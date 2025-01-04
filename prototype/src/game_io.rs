@@ -1,7 +1,8 @@
-use std::sync::{mpsc::TryRecvError, Arc};
+use std::sync::Arc;
 
 use anyhow::anyhow;
 use pollster::FutureExt;
+use tokio::sync::mpsc::error::TryRecvError;
 use winit::{
     application::ApplicationHandler,
     event::{KeyEvent, WindowEvent},

@@ -1,14 +1,13 @@
-use std::{
-    sync::mpsc::{self, SendError},
-    thread,
-};
+use std::thread;
+
+use tokio::sync::mpsc::{self, error::SendError};
 
 use tokio::runtime::Runtime;
 
 pub fn start_in_background() -> anyhow::Result<GameIo> {
     let runtime = Runtime::new()?;
 
-    let (color_tx, color_rx) = mpsc::sync_channel(0);
+    let (color_tx, color_rx) = mpsc::channel(1);
 
     thread::spawn(move || {
         runtime.block_on(async {
@@ -19,7 +18,7 @@ pub fn start_in_background() -> anyhow::Result<GameIo> {
             loop {
                 // The channel has no buffer, so this is synchronized to the
                 // frame rate of the renderer.
-                if let Err(SendError(_)) = color_tx.send(color) {
+                if let Err(SendError(_)) = color_tx.send(color).await {
                     // The other end has hung up. Time for us to shut down too.
                     break;
                 }
