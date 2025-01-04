@@ -17,7 +17,7 @@ pub fn start_and_wait(game_io: GameIo) -> anyhow::Result<()> {
         resources: None,
         result: Ok(()),
         color: None,
-        color_updates: game_io,
+        game_io,
     };
 
     let event_loop = EventLoop::new()?;
@@ -30,7 +30,7 @@ pub struct Application {
     resources: Option<ApplicationResources>,
     result: anyhow::Result<()>,
     color: Option<wgpu::Color>,
-    color_updates: GameIo,
+    game_io: GameIo,
 }
 
 impl Application {
@@ -81,7 +81,7 @@ impl ApplicationHandler for Application {
                 event_loop.exit();
             }
             WindowEvent::RedrawRequested => {
-                match self.color_updates.output.try_recv() {
+                match self.game_io.output.try_recv() {
                     Ok([r, g, b, a]) => {
                         self.color = Some(wgpu::Color { r, g, b, a })
                     }
