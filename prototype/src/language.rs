@@ -87,7 +87,7 @@ enum Event {
     GameInput(GameInput),
 }
 
-fn parse_command(command: String, _color: &mut [f64; 4]) {
+fn parse_command(command: String, color: &mut [f64; 4]) {
     let Ok(channels) = command
         .split_whitespace()
         .map(|channel| channel.parse::<f64>())
@@ -102,5 +102,5 @@ fn parse_command(command: String, _color: &mut [f64; 4]) {
         return;
     };
 
-    *_color = [r, g, b, a];
+    *color = [r, g, b, a];
 }
