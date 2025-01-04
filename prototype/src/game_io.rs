@@ -11,7 +11,7 @@ use winit::{
     window::{Window, WindowId},
 };
 
-use crate::language::GameIo;
+use crate::language::{GameInput, GameIo};
 
 pub fn start_and_wait(game_io: GameIo) -> anyhow::Result<()> {
     let mut application = Application {
@@ -82,7 +82,9 @@ impl ApplicationHandler for Application {
                 event_loop.exit();
             }
             WindowEvent::RedrawRequested => {
-                if let Err(SendError(_)) = self.game_io.input.send(()) {
+                if let Err(SendError(_)) =
+                    self.game_io.input.send(GameInput::RenderingFrame)
+                {
                     // The other end has hung up. We should shut down too.
                     event_loop.exit();
                     return;

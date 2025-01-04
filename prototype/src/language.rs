@@ -26,7 +26,7 @@ pub fn start_in_background() -> anyhow::Result<GameIo> {
                 }
 
                 match render_rx.recv().await {
-                    Some(()) => {
+                    Some(GameInput::RenderingFrame) => {
                         // This loop is coupled to the frame rate of the
                         // renderer.
                     }
@@ -46,6 +46,10 @@ pub fn start_in_background() -> anyhow::Result<GameIo> {
 }
 
 pub struct GameIo {
-    pub input: mpsc::UnboundedSender<()>,
+    pub input: mpsc::UnboundedSender<GameInput>,
     pub output: mpsc::Receiver<[f64; 4]>,
+}
+
+pub enum GameInput {
+    RenderingFrame,
 }
