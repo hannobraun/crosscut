@@ -46,12 +46,14 @@ pub fn start_in_background() -> anyhow::Result<GameIo> {
                             break;
                         };
 
-                        let _ = command;
-                        continue;
+                        Event::Command(command)
                     }
                 };
 
                 match event {
+                    Event::Command(command) => {
+                        let _ = command;
+                    }
                     Event::GameInput(GameInput::RenderingFrame) => {
                         // This loop is coupled to the frame rate of the
                         // renderer.
@@ -80,5 +82,6 @@ pub fn start_in_background() -> anyhow::Result<GameIo> {
 }
 
 enum Event {
+    Command(String),
     GameInput(GameInput),
 }
