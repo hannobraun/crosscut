@@ -20,14 +20,14 @@ fn main() -> anyhow::Result<()> {
     Ok(())
 }
 
-struct Application {
+pub struct Application {
     resources: Option<ApplicationResources>,
     color: watch::Receiver<wgpu::Color>,
     error: mpsc::Sender<anyhow::Error>,
 }
 
 impl Application {
-    fn start(color: watch::Receiver<wgpu::Color>) -> anyhow::Result<()> {
+    pub fn start(color: watch::Receiver<wgpu::Color>) -> anyhow::Result<()> {
         let (error_tx, error_rx) = mpsc::channel();
 
         let mut application = Application {
