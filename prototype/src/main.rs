@@ -101,7 +101,8 @@ impl ApplicationHandler for Application {
                 event_loop.exit();
             }
             WindowEvent::RedrawRequested => {
-                if let Err(err) = resources.renderer.render(self.bg_color) {
+                let bg_color = self.bg_color;
+                if let Err(err) = resources.renderer.render(bg_color) {
                     self.handle_error(err, event_loop);
 
                     // I want to have this explicit return here, to make sure
