@@ -1,8 +1,8 @@
-mod application;
+mod game_io;
 mod language;
 
 fn main() -> anyhow::Result<()> {
     let updates = language::start_in_background();
-    application::start_and_block(updates)?;
+    game_io::start_and_block(updates)?;
     Ok(())
 }
