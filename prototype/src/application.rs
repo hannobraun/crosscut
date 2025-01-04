@@ -15,6 +15,7 @@ pub fn start_and_block(color: watch::Receiver<[f64; 4]>) -> anyhow::Result<()> {
     let mut application = Application {
         resources: None,
         result: Ok(()),
+        color: None,
         color_updates: color,
     };
 
@@ -27,6 +28,7 @@ pub fn start_and_block(color: watch::Receiver<[f64; 4]>) -> anyhow::Result<()> {
 pub struct Application {
     resources: Option<ApplicationResources>,
     result: anyhow::Result<()>,
+    color: Option<wgpu::Color>,
     color_updates: watch::Receiver<[f64; 4]>,
 }
 
@@ -82,6 +84,7 @@ impl ApplicationHandler for Application {
                     let [r, g, b, a] = *self.color_updates.borrow();
                     wgpu::Color { r, g, b, a }
                 };
+                self.color = Some(bg_color);
 
                 if let Err(err) = resources.renderer.render(bg_color) {
                     self.handle_error(err, event_loop);
