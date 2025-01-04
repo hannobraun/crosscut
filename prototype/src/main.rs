@@ -15,7 +15,8 @@ use winit::{
 };
 
 fn main() -> anyhow::Result<()> {
-    Application::start()?;
+    let (_, color_rx) = watch::channel(wgpu::Color::BLACK);
+    Application::start(color_rx)?;
     Ok(())
 }
 
@@ -26,9 +27,8 @@ struct Application {
 }
 
 impl Application {
-    fn start() -> anyhow::Result<()> {
+    fn start(color_rx: watch::Receiver<wgpu::Color>) -> anyhow::Result<()> {
         let (error_tx, error_rx) = mpsc::channel();
-        let (_, color_rx) = watch::channel(wgpu::Color::BLACK);
 
         let mut application = Application {
             resources: None,
