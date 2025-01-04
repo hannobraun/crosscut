@@ -68,7 +68,7 @@ pub fn start_in_background() -> anyhow::Result<GameIo> {
     // Tokio documentation explicitly recommends against using that for
     // interactive code, recommending a dedicated thread instead.
     thread::spawn(move || loop {
-        let command = read_command();
+        let command = read_command().unwrap();
         if let Err(SendError(_)) = commands_tx.send(command) {
             // The other end has hung up. We should shut down too.
             break;
@@ -86,10 +86,10 @@ enum Event {
     GameInput(GameInput),
 }
 
-fn read_command() -> String {
+fn read_command() -> anyhow::Result<String> {
     let mut command = String::new();
-    stdin().read_line(&mut command).unwrap();
-    command
+    stdin().read_line(&mut command)?;
+    Ok(command)
 }
 
 fn parse_command(command: String, color: &mut [f64; 4]) {
