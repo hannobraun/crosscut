@@ -87,8 +87,8 @@ enum Event {
     GameInput(GameInput),
 }
 
-fn parse_command(_command: String, _color: &mut [f64; 4]) {
-    let Ok(channels) = _command
+fn parse_command(command: String, _color: &mut [f64; 4]) {
+    let Ok(channels) = command
         .split_whitespace()
         .map(|channel| channel.parse::<f64>())
         .collect::<Result<Vec<_>, _>>()
