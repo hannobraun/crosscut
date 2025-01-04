@@ -99,7 +99,8 @@ impl ApplicationHandler for Application {
                 event_loop.exit();
             }
             WindowEvent::RedrawRequested => {
-                if let Err(err) = resources.renderer.render() {
+                if let Err(err) = resources.renderer.render(wgpu::Color::BLACK)
+                {
                     self.handle_error(err, event_loop);
 
                     // I want to have this explicit return here, to make sure
@@ -184,7 +185,7 @@ impl Renderer {
         })
     }
 
-    fn render(&self) -> anyhow::Result<()> {
+    fn render(&self, bg_color: wgpu::Color) -> anyhow::Result<()> {
         let surface_texture = self.surface.get_current_texture()?;
         let view = surface_texture
             .texture
@@ -199,7 +200,7 @@ impl Renderer {
                 view: &view,
                 resolve_target: None,
                 ops: wgpu::Operations {
-                    load: wgpu::LoadOp::Clear(wgpu::Color::BLACK),
+                    load: wgpu::LoadOp::Clear(bg_color),
                     store: wgpu::StoreOp::Store,
                 },
             })],
