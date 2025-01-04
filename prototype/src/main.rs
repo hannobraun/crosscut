@@ -20,7 +20,7 @@ fn main() -> anyhow::Result<()> {
 
     let mut application = Application {
         resources: None,
-        bg_color: color_rx,
+        color: color_rx,
         error: error_tx,
     };
 
@@ -45,7 +45,7 @@ fn main() -> anyhow::Result<()> {
 
 struct Application {
     resources: Option<ApplicationResources>,
-    bg_color: watch::Receiver<wgpu::Color>,
+    color: watch::Receiver<wgpu::Color>,
     error: mpsc::Sender<anyhow::Error>,
 }
 
@@ -103,7 +103,7 @@ impl ApplicationHandler for Application {
                 event_loop.exit();
             }
             WindowEvent::RedrawRequested => {
-                let bg_color = *self.bg_color.borrow();
+                let bg_color = *self.color.borrow();
                 if let Err(err) = resources.renderer.render(bg_color) {
                     self.handle_error(err, event_loop);
 
