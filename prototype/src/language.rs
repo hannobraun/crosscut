@@ -17,7 +17,7 @@ pub fn start_in_background() -> anyhow::Result<GameIo> {
 
     thread::spawn(move || {
         runtime.block_on(async {
-            let color = [0., 0., 0., 1.];
+            let mut color = [0., 0., 0., 1.];
 
             println!("Color: {color:?}");
 
@@ -52,7 +52,7 @@ pub fn start_in_background() -> anyhow::Result<GameIo> {
 
                 match event {
                     Event::Command(command) => {
-                        let _ = command;
+                        parse_command(command, &mut color);
                     }
                     Event::GameInput(GameInput::RenderingFrame) => {
                         // This loop is coupled to the frame rate of the
@@ -85,3 +85,5 @@ enum Event {
     Command(String),
     GameInput(GameInput),
 }
+
+fn parse_command(_command: String, _color: &mut [f64; 4]) {}
