@@ -3,7 +3,7 @@ use std::{
     thread,
 };
 
-pub fn start_in_background() -> mpsc::Receiver<[f64; 4]> {
+pub fn start_in_background() -> GameIo {
     let (color_tx, color_rx) = mpsc::sync_channel(0);
 
     thread::spawn(move || {
@@ -21,5 +21,9 @@ pub fn start_in_background() -> mpsc::Receiver<[f64; 4]> {
         }
     });
 
-    color_rx
+    GameIo { output: color_rx }
+}
+
+pub struct GameIo {
+    pub output: mpsc::Receiver<[f64; 4]>,
 }
