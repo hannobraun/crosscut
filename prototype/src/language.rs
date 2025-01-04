@@ -31,9 +31,10 @@ pub fn start_in_background() -> anyhow::Result<GameIo> {
                     // The other end has hung up. We should shut down too.
                     break;
                 };
+                let event = Event::GameInput(game_input);
 
-                match game_input {
-                    GameInput::RenderingFrame => {
+                match event {
+                    Event::GameInput(GameInput::RenderingFrame) => {
                         // This loop is coupled to the frame rate of the
                         // renderer.
                     }
@@ -46,4 +47,8 @@ pub fn start_in_background() -> anyhow::Result<GameIo> {
         input: render_tx,
         output: color_rx,
     })
+}
+
+enum Event {
+    GameInput(GameInput),
 }
