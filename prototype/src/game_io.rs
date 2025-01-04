@@ -2,7 +2,7 @@ use std::sync::Arc;
 
 use anyhow::anyhow;
 use pollster::FutureExt;
-use tokio::sync::mpsc::error::TryRecvError;
+use tokio::sync::mpsc::error::{SendError, TryRecvError};
 use winit::{
     application::ApplicationHandler,
     event::{KeyEvent, WindowEvent},
@@ -82,6 +82,12 @@ impl ApplicationHandler for Application {
                 event_loop.exit();
             }
             WindowEvent::RedrawRequested => {
+                if let Err(SendError(_)) = self.game_io.input.send(()) {
+                    // The other end has hung up. We should shut down too.
+                    event_loop.exit();
+                    return;
+                }
+
                 loop {
                     match self.game_io.output.try_recv() {
                         Ok([r, g, b, a]) => {

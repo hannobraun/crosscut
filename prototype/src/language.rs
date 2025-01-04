@@ -8,6 +8,7 @@ use tokio::{
 pub fn start_in_background() -> anyhow::Result<GameIo> {
     let runtime = Runtime::new()?;
 
+    let (render_tx, mut render_rx) = mpsc::unbounded_channel();
     let (color_tx, color_rx) = mpsc::channel(1);
 
     thread::spawn(move || {
@@ -23,13 +24,28 @@ pub fn start_in_background() -> anyhow::Result<GameIo> {
                     // The other end has hung up. Time for us to shut down too.
                     break;
                 }
+
+                match render_rx.recv().await {
+                    Some(()) => {
+                        // This loop is coupled to the frame rate of the
+                        // renderer.
+                    }
+                    None => {
+                        // The other end has hung up. We should shut down too.
+                        break;
+                    }
+                }
             }
         });
     });
 
-    Ok(GameIo { output: color_rx })
+    Ok(GameIo {
+        input: render_tx,
+        output: color_rx,
+    })
 }
 
 pub struct GameIo {
+    pub input: mpsc::UnboundedSender<()>,
     pub output: mpsc::Receiver<[f64; 4]>,
 }
