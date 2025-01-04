@@ -5,6 +5,7 @@ use std::sync::{
 
 use anyhow::anyhow;
 use pollster::FutureExt;
+use tokio::sync::watch;
 use winit::{
     application::ApplicationHandler,
     event::{KeyEvent, WindowEvent},
@@ -15,10 +16,11 @@ use winit::{
 
 fn main() -> anyhow::Result<()> {
     let (error_tx, error_rx) = mpsc::channel();
+    let (_, color_rx) = watch::channel(wgpu::Color::BLACK);
 
     let mut application = Application {
         resources: None,
-        bg_color: wgpu::Color::BLACK,
+        bg_color: color_rx,
         error: error_tx,
     };
 
@@ -43,7 +45,7 @@ fn main() -> anyhow::Result<()> {
 
 struct Application {
     resources: Option<ApplicationResources>,
-    bg_color: wgpu::Color,
+    bg_color: watch::Receiver<wgpu::Color>,
     error: mpsc::Sender<anyhow::Error>,
 }
 
@@ -101,7 +103,7 @@ impl ApplicationHandler for Application {
                 event_loop.exit();
             }
             WindowEvent::RedrawRequested => {
-                let bg_color = self.bg_color;
+                let bg_color = *self.bg_color.borrow();
                 if let Err(err) = resources.renderer.render(bg_color) {
                     self.handle_error(err, event_loop);
 
