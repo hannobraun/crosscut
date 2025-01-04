@@ -14,6 +14,34 @@ use winit::{
     window::{Window, WindowId},
 };
 
+pub fn start(color: watch::Receiver<wgpu::Color>) -> anyhow::Result<()> {
+    let (error_tx, error_rx) = mpsc::channel();
+
+    let mut application = Application {
+        resources: None,
+        color,
+        error: error_tx,
+    };
+
+    let event_loop = EventLoop::new()?;
+    event_loop.run_app(&mut application)?;
+
+    match error_rx.try_recv() {
+        Ok(err) => return Err(err),
+        Err(TryRecvError::Empty) => {
+            // There's no error in the channel. All should be well.
+        }
+        Err(TryRecvError::Disconnected) => {
+            unreachable!(
+                "Error channel can't disconnect. The sender lives on the local \
+                stack."
+            );
+        }
+    }
+
+    Ok(())
+}
+
 pub struct Application {
     resources: Option<ApplicationResources>,
     color: watch::Receiver<wgpu::Color>,
@@ -21,34 +49,6 @@ pub struct Application {
 }
 
 impl Application {
-    pub fn start(color: watch::Receiver<wgpu::Color>) -> anyhow::Result<()> {
-        let (error_tx, error_rx) = mpsc::channel();
-
-        let mut application = Application {
-            resources: None,
-            color,
-            error: error_tx,
-        };
-
-        let event_loop = EventLoop::new()?;
-        event_loop.run_app(&mut application)?;
-
-        match error_rx.try_recv() {
-            Ok(err) => return Err(err),
-            Err(TryRecvError::Empty) => {
-                // There's no error in the channel. All should be well.
-            }
-            Err(TryRecvError::Disconnected) => {
-                unreachable!(
-                    "Error channel can't disconnect. The sender lives on the \
-                    local stack."
-                );
-            }
-        }
-
-        Ok(())
-    }
-
     fn handle_error(&self, err: anyhow::Error, event_loop: &ActiveEventLoop) {
         if let Err(SendError(err)) = self.error.send(err) {
             // The other end has already hung up. Nothing we can do
