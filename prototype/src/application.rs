@@ -1,8 +1,10 @@
-use std::sync::Arc;
+use std::sync::{
+    mpsc::{self, TryRecvError},
+    Arc,
+};
 
 use anyhow::anyhow;
 use pollster::FutureExt;
-use tokio::sync::watch;
 use winit::{
     application::ApplicationHandler,
     event::{KeyEvent, WindowEvent},
@@ -11,7 +13,7 @@ use winit::{
     window::{Window, WindowId},
 };
 
-pub fn start_and_block(color: watch::Receiver<[f64; 4]>) -> anyhow::Result<()> {
+pub fn start_and_block(color: mpsc::Receiver<[f64; 4]>) -> anyhow::Result<()> {
     let mut application = Application {
         resources: None,
         result: Ok(()),
@@ -29,7 +31,7 @@ pub struct Application {
     resources: Option<ApplicationResources>,
     result: anyhow::Result<()>,
     color: Option<wgpu::Color>,
-    color_updates: watch::Receiver<[f64; 4]>,
+    color_updates: mpsc::Receiver<[f64; 4]>,
 }
 
 impl Application {
@@ -80,10 +82,21 @@ impl ApplicationHandler for Application {
                 event_loop.exit();
             }
             WindowEvent::RedrawRequested => {
-                self.color = Some({
-                    let [r, g, b, a] = *self.color_updates.borrow();
-                    wgpu::Color { r, g, b, a }
-                });
+                match self.color_updates.try_recv() {
+                    Ok([r, g, b, a]) => {
+                        self.color = Some(wgpu::Color { r, g, b, a })
+                    }
+                    Err(TryRecvError::Empty) => {
+                        // No update, so nothing to do here. If we had an update
+                        // before, we'll use that one below.
+                    }
+                    Err(TryRecvError::Disconnected) => {
+                        // The other end has hung up. Time for us to shut down
+                        // too.
+                        event_loop.exit();
+                        return;
+                    }
+                };
 
                 let Some(bg_color) = self.color else {
                     return;
