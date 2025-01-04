@@ -121,8 +121,9 @@ struct ApplicationResources {
 impl ApplicationResources {
     fn new(event_loop: &ActiveEventLoop) -> anyhow::Result<Self> {
         let window = {
-            let window =
-                event_loop.create_window(Window::default_attributes())?;
+            let window = event_loop.create_window(
+                Window::default_attributes().with_title("Crosscut"),
+            )?;
             Arc::new(window)
         };
 
