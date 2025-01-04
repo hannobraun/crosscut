@@ -13,7 +13,7 @@ use winit::{
     window::{Window, WindowId},
 };
 
-pub fn start_and_block(color: mpsc::Receiver<[f64; 4]>) -> anyhow::Result<()> {
+pub fn start_and_wait(color: mpsc::Receiver<[f64; 4]>) -> anyhow::Result<()> {
     let mut application = Application {
         resources: None,
         result: Ok(()),
