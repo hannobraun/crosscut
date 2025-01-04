@@ -27,11 +27,14 @@ pub fn start_in_background() -> anyhow::Result<GameIo> {
                     break;
                 }
 
-                let Some(game_input) = render_rx.recv().await else {
-                    // The other end has hung up. We should shut down too.
-                    break;
+                let event = {
+                    let Some(game_input) = render_rx.recv().await else {
+                        // The other end has hung up. We should shut down too.
+                        break;
+                    };
+
+                    Event::GameInput(game_input)
                 };
-                let event = Event::GameInput(game_input);
 
                 match event {
                     Event::GameInput(GameInput::RenderingFrame) => {
