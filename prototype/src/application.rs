@@ -14,8 +14,8 @@ use winit::{
 pub fn start_and_block(color: watch::Receiver<[f64; 4]>) -> anyhow::Result<()> {
     let mut application = Application {
         resources: None,
-        color_updates: color,
         result: Ok(()),
+        color_updates: color,
     };
 
     let event_loop = EventLoop::new()?;
@@ -26,8 +26,8 @@ pub fn start_and_block(color: watch::Receiver<[f64; 4]>) -> anyhow::Result<()> {
 
 pub struct Application {
     resources: Option<ApplicationResources>,
-    color_updates: watch::Receiver<[f64; 4]>,
     result: anyhow::Result<()>,
+    color_updates: watch::Receiver<[f64; 4]>,
 }
 
 impl Application {
