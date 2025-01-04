@@ -1,4 +1,4 @@
-use std::thread;
+use std::{io::stdin, thread};
 
 use tokio::{
     runtime::Runtime,
@@ -13,6 +13,7 @@ pub fn start_in_background() -> anyhow::Result<GameIo> {
 
     let (render_tx, mut render_rx) = mpsc::unbounded_channel();
     let (color_tx, color_rx) = mpsc::unbounded_channel();
+    let (commands_tx, mut commands_rx) = mpsc::unbounded_channel();
 
     thread::spawn(move || {
         runtime.block_on(async {
@@ -38,6 +39,10 @@ pub fn start_in_background() -> anyhow::Result<GameIo> {
 
                         Event::GameInput(game_input)
                     }
+                    command = commands_rx.recv() => {
+                        let _ = command;
+                        continue;
+                    }
                 };
 
                 match event {
@@ -48,6 +53,18 @@ pub fn start_in_background() -> anyhow::Result<GameIo> {
                 }
             }
         });
+    });
+
+    // We're using Tokio here and could use its asynchronous stdio API. But the
+    // Tokio documentation explicitly recommends against using that for
+    // interactive code, recommending a dedicated thread instead.
+    thread::spawn(move || loop {
+        let mut command = String::new();
+        stdin().read_line(&mut command).unwrap();
+        if let Err(SendError(_)) = commands_tx.send(command) {
+            // The other end has hung up. We should shut down too.
+            break;
+        }
     });
 
     Ok(GameIo {
