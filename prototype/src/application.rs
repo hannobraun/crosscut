@@ -15,23 +15,19 @@ pub fn start_and_block(color: watch::Receiver<[f64; 4]>) -> anyhow::Result<()> {
     let mut application = Application {
         resources: None,
         color_updates: color,
-        error: None,
+        error: Ok(()),
     };
 
     let event_loop = EventLoop::new()?;
     event_loop.run_app(&mut application)?;
 
-    if let Some(err) = application.error {
-        return Err(err);
-    }
-
-    Ok(())
+    application.error
 }
 
 pub struct Application {
     resources: Option<ApplicationResources>,
     color_updates: watch::Receiver<[f64; 4]>,
-    error: Option<anyhow::Error>,
+    error: anyhow::Result<()>,
 }
 
 impl Application {
@@ -40,7 +36,7 @@ impl Application {
         err: anyhow::Error,
         event_loop: &ActiveEventLoop,
     ) {
-        self.error = Some(err);
+        self.error = Err(err);
         event_loop.exit();
     }
 }
