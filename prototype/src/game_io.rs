@@ -13,12 +13,14 @@ use winit::{
     window::{Window, WindowId},
 };
 
-pub fn start_and_wait(color: mpsc::Receiver<[f64; 4]>) -> anyhow::Result<()> {
+use crate::language::GameIo;
+
+pub fn start_and_wait(game_io: GameIo) -> anyhow::Result<()> {
     let mut application = Application {
         resources: None,
         result: Ok(()),
         color: None,
-        color_updates: color,
+        color_updates: game_io.output,
     };
 
     let event_loop = EventLoop::new()?;
