@@ -86,6 +86,10 @@ impl ApplicationHandler for Application {
                 };
                 self.color = Some(bg_color);
 
+                let Some(bg_color) = self.color else {
+                    return;
+                };
+
                 if let Err(err) = resources.renderer.render(bg_color) {
                     self.handle_error(err, event_loop);
 
