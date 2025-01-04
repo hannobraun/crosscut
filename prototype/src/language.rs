@@ -27,7 +27,9 @@ pub fn start_in_background() -> anyhow::Result<GameIo> {
                     break;
                 }
 
-                match render_rx.recv().await {
+                let game_input = render_rx.recv().await;
+
+                match game_input {
                     Some(GameInput::RenderingFrame) => {
                         // This loop is coupled to the frame rate of the
                         // renderer.
