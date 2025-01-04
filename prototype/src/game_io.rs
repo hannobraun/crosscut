@@ -1,7 +1,4 @@
-use std::sync::{
-    mpsc::{self, TryRecvError},
-    Arc,
-};
+use std::sync::{mpsc::TryRecvError, Arc};
 
 use anyhow::anyhow;
 use pollster::FutureExt;
@@ -20,7 +17,7 @@ pub fn start_and_wait(game_io: GameIo) -> anyhow::Result<()> {
         resources: None,
         result: Ok(()),
         color: None,
-        color_updates: game_io.output,
+        color_updates: game_io,
     };
 
     let event_loop = EventLoop::new()?;
@@ -33,7 +30,7 @@ pub struct Application {
     resources: Option<ApplicationResources>,
     result: anyhow::Result<()>,
     color: Option<wgpu::Color>,
-    color_updates: mpsc::Receiver<[f64; 4]>,
+    color_updates: GameIo,
 }
 
 impl Application {
@@ -84,7 +81,7 @@ impl ApplicationHandler for Application {
                 event_loop.exit();
             }
             WindowEvent::RedrawRequested => {
-                match self.color_updates.try_recv() {
+                match self.color_updates.output.try_recv() {
                     Ok([r, g, b, a]) => {
                         self.color = Some(wgpu::Color { r, g, b, a })
                     }
