@@ -14,7 +14,7 @@ use winit::{
     window::{Window, WindowId},
 };
 
-pub fn start(color: watch::Receiver<wgpu::Color>) -> anyhow::Result<()> {
+pub fn start(color: watch::Receiver<[f64; 4]>) -> anyhow::Result<()> {
     let (error_tx, error_rx) = mpsc::channel();
 
     let mut application = Application {
@@ -44,7 +44,7 @@ pub fn start(color: watch::Receiver<wgpu::Color>) -> anyhow::Result<()> {
 
 pub struct Application {
     resources: Option<ApplicationResources>,
-    color: watch::Receiver<wgpu::Color>,
+    color: watch::Receiver<[f64; 4]>,
     error: mpsc::Sender<anyhow::Error>,
 }
 
@@ -102,7 +102,11 @@ impl ApplicationHandler for Application {
                 event_loop.exit();
             }
             WindowEvent::RedrawRequested => {
-                let bg_color = *self.color.borrow();
+                let bg_color = {
+                    let [r, g, b, a] = *self.color.borrow();
+                    wgpu::Color { r, g, b, a }
+                };
+
                 if let Err(err) = resources.renderer.render(bg_color) {
                     self.handle_error(err, event_loop);
 

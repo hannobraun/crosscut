@@ -1,6 +1,6 @@
 use tokio::sync::watch;
 
-pub fn start() -> watch::Receiver<wgpu::Color> {
-    let (_, color_rx) = watch::channel(wgpu::Color::BLACK);
+pub fn start() -> watch::Receiver<[f64; 4]> {
+    let (_, color_rx) = watch::channel([0., 0., 0., 1.]);
     color_rx
 }
