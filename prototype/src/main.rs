@@ -18,6 +18,7 @@ fn main() -> anyhow::Result<()> {
 
     let mut application = Application {
         resources: None,
+        bg_color: wgpu::Color::BLACK,
         error: error_tx,
     };
 
@@ -42,6 +43,7 @@ fn main() -> anyhow::Result<()> {
 
 struct Application {
     resources: Option<ApplicationResources>,
+    bg_color: wgpu::Color,
     error: mpsc::Sender<anyhow::Error>,
 }
 
@@ -99,8 +101,7 @@ impl ApplicationHandler for Application {
                 event_loop.exit();
             }
             WindowEvent::RedrawRequested => {
-                let bg_color = wgpu::Color::BLACK;
-                if let Err(err) = resources.renderer.render(bg_color) {
+                if let Err(err) = resources.renderer.render(self.bg_color) {
                     self.handle_error(err, event_loop);
 
                     // I want to have this explicit return here, to make sure
