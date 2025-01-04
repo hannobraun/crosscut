@@ -9,6 +9,8 @@ pub fn start_in_background() -> mpsc::Receiver<[f64; 4]> {
     thread::spawn(move || {
         let color = [0., 0., 0., 1.];
 
+        println!("Color: {color:?}");
+
         loop {
             // The channel has no buffer, so this is synchronized to the frame
             // rate of the renderer.
