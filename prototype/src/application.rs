@@ -1,7 +1,4 @@
-use std::sync::{
-    mpsc::{self, SendError, TryRecvError},
-    Arc,
-};
+use std::sync::Arc;
 
 use anyhow::anyhow;
 use pollster::FutureExt;
@@ -15,28 +12,17 @@ use winit::{
 };
 
 pub fn start_and_block(color: watch::Receiver<[f64; 4]>) -> anyhow::Result<()> {
-    let (error_tx, error_rx) = mpsc::channel();
-
     let mut application = Application {
         resources: None,
         color_updates: color,
-        error: error_tx,
+        error: None,
     };
 
     let event_loop = EventLoop::new()?;
     event_loop.run_app(&mut application)?;
 
-    match error_rx.try_recv() {
-        Ok(err) => return Err(err),
-        Err(TryRecvError::Empty) => {
-            // There's no error in the channel. All should be well.
-        }
-        Err(TryRecvError::Disconnected) => {
-            unreachable!(
-                "Error channel can't disconnect. The sender lives on the local \
-                stack."
-            );
-        }
+    if let Some(err) = application.error {
+        return Err(err);
     }
 
     Ok(())
@@ -45,7 +31,7 @@ pub fn start_and_block(color: watch::Receiver<[f64; 4]>) -> anyhow::Result<()> {
 pub struct Application {
     resources: Option<ApplicationResources>,
     color_updates: watch::Receiver<[f64; 4]>,
-    error: mpsc::Sender<anyhow::Error>,
+    error: Option<anyhow::Error>,
 }
 
 impl Application {
@@ -54,17 +40,7 @@ impl Application {
         err: anyhow::Error,
         event_loop: &ActiveEventLoop,
     ) {
-        if let Err(SendError(err)) = self.error.send(err) {
-            // The other end has already hung up. Nothing we can do
-            // about it.
-            println!(
-                "Error while initializing application resources:\n\
-                {err:?}\n\
-                \n\
-                Failed to report this error properly, as the main thread isn't
-                listening anymore."
-            );
-        };
+        self.error = Some(err);
         event_loop.exit();
     }
 }
