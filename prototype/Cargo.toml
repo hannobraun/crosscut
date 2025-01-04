@@ -9,3 +9,7 @@ anyhow = "*"
 pollster = "*"
 wgpu = "*"
 winit = "*"
+
+[dependencies.tokio]
+version = "*"
+features = ["sync"]
