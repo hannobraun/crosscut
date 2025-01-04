@@ -99,8 +99,8 @@ impl ApplicationHandler for Application {
                 event_loop.exit();
             }
             WindowEvent::RedrawRequested => {
-                if let Err(err) = resources.renderer.render(wgpu::Color::BLACK)
-                {
+                let bg_color = wgpu::Color::BLACK;
+                if let Err(err) = resources.renderer.render(bg_color) {
                     self.handle_error(err, event_loop);
 
                     // I want to have this explicit return here, to make sure
