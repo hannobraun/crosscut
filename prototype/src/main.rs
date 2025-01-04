@@ -15,31 +15,7 @@ use winit::{
 };
 
 fn main() -> anyhow::Result<()> {
-    let (error_tx, error_rx) = mpsc::channel();
-    let (_, color_rx) = watch::channel(wgpu::Color::BLACK);
-
-    let mut application = Application {
-        resources: None,
-        color: color_rx,
-        error: error_tx,
-    };
-
-    let event_loop = EventLoop::new()?;
-    event_loop.run_app(&mut application)?;
-
-    match error_rx.try_recv() {
-        Ok(err) => return Err(err),
-        Err(TryRecvError::Empty) => {
-            // There's no error in the channel. All should be well.
-        }
-        Err(TryRecvError::Disconnected) => {
-            unreachable!(
-                "Error channel can't disconnect. The sender lives on the local \
-                stack."
-            );
-        }
-    }
-
+    Application::start()?;
     Ok(())
 }
 
@@ -50,6 +26,35 @@ struct Application {
 }
 
 impl Application {
+    fn start() -> anyhow::Result<()> {
+        let (error_tx, error_rx) = mpsc::channel();
+        let (_, color_rx) = watch::channel(wgpu::Color::BLACK);
+
+        let mut application = Application {
+            resources: None,
+            color: color_rx,
+            error: error_tx,
+        };
+
+        let event_loop = EventLoop::new()?;
+        event_loop.run_app(&mut application)?;
+
+        match error_rx.try_recv() {
+            Ok(err) => return Err(err),
+            Err(TryRecvError::Empty) => {
+                // There's no error in the channel. All should be well.
+            }
+            Err(TryRecvError::Disconnected) => {
+                unreachable!(
+                    "Error channel can't disconnect. The sender lives on the \
+                    local stack."
+                );
+            }
+        }
+
+        Ok(())
+    }
+
     fn handle_error(&self, err: anyhow::Error, event_loop: &ActiveEventLoop) {
         if let Err(SendError(err)) = self.error.send(err) {
             // The other end has already hung up. Nothing we can do
