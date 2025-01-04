@@ -19,7 +19,7 @@ pub fn start_and_block(color: watch::Receiver<[f64; 4]>) -> anyhow::Result<()> {
 
     let mut application = Application {
         resources: None,
-        color,
+        color_updates: color,
         error: error_tx,
     };
 
@@ -44,7 +44,7 @@ pub fn start_and_block(color: watch::Receiver<[f64; 4]>) -> anyhow::Result<()> {
 
 pub struct Application {
     resources: Option<ApplicationResources>,
-    color: watch::Receiver<[f64; 4]>,
+    color_updates: watch::Receiver<[f64; 4]>,
     error: mpsc::Sender<anyhow::Error>,
 }
 
@@ -103,7 +103,7 @@ impl ApplicationHandler for Application {
             }
             WindowEvent::RedrawRequested => {
                 let bg_color = {
-                    let [r, g, b, a] = *self.color.borrow();
+                    let [r, g, b, a] = *self.color_updates.borrow();
                     wgpu::Color { r, g, b, a }
                 };
 
