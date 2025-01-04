@@ -27,12 +27,12 @@ struct Application {
 }
 
 impl Application {
-    fn start(color_rx: watch::Receiver<wgpu::Color>) -> anyhow::Result<()> {
+    fn start(color: watch::Receiver<wgpu::Color>) -> anyhow::Result<()> {
         let (error_tx, error_rx) = mpsc::channel();
 
         let mut application = Application {
             resources: None,
-            color: color_rx,
+            color,
             error: error_tx,
         };
 
