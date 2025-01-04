@@ -14,7 +14,7 @@ use winit::{
     window::{Window, WindowId},
 };
 
-pub fn start(color: watch::Receiver<[f64; 4]>) -> anyhow::Result<()> {
+pub fn start_and_block(color: watch::Receiver<[f64; 4]>) -> anyhow::Result<()> {
     let (error_tx, error_rx) = mpsc::channel();
 
     let mut application = Application {
