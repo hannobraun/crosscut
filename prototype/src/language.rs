@@ -1,8 +1,9 @@
 use std::thread;
 
-use tokio::sync::mpsc::{self, error::SendError};
-
-use tokio::runtime::Runtime;
+use tokio::{
+    runtime::Runtime,
+    sync::mpsc::{self, error::SendError},
+};
 
 pub fn start_in_background() -> anyhow::Result<GameIo> {
     let runtime = Runtime::new()?;
