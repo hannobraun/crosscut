@@ -2,6 +2,7 @@ use std::thread;
 
 use tokio::{
     runtime::Runtime,
+    select,
     sync::mpsc::{self, error::SendError},
 };
 
@@ -27,13 +28,16 @@ pub fn start_in_background() -> anyhow::Result<GameIo> {
                     break;
                 }
 
-                let event = {
-                    let Some(game_input) = render_rx.recv().await else {
-                        // The other end has hung up. We should shut down too.
-                        break;
-                    };
+                let event = select! {
+                    game_input = render_rx.recv() => {
+                        let Some(game_input) = game_input else {
+                            // The other end has hung up. We should shut down
+                            // too.
+                            break;
+                        };
 
-                    Event::GameInput(game_input)
+                        Event::GameInput(game_input)
+                    }
                 };
 
                 match event {
