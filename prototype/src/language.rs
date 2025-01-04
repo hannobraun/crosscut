@@ -27,16 +27,15 @@ pub fn start_in_background() -> anyhow::Result<GameIo> {
                     break;
                 }
 
-                let game_input = render_rx.recv().await;
+                let Some(game_input) = render_rx.recv().await else {
+                    // The other end has hung up. We should shut down too.
+                    break;
+                };
 
                 match game_input {
-                    Some(GameInput::RenderingFrame) => {
+                    GameInput::RenderingFrame => {
                         // This loop is coupled to the frame rate of the
                         // renderer.
-                    }
-                    None => {
-                        // The other end has hung up. We should shut down too.
-                        break;
                     }
                 }
             }
