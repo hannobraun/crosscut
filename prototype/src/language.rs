@@ -5,6 +5,8 @@ use tokio::{
     sync::mpsc::{self, error::SendError},
 };
 
+use crate::game_io::{GameInput, GameIo};
+
 pub fn start_in_background() -> anyhow::Result<GameIo> {
     let runtime = Runtime::new()?;
 
@@ -43,13 +45,4 @@ pub fn start_in_background() -> anyhow::Result<GameIo> {
         input: render_tx,
         output: color_rx,
     })
-}
-
-pub struct GameIo {
-    pub input: mpsc::UnboundedSender<GameInput>,
-    pub output: mpsc::UnboundedReceiver<[f64; 4]>,
-}
-
-pub enum GameInput {
-    RenderingFrame,
 }
