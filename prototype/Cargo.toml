@@ -12,4 +12,4 @@ winit = "*"
 
 [dependencies.tokio]
 version = "*"
-features = ["sync"]
+features = ["rt", "rt-multi-thread", "sync"]
