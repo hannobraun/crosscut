@@ -9,7 +9,7 @@ pub fn start_in_background() -> anyhow::Result<GameIo> {
     let runtime = Runtime::new()?;
 
     let (render_tx, mut render_rx) = mpsc::unbounded_channel();
-    let (color_tx, color_rx) = mpsc::channel(1);
+    let (color_tx, color_rx) = mpsc::unbounded_channel();
 
     thread::spawn(move || {
         runtime.block_on(async {
@@ -20,7 +20,7 @@ pub fn start_in_background() -> anyhow::Result<GameIo> {
             loop {
                 // The channel has no buffer, so this is synchronized to the
                 // frame rate of the renderer.
-                if let Err(SendError(_)) = color_tx.send(color).await {
+                if let Err(SendError(_)) = color_tx.send(color) {
                     // The other end has hung up. Time for us to shut down too.
                     break;
                 }
@@ -47,7 +47,7 @@ pub fn start_in_background() -> anyhow::Result<GameIo> {
 
 pub struct GameIo {
     pub input: mpsc::UnboundedSender<GameInput>,
-    pub output: mpsc::Receiver<[f64; 4]>,
+    pub output: mpsc::UnboundedReceiver<[f64; 4]>,
 }
 
 pub enum GameInput {
