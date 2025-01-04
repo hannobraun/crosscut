@@ -1,5 +1,6 @@
 use std::{io::stdin, thread};
 
+use itertools::Itertools;
 use tokio::{
     runtime::Runtime,
     select,
@@ -86,4 +87,20 @@ enum Event {
     GameInput(GameInput),
 }
 
-fn parse_command(_command: String, _color: &mut [f64; 4]) {}
+fn parse_command(_command: String, _color: &mut [f64; 4]) {
+    let Ok(channels) = _command
+        .split_whitespace()
+        .map(|channel| channel.parse::<f64>())
+        .collect::<Result<Vec<_>, _>>()
+    else {
+        println!("Can't parse color channels as `f64`.");
+        return;
+    };
+
+    let Some((r, g, b, a)) = channels.into_iter().collect_tuple() else {
+        println!("Unexpected number of color channels.");
+        return;
+    };
+
+    *_color = [r, g, b, a];
+}
