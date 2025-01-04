@@ -49,7 +49,11 @@ pub struct Application {
 }
 
 impl Application {
-    fn handle_error(&self, err: anyhow::Error, event_loop: &ActiveEventLoop) {
+    fn handle_error(
+        &mut self,
+        err: anyhow::Error,
+        event_loop: &ActiveEventLoop,
+    ) {
         if let Err(SendError(err)) = self.error.send(err) {
             // The other end has already hung up. Nothing we can do
             // about it.
