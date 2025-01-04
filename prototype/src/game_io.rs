@@ -82,21 +82,24 @@ impl ApplicationHandler for Application {
                 event_loop.exit();
             }
             WindowEvent::RedrawRequested => {
-                match self.game_io.output.try_recv() {
-                    Ok([r, g, b, a]) => {
-                        self.color = Some(wgpu::Color { r, g, b, a })
-                    }
-                    Err(TryRecvError::Empty) => {
-                        // No update, so nothing to do here. If we had an update
-                        // before, we'll use that one below.
-                    }
-                    Err(TryRecvError::Disconnected) => {
-                        // The other end has hung up. Time for us to shut down
-                        // too.
-                        event_loop.exit();
-                        return;
-                    }
-                };
+                loop {
+                    match self.game_io.output.try_recv() {
+                        Ok([r, g, b, a]) => {
+                            self.color = Some(wgpu::Color { r, g, b, a })
+                        }
+                        Err(TryRecvError::Empty) => {
+                            // No update, so nothing to do here. If we had an
+                            // update before, we'll use that one below.
+                            break;
+                        }
+                        Err(TryRecvError::Disconnected) => {
+                            // The other end has hung up. Time for us to shut
+                            // down too.
+                            event_loop.exit();
+                            return;
+                        }
+                    };
+                }
 
                 let Some(bg_color) = self.color else {
                     return;
