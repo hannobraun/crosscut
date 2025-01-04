@@ -1,9 +1,8 @@
 mod application;
-
-use tokio::sync::watch;
+mod language;
 
 fn main() -> anyhow::Result<()> {
-    let (_, color_rx) = watch::channel(wgpu::Color::BLACK);
+    let color_rx = language::start();
     application::start(color_rx)?;
     Ok(())
 }
