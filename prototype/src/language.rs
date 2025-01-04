@@ -40,6 +40,12 @@ pub fn start_in_background() -> anyhow::Result<GameIo> {
                         Event::GameInput(game_input)
                     }
                     command = commands_rx.recv() => {
+                        let Some(command) = command else {
+                            // The other end has hung up. We should shut down
+                            // too.
+                            break;
+                        };
+
                         let _ = command;
                         continue;
                     }
