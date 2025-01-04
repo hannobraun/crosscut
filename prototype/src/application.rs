@@ -80,11 +80,10 @@ impl ApplicationHandler for Application {
                 event_loop.exit();
             }
             WindowEvent::RedrawRequested => {
-                let bg_color = {
+                self.color = Some({
                     let [r, g, b, a] = *self.color_updates.borrow();
                     wgpu::Color { r, g, b, a }
-                };
-                self.color = Some(bg_color);
+                });
 
                 let Some(bg_color) = self.color else {
                     return;
