@@ -5,13 +5,13 @@ use itertools::Itertools;
 
 use crate::channel::Sender;
 
-pub fn start(commands_tx: Sender<Command>) {
+pub fn start(commands: Sender<Command>) {
     thread::spawn(move || loop {
         let Some(command) = read_command().unwrap() else {
             continue;
         };
 
-        if let Err(SendError(_)) = commands_tx.send(command) {
+        if let Err(SendError(_)) = commands.send(command) {
             // The other end has hung up. We should shut down too.
             break;
         }
