@@ -1,5 +1,5 @@
 use std::sync::{
-    mpsc::{SendError, TryRecvError},
+    mpsc::{Receiver, SendError, TryRecvError},
     Arc,
 };
 
@@ -13,10 +13,7 @@ use winit::{
     window::{Window, WindowId},
 };
 
-use crate::{
-    actor::{Receiver, Sender},
-    language::GameInput,
-};
+use crate::{actor::Sender, language::GameInput};
 
 pub fn start_and_wait(
     input: Sender<GameInput>,
