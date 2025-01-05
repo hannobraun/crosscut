@@ -32,12 +32,10 @@ impl<I> Actor<I> {
         Actor { sender, handle }
     }
 
-    pub fn provide_input(
-        self,
-        mut f: impl FnMut() -> I + Send + 'static,
-    ) -> JoinHandle<()>
+    pub fn provide_input<F>(self, mut f: F) -> JoinHandle<()>
     where
         I: Send + 'static,
+        F: FnMut() -> I + Send + 'static,
     {
         thread::spawn(move || loop {
             let input = f();
