@@ -46,6 +46,10 @@ pub fn start() -> anyhow::Result<(GameIo, Sender<Command>)> {
     ))
 }
 
+struct Code {
+    color: [f64; 4],
+}
+
 enum Event {
     Command(Command),
     GameInput(GameInput),
@@ -57,8 +61,4 @@ pub enum Command {
 
 pub enum GameInput {
     RenderingFrame,
-}
-
-struct Code {
-    color: [f64; 4],
 }
