@@ -3,21 +3,19 @@ use std::{
     thread,
 };
 
-pub struct Spawner<T> {
-    actors: Option<T>,
-}
+pub struct Spawner {}
 
-impl Spawner<()> {
+impl Spawner {
     pub fn new() -> Self {
-        Self { actors: Some(()) }
+        Self {}
     }
 }
 
-impl<T> Spawner<T> {
+impl Spawner {
     pub fn spawn<I>(
-        mut self,
+        self,
         mut f: impl FnMut(I) -> bool + Send + 'static,
-    ) -> (Spawner<T>, Actor<I>)
+    ) -> (Spawner, Actor<I>)
     where
         I: Send + 'static,
     {
@@ -31,20 +29,7 @@ impl<T> Spawner<T> {
             }
         });
 
-        let Some(actors) = self.actors.take() else {
-            unreachable!(
-                "The field is only set to `None` right here, after which this \
-                instance is dropped. Thus, it's not possible to encounter a \
-                `None` value here."
-            );
-        };
-
-        (
-            Spawner {
-                actors: Some(actors),
-            },
-            Actor { sender },
-        )
+        (Spawner {}, Actor { sender })
     }
 }
 
