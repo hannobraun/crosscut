@@ -3,10 +3,11 @@ use std::thread;
 use tokio::{
     runtime::Runtime,
     select,
-    sync::mpsc::{self, error::SendError, UnboundedReceiver},
+    sync::mpsc::{error::SendError, UnboundedReceiver},
 };
 
 use crate::{
+    channel,
     cli::Command,
     game_io::{GameInput, GameIo},
 };
@@ -16,8 +17,8 @@ pub fn start(
 ) -> anyhow::Result<GameIo> {
     let runtime = Runtime::new()?;
 
-    let (render_tx, mut render_rx) = mpsc::unbounded_channel();
-    let (color_tx, color_rx) = mpsc::unbounded_channel();
+    let (render_tx, mut render_rx) = channel::create();
+    let (color_tx, color_rx) = channel::create();
 
     thread::spawn(move || {
         runtime.block_on(async {

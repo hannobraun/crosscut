@@ -2,10 +2,12 @@ use std::{io::stdin, thread};
 
 use anyhow::anyhow;
 use itertools::Itertools;
-use tokio::sync::mpsc::{self, error::SendError, UnboundedReceiver};
+use tokio::sync::mpsc::{error::SendError, UnboundedReceiver};
+
+use crate::channel;
 
 pub fn start() -> UnboundedReceiver<Command> {
-    let (commands_tx, commands_rx) = mpsc::unbounded_channel();
+    let (commands_tx, commands_rx) = channel::create();
 
     // We're using Tokio here and could use its asynchronous stdio API. But the
     // Tokio documentation explicitly recommends against using that for

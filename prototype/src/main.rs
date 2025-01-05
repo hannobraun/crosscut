@@ -1,3 +1,4 @@
+mod channel;
 mod cli;
 mod game_io;
 mod language;
