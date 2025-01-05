@@ -3,11 +3,9 @@ use std::{io::stdin, sync::mpsc::SendError, thread};
 use anyhow::anyhow;
 use itertools::Itertools;
 
-use crate::channel::{self, Receiver};
+use crate::channel::Sender;
 
-pub fn start() -> Receiver<Command> {
-    let (commands_tx, commands_rx) = channel::create();
-
+pub fn start(commands_tx: Sender<Command>) {
     thread::spawn(move || loop {
         let Some(command) = read_command().unwrap() else {
             continue;
@@ -18,8 +16,6 @@ pub fn start() -> Receiver<Command> {
             break;
         }
     });
-
-    commands_rx
 }
 
 fn read_command() -> anyhow::Result<Option<Command>> {

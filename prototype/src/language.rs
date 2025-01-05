@@ -1,12 +1,13 @@
 use std::{sync::mpsc::SendError, thread};
 
 use crate::{
-    channel::{self, actor, Receiver},
+    channel::{self, actor, Sender},
     cli::Command,
     game_io::{GameInput, GameIo},
 };
 
-pub fn start(commands_rx: Receiver<Command>) -> anyhow::Result<GameIo> {
+pub fn start() -> anyhow::Result<(GameIo, Sender<Command>)> {
+    let (commands_tx, commands_rx) = channel::create();
     let (color_tx, color_rx) = channel::create();
 
     let (events_tx, events_rx) = channel::create();
@@ -59,10 +60,13 @@ pub fn start(commands_rx: Receiver<Command>) -> anyhow::Result<GameIo> {
         }
     });
 
-    Ok(GameIo {
-        input,
-        output: color_rx,
-    })
+    Ok((
+        GameIo {
+            input,
+            output: color_rx,
+        },
+        commands_tx,
+    ))
 }
 
 enum Event {
