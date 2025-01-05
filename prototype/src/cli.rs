@@ -1,7 +1,25 @@
-use std::io::stdin;
+use std::{io::stdin, thread};
 
 use anyhow::anyhow;
 use itertools::Itertools;
+use tokio::sync::mpsc::{self, error::SendError, UnboundedReceiver};
+
+pub fn start() -> UnboundedReceiver<String> {
+    let (commands_tx, commands_rx) = mpsc::unbounded_channel();
+
+    // We're using Tokio here and could use its asynchronous stdio API. But the
+    // Tokio documentation explicitly recommends against using that for
+    // interactive code, recommending a dedicated thread instead.
+    thread::spawn(move || loop {
+        let command = read_command().unwrap();
+        if let Err(SendError(_)) = commands_tx.send(command) {
+            // The other end has hung up. We should shut down too.
+            break;
+        }
+    });
+
+    commands_rx
+}
 
 pub fn read_command() -> anyhow::Result<String> {
     let mut command = String::new();

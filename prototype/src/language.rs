@@ -3,20 +3,21 @@ use std::thread;
 use tokio::{
     runtime::Runtime,
     select,
-    sync::mpsc::{self, error::SendError},
+    sync::mpsc::{self, error::SendError, UnboundedReceiver},
 };
 
 use crate::{
-    cli::{parse_command, read_command, Command},
+    cli::{parse_command, Command},
     game_io::{GameInput, GameIo},
 };
 
-pub fn start() -> anyhow::Result<GameIo> {
+pub fn start(
+    mut commands_rx: UnboundedReceiver<String>,
+) -> anyhow::Result<GameIo> {
     let runtime = Runtime::new()?;
 
     let (render_tx, mut render_rx) = mpsc::unbounded_channel();
     let (color_tx, color_rx) = mpsc::unbounded_channel();
-    let (commands_tx, mut commands_rx) = mpsc::unbounded_channel();
 
     thread::spawn(move || {
         runtime.block_on(async {
@@ -71,17 +72,6 @@ pub fn start() -> anyhow::Result<GameIo> {
                 }
             }
         });
-    });
-
-    // We're using Tokio here and could use its asynchronous stdio API. But the
-    // Tokio documentation explicitly recommends against using that for
-    // interactive code, recommending a dedicated thread instead.
-    thread::spawn(move || loop {
-        let command = read_command().unwrap();
-        if let Err(SendError(_)) = commands_tx.send(command) {
-            // The other end has hung up. We should shut down too.
-            break;
-        }
     });
 
     Ok(GameIo {
