@@ -36,7 +36,7 @@ impl<I> Actor<I> {
         thread::spawn(move || loop {
             let input = f();
 
-            if let Err(SendError(_)) = self.sender.send(input) {
+            if let Err(ChannelError::Disconnected) = self.sender.send(input) {
                 break;
             }
         });
@@ -56,8 +56,10 @@ pub struct Sender<T> {
 }
 
 impl<T> Sender<T> {
-    pub fn send(&self, value: T) -> Result<(), SendError<T>> {
-        self.inner.send(value)
+    pub fn send(&self, value: T) -> Result<(), ChannelError> {
+        self.inner
+            .send(value)
+            .map_err(|SendError(_)| ChannelError::Disconnected)
     }
 }
 
@@ -81,4 +83,8 @@ impl<T> Receiver<T> {
     pub fn into_inner(self) -> mpsc::Receiver<T> {
         self.inner
     }
+}
+
+pub enum ChannelError {
+    Disconnected,
 }

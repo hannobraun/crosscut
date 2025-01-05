@@ -1,5 +1,5 @@
 use std::sync::{
-    mpsc::{self, SendError, TryRecvError},
+    mpsc::{self, TryRecvError},
     Arc,
 };
 
@@ -13,7 +13,10 @@ use winit::{
     window::{Window, WindowId},
 };
 
-use crate::{actor::Sender, language::GameInput};
+use crate::{
+    actor::{ChannelError, Sender},
+    language::GameInput,
+};
 
 pub fn start_and_wait(
     input: Sender<GameInput>,
@@ -87,7 +90,7 @@ impl ApplicationHandler for Handler {
                 event_loop.exit();
             }
             WindowEvent::RedrawRequested => {
-                if let Err(SendError(_)) =
+                if let Err(ChannelError::Disconnected) =
                     self.game_io.input.send(GameInput::RenderingFrame)
                 {
                     // The other end has hung up. We should shut down too.
