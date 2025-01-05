@@ -12,7 +12,7 @@ pub fn read_command() -> anyhow::Result<String> {
 pub fn parse_command(
     command: String,
     color: &mut [f64; 4],
-) -> anyhow::Result<()> {
+) -> anyhow::Result<Command> {
     let Ok(channels) = command
         .split_whitespace()
         .map(|channel| channel.parse::<f64>())
@@ -27,5 +27,9 @@ pub fn parse_command(
 
     *color = [r, g, b, a];
 
-    Ok(())
+    Ok(Command::SetColor { color: *color })
+}
+
+pub enum Command {
+    SetColor { color: [f64; 4] },
 }

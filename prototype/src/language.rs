@@ -7,7 +7,7 @@ use tokio::{
 };
 
 use crate::{
-    cli::{parse_command, read_command},
+    cli::{parse_command, read_command, Command},
     game_io::{GameInput, GameIo},
 };
 
@@ -55,8 +55,13 @@ pub fn start() -> anyhow::Result<GameIo> {
 
                 match event {
                     Event::Command(command) => {
-                        if let Err(err) = parse_command(command, &mut color) {
-                            println!("{err}");
+                        match parse_command(command, &mut color) {
+                            Ok(Command::SetColor { color }) => {
+                                let _ = color;
+                            }
+                            Err(err) => {
+                                println!("{err}");
+                            }
                         }
                     }
                     Event::GameInput(GameInput::RenderingFrame) => {
