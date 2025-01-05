@@ -8,7 +8,7 @@ pub struct Actor<I> {
 }
 
 impl<I> Actor<I> {
-    pub fn start(mut f: impl FnMut(I) -> bool + Send + 'static) -> Self
+    pub fn start(mut f: impl FnMut(I) -> bool + Send + 'static) -> Actor<I>
     where
         I: Send + 'static,
     {
