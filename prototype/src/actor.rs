@@ -6,18 +6,18 @@ use std::{
 use tuples::CombinRight;
 
 pub struct Spawner<T> {
-    actors: T,
+    actors: Option<T>,
 }
 
 impl Spawner<()> {
     pub fn new() -> Self {
-        Self { actors: () }
+        Self { actors: Some(()) }
     }
 }
 
 impl<T> Spawner<T> {
     pub fn spawn<I>(
-        self,
+        mut self,
         mut f: impl FnMut(I) -> bool + Send + 'static,
     ) -> (Spawner<T::Out>, Actor<I>)
     where
@@ -34,9 +34,17 @@ impl<T> Spawner<T> {
             }
         });
 
+        let Some(actors) = self.actors.take() else {
+            unreachable!(
+                "The field is only set to `None` right here, after which this \
+                instance is dropped. Thus, it's not possible to encounter a \
+                `None` value here."
+            );
+        };
+
         (
             Spawner {
-                actors: self.actors.push_right(handle),
+                actors: Some(actors.push_right(handle)),
             },
             Actor { sender },
         )
