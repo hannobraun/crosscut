@@ -1,5 +1,6 @@
 use std::io::stdin;
 
+use anyhow::anyhow;
 use itertools::Itertools;
 
 pub fn read_command() -> anyhow::Result<String> {
@@ -8,20 +9,23 @@ pub fn read_command() -> anyhow::Result<String> {
     Ok(command)
 }
 
-pub fn parse_command(command: String, color: &mut [f64; 4]) {
+pub fn parse_command(
+    command: String,
+    color: &mut [f64; 4],
+) -> anyhow::Result<()> {
     let Ok(channels) = command
         .split_whitespace()
         .map(|channel| channel.parse::<f64>())
         .collect::<Result<Vec<_>, _>>()
     else {
-        println!("Can't parse color channels as `f64`.");
-        return;
+        return Err(anyhow!("Can't parse color channels as `f64`."));
     };
 
     let Some((r, g, b, a)) = channels.into_iter().collect_tuple() else {
-        println!("Unexpected number of color channels.");
-        return;
+        return Err(anyhow!("Unexpected number of color channels."));
     };
 
     *color = [r, g, b, a];
+
+    Ok(())
 }
