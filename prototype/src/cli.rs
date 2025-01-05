@@ -11,7 +11,10 @@ pub fn start() -> UnboundedReceiver<String> {
     // Tokio documentation explicitly recommends against using that for
     // interactive code, recommending a dedicated thread instead.
     thread::spawn(move || loop {
-        let command = read_command().unwrap();
+        let Some(command) = read_command().unwrap() else {
+            continue;
+        };
+
         if let Err(SendError(_)) = commands_tx.send(command) {
             // The other end has hung up. We should shut down too.
             break;
@@ -21,10 +24,10 @@ pub fn start() -> UnboundedReceiver<String> {
     commands_rx
 }
 
-pub fn read_command() -> anyhow::Result<String> {
+pub fn read_command() -> anyhow::Result<Option<String>> {
     let mut command = String::new();
     stdin().read_line(&mut command)?;
-    Ok(command)
+    Ok(Some(command))
 }
 
 pub fn parse_command(command: String) -> anyhow::Result<Command> {
