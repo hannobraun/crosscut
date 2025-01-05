@@ -9,8 +9,8 @@ use crate::{
 };
 
 pub fn start(commands: Receiver<Command>) -> anyhow::Result<GameIo> {
-    // Specifying type explicitly, to work around this bug in rust-analyzer:
-    // https://github.com/rust-lang/rust-analyzer/issues/15984
+    // Specifying type parameter explicitly, to work around this bug in
+    // rust-analyzer: https://github.com/rust-lang/rust-analyzer/issues/15984
     let (input_tx, input_rx) = channel::create::<GameInput>();
     let (color_tx, color_rx) = channel::create();
 
