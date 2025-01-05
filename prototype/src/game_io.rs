@@ -18,12 +18,15 @@ use crate::{
     language::GameInput,
 };
 
-pub fn start_and_wait(game_io: GameIo) -> anyhow::Result<()> {
+pub fn start_and_wait(
+    input: Sender<GameInput>,
+    output: Receiver<[f64; 4]>,
+) -> anyhow::Result<()> {
     let mut handler = Handler {
         resources: None,
         result: Ok(()),
         color: None,
-        game_io,
+        game_io: GameIo { input, output },
     };
 
     let event_loop = EventLoop::new()?;
