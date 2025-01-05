@@ -1,6 +1,6 @@
 use std::thread;
 
-use crossbeam_channel::{select, SendError};
+use crossbeam_channel::SendError;
 
 use crate::{
     channel::{self, Receiver},
@@ -13,6 +13,31 @@ pub fn start(commands: Receiver<Command>) -> anyhow::Result<GameIo> {
     // rust-analyzer: https://github.com/rust-lang/rust-analyzer/issues/15984
     let (input_tx, input_rx) = channel::create::<GameInput>();
     let (color_tx, color_rx) = channel::create();
+
+    let (events_tx, events_rx) = channel::create();
+
+    let events_from_input = events_tx.clone();
+    let events_from_commands = events_tx;
+
+    thread::spawn(move || {
+        while let Ok(input) = input_rx.recv() {
+            if let Err(SendError(_)) =
+                events_from_input.send(Event::GameInput(input))
+            {
+                break;
+            };
+        }
+    });
+
+    thread::spawn(move || {
+        while let Ok(command) = commands.recv() {
+            if let Err(SendError(_)) =
+                events_from_commands.send(Event::Command(command))
+            {
+                break;
+            };
+        }
+    });
 
     thread::spawn(move || {
         let mut code = Code {
@@ -29,23 +54,9 @@ pub fn start(commands: Receiver<Command>) -> anyhow::Result<GameIo> {
                 break;
             }
 
-            let event = select! {
-                recv(input_rx) -> game_input => {
-                    let Ok(game_input) = game_input else {
-                        // The other end has hung up. We should shut down too.
-                        break;
-                    };
-
-                    Event::GameInput(game_input)
-                }
-                recv(commands) -> command => {
-                    let Ok(command) = command else {
-                        // The other end has hung up. We should shut down too.
-                        break;
-                    };
-
-                    Event::Command(command)
-                }
+            let Ok(event) = events_rx.recv() else {
+                // The other end has hung up. We should shut down too.
+                break;
             };
 
             match event {
