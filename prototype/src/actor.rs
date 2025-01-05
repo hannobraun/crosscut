@@ -48,12 +48,7 @@ impl<I> Actor<I> {
     {
         let handle = thread::spawn(move || {
             loop {
-                let input = match f() {
-                    Ok(input) => input,
-                    Err(err) => {
-                        return Err(err);
-                    }
-                };
+                let input = f()?;
 
                 if let Err(ChannelError::Disconnected) = self.sender.send(input)
                 {
