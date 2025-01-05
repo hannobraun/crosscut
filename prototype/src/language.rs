@@ -17,7 +17,7 @@ pub fn start() -> anyhow::Result<(GameIo, Sender<Command>)> {
     let input = actor(move |input| {
         events_from_input.send(Event::GameInput(input)).is_ok()
     });
-    let commands_tx = actor(move |command| {
+    let commands = actor(move |command| {
         events_from_commands.send(Event::Command(command)).is_ok()
     });
 
@@ -57,7 +57,7 @@ pub fn start() -> anyhow::Result<(GameIo, Sender<Command>)> {
             input,
             output: color_rx,
         },
-        commands_tx,
+        commands,
     ))
 }
 
