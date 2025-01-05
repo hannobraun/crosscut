@@ -1,7 +1,7 @@
 use crate::actor::{actor, Sender};
 
 pub fn start(
-    color_tx: Sender<[f64; 4]>,
+    color: Sender<[f64; 4]>,
 ) -> anyhow::Result<(Sender<GameInput>, Sender<Command>)> {
     let mut code = Code {
         color: [0., 0., 0., 1.],
@@ -19,7 +19,7 @@ pub fn start(
             }
         }
 
-        color_tx.send(code.color).is_ok()
+        color.send(code.color).is_ok()
     });
 
     let events_from_input = events.clone();
