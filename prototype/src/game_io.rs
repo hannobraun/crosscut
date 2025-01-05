@@ -12,12 +12,12 @@ use winit::{
 
 use crate::{
     actor::{ChannelError, Receiver, Sender},
-    language::GameInput,
+    language::{GameInput, GameOutput},
 };
 
 pub fn start_and_wait(
     input: Sender<GameInput>,
-    output: Receiver<[f64; 4]>,
+    output: Receiver<GameOutput>,
 ) -> anyhow::Result<()> {
     let mut handler = Handler {
         resources: None,
@@ -97,9 +97,9 @@ impl ApplicationHandler for Handler {
 
                 loop {
                     match self.game_io.output.try_recv() {
-                        Ok([r, g, b, a]) => {
-                            self.color = Some(wgpu::Color { r, g, b, a })
-                        }
+                        Ok(GameOutput::SubmitColor {
+                            color: [r, g, b, a],
+                        }) => self.color = Some(wgpu::Color { r, g, b, a }),
                         Err(TryRecvError::Empty) => {
                             // No update, so nothing to do here. If we had an
                             // update before, we'll use that one below.
@@ -244,5 +244,5 @@ impl Renderer {
 
 struct GameIo {
     input: Sender<GameInput>,
-    output: Receiver<[f64; 4]>,
+    output: Receiver<GameOutput>,
 }

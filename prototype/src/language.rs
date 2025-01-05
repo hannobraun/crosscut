@@ -1,7 +1,7 @@
 use crate::actor::{Actor, ActorHandle, Sender};
 
 pub fn start(
-    color: Sender<[f64; 4]>,
+    color: Sender<GameOutput>,
 ) -> anyhow::Result<(ActorHandle, Actor<Command>, Actor<GameInput>)> {
     let mut code = Code {
         color: [0., 0., 0., 1.],
@@ -20,7 +20,7 @@ pub fn start(
             }
         }
 
-        color.send(code.color)?;
+        color.send(GameOutput::SubmitColor { color: code.color })?;
 
         Ok(())
     });
@@ -55,6 +55,10 @@ pub enum Command {
 
 pub enum GameInput {
     RenderingFrame,
+}
+
+pub enum GameOutput {
+    SubmitColor { color: [f64; 4] },
 }
 
 fn print_output(code: &Code) {
