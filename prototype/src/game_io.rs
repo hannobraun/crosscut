@@ -1,5 +1,5 @@
 use std::sync::{
-    mpsc::{Receiver, SendError, TryRecvError},
+    mpsc::{self, SendError, TryRecvError},
     Arc,
 };
 
@@ -17,7 +17,7 @@ use crate::{actor::Sender, language::GameInput};
 
 pub fn start_and_wait(
     input: Sender<GameInput>,
-    output: Receiver<[f64; 4]>,
+    output: mpsc::Receiver<[f64; 4]>,
 ) -> anyhow::Result<()> {
     let mut handler = Handler {
         resources: None,
@@ -244,5 +244,5 @@ impl Renderer {
 
 struct GameIo {
     input: Sender<GameInput>,
-    output: Receiver<[f64; 4]>,
+    output: mpsc::Receiver<[f64; 4]>,
 }
