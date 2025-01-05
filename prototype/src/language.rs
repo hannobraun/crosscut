@@ -7,7 +7,7 @@ pub fn start(
         color: [0., 0., 0., 1.],
     };
 
-    println!("Color: {:?}", code.color);
+    print_output(&code);
 
     let handle_events = Actor::spawn(move |event| {
         match event {
@@ -54,4 +54,8 @@ pub enum Command {
 
 pub enum GameInput {
     RenderingFrame,
+}
+
+fn print_output(code: &Code) {
+    println!("Color: {:?}", code.color);
 }
