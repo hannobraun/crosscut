@@ -3,13 +3,15 @@ use crate::actor::{Sender, Spawner};
 pub fn start(
     color: Sender<[f64; 4]>,
 ) -> anyhow::Result<(Sender<GameInput>, Sender<Command>)> {
+    let spawner = Spawner::new();
+
     let mut code = Code {
         color: [0., 0., 0., 1.],
     };
 
     println!("Color: {:?}", code.color);
 
-    let (_, handle_events) = Spawner::new().spawn(move |event| {
+    let (spawner, handle_events) = spawner.spawn(move |event| {
         match event {
             Event::Command(Command::SetColor { color }) => {
                 code.color = color;
@@ -23,12 +25,12 @@ pub fn start(
     });
 
     let events_from_input = handle_events.sender.clone();
-    let (_, input_to_event) = Spawner::new().spawn(move |input| {
+    let (spawner, input_to_event) = spawner.spawn(move |input| {
         events_from_input.send(Event::GameInput(input)).is_ok()
     });
 
     let events_from_commands = handle_events.sender;
-    let (_, command_to_event) = Spawner::new().spawn(move |command| {
+    let (_, command_to_event) = spawner.spawn(move |command| {
         events_from_commands.send(Event::Command(command)).is_ok()
     });
 
