@@ -1,4 +1,8 @@
-use std::{io::stdin, sync::mpsc::SendError, thread};
+use std::{
+    io::stdin,
+    sync::mpsc::{self, SendError},
+    thread,
+};
 
 use anyhow::anyhow;
 use itertools::Itertools;
@@ -6,8 +10,22 @@ use itertools::Itertools;
 use crate::{actor::Sender, language::Command};
 
 pub fn start(commands: Sender<Command>) {
+    let (commands_tx, commands_rx) = mpsc::channel();
+
     thread::spawn(move || loop {
-        let Some(command) = read_command().unwrap() else {
+        let mut command = String::new();
+        stdin().read_line(&mut command).unwrap();
+
+        if let Err(SendError(_)) = commands_tx.send(command) {
+            break;
+        }
+    });
+
+    thread::spawn(move || loop {
+        let Ok(command) = commands_rx.recv() else {
+            break;
+        };
+        let Some(command) = read_command(command).unwrap() else {
             continue;
         };
 
@@ -18,10 +36,7 @@ pub fn start(commands: Sender<Command>) {
     });
 }
 
-fn read_command() -> anyhow::Result<Option<Command>> {
-    let mut command = String::new();
-    stdin().read_line(&mut command)?;
-
+fn read_command(command: String) -> anyhow::Result<Option<Command>> {
     let command = match parse_command(command) {
         Ok(command) => command,
         Err(err) => {
