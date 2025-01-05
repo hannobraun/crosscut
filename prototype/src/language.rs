@@ -27,11 +27,11 @@ pub fn start() -> anyhow::Result<(GameIo, Sender<Command>)> {
     });
 
     let events_from_input = events.clone();
-    let events_from_commands = events;
-
     let input = actor(move |input| {
         events_from_input.send(Event::GameInput(input)).is_ok()
     });
+
+    let events_from_commands = events;
     let commands = actor(move |command| {
         events_from_commands.send(Event::Command(command)).is_ok()
     });
