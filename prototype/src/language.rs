@@ -26,12 +26,14 @@ pub fn start(
 
     let events_from_input = handle_events.sender.clone();
     let input_to_event = Actor::spawn(move |input| {
-        Ok(events_from_input.send(Event::GameInput(input)).is_ok())
+        events_from_input.send(Event::GameInput(input))?;
+        Ok(true)
     });
 
     let events_from_commands = handle_events.sender;
     let command_to_event = Actor::spawn(move |command| {
-        Ok(events_from_commands.send(Event::Command(command)).is_ok())
+        events_from_commands.send(Event::Command(command))?;
+        Ok(true)
     });
 
     Ok((input_to_event.sender, command_to_event.sender))
