@@ -9,23 +9,24 @@ use crate::{
 };
 
 pub fn start(commands: Sender<Command>) {
-    Spawner::start(move |command| {
-        let command = match parse_command(command) {
-            Ok(command) => command,
-            Err(err) => {
-                println!("{err}");
-                return true;
-            }
-        };
+    Spawner
+        .start(move |command| {
+            let command = match parse_command(command) {
+                Ok(command) => command,
+                Err(err) => {
+                    println!("{err}");
+                    return true;
+                }
+            };
 
-        commands.send(command).is_ok()
-    })
-    .provide_input(|| {
-        let mut command = String::new();
-        stdin().read_line(&mut command).unwrap();
+            commands.send(command).is_ok()
+        })
+        .provide_input(|| {
+            let mut command = String::new();
+            stdin().read_line(&mut command).unwrap();
 
-        command
-    });
+            command
+        });
 }
 
 fn parse_command(command: String) -> anyhow::Result<Command> {
