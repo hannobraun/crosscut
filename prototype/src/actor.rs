@@ -3,15 +3,17 @@ use std::{
     thread,
 };
 
-pub struct Spawner;
+pub struct Spawner<T> {
+    _actors: T,
+}
 
-impl Spawner {
+impl Spawner<()> {
     pub fn new() -> Self {
-        Self {}
+        Self { _actors: () }
     }
 }
 
-impl Spawner {
+impl<T> Spawner<T> {
     pub fn spawn<I>(
         self,
         mut f: impl FnMut(I) -> bool + Send + 'static,
