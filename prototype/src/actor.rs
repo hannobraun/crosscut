@@ -6,6 +6,10 @@ use std::{
 pub struct Spawner;
 
 impl Spawner {
+    pub fn new() -> Self {
+        Self {}
+    }
+
     pub fn spawn<I>(
         &mut self,
         mut f: impl FnMut(I) -> bool + Send + 'static,

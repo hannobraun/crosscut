@@ -9,7 +9,7 @@ use crate::{
 };
 
 pub fn start(commands: Sender<Command>) {
-    Spawner
+    Spawner::new()
         .spawn(move |command| {
             let command = match parse_command(command) {
                 Ok(command) => command,
