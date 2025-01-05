@@ -13,7 +13,10 @@ use winit::{
     window::{Window, WindowId},
 };
 
-use crate::actor::{Receiver, Sender};
+use crate::{
+    actor::{Receiver, Sender},
+    language::GameInput,
+};
 
 pub fn start_and_wait(game_io: GameIo) -> anyhow::Result<()> {
     let mut handler = Handler {
@@ -32,10 +35,6 @@ pub fn start_and_wait(game_io: GameIo) -> anyhow::Result<()> {
 pub struct GameIo {
     pub input: Sender<GameInput>,
     pub output: Receiver<[f64; 4]>,
-}
-
-pub enum GameInput {
-    RenderingFrame,
 }
 
 pub struct Handler {
