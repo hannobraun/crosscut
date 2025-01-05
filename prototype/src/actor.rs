@@ -22,7 +22,7 @@ impl<I> Actor<I> {
             }
         });
 
-        Self { sender }
+        Actor { sender }
     }
 
     pub fn provide_input(self, mut f: impl FnMut() -> I + Send + 'static)
