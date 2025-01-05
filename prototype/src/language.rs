@@ -1,12 +1,9 @@
-use std::sync::mpsc::{self, Receiver};
-
 use crate::actor::{actor, Sender};
 
 #[allow(clippy::type_complexity)] // temporary; should be removed any commit now
 pub fn start(
-) -> anyhow::Result<(Sender<GameInput>, Receiver<[f64; 4]>, Sender<Command>)> {
-    let (color_tx, color_rx) = mpsc::channel();
-
+    color_tx: Sender<[f64; 4]>,
+) -> anyhow::Result<(Sender<GameInput>, Sender<Command>)> {
     let mut code = Code {
         color: [0., 0., 0., 1.],
     };
@@ -36,7 +33,7 @@ pub fn start(
         events_from_commands.send(Event::Command(command)).is_ok()
     });
 
-    Ok((input, color_rx, commands))
+    Ok((input, commands))
 }
 
 struct Code {
