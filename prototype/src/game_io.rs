@@ -120,7 +120,7 @@ impl ApplicationHandler for Handler {
                     self.handle_error(err, event_loop);
 
                     // I want to have this explicit return here, to make sure
-                    // this stays working as the code here shifts.
+                    // this stays working as the code shifts.
                     #[allow(clippy::needless_return)]
                     return;
                 }
