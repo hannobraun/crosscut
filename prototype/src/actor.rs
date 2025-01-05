@@ -106,19 +106,8 @@ pub struct ActorHandle {
 
 impl ActorHandle {
     pub fn join(self) -> anyhow::Result<()> {
-        if let Some(handle) = self.main {
+        for handle in [self.main, self.input].into_iter().flatten() {
             match handle.join() {
-                Ok(result) => {
-                    result?;
-                }
-                Err(payload) => {
-                    panic::resume_unwind(payload);
-                }
-            }
-        }
-
-        if let Some(input) = self.input {
-            match input.join() {
                 Ok(result) => {
                     result?;
                 }
