@@ -1,29 +1,20 @@
-use std::{
-    io::stdin,
-    sync::mpsc::{self, SendError},
-    thread,
-};
+use std::{io::stdin, sync::mpsc::SendError, thread};
 
 use anyhow::anyhow;
 use itertools::Itertools;
 
-use crate::{actor::Sender, language::Command};
+use crate::{
+    actor::{actor, Sender},
+    language::Command,
+};
 
 pub fn start(commands: Sender<Command>) {
-    let (commands_tx, commands_rx) = mpsc::channel();
-
-    thread::spawn(move || loop {
-        let Ok(command) = commands_rx.recv() else {
-            break;
-        };
+    let commands_tx = actor(move |command| {
         let Some(command) = read_command(command) else {
-            continue;
+            return true;
         };
 
-        if let Err(SendError(_)) = commands.send(command) {
-            // The other end has hung up. We should shut down too.
-            break;
-        }
+        commands.send(command).is_ok()
     });
 
     thread::spawn(move || loop {
