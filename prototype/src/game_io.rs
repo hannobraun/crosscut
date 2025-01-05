@@ -13,7 +13,7 @@ use winit::{
     window::{Window, WindowId},
 };
 
-use crate::channel::{Receiver, Sender};
+use crate::actor::{Receiver, Sender};
 
 pub fn start_and_wait(game_io: GameIo) -> anyhow::Result<()> {
     let mut application = Application {

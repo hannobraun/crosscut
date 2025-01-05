@@ -3,7 +3,7 @@ use std::{io::stdin, sync::mpsc::SendError, thread};
 use anyhow::anyhow;
 use itertools::Itertools;
 
-use crate::channel::Sender;
+use crate::actor::Sender;
 
 pub fn start(commands: Sender<Command>) {
     thread::spawn(move || loop {

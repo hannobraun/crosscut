@@ -1,7 +1,7 @@
 use std::sync::mpsc;
 
 use crate::{
-    channel::{actor, Sender},
+    actor::{actor, Sender},
     cli::Command,
     game_io::{GameInput, GameIo},
 };
