@@ -19,7 +19,7 @@ impl<I> Actor<I> {
             }
         });
 
-        Actor { input: sender }
+        Self { input: sender }
     }
 }
 
