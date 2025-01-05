@@ -1,5 +1,5 @@
 use std::{
-    sync::mpsc::{self, RecvError, SendError},
+    sync::mpsc::{self, SendError},
     thread::{self, JoinHandle},
 };
 
@@ -54,7 +54,7 @@ impl<I> Actor<I> {
 pub fn channel<T>() -> (Sender<T>, Receiver<T>) {
     let (sender, receiver) = mpsc::channel();
 
-    (Sender { inner: sender }, Receiver { inner: receiver })
+    (Sender { inner: sender }, receiver)
 }
 
 pub struct Sender<T> {
@@ -77,19 +77,7 @@ impl<T> Clone for Sender<T> {
     }
 }
 
-pub struct Receiver<T> {
-    inner: mpsc::Receiver<T>,
-}
-
-impl<T> Receiver<T> {
-    pub fn recv(&self) -> Result<T, RecvError> {
-        self.inner.recv()
-    }
-
-    pub fn into_inner(self) -> mpsc::Receiver<T> {
-        self.inner
-    }
-}
+type Receiver<T> = mpsc::Receiver<T>;
 
 pub enum ChannelError {
     Disconnected,

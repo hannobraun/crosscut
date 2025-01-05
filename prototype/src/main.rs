@@ -10,7 +10,7 @@ fn main() -> anyhow::Result<()> {
 
     let (input, commands) = language::start(color_tx)?;
     let cli = cli::start(commands);
-    game_io::start_and_wait(input, color_rx.into_inner())?;
+    game_io::start_and_wait(input, color_rx)?;
 
     match cli.join() {
         Ok(()) => {}
