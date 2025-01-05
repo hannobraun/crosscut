@@ -1,20 +1,14 @@
 use std::thread;
 
-use tokio::{
-    runtime::Runtime,
-    select,
-    sync::mpsc::{error::SendError, UnboundedReceiver},
-};
+use tokio::{runtime::Runtime, select, sync::mpsc::error::SendError};
 
 use crate::{
-    channel,
+    channel::{self, Receiver},
     cli::Command,
     game_io::{GameInput, GameIo},
 };
 
-pub fn start(
-    mut commands: UnboundedReceiver<Command>,
-) -> anyhow::Result<GameIo> {
+pub fn start(mut commands: Receiver<Command>) -> anyhow::Result<GameIo> {
     let runtime = Runtime::new()?;
 
     let (render_tx, mut render_rx) = channel::create();
