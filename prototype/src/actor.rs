@@ -77,7 +77,7 @@ impl<T> Clone for Sender<T> {
     }
 }
 
-type Receiver<T> = mpsc::Receiver<T>;
+pub type Receiver<T> = mpsc::Receiver<T>;
 
 pub enum ChannelError {
     Disconnected,

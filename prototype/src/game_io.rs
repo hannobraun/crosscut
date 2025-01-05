@@ -1,7 +1,4 @@
-use std::sync::{
-    mpsc::{self, TryRecvError},
-    Arc,
-};
+use std::sync::{mpsc::TryRecvError, Arc};
 
 use anyhow::anyhow;
 use pollster::FutureExt;
@@ -14,13 +11,13 @@ use winit::{
 };
 
 use crate::{
-    actor::{ChannelError, Sender},
+    actor::{ChannelError, Receiver, Sender},
     language::GameInput,
 };
 
 pub fn start_and_wait(
     input: Sender<GameInput>,
-    output: mpsc::Receiver<[f64; 4]>,
+    output: Receiver<[f64; 4]>,
 ) -> anyhow::Result<()> {
     let mut handler = Handler {
         resources: None,
@@ -247,5 +244,5 @@ impl Renderer {
 
 struct GameIo {
     input: Sender<GameInput>,
-    output: mpsc::Receiver<[f64; 4]>,
+    output: Receiver<[f64; 4]>,
 }
