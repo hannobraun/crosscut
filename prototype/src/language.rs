@@ -86,13 +86,13 @@ enum Event {
     GameInput(GameInput),
 }
 
-fn read_command() -> anyhow::Result<String> {
+pub fn read_command() -> anyhow::Result<String> {
     let mut command = String::new();
     stdin().read_line(&mut command)?;
     Ok(command)
 }
 
-fn parse_command(command: String, color: &mut [f64; 4]) {
+pub fn parse_command(command: String, color: &mut [f64; 4]) {
     let Ok(channels) = command
         .split_whitespace()
         .map(|channel| channel.parse::<f64>())
