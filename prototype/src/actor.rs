@@ -51,7 +51,7 @@ impl<I> Actor<I> {
                 let input = match f() {
                     Ok(input) => input,
                     Err(err) => {
-                        panic!("{err:?}");
+                        return Err(err);
                     }
                 };
 
