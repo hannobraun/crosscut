@@ -9,7 +9,9 @@ impl Spawner {
     pub fn new() -> Self {
         Self {}
     }
+}
 
+impl Spawner {
     pub fn spawn<I>(
         self,
         mut f: impl FnMut(I) -> bool + Send + 'static,
