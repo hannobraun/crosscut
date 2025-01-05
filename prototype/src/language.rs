@@ -22,7 +22,7 @@ pub fn start() -> anyhow::Result<GameIo> {
         runtime.block_on(async {
             let mut color = [0., 0., 0., 1.];
 
-            println!("Color: {color:?}");
+            println!("Color: {:?}", color);
 
             loop {
                 // The channel has no buffer, so this is synchronized to the
