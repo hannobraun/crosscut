@@ -19,7 +19,9 @@ pub fn start(
             }
         }
 
-        Ok(color.send(code.color).is_ok())
+        color.send(code.color)?;
+
+        Ok(true)
     });
 
     let events_from_input = handle_events.sender.clone();
