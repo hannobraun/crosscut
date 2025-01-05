@@ -35,12 +35,12 @@ pub fn start_and_wait(
     handler.result
 }
 
-pub struct GameIo {
-    pub input: Sender<GameInput>,
-    pub output: Receiver<[f64; 4]>,
+struct GameIo {
+    input: Sender<GameInput>,
+    output: Receiver<[f64; 4]>,
 }
 
-pub struct Handler {
+struct Handler {
     resources: Option<ApplicationResources>,
     result: anyhow::Result<()>,
     color: Option<wgpu::Color>,
