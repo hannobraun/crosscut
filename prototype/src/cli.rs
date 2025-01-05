@@ -4,7 +4,7 @@ use anyhow::anyhow;
 use itertools::Itertools;
 use tokio::sync::mpsc::{self, error::SendError, UnboundedReceiver};
 
-pub fn start() -> UnboundedReceiver<String> {
+pub fn start() -> UnboundedReceiver<Command> {
     let (commands_tx, commands_rx) = mpsc::unbounded_channel();
 
     // We're using Tokio here and could use its asynchronous stdio API. But the
@@ -24,9 +24,18 @@ pub fn start() -> UnboundedReceiver<String> {
     commands_rx
 }
 
-fn read_command() -> anyhow::Result<Option<String>> {
+fn read_command() -> anyhow::Result<Option<Command>> {
     let mut command = String::new();
     stdin().read_line(&mut command)?;
+
+    let command = match parse_command(command) {
+        Ok(command) => command,
+        Err(err) => {
+            println!("{err}");
+            return Ok(None);
+        }
+    };
+
     Ok(Some(command))
 }
 

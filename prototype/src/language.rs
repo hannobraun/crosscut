@@ -7,12 +7,12 @@ use tokio::{
 };
 
 use crate::{
-    cli::{parse_command, Command},
+    cli::Command,
     game_io::{GameInput, GameIo},
 };
 
 pub fn start(
-    mut commands: UnboundedReceiver<String>,
+    mut commands: UnboundedReceiver<Command>,
 ) -> anyhow::Result<GameIo> {
     let runtime = Runtime::new()?;
 
@@ -57,14 +57,9 @@ pub fn start(
                 };
 
                 match event {
-                    Event::Command(command) => match parse_command(command) {
-                        Ok(Command::SetColor { color }) => {
-                            code.color = color;
-                        }
-                        Err(err) => {
-                            println!("{err}");
-                        }
-                    },
+                    Event::Command(Command::SetColor { color }) => {
+                        code.color = color;
+                    }
                     Event::GameInput(GameInput::RenderingFrame) => {
                         // This loop is coupled to the frame rate of the
                         // renderer.
@@ -81,7 +76,7 @@ pub fn start(
 }
 
 enum Event {
-    Command(String),
+    Command(Command),
     GameInput(GameInput),
 }
 
