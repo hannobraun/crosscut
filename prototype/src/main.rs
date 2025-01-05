@@ -4,13 +4,21 @@ mod game_io;
 mod language;
 
 fn main() -> anyhow::Result<()> {
+    use std::panic;
     use std::sync::mpsc;
 
     let (color_tx, color_rx) = mpsc::channel();
 
     let (input, commands) = language::start(color_tx)?;
-    cli::start(commands);
+    let cli = cli::start(commands);
     game_io::start_and_wait(input, color_rx)?;
+
+    match cli.join() {
+        Ok(()) => {}
+        Err(payload) => {
+            panic::resume_unwind(payload);
+        }
+    }
 
     Ok(())
 }
