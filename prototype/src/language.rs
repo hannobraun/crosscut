@@ -14,7 +14,7 @@ pub fn start(commands: Receiver<Command>) -> anyhow::Result<GameIo> {
 
     // Specifying type explicitly, to work around this bug in rust-analyzer:
     // https://github.com/rust-lang/rust-analyzer/issues/15984
-    let (render_tx, render_rx) = channel::create::<GameInput>();
+    let (render_tx, input_rx) = channel::create::<GameInput>();
     let (color_tx, color_rx) = channel::create();
 
     thread::spawn(move || {
@@ -34,7 +34,7 @@ pub fn start(commands: Receiver<Command>) -> anyhow::Result<GameIo> {
                 }
 
                 let event = select! {
-                    recv(render_rx) -> game_input => {
+                    recv(input_rx) -> game_input => {
                         let Ok(game_input) = game_input else {
                             // The other end has hung up. We should shut down
                             // too.
