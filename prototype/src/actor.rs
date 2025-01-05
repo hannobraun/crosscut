@@ -5,7 +5,7 @@ use std::{
 
 pub struct Actor<I> {
     pub sender: Sender<I>,
-    pub handle: JoinHandle<anyhow::Result<()>>,
+    pub handle: ActorHandle,
 }
 
 impl<I> Actor<I> {
@@ -34,7 +34,7 @@ impl<I> Actor<I> {
         Actor { sender, handle }
     }
 
-    pub fn provide_input<F>(self, mut f: F) -> JoinHandle<anyhow::Result<()>>
+    pub fn provide_input<F>(self, mut f: F) -> ActorHandle
     where
         I: Send + 'static,
         F: FnMut() -> anyhow::Result<I> + Send + 'static,
@@ -87,3 +87,5 @@ pub type Receiver<T> = mpsc::Receiver<T>;
 pub enum ChannelError {
     Disconnected,
 }
+
+pub type ActorHandle = JoinHandle<anyhow::Result<()>>;
