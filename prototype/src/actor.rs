@@ -3,12 +3,10 @@ use std::{
     thread,
 };
 
-pub struct Actor<I> {
-    pub sender: Sender<I>,
-}
+pub struct Spawner;
 
-impl<I> Actor<I> {
-    pub fn start(mut f: impl FnMut(I) -> bool + Send + 'static) -> Actor<I>
+impl Spawner {
+    pub fn start<I>(mut f: impl FnMut(I) -> bool + Send + 'static) -> Actor<I>
     where
         I: Send + 'static,
     {
@@ -24,7 +22,13 @@ impl<I> Actor<I> {
 
         Actor { sender }
     }
+}
 
+pub struct Actor<I> {
+    pub sender: Sender<I>,
+}
+
+impl<I> Actor<I> {
     pub fn provide_input(self, mut f: impl FnMut() -> I + Send + 'static)
     where
         I: Send + 'static,
