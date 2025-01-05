@@ -24,15 +24,15 @@ pub fn start(
         Ok(())
     });
 
-    let events_from_input = handle_events.sender.clone();
-    let input_to_event = Actor::spawn(move |input| {
-        events_from_input.send(Event::GameInput(input))?;
+    let events_from_commands = handle_events.sender.clone();
+    let command_to_event = Actor::spawn(move |command| {
+        events_from_commands.send(Event::Command(command))?;
         Ok(())
     });
 
-    let events_from_commands = handle_events.sender;
-    let command_to_event = Actor::spawn(move |command| {
-        events_from_commands.send(Event::Command(command))?;
+    let events_from_input = handle_events.sender;
+    let input_to_event = Actor::spawn(move |input| {
+        events_from_input.send(Event::GameInput(input))?;
         Ok(())
     });
 
