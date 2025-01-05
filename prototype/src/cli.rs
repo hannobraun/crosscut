@@ -39,7 +39,7 @@ fn read_command() -> anyhow::Result<Option<Command>> {
     Ok(Some(command))
 }
 
-pub fn parse_command(command: String) -> anyhow::Result<Command> {
+fn parse_command(command: String) -> anyhow::Result<Command> {
     let Ok(channels) = command
         .split_whitespace()
         .map(|channel| channel.parse::<f64>())
