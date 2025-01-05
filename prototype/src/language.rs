@@ -40,8 +40,8 @@ pub fn start(
     Ok((handle_events.handle, command_to_event, input_to_event))
 }
 
-struct Code {
-    color: [f64; 4],
+pub struct Code {
+    pub color: [f64; 4],
 }
 
 enum Event {
