@@ -16,7 +16,7 @@ use winit::{
 use crate::actor::{Receiver, Sender};
 
 pub fn start_and_wait(game_io: GameIo) -> anyhow::Result<()> {
-    let mut application = Application {
+    let mut application = Handler {
         resources: None,
         result: Ok(()),
         color: None,
@@ -38,14 +38,14 @@ pub enum GameInput {
     RenderingFrame,
 }
 
-pub struct Application {
+pub struct Handler {
     resources: Option<ApplicationResources>,
     result: anyhow::Result<()>,
     color: Option<wgpu::Color>,
     game_io: GameIo,
 }
 
-impl Application {
+impl Handler {
     fn handle_error(
         &mut self,
         err: anyhow::Error,
@@ -56,7 +56,7 @@ impl Application {
     }
 }
 
-impl ApplicationHandler for Application {
+impl ApplicationHandler for Handler {
     fn resumed(&mut self, event_loop: &ActiveEventLoop) {
         self.resources = match ApplicationResources::new(event_loop) {
             Ok(resources) => Some(resources),
