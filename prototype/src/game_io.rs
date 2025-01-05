@@ -1,8 +1,8 @@
 use std::sync::Arc;
 
 use anyhow::anyhow;
+use crossbeam_channel::{SendError, TryRecvError};
 use pollster::FutureExt;
-use tokio::sync::mpsc::error::{SendError, TryRecvError};
 use winit::{
     application::ApplicationHandler,
     event::{KeyEvent, WindowEvent},

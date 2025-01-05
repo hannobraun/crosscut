@@ -1,6 +1,7 @@
 use std::thread;
 
-use tokio::{runtime::Runtime, select, sync::mpsc::error::SendError};
+use crossbeam_channel::{select, SendError};
+use tokio::runtime::Runtime;
 
 use crate::{
     channel::{self, Receiver},
@@ -8,10 +9,12 @@ use crate::{
     game_io::{GameInput, GameIo},
 };
 
-pub fn start(mut commands: Receiver<Command>) -> anyhow::Result<GameIo> {
+pub fn start(commands: Receiver<Command>) -> anyhow::Result<GameIo> {
     let runtime = Runtime::new()?;
 
-    let (render_tx, mut render_rx) = channel::create();
+    // Specifying type explicitly, to work around this bug in rust-analyzer:
+    // https://github.com/rust-lang/rust-analyzer/issues/15984
+    let (render_tx, render_rx) = channel::create::<GameInput>();
     let (color_tx, color_rx) = channel::create();
 
     thread::spawn(move || {
@@ -31,8 +34,8 @@ pub fn start(mut commands: Receiver<Command>) -> anyhow::Result<GameIo> {
                 }
 
                 let event = select! {
-                    game_input = render_rx.recv() => {
-                        let Some(game_input) = game_input else {
+                    recv(render_rx) -> game_input => {
+                        let Ok(game_input) = game_input else {
                             // The other end has hung up. We should shut down
                             // too.
                             break;
@@ -40,8 +43,8 @@ pub fn start(mut commands: Receiver<Command>) -> anyhow::Result<GameIo> {
 
                         Event::GameInput(game_input)
                     }
-                    command = commands.recv() => {
-                        let Some(command) = command else {
+                    recv(commands) -> command => {
+                        let Ok(command) = command else {
                             // The other end has hung up. We should shut down
                             // too.
                             break;

@@ -1,8 +1,8 @@
 use std::{io::stdin, thread};
 
 use anyhow::anyhow;
+use crossbeam_channel::SendError;
 use itertools::Itertools;
-use tokio::sync::mpsc::error::SendError;
 
 use crate::channel::{self, Receiver};
 

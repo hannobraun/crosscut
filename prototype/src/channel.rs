@@ -1,8 +1,6 @@
-use tokio::sync::mpsc;
-
 pub fn create<T>() -> (Sender<T>, Receiver<T>) {
-    mpsc::unbounded_channel()
+    crossbeam_channel::unbounded()
 }
 
-pub type Sender<T> = mpsc::UnboundedSender<T>;
-pub type Receiver<T> = mpsc::UnboundedReceiver<T>;
+pub type Sender<T> = crossbeam_channel::Sender<T>;
+pub type Receiver<T> = crossbeam_channel::Receiver<T>;
