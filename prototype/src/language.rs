@@ -63,5 +63,5 @@ pub enum GameOutput {
 }
 
 fn print_output(code: &Code) {
-    println!("Color: {:?}", code.expressions);
+    println!("{:#?}", code);
 }
