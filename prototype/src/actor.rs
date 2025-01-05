@@ -1,10 +1,11 @@
 use std::{
     sync::mpsc::{self, SendError},
-    thread,
+    thread::{self, JoinHandle},
 };
 
 pub struct Actor<I> {
     pub sender: Sender<I>,
+    pub handle: JoinHandle<()>,
 }
 
 impl<I> Actor<I> {
@@ -14,7 +15,7 @@ impl<I> Actor<I> {
     {
         let (sender, receiver) = mpsc::channel();
 
-        thread::spawn(move || {
+        let handle = thread::spawn(move || {
             while let Ok(input) = receiver.recv() {
                 if !f(input) {
                     break;
@@ -22,10 +23,13 @@ impl<I> Actor<I> {
             }
         });
 
-        Actor { sender }
+        Actor { sender, handle }
     }
 
-    pub fn provide_input(self, mut f: impl FnMut() -> I + Send + 'static)
+    pub fn provide_input(
+        self,
+        mut f: impl FnMut() -> I + Send + 'static,
+    ) -> JoinHandle<()>
     where
         I: Send + 'static,
     {
@@ -36,6 +40,8 @@ impl<I> Actor<I> {
                 break;
             }
         });
+
+        self.handle
     }
 }
 
