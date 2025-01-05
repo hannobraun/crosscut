@@ -99,10 +99,14 @@ pub struct ActorHandle {
 impl ActorHandle {
     pub fn join(self) -> anyhow::Result<()> {
         match self.main.join() {
-            Ok(result) => result,
+            Ok(result) => {
+                result?;
+            }
             Err(payload) => {
                 panic::resume_unwind(payload);
             }
         }
+
+        Ok(())
     }
 }
