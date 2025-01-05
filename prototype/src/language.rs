@@ -1,11 +1,10 @@
-use std::sync::mpsc;
+use std::sync::mpsc::{self, Receiver};
 
-use crate::{
-    actor::{actor, Sender},
-    game_io::GameIo,
-};
+use crate::actor::{actor, Sender};
 
-pub fn start() -> anyhow::Result<(GameIo, Sender<Command>)> {
+#[allow(clippy::type_complexity)] // temporary; should be removed any commit now
+pub fn start(
+) -> anyhow::Result<(Sender<GameInput>, Receiver<[f64; 4]>, Sender<Command>)> {
     let (color_tx, color_rx) = mpsc::channel();
 
     let mut code = Code {
@@ -37,13 +36,7 @@ pub fn start() -> anyhow::Result<(GameIo, Sender<Command>)> {
         events_from_commands.send(Event::Command(command)).is_ok()
     });
 
-    Ok((
-        GameIo {
-            input,
-            output: color_rx,
-        },
-        commands,
-    ))
+    Ok((input, color_rx, commands))
 }
 
 struct Code {
