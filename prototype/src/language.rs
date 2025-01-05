@@ -7,7 +7,6 @@ use crate::{
 };
 
 pub fn start() -> anyhow::Result<(GameIo, Sender<Command>)> {
-    let (commands_tx, commands_rx) = channel::create();
     let (color_tx, color_rx) = channel::create();
 
     let (events_tx, events_rx) = channel::create();
@@ -18,15 +17,8 @@ pub fn start() -> anyhow::Result<(GameIo, Sender<Command>)> {
     let input = actor(move |input| {
         events_from_input.send(Event::GameInput(input)).is_ok()
     });
-
-    thread::spawn(move || {
-        while let Ok(command) = commands_rx.recv() {
-            if let Err(SendError(_)) =
-                events_from_commands.send(Event::Command(command))
-            {
-                break;
-            };
-        }
+    let commands_tx = actor(move |command| {
+        events_from_commands.send(Event::Command(command)).is_ok()
     });
 
     thread::spawn(move || {
