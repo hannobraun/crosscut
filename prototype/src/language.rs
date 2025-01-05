@@ -6,7 +6,7 @@ use crate::{
     game_io::{GameInput, GameIo},
 };
 
-pub fn start(commands: Receiver<Command>) -> anyhow::Result<GameIo> {
+pub fn start(commands_rx: Receiver<Command>) -> anyhow::Result<GameIo> {
     let (color_tx, color_rx) = channel::create();
 
     let (events_tx, events_rx) = channel::create();
@@ -19,7 +19,7 @@ pub fn start(commands: Receiver<Command>) -> anyhow::Result<GameIo> {
     });
 
     thread::spawn(move || {
-        while let Ok(command) = commands.recv() {
+        while let Ok(command) = commands_rx.recv() {
             if let Err(SendError(_)) =
                 events_from_commands.send(Event::Command(command))
             {
