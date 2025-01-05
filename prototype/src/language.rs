@@ -9,7 +9,7 @@ pub fn start(
 
     println!("Color: {:?}", code.color);
 
-    let (_, handle_events) = Spawner::spawn(move |event| {
+    let handle_events = Spawner::spawn(move |event| {
         match event {
             Event::Command(Command::SetColor { color }) => {
                 code.color = color;
@@ -23,12 +23,12 @@ pub fn start(
     });
 
     let events_from_input = handle_events.sender.clone();
-    let (_, input_to_event) = Spawner::spawn(move |input| {
+    let input_to_event = Spawner::spawn(move |input| {
         events_from_input.send(Event::GameInput(input)).is_ok()
     });
 
     let events_from_commands = handle_events.sender;
-    let (_, command_to_event) = Spawner::spawn(move |command| {
+    let command_to_event = Spawner::spawn(move |command| {
         events_from_commands.send(Event::Command(command)).is_ok()
     });
 

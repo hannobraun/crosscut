@@ -20,7 +20,6 @@ pub fn start(commands: Sender<Command>) {
 
         commands.send(command).is_ok()
     })
-    .1
     .provide_input(|| {
         let mut command = String::new();
         stdin().read_line(&mut command).unwrap();

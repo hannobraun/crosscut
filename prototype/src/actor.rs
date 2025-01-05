@@ -6,9 +6,7 @@ use std::{
 pub struct Spawner {}
 
 impl Spawner {
-    pub fn spawn<I>(
-        mut f: impl FnMut(I) -> bool + Send + 'static,
-    ) -> (Spawner, Actor<I>)
+    pub fn spawn<I>(mut f: impl FnMut(I) -> bool + Send + 'static) -> Actor<I>
     where
         I: Send + 'static,
     {
@@ -22,7 +20,7 @@ impl Spawner {
             }
         });
 
-        (Spawner {}, Actor { sender })
+        Actor { sender }
     }
 }
 
