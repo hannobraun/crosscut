@@ -10,8 +10,12 @@ use crate::{
 
 pub fn start(commands: Sender<Command>) {
     let raw_commands = actor(move |command| {
-        let Some(command) = read_command(command) else {
-            return true;
+        let command = match parse_command(command) {
+            Ok(command) => command,
+            Err(err) => {
+                println!("{err}");
+                return true;
+            }
         };
 
         commands.send(command).is_ok()
@@ -25,18 +29,6 @@ pub fn start(commands: Sender<Command>) {
             break;
         }
     });
-}
-
-fn read_command(command: String) -> Option<Command> {
-    let command = match parse_command(command) {
-        Ok(command) => command,
-        Err(err) => {
-            println!("{err}");
-            return None;
-        }
-    };
-
-    Some(command)
 }
 
 fn parse_command(command: String) -> anyhow::Result<Command> {
