@@ -24,7 +24,7 @@ pub fn start() -> UnboundedReceiver<String> {
     commands_rx
 }
 
-pub fn read_command() -> anyhow::Result<Option<String>> {
+fn read_command() -> anyhow::Result<Option<String>> {
     let mut command = String::new();
     stdin().read_line(&mut command)?;
     Ok(Some(command))
