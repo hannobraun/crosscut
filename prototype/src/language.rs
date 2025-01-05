@@ -14,7 +14,7 @@ pub fn start(
 
     let handle_events = Actor::spawn(move |event| {
         match event {
-            Event::Command(Command::SetColor { color }) => {
+            Event::Command(Command::Insert { color }) => {
                 code.expressions = vec![Expression::Color { color }];
                 print_output(&code);
             }
@@ -52,7 +52,7 @@ enum Event {
 }
 
 pub enum Command {
-    SetColor { color: [f64; 4] },
+    Insert { color: [f64; 4] },
 }
 
 pub enum GameInput {

@@ -43,7 +43,7 @@ fn parse_command(command: String) -> anyhow::Result<Command> {
         return Err(anyhow!("Unexpected number of color channels."));
     };
 
-    Ok(Command::SetColor {
+    Ok(Command::Insert {
         color: [r, g, b, a],
     })
 }
