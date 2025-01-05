@@ -11,13 +11,13 @@ pub fn start() -> anyhow::Result<(GameIo, Sender<Command>)> {
 
     let (events_tx, events_rx) = channel::create();
 
+    let mut code = Code {
+        color: [0., 0., 0., 1.],
+    };
+
+    println!("Color: {:?}", code.color);
+
     thread::spawn(move || {
-        let mut code = Code {
-            color: [0., 0., 0., 1.],
-        };
-
-        println!("Color: {:?}", code.color);
-
         loop {
             // The channel has no buffer, so this is synchronized to the
             // frame rate of the renderer.
