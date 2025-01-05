@@ -6,9 +6,7 @@ use crate::{
 pub fn start(
     game_output: Sender<GameOutput>,
 ) -> anyhow::Result<(ActorHandle, Actor<Command>, Actor<GameInput>)> {
-    let mut code = Code {
-        color: vec![[0., 0., 0., 1.]],
-    };
+    let mut code = Code { color: vec![] };
 
     print_output(&code);
 
