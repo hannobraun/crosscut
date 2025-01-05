@@ -46,17 +46,22 @@ impl<I> Actor<I> {
         I: Send + 'static,
         F: FnMut() -> anyhow::Result<I> + Send + 'static,
     {
-        let handle = thread::spawn(move || loop {
-            let input = match f() {
-                Ok(input) => input,
-                Err(err) => {
-                    panic!("{err:?}");
-                }
-            };
+        let handle = thread::spawn(move || {
+            loop {
+                let input = match f() {
+                    Ok(input) => input,
+                    Err(err) => {
+                        panic!("{err:?}");
+                    }
+                };
 
-            if let Err(ChannelError::Disconnected) = self.sender.send(input) {
-                break;
+                if let Err(ChannelError::Disconnected) = self.sender.send(input)
+                {
+                    break;
+                }
             }
+
+            Ok(())
         });
 
         self.handle.input = Some(handle);
@@ -98,7 +103,7 @@ pub enum ChannelError {
 
 pub struct ActorHandle {
     main: JoinHandle<anyhow::Result<()>>,
-    input: Option<JoinHandle<()>>,
+    input: Option<JoinHandle<anyhow::Result<()>>>,
 }
 
 impl ActorHandle {
@@ -114,7 +119,9 @@ impl ActorHandle {
 
         if let Some(input) = self.input {
             match input.join() {
-                Ok(()) => {}
+                Ok(result) => {
+                    result?;
+                }
                 Err(payload) => {
                     panic::resume_unwind(payload);
                 }
