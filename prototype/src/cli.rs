@@ -14,13 +14,13 @@ pub fn start(commands: Sender<Command>) -> JoinHandle<()> {
             Ok(command) => command,
             Err(err) => {
                 println!("{err}");
-                return Ok(true);
+                return Ok(());
             }
         };
 
         commands.send(command)?;
 
-        Ok(true)
+        Ok(())
     })
     .provide_input(|| {
         let mut command = String::new();
