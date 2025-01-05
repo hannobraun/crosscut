@@ -3,8 +3,6 @@ use std::{
     thread,
 };
 
-use tuples::CombinRight;
-
 pub struct Spawner<T> {
     actors: Option<T>,
 }
@@ -21,7 +19,6 @@ impl<T> Spawner<T> {
         mut f: impl FnMut(I) -> bool + Send + 'static,
     ) -> (Spawner<T>, Actor<I>)
     where
-        T: CombinRight<()>,
         I: Send + 'static,
     {
         let (sender, receiver) = mpsc::channel();
