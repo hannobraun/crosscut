@@ -19,8 +19,6 @@ pub fn start() -> anyhow::Result<(GameIo, Sender<Command>)> {
 
     thread::spawn(move || {
         loop {
-            // The channel has no buffer, so this is synchronized to the
-            // frame rate of the renderer.
             if let Err(SendError(_)) = color_tx.send(code.color) {
                 // The other end has hung up. Time for us to shut down too.
                 break;
