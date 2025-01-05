@@ -28,11 +28,11 @@ pub fn start(
     });
 
     let events_from_commands = handle_events.input;
-    let commands = actor(move |command| {
+    let command_to_event = actor(move |command| {
         events_from_commands.send(Event::Command(command)).is_ok()
     });
 
-    Ok((input_to_event.input, commands.input))
+    Ok((input_to_event.input, command_to_event.input))
 }
 
 struct Code {
