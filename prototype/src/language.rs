@@ -11,7 +11,7 @@ use crate::{
     game_io::{GameInput, GameIo},
 };
 
-pub fn start_in_background() -> anyhow::Result<GameIo> {
+pub fn start() -> anyhow::Result<GameIo> {
     let runtime = Runtime::new()?;
 
     let (render_tx, mut render_rx) = mpsc::unbounded_channel();
