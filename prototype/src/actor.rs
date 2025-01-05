@@ -6,12 +6,12 @@ use std::{
 use tuples::CombinRight;
 
 pub struct Spawner<T> {
-    _actors: T,
+    actors: T,
 }
 
 impl Spawner<()> {
     pub fn new() -> Self {
-        Self { _actors: () }
+        Self { actors: () }
     }
 }
 
@@ -36,7 +36,7 @@ impl<T> Spawner<T> {
 
         (
             Spawner {
-                _actors: self._actors.push_right(handle),
+                actors: self.actors.push_right(handle),
             },
             Actor { sender },
         )
