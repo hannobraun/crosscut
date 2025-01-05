@@ -7,8 +7,8 @@ where
     let (sender, receiver) = mpsc::channel();
 
     thread::spawn(move || {
-        while let Ok(message) = receiver.recv() {
-            if !f(message) {
+        while let Ok(input) = receiver.recv() {
+            if !f(input) {
                 break;
             }
         }
