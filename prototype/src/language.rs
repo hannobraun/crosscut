@@ -1,4 +1,4 @@
-use crate::actor::{actor, Sender};
+use crate::actor::{Actor, Sender};
 
 pub fn start(
     color: Sender<[f64; 4]>,
@@ -9,7 +9,7 @@ pub fn start(
 
     println!("Color: {:?}", code.color);
 
-    let handle_events = actor(move |event| {
+    let handle_events = Actor::start(move |event| {
         match event {
             Event::Command(Command::SetColor { color }) => {
                 code.color = color;
@@ -23,12 +23,12 @@ pub fn start(
     });
 
     let events_from_input = handle_events.input.clone();
-    let input_to_event = actor(move |input| {
+    let input_to_event = Actor::start(move |input| {
         events_from_input.send(Event::GameInput(input)).is_ok()
     });
 
     let events_from_commands = handle_events.input;
-    let command_to_event = actor(move |command| {
+    let command_to_event = Actor::start(move |command| {
         events_from_commands.send(Event::Command(command)).is_ok()
     });
 

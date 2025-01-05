@@ -4,21 +4,23 @@ pub struct Actor<I> {
     pub input: Sender<I>,
 }
 
-pub fn actor<I>(mut f: impl FnMut(I) -> bool + Send + 'static) -> Actor<I>
-where
-    I: Send + 'static,
-{
-    let (sender, receiver) = mpsc::channel();
+impl<I> Actor<I> {
+    pub fn start(mut f: impl FnMut(I) -> bool + Send + 'static) -> Actor<I>
+    where
+        I: Send + 'static,
+    {
+        let (sender, receiver) = mpsc::channel();
 
-    thread::spawn(move || {
-        while let Ok(input) = receiver.recv() {
-            if !f(input) {
-                break;
+        thread::spawn(move || {
+            while let Ok(input) = receiver.recv() {
+                if !f(input) {
+                    break;
+                }
             }
-        }
-    });
+        });
 
-    Actor { input: sender }
+        Actor { input: sender }
+    }
 }
 
 pub type Sender<T> = mpsc::Sender<T>;
