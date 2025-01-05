@@ -1,7 +1,9 @@
-use std::sync::Arc;
+use std::sync::{
+    mpsc::{SendError, TryRecvError},
+    Arc,
+};
 
 use anyhow::anyhow;
-use crossbeam_channel::{SendError, TryRecvError};
 use pollster::FutureExt;
 use winit::{
     application::ApplicationHandler,

@@ -1,6 +1,4 @@
-use std::thread;
-
-use crossbeam_channel::SendError;
+use std::{sync::mpsc::SendError, thread};
 
 use crate::{
     channel::{self, Receiver},

@@ -1,7 +1,6 @@
-use std::{io::stdin, thread};
+use std::{io::stdin, sync::mpsc::SendError, thread};
 
 use anyhow::anyhow;
-use crossbeam_channel::SendError;
 use itertools::Itertools;
 
 use crate::channel::{self, Receiver};
