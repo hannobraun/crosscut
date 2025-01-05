@@ -106,12 +106,13 @@ pub struct ActorHandle {
 
 impl ActorHandle {
     pub fn join(&mut self) -> anyhow::Result<()> {
-        let [Some(main), Some(input)] = [self.main.take(), self.input.take()]
-        else {
+        if self.main.is_none() {
             panic!("You must not join an actor that has already been joined.");
-        };
+        }
 
-        for handle in [main, input] {
+        for handle in
+            [self.main.take(), self.input.take()].into_iter().flatten()
+        {
             match handle.join() {
                 Ok(result) => {
                     result?;
