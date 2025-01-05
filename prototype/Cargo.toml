@@ -11,7 +11,3 @@ itertools = "*"
 pollster = "*"
 wgpu = "*"
 winit = "*"
-
-[dependencies.tokio]
-version = "*"
-features = ["macros", "rt", "rt-multi-thread", "sync"]
