@@ -2,7 +2,7 @@ use crate::actor::{Actor, Sender};
 
 pub fn start(
     color: Sender<[f64; 4]>,
-) -> anyhow::Result<(Actor<GameInput>, Actor<Command>)> {
+) -> anyhow::Result<(Actor<Command>, Actor<GameInput>)> {
     let mut code = Code {
         color: [0., 0., 0., 1.],
     };
@@ -36,7 +36,7 @@ pub fn start(
         Ok(())
     });
 
-    Ok((input_to_event, command_to_event))
+    Ok((command_to_event, input_to_event))
 }
 
 struct Code {
