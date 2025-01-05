@@ -2,10 +2,7 @@ use std::sync::Arc;
 
 use anyhow::anyhow;
 use pollster::FutureExt;
-use tokio::sync::mpsc::{
-    self,
-    error::{SendError, TryRecvError},
-};
+use tokio::sync::mpsc::error::{SendError, TryRecvError};
 use winit::{
     application::ApplicationHandler,
     event::{KeyEvent, WindowEvent},
@@ -14,7 +11,7 @@ use winit::{
     window::{Window, WindowId},
 };
 
-use crate::channel::Sender;
+use crate::channel::{Receiver, Sender};
 
 pub fn start_and_wait(game_io: GameIo) -> anyhow::Result<()> {
     let mut application = Application {
@@ -32,7 +29,7 @@ pub fn start_and_wait(game_io: GameIo) -> anyhow::Result<()> {
 
 pub struct GameIo {
     pub input: Sender<GameInput>,
-    pub output: mpsc::UnboundedReceiver<[f64; 4]>,
+    pub output: Receiver<[f64; 4]>,
 }
 
 pub enum GameInput {
