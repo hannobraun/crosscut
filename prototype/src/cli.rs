@@ -1,4 +1,4 @@
-use std::{io::stdin, sync::mpsc::SendError, thread};
+use std::io::stdin;
 
 use anyhow::anyhow;
 use itertools::Itertools;
@@ -9,7 +9,7 @@ use crate::{
 };
 
 pub fn start(commands: Sender<Command>) {
-    let raw_commands = Actor::start(move |command| {
+    Actor::start(move |command| {
         let command = match parse_command(command) {
             Ok(command) => command,
             Err(err) => {
@@ -19,15 +19,12 @@ pub fn start(commands: Sender<Command>) {
         };
 
         commands.send(command).is_ok()
-    });
-
-    thread::spawn(move || loop {
+    })
+    .provide_input(|| {
         let mut command = String::new();
         stdin().read_line(&mut command).unwrap();
 
-        if let Err(SendError(_)) = raw_commands.input.send(command) {
-            break;
-        }
+        command
     });
 }
 

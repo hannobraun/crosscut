@@ -1,4 +1,7 @@
-use std::{sync::mpsc, thread};
+use std::{
+    sync::mpsc::{self, SendError},
+    thread,
+};
 
 pub struct Actor<I> {
     pub input: Sender<I>,
@@ -20,6 +23,19 @@ impl<I> Actor<I> {
         });
 
         Self { input: sender }
+    }
+
+    pub fn provide_input(self, mut f: impl FnMut() -> I + Send + 'static)
+    where
+        I: Send + 'static,
+    {
+        thread::spawn(move || loop {
+            let input = f();
+
+            if let Err(SendError(_)) = self.input.send(input) {
+                break;
+            }
+        });
     }
 }
 
