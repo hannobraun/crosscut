@@ -9,9 +9,6 @@ use crate::channel::{self, Receiver};
 pub fn start() -> Receiver<Command> {
     let (commands_tx, commands_rx) = channel::create();
 
-    // We're using Tokio here and could use its asynchronous stdio API. But the
-    // Tokio documentation explicitly recommends against using that for
-    // interactive code, recommending a dedicated thread instead.
     thread::spawn(move || loop {
         let Some(command) = read_command().unwrap() else {
             continue;
