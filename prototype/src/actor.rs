@@ -4,9 +4,9 @@ pub struct Actor<I> {
     pub input: Sender<I>,
 }
 
-pub fn actor<T>(mut f: impl FnMut(T) -> bool + Send + 'static) -> Actor<T>
+pub fn actor<I>(mut f: impl FnMut(I) -> bool + Send + 'static) -> Actor<I>
 where
-    T: Send + 'static,
+    I: Send + 'static,
 {
     let (sender, receiver) = mpsc::channel();
 
