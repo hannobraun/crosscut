@@ -112,6 +112,15 @@ impl ActorHandle {
             }
         }
 
+        if let Some(input) = self.input {
+            match input.join() {
+                Ok(()) => {}
+                Err(payload) => {
+                    panic::resume_unwind(payload);
+                }
+            }
+        }
+
         Ok(())
     }
 }
