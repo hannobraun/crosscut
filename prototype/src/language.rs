@@ -59,7 +59,7 @@ pub fn start() -> anyhow::Result<GameIo> {
                     Event::Command(command) => {
                         match parse_command(command, &mut code.color) {
                             Ok(Command::SetColor { color }) => {
-                                let _ = color;
+                                code.color = color;
                             }
                             Err(err) => {
                                 println!("{err}");
