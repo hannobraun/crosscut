@@ -25,7 +25,7 @@ pub fn start(commands: Sender<Command>) {
         let Ok(command) = commands_rx.recv() else {
             break;
         };
-        let Some(command) = read_command(command).unwrap() else {
+        let Some(command) = read_command(command) else {
             continue;
         };
 
@@ -36,16 +36,16 @@ pub fn start(commands: Sender<Command>) {
     });
 }
 
-fn read_command(command: String) -> anyhow::Result<Option<Command>> {
+fn read_command(command: String) -> Option<Command> {
     let command = match parse_command(command) {
         Ok(command) => command,
         Err(err) => {
             println!("{err}");
-            return Ok(None);
+            return None;
         }
     };
 
-    Ok(Some(command))
+    Some(command)
 }
 
 fn parse_command(command: String) -> anyhow::Result<Command> {
