@@ -105,7 +105,7 @@ pub struct ActorHandle {
 }
 
 impl ActorHandle {
-    pub fn join(mut self) -> anyhow::Result<()> {
+    pub fn join(&mut self) -> anyhow::Result<()> {
         for handle in
             [self.main.take(), self.input.take()].into_iter().flatten()
         {
