@@ -1,14 +1,14 @@
-use std::{io::stdin, thread::JoinHandle};
+use std::io::stdin;
 
 use anyhow::anyhow;
 use itertools::Itertools;
 
 use crate::{
-    actor::{Actor, Sender},
+    actor::{Actor, ActorHandle, Sender},
     language::Command,
 };
 
-pub fn start(commands: Sender<Command>) -> JoinHandle<anyhow::Result<()>> {
+pub fn start(commands: Sender<Command>) -> ActorHandle {
     Actor::spawn(move |command| {
         let command = match parse_command(command) {
             Ok(command) => command,

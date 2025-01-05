@@ -31,7 +31,10 @@ impl<I> Actor<I> {
             Ok(())
         });
 
-        Actor { sender, handle }
+        Actor {
+            sender,
+            handle: ActorHandle { main: handle },
+        }
     }
 
     pub fn provide_input<F>(self, mut f: F) -> ActorHandle
@@ -88,4 +91,12 @@ pub enum ChannelError {
     Disconnected,
 }
 
-pub type ActorHandle = JoinHandle<anyhow::Result<()>>;
+pub struct ActorHandle {
+    main: JoinHandle<anyhow::Result<()>>,
+}
+
+impl ActorHandle {
+    pub fn join(self) -> thread::Result<anyhow::Result<()>> {
+        self.main.join()
+    }
+}
