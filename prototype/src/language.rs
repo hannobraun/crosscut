@@ -7,7 +7,7 @@ pub fn start(
     game_output: Sender<GameOutput>,
 ) -> anyhow::Result<(ActorHandle, Actor<Command>, Actor<GameInput>)> {
     let mut code = Code {
-        color: [0., 0., 0., 1.],
+        color: vec![[0., 0., 0., 1.]],
     };
 
     print_output(&code);
@@ -15,7 +15,7 @@ pub fn start(
     let handle_events = Actor::spawn(move |event| {
         match event {
             Event::Command(Command::SetColor { color }) => {
-                code.color = color;
+                code.color = vec![color];
                 print_output(&code);
             }
             Event::GameInput(GameInput::RenderingFrame) => {
@@ -23,7 +23,9 @@ pub fn start(
             }
         }
 
-        game_output.send(GameOutput::SubmitColor { color: code.color })?;
+        for &color in &code.color {
+            game_output.send(GameOutput::SubmitColor { color })?;
+        }
 
         Ok(())
     });

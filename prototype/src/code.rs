@@ -1,3 +1,3 @@
 pub struct Code {
-    pub color: [f64; 4],
+    pub color: Vec<[f64; 4]>,
 }
