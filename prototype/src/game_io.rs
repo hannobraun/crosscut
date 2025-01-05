@@ -22,7 +22,7 @@ pub fn start_and_wait(
     let mut handler = Handler {
         resources: None,
         result: Ok(()),
-        color: Some(wgpu::Color::BLACK),
+        color: wgpu::Color::BLACK,
         game_io: GameIo { input, output },
     };
 
@@ -35,7 +35,7 @@ pub fn start_and_wait(
 struct Handler {
     resources: Option<ApplicationResources>,
     result: anyhow::Result<()>,
-    color: Option<wgpu::Color>,
+    color: wgpu::Color,
     game_io: GameIo,
 }
 
@@ -99,7 +99,7 @@ impl ApplicationHandler for Handler {
                     match self.game_io.output.try_recv() {
                         Ok(GameOutput::SubmitColor {
                             color: [r, g, b, a],
-                        }) => self.color = Some(wgpu::Color { r, g, b, a }),
+                        }) => self.color = wgpu::Color { r, g, b, a },
                         Err(TryRecvError::Empty) => {
                             // No update, so nothing to do here. If we had an
                             // update before, we'll use that one below.
@@ -114,9 +114,7 @@ impl ApplicationHandler for Handler {
                     };
                 }
 
-                let Some(bg_color) = self.color else {
-                    return;
-                };
+                let bg_color = self.color;
 
                 if let Err(err) = resources.renderer.render(bg_color) {
                     self.handle_error(err, event_loop);
