@@ -14,6 +14,8 @@ use winit::{
     window::{Window, WindowId},
 };
 
+use crate::channel::Sender;
+
 pub fn start_and_wait(game_io: GameIo) -> anyhow::Result<()> {
     let mut application = Application {
         resources: None,
@@ -29,7 +31,7 @@ pub fn start_and_wait(game_io: GameIo) -> anyhow::Result<()> {
 }
 
 pub struct GameIo {
-    pub input: mpsc::UnboundedSender<GameInput>,
+    pub input: Sender<GameInput>,
     pub output: mpsc::UnboundedReceiver<[f64; 4]>,
 }
 
