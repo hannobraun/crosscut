@@ -1,13 +1,12 @@
 use std::{sync::mpsc::SendError, thread};
 
 use crate::{
-    channel::{self, Receiver},
+    channel::{self, actor, Receiver},
     cli::Command,
     game_io::{GameInput, GameIo},
 };
 
 pub fn start(commands: Receiver<Command>) -> anyhow::Result<GameIo> {
-    let (input_tx, input_rx) = channel::create();
     let (color_tx, color_rx) = channel::create();
 
     let (events_tx, events_rx) = channel::create();
@@ -15,14 +14,8 @@ pub fn start(commands: Receiver<Command>) -> anyhow::Result<GameIo> {
     let events_from_input = events_tx.clone();
     let events_from_commands = events_tx;
 
-    thread::spawn(move || {
-        while let Ok(input) = input_rx.recv() {
-            if let Err(SendError(_)) =
-                events_from_input.send(Event::GameInput(input))
-            {
-                break;
-            };
-        }
+    let input_tx = actor(move |input| {
+        events_from_input.send(Event::GameInput(input)).is_ok()
     });
 
     thread::spawn(move || {
