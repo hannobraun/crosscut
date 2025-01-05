@@ -99,7 +99,9 @@ impl ApplicationHandler for Handler {
                     match self.game_io.output.try_recv() {
                         Ok(GameOutput::SubmitColor {
                             color: [r, g, b, a],
-                        }) => self.color = wgpu::Color { r, g, b, a },
+                        }) => {
+                            self.color = wgpu::Color { r, g, b, a };
+                        }
                         Err(TryRecvError::Empty) => {
                             // No update, so nothing to do here. If we had an
                             // update before, we'll use that one below.
