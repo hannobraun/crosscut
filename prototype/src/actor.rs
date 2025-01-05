@@ -33,7 +33,7 @@ impl<I> Actor<I> {
         Actor {
             sender,
             handle: ActorHandle {
-                main: handle,
+                main: Some(handle),
                 input: None,
             },
         }
@@ -100,18 +100,20 @@ pub enum ChannelError {
 }
 
 pub struct ActorHandle {
-    main: JoinHandle<anyhow::Result<()>>,
+    main: Option<JoinHandle<anyhow::Result<()>>>,
     input: Option<JoinHandle<anyhow::Result<()>>>,
 }
 
 impl ActorHandle {
     pub fn join(self) -> anyhow::Result<()> {
-        match self.main.join() {
-            Ok(result) => {
-                result?;
-            }
-            Err(payload) => {
-                panic::resume_unwind(payload);
+        if let Some(handle) = self.main {
+            match handle.join() {
+                Ok(result) => {
+                    result?;
+                }
+                Err(payload) => {
+                    panic::resume_unwind(payload);
+                }
             }
         }
 
