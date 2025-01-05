@@ -1,6 +1,5 @@
 use crate::actor::{actor, Sender};
 
-#[allow(clippy::type_complexity)] // temporary; should be removed any commit now
 pub fn start(
     color_tx: Sender<[f64; 4]>,
 ) -> anyhow::Result<(Sender<GameInput>, Sender<Command>)> {
