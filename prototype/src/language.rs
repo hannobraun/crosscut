@@ -2,7 +2,6 @@ use std::sync::mpsc;
 
 use crate::{
     actor::{actor, Sender},
-    cli::Command,
     game_io::{GameInput, GameIo},
 };
 
@@ -50,6 +49,10 @@ pub fn start() -> anyhow::Result<(GameIo, Sender<Command>)> {
 enum Event {
     Command(Command),
     GameInput(GameInput),
+}
+
+pub enum Command {
+    SetColor { color: [f64; 4] },
 }
 
 struct Code {

@@ -3,7 +3,7 @@ use std::{io::stdin, sync::mpsc::SendError, thread};
 use anyhow::anyhow;
 use itertools::Itertools;
 
-use crate::actor::Sender;
+use crate::{actor::Sender, language::Command};
 
 pub fn start(commands: Sender<Command>) {
     thread::spawn(move || loop {
@@ -49,8 +49,4 @@ fn parse_command(command: String) -> anyhow::Result<Command> {
     Ok(Command::SetColor {
         color: [r, g, b, a],
     })
-}
-
-pub enum Command {
-    SetColor { color: [f64; 4] },
 }
