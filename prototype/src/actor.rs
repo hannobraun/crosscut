@@ -1,4 +1,5 @@
 use std::{
+    panic,
     sync::mpsc::{self, SendError},
     thread::{self, JoinHandle},
 };
@@ -96,7 +97,12 @@ pub struct ActorHandle {
 }
 
 impl ActorHandle {
-    pub fn join(self) -> thread::Result<anyhow::Result<()>> {
-        self.main.join()
+    pub fn join(self) -> anyhow::Result<()> {
+        match self.main.join() {
+            Ok(result) => result,
+            Err(payload) => {
+                panic::resume_unwind(payload);
+            }
+        }
     }
 }
