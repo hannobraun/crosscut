@@ -11,7 +11,7 @@ impl Spawner {
     }
 
     pub fn spawn<I>(
-        &mut self,
+        self,
         mut f: impl FnMut(I) -> bool + Send + 'static,
     ) -> Actor<I>
     where
