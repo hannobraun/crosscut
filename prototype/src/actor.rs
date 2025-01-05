@@ -12,14 +12,22 @@ impl<I> Actor<I> {
     pub fn spawn<F>(mut f: F) -> Actor<I>
     where
         I: Send + 'static,
-        F: FnMut(I) -> bool + Send + 'static,
+        F: FnMut(I) -> Result<bool, ChannelError> + Send + 'static,
     {
         let (sender, receiver) = channel();
 
         let handle = thread::spawn(move || {
             while let Ok(input) = receiver.recv() {
-                if !f(input) {
-                    break;
+                match f(input) {
+                    Ok(true) => {}
+                    Ok(false) => {
+                        break;
+                    }
+                    Err(ChannelError::Disconnected) => {
+                        // Another actor has terminated. This means a shutdown
+                        // is in progress and we should terminate too.
+                        break;
+                    }
                 }
             }
         });
