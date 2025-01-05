@@ -1,6 +1,6 @@
 use crate::{
     actor::{Actor, ActorHandle, Sender},
-    code::Code,
+    code::{Code, Expression},
 };
 
 pub fn start(
@@ -15,7 +15,7 @@ pub fn start(
     let handle_events = Actor::spawn(move |event| {
         match event {
             Event::Command(Command::SetColor { color }) => {
-                code.expressions = vec![color];
+                code.expressions = vec![Expression::Color { color }];
                 print_output(&code);
             }
             Event::GameInput(GameInput::RenderingFrame) => {
@@ -24,7 +24,7 @@ pub fn start(
         }
 
         for expression in &code.expressions {
-            let color = expression;
+            let Expression::Color { color } = expression;
             game_output.send(GameOutput::SubmitColor { color: *color })?;
         }
 
