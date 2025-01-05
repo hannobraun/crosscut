@@ -22,7 +22,7 @@ pub fn start_and_wait(
     let mut handler = Handler {
         resources: None,
         result: Ok(()),
-        color: None,
+        color: Some(wgpu::Color::BLACK),
         game_io: GameIo { input, output },
     };
 
