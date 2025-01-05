@@ -12,7 +12,7 @@ use crate::{
 };
 
 pub fn start(
-    mut commands_rx: UnboundedReceiver<String>,
+    mut commands: UnboundedReceiver<String>,
 ) -> anyhow::Result<GameIo> {
     let runtime = Runtime::new()?;
 
@@ -45,7 +45,7 @@ pub fn start(
 
                         Event::GameInput(game_input)
                     }
-                    command = commands_rx.recv() => {
+                    command = commands.recv() => {
                         let Some(command) = command else {
                             // The other end has hung up. We should shut down
                             // too.
