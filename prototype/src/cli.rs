@@ -9,7 +9,7 @@ use crate::{
 };
 
 pub fn start(commands: Sender<Command>) {
-    let commands_tx = actor(move |command| {
+    let raw_commands = actor(move |command| {
         let Some(command) = read_command(command) else {
             return true;
         };
@@ -21,7 +21,7 @@ pub fn start(commands: Sender<Command>) {
         let mut command = String::new();
         stdin().read_line(&mut command).unwrap();
 
-        if let Err(SendError(_)) = commands_tx.send(command) {
+        if let Err(SendError(_)) = raw_commands.send(command) {
             break;
         }
     });
