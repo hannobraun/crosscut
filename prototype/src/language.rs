@@ -9,7 +9,7 @@ pub fn start(
 
     println!("Color: {:?}", code.color);
 
-    let events = actor(move |event| {
+    let handle_events = actor(move |event| {
         match event {
             Event::Command(Command::SetColor { color }) => {
                 code.color = color;
@@ -22,12 +22,12 @@ pub fn start(
         color.send(code.color).is_ok()
     });
 
-    let events_from_input = events.input.clone();
+    let events_from_input = handle_events.input.clone();
     let input = actor(move |input| {
         events_from_input.send(Event::GameInput(input)).is_ok()
     });
 
-    let events_from_commands = events.input;
+    let events_from_commands = handle_events.input;
     let commands = actor(move |command| {
         events_from_commands.send(Event::Command(command)).is_ok()
     });
