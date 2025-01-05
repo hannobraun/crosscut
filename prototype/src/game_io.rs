@@ -16,7 +16,7 @@ use winit::{
 use crate::actor::{Receiver, Sender};
 
 pub fn start_and_wait(game_io: GameIo) -> anyhow::Result<()> {
-    let mut application = Handler {
+    let mut handler = Handler {
         resources: None,
         result: Ok(()),
         color: None,
@@ -24,9 +24,9 @@ pub fn start_and_wait(game_io: GameIo) -> anyhow::Result<()> {
     };
 
     let event_loop = EventLoop::new()?;
-    event_loop.run_app(&mut application)?;
+    event_loop.run_app(&mut handler)?;
 
-    application.result
+    handler.result
 }
 
 pub struct GameIo {
