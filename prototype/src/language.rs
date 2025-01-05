@@ -1,5 +1,3 @@
-use std::{sync::mpsc::SendError, thread};
-
 use crate::{
     channel::{self, actor, Sender},
     cli::Command,
@@ -9,35 +7,23 @@ use crate::{
 pub fn start() -> anyhow::Result<(GameIo, Sender<Command>)> {
     let (color_tx, color_rx) = channel::create();
 
-    let (events_tx, events_rx) = channel::create();
-
     let mut code = Code {
         color: [0., 0., 0., 1.],
     };
 
     println!("Color: {:?}", code.color);
 
-    thread::spawn(move || {
-        loop {
-            let Ok(event) = events_rx.recv() else {
-                // The other end has hung up. We should shut down too.
-                break;
-            };
-
-            match event {
-                Event::Command(Command::SetColor { color }) => {
-                    code.color = color;
-                }
-                Event::GameInput(GameInput::RenderingFrame) => {
-                    // This loop is coupled to the frame rate of the renderer.
-                }
+    let events_tx = actor(move |event| {
+        match event {
+            Event::Command(Command::SetColor { color }) => {
+                code.color = color;
             }
-
-            if let Err(SendError(_)) = color_tx.send(code.color) {
-                // The other end has hung up. Time for us to shut down too.
-                break;
+            Event::GameInput(GameInput::RenderingFrame) => {
+                // This loop is coupled to the frame rate of the renderer.
             }
         }
+
+        color_tx.send(code.color).is_ok()
     });
 
     let events_from_input = events_tx.clone();
