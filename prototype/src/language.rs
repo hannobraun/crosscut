@@ -24,8 +24,8 @@ pub fn start(
         }
 
         for expression in &code.expressions {
-            let color = *expression;
-            game_output.send(GameOutput::SubmitColor { color })?;
+            let color = expression;
+            game_output.send(GameOutput::SubmitColor { color: *color })?;
         }
 
         Ok(())
