@@ -116,9 +116,7 @@ impl ApplicationHandler for Handler {
                     };
                 }
 
-                let bg_color = self.color;
-
-                if let Err(err) = resources.renderer.render(bg_color) {
+                if let Err(err) = resources.renderer.render(self.color) {
                     self.handle_error(err, event_loop);
 
                     // I want to have this explicit return here, to make sure
