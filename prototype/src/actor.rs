@@ -5,7 +5,7 @@ use std::{
 
 pub struct Actor<I> {
     pub sender: Sender<I>,
-    pub handle: JoinHandle<()>,
+    pub handle: JoinHandle<anyhow::Result<()>>,
 }
 
 impl<I> Actor<I> {
@@ -27,12 +27,14 @@ impl<I> Actor<I> {
                     }
                 }
             }
+
+            Ok(())
         });
 
         Actor { sender, handle }
     }
 
-    pub fn provide_input<F>(self, mut f: F) -> JoinHandle<()>
+    pub fn provide_input<F>(self, mut f: F) -> JoinHandle<anyhow::Result<()>>
     where
         I: Send + 'static,
         F: FnMut() -> anyhow::Result<I> + Send + 'static,

@@ -13,7 +13,9 @@ fn main() -> anyhow::Result<()> {
     game_io::start_and_wait(input, color_rx)?;
 
     match cli.join() {
-        Ok(()) => {}
+        Ok(result) => {
+            result?;
+        }
         Err(payload) => {
             panic::resume_unwind(payload);
         }

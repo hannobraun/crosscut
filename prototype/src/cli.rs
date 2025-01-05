@@ -8,7 +8,7 @@ use crate::{
     language::Command,
 };
 
-pub fn start(commands: Sender<Command>) -> JoinHandle<()> {
+pub fn start(commands: Sender<Command>) -> JoinHandle<anyhow::Result<()>> {
     Actor::spawn(move |command| {
         let command = match parse_command(command) {
             Ok(command) => command,
