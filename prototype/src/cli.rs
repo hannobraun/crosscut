@@ -25,7 +25,7 @@ pub fn start(commands: Sender<Command>) {
         let mut command = String::new();
         stdin().read_line(&mut command).unwrap();
 
-        if let Err(SendError(_)) = raw_commands.send(command) {
+        if let Err(SendError(_)) = raw_commands.input.send(command) {
             break;
         }
     });

@@ -1,6 +1,10 @@
 use std::{sync::mpsc, thread};
 
-pub fn actor<T>(mut f: impl FnMut(T) -> bool + Send + 'static) -> Sender<T>
+pub struct Actor<I> {
+    pub input: Sender<I>,
+}
+
+pub fn actor<T>(mut f: impl FnMut(T) -> bool + Send + 'static) -> Actor<T>
 where
     T: Send + 'static,
 {
@@ -14,7 +18,7 @@ where
         }
     });
 
-    sender
+    Actor { input: sender }
 }
 
 pub type Sender<T> = mpsc::Sender<T>;
