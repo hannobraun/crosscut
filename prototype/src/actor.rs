@@ -22,8 +22,6 @@ impl<I> Actor<I> {
                 match f(input) {
                     Ok(()) => {}
                     Err(ChannelError::Disconnected) => {
-                        // Another actor has terminated. This means a shutdown
-                        // is in progress and we should terminate too.
                         break;
                     }
                 }
