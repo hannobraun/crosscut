@@ -6,14 +6,16 @@ use crate::{
 pub fn start(
     game_output: Sender<GameOutput>,
 ) -> anyhow::Result<(ActorHandle, Actor<Command>, Actor<GameInput>)> {
-    let mut code = Code { color: vec![] };
+    let mut code = Code {
+        expressions: vec![],
+    };
 
     print_output(&code);
 
     let handle_events = Actor::spawn(move |event| {
         match event {
             Event::Command(Command::SetColor { color }) => {
-                code.color = vec![color];
+                code.expressions = vec![color];
                 print_output(&code);
             }
             Event::GameInput(GameInput::RenderingFrame) => {
@@ -21,7 +23,7 @@ pub fn start(
             }
         }
 
-        for &color in &code.color {
+        for &color in &code.expressions {
             game_output.send(GameOutput::SubmitColor { color })?;
         }
 
@@ -61,5 +63,5 @@ pub enum GameOutput {
 }
 
 fn print_output(code: &Code) {
-    println!("Color: {:?}", code.color);
+    println!("Color: {:?}", code.expressions);
 }
