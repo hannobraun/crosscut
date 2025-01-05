@@ -11,16 +11,6 @@ pub fn start() -> anyhow::Result<(GameIo, Sender<Command>)> {
 
     let (events_tx, events_rx) = channel::create();
 
-    let events_from_input = events_tx.clone();
-    let events_from_commands = events_tx;
-
-    let input = actor(move |input| {
-        events_from_input.send(Event::GameInput(input)).is_ok()
-    });
-    let commands = actor(move |command| {
-        events_from_commands.send(Event::Command(command)).is_ok()
-    });
-
     thread::spawn(move || {
         let mut code = Code {
             color: [0., 0., 0., 1.],
@@ -50,6 +40,16 @@ pub fn start() -> anyhow::Result<(GameIo, Sender<Command>)> {
                 }
             }
         }
+    });
+
+    let events_from_input = events_tx.clone();
+    let events_from_commands = events_tx;
+
+    let input = actor(move |input| {
+        events_from_input.send(Event::GameInput(input)).is_ok()
+    });
+    let commands = actor(move |command| {
+        events_from_commands.send(Event::Command(command)).is_ok()
     });
 
     Ok((
