@@ -34,16 +34,19 @@ impl<I> Actor<I> {
 
         Actor {
             sender,
-            handle: ActorHandle { main: handle },
+            handle: ActorHandle {
+                main: handle,
+                input: None,
+            },
         }
     }
 
-    pub fn provide_input<F>(self, mut f: F) -> ActorHandle
+    pub fn provide_input<F>(mut self, mut f: F) -> ActorHandle
     where
         I: Send + 'static,
         F: FnMut() -> anyhow::Result<I> + Send + 'static,
     {
-        thread::spawn(move || loop {
+        let handle = thread::spawn(move || loop {
             let input = match f() {
                 Ok(input) => input,
                 Err(err) => {
@@ -56,6 +59,7 @@ impl<I> Actor<I> {
             }
         });
 
+        self.handle.input = Some(handle);
         self.handle
     }
 }
@@ -94,6 +98,7 @@ pub enum ChannelError {
 
 pub struct ActorHandle {
     main: JoinHandle<anyhow::Result<()>>,
+    input: Option<JoinHandle<()>>,
 }
 
 impl ActorHandle {
