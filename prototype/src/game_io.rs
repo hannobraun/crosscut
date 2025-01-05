@@ -135,6 +135,14 @@ impl ApplicationHandler for Application {
             _ => {}
         }
     }
+
+    fn about_to_wait(&mut self, _: &ActiveEventLoop) {
+        let Some(resources) = self.resources.as_ref() else {
+            return;
+        };
+
+        resources.window.request_redraw();
+    }
 }
 
 struct ApplicationResources {
