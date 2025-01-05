@@ -22,17 +22,17 @@ pub fn start(
         color.send(code.color).is_ok()
     });
 
-    let events_from_input = handle_events.input.clone();
+    let events_from_input = handle_events.sender.clone();
     let input_to_event = Actor::start(move |input| {
         events_from_input.send(Event::GameInput(input)).is_ok()
     });
 
-    let events_from_commands = handle_events.input;
+    let events_from_commands = handle_events.sender;
     let command_to_event = Actor::start(move |command| {
         events_from_commands.send(Event::Command(command)).is_ok()
     });
 
-    Ok((input_to_event.input, command_to_event.input))
+    Ok((input_to_event.sender, command_to_event.sender))
 }
 
 struct Code {

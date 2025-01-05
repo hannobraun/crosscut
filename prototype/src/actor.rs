@@ -4,7 +4,7 @@ use std::{
 };
 
 pub struct Actor<I> {
-    pub input: Sender<I>,
+    pub sender: Sender<I>,
 }
 
 impl<I> Actor<I> {
@@ -22,7 +22,7 @@ impl<I> Actor<I> {
             }
         });
 
-        Self { input: sender }
+        Self { sender }
     }
 
     pub fn provide_input(self, mut f: impl FnMut() -> I + Send + 'static)
@@ -32,7 +32,7 @@ impl<I> Actor<I> {
         thread::spawn(move || loop {
             let input = f();
 
-            if let Err(SendError(_)) = self.input.send(input) {
+            if let Err(SendError(_)) = self.sender.send(input) {
                 break;
             }
         });
