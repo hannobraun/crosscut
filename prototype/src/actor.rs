@@ -1,6 +1,6 @@
 use std::{
     sync::mpsc::{self, SendError},
-    thread::{self, JoinHandle},
+    thread,
 };
 
 use tuples::CombinRight;
@@ -21,12 +21,12 @@ impl<T> Spawner<T> {
         mut f: impl FnMut(I) -> bool + Send + 'static,
     ) -> (Spawner<T::Out>, Actor<I>)
     where
-        T: CombinRight<JoinHandle<()>>,
+        T: CombinRight<()>,
         I: Send + 'static,
     {
         let (sender, receiver) = mpsc::channel();
 
-        let handle = thread::spawn(move || {
+        thread::spawn(move || {
             while let Ok(input) = receiver.recv() {
                 if !f(input) {
                     break;
@@ -44,7 +44,7 @@ impl<T> Spawner<T> {
 
         (
             Spawner {
-                actors: Some(actors.push_right(handle)),
+                actors: Some(actors.push_right(())),
             },
             Actor { sender },
         )
