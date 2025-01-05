@@ -1,7 +1,7 @@
 use crate::actor::{Actor, ActorHandle, Sender};
 
 pub fn start(
-    color: Sender<GameOutput>,
+    game_output: Sender<GameOutput>,
 ) -> anyhow::Result<(ActorHandle, Actor<Command>, Actor<GameInput>)> {
     let mut code = Code {
         color: [0., 0., 0., 1.],
@@ -20,7 +20,7 @@ pub fn start(
             }
         }
 
-        color.send(GameOutput::SubmitColor { color: code.color })?;
+        game_output.send(GameOutput::SubmitColor { color: code.color })?;
 
         Ok(())
     });
