@@ -4,12 +4,12 @@ use anyhow::anyhow;
 use itertools::Itertools;
 
 use crate::{
-    actor::{Sender, Spawner},
+    actor::{Actor, Sender},
     language::Command,
 };
 
 pub fn start(commands: Sender<Command>) {
-    Spawner::spawn(move |command| {
+    Actor::spawn(move |command| {
         let command = match parse_command(command) {
             Ok(command) => command,
             Err(err) => {
