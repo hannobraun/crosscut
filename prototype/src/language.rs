@@ -1,11 +1,13 @@
+use std::sync::mpsc;
+
 use crate::{
-    channel::{self, actor, Sender},
+    channel::{actor, Sender},
     cli::Command,
     game_io::{GameInput, GameIo},
 };
 
 pub fn start() -> anyhow::Result<(GameIo, Sender<Command>)> {
-    let (color_tx, color_rx) = channel::create();
+    let (color_tx, color_rx) = mpsc::channel();
 
     let mut code = Code {
         color: [0., 0., 0., 1.],
