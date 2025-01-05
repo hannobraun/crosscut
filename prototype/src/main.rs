@@ -5,9 +5,8 @@ mod language;
 
 fn main() -> anyhow::Result<()> {
     use std::panic;
-    use std::sync::mpsc;
 
-    let (color_tx, color_rx) = mpsc::channel();
+    let (color_tx, color_rx) = actor::channel();
 
     let (input, commands) = language::start(color_tx)?;
     let cli = cli::start(commands);

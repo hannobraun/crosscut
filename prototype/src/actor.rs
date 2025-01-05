@@ -13,7 +13,7 @@ impl<I> Actor<I> {
     where
         I: Send + 'static,
     {
-        let (sender, receiver) = mpsc::channel();
+        let (sender, receiver) = channel();
 
         let handle = thread::spawn(move || {
             while let Ok(input) = receiver.recv() {
@@ -43,6 +43,10 @@ impl<I> Actor<I> {
 
         self.handle
     }
+}
+
+pub fn channel<T>() -> (Sender<T>, Receiver<T>) {
+    mpsc::channel()
 }
 
 pub type Sender<T> = mpsc::Sender<T>;
