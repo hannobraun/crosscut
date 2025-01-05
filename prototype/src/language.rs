@@ -13,7 +13,7 @@ pub fn start() -> anyhow::Result<(GameIo, Sender<Command>)> {
 
     println!("Color: {:?}", code.color);
 
-    let events_tx = actor(move |event| {
+    let events = actor(move |event| {
         match event {
             Event::Command(Command::SetColor { color }) => {
                 code.color = color;
@@ -26,8 +26,8 @@ pub fn start() -> anyhow::Result<(GameIo, Sender<Command>)> {
         color_tx.send(code.color).is_ok()
     });
 
-    let events_from_input = events_tx.clone();
-    let events_from_commands = events_tx;
+    let events_from_input = events.clone();
+    let events_from_commands = events;
 
     let input = actor(move |input| {
         events_from_input.send(Event::GameInput(input)).is_ok()
