@@ -19,7 +19,7 @@ impl<T> Spawner<T> {
     pub fn spawn<I>(
         mut self,
         mut f: impl FnMut(I) -> bool + Send + 'static,
-    ) -> (Spawner<T::Out>, Actor<I>)
+    ) -> (Spawner<T>, Actor<I>)
     where
         T: CombinRight<()>,
         I: Send + 'static,
@@ -44,7 +44,7 @@ impl<T> Spawner<T> {
 
         (
             Spawner {
-                actors: Some(actors.push_right(())),
+                actors: Some(actors),
             },
             Actor { sender },
         )
