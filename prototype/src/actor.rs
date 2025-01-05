@@ -46,8 +46,27 @@ impl<I> Actor<I> {
 }
 
 pub fn channel<T>() -> (Sender<T>, Receiver<T>) {
-    mpsc::channel()
+    let (sender, receiver) = mpsc::channel();
+
+    (Sender { inner: sender }, receiver)
 }
 
-pub type Sender<T> = mpsc::Sender<T>;
+pub struct Sender<T> {
+    inner: mpsc::Sender<T>,
+}
+
+impl<T> Sender<T> {
+    pub fn send(&self, value: T) -> Result<(), SendError<T>> {
+        self.inner.send(value)
+    }
+}
+
+impl<T> Clone for Sender<T> {
+    fn clone(&self) -> Self {
+        Self {
+            inner: self.inner.clone(),
+        }
+    }
+}
+
 pub type Receiver<T> = mpsc::Receiver<T>;
