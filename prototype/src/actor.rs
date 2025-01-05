@@ -35,10 +35,15 @@ impl<I> Actor<I> {
     pub fn provide_input<F>(self, mut f: F) -> JoinHandle<()>
     where
         I: Send + 'static,
-        F: FnMut() -> I + Send + 'static,
+        F: FnMut() -> anyhow::Result<I> + Send + 'static,
     {
         thread::spawn(move || loop {
-            let input = f();
+            let input = match f() {
+                Ok(input) => input,
+                Err(err) => {
+                    panic!("{err:?}");
+                }
+            };
 
             if let Err(ChannelError::Disconnected) = self.sender.send(input) {
                 break;
