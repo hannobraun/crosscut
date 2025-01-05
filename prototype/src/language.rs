@@ -1,4 +1,7 @@
-use crate::actor::{Actor, ActorHandle, Sender};
+use crate::{
+    actor::{Actor, ActorHandle, Sender},
+    code::Code,
+};
 
 pub fn start(
     game_output: Sender<GameOutput>,
@@ -38,10 +41,6 @@ pub fn start(
     });
 
     Ok((handle_events.handle, command_to_event, input_to_event))
-}
-
-pub struct Code {
-    pub color: [f64; 4],
 }
 
 enum Event {

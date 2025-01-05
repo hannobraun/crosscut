@@ -1,5 +1,6 @@
 mod actor;
 mod cli;
+mod code;
 mod game_io;
 mod language;
 
