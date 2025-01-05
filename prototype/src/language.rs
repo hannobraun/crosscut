@@ -14,7 +14,7 @@ pub fn start(commands: Receiver<Command>) -> anyhow::Result<GameIo> {
     let events_from_input = events_tx.clone();
     let events_from_commands = events_tx;
 
-    let input_tx = actor(move |input| {
+    let input = actor(move |input| {
         events_from_input.send(Event::GameInput(input)).is_ok()
     });
 
@@ -60,7 +60,7 @@ pub fn start(commands: Receiver<Command>) -> anyhow::Result<GameIo> {
     });
 
     Ok(GameIo {
-        input: input_tx,
+        input,
         output: color_rx,
     })
 }
