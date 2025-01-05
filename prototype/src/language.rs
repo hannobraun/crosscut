@@ -1,13 +1,15 @@
-use std::{io::stdin, thread};
+use std::thread;
 
-use itertools::Itertools;
 use tokio::{
     runtime::Runtime,
     select,
     sync::mpsc::{self, error::SendError},
 };
 
-use crate::game_io::{GameInput, GameIo};
+use crate::{
+    cli::{parse_command, read_command},
+    game_io::{GameInput, GameIo},
+};
 
 pub fn start_in_background() -> anyhow::Result<GameIo> {
     let runtime = Runtime::new()?;
@@ -84,28 +86,4 @@ pub fn start_in_background() -> anyhow::Result<GameIo> {
 enum Event {
     Command(String),
     GameInput(GameInput),
-}
-
-pub fn read_command() -> anyhow::Result<String> {
-    let mut command = String::new();
-    stdin().read_line(&mut command)?;
-    Ok(command)
-}
-
-pub fn parse_command(command: String, color: &mut [f64; 4]) {
-    let Ok(channels) = command
-        .split_whitespace()
-        .map(|channel| channel.parse::<f64>())
-        .collect::<Result<Vec<_>, _>>()
-    else {
-        println!("Can't parse color channels as `f64`.");
-        return;
-    };
-
-    let Some((r, g, b, a)) = channels.into_iter().collect_tuple() else {
-        println!("Unexpected number of color channels.");
-        return;
-    };
-
-    *color = [r, g, b, a];
 }
