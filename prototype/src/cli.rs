@@ -24,7 +24,7 @@ pub fn start(commands: Sender<Command>) -> JoinHandle<anyhow::Result<()>> {
     })
     .provide_input(|| {
         let mut command = String::new();
-        stdin().read_line(&mut command).unwrap();
+        stdin().read_line(&mut command)?;
 
         Ok(command)
     })
