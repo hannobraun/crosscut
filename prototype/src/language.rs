@@ -23,7 +23,8 @@ pub fn start(
             }
         }
 
-        for &color in &code.expressions {
+        for expression in &code.expressions {
+            let color = *expression;
             game_output.send(GameOutput::SubmitColor { color })?;
         }
 
