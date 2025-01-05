@@ -1,8 +1,8 @@
-use crate::actor::{Actor, Sender};
+use crate::actor::{Actor, ActorHandle, Sender};
 
 pub fn start(
     color: Sender<[f64; 4]>,
-) -> anyhow::Result<(Actor<Command>, Actor<GameInput>)> {
+) -> anyhow::Result<(ActorHandle, Actor<Command>, Actor<GameInput>)> {
     let mut code = Code {
         color: [0., 0., 0., 1.],
     };
@@ -36,7 +36,7 @@ pub fn start(
         Ok(())
     });
 
-    Ok((command_to_event, input_to_event))
+    Ok((handle_events.handle, command_to_event, input_to_event))
 }
 
 struct Code {
