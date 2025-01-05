@@ -35,11 +35,6 @@ pub fn start_and_wait(
     handler.result
 }
 
-struct GameIo {
-    input: Sender<GameInput>,
-    output: Receiver<[f64; 4]>,
-}
-
 struct Handler {
     resources: Option<ApplicationResources>,
     result: anyhow::Result<()>,
@@ -248,4 +243,9 @@ impl Renderer {
 
         Ok(())
     }
+}
+
+struct GameIo {
+    input: Sender<GameInput>,
+    output: Receiver<[f64; 4]>,
 }
