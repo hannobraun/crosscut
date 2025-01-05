@@ -18,7 +18,9 @@ pub fn start(commands: Sender<Command>) -> JoinHandle<()> {
             }
         };
 
-        Ok(commands.send(command).is_ok())
+        commands.send(command)?;
+
+        Ok(true)
     })
     .provide_input(|| {
         let mut command = String::new();
