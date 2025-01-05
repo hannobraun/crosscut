@@ -13,6 +13,7 @@ pub fn start(
         match event {
             Event::Command(Command::SetColor { color }) => {
                 code.color = color;
+                print_output(&code);
             }
             Event::GameInput(GameInput::RenderingFrame) => {
                 // This loop is coupled to the frame rate of the renderer.
