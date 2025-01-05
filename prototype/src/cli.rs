@@ -13,15 +13,6 @@ pub fn start(commands: Sender<Command>) {
     let (commands_tx, commands_rx) = mpsc::channel();
 
     thread::spawn(move || loop {
-        let mut command = String::new();
-        stdin().read_line(&mut command).unwrap();
-
-        if let Err(SendError(_)) = commands_tx.send(command) {
-            break;
-        }
-    });
-
-    thread::spawn(move || loop {
         let Ok(command) = commands_rx.recv() else {
             break;
         };
@@ -31,6 +22,15 @@ pub fn start(commands: Sender<Command>) {
 
         if let Err(SendError(_)) = commands.send(command) {
             // The other end has hung up. We should shut down too.
+            break;
+        }
+    });
+
+    thread::spawn(move || loop {
+        let mut command = String::new();
+        stdin().read_line(&mut command).unwrap();
+
+        if let Err(SendError(_)) = commands_tx.send(command) {
             break;
         }
     });
