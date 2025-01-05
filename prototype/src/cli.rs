@@ -22,9 +22,9 @@ pub fn parse_command(command: String) -> anyhow::Result<Command> {
         return Err(anyhow!("Unexpected number of color channels."));
     };
 
-    let color = [r, g, b, a];
-
-    Ok(Command::SetColor { color })
+    Ok(Command::SetColor {
+        color: [r, g, b, a],
+    })
 }
 
 pub enum Command {
