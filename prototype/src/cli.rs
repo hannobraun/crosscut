@@ -9,10 +9,7 @@ pub fn read_command() -> anyhow::Result<String> {
     Ok(command)
 }
 
-pub fn parse_command(
-    command: String,
-    color: &mut [f64; 4],
-) -> anyhow::Result<Command> {
+pub fn parse_command(command: String) -> anyhow::Result<Command> {
     let Ok(channels) = command
         .split_whitespace()
         .map(|channel| channel.parse::<f64>())
@@ -25,9 +22,9 @@ pub fn parse_command(
         return Err(anyhow!("Unexpected number of color channels."));
     };
 
-    *color = [r, g, b, a];
+    let color = [r, g, b, a];
 
-    Ok(Command::SetColor { color: *color })
+    Ok(Command::SetColor { color })
 }
 
 pub enum Command {

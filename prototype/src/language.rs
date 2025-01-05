@@ -56,16 +56,14 @@ pub fn start() -> anyhow::Result<GameIo> {
                 };
 
                 match event {
-                    Event::Command(command) => {
-                        match parse_command(command, &mut code.color) {
-                            Ok(Command::SetColor { color }) => {
-                                code.color = color;
-                            }
-                            Err(err) => {
-                                println!("{err}");
-                            }
+                    Event::Command(command) => match parse_command(command) {
+                        Ok(Command::SetColor { color }) => {
+                            code.color = color;
                         }
-                    }
+                        Err(err) => {
+                            println!("{err}");
+                        }
+                    },
                     Event::GameInput(GameInput::RenderingFrame) => {
                         // This loop is coupled to the frame rate of the
                         // renderer.
