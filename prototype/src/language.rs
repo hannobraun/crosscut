@@ -20,14 +20,16 @@ pub fn start() -> anyhow::Result<GameIo> {
 
     thread::spawn(move || {
         runtime.block_on(async {
-            let mut color = [0., 0., 0., 1.];
+            let mut code = Code {
+                color: [0., 0., 0., 1.],
+            };
 
-            println!("Color: {:?}", color);
+            println!("Color: {:?}", code.color);
 
             loop {
                 // The channel has no buffer, so this is synchronized to the
                 // frame rate of the renderer.
-                if let Err(SendError(_)) = color_tx.send(color) {
+                if let Err(SendError(_)) = color_tx.send(code.color) {
                     // The other end has hung up. Time for us to shut down too.
                     break;
                 }
@@ -55,7 +57,7 @@ pub fn start() -> anyhow::Result<GameIo> {
 
                 match event {
                     Event::Command(command) => {
-                        match parse_command(command, &mut color) {
+                        match parse_command(command, &mut code.color) {
                             Ok(Command::SetColor { color }) => {
                                 let _ = color;
                             }
@@ -93,4 +95,8 @@ pub fn start() -> anyhow::Result<GameIo> {
 enum Event {
     Command(String),
     GameInput(GameInput),
+}
+
+struct Code {
+    color: [f64; 4],
 }
