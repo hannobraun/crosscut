@@ -9,9 +9,10 @@ pub struct Actor<I> {
 }
 
 impl<I> Actor<I> {
-    pub fn spawn(mut f: impl FnMut(I) -> bool + Send + 'static) -> Actor<I>
+    pub fn spawn<F>(mut f: F) -> Actor<I>
     where
         I: Send + 'static,
+        F: FnMut(I) -> bool + Send + 'static,
     {
         let (sender, receiver) = channel();
 
