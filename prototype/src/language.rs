@@ -23,7 +23,7 @@ pub fn start(
     });
 
     let events_from_input = handle_events.input.clone();
-    let input = actor(move |input| {
+    let input_to_event = actor(move |input| {
         events_from_input.send(Event::GameInput(input)).is_ok()
     });
 
@@ -32,7 +32,7 @@ pub fn start(
         events_from_commands.send(Event::Command(command)).is_ok()
     });
 
-    Ok((input.input, commands.input))
+    Ok((input_to_event.input, commands.input))
 }
 
 struct Code {
