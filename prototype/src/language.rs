@@ -2,7 +2,7 @@ use itertools::Itertools;
 
 use crate::{
     actor::{Actor, ActorHandle, Sender},
-    code::{Code, Expression},
+    code::model::{Code, Expression},
 };
 
 pub fn start(
