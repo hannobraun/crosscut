@@ -84,7 +84,7 @@ pub enum GameOutput {
 }
 
 fn print_output(code: &Code) {
-    println!("{:#?}", code);
+    println!("{}", code);
 }
 
 fn parse(command: String) -> anyhow::Result<Vec<Expression>> {
