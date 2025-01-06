@@ -1,8 +1,8 @@
 use std::io::stdin;
 
-use crate::actor::{Actor, ActorHandle, Sender};
+use crate::actor::{Actor, Sender, ThreadHandle};
 
-pub fn start(lines: Sender<String>) -> ActorHandle {
+pub fn start(lines: Sender<String>) -> ThreadHandle {
     Actor::spawn(move |line| {
         lines.send(line)?;
         Ok(())

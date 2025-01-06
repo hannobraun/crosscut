@@ -6,7 +6,7 @@ use std::{
 
 pub struct Actor<I> {
     pub sender: Sender<I>,
-    pub handle: ActorHandle,
+    pub handle: ThreadHandle,
 }
 
 impl<I> Actor<I> {
@@ -32,14 +32,14 @@ impl<I> Actor<I> {
 
         Actor {
             sender,
-            handle: ActorHandle {
+            handle: ThreadHandle {
                 main: Some(handle),
                 input: None,
             },
         }
     }
 
-    pub fn provide_input<F>(mut self, mut f: F) -> ActorHandle
+    pub fn provide_input<F>(mut self, mut f: F) -> ThreadHandle
     where
         I: Send + 'static,
         F: FnMut() -> anyhow::Result<I> + Send + 'static,
@@ -100,12 +100,12 @@ pub enum ChannelError {
 }
 
 #[derive(Debug)]
-pub struct ActorHandle {
+pub struct ThreadHandle {
     main: Option<JoinHandle<anyhow::Result<()>>>,
     input: Option<JoinHandle<anyhow::Result<()>>>,
 }
 
-impl ActorHandle {
+impl ThreadHandle {
     pub fn join(&mut self) -> anyhow::Result<()> {
         if self.main.is_none() {
             panic!("You must not join an actor that has already been joined.");

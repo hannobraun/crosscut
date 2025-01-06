@@ -2,13 +2,13 @@ use anyhow::anyhow;
 use itertools::Itertools;
 
 use crate::{
-    actor::{Actor, ActorHandle, Sender},
+    actor::{Actor, Sender, ThreadHandle},
     code::model::{Code, Expression},
 };
 
 pub fn start(
     game_output: Sender<GameOutput>,
-) -> anyhow::Result<(ActorHandle, Actor<String>, Actor<GameInput>)> {
+) -> anyhow::Result<(ThreadHandle, Actor<String>, Actor<GameInput>)> {
     let mut code = Code {
         expressions: vec![],
     };
