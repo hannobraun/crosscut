@@ -26,10 +26,8 @@ pub fn start(
                     }
                 };
 
-                for Command::Insert { color } in commands {
-                    code.expressions.extend(color.map(|channel| {
-                        Expression::LiteralNumber { value: channel }
-                    }));
+                for Command::Insert { value } in commands {
+                    code.expressions.push(Expression::LiteralNumber { value });
                 }
 
                 print_output(&code);
@@ -80,7 +78,7 @@ enum Event {
 }
 
 pub enum Command {
-    Insert { color: [f64; 4] },
+    Insert { value: f64 },
 }
 
 pub enum GameInput {
@@ -104,11 +102,8 @@ fn parse_command(command: String) -> anyhow::Result<Vec<Command>> {
         return Err(anyhow!("Can't parse color channels as `f64`."));
     };
 
-    let Some((r, g, b, a)) = channels.into_iter().collect_tuple() else {
-        return Err(anyhow!("Unexpected number of color channels."));
-    };
-
-    Ok(vec![Command::Insert {
-        color: [r, g, b, a],
-    }])
+    Ok(channels
+        .into_iter()
+        .map(|channel| Command::Insert { value: channel })
+        .collect())
 }
