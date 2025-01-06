@@ -26,11 +26,12 @@ pub fn start(
                     }
                 };
 
-                let Command::Insert { color } = command;
+                for Command::Insert { color } in command {
+                    code.expressions.extend(color.map(|channel| {
+                        Expression::LiteralNumber { value: channel }
+                    }));
+                }
 
-                code.expressions.extend(color.map(|channel| {
-                    Expression::LiteralNumber { value: channel }
-                }));
                 print_output(&code);
             }
             Event::GameInput(GameInput::RenderingFrame) => {
@@ -94,7 +95,7 @@ fn print_output(code: &Code) {
     println!("{:#?}", code);
 }
 
-fn parse_command(command: String) -> anyhow::Result<Command> {
+fn parse_command(command: String) -> anyhow::Result<Vec<Command>> {
     let Ok(channels) = command
         .split_whitespace()
         .map(|channel| channel.parse::<f64>())
@@ -107,7 +108,7 @@ fn parse_command(command: String) -> anyhow::Result<Command> {
         return Err(anyhow!("Unexpected number of color channels."));
     };
 
-    Ok(Command::Insert {
+    Ok(vec![Command::Insert {
         color: [r, g, b, a],
-    })
+    }])
 }
