@@ -26,9 +26,7 @@ pub fn start(
                     }
                 };
 
-                for expression in expressions {
-                    code.expressions.push(expression);
-                }
+                code.expressions.extend(expressions);
 
                 print_output(&code);
             }
