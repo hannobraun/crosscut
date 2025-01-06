@@ -4,11 +4,11 @@ use crate::{
 };
 
 pub fn update(code: &Code, _: &Interpreter) -> anyhow::Result<()> {
-    render_code(code);
+    render_code(code)?;
     Ok(())
 }
 
-fn render_code(code: &Code) {
+fn render_code(code: &Code) -> anyhow::Result<()> {
     for expression in &code.expressions {
         print!("    ");
 
@@ -21,4 +21,6 @@ fn render_code(code: &Code) {
             }
         }
     }
+
+    Ok(())
 }
