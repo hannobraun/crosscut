@@ -11,6 +11,8 @@ pub fn start(
     let mut code = Code {
         expressions: vec![],
     };
+    let mut next_expression = 0;
+    let mut values = Vec::new();
 
     print_output(&code);
 
@@ -26,20 +28,20 @@ pub fn start(
             }
         }
 
-        let mut values = Vec::new();
-        for expression in &code.expressions {
+        if let Some(expression) = code.expressions.get(next_expression) {
             let value = match expression {
                 Expression::LiteralNumber { value } => value,
                 Expression::InvalidNumber { .. } => {
-                    continue;
+                    return Ok(());
                 }
             };
             values.push(*value);
+            next_expression += 1;
 
             let Some((r, g, b, a)) = values.iter().copied().collect_tuple()
             else {
                 // Don't have enough values yet to constitute a color.
-                continue;
+                return Ok(());
             };
 
             values.clear();
