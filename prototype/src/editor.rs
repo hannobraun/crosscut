@@ -3,8 +3,9 @@ use crate::{
     interpreter::Interpreter,
 };
 
-pub fn update(code: &Code, _: &Interpreter) {
+pub fn update(code: &Code, _: &Interpreter) -> anyhow::Result<()> {
     render_code(code);
+    Ok(())
 }
 
 fn render_code(code: &Code) {
