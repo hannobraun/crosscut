@@ -13,7 +13,7 @@ impl<I> Actor<I> {
     pub fn spawn<F>(mut f: F) -> Actor<I>
     where
         I: Send + 'static,
-        F: FnMut(I) -> Result<(), ChannelError> + Send + 'static,
+        F: FnMut(I) -> Result<(), Error> + Send + 'static,
     {
         let (sender, receiver) = channel();
 
@@ -21,7 +21,7 @@ impl<I> Actor<I> {
             while let Ok(input) = receiver.recv() {
                 match f(input) {
                     Ok(()) => {}
-                    Err(ChannelError::Disconnected) => {
+                    Err(Error::Disconnected) => {
                         break;
                     }
                 }
@@ -48,8 +48,7 @@ impl<I> Actor<I> {
             loop {
                 let input = f()?;
 
-                if let Err(ChannelError::Disconnected) = self.sender.send(input)
-                {
+                if let Err(Error::Disconnected) = self.sender.send(input) {
                     break;
                 }
             }
@@ -73,10 +72,10 @@ pub struct Sender<T> {
 }
 
 impl<T> Sender<T> {
-    pub fn send(&self, value: T) -> Result<(), ChannelError> {
+    pub fn send(&self, value: T) -> Result<(), Error> {
         self.inner
             .send(value)
-            .map_err(|SendError(_)| ChannelError::Disconnected)
+            .map_err(|SendError(_)| Error::Disconnected)
     }
 }
 
@@ -90,7 +89,7 @@ impl<T> Clone for Sender<T> {
 
 pub type Receiver<T> = mpsc::Receiver<T>;
 
-pub enum ChannelError {
+pub enum Error {
     /// # Channel is disconnected
     ///
     /// This should only happen, if another thread has shut down. Within the
