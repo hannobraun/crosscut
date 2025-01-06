@@ -26,8 +26,8 @@ pub fn start(
                     }
                 };
 
-                for Command::Insert { value } in commands {
-                    code.expressions.push(Expression::LiteralNumber { value });
+                for expression in commands {
+                    code.expressions.push(expression);
                 }
 
                 print_output(&code);
@@ -77,10 +77,6 @@ enum Event {
     GameInput(GameInput),
 }
 
-pub enum Command {
-    Insert { value: f64 },
-}
-
 pub enum GameInput {
     RenderingFrame,
 }
@@ -93,7 +89,7 @@ fn print_output(code: &Code) {
     println!("{:#?}", code);
 }
 
-fn parse(command: String) -> anyhow::Result<Vec<Command>> {
+fn parse(command: String) -> anyhow::Result<Vec<Expression>> {
     let Ok(channels) = command
         .split_whitespace()
         .map(|channel| channel.parse::<f64>())
@@ -104,6 +100,6 @@ fn parse(command: String) -> anyhow::Result<Vec<Command>> {
 
     Ok(channels
         .into_iter()
-        .map(|channel| Command::Insert { value: channel })
+        .map(|channel| Expression::LiteralNumber { value: channel })
         .collect())
 }
