@@ -8,9 +8,9 @@ pub fn start(lines: Sender<String>) -> ActorHandle {
         Ok(())
     })
     .provide_input(|| {
-        let mut command = String::new();
-        stdin().read_line(&mut command)?;
+        let mut line = String::new();
+        stdin().read_line(&mut line)?;
 
-        Ok(command)
+        Ok(line)
     })
 }
