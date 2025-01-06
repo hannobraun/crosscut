@@ -21,7 +21,7 @@ impl<I> Actor<I> {
             while let Ok(input) = receiver.recv() {
                 match f(input) {
                     Ok(()) => {}
-                    Err(Error::Disconnected) => {
+                    Err(Error::ChannelDisconnected) => {
                         break;
                     }
                 }
@@ -48,7 +48,8 @@ impl<I> Actor<I> {
             loop {
                 let input = f()?;
 
-                if let Err(Error::Disconnected) = self.sender.send(input) {
+                if let Err(Error::ChannelDisconnected) = self.sender.send(input)
+                {
                     break;
                 }
             }
@@ -75,7 +76,7 @@ impl<T> Sender<T> {
     pub fn send(&self, value: T) -> Result<(), Error> {
         self.inner
             .send(value)
-            .map_err(|SendError(_)| Error::Disconnected)
+            .map_err(|SendError(_)| Error::ChannelDisconnected)
     }
 }
 
@@ -95,7 +96,7 @@ pub enum Error {
     /// This should only happen, if another thread has shut down. Within the
     /// scope of this application, this means that the overall system either
     /// already is shutting down, or should be going into shutdown.
-    Disconnected,
+    ChannelDisconnected,
 }
 
 #[derive(Debug)]
