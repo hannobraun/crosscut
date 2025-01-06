@@ -3,6 +3,7 @@ use itertools::Itertools;
 use crate::{
     actor::{Actor, Sender, ThreadHandle},
     code::model::{Code, Expression},
+    interpreter::Interpreter,
 };
 
 pub fn start(
@@ -11,7 +12,7 @@ pub fn start(
     let mut code = Code {
         expressions: vec![],
     };
-    let mut next_expression = 0;
+    let mut interpreter = Interpreter { next_expression: 0 };
     let mut values = Vec::new();
 
     print_output(&code);
@@ -28,7 +29,9 @@ pub fn start(
             }
         }
 
-        if let Some(expression) = code.expressions.get(next_expression) {
+        if let Some(expression) =
+            code.expressions.get(interpreter.next_expression)
+        {
             let value = match expression {
                 Expression::LiteralNumber { value } => value,
                 Expression::InvalidNumber { .. } => {
@@ -36,7 +39,7 @@ pub fn start(
                 }
             };
             values.push(*value);
-            next_expression += 1;
+            interpreter.next_expression += 1;
 
             let Some((r, g, b, a)) = values.iter().copied().collect_tuple()
             else {

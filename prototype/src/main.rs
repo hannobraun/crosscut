@@ -1,6 +1,7 @@
 mod actor;
 mod code;
 mod game_io;
+mod interpreter;
 mod language;
 mod stdin;
 
