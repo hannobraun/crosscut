@@ -1,3 +1,5 @@
+use itertools::Itertools;
+
 use crate::{
     actor::{Actor, ActorHandle, Sender},
     code::{Code, Expression},
@@ -15,7 +17,9 @@ pub fn start(
     let handle_events = Actor::spawn(move |event| {
         match event {
             Event::Command(Command::Insert { color }) => {
-                code.expressions = vec![Expression::Color { color }];
+                code.expressions.extend(color.map(|channel| {
+                    Expression::LiteralNumber { value: channel }
+                }));
                 print_output(&code);
             }
             Event::GameInput(GameInput::RenderingFrame) => {
@@ -23,9 +27,21 @@ pub fn start(
             }
         }
 
+        let mut values = Vec::new();
         for expression in &code.expressions {
-            let Expression::Color { color } = expression;
-            game_output.send(GameOutput::SubmitColor { color: *color })?;
+            let Expression::LiteralNumber { value } = expression;
+            values.push(*value);
+
+            let Some((r, g, b, a)) = values.iter().copied().collect_tuple()
+            else {
+                // Don't have enough values yet to constitute a color.
+                continue;
+            };
+
+            values.clear();
+            game_output.send(GameOutput::SubmitColor {
+                color: [r, g, b, a],
+            })?;
         }
 
         Ok(())

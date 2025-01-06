@@ -5,5 +5,5 @@ pub struct Code {
 
 #[derive(Debug)]
 pub enum Expression {
-    Color { color: [f64; 4] },
+    LiteralNumber { value: f64 },
 }
