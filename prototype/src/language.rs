@@ -16,7 +16,7 @@ pub fn start(
 
     let handle_events = Actor::spawn(move |event| {
         match event {
-            Event::Command(Command::Insert { color }) => {
+            Event::EditorInput(Command::Insert { color }) => {
                 code.expressions.extend(color.map(|channel| {
                     Expression::LiteralNumber { value: channel }
                 }));
@@ -49,7 +49,7 @@ pub fn start(
 
     let events_from_commands = handle_events.sender.clone();
     let command_to_event = Actor::spawn(move |command| {
-        events_from_commands.send(Event::Command(command))?;
+        events_from_commands.send(Event::EditorInput(command))?;
         Ok(())
     });
 
@@ -63,7 +63,7 @@ pub fn start(
 }
 
 enum Event {
-    Command(Command),
+    EditorInput(Command),
     GameInput(GameInput),
 }
 
