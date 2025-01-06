@@ -130,16 +130,10 @@ impl ActorHandle {
 
 impl Drop for ActorHandle {
     fn drop(&mut self) {
-        if thread::panicking() {
-            // No need for a double panic.
-            return;
-        }
-
-        assert!(
-            self.main.is_none() && self.input.is_none(),
-            "You are dropping a handle for an actor that you haven't joined. \
-            All actors must be joined, to make sure errors are handled \
-            correctly."
+        eprintln!(
+            "WARNING: Dropping actor handle without having joined it. This is \
+            fine, if it happens because of some other error. But if it happens \
+            as part of a normal shutdown, it should be considered a bug."
         );
     }
 }
