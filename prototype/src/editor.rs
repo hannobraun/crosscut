@@ -28,11 +28,7 @@ fn render_code(
         }
     }
 
-    let state = if interpreter.next_expression >= code.expressions.len() {
-        "paused"
-    } else {
-        "running"
-    };
+    let state = interpreter.state(code);
 
     writeln!(w)?;
     write!(w, "{} > ", state)?;
