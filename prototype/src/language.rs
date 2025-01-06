@@ -85,9 +85,8 @@ fn print_output(code: &Code) {
     println!("{code}");
 }
 
-fn parse(command: String) -> Vec<Expression> {
-    command
-        .split_whitespace()
+fn parse(line: String) -> Vec<Expression> {
+    line.split_whitespace()
         .map(|channel| match channel.parse::<f64>() {
             Ok(value) => Expression::LiteralNumber { value },
             Err(_) => Expression::InvalidNumber {
