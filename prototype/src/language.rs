@@ -3,7 +3,7 @@ use itertools::Itertools;
 use crate::{
     actor::{Actor, Sender, ThreadHandle},
     code::model::{Code, Expression},
-    editor::print_output,
+    editor::update,
     interpreter::Interpreter,
 };
 
@@ -14,14 +14,14 @@ pub fn start(
     let mut interpreter = Interpreter::default();
     let mut values = Vec::new();
 
-    print_output(&code);
+    update(&code);
 
     let handle_events = Actor::spawn(move |event| {
         match event {
             Event::EditorInput { line } => {
                 let expressions = parse(line);
                 code.expressions.extend(expressions);
-                print_output(&code);
+                update(&code);
             }
             Event::GameInput(GameInput::RenderingFrame) => {
                 // This loop is coupled to the frame rate of the renderer.
