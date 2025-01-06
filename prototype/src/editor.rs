@@ -4,6 +4,10 @@ use crate::{
 };
 
 pub fn update(code: &Code, _: &Interpreter) {
+    render_code(code);
+}
+
+fn render_code(code: &Code) {
     for expression in &code.expressions {
         print!("    ");
 
