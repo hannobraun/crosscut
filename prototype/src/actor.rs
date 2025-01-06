@@ -99,6 +99,7 @@ pub enum ChannelError {
     Disconnected,
 }
 
+#[derive(Debug)]
 pub struct ActorHandle {
     main: Option<JoinHandle<anyhow::Result<()>>>,
     input: Option<JoinHandle<anyhow::Result<()>>>,
