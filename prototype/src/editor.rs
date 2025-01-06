@@ -12,7 +12,7 @@ pub fn update(code: &Code, interpreter: &Interpreter) -> anyhow::Result<()> {
 
 fn render_code(
     code: &Code,
-    _: &Interpreter,
+    interpreter: &Interpreter,
     mut w: impl io::Write,
 ) -> anyhow::Result<()> {
     for expression in &code.expressions {
@@ -27,6 +27,17 @@ fn render_code(
             }
         }
     }
+
+    let state = if interpreter.next_expression >= code.expressions.len() {
+        "paused"
+    } else {
+        "running"
+    };
+
+    writeln!(w)?;
+    write!(w, "{} > ", state)?;
+
+    w.flush()?;
 
     Ok(())
 }
