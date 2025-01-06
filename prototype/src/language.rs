@@ -57,7 +57,7 @@ pub fn start(
     });
 
     let events_from_commands = handle_events.sender.clone();
-    let command_to_event = Actor::spawn(move |command| {
+    let handle_editor_input = Actor::spawn(move |command| {
         events_from_commands.send(Event::EditorInput { line: command })?;
         Ok(())
     });
@@ -68,7 +68,7 @@ pub fn start(
         Ok(())
     });
 
-    Ok((handle_events.handle, command_to_event, input_to_event))
+    Ok((handle_events.handle, handle_editor_input, input_to_event))
 }
 
 enum Event {
