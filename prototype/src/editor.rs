@@ -10,7 +10,6 @@ pub fn start(lines: Sender<String>) -> ActorHandle {
     .provide_input(|| {
         let mut line = String::new();
         stdin().read_line(&mut line)?;
-
         Ok(line)
     })
 }
