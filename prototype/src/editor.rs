@@ -1,6 +1,9 @@
-use crate::code::model::{Code, Expression};
+use crate::{
+    code::model::{Code, Expression},
+    interpreter::Interpreter,
+};
 
-pub fn update(code: &Code) {
+pub fn update(code: &Code, _: &Interpreter) {
     for expression in &code.expressions {
         print!("    ");
 

@@ -14,14 +14,14 @@ pub fn start(
     let mut interpreter = Interpreter::default();
     let mut values = Vec::new();
 
-    editor::update(&code);
+    editor::update(&code, &interpreter);
 
     let handle_events = Actor::spawn(move |event| {
         match event {
             Event::EditorInput { line } => {
                 let expressions = parse(line);
                 code.expressions.extend(expressions);
-                editor::update(&code);
+                editor::update(&code, &interpreter);
             }
             Event::GameInput(GameInput::RenderingFrame) => {
                 // This loop is coupled to the frame rate of the renderer.
