@@ -19,7 +19,7 @@ pub fn start(
         match event {
             Event::EditorInput { line } => {
                 let expressions = match parse(line) {
-                    Ok(commands) => commands,
+                    Ok(expressions) => expressions,
                     Err(err) => {
                         println!("{err}");
                         return Ok(());
