@@ -18,9 +18,7 @@ pub fn start(
         match event {
             Event::EditorInput { line } => {
                 let expressions = parse(line);
-
                 code.expressions.extend(expressions);
-
                 print_output(&code);
             }
             Event::GameInput(GameInput::RenderingFrame) => {
