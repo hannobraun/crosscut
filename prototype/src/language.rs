@@ -18,7 +18,7 @@ pub fn start(
     let handle_events = Actor::spawn(move |event| {
         match event {
             Event::EditorInput { line } => {
-                let commands = match parse(line) {
+                let expressions = match parse(line) {
                     Ok(commands) => commands,
                     Err(err) => {
                         println!("{err}");
@@ -26,7 +26,7 @@ pub fn start(
                     }
                 };
 
-                for expression in commands {
+                for expression in expressions {
                     code.expressions.push(expression);
                 }
 
