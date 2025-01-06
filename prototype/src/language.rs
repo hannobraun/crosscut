@@ -82,7 +82,7 @@ pub enum GameOutput {
     SubmitColor { color: [f64; 4] },
 }
 
-fn print_output(code: &Code) {
+pub fn print_output(code: &Code) {
     println!("{code}");
 }
 
