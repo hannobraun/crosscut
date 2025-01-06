@@ -9,9 +9,7 @@ use crate::{
 pub fn start(
     game_output: Sender<GameOutput>,
 ) -> anyhow::Result<(ThreadHandle, Actor<String>, Actor<GameInput>)> {
-    let mut code = Code {
-        expressions: vec![],
-    };
+    let mut code = Code::default();
     let mut interpreter = Interpreter { next_expression: 0 };
     let mut values = Vec::new();
 
