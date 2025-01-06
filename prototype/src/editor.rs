@@ -1,7 +1,7 @@
 use std::io::{self, stdout};
 
 use crate::{
-    code::model::{Code, Expression},
+    code::{Code, Expression},
     interpreter::Interpreter,
 };
 

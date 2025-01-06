@@ -1,4 +1,4 @@
-use crate::code::model::Code;
+use crate::code::Code;
 
 #[derive(Default)]
 pub struct Interpreter {
