@@ -18,7 +18,7 @@ pub fn start(
     let handle_events = Actor::spawn(move |event| {
         match event {
             Event::EditorInput { line } => {
-                let commands = match parse_command(line) {
+                let commands = match parse(line) {
                     Ok(commands) => commands,
                     Err(err) => {
                         println!("{err}");
@@ -93,7 +93,7 @@ fn print_output(code: &Code) {
     println!("{:#?}", code);
 }
 
-fn parse_command(command: String) -> anyhow::Result<Vec<Command>> {
+fn parse(command: String) -> anyhow::Result<Vec<Command>> {
     let Ok(channels) = command
         .split_whitespace()
         .map(|channel| channel.parse::<f64>())
