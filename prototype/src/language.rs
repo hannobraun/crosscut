@@ -18,7 +18,7 @@ pub fn start(
     let handle_events = Actor::spawn(move |event| {
         match event {
             Event::EditorInput { line } => {
-                let command = match parse_command(line) {
+                let commands = match parse_command(line) {
                     Ok(command) => command,
                     Err(err) => {
                         println!("{err}");
@@ -26,7 +26,7 @@ pub fn start(
                     }
                 };
 
-                for Command::Insert { color } in command {
+                for Command::Insert { color } in commands {
                     code.expressions.extend(color.map(|channel| {
                         Expression::LiteralNumber { value: channel }
                     }));
