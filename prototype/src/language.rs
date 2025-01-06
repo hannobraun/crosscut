@@ -1,3 +1,4 @@
+use anyhow::anyhow;
 use itertools::Itertools;
 
 use crate::{
@@ -7,7 +8,7 @@ use crate::{
 
 pub fn start(
     game_output: Sender<GameOutput>,
-) -> anyhow::Result<(ActorHandle, Actor<Command>, Actor<GameInput>)> {
+) -> anyhow::Result<(ActorHandle, Actor<String>, Actor<GameInput>)> {
     let mut code = Code {
         expressions: vec![],
     };
@@ -16,7 +17,15 @@ pub fn start(
 
     let handle_events = Actor::spawn(move |event| {
         match event {
-            Event::EditorInput(Command::Insert { color }) => {
+            Event::EditorInput { line } => {
+                let Command::Insert { color } = match parse_command(line) {
+                    Ok(command) => command,
+                    Err(err) => {
+                        println!("{err}");
+                        return Ok(());
+                    }
+                };
+
                 code.expressions.extend(color.map(|channel| {
                     Expression::LiteralNumber { value: channel }
                 }));
@@ -49,7 +58,7 @@ pub fn start(
 
     let events_from_commands = handle_events.sender.clone();
     let command_to_event = Actor::spawn(move |command| {
-        events_from_commands.send(Event::EditorInput(command))?;
+        events_from_commands.send(Event::EditorInput { line: command })?;
         Ok(())
     });
 
@@ -63,7 +72,7 @@ pub fn start(
 }
 
 enum Event {
-    EditorInput(Command),
+    EditorInput { line: String },
     GameInput(GameInput),
 }
 
@@ -81,4 +90,22 @@ pub enum GameOutput {
 
 fn print_output(code: &Code) {
     println!("{:#?}", code);
+}
+
+fn parse_command(command: String) -> anyhow::Result<Command> {
+    let Ok(channels) = command
+        .split_whitespace()
+        .map(|channel| channel.parse::<f64>())
+        .collect::<Result<Vec<_>, _>>()
+    else {
+        return Err(anyhow!("Can't parse color channels as `f64`."));
+    };
+
+    let Some((r, g, b, a)) = channels.into_iter().collect_tuple() else {
+        return Err(anyhow!("Unexpected number of color channels."));
+    };
+
+    Ok(Command::Insert {
+        color: [r, g, b, a],
+    })
 }
