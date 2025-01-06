@@ -3,6 +3,7 @@ use itertools::Itertools;
 use crate::{
     actor::{Actor, Sender, ThreadHandle},
     code::model::{Code, Expression},
+    editor::print_output,
     interpreter::Interpreter,
 };
 
@@ -80,10 +81,6 @@ pub enum GameInput {
 
 pub enum GameOutput {
     SubmitColor { color: [f64; 4] },
-}
-
-pub fn print_output(code: &Code) {
-    println!("{code}");
 }
 
 fn parse(line: String) -> Vec<Expression> {
