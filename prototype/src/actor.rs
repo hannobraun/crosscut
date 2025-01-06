@@ -127,13 +127,3 @@ impl ActorHandle {
         Ok(())
     }
 }
-
-impl Drop for ActorHandle {
-    fn drop(&mut self) {
-        eprintln!(
-            "WARNING: Dropping actor handle without having joined it. This is \
-            fine, if it happens because of some other error. But if it happens \
-            as part of a normal shutdown, it should be considered a bug."
-        );
-    }
-}
