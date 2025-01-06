@@ -28,10 +28,8 @@ fn render_code(
         }
     }
 
-    let state = interpreter.state(code);
-
     writeln!(w)?;
-    write!(w, "{} > ", state)?;
+    write!(w, "{} > ", interpreter.state(code))?;
 
     w.flush()?;
 
