@@ -17,13 +17,7 @@ pub fn start(
     let handle_events = Actor::spawn(move |event| {
         match event {
             Event::EditorInput { line } => {
-                let expressions = match parse(line) {
-                    Ok(expressions) => expressions,
-                    Err(err) => {
-                        println!("{err}");
-                        return Ok(());
-                    }
-                };
+                let expressions = parse(line);
 
                 code.expressions.extend(expressions);
 
@@ -91,8 +85,8 @@ fn print_output(code: &Code) {
     println!("{code}");
 }
 
-fn parse(command: String) -> anyhow::Result<Vec<Expression>> {
-    Ok(command
+fn parse(command: String) -> Vec<Expression> {
+    command
         .split_whitespace()
         .map(|channel| match channel.parse::<f64>() {
             Ok(value) => Expression::LiteralNumber { value },
@@ -100,5 +94,5 @@ fn parse(command: String) -> anyhow::Result<Vec<Expression>> {
                 invalid: channel.to_string(),
             },
         })
-        .collect())
+        .collect()
 }
