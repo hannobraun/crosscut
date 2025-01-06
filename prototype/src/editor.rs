@@ -5,12 +5,16 @@ use crate::{
     interpreter::Interpreter,
 };
 
-pub fn update(code: &Code, _: &Interpreter) -> anyhow::Result<()> {
-    render_code(code, stdout())?;
+pub fn update(code: &Code, interpreter: &Interpreter) -> anyhow::Result<()> {
+    render_code(code, interpreter, stdout())?;
     Ok(())
 }
 
-fn render_code(code: &Code, mut w: impl io::Write) -> anyhow::Result<()> {
+fn render_code(
+    code: &Code,
+    _: &Interpreter,
+    mut w: impl io::Write,
+) -> anyhow::Result<()> {
     for expression in &code.expressions {
         write!(w, "    ")?;
 
