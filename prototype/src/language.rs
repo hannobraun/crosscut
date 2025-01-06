@@ -1,4 +1,3 @@
-use anyhow::anyhow;
 use itertools::Itertools;
 
 use crate::{
@@ -37,7 +36,12 @@ pub fn start(
 
         let mut values = Vec::new();
         for expression in &code.expressions {
-            let Expression::LiteralNumber { value } = expression;
+            let value = match expression {
+                Expression::LiteralNumber { value } => value,
+                Expression::InvalidNumber { .. } => {
+                    continue;
+                }
+            };
             values.push(*value);
 
             let Some((r, g, b, a)) = values.iter().copied().collect_tuple()
@@ -88,16 +92,13 @@ fn print_output(code: &Code) {
 }
 
 fn parse(command: String) -> anyhow::Result<Vec<Expression>> {
-    let Ok(channels) = command
+    Ok(command
         .split_whitespace()
-        .map(|channel| channel.parse::<f64>())
-        .collect::<Result<Vec<_>, _>>()
-    else {
-        return Err(anyhow!("Can't parse color channels as `f64`."));
-    };
-
-    Ok(channels
-        .into_iter()
-        .map(|channel| Expression::LiteralNumber { value: channel })
+        .map(|channel| match channel.parse::<f64>() {
+            Ok(value) => Expression::LiteralNumber { value },
+            Err(_) => Expression::InvalidNumber {
+                invalid: channel.to_string(),
+            },
+        })
         .collect())
 }
