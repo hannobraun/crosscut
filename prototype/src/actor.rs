@@ -24,6 +24,9 @@ impl<I> Actor<I> {
                     Err(Error::ChannelDisconnected) => {
                         break;
                     }
+                    Err(Error::Other { err }) => {
+                        return Err(err);
+                    }
                 }
             }
 
@@ -97,6 +100,16 @@ pub enum Error {
     /// scope of this application, this means that the overall system either
     /// already is shutting down, or should be going into shutdown.
     ChannelDisconnected,
+
+    Other {
+        err: anyhow::Error,
+    },
+}
+
+impl From<anyhow::Error> for Error {
+    fn from(err: anyhow::Error) -> Self {
+        Self::Other { err }
+    }
 }
 
 #[derive(Debug)]
