@@ -1,8 +1,6 @@
-use super::code::Expression;
+use super::code::{Code, Expression};
 
-pub fn compile(input: String) -> Vec<Expression> {
-    let mut expressions = Vec::new();
-
+pub fn compile(input: String, code: &mut Code) {
     for token in input.split_whitespace() {
         let expression = match token.parse::<f64>() {
             Ok(value) => Expression::LiteralNumber { value },
@@ -11,8 +9,6 @@ pub fn compile(input: String) -> Vec<Expression> {
             },
         };
 
-        expressions.push(expression);
+        code.expressions.push(expression);
     }
-
-    expressions
 }
