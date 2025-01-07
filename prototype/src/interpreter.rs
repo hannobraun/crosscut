@@ -1,9 +1,9 @@
-use std::collections::BTreeSet;
+use std::collections::BTreeMap;
 
 use crate::code::{Code, Expression};
 
 pub struct Interpreter {
-    pub functions: BTreeSet<String>,
+    pub functions: BTreeMap<String, Function>,
     pub next_expression: usize,
     pub active_function: Option<Function>,
 }
@@ -38,11 +38,8 @@ impl Interpreter {
         } else {
             match expression {
                 Expression::Identifier { name } => {
-                    if self.functions.contains(name) {
-                        self.active_function = Some(Function {
-                            input: (),
-                            output: (),
-                        });
+                    if let Some(function) = self.functions.get(name).copied() {
+                        self.active_function = Some(function);
                         self.next_expression += 1;
                     }
                 }

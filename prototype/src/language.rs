@@ -1,4 +1,4 @@
-use std::collections::BTreeSet;
+use std::collections::BTreeMap;
 
 use itertools::Itertools;
 
@@ -6,7 +6,7 @@ use crate::{
     actor::{Actor, Sender, ThreadHandle},
     code::{Code, Expression},
     editor,
-    interpreter::Interpreter,
+    interpreter::{Function, Interpreter},
 };
 
 pub fn start(
@@ -14,8 +14,15 @@ pub fn start(
 ) -> anyhow::Result<(ThreadHandle, Actor<String>, Actor<GameInput>)> {
     let mut code = Code::default();
     let mut interpreter = Interpreter {
-        functions: BTreeSet::from(
-            ["submit_color"].map(|name| name.to_string()),
+        functions: BTreeMap::from(
+            [(
+                "submit_color",
+                Function {
+                    input: (),
+                    output: (),
+                },
+            )]
+            .map(|(name, function)| (name.to_string(), function)),
         ),
         next_expression: 0,
         active_function: None,
