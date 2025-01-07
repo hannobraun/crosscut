@@ -8,9 +8,9 @@ use crate::{
 };
 
 use super::{
-    code::Code,
+    code::{Code, Function},
     compiler::compile,
-    interpreter::{Function, Interpreter},
+    interpreter::Interpreter,
 };
 
 pub fn start(

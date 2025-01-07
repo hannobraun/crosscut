@@ -1,6 +1,6 @@
 use std::collections::BTreeMap;
 
-use super::code::{Code, Expression};
+use super::code::{Code, Expression, Function};
 
 pub struct Interpreter {
     pub functions: BTreeMap<String, Function>,
@@ -60,10 +60,4 @@ impl Interpreter {
     ) -> Option<&'r Expression> {
         code.expressions.get(self.next_expression)
     }
-}
-
-#[derive(Clone, Copy)]
-pub struct Function {
-    pub input: (),
-    pub output: (),
 }
