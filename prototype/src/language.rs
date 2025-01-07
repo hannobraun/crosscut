@@ -32,9 +32,7 @@ pub fn start(
             code.expressions.get(interpreter.next_expression)
         {
             match expression {
-                Expression::Identifier { .. } => {
-                    return Ok(());
-                }
+                Expression::Identifier { .. } => {}
                 Expression::LiteralNumber { value } => {
                     values.push(*value);
                     interpreter.next_expression += 1;
