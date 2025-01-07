@@ -31,14 +31,15 @@ pub fn start(
         if let Some(expression) =
             code.expressions.get(interpreter.next_expression)
         {
-            let value = match expression {
+            match expression {
                 Expression::Identifier { .. } => {
                     return Ok(());
                 }
-                Expression::LiteralNumber { value } => value,
-            };
-            values.push(*value);
-            interpreter.next_expression += 1;
+                Expression::LiteralNumber { value } => {
+                    values.push(*value);
+                    interpreter.next_expression += 1;
+                }
+            }
 
             let Some((r, g, b, a)) = values.iter().copied().collect_tuple()
             else {
