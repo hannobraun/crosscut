@@ -19,11 +19,11 @@ fn render_code(
         write!(w, "    ")?;
 
         match expression {
-            Expression::LiteralNumber { value } => {
-                writeln!(w, "{value}")?;
-            }
             Expression::InvalidNumber { invalid } => {
                 writeln!(w, "invalid number `{invalid}`")?;
+            }
+            Expression::LiteralNumber { value } => {
+                writeln!(w, "{value}")?;
             }
         }
     }

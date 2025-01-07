@@ -32,10 +32,10 @@ pub fn start(
             code.expressions.get(interpreter.next_expression)
         {
             let value = match expression {
-                Expression::LiteralNumber { value } => value,
                 Expression::InvalidNumber { .. } => {
                     return Ok(());
                 }
+                Expression::LiteralNumber { value } => value,
             };
             values.push(*value);
             interpreter.next_expression += 1;

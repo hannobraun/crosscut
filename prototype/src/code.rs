@@ -5,6 +5,6 @@ pub struct Code {
 
 #[derive(Debug)]
 pub enum Expression {
-    LiteralNumber { value: f64 },
     InvalidNumber { invalid: String },
+    LiteralNumber { value: f64 },
 }
