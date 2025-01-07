@@ -4,6 +4,10 @@ use super::{
 
 #[test]
 fn call_to_host_function() {
+    // The host can define functions which Crosscut code can call. This should
+    // result in the interpreter notifying the host of this call, so it may
+    // handle it.
+
     let host = Host::from_function_names(["host_fn"]);
     let mut code = Code::default();
     let mut interpreter = Interpreter::default();
