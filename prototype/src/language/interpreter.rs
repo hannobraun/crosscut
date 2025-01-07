@@ -1,9 +1,6 @@
-use std::collections::BTreeMap;
-
 use super::code::{Code, Expression, FunctionType};
 
 pub struct Interpreter {
-    pub functions: BTreeMap<String, FunctionType>,
     pub next_expression: usize,
     pub active_function: Option<FunctionType>,
 }
