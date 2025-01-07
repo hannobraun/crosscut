@@ -48,11 +48,11 @@ pub fn start(
             } else {
                 // Functions can only have one input, but we need 4 values for a
                 // color. Let's get some more using currying.
-                let Some(function) = host.function_by_name("__color_currying")
+                let Some(target) = host.function_by_name("__color_currying")
                 else {
                     unreachable!("Function has been defined above.");
                 };
-                Some(ActiveCall { target: function })
+                Some(ActiveCall { target })
             }
         };
 
