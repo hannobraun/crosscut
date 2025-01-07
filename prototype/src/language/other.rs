@@ -70,12 +70,13 @@ pub fn start(
             } else {
                 // Functions can only have one input, but we need 4 values for a
                 // color. Let's get some more using currying.
-                Some(HostFunction {
+                let function = HostFunction {
                     signature: Signature {
                         input: (),
                         output: (),
                     },
-                })
+                };
+                Some(function)
             }
         };
 
