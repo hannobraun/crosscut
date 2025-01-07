@@ -1,6 +1,6 @@
 use std::collections::BTreeSet;
 
-use super::code::{HostFunction, Signature};
+use super::code::HostFunction;
 
 pub struct Host {
     pub functions: BTreeSet<String>,
@@ -18,18 +18,10 @@ impl Host {
     pub fn functions(
         &self,
     ) -> impl Iterator<Item = (&String, HostFunction)> + '_ {
-        self.functions.iter().enumerate().map(|(id, name)| {
-            (
-                name,
-                HostFunction {
-                    id,
-                    signature: Signature {
-                        input: (),
-                        output: (),
-                    },
-                },
-            )
-        })
+        self.functions
+            .iter()
+            .enumerate()
+            .map(|(id, name)| (name, HostFunction { id }))
     }
 
     pub fn function_by_name(&self, name: &str) -> Option<HostFunction> {

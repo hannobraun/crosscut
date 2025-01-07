@@ -15,11 +15,4 @@ pub enum Expression {
 #[derive(Clone, Copy, Debug)]
 pub struct HostFunction {
     pub id: usize,
-    pub signature: Signature,
-}
-
-#[derive(Clone, Copy, Debug)]
-pub struct Signature {
-    pub input: (),
-    pub output: (),
 }

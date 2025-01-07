@@ -1,4 +1,4 @@
-use super::code::{Code, Expression, HostFunction, Signature};
+use super::code::{Code, Expression, HostFunction};
 
 #[derive(Default)]
 pub struct Interpreter {
@@ -20,15 +20,7 @@ impl Interpreter {
             let index = self.next_expression;
             let expression = self.next_expression(code)?;
 
-            if let Some(HostFunction {
-                id,
-                signature:
-                    Signature {
-                        input: (),
-                        output: (),
-                    },
-            }) = self.active_function
-            {
+            if let Some(HostFunction { id }) = self.active_function {
                 match expression {
                     Expression::Identifier { .. } => {
                         // Function call is already in progress, and nested
