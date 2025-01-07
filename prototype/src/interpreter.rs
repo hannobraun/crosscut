@@ -10,10 +10,10 @@ pub struct Interpreter {
 
 impl Interpreter {
     pub fn state(&self, code: &Code) -> &'static str {
-        if self.next_expression(code).is_none() {
-            "paused"
-        } else {
+        if self.next_expression(code).is_some() {
             "running"
+        } else {
+            "paused"
         }
     }
 
