@@ -41,7 +41,7 @@ pub fn start(
     let handle_events = Actor::spawn(move |event| {
         match event {
             Event::EditorInput { line } => {
-                compile(line, &host.functions, &mut code);
+                compile(line, &host, &mut code);
                 editor::update(&code, &interpreter)?;
             }
             Event::GameInput(GameInput::RenderingFrame) => {
