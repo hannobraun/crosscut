@@ -32,7 +32,7 @@ pub fn start(
             code.expressions.get(interpreter.next_expression)
         {
             let value = match expression {
-                Expression::InvalidNumber { .. } => {
+                Expression::Identifier { .. } => {
                     return Ok(());
                 }
                 Expression::LiteralNumber { value } => value,
@@ -87,7 +87,7 @@ fn parse(line: String) -> Vec<Expression> {
     line.split_whitespace()
         .map(|channel| match channel.parse::<f64>() {
             Ok(value) => Expression::LiteralNumber { value },
-            Err(_) => Expression::InvalidNumber {
+            Err(_) => Expression::Identifier {
                 invalid: channel.to_string(),
             },
         })
