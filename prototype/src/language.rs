@@ -1,5 +1,3 @@
-use itertools::Itertools;
-
 use crate::{
     actor::{Actor, Sender, ThreadHandle},
     code::{Code, Expression},
@@ -12,7 +10,7 @@ pub fn start(
 ) -> anyhow::Result<(ThreadHandle, Actor<String>, Actor<GameInput>)> {
     let mut code = Code::default();
     let mut interpreter = Interpreter::default();
-    let mut values = None;
+    let mut current_function = None;
 
     editor::update(&code, &interpreter)?;
 
@@ -33,30 +31,47 @@ pub fn start(
         {
             match expression {
                 Expression::Identifier { name } => {
-                    if name == "submit_color" && values.is_none() {
-                        values = Some(Vec::new());
+                    if name == "submit_color" && current_function.is_none() {
+                        current_function = Some(HostFunction::SubmitColor);
                         interpreter.next_expression += 1;
                     }
                 }
                 Expression::LiteralNumber { value } => {
-                    if let Some(values) = values.as_mut() {
-                        values.push(*value);
+                    if let Some(function) = current_function {
+                        match function {
+                            HostFunction::SubmitColor => {
+                                current_function =
+                                    Some(HostFunction::SubmitColorR {
+                                        r: *value,
+                                    });
+                            }
+                            HostFunction::SubmitColorR { r } => {
+                                current_function =
+                                    Some(HostFunction::SubmitColorRG {
+                                        r,
+                                        g: *value,
+                                    });
+                            }
+                            HostFunction::SubmitColorRG { r, g } => {
+                                current_function =
+                                    Some(HostFunction::SubmitColorRGB {
+                                        r,
+                                        g,
+                                        b: *value,
+                                    });
+                            }
+                            HostFunction::SubmitColorRGB { r, g, b } => {
+                                current_function = None;
+                                game_output.send(GameOutput::SubmitColor {
+                                    color: [r, g, b, *value],
+                                })?;
+                            }
+                        }
+
                         interpreter.next_expression += 1;
                     }
                 }
             }
-
-            let Some((r, g, b, a)) =
-                values.iter().flatten().copied().collect_tuple()
-            else {
-                // Don't have enough values yet to constitute a color.
-                return Ok(());
-            };
-
-            values = None;
-            game_output.send(GameOutput::SubmitColor {
-                color: [r, g, b, a],
-            })?;
         }
 
         Ok(())
@@ -99,4 +114,12 @@ fn parse(line: String) -> Vec<Expression> {
             },
         })
         .collect()
+}
+
+#[derive(Clone, Copy)]
+enum HostFunction {
+    SubmitColor,
+    SubmitColorR { r: f64 },
+    SubmitColorRG { r: f64, g: f64 },
+    SubmitColorRGB { r: f64, g: f64, b: f64 },
 }
