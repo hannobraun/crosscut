@@ -36,7 +36,7 @@ pub fn start(
         if let Some((_, value)) = interpreter.step(&code) {
             values.push(value);
 
-            interpreter.active_function = if let Some([r, g, b, a]) =
+            interpreter.active_call = if let Some([r, g, b, a]) =
                 values.iter().copied().collect_array()
             {
                 values.clear();

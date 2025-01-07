@@ -3,7 +3,7 @@ use super::code::{Code, Expression, HostFunction};
 #[derive(Default)]
 pub struct Interpreter {
     pub next_expression: usize,
-    pub active_function: Option<ActiveCall>,
+    pub active_call: Option<ActiveCall>,
 }
 
 impl Interpreter {
@@ -22,7 +22,7 @@ impl Interpreter {
 
             if let Some(ActiveCall {
                 function: HostFunction { id },
-            }) = self.active_function
+            }) = self.active_call
             {
                 match expression {
                     Expression::Identifier { .. } => {
@@ -30,7 +30,7 @@ impl Interpreter {
                         // function calls are not supported yet.
                     }
                     Expression::LiteralNumber { value } => {
-                        self.active_function = None;
+                        self.active_call = None;
                         self.next_expression += 1;
                         return Some((id, *value));
                     }
@@ -41,8 +41,7 @@ impl Interpreter {
                         if let Some(function) =
                             code.function_calls.get(&index).copied()
                         {
-                            self.active_function =
-                                Some(ActiveCall { function });
+                            self.active_call = Some(ActiveCall { function });
                             self.next_expression += 1;
                             continue;
                         }
