@@ -8,7 +8,7 @@ use crate::{
 };
 
 use super::{
-    code::{Code, Signature},
+    code::{Code, HostFunction, Signature},
     compiler::compile,
     host::Host,
     interpreter::Interpreter,
@@ -61,9 +61,11 @@ pub fn start(
             } else {
                 // Functions can only have one input, but we need 4 values for a
                 // color. Let's get some more using currying.
-                Some(Signature {
-                    input: (),
-                    output: (),
+                Some(HostFunction {
+                    signature: Signature {
+                        input: (),
+                        output: (),
+                    },
                 })
             }
         };
