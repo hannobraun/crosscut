@@ -22,7 +22,10 @@ impl Interpreter {
 
         if self.active_function {
             match expression {
-                Expression::Identifier { .. } => {}
+                Expression::Identifier { .. } => {
+                    // Function call is already in progress, and nested function
+                    // calls are not supported yet.
+                }
                 Expression::LiteralNumber { value } => {
                     self.next_expression += 1;
                     return Some(*value);
@@ -36,7 +39,10 @@ impl Interpreter {
                         self.next_expression += 1;
                     }
                 }
-                Expression::LiteralNumber { .. } => {}
+                Expression::LiteralNumber { .. } => {
+                    // There's not function call in progress, and thus nowhere
+                    // to put a value right now.
+                }
             }
         }
 
