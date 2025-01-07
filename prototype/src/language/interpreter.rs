@@ -20,35 +20,30 @@ impl Interpreter {
             let index = self.next_expression;
             let expression = self.next_expression(code)?;
 
-            if let Some(ActiveCall {
-                target: HostFunction { id },
-            }) = self.active_call
-            {
-                match expression {
-                    Expression::Identifier { .. } => {
+            match expression {
+                Expression::Identifier { .. } => {
+                    if let Some(ActiveCall { target: _ }) = self.active_call {
                         // Function call is already in progress, and nested
                         // function calls are not supported yet.
+                    } else if let Some(target) =
+                        code.function_calls.get(&index).copied()
+                    {
+                        self.active_call = Some(ActiveCall { target });
+                        self.next_expression += 1;
+                        continue;
+                    } else {
+                        // No function found. This identifier is unresolved.
                     }
-                    Expression::LiteralNumber { value } => {
+                }
+                Expression::LiteralNumber { value } => {
+                    if let Some(ActiveCall {
+                        target: HostFunction { id },
+                    }) = self.active_call
+                    {
                         self.active_call = None;
                         self.next_expression += 1;
                         return Some((id, *value));
-                    }
-                }
-            } else {
-                match expression {
-                    Expression::Identifier { .. } => {
-                        if let Some(target) =
-                            code.function_calls.get(&index).copied()
-                        {
-                            self.active_call = Some(ActiveCall { target });
-                            self.next_expression += 1;
-                            continue;
-                        } else {
-                            // No function found. This identifier is unresolved.
-                        }
-                    }
-                    Expression::LiteralNumber { .. } => {
+                    } else {
                         // There's not function call in progress, and thus
                         // nowhere to put a value right now.
                     }
