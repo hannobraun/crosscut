@@ -19,13 +19,22 @@ pub fn start(
 ) -> anyhow::Result<(ThreadHandle, Actor<String>, Actor<GameInput>)> {
     let host = Host {
         functions: BTreeMap::from(
-            [(
-                "submit_color",
-                Signature {
-                    input: (),
-                    output: (),
-                },
-            )]
+            [
+                (
+                    "submit_color",
+                    Signature {
+                        input: (),
+                        output: (),
+                    },
+                ),
+                (
+                    "__submit_color_currying",
+                    Signature {
+                        input: (),
+                        output: (),
+                    },
+                ),
+            ]
             .map(|(name, signature)| (name.to_string(), signature)),
         ),
     };
