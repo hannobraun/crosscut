@@ -18,7 +18,7 @@ pub fn start(
             ["submit_color"].map(|name| name.to_string()),
         ),
         next_expression: 0,
-        active_function: false,
+        active_function: None,
     };
     let mut values = Vec::new();
 
@@ -45,7 +45,7 @@ pub fn start(
                     color: [r, g, b, a],
                 })?;
 
-                interpreter.active_function = false;
+                interpreter.active_function = None;
             }
         };
 
