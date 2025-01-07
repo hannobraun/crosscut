@@ -50,6 +50,8 @@ impl Interpreter {
                             self.next_expression += 1;
                             continue;
                         }
+
+                        // No function found. This identifier is unresolved.
                     }
                     Expression::LiteralNumber { .. } => {
                         // There's not function call in progress, and thus
