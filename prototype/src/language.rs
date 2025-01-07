@@ -11,7 +11,10 @@ pub fn start(
     game_output: Sender<GameOutput>,
 ) -> anyhow::Result<(ThreadHandle, Actor<String>, Actor<GameInput>)> {
     let mut code = Code::default();
-    let mut interpreter = Interpreter::default();
+    let mut interpreter = Interpreter {
+        next_expression: 0,
+        active_function: false,
+    };
     let mut values = Vec::new();
 
     editor::update(&code, &interpreter)?;
