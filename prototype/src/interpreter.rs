@@ -1,6 +1,9 @@
+use std::collections::BTreeSet;
+
 use crate::code::Code;
 
 pub struct Interpreter {
+    pub functions: BTreeSet<String>,
     pub next_expression: usize,
     pub active_function: bool,
 }

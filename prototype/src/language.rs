@@ -1,3 +1,5 @@
+use std::collections::BTreeSet;
+
 use itertools::Itertools;
 
 use crate::{
@@ -12,6 +14,9 @@ pub fn start(
 ) -> anyhow::Result<(ThreadHandle, Actor<String>, Actor<GameInput>)> {
     let mut code = Code::default();
     let mut interpreter = Interpreter {
+        functions: BTreeSet::from(
+            ["submit_color"].map(|name| name.to_string()),
+        ),
         next_expression: 0,
         active_function: false,
     };
@@ -36,7 +41,9 @@ pub fn start(
         {
             match expression {
                 Expression::Identifier { name } => {
-                    if name == "submit_color" && !interpreter.active_function {
+                    if interpreter.functions.contains(name)
+                        && !interpreter.active_function
+                    {
                         interpreter.active_function = true;
                         interpreter.next_expression += 1;
                     }
