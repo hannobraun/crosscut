@@ -46,18 +46,20 @@ pub fn start(
         if let Some(value) = interpreter.step(&code) {
             values.push(value);
 
-            if let Some([r, g, b, a]) = values.iter().copied().collect_array() {
+            interpreter.active_function = if let Some([r, g, b, a]) =
+                values.iter().copied().collect_array()
+            {
                 values.clear();
                 game_output.send(GameOutput::SubmitColor {
                     color: [r, g, b, a],
                 })?;
 
-                interpreter.active_function = None;
+                None
             } else {
-                interpreter.active_function = Some(Function {
+                Some(Function {
                     input: (),
                     output: (),
-                });
+                })
             }
         };
 
