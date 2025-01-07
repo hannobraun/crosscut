@@ -56,6 +56,8 @@ pub fn start(
 
                 None
             } else {
+                // Functions can only have one input, but we need 4 values for a
+                // color. Let's get some more using currying.
                 Some(Function {
                     input: (),
                     output: (),
