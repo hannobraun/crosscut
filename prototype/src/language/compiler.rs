@@ -11,7 +11,7 @@ pub fn compile(input: String, host: &Host, code: &mut Code) {
                 let index = code.expressions.len();
                 let name = token.to_string();
 
-                if let Some(function) = host.functions.get(&name).copied() {
+                if let Some(function) = host.function_by_name(&name) {
                     code.function_calls.insert(index, function);
                 }
 
