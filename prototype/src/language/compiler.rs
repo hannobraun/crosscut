@@ -3,7 +3,7 @@ use super::{
     host::Host,
 };
 
-pub fn compile(input: String, host: &Host, code: &mut Code) {
+pub fn compile(input: &str, host: &Host, code: &mut Code) {
     for token in input.split_whitespace() {
         let expression = match token.parse::<f64>() {
             Ok(value) => Expression::LiteralNumber { value },
