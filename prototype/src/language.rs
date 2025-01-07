@@ -85,10 +85,10 @@ pub enum GameOutput {
 
 fn parse(line: String) -> Vec<Expression> {
     line.split_whitespace()
-        .map(|channel| match channel.parse::<f64>() {
+        .map(|token| match token.parse::<f64>() {
             Ok(value) => Expression::LiteralNumber { value },
             Err(_) => Expression::Identifier {
-                name: channel.to_string(),
+                name: token.to_string(),
             },
         })
         .collect()
