@@ -26,13 +26,8 @@ pub fn start(
                     output: (),
                 },
             )]
-            .map(|(name, function)| {
-                (
-                    name.to_string(),
-                    HostFunction {
-                        signature: function,
-                    },
-                )
+            .map(|(name, signature)| {
+                (name.to_string(), HostFunction { signature })
             }),
         ),
     };
