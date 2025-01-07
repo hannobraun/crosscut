@@ -12,7 +12,7 @@ pub fn start(
 ) -> anyhow::Result<(ThreadHandle, Actor<String>, Actor<GameInput>)> {
     let mut code = Code::default();
     let mut interpreter = Interpreter::default();
-    let mut values = Vec::new();
+    let mut values = None;
 
     editor::update(&code, &interpreter)?;
 
@@ -33,23 +33,27 @@ pub fn start(
         {
             match expression {
                 Expression::Identifier { name } => {
-                    if name == "submit_color" && values.is_empty() {
+                    if name == "submit_color" && values.is_none() {
+                        values = Some(Vec::new());
                         interpreter.next_expression += 1;
                     }
                 }
                 Expression::LiteralNumber { value } => {
-                    values.push(*value);
-                    interpreter.next_expression += 1;
+                    if let Some(values) = values.as_mut() {
+                        values.push(*value);
+                        interpreter.next_expression += 1;
+                    }
                 }
             }
 
-            let Some((r, g, b, a)) = values.iter().copied().collect_tuple()
+            let Some((r, g, b, a)) =
+                values.iter().flatten().copied().collect_tuple()
             else {
                 // Don't have enough values yet to constitute a color.
                 return Ok(());
             };
 
-            values.clear();
+            values = None;
             game_output.send(GameOutput::SubmitColor {
                 color: [r, g, b, a],
             })?;
