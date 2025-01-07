@@ -55,7 +55,7 @@ pub fn start(
             }
         }
 
-        if let Some(value) = interpreter.step(&code) {
+        if let Some((_, value)) = interpreter.step(&code) {
             values.push(value);
 
             interpreter.active_function = if let Some([r, g, b, a]) =

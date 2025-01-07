@@ -12,7 +12,16 @@ impl Host {
     ) -> impl Iterator<Item = (&String, HostFunction)> + '_ {
         self.functions
             .iter()
-            .map(|(name, &signature)| (name, HostFunction { signature }))
+            .enumerate()
+            .map(|(effect, (name, &signature))| {
+                (
+                    name,
+                    HostFunction {
+                        id: effect,
+                        signature,
+                    },
+                )
+            })
     }
 
     pub fn function_by_name(&self, name: &str) -> Option<HostFunction> {

@@ -15,11 +15,12 @@ impl Interpreter {
         }
     }
 
-    pub fn step(&mut self, code: &Code) -> Option<f64> {
+    pub fn step(&mut self, code: &Code) -> Option<(usize, f64)> {
         let index = self.next_expression;
         let expression = self.next_expression(code)?;
 
         if let Some(HostFunction {
+            id,
             signature:
                 Signature {
                     input: (),
@@ -35,7 +36,7 @@ impl Interpreter {
                 Expression::LiteralNumber { value } => {
                     self.active_function = None;
                     self.next_expression += 1;
-                    return Some(*value);
+                    return Some((id, *value));
                 }
             }
         } else {
