@@ -18,6 +18,7 @@ impl Interpreter {
     }
 
     pub fn step(&mut self, code: &Code) -> Option<f64> {
+        let index = self.next_expression;
         let expression = self.next_expression(code)?;
 
         if let Some(FunctionType {
@@ -40,6 +41,12 @@ impl Interpreter {
             match expression {
                 Expression::Identifier { name } => {
                     if let Some(function) = self.functions.get(name).copied() {
+                        self.active_function = Some(function);
+                        self.next_expression += 1;
+                    }
+                    if let Some(function) =
+                        code.function_calls.get(&index).copied()
+                    {
                         self.active_function = Some(function);
                         self.next_expression += 1;
                     }

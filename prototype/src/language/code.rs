@@ -1,6 +1,9 @@
+use std::collections::BTreeMap;
+
 #[derive(Debug, Default)]
 pub struct Code {
     pub expressions: Vec<Expression>,
+    pub function_calls: BTreeMap<usize, FunctionType>,
 }
 
 #[derive(Debug)]
