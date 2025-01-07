@@ -32,7 +32,11 @@ pub fn start(
             code.expressions.get(interpreter.next_expression)
         {
             match expression {
-                Expression::Identifier { .. } => {}
+                Expression::Identifier { name } => {
+                    if name == "submit_color" && values.is_empty() {
+                        interpreter.next_expression += 1;
+                    }
+                }
                 Expression::LiteralNumber { value } => {
                     values.push(*value);
                     interpreter.next_expression += 1;
