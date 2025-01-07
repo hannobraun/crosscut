@@ -1,6 +1,6 @@
 use std::collections::BTreeMap;
 
-use crate::code::{Code, Expression};
+use super::code::{Code, Expression};
 
 pub struct Interpreter {
     pub functions: BTreeMap<String, Function>,

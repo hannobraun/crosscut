@@ -1,8 +1,8 @@
 use std::io::{self, stdout};
 
-use crate::{
+use crate::language::{
     code::{Code, Expression},
-    language::interpreter::Interpreter,
+    interpreter::Interpreter,
 };
 
 pub fn update(code: &Code, interpreter: &Interpreter) -> anyhow::Result<()> {
