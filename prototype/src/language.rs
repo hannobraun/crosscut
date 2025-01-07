@@ -36,37 +36,18 @@ pub fn start(
             }
         }
 
-        if let Some(expression) =
-            code.expressions.get(interpreter.next_expression)
-        {
-            match expression {
-                Expression::Identifier { name } => {
-                    if interpreter.functions.contains(name)
-                        && !interpreter.active_function
-                    {
-                        interpreter.active_function = true;
-                        interpreter.next_expression += 1;
-                    }
-                }
-                Expression::LiteralNumber { value } => {
-                    if interpreter.active_function {
-                        values.push(*value);
+        if let Some(value) = interpreter.step(&code) {
+            values.push(value);
 
-                        if let Some([r, g, b, a]) =
-                            values.iter().copied().collect_array()
-                        {
-                            values.clear();
-                            game_output.send(GameOutput::SubmitColor {
-                                color: [r, g, b, a],
-                            })?;
+            if let Some([r, g, b, a]) = values.iter().copied().collect_array() {
+                values.clear();
+                game_output.send(GameOutput::SubmitColor {
+                    color: [r, g, b, a],
+                })?;
 
-                            interpreter.active_function = false;
-                        }
-                        interpreter.next_expression += 1;
-                    }
-                }
+                interpreter.active_function = false;
             }
-        }
+        };
 
         Ok(())
     });
