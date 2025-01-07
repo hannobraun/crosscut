@@ -1,27 +1,27 @@
-use std::collections::BTreeMap;
+use std::collections::BTreeSet;
 
 use super::code::{HostFunction, Signature};
 
 pub struct Host {
-    pub functions: BTreeMap<String, Signature>,
+    pub functions: BTreeSet<String>,
 }
 
 impl Host {
     pub fn functions(
         &self,
     ) -> impl Iterator<Item = (&String, HostFunction)> + '_ {
-        self.functions
-            .iter()
-            .enumerate()
-            .map(|(effect, (name, &signature))| {
-                (
-                    name,
-                    HostFunction {
-                        id: effect,
-                        signature,
+        self.functions.iter().enumerate().map(|(effect, name)| {
+            (
+                name,
+                HostFunction {
+                    id: effect,
+                    signature: Signature {
+                        input: (),
+                        output: (),
                     },
-                )
-            })
+                },
+            )
+        })
     }
 
     pub fn function_by_name(&self, name: &str) -> Option<HostFunction> {

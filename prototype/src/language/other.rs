@@ -1,4 +1,4 @@
-use std::collections::BTreeMap;
+use std::collections::BTreeSet;
 
 use itertools::Itertools;
 
@@ -8,34 +8,15 @@ use crate::{
 };
 
 use super::{
-    code::{Code, Signature},
-    compiler::compile,
-    host::Host,
-    interpreter::Interpreter,
+    code::Code, compiler::compile, host::Host, interpreter::Interpreter,
 };
 
 pub fn start(
     game_output: Sender<GameOutput>,
 ) -> anyhow::Result<(ThreadHandle, Actor<String>, Actor<GameInput>)> {
     let host = Host {
-        functions: BTreeMap::from(
-            [
-                (
-                    "color",
-                    Signature {
-                        input: (),
-                        output: (),
-                    },
-                ),
-                (
-                    "__color_currying",
-                    Signature {
-                        input: (),
-                        output: (),
-                    },
-                ),
-            ]
-            .map(|(name, signature)| (name.to_string(), signature)),
+        functions: BTreeSet::from(
+            ["color", "__color_currying"].map(|name| name.to_string()),
         ),
     };
     let mut code = Code::default();
