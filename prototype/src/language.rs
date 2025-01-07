@@ -88,7 +88,7 @@ fn parse(line: String) -> Vec<Expression> {
         .map(|channel| match channel.parse::<f64>() {
             Ok(value) => Expression::LiteralNumber { value },
             Err(_) => Expression::Identifier {
-                invalid: channel.to_string(),
+                name: channel.to_string(),
             },
         })
         .collect()

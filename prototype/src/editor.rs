@@ -19,7 +19,7 @@ fn render_code(
         write!(w, "    ")?;
 
         match expression {
-            Expression::Identifier { invalid } => {
+            Expression::Identifier { name: invalid } => {
                 writeln!(w, "invalid number `{invalid}`")?;
             }
             Expression::LiteralNumber { value } => {
