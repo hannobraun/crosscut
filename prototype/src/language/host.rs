@@ -7,7 +7,16 @@ pub struct Host {
 }
 
 impl Host {
+    pub fn functions(
+        &self,
+    ) -> impl Iterator<Item = (&String, HostFunction)> + '_ {
+        self.functions
+            .iter()
+            .map(|(name, function)| (name, *function))
+    }
+
     pub fn function_by_name(&self, name: &str) -> Option<HostFunction> {
-        self.functions.get(name).copied()
+        self.functions()
+            .find_map(|(n, function)| (n == name).then_some(function))
     }
 }
