@@ -20,7 +20,11 @@ impl Interpreter {
     pub fn step(&mut self, code: &Code) -> Option<f64> {
         let expression = self.next_expression(code)?;
 
-        if let Some(Function {}) = self.active_function {
+        if let Some(Function {
+            input: (),
+            output: (),
+        }) = self.active_function
+        {
             match expression {
                 Expression::Identifier { .. } => {
                     // Function call is already in progress, and nested function
@@ -35,7 +39,10 @@ impl Interpreter {
             match expression {
                 Expression::Identifier { name } => {
                     if self.functions.contains(name) {
-                        self.active_function = Some(Function {});
+                        self.active_function = Some(Function {
+                            input: (),
+                            output: (),
+                        });
                         self.next_expression += 1;
                     }
                 }
@@ -57,4 +64,7 @@ impl Interpreter {
     }
 }
 
-pub struct Function {}
+pub struct Function {
+    pub input: (),
+    pub output: (),
+}
