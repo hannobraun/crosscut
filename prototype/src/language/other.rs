@@ -8,7 +8,7 @@ use crate::{
 };
 
 use super::{
-    code::{Code, HostFunction, Signature},
+    code::{Code, Signature},
     compiler::compile,
     host::Host,
     interpreter::Interpreter,
@@ -70,11 +70,10 @@ pub fn start(
             } else {
                 // Functions can only have one input, but we need 4 values for a
                 // color. Let's get some more using currying.
-                let function = HostFunction {
-                    signature: Signature {
-                        input: (),
-                        output: (),
-                    },
+                let Some(function) =
+                    host.function_by_name("__submit_color_currying")
+                else {
+                    unreachable!("Function has been defined above.");
                 };
                 Some(function)
             }
