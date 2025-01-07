@@ -64,6 +64,7 @@ impl Interpreter {
     }
 }
 
+#[derive(Clone, Copy)]
 pub struct Function {
     pub input: (),
     pub output: (),
