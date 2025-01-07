@@ -1,6 +1,11 @@
 use crate::code::Signature;
 
 /// # A host into which a Crosscut application is embedded
+///
+/// ## Implementation Note
+///
+/// There's really no good reason that this should be a trait and not just a
+/// struct.
 pub trait Host {
     /// # Iterate over all of the host's functions
     ///
