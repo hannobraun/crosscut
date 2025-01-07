@@ -1,5 +1,6 @@
 use super::code::{Code, Expression, FunctionType};
 
+#[derive(Default)]
 pub struct Interpreter {
     pub next_expression: usize,
     pub active_function: Option<FunctionType>,

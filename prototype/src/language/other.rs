@@ -30,10 +30,7 @@ pub fn start(
         ),
     };
     let mut code = Code::default();
-    let mut interpreter = Interpreter {
-        next_expression: 0,
-        active_function: None,
-    };
+    let mut interpreter = Interpreter::default();
     let mut values = Vec::new();
 
     editor::update(&code, &interpreter)?;
