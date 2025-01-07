@@ -20,7 +20,7 @@ fn render_code(
 
         match expression {
             Expression::Identifier { name } => {
-                writeln!(w, "invalid number `{name}`")?;
+                writeln!(w, "{name}")?;
             }
             Expression::LiteralNumber { value } => {
                 writeln!(w, "{value}")?;
