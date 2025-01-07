@@ -3,7 +3,7 @@ use std::collections::BTreeMap;
 #[derive(Debug, Default)]
 pub struct Code {
     pub expressions: Vec<Expression>,
-    pub function_calls: BTreeMap<usize, FunctionType>,
+    pub function_calls: BTreeMap<usize, HostFunction>,
 }
 
 #[derive(Debug)]

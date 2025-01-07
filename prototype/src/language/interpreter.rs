@@ -41,7 +41,7 @@ impl Interpreter {
                     if let Some(function) =
                         code.function_calls.get(&index).copied()
                     {
-                        self.active_function = Some(function);
+                        self.active_function = Some(function.signature);
                         self.next_expression += 1;
                     }
                 }
