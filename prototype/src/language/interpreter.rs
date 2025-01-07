@@ -1,9 +1,9 @@
-use super::code::{Code, Expression, FunctionType};
+use super::code::{Code, Expression, Signature};
 
 #[derive(Default)]
 pub struct Interpreter {
     pub next_expression: usize,
-    pub active_function: Option<FunctionType>,
+    pub active_function: Option<Signature>,
 }
 
 impl Interpreter {
@@ -19,7 +19,7 @@ impl Interpreter {
         let index = self.next_expression;
         let expression = self.next_expression(code)?;
 
-        if let Some(FunctionType {
+        if let Some(Signature {
             input: (),
             output: (),
         }) = self.active_function

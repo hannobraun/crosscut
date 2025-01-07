@@ -8,7 +8,7 @@ use crate::{
 };
 
 use super::{
-    code::{Code, FunctionType, HostFunction},
+    code::{Code, HostFunction, Signature},
     compiler::compile,
     host::Host,
     interpreter::Interpreter,
@@ -21,7 +21,7 @@ pub fn start(
         functions: BTreeMap::from(
             [(
                 "submit_color",
-                FunctionType {
+                Signature {
                     input: (),
                     output: (),
                 },
@@ -68,7 +68,7 @@ pub fn start(
             } else {
                 // Functions can only have one input, but we need 4 values for a
                 // color. Let's get some more using currying.
-                Some(FunctionType {
+                Some(Signature {
                     input: (),
                     output: (),
                 })
