@@ -1,7 +1,7 @@
 use std::collections::BTreeMap;
 
-use super::code::FunctionType;
+use super::code::HostFunction;
 
 pub struct Host {
-    pub functions: BTreeMap<String, FunctionType>,
+    pub functions: BTreeMap<String, HostFunction>,
 }

@@ -12,7 +12,7 @@ pub fn compile(input: String, host: &Host, code: &mut Code) {
                 let name = token.to_string();
 
                 if let Some(function) = host.functions.get(&name).copied() {
-                    code.function_calls.insert(index, function);
+                    code.function_calls.insert(index, function.signature);
                 }
 
                 Expression::Identifier { name }
