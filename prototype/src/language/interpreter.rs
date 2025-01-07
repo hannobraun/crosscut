@@ -39,11 +39,7 @@ impl Interpreter {
             }
         } else {
             match expression {
-                Expression::Identifier { name } => {
-                    if let Some(function) = self.functions.get(name).copied() {
-                        self.active_function = Some(function);
-                        self.next_expression += 1;
-                    }
+                Expression::Identifier { .. } => {
                     if let Some(function) =
                         code.function_calls.get(&index).copied()
                     {
