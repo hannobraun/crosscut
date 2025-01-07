@@ -10,22 +10,25 @@ use crate::{
 use super::{
     code::{Code, FunctionType},
     compiler::compile,
+    host::Host,
     interpreter::Interpreter,
 };
 
 pub fn start(
     game_output: Sender<GameOutput>,
 ) -> anyhow::Result<(ThreadHandle, Actor<String>, Actor<GameInput>)> {
-    let functions = BTreeMap::from(
-        [(
-            "submit_color",
-            FunctionType {
-                input: (),
-                output: (),
-            },
-        )]
-        .map(|(name, function)| (name.to_string(), function)),
-    );
+    let host = Host {
+        functions: BTreeMap::from(
+            [(
+                "submit_color",
+                FunctionType {
+                    input: (),
+                    output: (),
+                },
+            )]
+            .map(|(name, function)| (name.to_string(), function)),
+        ),
+    };
     let mut code = Code::default();
     let mut interpreter = Interpreter {
         next_expression: 0,
@@ -38,7 +41,7 @@ pub fn start(
     let handle_events = Actor::spawn(move |event| {
         match event {
             Event::EditorInput { line } => {
-                compile(line, &functions, &mut code);
+                compile(line, &host.functions, &mut code);
                 editor::update(&code, &interpreter)?;
             }
             Event::GameInput(GameInput::RenderingFrame) => {
