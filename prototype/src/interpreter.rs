@@ -10,7 +10,7 @@ pub struct Interpreter {
 
 impl Interpreter {
     pub fn state(&self, code: &Code) -> &'static str {
-        if self.next_expression >= code.expressions.len() {
+        if self.next_expression(code).is_none() {
             "paused"
         } else {
             "running"
@@ -18,7 +18,7 @@ impl Interpreter {
     }
 
     pub fn step(&mut self, code: &Code) -> Option<f64> {
-        let expression = code.expressions.get(self.next_expression)?;
+        let expression = self.next_expression(code)?;
 
         if self.active_function {
             match expression {
@@ -41,5 +41,12 @@ impl Interpreter {
         }
 
         None
+    }
+
+    pub fn next_expression<'r>(
+        &self,
+        code: &'r Code,
+    ) -> Option<&'r Expression> {
+        code.expressions.get(self.next_expression)
     }
 }
