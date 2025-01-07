@@ -21,7 +21,7 @@ pub fn start(
         functions: BTreeMap::from(
             [
                 (
-                    "submit_color",
+                    "color",
                     Signature {
                         input: (),
                         output: (),
