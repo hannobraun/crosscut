@@ -18,11 +18,11 @@ impl Host {
     pub fn functions(
         &self,
     ) -> impl Iterator<Item = (&String, HostFunction)> + '_ {
-        self.functions.iter().enumerate().map(|(effect, name)| {
+        self.functions.iter().enumerate().map(|(id, name)| {
             (
                 name,
                 HostFunction {
-                    id: effect,
+                    id,
                     signature: Signature {
                         input: (),
                         output: (),
