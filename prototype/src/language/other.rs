@@ -99,7 +99,7 @@ pub enum GameOutput {
     SubmitColor { color: [f64; 4] },
 }
 
-fn parse(line: String) -> Vec<Expression> {
+pub fn parse(line: String) -> Vec<Expression> {
     line.split_whitespace()
         .map(|token| match token.parse::<f64>() {
             Ok(value) => Expression::LiteralNumber { value },
