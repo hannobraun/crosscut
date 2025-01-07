@@ -31,6 +31,7 @@ impl Interpreter {
                     // calls are not supported yet.
                 }
                 Expression::LiteralNumber { value } => {
+                    self.active_function = None;
                     self.next_expression += 1;
                     return Some(*value);
                 }

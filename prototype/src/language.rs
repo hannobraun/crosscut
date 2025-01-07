@@ -53,6 +53,11 @@ pub fn start(
                 })?;
 
                 interpreter.active_function = None;
+            } else {
+                interpreter.active_function = Some(Function {
+                    input: (),
+                    output: (),
+                });
             }
         };
 
