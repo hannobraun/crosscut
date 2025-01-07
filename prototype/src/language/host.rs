@@ -1,9 +1,9 @@
 use std::collections::BTreeMap;
 
-use super::code::HostFunction;
+use super::code::{HostFunction, Signature};
 
 pub struct Host {
-    pub functions: BTreeMap<String, HostFunction>,
+    pub functions: BTreeMap<String, Signature>,
 }
 
 impl Host {
@@ -12,7 +12,7 @@ impl Host {
     ) -> impl Iterator<Item = (&String, HostFunction)> + '_ {
         self.functions
             .iter()
-            .map(|(name, function)| (name, *function))
+            .map(|(name, &signature)| (name, HostFunction { signature }))
     }
 
     pub fn function_by_name(&self, name: &str) -> Option<HostFunction> {

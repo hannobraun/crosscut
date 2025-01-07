@@ -8,7 +8,7 @@ use crate::{
 };
 
 use super::{
-    code::{Code, HostFunction, Signature},
+    code::{Code, Signature},
     compiler::compile,
     host::Host,
     interpreter::Interpreter,
@@ -26,9 +26,7 @@ pub fn start(
                     output: (),
                 },
             )]
-            .map(|(name, signature)| {
-                (name.to_string(), HostFunction { signature })
-            }),
+            .map(|(name, signature)| (name.to_string(), signature)),
         ),
     };
     let mut code = Code::default();
