@@ -21,7 +21,7 @@ impl Interpreter {
             let expression = self.next_expression(code)?;
 
             if let Some(ActiveCall {
-                function: HostFunction { id },
+                target: HostFunction { id },
             }) = self.active_call
             {
                 match expression {
@@ -41,7 +41,8 @@ impl Interpreter {
                         if let Some(function) =
                             code.function_calls.get(&index).copied()
                         {
-                            self.active_call = Some(ActiveCall { function });
+                            self.active_call =
+                                Some(ActiveCall { target: function });
                             self.next_expression += 1;
                             continue;
                         }
@@ -70,5 +71,5 @@ impl Interpreter {
 }
 
 pub struct ActiveCall {
-    pub function: HostFunction,
+    pub target: HostFunction,
 }

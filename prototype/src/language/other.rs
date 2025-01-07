@@ -52,7 +52,7 @@ pub fn start(
                 else {
                     unreachable!("Function has been defined above.");
                 };
-                Some(ActiveCall { function })
+                Some(ActiveCall { target: function })
             }
         };
 
