@@ -3,7 +3,7 @@ use super::code::{Code, Expression, HostFunction};
 #[derive(Default)]
 pub struct Interpreter {
     pub next_expression: usize,
-    pub active_function: Option<HostFunction>,
+    pub active_function: Option<ActiveFunction>,
 }
 
 impl Interpreter {
@@ -20,7 +20,10 @@ impl Interpreter {
             let index = self.next_expression;
             let expression = self.next_expression(code)?;
 
-            if let Some(HostFunction { id }) = self.active_function {
+            if let Some(ActiveFunction {
+                function: HostFunction { id },
+            }) = self.active_function
+            {
                 match expression {
                     Expression::Identifier { .. } => {
                         // Function call is already in progress, and nested
@@ -38,7 +41,8 @@ impl Interpreter {
                         if let Some(function) =
                             code.function_calls.get(&index).copied()
                         {
-                            self.active_function = Some(function);
+                            self.active_function =
+                                Some(ActiveFunction { function });
                             self.next_expression += 1;
                             continue;
                         }
@@ -64,4 +68,8 @@ impl Interpreter {
     ) -> Option<&'r Expression> {
         code.expressions.get(self.next_expression)
     }
+}
+
+pub struct ActiveFunction {
+    pub function: HostFunction,
 }

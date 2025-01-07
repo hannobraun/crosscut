@@ -6,7 +6,10 @@ use crate::{
 };
 
 use super::{
-    code::Code, compiler::compile, host::Host, interpreter::Interpreter,
+    code::Code,
+    compiler::compile,
+    host::Host,
+    interpreter::{ActiveFunction, Interpreter},
 };
 
 pub fn start(
@@ -49,7 +52,7 @@ pub fn start(
                 else {
                     unreachable!("Function has been defined above.");
                 };
-                Some(function)
+                Some(ActiveFunction { function })
             }
         };
 
