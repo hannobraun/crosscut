@@ -10,7 +10,7 @@ pub enum Expression {
 }
 
 #[derive(Clone, Copy)]
-pub struct Function {
+pub struct FunctionType {
     pub input: (),
     pub output: (),
 }

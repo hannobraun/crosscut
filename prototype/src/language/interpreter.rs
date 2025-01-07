@@ -1,11 +1,11 @@
 use std::collections::BTreeMap;
 
-use super::code::{Code, Expression, Function};
+use super::code::{Code, Expression, FunctionType};
 
 pub struct Interpreter {
-    pub functions: BTreeMap<String, Function>,
+    pub functions: BTreeMap<String, FunctionType>,
     pub next_expression: usize,
-    pub active_function: Option<Function>,
+    pub active_function: Option<FunctionType>,
 }
 
 impl Interpreter {
@@ -20,7 +20,7 @@ impl Interpreter {
     pub fn step(&mut self, code: &Code) -> Option<f64> {
         let expression = self.next_expression(code)?;
 
-        if let Some(Function {
+        if let Some(FunctionType {
             input: (),
             output: (),
         }) = self.active_function
