@@ -38,11 +38,10 @@ impl Interpreter {
             } else {
                 match expression {
                     Expression::Identifier { .. } => {
-                        if let Some(function) =
+                        if let Some(target) =
                             code.function_calls.get(&index).copied()
                         {
-                            self.active_call =
-                                Some(ActiveCall { target: function });
+                            self.active_call = Some(ActiveCall { target });
                             self.next_expression += 1;
                             continue;
                         }
