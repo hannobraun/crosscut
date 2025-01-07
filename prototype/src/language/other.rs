@@ -1,5 +1,3 @@
-use std::collections::BTreeSet;
-
 use itertools::Itertools;
 
 use crate::{
@@ -14,11 +12,7 @@ use super::{
 pub fn start(
     game_output: Sender<GameOutput>,
 ) -> anyhow::Result<(ThreadHandle, Actor<String>, Actor<GameInput>)> {
-    let host = Host {
-        functions: BTreeSet::from(
-            ["color", "__color_currying"].map(|name| name.to_string()),
-        ),
-    };
+    let host = Host::from_function_names(["color", "__color_currying"]);
     let mut code = Code::default();
     let mut interpreter = Interpreter::default();
     let mut values = Vec::new();

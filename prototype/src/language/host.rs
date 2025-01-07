@@ -7,6 +7,14 @@ pub struct Host {
 }
 
 impl Host {
+    pub fn from_function_names(
+        names: impl IntoIterator<Item = impl Into<String>>,
+    ) -> Self {
+        Self {
+            functions: names.into_iter().map(|name| name.into()).collect(),
+        }
+    }
+
     pub fn functions(
         &self,
     ) -> impl Iterator<Item = (&String, HostFunction)> + '_ {
