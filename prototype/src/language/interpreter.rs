@@ -44,9 +44,9 @@ impl Interpreter {
                             self.active_call = Some(ActiveCall { target });
                             self.next_expression += 1;
                             continue;
+                        } else {
+                            // No function found. This identifier is unresolved.
                         }
-
-                        // No function found. This identifier is unresolved.
                     }
                     Expression::LiteralNumber { .. } => {
                         // There's not function call in progress, and thus
