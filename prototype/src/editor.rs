@@ -2,7 +2,7 @@ use std::io::{self, stdout};
 
 use crate::{
     code::{Code, Expression},
-    interpreter::Interpreter,
+    language::interpreter::Interpreter,
 };
 
 pub fn update(code: &Code, interpreter: &Interpreter) -> anyhow::Result<()> {

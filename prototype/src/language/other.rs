@@ -6,8 +6,9 @@ use crate::{
     actor::{Actor, Sender, ThreadHandle},
     code::{Code, Expression},
     editor,
-    interpreter::{Function, Interpreter},
 };
+
+use super::interpreter::{Function, Interpreter};
 
 pub fn start(
     game_output: Sender<GameOutput>,
