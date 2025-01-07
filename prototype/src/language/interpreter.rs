@@ -22,7 +22,10 @@ impl Interpreter {
 
             match expression {
                 Expression::Identifier { .. } => {
-                    if let Some(ActiveCall { target: _ }) = self.active_call {
+                    if let Some(ActiveCall {
+                        target: HostFunction { id: _ },
+                    }) = self.active_call
+                    {
                         // Function call is already in progress, and nested
                         // function calls are not supported yet.
                     } else if let Some(target) =
