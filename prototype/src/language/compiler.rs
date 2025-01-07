@@ -1,6 +1,6 @@
 use super::code::Expression;
 
-pub fn parse(line: String) -> Vec<Expression> {
+pub fn compile(line: String) -> Vec<Expression> {
     line.split_whitespace()
         .map(|token| match token.parse::<f64>() {
             Ok(value) => Expression::LiteralNumber { value },

@@ -9,7 +9,7 @@ use crate::{
 
 use super::{
     code::Code,
-    compiler::parse,
+    compiler::compile,
     interpreter::{Function, Interpreter},
 };
 
@@ -38,7 +38,7 @@ pub fn start(
     let handle_events = Actor::spawn(move |event| {
         match event {
             Event::EditorInput { line } => {
-                let expressions = parse(line);
+                let expressions = compile(line);
                 code.expressions.extend(expressions);
                 editor::update(&code, &interpreter)?;
             }
