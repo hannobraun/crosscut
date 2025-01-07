@@ -3,7 +3,7 @@ use super::code::{Code, Expression, HostFunction};
 #[derive(Default)]
 pub struct Interpreter {
     pub next_expression: usize,
-    pub active_function: Option<ActiveFunction>,
+    pub active_function: Option<ActiveCall>,
 }
 
 impl Interpreter {
@@ -20,7 +20,7 @@ impl Interpreter {
             let index = self.next_expression;
             let expression = self.next_expression(code)?;
 
-            if let Some(ActiveFunction {
+            if let Some(ActiveCall {
                 function: HostFunction { id },
             }) = self.active_function
             {
@@ -42,7 +42,7 @@ impl Interpreter {
                             code.function_calls.get(&index).copied()
                         {
                             self.active_function =
-                                Some(ActiveFunction { function });
+                                Some(ActiveCall { function });
                             self.next_expression += 1;
                             continue;
                         }
@@ -70,6 +70,6 @@ impl Interpreter {
     }
 }
 
-pub struct ActiveFunction {
+pub struct ActiveCall {
     pub function: HostFunction,
 }

@@ -9,7 +9,7 @@ use super::{
     code::Code,
     compiler::compile,
     host::Host,
-    interpreter::{ActiveFunction, Interpreter},
+    interpreter::{ActiveCall, Interpreter},
 };
 
 pub fn start(
@@ -52,7 +52,7 @@ pub fn start(
                 else {
                     unreachable!("Function has been defined above.");
                 };
-                Some(ActiveFunction { function })
+                Some(ActiveCall { function })
             }
         };
 
