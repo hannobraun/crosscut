@@ -12,7 +12,7 @@ pub enum Expression {
     LiteralNumber { value: f64 },
 }
 
-#[derive(Clone, Copy)]
+#[derive(Clone, Copy, Debug)]
 pub struct HostFunction {
     pub signature: FunctionType,
 }
