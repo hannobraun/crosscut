@@ -1,3 +1,5 @@
+use itertools::Itertools;
+
 use crate::{
     actor::{Actor, Sender, ThreadHandle},
     code::{Code, Expression},
@@ -10,7 +12,7 @@ pub fn start(
 ) -> anyhow::Result<(ThreadHandle, Actor<String>, Actor<GameInput>)> {
     let mut code = Code::default();
     let mut interpreter = Interpreter::default();
-    let mut current_function = None;
+    let mut values = Vec::new();
 
     editor::update(&code, &interpreter)?;
 
@@ -31,43 +33,25 @@ pub fn start(
         {
             match expression {
                 Expression::Identifier { name } => {
-                    if name == "submit_color" && current_function.is_none() {
-                        current_function = Some(HostFunction::SubmitColor);
+                    if name == "submit_color" && !interpreter.active_function {
+                        interpreter.active_function = true;
                         interpreter.next_expression += 1;
                     }
                 }
                 Expression::LiteralNumber { value } => {
-                    if let Some(function) = current_function {
-                        match function {
-                            HostFunction::SubmitColor => {
-                                current_function =
-                                    Some(HostFunction::SubmitColorR {
-                                        r: *value,
-                                    });
-                            }
-                            HostFunction::SubmitColorR { r } => {
-                                current_function =
-                                    Some(HostFunction::SubmitColorRG {
-                                        r,
-                                        g: *value,
-                                    });
-                            }
-                            HostFunction::SubmitColorRG { r, g } => {
-                                current_function =
-                                    Some(HostFunction::SubmitColorRGB {
-                                        r,
-                                        g,
-                                        b: *value,
-                                    });
-                            }
-                            HostFunction::SubmitColorRGB { r, g, b } => {
-                                current_function = None;
-                                game_output.send(GameOutput::SubmitColor {
-                                    color: [r, g, b, *value],
-                                })?;
-                            }
-                        }
+                    if interpreter.active_function {
+                        values.push(*value);
 
+                        if let Some([r, g, b, a]) =
+                            values.iter().copied().collect_array()
+                        {
+                            values.clear();
+                            game_output.send(GameOutput::SubmitColor {
+                                color: [r, g, b, a],
+                            })?;
+
+                            interpreter.active_function = false;
+                        }
                         interpreter.next_expression += 1;
                     }
                 }
@@ -114,12 +98,4 @@ fn parse(line: String) -> Vec<Expression> {
             },
         })
         .collect()
-}
-
-#[derive(Clone, Copy)]
-enum HostFunction {
-    SubmitColor,
-    SubmitColorR { r: f64 },
-    SubmitColorRG { r: f64, g: f64 },
-    SubmitColorRGB { r: f64, g: f64, b: f64 },
 }
