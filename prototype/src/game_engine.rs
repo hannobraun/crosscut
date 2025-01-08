@@ -21,7 +21,7 @@ impl GameEngine {
                 Event::EditorInput { line } => {
                     editor.process_input(line);
 
-                    match interpreter.step(&editor.code) {
+                    match interpreter.step(editor.code()) {
                         InterpreterState::Error => {
                             // Not handling errors right now. Eventually, those
                             // should be properly encoded in `Code` and

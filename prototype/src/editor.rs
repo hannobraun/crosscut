@@ -8,10 +8,14 @@ use crate::language::{
 
 #[derive(Default)]
 pub struct Editor {
-    pub code: Code,
+    code: Code,
 }
 
 impl Editor {
+    pub fn code(&self) -> &Code {
+        &self.code
+    }
+
     pub fn process_input(&mut self, line: String) {
         compile(&line, &mut self.code);
     }
