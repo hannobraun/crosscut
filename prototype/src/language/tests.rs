@@ -1,8 +1,6 @@
 use crate::language::interpreter::InterpreterState;
 
-use super::{
-    code::Code, compiler::compile, host::Host, interpreter::Interpreter,
-};
+use super::{code::Code, compiler, host::Host, interpreter::Interpreter};
 
 #[test]
 fn evaluate_single_expression() {
@@ -64,4 +62,8 @@ fn call_to_host_function() {
 
     assert_eq!(id, host.function_by_name("host_fn").unwrap().id);
     assert_eq!(input, 1.);
+}
+
+fn compile(input: &str, host: &Host, code: &mut Code) {
+    compiler::compile(input, host, code);
 }
