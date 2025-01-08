@@ -7,7 +7,7 @@ pub struct Interpreter {
 
 impl Interpreter {
     pub fn state(&self, code: &Code) -> &'static str {
-        if self.next_fragment(code).is_some() {
+        if self.next_expression(code).is_some() {
             "running"
         } else {
             "paused"
@@ -15,7 +15,7 @@ impl Interpreter {
     }
 
     pub fn step(&mut self, code: &Code) -> InterpreterState {
-        let Some(expression) = self.next_fragment(code) else {
+        let Some(expression) = self.next_expression(code) else {
             return InterpreterState::Error;
         };
 
@@ -39,7 +39,10 @@ impl Interpreter {
         }
     }
 
-    pub fn next_fragment<'r>(&self, code: &'r Code) -> Option<&'r Expression> {
+    pub fn next_expression<'r>(
+        &self,
+        code: &'r Code,
+    ) -> Option<&'r Expression> {
         let Fragment::Expression {
             expression: fragment,
         } = code.fragments.get(self.next_fragment)?
