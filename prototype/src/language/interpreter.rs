@@ -60,7 +60,8 @@ impl Interpreter {
     }
 
     pub fn next_expression<'r>(&self, code: &'r Code) -> Option<&'r Token> {
-        code.expressions.get(self.next_expression)
+        let token = code.expressions.get(self.next_expression)?;
+        Some(token)
     }
 }
 
