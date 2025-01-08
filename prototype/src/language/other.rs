@@ -30,13 +30,11 @@ pub fn start(
             }
         }
 
-        if let InterpreterState::CallToHostFunction {
-            id: _,
-            input: value,
-        } = interpreter.step(&code)
+        if let InterpreterState::CallToHostFunction { id: _, input } =
+            interpreter.step(&code)
         {
             game_output.send(GameOutput::SubmitColor {
-                color: [value, value, value, 1.],
+                color: [input, input, input, 1.],
             })?;
             interpreter.active_call = None;
         };
