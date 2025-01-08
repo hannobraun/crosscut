@@ -1,4 +1,4 @@
-use super::code::{Code, Expression, Fragment, Token};
+use super::code::{Code, Expression, Fragment};
 
 #[derive(Default)]
 pub struct Interpreter {
@@ -38,10 +38,7 @@ impl Interpreter {
                     return InterpreterState::Finished { output: *value };
                 }
             },
-            Fragment::UnexpectedToken { token } => match token {
-                Token::Identifier { .. } => {}
-                Token::LiteralNumber { .. } => {}
-            },
+            Fragment::UnexpectedToken { .. } => {}
         }
 
         InterpreterState::Error
