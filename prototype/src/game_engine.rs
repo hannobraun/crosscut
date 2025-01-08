@@ -15,7 +15,9 @@ pub struct GameEngine {
 }
 
 impl GameEngine {
-    pub fn start(game_output: Sender<GameOutput>) -> anyhow::Result<Self> {
+    pub fn start(
+        game_output: Sender<GameOutput>,
+    ) -> anyhow::Result<GameEngine> {
         let mut code = Code::default();
         let mut interpreter = Interpreter::default();
 
