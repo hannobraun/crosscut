@@ -2,7 +2,7 @@ use super::code::{Code, Fragment, HostFunction, Token};
 
 #[derive(Default)]
 pub struct Interpreter {
-    pub next_expression: usize,
+    pub next_fragment: usize,
     pub active_call: Option<ActiveCall>,
 }
 
@@ -17,7 +17,7 @@ impl Interpreter {
 
     pub fn step(&mut self, code: &Code) -> Option<(usize, f64)> {
         loop {
-            let index = self.next_expression;
+            let index = self.next_fragment;
             let expression = self.next_fragment(code)?;
 
             match expression {
@@ -33,7 +33,7 @@ impl Interpreter {
                             code.function_calls.get(&index).copied()
                         {
                             self.active_call = Some(ActiveCall { target });
-                            self.next_expression += 1;
+                            self.next_fragment += 1;
                             continue;
                         } else {
                             // No function found. This identifier is unresolved.
@@ -45,7 +45,7 @@ impl Interpreter {
                         }) = self.active_call
                         {
                             self.active_call = None;
-                            self.next_expression += 1;
+                            self.next_fragment += 1;
                             return Some((id, *value));
                         } else {
                             // There's not function call in progress, and thus
@@ -62,7 +62,7 @@ impl Interpreter {
     }
 
     pub fn next_fragment<'r>(&self, code: &'r Code) -> Option<&'r Fragment> {
-        let fragment = code.fragments.get(self.next_expression)?;
+        let fragment = code.fragments.get(self.next_fragment)?;
         Some(fragment)
     }
 }
