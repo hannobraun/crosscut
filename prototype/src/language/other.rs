@@ -43,8 +43,10 @@ pub fn start(
                 // editor. But in any case, there's nothing to do here, at least
                 // for now.
             }
-            InterpreterState::Finished { output: _ } => {
-                // Not handling this case yet.
+            InterpreterState::Finished { output } => {
+                game_output.send(GameOutput::SubmitColor {
+                    color: [output, output, output, 1.],
+                })?;
             }
         }
 
