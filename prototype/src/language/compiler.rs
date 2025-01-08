@@ -4,6 +4,10 @@ use super::{
 };
 
 pub fn compile(input: &str, host: &Host, code: &mut Code) {
+    // This is a hack to get things starting to work, while I get a real
+    // compiler pipeline set up.
+    let mut compiled_expression = false;
+
     for token in tokenize(input) {
         let fragment = match token {
             Token::Identifier { name } => {
@@ -16,9 +20,19 @@ pub fn compile(input: &str, host: &Host, code: &mut Code) {
                     token: Token::Identifier { name },
                 }
             }
-            Token::LiteralNumber { value } => Fragment::Expression {
-                expression: Expression::LiteralValue { value },
-            },
+            Token::LiteralNumber { value } => {
+                if compiled_expression {
+                    Fragment::UnexpectedToken {
+                        token: Token::LiteralNumber { value },
+                    }
+                } else {
+                    compiled_expression = true;
+
+                    Fragment::Expression {
+                        expression: Expression::LiteralValue { value },
+                    }
+                }
+            }
         };
 
         code.fragments.push(fragment);

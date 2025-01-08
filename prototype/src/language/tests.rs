@@ -22,6 +22,27 @@ fn evaluate_single_expression() {
 }
 
 #[test]
+fn code_after_expression_is_an_error() {
+    // An expression returns a value. That value can only be returned from the
+    // interpreter (which would mean the program has finished), or it can be
+    // used as the argument of a function call.
+    //
+    // Any code that comes after an expression makes no sense, and is an error.
+
+    let host = Host::without_functions();
+    let mut code = Code::default();
+    let mut interpreter = Interpreter::default();
+
+    compile("1 2", &host, &mut code);
+
+    assert_eq!(
+        interpreter.step(&code),
+        InterpreterState::Finished { output: 1. },
+    );
+    assert_eq!(interpreter.step(&code), InterpreterState::Error);
+}
+
+#[test]
 fn call_to_host_function() {
     // The host can define functions which Crosscut code can call. This should
     // result in the interpreter notifying the host of this call, so it may
