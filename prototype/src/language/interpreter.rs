@@ -37,8 +37,9 @@ impl Interpreter {
                                 input: *value,
                             };
                         } else {
-                            // There's no function call in progress, and thus
-                            // nowhere to put a value right now.
+                            return InterpreterState::Finished {
+                                output: *value,
+                            };
                         }
                     }
                 },
@@ -102,6 +103,11 @@ pub enum InterpreterState {
         #[allow(unused)] // used only in test code, so far
         id: usize,
         input: f64,
+    },
+
+    #[allow(unused)] // used only in test code, so far
+    Finished {
+        output: f64,
     },
 
     Other,

@@ -7,6 +7,13 @@ pub struct Host {
 }
 
 impl Host {
+    #[cfg(test)]
+    pub fn without_functions() -> Self {
+        Self {
+            functions: BTreeSet::new(),
+        }
+    }
+
     pub fn from_function_names(
         names: impl IntoIterator<Item = impl Into<String>>,
     ) -> Self {

@@ -5,6 +5,23 @@ use super::{
 };
 
 #[test]
+fn evaluate_single_expression() {
+    // If the program consists only of a single expression, it should be
+    // evaluated, and its value returned by the interpreter.
+
+    let host = Host::without_functions();
+    let mut code = Code::default();
+    let mut interpreter = Interpreter::default();
+
+    compile("1", &host, &mut code);
+
+    assert_eq!(
+        interpreter.step(&code),
+        InterpreterState::Finished { output: 1. },
+    );
+}
+
+#[test]
 fn call_to_host_function() {
     // The host can define functions which Crosscut code can call. This should
     // result in the interpreter notifying the host of this call, so it may
