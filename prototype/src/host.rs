@@ -8,13 +8,13 @@ use crate::{
     },
 };
 
-pub struct Host {
+pub struct GameEngine {
     pub handle: ThreadHandle,
     pub handle_editor_input: Actor<String>,
     pub handle_game_input: Actor<GameInput>,
 }
 
-impl Host {
+impl GameEngine {
     pub fn start(game_output: Sender<GameOutput>) -> anyhow::Result<Self> {
         let mut code = Code::default();
         let mut interpreter = Interpreter::default();
@@ -62,7 +62,7 @@ impl Host {
             Ok(())
         });
 
-        Ok(Host {
+        Ok(GameEngine {
             handle: handle_events.handle,
             handle_editor_input,
             handle_game_input,
