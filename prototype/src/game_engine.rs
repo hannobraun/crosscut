@@ -8,13 +8,13 @@ use crate::{
     },
 };
 
-pub struct GameEngine {
+pub struct GameEngineThreads {
     pub handle: ThreadHandle,
     pub handle_editor_input: ThreadHandle,
     pub handle_game_input: ThreadHandle,
 }
 
-impl GameEngine {
+impl GameEngineThreads {
     pub fn join(mut self) -> anyhow::Result<()> {
         self.handle.join()?;
         self.handle_editor_input.join()?;
@@ -31,7 +31,7 @@ pub struct GameEngineSenders {
 
 pub fn start(
     game_output: Sender<GameOutput>,
-) -> anyhow::Result<(GameEngine, GameEngineSenders)> {
+) -> anyhow::Result<(GameEngineThreads, GameEngineSenders)> {
     let mut code = Code::default();
     let mut interpreter = Interpreter::default();
 
@@ -78,7 +78,7 @@ pub fn start(
         Ok(())
     });
 
-    let game_engine = GameEngine {
+    let game_engine = GameEngineThreads {
         handle: handle_events.handle,
         handle_editor_input: handle_editor_input.handle,
         handle_game_input: handle_game_input.handle,
