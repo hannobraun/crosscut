@@ -40,9 +40,7 @@ impl Interpreter {
             },
             Fragment::UnexpectedToken { token } => match token {
                 Token::Identifier { .. } => {}
-                Token::LiteralNumber { .. } => {
-                    return InterpreterState::Error;
-                }
+                Token::LiteralNumber { .. } => {}
             },
         }
 
