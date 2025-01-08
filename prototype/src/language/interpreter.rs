@@ -29,6 +29,7 @@ impl Interpreter {
                         {
                             self.active_call = None;
                             self.next_fragment += 1;
+
                             return Some((id, *value));
                         } else {
                             // There's no function call in progress, and thus
@@ -61,6 +62,7 @@ impl Interpreter {
                         {
                             self.active_call = None;
                             self.next_fragment += 1;
+
                             return Some((id, *value));
                         } else {
                             // There's no function call in progress, and thus
