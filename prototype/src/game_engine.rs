@@ -14,7 +14,7 @@ pub struct GameEngine {
 }
 
 impl GameEngine {
-    pub fn start(game_output: Sender<GameOutput>) -> anyhow::Result<Self> {
+    pub fn start(game_output_tx: Sender<GameOutput>) -> anyhow::Result<Self> {
         let mut code = Code::default();
         let mut interpreter = Interpreter::default();
 
@@ -33,7 +33,7 @@ impl GameEngine {
                             // there's nothing to do here, at least for now.
                         }
                         InterpreterState::Finished { output } => {
-                            game_output.send(GameOutput::SubmitColor {
+                            game_output_tx.send(GameOutput::SubmitColor {
                                 color: [output, output, output, 1.],
                             })?;
                         }
