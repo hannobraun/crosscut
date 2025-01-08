@@ -1,5 +1,5 @@
 use super::{
-    code::{Code, Fragment, Token},
+    code::{Code, Expression, Fragment, Token},
     host::Host,
 };
 
@@ -16,7 +16,9 @@ pub fn compile(input: &str, host: &Host, code: &mut Code) {
                     token: Token::Identifier { name },
                 }
             }
-            Token::LiteralNumber { .. } => Fragment::UnexpectedToken { token },
+            Token::LiteralNumber { value } => Fragment::Expression {
+                expression: Expression::LiteralValue { value },
+            },
         };
 
         code.fragments.push(fragment);

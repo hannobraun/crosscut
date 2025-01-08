@@ -8,7 +8,13 @@ pub struct Code {
 
 #[derive(Debug)]
 pub enum Fragment {
+    Expression { expression: Expression },
     UnexpectedToken { token: Token },
+}
+
+#[derive(Debug)]
+pub enum Expression {
+    LiteralValue { value: f64 },
 }
 
 #[derive(Debug)]

@@ -1,4 +1,4 @@
-use super::code::{Code, Fragment, HostFunction, Token};
+use super::code::{Code, Expression, Fragment, HostFunction, Token};
 
 #[derive(Default)]
 pub struct Interpreter {
@@ -21,6 +21,21 @@ impl Interpreter {
             let fragment = self.next_fragment(code)?;
 
             match fragment {
+                Fragment::Expression { expression } => match expression {
+                    Expression::LiteralValue { value } => {
+                        if let Some(ActiveCall {
+                            target: HostFunction { id },
+                        }) = self.active_call
+                        {
+                            self.active_call = None;
+                            self.next_fragment += 1;
+                            return Some((id, *value));
+                        } else {
+                            // There's no function call in progress, and thus
+                            // nowhere to put a value right now.
+                        }
+                    }
+                },
                 Fragment::UnexpectedToken { token } => match token {
                     Token::Identifier { .. } => {
                         if let Some(ActiveCall {
