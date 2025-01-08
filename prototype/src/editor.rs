@@ -5,6 +5,7 @@ use crate::language::{
     interpreter::Interpreter,
 };
 
+#[derive(Default)]
 pub struct Editor {
     pub code: Code,
 }

@@ -2,7 +2,6 @@ use crate::{
     actor::{Actor, Sender, ThreadHandle},
     editor::{self, Editor},
     language::{
-        code::Code,
         compiler::compile,
         interpreter::{Interpreter, InterpreterState},
     },
@@ -15,9 +14,7 @@ pub struct GameEngine {
 
 impl GameEngine {
     pub fn start(game_output_tx: Sender<GameOutput>) -> anyhow::Result<Self> {
-        let mut editor = Editor {
-            code: Code::default(),
-        };
+        let mut editor = Editor::default();
         let mut interpreter = Interpreter::default();
 
         editor::update(&editor.code, &interpreter)?;
