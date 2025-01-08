@@ -7,5 +7,6 @@ edition = "2021"
 [dependencies]
 anyhow = "*"
 pollster = "*"
+pretty_assertions = "*"
 wgpu = "*"
 winit = "*"
