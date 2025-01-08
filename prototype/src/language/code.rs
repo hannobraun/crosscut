@@ -2,12 +2,12 @@ use std::collections::BTreeMap;
 
 #[derive(Debug, Default)]
 pub struct Code {
-    pub expressions: Vec<Expression>,
+    pub expressions: Vec<Token>,
     pub function_calls: BTreeMap<usize, HostFunction>,
 }
 
 #[derive(Debug)]
-pub enum Expression {
+pub enum Token {
     Identifier { name: String },
     LiteralNumber { value: f64 },
 }

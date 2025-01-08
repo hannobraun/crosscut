@@ -1,4 +1,4 @@
-use super::code::{Code, Expression, HostFunction};
+use super::code::{Code, HostFunction, Token};
 
 #[derive(Default)]
 pub struct Interpreter {
@@ -21,7 +21,7 @@ impl Interpreter {
             let expression = self.next_expression(code)?;
 
             match expression {
-                Expression::Identifier { .. } => {
+                Token::Identifier { .. } => {
                     if let Some(ActiveCall {
                         target: HostFunction { id: _ },
                     }) = self.active_call
@@ -38,7 +38,7 @@ impl Interpreter {
                         // No function found. This identifier is unresolved.
                     }
                 }
-                Expression::LiteralNumber { value } => {
+                Token::LiteralNumber { value } => {
                     if let Some(ActiveCall {
                         target: HostFunction { id },
                     }) = self.active_call
@@ -59,10 +59,7 @@ impl Interpreter {
         None
     }
 
-    pub fn next_expression<'r>(
-        &self,
-        code: &'r Code,
-    ) -> Option<&'r Expression> {
+    pub fn next_expression<'r>(&self, code: &'r Code) -> Option<&'r Token> {
         code.expressions.get(self.next_expression)
     }
 }

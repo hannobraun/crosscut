@@ -1,7 +1,7 @@
 use std::io::{self, stdout};
 
 use crate::language::{
-    code::{Code, Expression},
+    code::{Code, Token},
     interpreter::Interpreter,
 };
 
@@ -19,10 +19,10 @@ fn render_code(
         write!(w, "    ")?;
 
         match expression {
-            Expression::Identifier { name } => {
+            Token::Identifier { name } => {
                 writeln!(w, "{name}")?;
             }
-            Expression::LiteralNumber { value } => {
+            Token::LiteralNumber { value } => {
                 writeln!(w, "{value}")?;
             }
         }

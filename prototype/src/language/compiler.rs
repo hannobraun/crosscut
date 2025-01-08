@@ -1,12 +1,12 @@
 use super::{
-    code::{Code, Expression},
+    code::{Code, Token},
     host::Host,
 };
 
 pub fn compile(input: &str, host: &Host, code: &mut Code) {
     for token in input.split_whitespace() {
         let expression = match token.parse::<f64>() {
-            Ok(value) => Expression::LiteralNumber { value },
+            Ok(value) => Token::LiteralNumber { value },
             Err(_) => {
                 let index = code.expressions.len();
                 let name = token.to_string();
@@ -15,7 +15,7 @@ pub fn compile(input: &str, host: &Host, code: &mut Code) {
                     code.function_calls.insert(index, function);
                 }
 
-                Expression::Identifier { name }
+                Token::Identifier { name }
             }
         };
 
