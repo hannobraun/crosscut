@@ -18,9 +18,9 @@ impl Interpreter {
     pub fn step(&mut self, code: &Code) -> Option<(usize, f64)> {
         loop {
             let index = self.next_fragment;
-            let expression = self.next_fragment(code)?;
+            let fragment = self.next_fragment(code)?;
 
-            match expression {
+            match fragment {
                 Fragment::UnexpectedToken { token } => match token {
                     Token::Identifier { .. } => {
                         if let Some(ActiveCall {
