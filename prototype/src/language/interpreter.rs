@@ -101,10 +101,8 @@ pub enum InterpreterState {
         input: f64,
     },
 
-    #[allow(unused)] // used only in test code, so far
     Error,
 
-    #[allow(unused)] // used only in test code, so far
     Finished {
         output: f64,
     },
