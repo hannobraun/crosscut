@@ -25,6 +25,8 @@ impl Interpreter {
             match fragment {
                 Fragment::Expression { expression } => match expression {
                     Expression::LiteralValue { value } => {
+                        self.next_fragment += 1;
+
                         let Some(ActiveCall {
                             target: HostFunction { id },
                         }) = self.active_call
@@ -35,7 +37,6 @@ impl Interpreter {
                         };
 
                         self.active_call = None;
-                        self.next_fragment += 1;
 
                         return InterpreterState::CallToHostFunction {
                             id,
