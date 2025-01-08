@@ -46,10 +46,6 @@ pub fn start(
             InterpreterState::Finished { output: _ } => {
                 // Not handling this case yet.
             }
-            InterpreterState::Other => {
-                // Nothing to do here, really. This variant will get removed
-                // anyway.
-            }
         }
 
         Ok(())

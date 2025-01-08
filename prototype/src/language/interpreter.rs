@@ -19,7 +19,7 @@ impl Interpreter {
         loop {
             let index = self.next_fragment;
             let Some(fragment) = self.next_fragment(code) else {
-                return InterpreterState::Other;
+                return InterpreterState::Error;
             };
 
             match fragment {
@@ -82,7 +82,7 @@ impl Interpreter {
             break;
         }
 
-        InterpreterState::Other
+        InterpreterState::Error
     }
 
     pub fn next_fragment<'r>(&self, code: &'r Code) -> Option<&'r Fragment> {
@@ -108,6 +108,4 @@ pub enum InterpreterState {
     Finished {
         output: f64,
     },
-
-    Other,
 }
