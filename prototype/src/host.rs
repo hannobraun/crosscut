@@ -51,9 +51,9 @@ pub fn start(
         Ok(())
     });
 
-    let events_from_input = handle_events.sender;
+    let events_from_game_input = handle_events.sender;
     let handle_game_input = Actor::spawn(move |input| {
-        events_from_input.send(Event::GameInput(input))?;
+        events_from_game_input.send(Event::GameInput(input))?;
         Ok(())
     });
 
