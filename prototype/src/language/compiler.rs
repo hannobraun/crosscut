@@ -5,14 +5,16 @@ use super::{
 
 pub fn compile(input: &str, host: &Host, code: &mut Code) {
     for token in tokenize(input) {
-        let fragment = match &token {
+        let fragment = match token {
             Token::Identifier { name } => {
-                if let Some(function) = host.function_by_name(name) {
+                if let Some(function) = host.function_by_name(&name) {
                     let index = code.fragments.len();
                     code.function_calls.insert(index, function);
                 }
 
-                Fragment::UnexpectedToken { token }
+                Fragment::UnexpectedToken {
+                    token: Token::Identifier { name },
+                }
             }
             Token::LiteralNumber { .. } => Fragment::UnexpectedToken { token },
         };
