@@ -6,11 +6,9 @@ mod language;
 mod stdin;
 
 fn main() -> anyhow::Result<()> {
-    use game_engine::GameEngine;
-
     let (game_output_tx, game_output_rx) = actor::channel();
 
-    let mut host = GameEngine::start(game_output_tx)?;
+    let mut host = game_engine::start(game_output_tx)?;
     let mut editor = stdin::start(host.handle_editor_input.sender);
     game_io::start_and_wait(host.handle_game_input.sender, game_output_rx)?;
 
