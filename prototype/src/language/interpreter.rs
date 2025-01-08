@@ -96,6 +96,7 @@ pub struct ActiveCall {
     pub target: HostFunction,
 }
 
+#[derive(Debug, PartialEq)]
 pub enum InterpreterState {
     CallToHostFunction {
         #[allow(unused)] // used only in test code, so far
