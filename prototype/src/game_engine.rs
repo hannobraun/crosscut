@@ -1,6 +1,6 @@
 use crate::{
     actor::{Actor, Sender, ThreadHandle},
-    editor::{self, Editor},
+    editor::Editor,
     language::{
         compiler::compile,
         interpreter::{Interpreter, InterpreterState},
@@ -17,7 +17,7 @@ impl GameEngine {
         let mut editor = Editor::default();
         let mut interpreter = Interpreter::default();
 
-        editor::update(&editor.code, &interpreter)?;
+        Editor::update(&editor.code, &interpreter)?;
 
         let handle_events = Actor::spawn(move |event| {
             match event {
@@ -38,7 +38,7 @@ impl GameEngine {
                         }
                     }
 
-                    editor::update(&editor.code, &interpreter)?;
+                    Editor::update(&editor.code, &interpreter)?;
                 }
                 Event::GameInput(GameInput::RenderingFrame) => {
                     // This loop is coupled to the frame rate of the renderer.

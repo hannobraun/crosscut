@@ -10,9 +10,14 @@ pub struct Editor {
     pub code: Code,
 }
 
-pub fn update(code: &Code, interpreter: &Interpreter) -> anyhow::Result<()> {
-    render_code(code, interpreter, stdout())?;
-    Ok(())
+impl Editor {
+    pub fn update(
+        code: &Code,
+        interpreter: &Interpreter,
+    ) -> anyhow::Result<()> {
+        render_code(code, interpreter, stdout())?;
+        Ok(())
+    }
 }
 
 fn render_code(
