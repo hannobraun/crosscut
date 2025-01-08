@@ -13,12 +13,12 @@ pub fn compile(input: &str, host: &Host, code: &mut Code) {
                     code.function_calls.insert(index, function);
                 }
 
-                token
+                Fragment::UnexpectedToken { token }
             }
-            Token::LiteralNumber { .. } => token,
+            Token::LiteralNumber { .. } => Fragment::UnexpectedToken { token },
         };
 
-        code.fragments.push(Fragment::UnexpectedToken { token });
+        code.fragments.push(token);
     }
 }
 
