@@ -1,9 +1,6 @@
-use std::collections::BTreeMap;
-
 #[derive(Clone, Debug, Default, PartialEq)]
 pub struct Code {
     pub fragments: Vec<Fragment>,
-    pub function_calls: BTreeMap<usize, HostFunction>,
 }
 
 impl Code {
