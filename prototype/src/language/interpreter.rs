@@ -103,5 +103,6 @@ pub enum InterpreterState {
         id: usize,
         input: f64,
     },
+
     Other,
 }
