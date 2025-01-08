@@ -40,7 +40,7 @@ impl Interpreter {
                         self.next_fragment += 1;
 
                         let Some(ActiveCall {
-                            target: HostFunction { id },
+                            target: HostFunction { .. },
                         }) = self.active_call
                         else {
                             return InterpreterState::Finished {
@@ -51,7 +51,6 @@ impl Interpreter {
                         self.active_call = None;
 
                         return InterpreterState::CallToHostFunction {
-                            id,
                             input: *value,
                         };
                     }
@@ -99,8 +98,6 @@ pub struct ActiveCall {
 #[derive(Debug, PartialEq)]
 pub enum InterpreterState {
     CallToHostFunction {
-        #[allow(unused)] // used only in test code, so far
-        id: usize,
         input: f64,
     },
 

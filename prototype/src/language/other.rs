@@ -30,7 +30,7 @@ pub fn start(
             }
         }
 
-        if let InterpreterState::CallToHostFunction { id: _, input } =
+        if let InterpreterState::CallToHostFunction { input } =
             interpreter.step(&code)
         {
             game_output.send(GameOutput::SubmitColor {
