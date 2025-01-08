@@ -1,3 +1,5 @@
+use pretty_assertions::assert_eq;
+
 use crate::language::interpreter::InterpreterState;
 
 use super::{code::Code, compiler, host::Host, interpreter::Interpreter};
