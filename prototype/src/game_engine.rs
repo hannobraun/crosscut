@@ -9,9 +9,9 @@ use crate::{
 };
 
 pub struct GameEngineThreads {
-    pub handle: ThreadHandle,
-    pub handle_editor_input: ThreadHandle,
-    pub handle_game_input: ThreadHandle,
+    handle: ThreadHandle,
+    handle_editor_input: ThreadHandle,
+    handle_game_input: ThreadHandle,
 }
 
 impl GameEngineThreads {
