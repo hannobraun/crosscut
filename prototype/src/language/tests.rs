@@ -16,7 +16,7 @@ fn call_to_host_function() {
 
     compile("host_fn 1", &host, &mut code);
 
-    let (id, value) = loop {
+    let (id, input) = loop {
         if let InterpreterState::CallToHostFunction { id, input } =
             interpreter.step(&code)
         {
@@ -25,5 +25,5 @@ fn call_to_host_function() {
     };
 
     assert_eq!(id, host.function_by_name("host_fn").unwrap().id);
-    assert_eq!(value, 1.);
+    assert_eq!(input, 1.);
 }
