@@ -52,12 +52,12 @@ pub fn start(
     });
 
     let events_from_input = handle_events.sender;
-    let input_to_event = Actor::spawn(move |input| {
+    let handle_game_input = Actor::spawn(move |input| {
         events_from_input.send(Event::GameInput(input))?;
         Ok(())
     });
 
-    Ok((handle_events.handle, handle_editor_input, input_to_event))
+    Ok((handle_events.handle, handle_editor_input, handle_game_input))
 }
 
 enum Event {
