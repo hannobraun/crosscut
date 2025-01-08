@@ -6,6 +6,36 @@ pub struct Code {
     pub function_calls: BTreeMap<usize, HostFunction>,
 }
 
+impl Code {
+    /// # Indicate whether this is complete, meaning contains an expression
+    ///
+    /// The presence of errors has no significance for the return value of this
+    /// function. Its purpose, rather, is to indicate whether the addition of
+    /// more fragments would also result in the addition of _more_ errors.
+    ///
+    /// ## Implementation Note
+    ///
+    /// That the presence of errors has no significance, as documented above, is
+    /// not completely true. That is because of a hack that eases the transition
+    /// to a more functional evaluation model.
+    ///
+    /// Eventually, this method would move to a type representing something like
+    /// a branch, or branch body. That it is defined on `Code` is only a
+    /// consequence of the current state of development.
+    pub fn is_complete(&self) -> bool {
+        self.fragments
+            .last()
+            .map(|fragment| match fragment {
+                Fragment::Expression { .. } => true,
+                Fragment::UnexpectedToken { token } => match token {
+                    Token::Identifier { .. } => false,
+                    Token::LiteralNumber { .. } => true,
+                },
+            })
+            .unwrap_or(false)
+    }
+}
+
 #[derive(Clone, Debug, PartialEq)]
 pub enum Fragment {
     Expression { expression: Expression },
