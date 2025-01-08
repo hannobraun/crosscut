@@ -6,7 +6,17 @@ use super::{
 pub fn compile(input: &str, host: &Host, code: &mut Code) {
     // This is a hack to get things starting to work, while I get a real
     // compiler pipeline set up.
-    let mut already_compiled_expression = false;
+    let mut already_compiled_expression = code
+        .fragments
+        .last()
+        .map(|fragment| match fragment {
+            Fragment::Expression { .. } => true,
+            Fragment::UnexpectedToken { token } => match token {
+                Token::Identifier { .. } => false,
+                Token::LiteralNumber { .. } => true,
+            },
+        })
+        .unwrap_or(false);
 
     for token in tokenize(input) {
         let fragment = match token {
