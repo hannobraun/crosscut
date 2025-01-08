@@ -1,12 +1,12 @@
 mod actor;
 mod editor;
+mod game_engine;
 mod game_io;
-mod host;
 mod language;
 mod stdin;
 
 fn main() -> anyhow::Result<()> {
-    use host::GameEngine;
+    use game_engine::GameEngine;
 
     let (game_output_tx, game_output_rx) = actor::channel();
 

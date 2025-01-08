@@ -12,7 +12,7 @@ use winit::{
 
 use crate::{
     actor::{self, Receiver, Sender},
-    host::{GameInput, GameOutput},
+    game_engine::{GameInput, GameOutput},
 };
 
 pub fn start_and_wait(
