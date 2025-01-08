@@ -1,5 +1,5 @@
 use super::{
-    code::{Code, Token},
+    code::{Code, Fragment, Token},
     host::Host,
 };
 
@@ -19,6 +19,6 @@ pub fn compile(input: &str, host: &Host, code: &mut Code) {
             }
         };
 
-        code.expressions.push(token);
+        code.expressions.push(Fragment::UnexpectedToken { token });
     }
 }

@@ -1,4 +1,4 @@
-use super::code::{Code, HostFunction, Token};
+use super::code::{Code, Fragment, HostFunction, Token};
 
 #[derive(Default)]
 pub struct Interpreter {
@@ -60,7 +60,8 @@ impl Interpreter {
     }
 
     pub fn next_expression<'r>(&self, code: &'r Code) -> Option<&'r Token> {
-        let token = code.expressions.get(self.next_expression)?;
+        let Fragment::UnexpectedToken { token } =
+            code.expressions.get(self.next_expression)?;
         Some(token)
     }
 }

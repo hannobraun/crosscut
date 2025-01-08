@@ -2,8 +2,13 @@ use std::collections::BTreeMap;
 
 #[derive(Debug, Default)]
 pub struct Code {
-    pub expressions: Vec<Token>,
+    pub expressions: Vec<Fragment>,
     pub function_calls: BTreeMap<usize, HostFunction>,
+}
+
+#[derive(Debug)]
+pub enum Fragment {
+    UnexpectedToken { token: Token },
 }
 
 #[derive(Debug)]
