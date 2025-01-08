@@ -1,23 +1,23 @@
 use std::collections::BTreeMap;
 
-#[derive(Debug, Default)]
+#[derive(Clone, Debug, Default)]
 pub struct Code {
     pub fragments: Vec<Fragment>,
     pub function_calls: BTreeMap<usize, HostFunction>,
 }
 
-#[derive(Debug)]
+#[derive(Clone, Debug)]
 pub enum Fragment {
     Expression { expression: Expression },
     UnexpectedToken { token: Token },
 }
 
-#[derive(Debug)]
+#[derive(Clone, Debug)]
 pub enum Expression {
     LiteralValue { value: f64 },
 }
 
-#[derive(Debug)]
+#[derive(Clone, Debug)]
 pub enum Token {
     Identifier { name: String },
     LiteralNumber { value: f64 },
