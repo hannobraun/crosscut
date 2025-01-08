@@ -62,22 +62,8 @@ impl Interpreter {
                             // No function found. This identifier is unresolved.
                         }
                     }
-                    Token::LiteralNumber { value } => {
-                        if let Some(ActiveCall {
-                            target: HostFunction { id },
-                        }) = self.active_call
-                        {
-                            self.active_call = None;
-                            self.next_fragment += 1;
-
-                            return InterpreterState::CallToHostFunction {
-                                id,
-                                input: *value,
-                            };
-                        } else {
-                            // There's no function call in progress, and thus
-                            // nowhere to put a value right now.
-                        }
+                    Token::LiteralNumber { .. } => {
+                        return InterpreterState::Error;
                     }
                 },
             }
@@ -105,6 +91,9 @@ pub enum InterpreterState {
         id: usize,
         input: f64,
     },
+
+    #[allow(unused)] // used only in test code, so far
+    Error,
 
     #[allow(unused)] // used only in test code, so far
     Finished {
