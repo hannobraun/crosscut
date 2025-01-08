@@ -4,21 +4,26 @@ use super::{
 };
 
 pub fn compile(input: &str, host: &Host, code: &mut Code) {
-    for token in input.split_whitespace() {
-        let token = match token.parse::<f64>() {
-            Ok(value) => Token::LiteralNumber { value },
-            Err(_) => {
-                let index = code.fragments.len();
-                let name = token.to_string();
+    for token in tokenize(input) {
+        if let Token::Identifier { name } = &token {
+            let index = code.fragments.len();
 
-                if let Some(function) = host.function_by_name(&name) {
-                    code.function_calls.insert(index, function);
-                }
-
-                Token::Identifier { name }
+            if let Some(function) = host.function_by_name(name) {
+                code.function_calls.insert(index, function);
             }
-        };
+        }
 
         code.fragments.push(Fragment::UnexpectedToken { token });
     }
+}
+
+fn tokenize(input: &str) -> impl Iterator<Item = Token> + '_ {
+    input
+        .split_whitespace()
+        .map(|token| match token.parse::<f64>() {
+            Ok(value) => Token::LiteralNumber { value },
+            Err(_) => Token::Identifier {
+                name: token.to_string(),
+            },
+        })
 }
