@@ -15,10 +15,10 @@ fn render_code(
     interpreter: &Interpreter,
     mut w: impl io::Write,
 ) -> anyhow::Result<()> {
-    for expression in &code.fragments {
+    for fragment in &code.fragments {
         write!(w, "    ")?;
 
-        match expression {
+        match fragment {
             Fragment::UnexpectedToken { token } => match token {
                 Token::Identifier { name } => {
                     writeln!(w, "{name}")?;
