@@ -1,9 +1,6 @@
-use super::{
-    code::{Code, Expression, Fragment, Token},
-    host::Host,
-};
+use super::code::{Code, Expression, Fragment, Token};
 
-pub fn compile(input: &str, _: &Host, code: &mut Code) {
+pub fn compile(input: &str, code: &mut Code) {
     for token in tokenize(input) {
         let fragment = match token {
             Token::Identifier { name } => Fragment::UnexpectedToken {

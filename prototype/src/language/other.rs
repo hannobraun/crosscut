@@ -6,14 +6,12 @@ use crate::{
 use super::{
     code::Code,
     compiler::compile,
-    host::Host,
     interpreter::{Interpreter, InterpreterState},
 };
 
 pub fn start(
     game_output: Sender<GameOutput>,
 ) -> anyhow::Result<(ThreadHandle, Actor<String>, Actor<GameInput>)> {
-    let host = Host::from_function_names(["color"]);
     let mut code = Code::default();
     let mut interpreter = Interpreter::default();
 
@@ -22,7 +20,7 @@ pub fn start(
     let handle_events = Actor::spawn(move |event| {
         match event {
             Event::EditorInput { line } => {
-                compile(&line, &host, &mut code);
+                compile(&line, &mut code);
                 editor::update(&code, &interpreter)?;
             }
             Event::GameInput(GameInput::RenderingFrame) => {
