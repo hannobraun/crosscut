@@ -17,7 +17,7 @@ impl GameEngine {
         let mut editor = Editor::default();
         let mut interpreter = Interpreter::default();
 
-        Editor::update(&editor.code, &interpreter)?;
+        editor.update(&interpreter)?;
 
         let handle_events = Actor::spawn(move |event| {
             match event {
@@ -38,7 +38,7 @@ impl GameEngine {
                         }
                     }
 
-                    Editor::update(&editor.code, &interpreter)?;
+                    editor.update(&interpreter)?;
                 }
                 Event::GameInput(GameInput::RenderingFrame) => {
                     // This loop is coupled to the frame rate of the renderer.

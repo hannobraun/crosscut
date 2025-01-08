@@ -11,11 +11,8 @@ pub struct Editor {
 }
 
 impl Editor {
-    pub fn update(
-        code: &Code,
-        interpreter: &Interpreter,
-    ) -> anyhow::Result<()> {
-        render_code(code, interpreter, stdout())?;
+    pub fn update(&self, interpreter: &Interpreter) -> anyhow::Result<()> {
+        render_code(&self.code, interpreter, stdout())?;
         Ok(())
     }
 }
