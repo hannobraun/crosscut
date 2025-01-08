@@ -7,9 +7,8 @@ pub fn compile(input: &str, host: &Host, code: &mut Code) {
     for token in tokenize(input) {
         let fragment = match &token {
             Token::Identifier { name } => {
-                let index = code.fragments.len();
-
                 if let Some(function) = host.function_by_name(name) {
+                    let index = code.fragments.len();
                     code.function_calls.insert(index, function);
                 }
 
