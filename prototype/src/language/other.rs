@@ -10,7 +10,7 @@ use super::{
 pub fn start(
     game_output: Sender<GameOutput>,
 ) -> anyhow::Result<(ThreadHandle, Actor<String>, Actor<GameInput>)> {
-    let host = Host::from_function_names(["color", "__color_currying"]);
+    let host = Host::from_function_names(["color"]);
     let mut code = Code::default();
     let mut interpreter = Interpreter::default();
 
