@@ -1,15 +1,10 @@
-use itertools::Itertools;
-
 use crate::{
     actor::{Actor, Sender, ThreadHandle},
     editor,
 };
 
 use super::{
-    code::Code,
-    compiler::compile,
-    host::Host,
-    interpreter::{ActiveCall, Interpreter},
+    code::Code, compiler::compile, host::Host, interpreter::Interpreter,
 };
 
 pub fn start(
@@ -18,7 +13,6 @@ pub fn start(
     let host = Host::from_function_names(["color", "__color_currying"]);
     let mut code = Code::default();
     let mut interpreter = Interpreter::default();
-    let mut values = Vec::new();
 
     editor::update(&code, &interpreter)?;
 
@@ -34,26 +28,10 @@ pub fn start(
         }
 
         if let Some((_, value)) = interpreter.step(&code) {
-            values.push(value);
-
-            interpreter.active_call = if let Some([r, g, b, a]) =
-                values.iter().copied().collect_array()
-            {
-                values.clear();
-                game_output.send(GameOutput::SubmitColor {
-                    color: [r, g, b, a],
-                })?;
-
-                None
-            } else {
-                // Functions can only have one input, but we need 4 values for a
-                // color. Let's get some more using currying.
-                let Some(target) = host.function_by_name("__color_currying")
-                else {
-                    unreachable!("Function has been defined above.");
-                };
-                Some(ActiveCall { target })
-            }
+            game_output.send(GameOutput::SubmitColor {
+                color: [value, value, value, 1.],
+            })?;
+            interpreter.active_call = None;
         };
 
         Ok(())
