@@ -14,6 +14,16 @@ pub struct GameEngine {
     pub handle_game_input: ThreadHandle,
 }
 
+impl GameEngine {
+    pub fn join(mut self) -> anyhow::Result<()> {
+        self.handle.join()?;
+        self.handle_editor_input.join()?;
+        self.handle_game_input.join()?;
+
+        Ok(())
+    }
+}
+
 pub struct GameEngineSenders {
     pub editor_input: Sender<String>,
     pub game_input: Sender<GameInput>,
