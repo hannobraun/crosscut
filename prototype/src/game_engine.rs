@@ -10,11 +10,18 @@ use crate::{
 
 pub struct GameEngine {
     pub handle: ThreadHandle,
-    pub handle_editor_input: Actor<String>,
-    pub handle_game_input: Actor<GameInput>,
+    pub handle_editor_input: ThreadHandle,
+    pub handle_game_input: ThreadHandle,
 }
 
-pub fn start(game_output: Sender<GameOutput>) -> anyhow::Result<GameEngine> {
+pub struct GameEngineSenders {
+    pub editor_input: Sender<String>,
+    pub game_input: Sender<GameInput>,
+}
+
+pub fn start(
+    game_output: Sender<GameOutput>,
+) -> anyhow::Result<(GameEngine, GameEngineSenders)> {
     let mut code = Code::default();
     let mut interpreter = Interpreter::default();
 
@@ -63,11 +70,15 @@ pub fn start(game_output: Sender<GameOutput>) -> anyhow::Result<GameEngine> {
 
     let game_engine = GameEngine {
         handle: handle_events.handle,
-        handle_editor_input,
-        handle_game_input,
+        handle_editor_input: handle_editor_input.handle,
+        handle_game_input: handle_game_input.handle,
+    };
+    let senders = GameEngineSenders {
+        editor_input: handle_editor_input.sender,
+        game_input: handle_game_input.sender,
     };
 
-    Ok(game_engine)
+    Ok((game_engine, senders))
 }
 
 enum Event {
