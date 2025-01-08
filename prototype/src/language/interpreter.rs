@@ -25,6 +25,18 @@ impl Interpreter {
             match fragment {
                 Fragment::Expression { expression } => match expression {
                     Expression::LiteralValue { value } => {
+                        // We increment the code pointer unconditionally, even
+                        // if we expect the program to be finished after this.
+                        //
+                        // This is important for two reasons:
+                        //
+                        // 1. If the program _is_ finished, then this fact can
+                        //    be derived from the interpreter state, even if a
+                        //    caller previously ignored the return value of this
+                        //    function.
+                        // 2. If the program is _not_ finished, then this is an
+                        //    error, and we want the next call to the `step`
+                        //    function to reflect that.
                         self.next_fragment += 1;
 
                         let Some(ActiveCall {
