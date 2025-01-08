@@ -61,11 +61,13 @@ pub fn start(game_output: Sender<GameOutput>) -> anyhow::Result<GameEngine> {
         Ok(())
     });
 
-    Ok(GameEngine {
+    let game_engine = GameEngine {
         handle: handle_events.handle,
         handle_editor_input,
         handle_game_input,
-    })
+    };
+
+    Ok(game_engine)
 }
 
 enum Event {
