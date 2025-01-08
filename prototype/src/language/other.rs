@@ -31,12 +31,6 @@ pub fn start(
         }
 
         match interpreter.step(&code) {
-            InterpreterState::CallToHostFunction { input } => {
-                game_output.send(GameOutput::SubmitColor {
-                    color: [input, input, input, 1.],
-                })?;
-                interpreter.active_call = None;
-            }
             InterpreterState::Error => {
                 // Not handling errors right now. Eventually, those should be
                 // properly encoded in `Code` and therefore visible in the

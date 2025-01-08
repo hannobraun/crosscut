@@ -48,11 +48,7 @@ impl Interpreter {
                             };
                         };
 
-                        self.active_call = None;
-
-                        return InterpreterState::CallToHostFunction {
-                            input: *value,
-                        };
+                        return InterpreterState::Error;
                     }
                 },
                 Fragment::UnexpectedToken { token } => match token {
@@ -97,13 +93,7 @@ pub struct ActiveCall {
 
 #[derive(Debug, PartialEq)]
 pub enum InterpreterState {
-    CallToHostFunction {
-        input: f64,
-    },
-
     Error,
 
-    Finished {
-        output: f64,
-    },
+    Finished { output: f64 },
 }
