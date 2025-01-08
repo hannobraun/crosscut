@@ -15,11 +15,11 @@ impl Interpreter {
     }
 
     pub fn step(&mut self, code: &Code) -> InterpreterState {
-        let Some(fragment) = self.next_fragment(code) else {
+        let Some(expression) = self.next_fragment(code) else {
             return InterpreterState::Error;
         };
 
-        match fragment {
+        match expression {
             Expression::LiteralValue { value } => {
                 // We increment the code pointer unconditionally, even if we
                 // expect the program to be finished after this.
