@@ -16,7 +16,7 @@ impl Editor {
         compile(&line, &mut self.code);
     }
 
-    pub fn update(&self, interpreter: &Interpreter) -> anyhow::Result<()> {
+    pub fn render(&self, interpreter: &Interpreter) -> anyhow::Result<()> {
         render_code(&self.code, interpreter, stdout())?;
         Ok(())
     }
