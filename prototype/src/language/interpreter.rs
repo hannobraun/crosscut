@@ -43,14 +43,13 @@ impl Interpreter {
         &self,
         code: &'r Code,
     ) -> Option<&'r Expression> {
-        let Fragment::Expression {
-            expression: fragment,
-        } = code.fragments.get(self.next_fragment)?
+        let Fragment::Expression { expression } =
+            code.fragments.get(self.next_fragment)?
         else {
             return None;
         };
 
-        Some(fragment)
+        Some(expression)
     }
 }
 
