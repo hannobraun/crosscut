@@ -5,7 +5,7 @@ use super::{
 
 pub fn compile(input: &str, host: &Host, code: &mut Code) {
     for token in input.split_whitespace() {
-        let expression = match token.parse::<f64>() {
+        let token = match token.parse::<f64>() {
             Ok(value) => Token::LiteralNumber { value },
             Err(_) => {
                 let index = code.expressions.len();
@@ -19,6 +19,6 @@ pub fn compile(input: &str, host: &Host, code: &mut Code) {
             }
         };
 
-        code.expressions.push(expression);
+        code.expressions.push(token);
     }
 }
