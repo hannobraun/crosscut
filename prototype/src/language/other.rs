@@ -1,12 +1,11 @@
 use crate::{
     actor::{Actor, Sender, ThreadHandle},
     editor,
-};
-
-use super::{
-    code::Code,
-    compiler::compile,
-    interpreter::{Interpreter, InterpreterState},
+    language::{
+        code::Code,
+        compiler::compile,
+        interpreter::{Interpreter, InterpreterState},
+    },
 };
 
 pub fn start(
