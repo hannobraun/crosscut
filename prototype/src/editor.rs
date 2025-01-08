@@ -5,6 +5,10 @@ use crate::language::{
     interpreter::Interpreter,
 };
 
+pub struct Editor {
+    pub code: Code,
+}
+
 pub fn update(code: &Code, interpreter: &Interpreter) -> anyhow::Result<()> {
     render_code(code, interpreter, stdout())?;
     Ok(())

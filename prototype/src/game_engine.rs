@@ -1,6 +1,6 @@
 use crate::{
     actor::{Actor, Sender, ThreadHandle},
-    editor,
+    editor::{self, Editor},
     language::{
         code::Code,
         compiler::compile,
@@ -15,17 +15,19 @@ pub struct GameEngine {
 
 impl GameEngine {
     pub fn start(game_output_tx: Sender<GameOutput>) -> anyhow::Result<Self> {
-        let mut code = Code::default();
+        let mut editor = Editor {
+            code: Code::default(),
+        };
         let mut interpreter = Interpreter::default();
 
-        editor::update(&code, &interpreter)?;
+        editor::update(&editor.code, &interpreter)?;
 
         let handle_events = Actor::spawn(move |event| {
             match event {
                 Event::EditorInput { line } => {
-                    compile(&line, &mut code);
+                    compile(&line, &mut editor.code);
 
-                    match interpreter.step(&code) {
+                    match interpreter.step(&editor.code) {
                         InterpreterState::Error => {
                             // Not handling errors right now. Eventually, those
                             // should be properly encoded in `Code` and
@@ -39,7 +41,7 @@ impl GameEngine {
                         }
                     }
 
-                    editor::update(&code, &interpreter)?;
+                    editor::update(&editor.code, &interpreter)?;
                 }
                 Event::GameInput(GameInput::RenderingFrame) => {
                     // This loop is coupled to the frame rate of the renderer.
