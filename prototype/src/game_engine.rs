@@ -78,7 +78,7 @@ pub fn start(
         Ok(())
     });
 
-    let game_engine = GameEngineThreads {
+    let threads = GameEngineThreads {
         handle: handle_events.handle,
         handle_editor_input: handle_editor_input.handle,
         handle_game_input: handle_game_input.handle,
@@ -88,7 +88,7 @@ pub fn start(
         game_input: handle_game_input.sender,
     };
 
-    Ok((game_engine, senders))
+    Ok((threads, senders))
 }
 
 enum Event {
