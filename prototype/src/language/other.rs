@@ -30,14 +30,27 @@ pub fn start(
             }
         }
 
-        if let InterpreterState::CallToHostFunction { input } =
-            interpreter.step(&code)
-        {
-            game_output.send(GameOutput::SubmitColor {
-                color: [input, input, input, 1.],
-            })?;
-            interpreter.active_call = None;
-        };
+        match interpreter.step(&code) {
+            InterpreterState::CallToHostFunction { input } => {
+                game_output.send(GameOutput::SubmitColor {
+                    color: [input, input, input, 1.],
+                })?;
+                interpreter.active_call = None;
+            }
+            InterpreterState::Error => {
+                // Not handling errors right now. Eventually, those should be
+                // properly encoded in `Code` and therefore visible in the
+                // editor. But in any case, there's nothing to do here, at least
+                // for now.
+            }
+            InterpreterState::Finished { output: _ } => {
+                // Not handling this case yet.
+            }
+            InterpreterState::Other => {
+                // Nothing to do here, really. This variant will get removed
+                // anyway.
+            }
+        }
 
         Ok(())
     });
