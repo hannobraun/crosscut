@@ -6,7 +6,7 @@ use super::{
 pub fn compile(input: &str, host: &Host, code: &mut Code) {
     // This is a hack to get things starting to work, while I get a real
     // compiler pipeline set up.
-    let mut compiled_expression = false;
+    let mut already_compiled_expression = false;
 
     for token in tokenize(input) {
         let fragment = match token {
@@ -21,12 +21,12 @@ pub fn compile(input: &str, host: &Host, code: &mut Code) {
                 }
             }
             Token::LiteralNumber { value } => {
-                if compiled_expression {
+                if already_compiled_expression {
                     Fragment::UnexpectedToken {
                         token: Token::LiteralNumber { value },
                     }
                 } else {
-                    compiled_expression = true;
+                    already_compiled_expression = true;
 
                     Fragment::Expression {
                         expression: Expression::LiteralValue { value },
