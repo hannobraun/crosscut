@@ -2,6 +2,7 @@ use std::io::{self, stdout};
 
 use crate::language::{
     code::{Code, Expression, Fragment, Token},
+    compiler::compile,
     interpreter::Interpreter,
 };
 
@@ -11,6 +12,10 @@ pub struct Editor {
 }
 
 impl Editor {
+    pub fn process_input(&mut self, line: String) {
+        compile(&line, &mut self.code);
+    }
+
     pub fn update(&self, interpreter: &Interpreter) -> anyhow::Result<()> {
         render_code(&self.code, interpreter, stdout())?;
         Ok(())

@@ -1,10 +1,7 @@
 use crate::{
     actor::{Actor, Sender, ThreadHandle},
     editor::Editor,
-    language::{
-        compiler::compile,
-        interpreter::{Interpreter, InterpreterState},
-    },
+    language::interpreter::{Interpreter, InterpreterState},
 };
 
 pub struct GameEngine {
@@ -22,7 +19,7 @@ impl GameEngine {
         let handle_events = Actor::spawn(move |event| {
             match event {
                 Event::EditorInput { line } => {
-                    compile(&line, &mut editor.code);
+                    editor.process_input(line);
 
                     match interpreter.step(&editor.code) {
                         InterpreterState::Error => {
