@@ -1,9 +1,8 @@
-use super::code::{Code, Expression, Fragment, HostFunction, Token};
+use super::code::{Code, Expression, Fragment, Token};
 
 #[derive(Default)]
 pub struct Interpreter {
     pub next_fragment: usize,
-    pub active_call: Option<ActiveCall>,
 }
 
 impl Interpreter {
@@ -39,30 +38,12 @@ impl Interpreter {
                         //    function to reflect that.
                         self.next_fragment += 1;
 
-                        let Some(ActiveCall {
-                            target: HostFunction { .. },
-                        }) = self.active_call
-                        else {
-                            return InterpreterState::Finished {
-                                output: *value,
-                            };
-                        };
-
-                        return InterpreterState::Error;
+                        return InterpreterState::Finished { output: *value };
                     }
                 },
                 Fragment::UnexpectedToken { token } => match token {
                     Token::Identifier { .. } => {
-                        if let Some(ActiveCall {
-                            target: HostFunction { id: _ },
-                        }) = self.active_call
-                        {
-                            // Function call is already in progress, and nested
-                            // function calls are not supported yet.
-                        } else if let Some(target) =
-                            code.function_calls.get(&index).copied()
-                        {
-                            self.active_call = Some(ActiveCall { target });
+                        if code.function_calls.get(&index).copied().is_some() {
                             self.next_fragment += 1;
                             continue;
                         } else {
@@ -85,10 +66,6 @@ impl Interpreter {
         let fragment = code.fragments.get(self.next_fragment)?;
         Some(fragment)
     }
-}
-
-pub struct ActiveCall {
-    pub target: HostFunction,
 }
 
 #[derive(Debug, PartialEq)]
