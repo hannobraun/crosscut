@@ -62,8 +62,8 @@ impl Interpreter {
     }
 
     pub fn next_expression<'r>(&self, code: &'r Code) -> Option<&'r Fragment> {
-        let token = code.fragments.get(self.next_expression)?;
-        Some(token)
+        let fragment = code.fragments.get(self.next_expression)?;
+        Some(fragment)
     }
 }
 
