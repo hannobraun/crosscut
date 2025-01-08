@@ -25,22 +25,22 @@ impl Interpreter {
             match fragment {
                 Fragment::Expression { expression } => match expression {
                     Expression::LiteralValue { value } => {
-                        if let Some(ActiveCall {
+                        let Some(ActiveCall {
                             target: HostFunction { id },
                         }) = self.active_call
-                        {
-                            self.active_call = None;
-                            self.next_fragment += 1;
-
-                            return InterpreterState::CallToHostFunction {
-                                id,
-                                input: *value,
-                            };
-                        } else {
+                        else {
                             return InterpreterState::Finished {
                                 output: *value,
                             };
-                        }
+                        };
+
+                        self.active_call = None;
+                        self.next_fragment += 1;
+
+                        return InterpreterState::CallToHostFunction {
+                            id,
+                            input: *value,
+                        };
                     }
                 },
                 Fragment::UnexpectedToken { token } => match token {
