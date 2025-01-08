@@ -2,7 +2,7 @@ use std::collections::BTreeMap;
 
 #[derive(Debug, Default)]
 pub struct Code {
-    pub expressions: Vec<Fragment>,
+    pub fragments: Vec<Fragment>,
     pub function_calls: BTreeMap<usize, HostFunction>,
 }
 

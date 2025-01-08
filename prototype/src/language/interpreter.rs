@@ -61,7 +61,7 @@ impl Interpreter {
 
     pub fn next_expression<'r>(&self, code: &'r Code) -> Option<&'r Token> {
         let Fragment::UnexpectedToken { token } =
-            code.expressions.get(self.next_expression)?;
+            code.fragments.get(self.next_expression)?;
         Some(token)
     }
 }

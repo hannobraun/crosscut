@@ -15,7 +15,7 @@ fn render_code(
     interpreter: &Interpreter,
     mut w: impl io::Write,
 ) -> anyhow::Result<()> {
-    for expression in &code.expressions {
+    for expression in &code.fragments {
         write!(w, "    ")?;
 
         match expression {

@@ -8,7 +8,7 @@ pub fn compile(input: &str, host: &Host, code: &mut Code) {
         let token = match token.parse::<f64>() {
             Ok(value) => Token::LiteralNumber { value },
             Err(_) => {
-                let index = code.expressions.len();
+                let index = code.fragments.len();
                 let name = token.to_string();
 
                 if let Some(function) = host.function_by_name(&name) {
@@ -19,6 +19,6 @@ pub fn compile(input: &str, host: &Host, code: &mut Code) {
             }
         };
 
-        code.expressions.push(Fragment::UnexpectedToken { token });
+        code.fragments.push(Fragment::UnexpectedToken { token });
     }
 }
