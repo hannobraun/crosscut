@@ -2,18 +2,17 @@ use pretty_assertions::assert_eq;
 
 use crate::language::interpreter::InterpreterState;
 
-use super::{code::Code, compiler, host::Host, interpreter::Interpreter};
+use super::{code::Code, compiler, interpreter::Interpreter};
 
 #[test]
 fn evaluate_single_expression() {
     // If the program consists only of a single expression, it should be
     // evaluated, and its value returned by the interpreter.
 
-    let host = Host::without_functions();
     let mut code = Code::default();
     let mut interpreter = Interpreter::default();
 
-    compile("1", &host, &mut code);
+    compile("1", &mut code);
 
     assert_eq!(
         interpreter.step(&code),
@@ -29,11 +28,10 @@ fn code_after_expression_is_an_error() {
     //
     // Any code that comes after an expression makes no sense, and is an error.
 
-    let host = Host::without_functions();
     let mut code = Code::default();
     let mut interpreter = Interpreter::default();
 
-    compile("1 2", &host, &mut code);
+    compile("1 2", &mut code);
 
     assert_eq!(
         interpreter.step(&code),
@@ -42,7 +40,7 @@ fn code_after_expression_is_an_error() {
     assert_eq!(interpreter.step(&code), InterpreterState::Error);
 }
 
-fn compile(input: &str, _: &Host, code: &mut Code) {
+fn compile(input: &str, code: &mut Code) {
     let mut copy_of_code = code.clone();
 
     compiler::compile(input, code);
