@@ -5,7 +5,7 @@ use super::{
 
 pub fn compile(input: &str, host: &Host, code: &mut Code) {
     for token in tokenize(input) {
-        let token = match &token {
+        let fragment = match &token {
             Token::Identifier { name } => {
                 let index = code.fragments.len();
 
@@ -18,7 +18,7 @@ pub fn compile(input: &str, host: &Host, code: &mut Code) {
             Token::LiteralNumber { .. } => Fragment::UnexpectedToken { token },
         };
 
-        code.fragments.push(token);
+        code.fragments.push(fragment);
     }
 }
 
