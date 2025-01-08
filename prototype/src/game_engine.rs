@@ -8,6 +8,11 @@ use crate::{
     },
 };
 
+pub struct GameEngine {
+    pub threads: GameEngineThreads,
+    pub senders: GameEngineSenders,
+}
+
 pub struct GameEngineThreads {
     handle: ThreadHandle,
     handle_editor_input: ThreadHandle,
@@ -29,9 +34,7 @@ pub struct GameEngineSenders {
     pub game_input: Sender<GameInput>,
 }
 
-pub fn start(
-    game_output: Sender<GameOutput>,
-) -> anyhow::Result<(GameEngineThreads, GameEngineSenders)> {
+pub fn start(game_output: Sender<GameOutput>) -> anyhow::Result<GameEngine> {
     let mut code = Code::default();
     let mut interpreter = Interpreter::default();
 
@@ -88,7 +91,7 @@ pub fn start(
         game_input: handle_game_input.sender,
     };
 
-    Ok((threads, senders))
+    Ok(GameEngine { threads, senders })
 }
 
 enum Event {
