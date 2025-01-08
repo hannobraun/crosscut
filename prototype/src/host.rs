@@ -15,7 +15,7 @@ pub struct Host {
 }
 
 impl Host {
-    pub fn start(game_output: Sender<GameOutput>) -> anyhow::Result<Host> {
+    pub fn start(game_output: Sender<GameOutput>) -> anyhow::Result<Self> {
         let mut code = Code::default();
         let mut interpreter = Interpreter::default();
 
