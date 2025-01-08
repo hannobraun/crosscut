@@ -29,9 +29,9 @@ impl Interpreter {
                 // 1. If the program _is_ finished, then this fact can be
                 //    derived from the interpreter state, even if a caller
                 //    previously ignored the return value of this function.
-                // 2. If the program is _not_ finished, then this is an
-                //    error, and we want the next call to the `step`
-                //    function to reflect that.
+                // 2. If the program is _not_ finished, then this is an error,
+                //    and we want the next call to the `step` function to
+                //    reflect that.
                 self.next_fragment += 1;
 
                 InterpreterState::Finished { output: *value }
