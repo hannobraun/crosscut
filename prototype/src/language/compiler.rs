@@ -4,8 +4,6 @@ use super::{
 };
 
 pub fn compile(input: &str, host: &Host, code: &mut Code) {
-    let mut already_compiled_expression = code.is_complete();
-
     for token in tokenize(input) {
         let fragment = match token {
             Token::Identifier { name } => {
@@ -19,13 +17,11 @@ pub fn compile(input: &str, host: &Host, code: &mut Code) {
                 }
             }
             Token::LiteralNumber { value } => {
-                if already_compiled_expression {
+                if code.is_complete() {
                     Fragment::UnexpectedToken {
                         token: Token::LiteralNumber { value },
                     }
                 } else {
-                    already_compiled_expression = true;
-
                     Fragment::Expression {
                         expression: Expression::LiteralValue { value },
                     }
