@@ -45,9 +45,9 @@ pub fn start(
         Ok(())
     });
 
-    let events_from_commands = handle_events.sender.clone();
+    let events_from_editor_input = handle_events.sender.clone();
     let handle_editor_input = Actor::spawn(move |line| {
-        events_from_commands.send(Event::EditorInput { line })?;
+        events_from_editor_input.send(Event::EditorInput { line })?;
         Ok(())
     });
 
