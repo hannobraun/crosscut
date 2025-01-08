@@ -1,3 +1,5 @@
+use crate::language::interpreter::InterpreterState;
+
 use super::{
     code::Code, compiler::compile, host::Host, interpreter::Interpreter,
 };
@@ -15,8 +17,10 @@ fn call_to_host_function() {
     compile("host_fn 1", &host, &mut code);
 
     let (id, value) = loop {
-        if let Some(call) = interpreter.step(&code) {
-            break call;
+        if let InterpreterState::CallToHostFunction { id, input } =
+            interpreter.step(&code)
+        {
+            break (id, input);
         }
     };
 

@@ -4,7 +4,10 @@ use crate::{
 };
 
 use super::{
-    code::Code, compiler::compile, host::Host, interpreter::Interpreter,
+    code::Code,
+    compiler::compile,
+    host::Host,
+    interpreter::{Interpreter, InterpreterState},
 };
 
 pub fn start(
@@ -27,7 +30,11 @@ pub fn start(
             }
         }
 
-        if let Some((_, value)) = interpreter.step(&code) {
+        if let InterpreterState::CallToHostFunction {
+            id: _,
+            input: value,
+        } = interpreter.step(&code)
+        {
             game_output.send(GameOutput::SubmitColor {
                 color: [value, value, value, 1.],
             })?;

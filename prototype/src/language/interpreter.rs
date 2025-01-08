@@ -15,10 +15,12 @@ impl Interpreter {
         }
     }
 
-    pub fn step(&mut self, code: &Code) -> Option<(usize, f64)> {
+    pub fn step(&mut self, code: &Code) -> InterpreterState {
         loop {
             let index = self.next_fragment;
-            let fragment = self.next_fragment(code)?;
+            let Some(fragment) = self.next_fragment(code) else {
+                return InterpreterState::Other;
+            };
 
             match fragment {
                 Fragment::Expression { expression } => match expression {
@@ -30,7 +32,10 @@ impl Interpreter {
                             self.active_call = None;
                             self.next_fragment += 1;
 
-                            return Some((id, *value));
+                            return InterpreterState::CallToHostFunction {
+                                id,
+                                input: *value,
+                            };
                         } else {
                             // There's no function call in progress, and thus
                             // nowhere to put a value right now.
@@ -63,7 +68,10 @@ impl Interpreter {
                             self.active_call = None;
                             self.next_fragment += 1;
 
-                            return Some((id, *value));
+                            return InterpreterState::CallToHostFunction {
+                                id,
+                                input: *value,
+                            };
                         } else {
                             // There's no function call in progress, and thus
                             // nowhere to put a value right now.
@@ -75,7 +83,7 @@ impl Interpreter {
             break;
         }
 
-        None
+        InterpreterState::Other
     }
 
     pub fn next_fragment<'r>(&self, code: &'r Code) -> Option<&'r Fragment> {
@@ -86,4 +94,13 @@ impl Interpreter {
 
 pub struct ActiveCall {
     pub target: HostFunction,
+}
+
+pub enum InterpreterState {
+    CallToHostFunction {
+        #[allow(unused)] // used only in test code, so far
+        id: usize,
+        input: f64,
+    },
+    Other,
 }
