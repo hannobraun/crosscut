@@ -15,10 +15,6 @@ impl Code {
     ///
     /// ## Implementation Note
     ///
-    /// That the presence of errors has no significance, as documented above, is
-    /// not completely true. That is because of a hack that eases the transition
-    /// to a more functional evaluation model.
-    ///
     /// Eventually, this method would move to a type representing something like
     /// a branch, or branch body. That it is defined on `Code` is only a
     /// consequence of the current state of development.
