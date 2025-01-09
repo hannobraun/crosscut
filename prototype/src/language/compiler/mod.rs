@@ -1,4 +1,4 @@
-use super::code::{Code, Expression, Fragment, Token};
+use crate::language::code::{Code, Expression, Fragment, Token};
 
 pub fn compile(input: &str, code: &mut Code) {
     for token in tokenize(input) {
