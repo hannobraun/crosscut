@@ -35,19 +35,19 @@ impl Code {
     }
 }
 
-#[derive(Clone, Debug, PartialEq)]
+#[derive(Clone, Debug, PartialEq, udigest::Digestable)]
 pub enum Fragment {
     Expression { expression: Expression },
     UnexpectedToken { token: Token },
 }
 
-#[derive(Clone, Debug, PartialEq)]
+#[derive(Clone, Debug, PartialEq, udigest::Digestable)]
 pub enum Expression {
     FunctionCall { target: usize },
     LiteralValue { value: u32 },
 }
 
-#[derive(Clone, Debug, PartialEq)]
+#[derive(Clone, Debug, PartialEq, udigest::Digestable)]
 pub enum Token {
     Identifier { name: String },
     LiteralNumber { value: u32 },
