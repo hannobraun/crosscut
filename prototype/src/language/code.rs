@@ -24,15 +24,8 @@ impl Code {
     /// consequence of the current state of development.
     pub fn is_complete(&self) -> bool {
         self.fragments
-            .last()
-            .map(|fragment| match fragment {
-                Fragment::Expression { .. } => true,
-                Fragment::UnexpectedToken { token } => match token {
-                    Token::Identifier { .. } => false,
-                    Token::LiteralNumber { .. } => true,
-                },
-            })
-            .unwrap_or(false)
+            .iter()
+            .any(|fragment| matches!(fragment, Fragment::Expression { .. }))
     }
 }
 
