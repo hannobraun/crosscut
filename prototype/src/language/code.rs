@@ -1,7 +1,8 @@
-use std::collections::BTreeSet;
+use std::collections::{BTreeMap, BTreeSet};
 
 #[derive(Clone, Debug, Default, PartialEq)]
 pub struct Code {
+    pub fragments: BTreeMap<Hash, Fragment>,
     pub root: Vec<Fragment>,
     pub errors: BTreeSet<usize>,
 }
@@ -23,6 +24,11 @@ impl Code {
             .iter()
             .any(|fragment| matches!(fragment, Fragment::Expression { .. }))
     }
+}
+
+#[derive(Clone, Debug, PartialEq)]
+pub struct Hash {
+    inner: blake3::Hash,
 }
 
 #[derive(Clone, Debug, PartialEq)]
