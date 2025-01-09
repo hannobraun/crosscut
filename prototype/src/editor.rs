@@ -73,9 +73,22 @@ impl Editor {
         host: &Host,
         interpreter: &Interpreter,
     ) -> anyhow::Result<()> {
-        render_code(&self.code, host, interpreter, stdout())?;
+        let render = Render {
+            code: &self.code,
+            host,
+            interpreter,
+            w: stdout(),
+        };
+        render_code(render.code, render.host, render.interpreter, render.w)?;
         Ok(())
     }
+}
+
+struct Render<'r, W> {
+    code: &'r Code,
+    host: &'r Host,
+    interpreter: &'r Interpreter,
+    w: W,
 }
 
 fn render_code(
