@@ -10,6 +10,10 @@ pub struct Code {
 }
 
 impl Code {
+    pub fn fragment_at(&self, index: usize) -> Option<&Fragment> {
+        self.root.get(index)
+    }
+
     pub fn root(&self) -> impl Iterator<Item = &Fragment> {
         self.root.iter()
     }
