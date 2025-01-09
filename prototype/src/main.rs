@@ -1,3 +1,8 @@
+// This makes sense to prevent in public APIs, but it also warns me about the
+// names of private modules that I only re-export from. In my opinion, it's too
+// annoying for what little value it might provide.
+#![allow(clippy::module_inception)]
+
 mod actor;
 mod editor;
 mod game_engine;
