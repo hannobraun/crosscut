@@ -18,7 +18,7 @@ impl Interpreter {
     }
 
     pub fn step(&mut self, code: &Code) -> InterpreterState {
-        let NextExpression::Expression { expression } =
+        let NextExpression::Expression { index, expression } =
             self.next_expression(code)
         else {
             return InterpreterState::Error;
@@ -41,7 +41,7 @@ impl Interpreter {
                 // 2. If the program is _not_ finished, then this is an error,
                 //    and we want the next call to the `step` function to
                 //    reflect that.
-                self.next_fragment += 1;
+                self.next_fragment = index + 1;
 
                 InterpreterState::Finished { output: *value }
             }
@@ -56,7 +56,10 @@ impl Interpreter {
             return NextExpression::NextFragmentIsNotAnExpression;
         };
 
-        NextExpression::Expression { expression }
+        NextExpression::Expression {
+            index: self.next_fragment,
+            expression,
+        }
     }
 }
 
@@ -67,7 +70,10 @@ pub enum InterpreterState {
 }
 
 pub enum NextExpression<'r> {
-    Expression { expression: &'r Expression },
+    Expression {
+        index: usize,
+        expression: &'r Expression,
+    },
     NoMoreFragments,
     NextFragmentIsNotAnExpression,
 }
