@@ -16,7 +16,11 @@ impl Editor {
         &self.code
     }
 
-    pub fn process_input(&mut self, line: String, _: &mut Interpreter) {
+    pub fn process_input(
+        &mut self,
+        line: String,
+        interpreter: &mut Interpreter,
+    ) {
         let mut command_and_arguments =
             line.trim().splitn(2, |ch: char| ch.is_whitespace());
 
@@ -42,6 +46,14 @@ impl Editor {
                 };
 
                 compile(input_code, &mut self.code);
+            }
+            command @ ":reset" => {
+                let None = command_and_arguments.next() else {
+                    println!("`{command}` command expects no arguments.");
+                    return;
+                };
+
+                *interpreter = Interpreter::default();
             }
             command => {
                 println!("Unknown command: `{command}`");
