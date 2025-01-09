@@ -79,7 +79,7 @@ impl Editor {
             interpreter,
             w: stdout(),
         };
-        render_code(render.code, render.host, render.interpreter, render.w)?;
+        render_code(render)?;
         Ok(())
     }
 }
@@ -91,26 +91,28 @@ struct Render<'r, W> {
     w: W,
 }
 
-fn render_code(
-    code: &Code,
-    host: &Host,
-    interpreter: &Interpreter,
-    mut w: impl io::Write,
-) -> anyhow::Result<()> {
-    writeln!(w)?;
+fn render_code(mut render: Render<impl io::Write>) -> anyhow::Result<()> {
+    writeln!(render.w)?;
 
-    for (i, fragment) in code.fragments.iter().enumerate() {
-        render_fragment(i, fragment, code, host, interpreter, &mut w)?;
+    for (i, fragment) in render.code.fragments.iter().enumerate() {
+        render_fragment(
+            i,
+            fragment,
+            render.code,
+            render.host,
+            render.interpreter,
+            &mut render.w,
+        )?;
     }
 
-    if interpreter.next_fragment == code.fragments.len() {
-        writeln!(w, " => ")?;
+    if render.interpreter.next_fragment == render.code.fragments.len() {
+        writeln!(render.w, " => ")?;
     }
 
-    writeln!(w)?;
-    write!(w, "{} > ", interpreter.state(code))?;
+    writeln!(render.w)?;
+    write!(render.w, "{} > ", render.interpreter.state(render.code))?;
 
-    w.flush()?;
+    render.w.flush()?;
 
     Ok(())
 }
