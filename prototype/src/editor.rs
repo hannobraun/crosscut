@@ -87,37 +87,7 @@ fn render_code(
     writeln!(w)?;
 
     for (i, fragment) in code.fragments.iter().enumerate() {
-        if code.errors.contains(&i) {
-            w.queue(SetForegroundColor(Color::Red))?;
-        }
-
-        if i == interpreter.next_fragment {
-            w.queue(SetAttribute(Attribute::Bold))?;
-            write!(w, " => ")?;
-        } else {
-            write!(w, "    ")?;
-        }
-
-        match fragment {
-            Fragment::Expression { expression } => {
-                render_expression(expression, host, &mut w)?;
-            }
-            Fragment::UnexpectedToken { token } => {
-                match token {
-                    Token::Identifier { name } => {
-                        write!(w, "{name}")?;
-                    }
-                    Token::LiteralNumber { value } => {
-                        write!(w, "{value}")?;
-                    }
-                }
-
-                writeln!(w, "    error: unexpected token")?;
-            }
-        }
-
-        w.queue(ResetColor)?;
-        w.queue(SetAttribute(Attribute::Reset))?;
+        render_fragment(i, fragment, code, host, interpreter, &mut w)?;
     }
 
     if interpreter.next_fragment == code.fragments.len() {
@@ -128,6 +98,49 @@ fn render_code(
     write!(w, "{} > ", interpreter.state(code))?;
 
     w.flush()?;
+
+    Ok(())
+}
+
+fn render_fragment(
+    i: usize,
+    fragment: &Fragment,
+    code: &Code,
+    host: &Host,
+    interpreter: &Interpreter,
+    mut w: impl io::Write,
+) -> anyhow::Result<()> {
+    if code.errors.contains(&i) {
+        w.queue(SetForegroundColor(Color::Red))?;
+    }
+
+    if i == interpreter.next_fragment {
+        w.queue(SetAttribute(Attribute::Bold))?;
+        write!(w, " => ")?;
+    } else {
+        write!(w, "    ")?;
+    }
+
+    match fragment {
+        Fragment::Expression { expression } => {
+            render_expression(expression, host, &mut w)?;
+        }
+        Fragment::UnexpectedToken { token } => {
+            match token {
+                Token::Identifier { name } => {
+                    write!(w, "{name}")?;
+                }
+                Token::LiteralNumber { value } => {
+                    write!(w, "{value}")?;
+                }
+            }
+
+            writeln!(w, "    error: unexpected token")?;
+        }
+    }
+
+    w.queue(ResetColor)?;
+    w.queue(SetAttribute(Attribute::Reset))?;
 
     Ok(())
 }
