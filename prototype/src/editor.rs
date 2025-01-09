@@ -99,21 +99,9 @@ fn render_code(
         }
 
         match fragment {
-            Fragment::Expression { expression } => match expression {
-                Expression::FunctionCall { target } => {
-                    let Some(name) = host.functions_by_id.get(target) else {
-                        unreachable!(
-                            "Function call refers to non-existing function \
-                            {target}"
-                        );
-                    };
-
-                    writeln!(w, "{name}")?;
-                }
-                Expression::LiteralValue { value } => {
-                    writeln!(w, "{value}")?;
-                }
-            },
+            Fragment::Expression { expression } => {
+                render_expression(expression, host, &mut w)?;
+            }
             Fragment::UnexpectedToken { token } => {
                 match token {
                     Token::Identifier { name } => {
@@ -140,6 +128,29 @@ fn render_code(
     write!(w, "{} > ", interpreter.state(code))?;
 
     w.flush()?;
+
+    Ok(())
+}
+
+fn render_expression(
+    expression: &Expression,
+    host: &Host,
+    mut w: impl io::Write,
+) -> anyhow::Result<()> {
+    match expression {
+        Expression::FunctionCall { target } => {
+            let Some(name) = host.functions_by_id.get(target) else {
+                unreachable!(
+                    "Function call refers to non-existing function {target}"
+                );
+            };
+
+            writeln!(w, "{name}")?;
+        }
+        Expression::LiteralValue { value } => {
+            writeln!(w, "{value}")?;
+        }
+    }
 
     Ok(())
 }
