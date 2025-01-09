@@ -97,14 +97,18 @@ fn render_code(
                     writeln!(w, "{value}")?;
                 }
             },
-            Fragment::UnexpectedToken { token } => match token {
-                Token::Identifier { name } => {
-                    writeln!(w, "{name}")?;
+            Fragment::UnexpectedToken { token } => {
+                match token {
+                    Token::Identifier { name } => {
+                        write!(w, "{name}")?;
+                    }
+                    Token::LiteralNumber { value } => {
+                        write!(w, "{value}")?;
+                    }
                 }
-                Token::LiteralNumber { value } => {
-                    writeln!(w, "{value}")?;
-                }
-            },
+
+                writeln!(w, "    error: unexpected token")?;
+            }
         }
 
         w.queue(ResetColor)?;
