@@ -74,8 +74,12 @@ fn render_code(
 ) -> anyhow::Result<()> {
     writeln!(w)?;
 
-    for fragment in &code.fragments {
-        write!(w, "    ")?;
+    for (i, fragment) in code.fragments.iter().enumerate() {
+        if i == interpreter.next_fragment {
+            write!(w, " => ")?;
+        } else {
+            write!(w, "    ")?;
+        }
 
         match fragment {
             Fragment::Expression { expression } => match expression {
