@@ -6,7 +6,7 @@ use crossterm::{
 };
 
 use crate::language::{
-    code::{Code, Expression, Fragment, Token},
+    code::{Code, Expression, Fragment, Hash, Token},
     compiler::compile,
     host::Host,
     interpreter::Interpreter,
@@ -99,7 +99,7 @@ where
     fn render_code(mut self) -> anyhow::Result<()> {
         writeln!(self.w)?;
 
-        for (i, fragment) in self.code.root().enumerate() {
+        for (i, fragment) in self.code.root.iter().enumerate() {
             self.render_fragment(i, fragment)?;
         }
 
@@ -118,7 +118,7 @@ where
     fn render_fragment(
         &mut self,
         i: usize,
-        fragment: &Fragment,
+        fragment: &Hash,
     ) -> anyhow::Result<()> {
         if self.code.errors.contains(&i) {
             self.w.queue(SetForegroundColor(Color::Red))?;
@@ -131,7 +131,7 @@ where
             write!(self.w, "    ")?;
         }
 
-        match fragment {
+        match self.code.fragment_by_hash(fragment) {
             Fragment::Expression { expression } => {
                 self.render_expression(expression)?;
             }
