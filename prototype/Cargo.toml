@@ -7,6 +7,7 @@ edition = "2021"
 [dependencies]
 anyhow = "*"
 crossterm = "*"
+itertools = "*"
 pollster = "*"
 pretty_assertions = "*"
 wgpu = "*"
