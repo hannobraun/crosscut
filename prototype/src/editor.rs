@@ -25,6 +25,14 @@ impl Editor {
         };
 
         match command {
+            command @ ":clear" => {
+                let None = command_and_arguments.next() else {
+                    println!("`{command}` command expects no arguments.");
+                    return;
+                };
+
+                self.code = Code::default();
+            }
             command @ ":insert" => {
                 let Some(input_code) = command_and_arguments.next() else {
                     println!(
