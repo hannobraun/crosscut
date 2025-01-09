@@ -25,6 +25,7 @@ impl Editor {
     pub fn process_input(
         &mut self,
         line: String,
+        host: &Host,
         interpreter: &mut Interpreter,
     ) {
         let mut command_and_arguments =
@@ -51,7 +52,7 @@ impl Editor {
                     return;
                 };
 
-                compile(input_code, &Host, &mut self.code);
+                compile(input_code, host, &mut self.code);
             }
             command @ ":reset" => {
                 let None = command_and_arguments.next() else {
