@@ -1,5 +1,7 @@
 use std::collections::{BTreeMap, BTreeSet};
 
+use super::Hash;
+
 #[derive(Clone, Debug, Default, PartialEq)]
 pub struct Code {
     pub fragments: BTreeMap<Hash, Fragment>,
@@ -28,11 +30,6 @@ impl Code {
             .iter()
             .any(|fragment| matches!(fragment, Fragment::Expression { .. }))
     }
-}
-
-#[derive(Clone, Debug, PartialEq)]
-pub struct Hash {
-    inner: blake3::Hash,
 }
 
 #[derive(Clone, Debug, PartialEq)]
