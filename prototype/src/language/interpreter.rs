@@ -56,7 +56,6 @@ impl Interpreter {
 #[derive(Debug, PartialEq)]
 pub enum InterpreterState {
     Error,
-
     Finished { output: f64 },
 }
 
