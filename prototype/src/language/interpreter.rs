@@ -1,6 +1,5 @@
 use super::code::{Code, Expression, Fragment};
 
-#[derive(Default)]
 pub struct Interpreter {
     pub next_fragment: usize,
 }
