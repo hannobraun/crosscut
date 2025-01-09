@@ -2,11 +2,15 @@ use super::code::{Code, Expression, Fragment, Hash};
 
 pub struct Interpreter {
     pub next: Option<Hash>,
+    pub active_call: Option<usize>,
 }
 
 impl Interpreter {
     pub fn new(code: &Code) -> Self {
-        Self { next: code.entry() }
+        Self {
+            next: code.entry(),
+            active_call: None,
+        }
     }
 
     pub fn state(&self, code: &Code) -> &'static str {
@@ -18,23 +22,30 @@ impl Interpreter {
     }
 
     pub fn step(&mut self, code: &Code) -> InterpreterState {
-        let NextExpression::Expression { expression } =
-            self.next_expression(code)
-        else {
-            return InterpreterState::Error;
-        };
+        loop {
+            let NextExpression::Expression { expression } =
+                self.next_expression(code)
+            else {
+                // TASK: This isn't correct. It could also mean we're finished.
+                return InterpreterState::Error;
+            };
 
-        match expression {
-            Expression::FunctionCall {
-                target: _,
-                argument: _,
-            } => {
-                // Not yet implemented.
-                todo!()
-            }
-            Expression::LiteralValue { value } => {
-                self.next = None;
-                InterpreterState::Finished { output: *value }
+            match expression {
+                Expression::FunctionCall { target, argument } => {
+                    self.active_call = Some(*target);
+                    self.next = Some(*argument);
+                }
+                Expression::LiteralValue { value } => {
+                    if let Some(id) = self.active_call {
+                        return InterpreterState::CallToHostFunction {
+                            id,
+                            input: *value,
+                        };
+                    } else {
+                        self.next = None;
+                        return InterpreterState::Finished { output: *value };
+                    }
+                }
             }
         }
     }
@@ -58,6 +69,7 @@ impl Interpreter {
 
 #[derive(Debug, PartialEq)]
 pub enum InterpreterState {
+    CallToHostFunction { id: usize, input: u32 },
     Error,
     Finished { output: u32 },
 }

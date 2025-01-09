@@ -26,6 +26,12 @@ impl GameEngine {
                     editor.process_input(line, &host, &mut interpreter);
 
                     match interpreter.step(editor.code()) {
+                        InterpreterState::CallToHostFunction {
+                            id: _,
+                            input: _,
+                        } => {
+                            // No host functions are defined, currently.
+                        }
                         InterpreterState::Error => {
                             // Not handling errors right now. Eventually, those
                             // should be properly encoded in `Code` and
