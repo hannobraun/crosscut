@@ -10,8 +10,10 @@ fn code_after_expression_is_an_error() {
     // Either way, any code that comes after an expression makes no sense, and
     // is an error.
 
+    let host = Host;
+
     let mut code = Code::default();
-    compile("1 2", &Host, &mut code);
+    compile("1 2", &host, &mut code);
 
     assert!(code.errors.contains(&1));
 }

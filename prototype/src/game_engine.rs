@@ -14,6 +14,7 @@ pub struct GameEngine {
 
 impl GameEngine {
     pub fn start(game_output_tx: Sender<GameOutput>) -> anyhow::Result<Self> {
+        let host = Host;
         let mut editor = Editor::default();
         let mut interpreter = Interpreter::default();
 
@@ -22,7 +23,7 @@ impl GameEngine {
         let handle_events = Actor::spawn(move |event| {
             match event {
                 Event::EditorInput { line } => {
-                    editor.process_input(line, &Host, &mut interpreter);
+                    editor.process_input(line, &host, &mut interpreter);
 
                     match interpreter.step(editor.code()) {
                         InterpreterState::Error => {
