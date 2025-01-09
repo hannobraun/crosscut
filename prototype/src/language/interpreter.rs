@@ -9,7 +9,7 @@ impl Interpreter {
     pub fn state(&self, code: &Code) -> &'static str {
         match self.next_expression(code) {
             NextExpression::Expression { .. } => "running",
-            NextExpression::NoMoreFragments => "paused",
+            NextExpression::NoMoreFragments => "finished",
             NextExpression::NextFragmentIsNotAnExpression => "error",
         }
     }
