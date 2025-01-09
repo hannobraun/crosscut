@@ -11,7 +11,7 @@ fn evaluate_single_expression() {
     // If the program consists only of a single expression, it should be
     // evaluated, and its value returned by the interpreter.
 
-    let host = Host;
+    let host = Host::empty();
     let mut code = Code::default();
     let mut interpreter = Interpreter::default();
 
@@ -31,7 +31,7 @@ fn code_after_expression_is_an_error() {
     // Either way, any code that comes after an expression makes no sense, and
     // is an error.
 
-    let host = Host;
+    let host = Host::empty();
     let mut code = Code::default();
     let mut interpreter = Interpreter::default();
 
