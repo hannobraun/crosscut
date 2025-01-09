@@ -18,3 +18,4 @@ features = ["traits-preview"]
 
 [dependencies.udigest]
 version = "*"
+features = ["derive"]
