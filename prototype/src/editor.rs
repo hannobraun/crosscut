@@ -1,7 +1,7 @@
 use std::io::{self, stdout};
 
 use crossterm::{
-    style::{Color, ResetColor, SetForegroundColor},
+    style::{Attribute, Color, ResetColor, SetAttribute, SetForegroundColor},
     QueueableCommand,
 };
 
@@ -85,6 +85,7 @@ fn render_code(
         }
 
         if i == interpreter.next_fragment {
+            w.queue(SetAttribute(Attribute::Bold))?;
             write!(w, " => ")?;
         } else {
             write!(w, "    ")?;
@@ -107,6 +108,7 @@ fn render_code(
         }
 
         w.queue(ResetColor)?;
+        w.queue(SetAttribute(Attribute::Reset))?;
     }
 
     if interpreter.next_fragment == code.fragments.len() {
