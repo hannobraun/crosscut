@@ -8,6 +8,10 @@ pub struct Code {
 }
 
 impl Code {
+    pub fn root(&self) -> impl Iterator<Item = &Fragment> {
+        self.root.iter()
+    }
+
     /// # Indicate whether this is complete, meaning contains an expression
     ///
     /// The presence of errors has no significance for the return value of this

@@ -99,7 +99,7 @@ where
     fn render_code(mut self) -> anyhow::Result<()> {
         writeln!(self.w)?;
 
-        for (i, fragment) in self.code.root.iter().enumerate() {
+        for (i, fragment) in self.code.root().enumerate() {
             self.render_fragment(i, fragment)?;
         }
 
