@@ -10,8 +10,12 @@ pub struct Code {
 }
 
 impl Code {
-    pub fn entry(&self) -> usize {
-        0
+    pub fn entry(&self) -> Option<usize> {
+        if self.root.is_empty() {
+            None
+        } else {
+            Some(0)
+        }
     }
 
     pub fn fragment_by_hash(&self, hash: &Hash) -> &Fragment {
