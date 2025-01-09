@@ -16,7 +16,7 @@ impl GameEngine {
     pub fn start(game_output_tx: Sender<GameOutput>) -> anyhow::Result<Self> {
         let host = Host::empty();
         let mut editor = Editor::default();
-        let mut interpreter = Interpreter::default();
+        let mut interpreter = Interpreter::new(0);
 
         editor.render(&host, &interpreter)?;
 

@@ -6,6 +6,10 @@ pub struct Interpreter {
 }
 
 impl Interpreter {
+    pub fn new(next_fragment: usize) -> Self {
+        Self { next_fragment }
+    }
+
     pub fn state(&self, code: &Code) -> &'static str {
         match self.next_expression(code) {
             NextExpression::Expression { .. } => "running",
