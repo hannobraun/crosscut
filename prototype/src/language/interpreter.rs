@@ -1,12 +1,14 @@
 use super::code::{Code, Expression, Fragment};
 
 pub struct Interpreter {
-    pub next_fragment: usize,
+    pub next_fragment: Option<usize>,
 }
 
 impl Interpreter {
     pub fn new(next_fragment: usize) -> Self {
-        Self { next_fragment }
+        Self {
+            next_fragment: Some(next_fragment),
+        }
     }
 
     pub fn state(&self, code: &Code) -> &'static str {
@@ -41,7 +43,7 @@ impl Interpreter {
                 // 2. If the program is _not_ finished, then this is an error,
                 //    and we want the next call to the `step` function to
                 //    reflect that.
-                self.next_fragment = index + 1;
+                self.next_fragment = Some(index + 1);
 
                 InterpreterState::Finished { output: *value }
             }
@@ -49,7 +51,9 @@ impl Interpreter {
     }
 
     pub fn next_expression<'r>(&self, code: &'r Code) -> NextExpression<'r> {
-        let index = self.next_fragment;
+        let Some(index) = self.next_fragment else {
+            return NextExpression::NoMoreFragments;
+        };
         let Some(fragment) = code.fragment_at(index) else {
             return NextExpression::NoMoreFragments;
         };

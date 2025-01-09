@@ -103,7 +103,7 @@ where
             self.render_fragment(i, hash)?;
         }
 
-        if self.interpreter.next_fragment == self.code.root.len() {
+        if self.interpreter.next_fragment == Some(self.code.root.len()) {
             writeln!(self.w, " => ")?;
         }
 
@@ -120,7 +120,7 @@ where
             self.w.queue(SetForegroundColor(Color::Red))?;
         }
 
-        if i == self.interpreter.next_fragment {
+        if Some(i) == self.interpreter.next_fragment {
             self.w.queue(SetAttribute(Attribute::Bold))?;
             write!(self.w, " => ")?;
         } else {
