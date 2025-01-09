@@ -133,7 +133,7 @@ where
 
         match fragment {
             Fragment::Expression { expression } => {
-                render_expression(self, expression)?;
+                self.render_expression(expression)?;
             }
             Fragment::UnexpectedToken { token } => {
                 match token {
@@ -154,26 +154,26 @@ where
 
         Ok(())
     }
-}
 
-fn render_expression(
-    render: &mut Render<impl io::Write>,
-    expression: &Expression,
-) -> anyhow::Result<()> {
-    match expression {
-        Expression::FunctionCall { target } => {
-            let Some(name) = render.host.functions_by_id.get(target) else {
-                unreachable!(
-                    "Function call refers to non-existing function {target}"
-                );
-            };
+    fn render_expression(
+        &mut self,
+        expression: &Expression,
+    ) -> anyhow::Result<()> {
+        match expression {
+            Expression::FunctionCall { target } => {
+                let Some(name) = self.host.functions_by_id.get(target) else {
+                    unreachable!(
+                        "Function call refers to non-existing function {target}"
+                    );
+                };
 
-            writeln!(render.w, "{name}")?;
+                writeln!(self.w, "{name}")?;
+            }
+            Expression::LiteralValue { value } => {
+                writeln!(self.w, "{value}")?;
+            }
         }
-        Expression::LiteralValue { value } => {
-            writeln!(render.w, "{value}")?;
-        }
+
+        Ok(())
     }
-
-    Ok(())
 }
