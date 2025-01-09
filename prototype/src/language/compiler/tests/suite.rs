@@ -1,4 +1,6 @@
-use crate::language::{code::Code, compiler::tests::infra::compile};
+use crate::language::{
+    code::Code, compiler::tests::infra::compile, host::Host,
+};
 
 #[test]
 fn code_after_expression_is_an_error() {
@@ -9,7 +11,7 @@ fn code_after_expression_is_an_error() {
     // is an error.
 
     let mut code = Code::default();
-    compile("1 2", &mut code);
+    compile("1 2", &Host, &mut code);
 
     assert!(code.errors.contains(&1));
 }
