@@ -5,21 +5,35 @@ use super::Hash;
 #[derive(Clone, Debug, Default, PartialEq)]
 pub struct Code {
     pub fragments: BTreeMap<Hash, Fragment>,
-    pub root: Vec<Fragment>,
+    pub root: Vec<Hash>,
     pub errors: BTreeSet<usize>,
 }
 
 impl Code {
+    pub fn fragment_by_hash(&self, hash: &Hash) -> &Fragment {
+        let Some(hash) = self.fragments.get(hash) else {
+            unreachable!(
+                "As long as the internal structure of `Code` is valid, hashes \
+                in the root must refer to existing fragments."
+            );
+        };
+        hash
+    }
+
     pub fn fragment_at(&self, index: usize) -> Option<&Fragment> {
-        self.root.get(index)
+        let hash = self.root.get(index)?;
+        let fragment = self.fragment_by_hash(hash);
+        Some(fragment)
     }
 
     pub fn root(&self) -> impl Iterator<Item = &Fragment> {
-        self.root.iter()
+        self.root.iter().map(|hash| self.fragment_by_hash(hash))
     }
 
     pub fn push(&mut self, fragment: Fragment) {
-        self.root.push(fragment);
+        let hash = Hash::of(&fragment);
+        self.fragments.insert(hash, fragment);
+        self.root.push(hash);
     }
 
     /// # Indicate whether this is complete, meaning contains an expression
