@@ -100,7 +100,7 @@ where
         writeln!(self.w)?;
 
         for (i, fragment) in self.code.fragments.iter().enumerate() {
-            render_fragment(&mut self, i, fragment)?;
+            self.render_fragment(i, fragment)?;
         }
 
         if self.interpreter.next_fragment == self.code.fragments.len() {
@@ -114,46 +114,46 @@ where
 
         Ok(())
     }
-}
 
-fn render_fragment(
-    render: &mut Render<impl io::Write>,
-    i: usize,
-    fragment: &Fragment,
-) -> anyhow::Result<()> {
-    if render.code.errors.contains(&i) {
-        render.w.queue(SetForegroundColor(Color::Red))?;
-    }
-
-    if i == render.interpreter.next_fragment {
-        render.w.queue(SetAttribute(Attribute::Bold))?;
-        write!(render.w, " => ")?;
-    } else {
-        write!(render.w, "    ")?;
-    }
-
-    match fragment {
-        Fragment::Expression { expression } => {
-            render_expression(expression, render.host, &mut render.w)?;
+    fn render_fragment(
+        &mut self,
+        i: usize,
+        fragment: &Fragment,
+    ) -> anyhow::Result<()> {
+        if self.code.errors.contains(&i) {
+            self.w.queue(SetForegroundColor(Color::Red))?;
         }
-        Fragment::UnexpectedToken { token } => {
-            match token {
-                Token::Identifier { name } => {
-                    write!(render.w, "{name}")?;
-                }
-                Token::LiteralNumber { value } => {
-                    write!(render.w, "{value}")?;
-                }
+
+        if i == self.interpreter.next_fragment {
+            self.w.queue(SetAttribute(Attribute::Bold))?;
+            write!(self.w, " => ")?;
+        } else {
+            write!(self.w, "    ")?;
+        }
+
+        match fragment {
+            Fragment::Expression { expression } => {
+                render_expression(expression, self.host, &mut self.w)?;
             }
+            Fragment::UnexpectedToken { token } => {
+                match token {
+                    Token::Identifier { name } => {
+                        write!(self.w, "{name}")?;
+                    }
+                    Token::LiteralNumber { value } => {
+                        write!(self.w, "{value}")?;
+                    }
+                }
 
-            writeln!(render.w, "    error: unexpected token")?;
+                writeln!(self.w, "    error: unexpected token")?;
+            }
         }
+
+        self.w.queue(ResetColor)?;
+        self.w.queue(SetAttribute(Attribute::Reset))?;
+
+        Ok(())
     }
-
-    render.w.queue(ResetColor)?;
-    render.w.queue(SetAttribute(Attribute::Reset))?;
-
-    Ok(())
 }
 
 fn render_expression(
