@@ -5,8 +5,8 @@ pub struct Interpreter {
 }
 
 impl Interpreter {
-    pub fn new(next: Option<Hash>) -> Self {
-        Self { next }
+    pub fn new(code: &Code) -> Self {
+        Self { next: code.entry() }
     }
 
     pub fn state(&self, code: &Code) -> &'static str {

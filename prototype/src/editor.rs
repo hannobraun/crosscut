@@ -60,7 +60,7 @@ impl Editor {
                     return;
                 };
 
-                *interpreter = Interpreter::new(self.code.entry());
+                *interpreter = Interpreter::new(&self.code);
             }
             command => {
                 println!("Unknown command: `{command}`");

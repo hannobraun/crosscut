@@ -16,7 +16,7 @@ fn evaluate_single_expression() {
 
     compile("1", &host, &mut code);
 
-    let mut interpreter = Interpreter::new(code.entry());
+    let mut interpreter = Interpreter::new(&code);
     assert_eq!(
         interpreter.step(&code),
         InterpreterState::Finished { output: 1 },
@@ -36,7 +36,7 @@ fn code_after_expression_is_an_error() {
 
     compile("1 2", &host, &mut code);
 
-    let mut interpreter = Interpreter::new(code.entry());
+    let mut interpreter = Interpreter::new(&code);
     assert_eq!(
         interpreter.step(&code),
         InterpreterState::Finished { output: 1 },
