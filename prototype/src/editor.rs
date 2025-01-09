@@ -98,6 +98,10 @@ fn render_code(
         }
     }
 
+    if interpreter.next_fragment == code.fragments.len() {
+        writeln!(w, " => ")?;
+    }
+
     writeln!(w)?;
     write!(w, "{} > ", interpreter.state(code))?;
 
