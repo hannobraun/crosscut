@@ -57,12 +57,13 @@ impl Code {
 #[derive(Clone, Debug, PartialEq, udigest::Digestable)]
 pub enum Fragment {
     Expression { expression: Expression },
+    MissingArgument,
     UnexpectedToken { token: Token },
 }
 
 #[derive(Clone, Debug, PartialEq, udigest::Digestable)]
 pub enum Expression {
-    FunctionCall { target: usize },
+    FunctionCall { target: usize, argument: Hash },
     LiteralValue { value: u32 },
 }
 

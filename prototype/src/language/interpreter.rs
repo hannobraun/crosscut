@@ -25,7 +25,10 @@ impl Interpreter {
         };
 
         match expression {
-            Expression::FunctionCall { target: _ } => {
+            Expression::FunctionCall {
+                target: _,
+                argument: _,
+            } => {
                 // Not yet implemented.
                 todo!()
             }

@@ -128,6 +128,9 @@ where
             Fragment::Expression { expression } => {
                 self.render_expression(expression)?;
             }
+            Fragment::MissingArgument => {
+                writeln!(self.w, "missing argument")?;
+            }
             Fragment::UnexpectedToken { token } => {
                 match token {
                     Token::Identifier { name } => {
@@ -153,7 +156,10 @@ where
         expression: &Expression,
     ) -> anyhow::Result<()> {
         match expression {
-            Expression::FunctionCall { target } => {
+            Expression::FunctionCall {
+                target,
+                argument: _,
+            } => {
                 let Some(name) = self.host.functions_by_id.get(target) else {
                     unreachable!(
                         "Function call refers to non-existing function {target}"
