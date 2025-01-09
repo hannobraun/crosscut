@@ -22,6 +22,10 @@ impl Interpreter {
         };
 
         match expression {
+            Expression::FunctionCall { target: _ } => {
+                // Not yet implemented.
+                todo!()
+            }
             Expression::LiteralValue { value } => {
                 // We increment the code pointer unconditionally, even if we
                 // expect the program to be finished after this.

@@ -3,12 +3,20 @@ use crate::language::{
     host::Host,
 };
 
-pub fn compile(input: &str, _: &Host, code: &mut Code) {
+pub fn compile(input: &str, host: &Host, code: &mut Code) {
     for token in tokenize(input) {
         let fragment = match token {
-            Token::Identifier { name } => Fragment::UnexpectedToken {
-                token: Token::Identifier { name },
-            },
+            Token::Identifier { name } => {
+                if let Some(id) = host.functions_by_name.get(&name).copied() {
+                    Fragment::Expression {
+                        expression: Expression::FunctionCall { target: id },
+                    }
+                } else {
+                    Fragment::UnexpectedToken {
+                        token: Token::Identifier { name },
+                    }
+                }
+            }
             Token::LiteralNumber { value } => {
                 if code.is_complete() {
                     let index = code.fragments.len();

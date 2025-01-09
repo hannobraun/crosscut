@@ -100,6 +100,9 @@ fn render_code(
 
         match fragment {
             Fragment::Expression { expression } => match expression {
+                Expression::FunctionCall { target: _ } => {
+                    writeln!(w, "call to host function (not supported yet)")?;
+                }
                 Expression::LiteralValue { value } => {
                     writeln!(w, "{value}")?;
                 }

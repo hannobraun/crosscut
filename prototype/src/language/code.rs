@@ -44,6 +44,7 @@ pub enum Fragment {
 
 #[derive(Clone, Debug, PartialEq)]
 pub enum Expression {
+    FunctionCall { target: usize },
     LiteralValue { value: f64 },
 }
 
