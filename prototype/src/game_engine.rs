@@ -19,7 +19,7 @@ impl GameEngine {
         let handle_events = Actor::spawn(move |event| {
             match event {
                 Event::EditorInput { line } => {
-                    editor.process_input(line);
+                    editor.process_input(line, &mut interpreter);
 
                     match interpreter.step(editor.code()) {
                         InterpreterState::Error => {

@@ -16,7 +16,7 @@ impl Editor {
         &self.code
     }
 
-    pub fn process_input(&mut self, line: String) {
+    pub fn process_input(&mut self, line: String, _: &mut Interpreter) {
         let mut command_and_arguments =
             line.trim().splitn(2, |ch: char| ch.is_whitespace());
 
