@@ -72,6 +72,8 @@ fn render_code(
     interpreter: &Interpreter,
     mut w: impl io::Write,
 ) -> anyhow::Result<()> {
+    writeln!(w)?;
+
     for fragment in &code.fragments {
         write!(w, "    ")?;
 
