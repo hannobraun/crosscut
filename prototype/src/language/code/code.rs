@@ -10,6 +10,10 @@ pub struct Code {
 }
 
 impl Code {
+    pub fn entry(&self) -> usize {
+        0
+    }
+
     pub fn fragment_by_hash(&self, hash: &Hash) -> &Fragment {
         let Some(hash) = self.fragments.get(hash) else {
             unreachable!(

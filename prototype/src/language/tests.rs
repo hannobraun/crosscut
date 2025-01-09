@@ -13,7 +13,7 @@ fn evaluate_single_expression() {
 
     let host = Host::empty();
     let mut code = Code::default();
-    let mut interpreter = Interpreter::new(0);
+    let mut interpreter = Interpreter::new(code.entry());
 
     compile("1", &host, &mut code);
 
@@ -33,7 +33,7 @@ fn code_after_expression_is_an_error() {
 
     let host = Host::empty();
     let mut code = Code::default();
-    let mut interpreter = Interpreter::new(0);
+    let mut interpreter = Interpreter::new(code.entry());
 
     compile("1 2", &host, &mut code);
 
