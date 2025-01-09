@@ -1,6 +1,9 @@
-use crate::language::code::{Code, Expression, Fragment, Token};
+use crate::language::{
+    code::{Code, Expression, Fragment, Token},
+    host::Host,
+};
 
-pub fn compile(input: &str, code: &mut Code) {
+pub fn compile(input: &str, _: &Host, code: &mut Code) {
     for token in tokenize(input) {
         let fragment = match token {
             Token::Identifier { name } => Fragment::UnexpectedToken {

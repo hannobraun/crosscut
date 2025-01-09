@@ -8,6 +8,7 @@ use crossterm::{
 use crate::language::{
     code::{Code, Expression, Fragment, Token},
     compiler::compile,
+    host::Host,
     interpreter::Interpreter,
 };
 
@@ -50,7 +51,7 @@ impl Editor {
                     return;
                 };
 
-                compile(input_code, &mut self.code);
+                compile(input_code, &Host, &mut self.code);
             }
             command @ ":reset" => {
                 let None = command_and_arguments.next() else {
