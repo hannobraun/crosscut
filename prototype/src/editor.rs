@@ -80,7 +80,7 @@ impl Editor {
 
 fn render_code(
     code: &Code,
-    _: &Host,
+    host: &Host,
     interpreter: &Interpreter,
     mut w: impl io::Write,
 ) -> anyhow::Result<()> {
@@ -100,8 +100,15 @@ fn render_code(
 
         match fragment {
             Fragment::Expression { expression } => match expression {
-                Expression::FunctionCall { target: _ } => {
-                    writeln!(w, "call to host function (not supported yet)")?;
+                Expression::FunctionCall { target } => {
+                    let Some(name) = host.functions_by_id.get(target) else {
+                        unreachable!(
+                            "Function call refers to non-existing function \
+                            {target}"
+                        );
+                    };
+
+                    writeln!(w, "{name}")?;
                 }
                 Expression::LiteralValue { value } => {
                     writeln!(w, "{value}")?;
