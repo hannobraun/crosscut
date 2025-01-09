@@ -33,7 +33,7 @@ pub fn compile(input: &str, host: &Host, code: &mut Code) {
             }
         };
 
-        code.root.push(fragment);
+        code.push(fragment);
     }
 }
 
