@@ -73,13 +73,14 @@ impl Editor {
         host: &Host,
         interpreter: &Interpreter,
     ) -> anyhow::Result<()> {
-        let render = Render {
+        Render {
             code: &self.code,
             host,
             interpreter,
             w: stdout(),
-        };
-        render.render_code()?;
+        }
+        .render_code()?;
+
         Ok(())
     }
 }
