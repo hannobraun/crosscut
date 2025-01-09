@@ -49,17 +49,15 @@ impl Interpreter {
     }
 
     pub fn next_expression<'r>(&self, code: &'r Code) -> NextExpression<'r> {
-        let Some(fragment) = code.fragment_at(self.next_fragment) else {
+        let index = self.next_fragment;
+        let Some(fragment) = code.fragment_at(index) else {
             return NextExpression::NoMoreFragments;
         };
         let Fragment::Expression { expression } = fragment else {
             return NextExpression::NextFragmentIsNotAnExpression;
         };
 
-        NextExpression::Expression {
-            index: self.next_fragment,
-            expression,
-        }
+        NextExpression::Expression { index, expression }
     }
 }
 
