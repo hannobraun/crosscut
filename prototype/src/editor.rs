@@ -17,7 +17,22 @@ impl Editor {
     }
 
     pub fn process_input(&mut self, line: String) {
-        compile(&line, &mut self.code);
+        let Some((command, input_code)) = line.trim().split_once(' ') else {
+            println!(
+                "Editor input must consist of a command and input code, \
+                separated by whitespace."
+            );
+            return;
+        };
+
+        match command {
+            ":insert" => {
+                compile(input_code, &mut self.code);
+            }
+            _ => {
+                println!("Unknown command: {command}");
+            }
+        }
     }
 
     pub fn render(&self, interpreter: &Interpreter) -> anyhow::Result<()> {
