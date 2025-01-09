@@ -46,7 +46,7 @@ impl Interpreter {
     }
 
     pub fn next_expression<'r>(&self, code: &'r Code) -> NextExpression<'r> {
-        let Some(fragment) = code.fragments.get(self.next_fragment) else {
+        let Some(fragment) = code.root.get(self.next_fragment) else {
             return NextExpression::NoMoreFragments;
         };
         let Fragment::Expression { expression } = fragment else {

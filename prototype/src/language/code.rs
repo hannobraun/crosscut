@@ -2,7 +2,7 @@ use std::collections::BTreeSet;
 
 #[derive(Clone, Debug, Default, PartialEq)]
 pub struct Code {
-    pub fragments: Vec<Fragment>,
+    pub root: Vec<Fragment>,
     pub errors: BTreeSet<usize>,
 }
 
@@ -19,7 +19,7 @@ impl Code {
     /// a branch, or branch body. That it is defined on `Code` is only a
     /// consequence of the current state of development.
     pub fn is_complete(&self) -> bool {
-        self.fragments
+        self.root
             .iter()
             .any(|fragment| matches!(fragment, Fragment::Expression { .. }))
     }

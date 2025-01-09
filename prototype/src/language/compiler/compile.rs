@@ -19,7 +19,7 @@ pub fn compile(input: &str, host: &Host, code: &mut Code) {
             }
             Token::LiteralNumber { value } => {
                 if code.is_complete() {
-                    let index = code.fragments.len();
+                    let index = code.root.len();
                     code.errors.insert(index);
 
                     Fragment::UnexpectedToken {
@@ -33,7 +33,7 @@ pub fn compile(input: &str, host: &Host, code: &mut Code) {
             }
         };
 
-        code.fragments.push(fragment);
+        code.root.push(fragment);
     }
 }
 
