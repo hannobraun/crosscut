@@ -6,10 +6,12 @@ edition = "2021"
 
 [dependencies]
 anyhow = "*"
-blake3 = "*"
 crossterm = "*"
 pollster = "*"
 pretty_assertions = "*"
 udigest = "*"
 wgpu = "*"
 winit = "*"
+
+[dependencies.blake3]
+version = "*"
