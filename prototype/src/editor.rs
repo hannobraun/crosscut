@@ -1,5 +1,10 @@
 use std::io::{self, stdout};
 
+use crossterm::{
+    style::{Color, ResetColor, SetForegroundColor},
+    QueueableCommand,
+};
+
 use crate::language::{
     code::{Code, Expression, Fragment, Token},
     compiler::compile,
@@ -75,6 +80,10 @@ fn render_code(
     writeln!(w)?;
 
     for (i, fragment) in code.fragments.iter().enumerate() {
+        if code.errors.contains(&i) {
+            w.queue(SetForegroundColor(Color::Red))?;
+        }
+
         if i == interpreter.next_fragment {
             write!(w, " => ")?;
         } else {
@@ -96,6 +105,8 @@ fn render_code(
                 }
             },
         }
+
+        w.queue(ResetColor)?;
     }
 
     if interpreter.next_fragment == code.fragments.len() {
