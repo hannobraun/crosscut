@@ -8,6 +8,9 @@ pub fn compile(input: &str, code: &mut Code) {
             },
             Token::LiteralNumber { value } => {
                 if code.is_complete() {
+                    let index = code.fragments.len();
+                    code.errors.insert(index);
+
                     Fragment::UnexpectedToken {
                         token: Token::LiteralNumber { value },
                     }

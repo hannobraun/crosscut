@@ -1,6 +1,9 @@
+use std::collections::BTreeSet;
+
 #[derive(Clone, Debug, Default, PartialEq)]
 pub struct Code {
     pub fragments: Vec<Fragment>,
+    pub errors: BTreeSet<usize>,
 }
 
 impl Code {
