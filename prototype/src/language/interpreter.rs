@@ -36,6 +36,10 @@ impl Interpreter {
         }
     }
 
+    pub fn reset(&mut self, code: &Code) {
+        self.next = code.entry();
+    }
+
     pub fn next_expression<'r>(&self, code: &'r Code) -> NextExpression<'r> {
         let Some(hash) = self.next else {
             return NextExpression::NoMoreFragments;
