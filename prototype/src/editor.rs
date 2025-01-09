@@ -115,11 +115,7 @@ where
         Ok(())
     }
 
-    fn render_fragment(
-        &mut self,
-        i: usize,
-        fragment: &Hash,
-    ) -> anyhow::Result<()> {
+    fn render_fragment(&mut self, i: usize, hash: &Hash) -> anyhow::Result<()> {
         if self.code.errors.contains(&i) {
             self.w.queue(SetForegroundColor(Color::Red))?;
         }
@@ -131,7 +127,7 @@ where
             write!(self.w, "    ")?;
         }
 
-        match self.code.fragment_by_hash(fragment) {
+        match self.code.fragment_by_hash(hash) {
             Fragment::Expression { expression } => {
                 self.render_expression(expression)?;
             }
