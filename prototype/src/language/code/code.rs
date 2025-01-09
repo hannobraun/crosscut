@@ -10,12 +10,8 @@ pub struct Code {
 }
 
 impl Code {
-    pub fn entry(&self) -> Option<usize> {
-        if self.root.is_empty() {
-            None
-        } else {
-            Some(0)
-        }
+    pub fn entry(&self) -> Option<Hash> {
+        self.root.first().copied()
     }
 
     pub fn fragment_by_hash(&self, hash: &Hash) -> &Fragment {
@@ -26,12 +22,6 @@ impl Code {
             );
         };
         hash
-    }
-
-    pub fn fragment_at(&self, index: usize) -> Option<&Fragment> {
-        let hash = self.root.get(index)?;
-        let fragment = self.fragment_by_hash(hash);
-        Some(fragment)
     }
 
     pub fn root(&self) -> impl Iterator<Item = &Fragment> {

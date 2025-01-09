@@ -1,11 +1,11 @@
-use super::code::{Code, Expression, Fragment};
+use super::code::{Code, Expression, Fragment, Hash};
 
 pub struct Interpreter {
-    pub next_fragment: Option<usize>,
+    pub next_fragment: Option<Hash>,
 }
 
 impl Interpreter {
-    pub fn new(next_fragment: Option<usize>) -> Self {
+    pub fn new(next_fragment: Option<Hash>) -> Self {
         Self { next_fragment }
     }
 
@@ -40,9 +40,7 @@ impl Interpreter {
         let Some(index) = self.next_fragment else {
             return NextExpression::NoMoreFragments;
         };
-        let Some(fragment) = code.fragment_at(index) else {
-            return NextExpression::NoMoreFragments;
-        };
+        let fragment = code.fragment_by_hash(&index);
         let Fragment::Expression { expression } = fragment else {
             return NextExpression::NextFragmentIsNotAnExpression;
         };

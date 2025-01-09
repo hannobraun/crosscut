@@ -111,12 +111,12 @@ where
         Ok(())
     }
 
-    fn render_fragment(&mut self, i: usize, hash: &Hash) -> anyhow::Result<()> {
+    fn render_fragment(&mut self, _: usize, hash: &Hash) -> anyhow::Result<()> {
         if self.code.errors.contains(hash) {
             self.w.queue(SetForegroundColor(Color::Red))?;
         }
 
-        if Some(i) == self.interpreter.next_fragment {
+        if Some(hash) == self.interpreter.next_fragment.as_ref() {
             self.w.queue(SetAttribute(Attribute::Bold))?;
             write!(self.w, " => ")?;
         } else {
