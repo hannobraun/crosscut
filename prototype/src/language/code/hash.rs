@@ -1,4 +1,4 @@
 #[derive(Clone, Debug, Eq, Ord, PartialEq, PartialOrd)]
 pub struct Hash {
-    inner: [u8; 32],
+    value: [u8; 32],
 }
