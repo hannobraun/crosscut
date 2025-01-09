@@ -30,10 +30,13 @@ impl Code {
         self.root.iter().map(|hash| self.fragment_by_hash(hash))
     }
 
-    pub fn push(&mut self, fragment: Fragment) {
+    pub fn push(&mut self, fragment: Fragment) -> Hash {
         let hash = Hash::of(&fragment);
+
         self.fragments.insert(hash, fragment);
         self.root.push(hash);
+
+        hash
     }
 
     /// # Indicate whether this is complete, meaning contains an expression
