@@ -44,13 +44,13 @@ pub enum Fragment {
 #[derive(Clone, Debug, PartialEq)]
 pub enum Expression {
     FunctionCall { target: usize },
-    LiteralValue { value: f64 },
+    LiteralValue { value: u32 },
 }
 
 #[derive(Clone, Debug, PartialEq)]
 pub enum Token {
     Identifier { name: String },
-    LiteralNumber { value: f64 },
+    LiteralNumber { value: u32 },
 }
 
 #[derive(Clone, Copy, Debug, PartialEq)]

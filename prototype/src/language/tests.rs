@@ -19,7 +19,7 @@ fn evaluate_single_expression() {
 
     assert_eq!(
         interpreter.step(&code),
-        InterpreterState::Finished { output: 1. },
+        InterpreterState::Finished { output: 1 },
     );
 }
 
@@ -39,7 +39,7 @@ fn code_after_expression_is_an_error() {
 
     assert_eq!(
         interpreter.step(&code),
-        InterpreterState::Finished { output: 1. },
+        InterpreterState::Finished { output: 1 },
     );
     assert_eq!(interpreter.step(&code), InterpreterState::Error);
 }

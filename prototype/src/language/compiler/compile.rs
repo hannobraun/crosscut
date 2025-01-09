@@ -40,7 +40,7 @@ pub fn compile(input: &str, host: &Host, code: &mut Code) {
 fn tokenize(input: &str) -> impl Iterator<Item = Token> + '_ {
     input
         .split_whitespace()
-        .map(|token| match token.parse::<f64>() {
+        .map(|token| match token.parse::<u32>() {
             Ok(value) => Token::LiteralNumber { value },
             Err(_) => Token::Identifier {
                 name: token.to_string(),

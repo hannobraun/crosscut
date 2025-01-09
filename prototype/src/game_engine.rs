@@ -33,8 +33,10 @@ impl GameEngine {
                             // there's nothing to do here, at least for now.
                         }
                         InterpreterState::Finished { output } => {
+                            let color = output as f64 / 255.;
+
                             game_output_tx.send(GameOutput::SubmitColor {
-                                color: [output, output, output, 1.],
+                                color: [color, color, color, 1.],
                             })?;
                         }
                     }

@@ -60,7 +60,7 @@ impl Interpreter {
 #[derive(Debug, PartialEq)]
 pub enum InterpreterState {
     Error,
-    Finished { output: f64 },
+    Finished { output: u32 },
 }
 
 pub enum NextExpression<'r> {
