@@ -103,10 +103,6 @@ where
             self.render_fragment(i, hash)?;
         }
 
-        if self.interpreter.next_fragment == Some(self.code.root.len()) {
-            writeln!(self.w, " => ")?;
-        }
-
         writeln!(self.w)?;
         write!(self.w, "{} > ", self.interpreter.state(self.code))?;
 
