@@ -20,7 +20,7 @@ impl Interpreter {
     }
 
     pub fn step(&mut self, code: &Code) -> InterpreterState {
-        let NextExpression::Expression { index, expression } =
+        let NextExpression::Expression { expression } =
             self.next_expression(code)
         else {
             return InterpreterState::Error;
@@ -32,19 +32,7 @@ impl Interpreter {
                 todo!()
             }
             Expression::LiteralValue { value } => {
-                // We increment the code pointer unconditionally, even if we
-                // expect the program to be finished after this.
-                //
-                // This is important for two reasons:
-                //
-                // 1. If the program _is_ finished, then this fact can be
-                //    derived from the interpreter state, even if a caller
-                //    previously ignored the return value of this function.
-                // 2. If the program is _not_ finished, then this is an error,
-                //    and we want the next call to the `step` function to
-                //    reflect that.
-                self.next_fragment = Some(index + 1);
-
+                self.next_fragment = None;
                 InterpreterState::Finished { output: *value }
             }
         }
@@ -61,7 +49,7 @@ impl Interpreter {
             return NextExpression::NextFragmentIsNotAnExpression;
         };
 
-        NextExpression::Expression { index, expression }
+        NextExpression::Expression { expression }
     }
 }
 
@@ -72,10 +60,7 @@ pub enum InterpreterState {
 }
 
 pub enum NextExpression<'r> {
-    Expression {
-        index: usize,
-        expression: &'r Expression,
-    },
+    Expression { expression: &'r Expression },
     NoMoreFragments,
     NextFragmentIsNotAnExpression,
 }
