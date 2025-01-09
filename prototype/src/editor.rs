@@ -116,7 +116,7 @@ where
             self.w.queue(SetForegroundColor(Color::Red))?;
         }
 
-        if Some(hash) == self.interpreter.next_fragment.as_ref() {
+        if Some(hash) == self.interpreter.next.as_ref() {
             self.w.queue(SetAttribute(Attribute::Bold))?;
             write!(self.w, " => ")?;
         } else {

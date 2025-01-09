@@ -1,12 +1,14 @@
 use super::code::{Code, Expression, Fragment, Hash};
 
 pub struct Interpreter {
-    pub next_fragment: Option<Hash>,
+    pub next: Option<Hash>,
 }
 
 impl Interpreter {
     pub fn new(next_fragment: Option<Hash>) -> Self {
-        Self { next_fragment }
+        Self {
+            next: next_fragment,
+        }
     }
 
     pub fn state(&self, code: &Code) -> &'static str {
@@ -30,14 +32,14 @@ impl Interpreter {
                 todo!()
             }
             Expression::LiteralValue { value } => {
-                self.next_fragment = None;
+                self.next = None;
                 InterpreterState::Finished { output: *value }
             }
         }
     }
 
     pub fn next_expression<'r>(&self, code: &'r Code) -> NextExpression<'r> {
-        let Some(hash) = self.next_fragment else {
+        let Some(hash) = self.next else {
             return NextExpression::NoMoreFragments;
         };
         let fragment = code.fragment_by_hash(&hash);
