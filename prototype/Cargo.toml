@@ -9,10 +9,12 @@ anyhow = "*"
 crossterm = "*"
 pollster = "*"
 pretty_assertions = "*"
-udigest = "*"
 wgpu = "*"
 winit = "*"
 
 [dependencies.blake3]
 version = "*"
 features = ["traits-preview"]
+
+[dependencies.udigest]
+version = "*"
