@@ -6,7 +6,7 @@ use super::Hash;
 pub struct Code {
     pub fragments: BTreeMap<Hash, Fragment>,
     pub root: Vec<Hash>,
-    pub errors: BTreeSet<usize>,
+    pub errors: BTreeSet<Hash>,
 }
 
 impl Code {

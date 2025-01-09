@@ -116,7 +116,7 @@ where
     }
 
     fn render_fragment(&mut self, i: usize, hash: &Hash) -> anyhow::Result<()> {
-        if self.code.errors.contains(&i) {
+        if self.code.errors.contains(hash) {
             self.w.queue(SetForegroundColor(Color::Red))?;
         }
 

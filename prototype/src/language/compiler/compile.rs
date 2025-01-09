@@ -32,11 +32,10 @@ pub fn compile(input: &str, host: &Host, code: &mut Code) {
 
         let is_error = matches!(fragment, Fragment::UnexpectedToken { .. });
 
-        code.push(fragment);
+        let hash = code.push(fragment);
 
         if is_error {
-            let index = code.root.len() - 1;
-            code.errors.insert(index);
+            code.errors.insert(hash);
         }
     }
 }

@@ -1,3 +1,5 @@
+use itertools::Itertools;
+
 use crate::language::{
     code::Code, compiler::tests::infra::compile, host::Host,
 };
@@ -15,5 +17,6 @@ fn code_after_expression_is_an_error() {
     let mut code = Code::default();
     compile("1 2", &host, &mut code);
 
-    assert!(code.errors.contains(&1));
+    let (_a, b) = code.root.iter().collect_tuple().unwrap();
+    assert!(code.errors.contains(b));
 }
