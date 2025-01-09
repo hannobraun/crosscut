@@ -43,6 +43,7 @@ impl Editor {
                 };
 
                 self.code = Code::default();
+                interpreter.reset(&self.code);
             }
             command @ ":insert" => {
                 let Some(input_code) = command_and_arguments.next() else {
