@@ -1,11 +1,11 @@
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub struct Hash {
-    inner: blake3::Hash,
+    inner: [u8; 32],
 }
 
 impl Ord for Hash {
     fn cmp(&self, other: &Self) -> std::cmp::Ordering {
-        self.inner.as_bytes().cmp(other.inner.as_bytes())
+        self.inner.cmp(&other.inner)
     }
 }
 
