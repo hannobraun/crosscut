@@ -68,7 +68,11 @@ impl Editor {
         }
     }
 
-    pub fn render(&self, interpreter: &Interpreter) -> anyhow::Result<()> {
+    pub fn render(
+        &self,
+        _: &Host,
+        interpreter: &Interpreter,
+    ) -> anyhow::Result<()> {
         render_code(&self.code, interpreter, stdout())?;
         Ok(())
     }
