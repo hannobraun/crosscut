@@ -1,4 +1,4 @@
-use crate::language::{code::Code, compiler::compile};
+use crate::language::{code::Code, compiler::tests::infra::compile};
 
 #[test]
 fn code_after_expression_is_an_error() {
