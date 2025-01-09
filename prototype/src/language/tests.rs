@@ -40,7 +40,7 @@ fn code_after_expression_is_an_error() {
     assert_eq!(interpreter.step(&code), InterpreterState::Error);
 }
 
-fn compile(input: &str, code: &mut Code) {
+pub fn compile(input: &str, code: &mut Code) {
     let mut copy_of_code = code.clone();
 
     compiler::compile(input, code);
