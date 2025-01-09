@@ -156,10 +156,7 @@ where
         expression: &Expression,
     ) -> anyhow::Result<()> {
         match expression {
-            Expression::FunctionCall {
-                target,
-                argument: _,
-            } => {
+            Expression::FunctionCall { target, argument } => {
                 let Some(name) = self.host.functions_by_id.get(target) else {
                     unreachable!(
                         "Function call refers to non-existing function {target}"
@@ -167,6 +164,7 @@ where
                 };
 
                 writeln!(self.w, "{name}")?;
+                self.render_fragment(argument)?;
             }
             Expression::LiteralValue { value } => {
                 writeln!(self.w, "{value}")?;
