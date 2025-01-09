@@ -17,7 +17,8 @@ impl Editor {
     }
 
     pub fn process_input(&mut self, line: String) {
-        let mut command_and_arguments = line.trim().splitn(2, ' ');
+        let mut command_and_arguments =
+            line.trim().splitn(2, |ch: char| ch.is_whitespace());
 
         let Some(command) = command_and_arguments.next() else {
             return;
