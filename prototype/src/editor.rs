@@ -70,16 +70,17 @@ impl Editor {
 
     pub fn render(
         &self,
-        _: &Host,
+        host: &Host,
         interpreter: &Interpreter,
     ) -> anyhow::Result<()> {
-        render_code(&self.code, interpreter, stdout())?;
+        render_code(&self.code, host, interpreter, stdout())?;
         Ok(())
     }
 }
 
 fn render_code(
     code: &Code,
+    _: &Host,
     interpreter: &Interpreter,
     mut w: impl io::Write,
 ) -> anyhow::Result<()> {
