@@ -100,14 +100,7 @@ where
         writeln!(self.w)?;
 
         for (i, fragment) in self.code.fragments.iter().enumerate() {
-            render_fragment(
-                i,
-                fragment,
-                self.code,
-                self.host,
-                self.interpreter,
-                &mut self.w,
-            )?;
+            render_fragment(&mut self, i, fragment)?;
         }
 
         if self.interpreter.next_fragment == self.code.fragments.len() {
@@ -124,44 +117,41 @@ where
 }
 
 fn render_fragment(
+    render: &mut Render<impl io::Write>,
     i: usize,
     fragment: &Fragment,
-    code: &Code,
-    host: &Host,
-    interpreter: &Interpreter,
-    mut w: impl io::Write,
 ) -> anyhow::Result<()> {
-    if code.errors.contains(&i) {
-        w.queue(SetForegroundColor(Color::Red))?;
+    if render.code.errors.contains(&i) {
+        render.w.queue(SetForegroundColor(Color::Red))?;
     }
 
-    if i == interpreter.next_fragment {
-        w.queue(SetAttribute(Attribute::Bold))?;
-        write!(w, " => ")?;
+    if i == render.interpreter.next_fragment {
+        render.w.queue(SetAttribute(Attribute::Bold))?;
+        write!(render.w, " => ")?;
     } else {
-        write!(w, "    ")?;
+        write!(render.w, "    ")?;
     }
 
     match fragment {
         Fragment::Expression { expression } => {
-            render_expression(expression, host, &mut w)?;
+            render_expression(expression, render.host, &mut render.w)?;
         }
         Fragment::UnexpectedToken { token } => {
             match token {
                 Token::Identifier { name } => {
-                    write!(w, "{name}")?;
+                    write!(render.w, "{name}")?;
                 }
                 Token::LiteralNumber { value } => {
-                    write!(w, "{value}")?;
+                    write!(render.w, "{value}")?;
                 }
             }
 
-            writeln!(w, "    error: unexpected token")?;
+            writeln!(render.w, "    error: unexpected token")?;
         }
     }
 
-    w.queue(ResetColor)?;
-    w.queue(SetAttribute(Attribute::Reset))?;
+    render.w.queue(ResetColor)?;
+    render.w.queue(SetAttribute(Attribute::Reset))?;
 
     Ok(())
 }
