@@ -26,8 +26,7 @@ impl Code {
     /// a branch, or branch body. That it is defined on `Code` is only a
     /// consequence of the current state of development.
     pub fn is_complete(&self) -> bool {
-        self.root
-            .iter()
+        self.root()
             .any(|fragment| matches!(fragment, Fragment::Expression { .. }))
     }
 }
