@@ -37,10 +37,10 @@ impl Interpreter {
     }
 
     pub fn next_expression<'r>(&self, code: &'r Code) -> NextExpression<'r> {
-        let Some(index) = self.next_fragment else {
+        let Some(hash) = self.next_fragment else {
             return NextExpression::NoMoreFragments;
         };
-        let fragment = code.fragment_by_hash(&index);
+        let fragment = code.fragment_by_hash(&hash);
         let Fragment::Expression { expression } = fragment else {
             return NextExpression::NextFragmentIsNotAnExpression;
         };
