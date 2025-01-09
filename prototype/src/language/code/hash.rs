@@ -1,6 +1,8 @@
 use super::Fragment;
 
-#[derive(Clone, Copy, Debug, Eq, Ord, PartialEq, PartialOrd)]
+#[derive(
+    Clone, Copy, Debug, Eq, Ord, PartialEq, PartialOrd, udigest::Digestable,
+)]
 pub struct Hash {
     value: [u8; 32],
 }
