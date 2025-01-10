@@ -2,7 +2,7 @@ use super::code::{Body, Code, Expression, FragmentId, FragmentKind};
 
 pub struct Interpreter {
     pub next: Option<FragmentId>,
-    pub active_call: Option<usize>,
+    pub active_call: Option<ActiveCall>,
 }
 
 impl Interpreter {
@@ -31,11 +31,14 @@ impl Interpreter {
 
             match expression {
                 Expression::FunctionCall { target } => {
-                    self.active_call = Some(*target);
+                    self.active_call =
+                        Some(ActiveCall::ToHostFunction { id: *target });
                     self.next = body.entry().copied();
                 }
                 Expression::LiteralValue { value } => {
-                    if let Some(id) = self.active_call {
+                    if let Some(ActiveCall::ToHostFunction { id }) =
+                        self.active_call
+                    {
                         return InterpreterState::CallToHostFunction {
                             id,
                             input: *value,
@@ -67,6 +70,10 @@ impl Interpreter {
             body: &fragment.body,
         }
     }
+}
+
+pub enum ActiveCall {
+    ToHostFunction { id: usize },
 }
 
 #[derive(Debug, PartialEq)]
