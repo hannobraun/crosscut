@@ -17,7 +17,7 @@ impl Code {
 
     pub fn find_innermost_fragment_with_valid_body(&self) -> FragmentPath {
         let mut path = FragmentPath { inner: Vec::new() };
-        let mut body = &self.root;
+        let mut current_body = &self.root;
 
         // Eventually, this method is going to take a parameter that tells it
         // exactly where to push the provided fragment. But for now, it just
@@ -25,7 +25,7 @@ impl Code {
         //
         // This loop is responsible for finding that.
         loop {
-            let Some(id) = body.ids().next_back().copied() else {
+            let Some(id) = current_body.ids().next_back().copied() else {
                 // The body we're currently looking at, `body`, is the innermost
                 // valid one that we have found so far. If it doesn't have any
                 // children, then it is the innermost valid one, period. We can
@@ -56,7 +56,7 @@ impl Code {
             };
 
             path.inner.push(id);
-            body = &fragment.body;
+            current_body = &fragment.body;
         }
 
         path
