@@ -101,7 +101,6 @@ where
 {
     pub fn render_code(&mut self) -> anyhow::Result<()> {
         writeln!(self.w)?;
-
         self.render_body(&self.code.root)?;
 
         self.w.flush()?;
