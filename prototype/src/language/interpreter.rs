@@ -2,7 +2,7 @@ use super::code::{Body, Code, Expression, FragmentId, FragmentKind};
 
 pub struct Interpreter {
     pub next: Option<FragmentId>,
-    pub active_call: Option<ActiveCall>,
+    active_call: Option<ActiveCall>,
 }
 
 impl Interpreter {
