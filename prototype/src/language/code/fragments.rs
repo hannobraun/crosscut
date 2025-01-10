@@ -18,9 +18,11 @@ impl Fragments {
         let existing = self.inner.insert(id, fragment);
         assert!(
             existing.is_none(),
-            "Hash collision! This is either incredibly unlikely (as in, less \
-            likely than being hit by lightning, according to my understanding) \
-            or a bug.",
+            "Hash collision! The hash `{:?}` was generated twice.\n\
+            \n\
+            This is either incredibly unlikely (as in, less likely than being \
+            hit by lightning, according to my understanding) or a bug.",
+            id,
         );
 
         id
