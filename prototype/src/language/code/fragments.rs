@@ -11,7 +11,7 @@ pub struct Id {
     hash: [u8; 32],
 }
 impl Id {
-    pub fn of(fragment: &Fragment) -> Self {
+    pub fn generate(fragment: &Fragment) -> Self {
         let hash = udigest::hash::<blake3::Hasher>(fragment).into();
         Self { hash }
     }

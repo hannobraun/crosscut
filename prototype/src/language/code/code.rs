@@ -30,7 +30,7 @@ impl Code {
     }
 
     pub fn push(&mut self, fragment: Fragment) -> Id {
-        let id = Id::of(&fragment);
+        let id = Id::generate(&fragment);
 
         self.fragments.insert(id, fragment);
         self.root.push(id);
