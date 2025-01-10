@@ -16,7 +16,7 @@ impl Code {
     }
 
     pub fn find_innermost_fragment_with_valid_body(&self) -> FragmentPath {
-        let mut innermost_valid_body = FragmentPath { inner: Vec::new() };
+        let mut path = FragmentPath { inner: Vec::new() };
         let mut body = &self.root;
 
         // Eventually, this method is going to take a parameter that tells it
@@ -55,11 +55,11 @@ impl Code {
                 break;
             };
 
-            innermost_valid_body.inner.push(id);
+            path.inner.push(id);
             body = &fragment.body;
         }
 
-        innermost_valid_body
+        path
     }
 
     pub fn append(&mut self, to_append: Fragment) -> FragmentId {
