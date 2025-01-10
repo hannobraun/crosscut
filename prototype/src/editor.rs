@@ -100,7 +100,7 @@ where
     fn render_code(mut self) -> anyhow::Result<()> {
         writeln!(self.w)?;
 
-        for hash in self.code.root.inner.iter() {
+        for hash in self.code.root.ids() {
             self.render_fragment(hash)?;
         }
 
