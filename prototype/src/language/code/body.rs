@@ -16,6 +16,10 @@ impl Body {
         id
     }
 
+    pub fn entry(&self) -> Option<&FragmentId> {
+        self.inner.first()
+    }
+
     pub fn ids(&self) -> impl Iterator<Item = &FragmentId> {
         self.inner.iter()
     }

@@ -12,7 +12,7 @@ pub struct Code {
 
 impl Code {
     pub fn entry(&self) -> Option<FragmentId> {
-        self.root.inner.first().copied()
+        self.root.entry().copied()
     }
 
     pub fn fragments(&self) -> &Fragments {
