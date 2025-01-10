@@ -1,4 +1,4 @@
-use super::code::{Code, Expression, FragmentId, FragmentKind};
+use super::code::{Body, Code, Expression, FragmentId, FragmentKind};
 
 pub struct Interpreter {
     pub next: Option<FragmentId>,
@@ -23,7 +23,7 @@ impl Interpreter {
 
     pub fn step(&mut self, code: &Code) -> InterpreterState {
         loop {
-            let NextExpression::Expression { expression } =
+            let NextExpression::Expression { expression, body } =
                 self.next_expression(code)
             else {
                 return InterpreterState::Error;
@@ -32,7 +32,7 @@ impl Interpreter {
             match expression {
                 Expression::FunctionCall {
                     target,
-                    argument: body,
+                    argument: _,
                 } => {
                     self.active_call = Some(*target);
                     self.next = body.entry().copied();
@@ -65,7 +65,10 @@ impl Interpreter {
             return NextExpression::NextFragmentIsNotAnExpression;
         };
 
-        NextExpression::Expression { expression }
+        NextExpression::Expression {
+            expression,
+            body: &fragment.body,
+        }
     }
 }
 
@@ -77,7 +80,10 @@ pub enum InterpreterState {
 }
 
 pub enum NextExpression<'r> {
-    Expression { expression: &'r Expression },
+    Expression {
+        expression: &'r Expression,
+        body: &'r Body,
+    },
     NoMoreFragments,
     NextFragmentIsNotAnExpression,
 }
