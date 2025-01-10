@@ -158,7 +158,6 @@ where
         match &fragment.kind {
             FragmentKind::Expression { expression } => {
                 self.render_expression(expression)?;
-                self.render_body(&fragment.body)?;
             }
             FragmentKind::UnexpectedToken { token } => {
                 match token {
@@ -173,6 +172,8 @@ where
                 writeln!(self.w, "    error: unexpected token")?;
             }
         }
+
+        self.render_body(&fragment.body)?;
 
         self.w.queue(ResetColor)?;
         self.w.queue(SetAttribute(Attribute::Reset))?;
