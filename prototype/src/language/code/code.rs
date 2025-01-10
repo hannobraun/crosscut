@@ -16,11 +16,32 @@ impl Code {
     }
 
     pub fn push(&mut self, to_push: Fragment) -> FragmentId {
+        // This function is less regular than it could be, if the root where
+        // another kind of fragment. Then it wouldn't need special handling
+        // here.
+        //
+        // However, I think that would be problematic in different ways. Not the
+        // least, by adding another kind of fragment that is only allowed to be
+        // used in a single place.
+        //
+        // I'm not sure that it would be worth it, especially since I've already
+        // got this working, it seems. It's something to keep an eye on though,
+        // for sure.
+
         let mut fragments_to_update = Vec::new();
         let mut body = &self.root;
 
+        // Eventually, this method is going to take a parameter that tells it
+        // exactly where to push the provided fragment. But for now, it just
+        // always pushes it to the innermost valid expression.
+        //
+        // This loop is responsible for finding that.
         loop {
             let Some(id) = body.ids().next_back().copied() else {
+                // The body we're currently looking at, `body`, is the innermost
+                // valid one that we have found so far. If it doesn't have any
+                // children, then it is the innermost valid one, period. We can
+                // stop.
                 break;
             };
 
@@ -32,6 +53,17 @@ impl Code {
                 ..
             } = self.fragments.get(&id)
             else {
+                // Our best candidate for the innermost valid body, `body`, does
+                // have children, and we've been looking at the last of those.
+                //
+                // That child is not an expression though, which means it has no
+                // valid body. We're done with our search.
+                //
+                // (In principle, we'd need to look at _all_ the children, to
+                // see of any of them has a valid body. But as long as we're
+                // just pushing new stuff to the end of the innermost body, I
+                // don't think it's possible to construct a case where this
+                // makes a difference.)
                 break;
             };
 
