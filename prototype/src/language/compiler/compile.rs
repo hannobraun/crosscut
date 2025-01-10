@@ -9,10 +9,7 @@ pub fn compile(input: &str, host: &Host, code: &mut Code) {
             Token::Identifier { name } => {
                 if let Some(id) = host.functions_by_name.get(&name).copied() {
                     FragmentKind::Expression {
-                        expression: Expression::FunctionCall {
-                            target: id,
-                            argument: Body::default(),
-                        },
+                        expression: Expression::FunctionCall { target: id },
                     }
                 } else {
                     FragmentKind::UnexpectedToken {

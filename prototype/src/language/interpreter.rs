@@ -30,10 +30,7 @@ impl Interpreter {
             };
 
             match expression {
-                Expression::FunctionCall {
-                    target,
-                    argument: _,
-                } => {
+                Expression::FunctionCall { target } => {
                     self.active_call = Some(*target);
                     self.next = body.entry().copied();
                 }
