@@ -6,6 +6,16 @@ pub struct Body {
 }
 
 impl Body {
+    pub fn push(
+        &mut self,
+        fragment: Fragment,
+        fragments: &mut Fragments,
+    ) -> FragmentId {
+        let id = fragments.insert(fragment);
+        self.inner.push(id);
+        id
+    }
+
     pub fn ids(&self) -> impl Iterator<Item = &FragmentId> {
         self.inner.iter()
     }

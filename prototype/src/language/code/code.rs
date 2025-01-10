@@ -20,9 +20,7 @@ impl Code {
     }
 
     pub fn push(&mut self, fragment: Fragment) -> FragmentId {
-        let id = self.fragments.insert(fragment);
-        self.root.inner.push(id);
-        id
+        self.root.push(fragment, &mut self.fragments)
     }
 }
 
