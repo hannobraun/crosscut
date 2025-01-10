@@ -12,7 +12,7 @@ pub struct Id {
 }
 impl Id {
     pub fn of(fragment: &Fragment) -> Self {
-        let value = udigest::hash::<blake3::Hasher>(fragment).into();
-        Self { hash: value }
+        let hash = udigest::hash::<blake3::Hasher>(fragment).into();
+        Self { hash }
     }
 }
