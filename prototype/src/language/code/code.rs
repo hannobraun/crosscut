@@ -15,7 +15,7 @@ impl Code {
         &self.fragments
     }
 
-    pub fn append(&mut self, to_push: Fragment) -> FragmentId {
+    pub fn append(&mut self, to_append: Fragment) -> FragmentId {
         // This function is less regular than it could be, if the root where
         // another kind of fragment. Then it wouldn't need special handling
         // here.
@@ -72,11 +72,11 @@ impl Code {
         }
 
         let Some(to_update_id) = fragments_to_update.pop() else {
-            return self.root.push(to_push, &mut self.fragments);
+            return self.root.push(to_append, &mut self.fragments);
         };
 
         let mut to_update = self.fragments.get(&to_update_id).clone();
-        let id_of_pushed = to_update.body.push(to_push, &mut self.fragments);
+        let id_of_pushed = to_update.body.push(to_append, &mut self.fragments);
 
         let id_before_update = to_update_id;
         let updated = to_update;
