@@ -144,7 +144,7 @@ where
             self.w.queue(SetAttribute(Attribute::Bold))?;
             write!(self.w, " => ")?;
         } else {
-            write!(self.w, "    ")?;
+            self.render_indent()?;
         }
 
         let fragment = self.code.fragments().get(id);
@@ -171,6 +171,11 @@ where
         self.w.queue(ResetColor)?;
         self.w.queue(SetAttribute(Attribute::Reset))?;
 
+        Ok(())
+    }
+
+    fn render_indent(&mut self) -> anyhow::Result<()> {
+        write!(self.w, "    ")?;
         Ok(())
     }
 
