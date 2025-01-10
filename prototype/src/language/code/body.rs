@@ -2,7 +2,7 @@ use super::{Fragment, FragmentId, Fragments};
 
 #[derive(Clone, Debug, Default, Eq, PartialEq)]
 pub struct Body {
-    pub inner: Vec<FragmentId>,
+    inner: Vec<FragmentId>,
 }
 
 impl Body {
