@@ -12,8 +12,10 @@ impl Fragments {
         self.inner.get(id)
     }
 
-    pub fn insert(&mut self, id: FragmentId, fragment: Fragment) {
+    pub fn insert(&mut self, fragment: Fragment) -> FragmentId {
+        let id = FragmentId::generate(&fragment);
         self.inner.insert(id, fragment);
+        id
     }
 }
 
