@@ -1,6 +1,6 @@
 use super::{Fragment, FragmentId, Fragments};
 
-#[derive(Clone, Debug, Default, Eq, PartialEq)]
+#[derive(Clone, Debug, Default, Eq, PartialEq, udigest::Digestable)]
 pub struct Body {
     inner: Vec<FragmentId>,
 }
