@@ -74,7 +74,7 @@ impl Editor {
         host: &Host,
         interpreter: &Interpreter,
     ) -> anyhow::Result<()> {
-        Render {
+        Renderer {
             code: &self.code,
             host,
             interpreter,
@@ -86,14 +86,14 @@ impl Editor {
     }
 }
 
-struct Render<'r, W> {
+struct Renderer<'r, W> {
     code: &'r Code,
     host: &'r Host,
     interpreter: &'r Interpreter,
     w: W,
 }
 
-impl<W> Render<'_, W>
+impl<W> Renderer<'_, W>
 where
     W: io::Write,
 {
