@@ -9,7 +9,14 @@ pub struct Fragments {
 
 impl Fragments {
     pub fn get(&self, id: &FragmentId) -> Option<&Fragment> {
-        self.inner.get(id)
+        let Some(fragment) = self.inner.get(id) else {
+            panic!(
+                "Fragment with ID `{id:?}` not found. This should never \
+                happen, unless you are mixing and matching data structures \
+                from different instances of `Code`."
+            );
+        };
+        Some(fragment)
     }
 
     pub fn insert(&mut self, fragment: Fragment) -> FragmentId {
