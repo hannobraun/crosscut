@@ -19,17 +19,13 @@ impl Code {
         let mut path = FragmentPath { inner: Vec::new() };
         let mut current_body = &self.root;
 
-        // Eventually, this method is going to take a parameter that tells it
-        // exactly where to push the provided fragment. But for now, it just
-        // always pushes it to the innermost valid expression.
-        //
-        // This loop is responsible for finding that.
         loop {
             let Some(id) = current_body.ids().next_back().copied() else {
-                // The body we're currently looking at, `body`, is the innermost
-                // valid one that we have found so far. If it doesn't have any
-                // children, then it is the innermost valid one, period. We can
-                // stop.
+                // The body we're currently looking at, is the innermost valid
+                // one that we have found so far. If it doesn't have any
+                // children, then it is the innermost valid one, period.
+                //
+                // If that's the case, we're done.
                 break;
             };
 
@@ -41,11 +37,10 @@ impl Code {
                 ..
             } = self.fragments.get(&id)
             else {
-                // Our best candidate for the innermost valid body, `body`, does
-                // have children, and we've been looking at the last of those.
-                //
-                // That child is not an expression though, which means it has no
-                // valid body. We're done with our search.
+                // The body we're currently looking at does have children, and
+                // we've been looking at the last of those. That child is not an
+                // expression though, which means it has no valid body. We're
+                // done with our search.
                 //
                 // (In principle, we'd need to look at _all_ the children, to
                 // see of any of them has a valid body. But as long as we're
