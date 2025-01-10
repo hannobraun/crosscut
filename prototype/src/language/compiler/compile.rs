@@ -21,7 +21,7 @@ pub fn compile(input: &str, host: &Host, code: &mut Code) {
                 }
             }
             Token::LiteralNumber { value } => {
-                if code.is_complete() {
+                if code.root.is_complete(code.fragments()) {
                     Fragment::UnexpectedToken {
                         token: Token::LiteralNumber { value },
                     }
