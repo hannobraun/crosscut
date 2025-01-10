@@ -5,6 +5,8 @@ use crate::language::{
 
 pub fn compile(input: &str, host: &Host, code: &mut Code) {
     for token in tokenize(input) {
+        let append_to = code.find_innermost_fragment_with_valid_body();
+
         let fragment = match token {
             Token::Identifier { name } => {
                 if let Some(id) = host.functions_by_name.get(&name).copied() {
@@ -37,7 +39,7 @@ pub fn compile(input: &str, host: &Host, code: &mut Code) {
                 kind: fragment,
                 body: Body::default(),
             },
-            code.find_innermost_fragment_with_valid_body(),
+            append_to,
         );
 
         if is_error {
