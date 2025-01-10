@@ -8,7 +8,7 @@ pub struct Interpreter {
 impl Interpreter {
     pub fn new(code: &Code) -> Self {
         Self {
-            next: code.entry(),
+            next: code.root.entry().copied(),
             active_call: None,
         }
     }
@@ -51,7 +51,7 @@ impl Interpreter {
     }
 
     pub fn reset(&mut self, code: &Code) {
-        self.next = code.entry();
+        self.next = code.root.entry().copied();
     }
 
     pub fn next_expression<'r>(&self, code: &'r Code) -> NextExpression<'r> {

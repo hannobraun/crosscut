@@ -11,10 +11,6 @@ pub struct Code {
 }
 
 impl Code {
-    pub fn entry(&self) -> Option<FragmentId> {
-        self.root.entry().copied()
-    }
-
     pub fn fragments(&self) -> &Fragments {
         &self.fragments
     }
