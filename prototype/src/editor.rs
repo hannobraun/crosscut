@@ -173,7 +173,9 @@ where
             }
         }
 
+        self.indent += 1;
         self.render_body(&fragment.body)?;
+        self.indent -= 1;
 
         self.w.queue(ResetColor)?;
         self.w.queue(SetAttribute(Attribute::Reset))?;
