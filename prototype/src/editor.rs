@@ -152,6 +152,7 @@ where
         match &fragment.kind {
             FragmentKind::Expression { expression } => {
                 self.render_expression(expression)?;
+                self.render_body(&fragment.body)?;
             }
             FragmentKind::UnexpectedToken { token } => {
                 match token {
@@ -178,7 +179,10 @@ where
         expression: &Expression,
     ) -> anyhow::Result<()> {
         match expression {
-            Expression::FunctionCall { target, argument } => {
+            Expression::FunctionCall {
+                target,
+                argument: _,
+            } => {
                 let Some(name) = self.host.functions_by_id.get(target) else {
                     unreachable!(
                         "Function call refers to non-existing function {target}"
@@ -186,7 +190,6 @@ where
                 };
 
                 writeln!(self.w, "{name}")?;
-                self.render_body(argument)?;
             }
             Expression::LiteralValue { value } => {
                 writeln!(self.w, "{value}")?;
