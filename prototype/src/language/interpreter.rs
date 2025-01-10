@@ -58,7 +58,7 @@ impl Interpreter {
         let Some(hash) = self.next else {
             return NextExpression::NoMoreFragments;
         };
-        let fragment = code.fragment_by_hash(&hash);
+        let fragment = code.fragment_by_id(&hash);
         let Fragment::Expression { expression } = fragment else {
             return NextExpression::NextFragmentIsNotAnExpression;
         };

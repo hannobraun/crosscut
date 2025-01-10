@@ -15,7 +15,7 @@ impl Code {
         self.root.first().copied()
     }
 
-    pub fn fragment_by_hash(&self, hash: &Id) -> &Fragment {
+    pub fn fragment_by_id(&self, hash: &Id) -> &Fragment {
         let Some(hash) = self.fragments.get(hash) else {
             unreachable!(
                 "As long as the internal structure of `Code` is valid, hashes \
@@ -26,7 +26,7 @@ impl Code {
     }
 
     pub fn root(&self) -> impl Iterator<Item = &Fragment> {
-        self.root.iter().map(|hash| self.fragment_by_hash(hash))
+        self.root.iter().map(|hash| self.fragment_by_id(hash))
     }
 
     pub fn push(&mut self, fragment: Fragment) -> Id {
