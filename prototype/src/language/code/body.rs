@@ -36,7 +36,7 @@ impl Body {
     /// The presence of errors has no significance for the return value of this
     /// function. Its purpose, rather, is to indicate whether the addition of
     /// more fragments would also result in the addition of _more_ errors.
-    pub fn is_complete<'r>(
+    pub fn expression<'r>(
         &'r self,
         fragments: &'r Fragments,
     ) -> Option<&'r Expression> {
