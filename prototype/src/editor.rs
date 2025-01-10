@@ -87,7 +87,7 @@ impl Editor {
     }
 }
 
-struct Renderer<'r, W> {
+pub struct Renderer<'r, W> {
     code: &'r Code,
     host: &'r Host,
     interpreter: &'r Interpreter,
@@ -98,7 +98,7 @@ impl<W> Renderer<'_, W>
 where
     W: io::Write,
 {
-    fn render_code(&mut self) -> anyhow::Result<()> {
+    pub fn render_code(&mut self) -> anyhow::Result<()> {
         writeln!(self.w)?;
 
         self.render_body(&self.code.root)?;
