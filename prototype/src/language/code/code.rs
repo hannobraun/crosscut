@@ -70,10 +70,9 @@ impl Code {
         // got this working, it seems. It's something to keep an eye on though,
         // for sure.
 
-        let mut innermost_valid_body =
-            self.find_innermost_fragment_with_valid_body();
+        let mut path = self.find_innermost_fragment_with_valid_body();
 
-        let Some(to_update_id) = innermost_valid_body.inner.pop() else {
+        let Some(to_update_id) = path.inner.pop() else {
             return self.root.push(to_append, &mut self.fragments);
         };
 
