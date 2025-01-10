@@ -142,7 +142,7 @@ where
             self.w.queue(SetForegroundColor(Color::Red))?;
         }
 
-        if Some(id) == self.interpreter.next.as_ref() {
+        if Some(id) == self.interpreter.next() {
             self.w.queue(SetAttribute(Attribute::Bold))?;
             write!(self.w, " => ")?;
         } else {

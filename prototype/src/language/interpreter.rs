@@ -1,7 +1,7 @@
 use super::code::{Body, Code, Expression, FragmentId, FragmentKind};
 
 pub struct Interpreter {
-    pub next: Option<FragmentId>,
+    next: Option<FragmentId>,
     active_call: Option<ActiveCall>,
 }
 
@@ -11,6 +11,10 @@ impl Interpreter {
             next: code.root.entry().copied(),
             active_call: None,
         }
+    }
+
+    pub fn next(&self) -> Option<&FragmentId> {
+        self.next.as_ref()
     }
 
     pub fn state(&self, code: &Code) -> &'static str {
