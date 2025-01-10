@@ -15,8 +15,8 @@ impl Code {
         self.root.first().copied()
     }
 
-    pub fn fragment_by_id(&self, hash: &Id) -> &Fragment {
-        let Some(hash) = self.fragments.get(hash) else {
+    pub fn fragment_by_id(&self, id: &Id) -> &Fragment {
+        let Some(hash) = self.fragments.get(id) else {
             unreachable!(
                 "As long as the internal structure of `Code` is valid, hashes \
                 in the root must refer to existing fragments."
