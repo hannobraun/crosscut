@@ -1,21 +1,21 @@
 use std::collections::BTreeSet;
 
-use super::{fragments::Fragments, Hash};
+use super::{fragments::Fragments, Id};
 
 #[derive(Clone, Debug, Default, PartialEq)]
 pub struct Code {
     fragments: Fragments,
 
-    pub root: Vec<Hash>,
-    pub errors: BTreeSet<Hash>,
+    pub root: Vec<Id>,
+    pub errors: BTreeSet<Id>,
 }
 
 impl Code {
-    pub fn entry(&self) -> Option<Hash> {
+    pub fn entry(&self) -> Option<Id> {
         self.root.first().copied()
     }
 
-    pub fn fragment_by_hash(&self, hash: &Hash) -> &Fragment {
+    pub fn fragment_by_hash(&self, hash: &Id) -> &Fragment {
         let Some(hash) = self.fragments.get(hash) else {
             unreachable!(
                 "As long as the internal structure of `Code` is valid, hashes \
@@ -29,8 +29,8 @@ impl Code {
         self.root.iter().map(|hash| self.fragment_by_hash(hash))
     }
 
-    pub fn push(&mut self, fragment: Fragment) -> Hash {
-        let hash = Hash::of(&fragment);
+    pub fn push(&mut self, fragment: Fragment) -> Id {
+        let hash = Id::of(&fragment);
 
         self.fragments.insert(hash, fragment);
         self.root.push(hash);
@@ -64,7 +64,7 @@ pub enum Fragment {
 
 #[derive(Clone, Debug, PartialEq, udigest::Digestable)]
 pub enum Expression {
-    FunctionCall { target: usize, argument: Hash },
+    FunctionCall { target: usize, argument: Id },
     LiteralValue { value: u32 },
 }
 

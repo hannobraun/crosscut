@@ -3,5 +3,5 @@ mod fragments;
 
 pub use self::{
     code::{Code, Expression, Fragment, Token},
-    fragments::Hash,
+    fragments::Id,
 };
