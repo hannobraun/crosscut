@@ -2,7 +2,20 @@ use std::collections::BTreeMap;
 
 use super::{Expression, Token};
 
-pub type Fragments = BTreeMap<FragmentId, Fragment>;
+#[derive(Clone, Debug, Default, PartialEq)]
+pub struct Fragments {
+    inner: BTreeMap<FragmentId, Fragment>,
+}
+
+impl Fragments {
+    pub fn get(&self, id: &FragmentId) -> Option<&Fragment> {
+        self.inner.get(id)
+    }
+
+    pub fn insert(&mut self, id: FragmentId, fragment: Fragment) {
+        self.inner.insert(id, fragment);
+    }
+}
 
 #[derive(
     Clone, Copy, Debug, Eq, Ord, PartialEq, PartialOrd, udigest::Digestable,
