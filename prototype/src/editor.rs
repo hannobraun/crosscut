@@ -112,19 +112,19 @@ where
         Ok(())
     }
 
-    fn render_fragment(&mut self, hash: &Id) -> anyhow::Result<()> {
-        if self.code.errors.contains(hash) {
+    fn render_fragment(&mut self, id: &Id) -> anyhow::Result<()> {
+        if self.code.errors.contains(id) {
             self.w.queue(SetForegroundColor(Color::Red))?;
         }
 
-        if Some(hash) == self.interpreter.next.as_ref() {
+        if Some(id) == self.interpreter.next.as_ref() {
             self.w.queue(SetAttribute(Attribute::Bold))?;
             write!(self.w, " => ")?;
         } else {
             write!(self.w, "    ")?;
         }
 
-        match self.code.fragment_by_hash(hash) {
+        match self.code.fragment_by_hash(id) {
             Fragment::Expression { expression } => {
                 self.render_expression(expression)?;
             }
