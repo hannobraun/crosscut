@@ -1,4 +1,6 @@
-use std::collections::BTreeMap;
+use std::{collections::BTreeMap, fmt};
+
+use base64::{prelude::BASE64_STANDARD_NO_PAD, Engine};
 
 use super::{Body, Expression, Token};
 
@@ -36,9 +38,7 @@ impl Fragments {
     }
 }
 
-#[derive(
-    Clone, Copy, Debug, Eq, Ord, PartialEq, PartialOrd, udigest::Digestable,
-)]
+#[derive(Clone, Copy, Eq, Ord, PartialEq, PartialOrd, udigest::Digestable)]
 pub struct FragmentId {
     hash: [u8; 32],
 }
@@ -46,6 +46,13 @@ impl FragmentId {
     fn generate(fragment: &Fragment) -> Self {
         let hash = udigest::hash::<blake3::Hasher>(fragment).into();
         Self { hash }
+    }
+}
+
+impl fmt::Debug for FragmentId {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", BASE64_STANDARD_NO_PAD.encode(self.hash))?;
+        Ok(())
     }
 }
 
