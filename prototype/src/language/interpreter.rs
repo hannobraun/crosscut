@@ -40,19 +40,18 @@ impl Interpreter {
                     self.next = body.entry().copied();
                 }
                 Expression::LiteralValue { value } => {
-                    if let Some(ActiveCall::ToHostFunction { id }) =
-                        self.active_call
-                    {
-                        return InterpreterState::CallToHostFunction {
-                            id,
-                            input: *value,
-                        };
-                    } else {
-                        self.next = None;
-                        return InterpreterState::Finished { output: *value };
-                    }
+                    return self.evaluate_value(*value);
                 }
             }
+        }
+    }
+
+    fn evaluate_value(&mut self, value: u32) -> InterpreterState {
+        if let Some(ActiveCall::ToHostFunction { id }) = self.active_call {
+            InterpreterState::CallToHostFunction { id, input: value }
+        } else {
+            self.next = None;
+            InterpreterState::Finished { output: value }
         }
     }
 
