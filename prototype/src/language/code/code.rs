@@ -28,7 +28,7 @@ impl Code {
         // got this working, it seems. It's something to keep an eye on though,
         // for sure.
 
-        let mut fragments_to_update = FragmentPath { inner: Vec::new() };
+        let mut innermost_valid_body = FragmentPath { inner: Vec::new() };
         let mut body = &self.root;
 
         // Eventually, this method is going to take a parameter that tells it
@@ -67,11 +67,11 @@ impl Code {
                 break;
             };
 
-            fragments_to_update.inner.push(id);
+            innermost_valid_body.inner.push(id);
             body = &fragment.body;
         }
 
-        let Some(to_update_id) = fragments_to_update.inner.pop() else {
+        let Some(to_update_id) = innermost_valid_body.inner.pop() else {
             return self.root.push(to_append, &mut self.fragments);
         };
 
