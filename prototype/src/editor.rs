@@ -88,6 +88,7 @@ pub struct Renderer<'r, W> {
     host: &'r Host,
     interpreter: &'r Interpreter,
     w: W,
+    indent: u32,
 }
 
 impl<'r> Renderer<'r, Stdout> {
@@ -101,6 +102,7 @@ impl<'r> Renderer<'r, Stdout> {
             host,
             interpreter,
             w: stdout(),
+            indent: 0,
         }
     }
 }
@@ -144,6 +146,10 @@ where
             self.w.queue(SetAttribute(Attribute::Bold))?;
             write!(self.w, " => ")?;
         } else {
+            self.render_indent()?;
+        }
+
+        for _ in 0..self.indent {
             self.render_indent()?;
         }
 
