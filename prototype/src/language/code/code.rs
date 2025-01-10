@@ -15,7 +15,7 @@ impl Code {
         &self.fragments
     }
 
-    pub fn push(&mut self, fragment: Fragment) -> FragmentId {
+    pub fn push(&mut self, to_push: Fragment) -> FragmentId {
         let mut fragments_to_update = Vec::new();
         let mut body = &self.root;
 
@@ -40,11 +40,11 @@ impl Code {
         }
 
         let Some(to_update_id) = fragments_to_update.pop() else {
-            return self.root.push(fragment, &mut self.fragments);
+            return self.root.push(to_push, &mut self.fragments);
         };
 
         let mut to_update = self.fragments.get(&to_update_id).clone();
-        let id_of_pushed = to_update.body.push(fragment, &mut self.fragments);
+        let id_of_pushed = to_update.body.push(to_push, &mut self.fragments);
 
         let id_before_update = to_update_id;
         let updated = to_update;
