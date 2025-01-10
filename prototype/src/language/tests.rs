@@ -43,3 +43,31 @@ fn code_after_expression_is_an_error() {
     );
     assert_eq!(interpreter.step(&code), InterpreterState::Error);
 }
+#[test]
+fn call_to_host_function() {
+    // The host can define functions. Those functions take one argument, return
+    // one value, and can be called from Crosscut code.
+
+    let mut code = Code::default();
+
+    let host = Host::from_functions(["half"]);
+    compile("half 64", &host, &mut code);
+
+    let mut interpreter = Interpreter::new(&code);
+    let output = loop {
+        match interpreter.step(&code) {
+            InterpreterState::CallToHostFunction { id, input, output } => {
+                assert_eq!(id, 0);
+                *output = input / 2;
+            }
+            InterpreterState::Finished { output } => {
+                break output;
+            }
+            state => {
+                panic!("Unexpected state: {state:#?}");
+            }
+        }
+    };
+
+    assert_eq!(output, 32);
+}

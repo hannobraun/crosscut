@@ -27,17 +27,32 @@ impl Interpreter {
 
     pub fn step(&mut self, code: &Code) -> InterpreterState {
         loop {
-            let NextExpression::Expression { expression, body } =
-                self.next_expression(code)
+            let NextExpression::Expression {
+                expression,
+                body,
+                fragment,
+            } = self.next_expression(code)
             else {
                 return InterpreterState::Error;
             };
 
             match expression {
                 Expression::FunctionCall { target } => {
-                    self.active_call =
-                        Some(ActiveCall::ToHostFunction { id: *target });
-                    self.next = body.entry().copied();
+                    if let Some(ActiveCall::ToHostFunction {
+                        output: Some(output),
+                        ..
+                    }) = self.active_call
+                    {
+                        self.active_call = None;
+                        return self.evaluate_value(output);
+                    } else {
+                        self.active_call = Some(ActiveCall::ToHostFunction {
+                            id: *target,
+                            fragment,
+                            output: None,
+                        });
+                        self.next = body.entry().copied();
+                    }
                 }
                 Expression::LiteralValue { value } => {
                     return self.evaluate_value(*value);
@@ -47,8 +62,18 @@ impl Interpreter {
     }
 
     fn evaluate_value(&mut self, value: u32) -> InterpreterState {
-        if let Some(ActiveCall::ToHostFunction { id }) = self.active_call {
-            InterpreterState::CallToHostFunction { id, input: value }
+        if let Some(ActiveCall::ToHostFunction {
+            id,
+            fragment,
+            output,
+        }) = &mut self.active_call
+        {
+            self.next = Some(*fragment);
+            InterpreterState::CallToHostFunction {
+                id: *id,
+                input: value,
+                output: output.insert(0),
+            }
         } else {
             self.next = None;
             InterpreterState::Finished { output: value }
@@ -71,25 +96,37 @@ impl Interpreter {
         NextExpression::Expression {
             expression,
             body: &fragment.body,
+            fragment: id,
         }
     }
 }
 
 pub enum ActiveCall {
-    ToHostFunction { id: usize },
+    ToHostFunction {
+        id: usize,
+        fragment: FragmentId,
+        output: Option<u32>,
+    },
 }
 
 #[derive(Debug, PartialEq)]
-pub enum InterpreterState {
-    CallToHostFunction { id: usize, input: u32 },
+pub enum InterpreterState<'r> {
+    CallToHostFunction {
+        id: usize,
+        input: u32,
+        output: &'r mut u32,
+    },
     Error,
-    Finished { output: u32 },
+    Finished {
+        output: u32,
+    },
 }
 
 pub enum NextExpression<'r> {
     Expression {
         expression: &'r Expression,
         body: &'r Body,
+        fragment: FragmentId,
     },
     NoMoreFragments,
     NextFragmentIsNotAnExpression,

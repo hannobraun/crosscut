@@ -29,6 +29,7 @@ impl GameEngine {
                         InterpreterState::CallToHostFunction {
                             id: _,
                             input: _,
+                            output: _,
                         } => {
                             // No host functions are defined, currently.
                         }
