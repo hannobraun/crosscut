@@ -15,7 +15,7 @@ impl Code {
         &self.fragments
     }
 
-    pub fn push(&mut self, to_push: Fragment) -> FragmentId {
+    pub fn append(&mut self, to_push: Fragment) -> FragmentId {
         // This function is less regular than it could be, if the root where
         // another kind of fragment. Then it wouldn't need special handling
         // here.

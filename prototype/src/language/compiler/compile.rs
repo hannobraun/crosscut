@@ -32,7 +32,7 @@ pub fn compile(input: &str, host: &Host, code: &mut Code) {
 
         let is_error = matches!(fragment, FragmentKind::UnexpectedToken { .. });
 
-        let id = code.push(Fragment {
+        let id = code.append(Fragment {
             kind: fragment,
             body: Body::default(),
         });
