@@ -97,7 +97,7 @@ impl<W> Renderer<'_, W>
 where
     W: io::Write,
 {
-    fn render_code(mut self) -> anyhow::Result<()> {
+    fn render_code(&mut self) -> anyhow::Result<()> {
         writeln!(self.w)?;
 
         self.render_body(&self.code.root)?;
