@@ -12,7 +12,7 @@ pub struct Code {
 
 impl Code {
     pub fn entry(&self) -> Option<FragmentId> {
-        self.root.first().copied()
+        self.root.inner.first().copied()
     }
 
     pub fn fragment_by_id(&self, id: &FragmentId) -> &Fragment {
@@ -26,12 +26,12 @@ impl Code {
     }
 
     pub fn root(&self) -> impl Iterator<Item = &Fragment> {
-        self.root.iter().map(|hash| self.fragment_by_id(hash))
+        self.root.inner.iter().map(|hash| self.fragment_by_id(hash))
     }
 
     pub fn push(&mut self, fragment: Fragment) -> FragmentId {
         let id = self.fragments.insert(fragment);
-        self.root.push(id);
+        self.root.inner.push(id);
         id
     }
 

@@ -17,6 +17,6 @@ fn code_after_expression_is_an_error() {
     let mut code = Code::default();
     compile("1 2", &host, &mut code);
 
-    let (_a, b) = code.root.iter().collect_tuple().unwrap();
+    let (_a, b) = code.root.inner.iter().collect_tuple().unwrap();
     assert!(code.errors.contains(b));
 }

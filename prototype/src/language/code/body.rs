@@ -1,3 +1,6 @@
 use super::FragmentId;
 
-pub type Body = Vec<FragmentId>;
+#[derive(Clone, Debug, Default, Eq, PartialEq)]
+pub struct Body {
+    pub inner: Vec<FragmentId>,
+}
