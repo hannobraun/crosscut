@@ -5,5 +5,5 @@ mod fragments;
 pub use self::{
     body::Body,
     code::{Code, Expression, Token},
-    fragments::{Fragment, FragmentId, Fragments},
+    fragments::{Fragment, FragmentId, FragmentKind, Fragments},
 };

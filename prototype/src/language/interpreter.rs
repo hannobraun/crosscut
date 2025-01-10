@@ -1,4 +1,4 @@
-use super::code::{Code, Expression, Fragment, FragmentId};
+use super::code::{Code, Expression, FragmentId, FragmentKind};
 
 pub struct Interpreter {
     pub next: Option<FragmentId>,
@@ -58,7 +58,7 @@ impl Interpreter {
             return NextExpression::NoMoreFragments;
         };
         let fragment = code.fragments().get(&id);
-        let Fragment::Expression { expression } = fragment else {
+        let FragmentKind::Expression { expression } = &fragment.kind else {
             return NextExpression::NextFragmentIsNotAnExpression;
         };
 

@@ -1,4 +1,4 @@
-use super::{Expression, Fragment, FragmentId, Fragments};
+use super::{Expression, Fragment, FragmentId, FragmentKind, Fragments};
 
 #[derive(Clone, Debug, Default, Eq, PartialEq, udigest::Digestable)]
 pub struct Body {
@@ -36,7 +36,7 @@ impl Body {
         fragments: &'r Fragments,
     ) -> Option<&'r Expression> {
         self.fragments(fragments).find_map(|fragment| {
-            if let Fragment::Expression { expression } = fragment {
+            if let FragmentKind::Expression { expression } = &fragment.kind {
                 Some(expression)
             } else {
                 None

@@ -1,5 +1,5 @@
 use crate::language::{
-    code::{Body, Code, Expression, Fragment, Token},
+    code::{Body, Code, Expression, Fragment, FragmentKind, Token},
     host::Host,
 };
 
@@ -8,34 +8,34 @@ pub fn compile(input: &str, host: &Host, code: &mut Code) {
         let fragment = match token {
             Token::Identifier { name } => {
                 if let Some(id) = host.functions_by_name.get(&name).copied() {
-                    Fragment::Expression {
+                    FragmentKind::Expression {
                         expression: Expression::FunctionCall {
                             target: id,
                             argument: Body::default(),
                         },
                     }
                 } else {
-                    Fragment::UnexpectedToken {
+                    FragmentKind::UnexpectedToken {
                         token: Token::Identifier { name },
                     }
                 }
             }
             Token::LiteralNumber { value } => {
                 if code.root.expression(code.fragments()).is_some() {
-                    Fragment::UnexpectedToken {
+                    FragmentKind::UnexpectedToken {
                         token: Token::LiteralNumber { value },
                     }
                 } else {
-                    Fragment::Expression {
+                    FragmentKind::Expression {
                         expression: Expression::LiteralValue { value },
                     }
                 }
             }
         };
 
-        let is_error = matches!(fragment, Fragment::UnexpectedToken { .. });
+        let is_error = matches!(fragment, FragmentKind::UnexpectedToken { .. });
 
-        let hash = code.push(fragment);
+        let hash = code.push(Fragment { kind: fragment });
 
         if is_error {
             code.errors.insert(hash);

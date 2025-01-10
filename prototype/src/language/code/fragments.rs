@@ -50,7 +50,12 @@ impl FragmentId {
 }
 
 #[derive(Clone, Debug, Eq, PartialEq, udigest::Digestable)]
-pub enum Fragment {
+pub struct Fragment {
+    pub kind: FragmentKind,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, udigest::Digestable)]
+pub enum FragmentKind {
     Expression { expression: Expression },
     UnexpectedToken { token: Token },
 }

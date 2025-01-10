@@ -6,7 +6,7 @@ use crossterm::{
 };
 
 use crate::language::{
-    code::{Body, Code, Expression, Fragment, FragmentId, Token},
+    code::{Body, Code, Expression, FragmentId, FragmentKind, Token},
     compiler::compile,
     host::Host,
     interpreter::Interpreter,
@@ -147,11 +147,11 @@ where
             write!(self.w, "    ")?;
         }
 
-        match self.code.fragments().get(id) {
-            Fragment::Expression { expression } => {
+        match &self.code.fragments().get(id).kind {
+            FragmentKind::Expression { expression } => {
                 self.render_expression(expression)?;
             }
-            Fragment::UnexpectedToken { token } => {
+            FragmentKind::UnexpectedToken { token } => {
                 match token {
                     Token::Identifier { name } => {
                         write!(self.w, "{name}")?;
