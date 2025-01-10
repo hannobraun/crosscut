@@ -15,8 +15,12 @@ impl Code {
         self.root.inner.first().copied()
     }
 
+    pub fn fragments(&self) -> &Fragments {
+        &self.fragments
+    }
+
     pub fn fragment_by_id(&self, id: &FragmentId) -> &Fragment {
-        self.fragments.get(id)
+        self.fragments().get(id)
     }
 
     pub fn root(&self) -> impl Iterator<Item = &Fragment> {
