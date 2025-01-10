@@ -28,7 +28,7 @@ impl Code {
         // got this working, it seems. It's something to keep an eye on though,
         // for sure.
 
-        let mut fragments_to_update = Vec::new();
+        let mut fragments_to_update = FragmentPath { inner: Vec::new() };
         let mut body = &self.root;
 
         // Eventually, this method is going to take a parameter that tells it
@@ -67,11 +67,11 @@ impl Code {
                 break;
             };
 
-            fragments_to_update.push(id);
+            fragments_to_update.inner.push(id);
             body = &fragment.body;
         }
 
-        let Some(to_update_id) = fragments_to_update.pop() else {
+        let Some(to_update_id) = fragments_to_update.inner.pop() else {
             return self.root.push(to_append, &mut self.fragments);
         };
 
@@ -90,6 +90,10 @@ impl Code {
 
         appended
     }
+}
+
+pub struct FragmentPath {
+    inner: Vec<FragmentId>,
 }
 
 #[derive(Clone, Debug, Eq, PartialEq, udigest::Digestable)]
