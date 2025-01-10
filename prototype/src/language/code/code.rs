@@ -99,6 +99,12 @@ pub struct FragmentPath {
     inner: Vec<FragmentId>,
 }
 
+impl FragmentPath {
+    pub fn id(&self) -> Option<&FragmentId> {
+        self.inner.last()
+    }
+}
+
 #[derive(Clone, Debug, Eq, PartialEq, udigest::Digestable)]
 pub enum Expression {
     FunctionCall { target: usize },

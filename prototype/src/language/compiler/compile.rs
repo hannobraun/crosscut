@@ -20,8 +20,15 @@ pub fn compile(input: &str, host: &Host, code: &mut Code) {
                 }
             }
             Token::LiteralNumber { value } => {
-                let can_append_expression =
-                    code.root.expression(code.fragments()).is_some();
+                let can_append_expression = if let Some(id) = append_to.id() {
+                    code.fragments()
+                        .get(id)
+                        .body
+                        .expression(code.fragments())
+                        .is_some()
+                } else {
+                    code.root.expression(code.fragments()).is_some()
+                };
 
                 if can_append_expression {
                     FragmentKind::UnexpectedToken {
