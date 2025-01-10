@@ -1,12 +1,12 @@
 use std::collections::BTreeSet;
 
-use super::{fragments::Fragments, Fragment, FragmentId};
+use super::{fragments::Fragments, Body, Fragment, FragmentId};
 
 #[derive(Clone, Debug, Default, Eq, PartialEq)]
 pub struct Code {
     fragments: Fragments,
 
-    pub root: Vec<FragmentId>,
+    pub root: Body,
     pub errors: BTreeSet<FragmentId>,
 }
 
