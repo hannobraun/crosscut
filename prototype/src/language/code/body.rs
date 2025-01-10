@@ -34,10 +34,10 @@ impl Body {
     pub fn expression<'r>(
         &'r self,
         fragments: &'r Fragments,
-    ) -> Option<&'r Expression> {
+    ) -> Option<(&'r Expression, &'r Body)> {
         self.fragments(fragments).find_map(|fragment| {
             if let FragmentKind::Expression { expression } = &fragment.kind {
-                Some(expression)
+                Some((expression, &fragment.body))
             } else {
                 None
             }
