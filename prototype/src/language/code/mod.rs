@@ -3,5 +3,5 @@ mod fragments;
 
 pub use self::{
     code::{Code, Expression, Token},
-    fragments::{Fragment, Id},
+    fragments::{Fragment, FragmentId},
 };

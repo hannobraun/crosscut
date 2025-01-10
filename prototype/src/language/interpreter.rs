@@ -1,7 +1,7 @@
-use super::code::{Code, Expression, Fragment, Id};
+use super::code::{Code, Expression, Fragment, FragmentId};
 
 pub struct Interpreter {
-    pub next: Option<Id>,
+    pub next: Option<FragmentId>,
     pub active_call: Option<usize>,
 }
 

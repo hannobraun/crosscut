@@ -6,7 +6,7 @@ use crossterm::{
 };
 
 use crate::language::{
-    code::{Code, Expression, Fragment, Id, Token},
+    code::{Code, Expression, Fragment, FragmentId, Token},
     compiler::compile,
     host::Host,
     interpreter::Interpreter,
@@ -112,7 +112,7 @@ where
         Ok(())
     }
 
-    fn render_fragment(&mut self, id: &Id) -> anyhow::Result<()> {
+    fn render_fragment(&mut self, id: &FragmentId) -> anyhow::Result<()> {
         if self.code.errors.contains(id) {
             self.w.queue(SetForegroundColor(Color::Red))?;
         }
