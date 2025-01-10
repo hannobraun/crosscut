@@ -26,7 +26,6 @@ impl Interpreter {
             let NextExpression::Expression { expression } =
                 self.next_expression(code)
             else {
-                // TASK: This isn't correct. It could also mean we're finished.
                 return InterpreterState::Error;
             };
 
