@@ -55,10 +55,10 @@ impl Interpreter {
     }
 
     pub fn next_expression<'r>(&self, code: &'r Code) -> NextExpression<'r> {
-        let Some(hash) = self.next else {
+        let Some(id) = self.next else {
             return NextExpression::NoMoreFragments;
         };
-        let fragment = code.fragments().get(&hash);
+        let fragment = code.fragments().get(&id);
         let Fragment::Expression { expression } = fragment else {
             return NextExpression::NextFragmentIsNotAnExpression;
         };
