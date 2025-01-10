@@ -1,6 +1,6 @@
 use std::collections::BTreeMap;
 
-use super::Fragment;
+use super::{Expression, Token};
 
 pub type Fragments = BTreeMap<Id, Fragment>;
 
@@ -15,4 +15,11 @@ impl Id {
         let hash = udigest::hash::<blake3::Hasher>(fragment).into();
         Self { hash }
     }
+}
+
+#[derive(Clone, Debug, PartialEq, udigest::Digestable)]
+pub enum Fragment {
+    Expression { expression: Expression },
+    MissingArgument,
+    UnexpectedToken { token: Token },
 }

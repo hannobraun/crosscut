@@ -1,6 +1,6 @@
 use std::collections::BTreeSet;
 
-use super::{fragments::Fragments, Id};
+use super::{fragments::Fragments, Fragment, Id};
 
 #[derive(Clone, Debug, Default, PartialEq)]
 pub struct Code {
@@ -53,13 +53,6 @@ impl Code {
         self.root()
             .any(|fragment| matches!(fragment, Fragment::Expression { .. }))
     }
-}
-
-#[derive(Clone, Debug, PartialEq, udigest::Digestable)]
-pub enum Fragment {
-    Expression { expression: Expression },
-    MissingArgument,
-    UnexpectedToken { token: Token },
 }
 
 #[derive(Clone, Debug, PartialEq, udigest::Digestable)]
