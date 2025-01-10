@@ -30,9 +30,12 @@ impl Interpreter {
             };
 
             match expression {
-                Expression::FunctionCall { target, argument } => {
+                Expression::FunctionCall {
+                    target,
+                    argument: body,
+                } => {
                     self.active_call = Some(*target);
-                    self.next = argument.entry().copied();
+                    self.next = body.entry().copied();
                 }
                 Expression::LiteralValue { value } => {
                     if let Some(id) = self.active_call {
