@@ -8,7 +8,7 @@ pub struct Fragments {
 }
 
 impl Fragments {
-    pub fn get(&self, id: &FragmentId) -> Option<&Fragment> {
+    pub fn get(&self, id: &FragmentId) -> &Fragment {
         let Some(fragment) = self.inner.get(id) else {
             panic!(
                 "Fragment with ID `{id:?}` not found. This should never \
@@ -16,7 +16,7 @@ impl Fragments {
                 from different instances of `Code`."
             );
         };
-        Some(fragment)
+        fragment
     }
 
     pub fn insert(&mut self, fragment: Fragment) -> FragmentId {

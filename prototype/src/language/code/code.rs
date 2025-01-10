@@ -16,13 +16,7 @@ impl Code {
     }
 
     pub fn fragment_by_id(&self, id: &FragmentId) -> &Fragment {
-        let Some(hash) = self.fragments.get(id) else {
-            unreachable!(
-                "As long as the internal structure of `Code` is valid, hashes \
-                in the root must refer to existing fragments."
-            );
-        };
-        hash
+        self.fragments.get(id)
     }
 
     pub fn root(&self) -> impl Iterator<Item = &Fragment> {
