@@ -31,11 +31,6 @@ impl Body {
         self.ids().map(|hash| fragments.get(hash))
     }
 
-    /// # Indicate whether this body is complete, i.e. contains an expression
-    ///
-    /// The presence of errors has no significance for the return value of this
-    /// function. Its purpose, rather, is to indicate whether the addition of
-    /// more fragments would also result in the addition of _more_ errors.
     pub fn expression<'r>(
         &'r self,
         fragments: &'r Fragments,
