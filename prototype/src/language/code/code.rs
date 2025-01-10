@@ -15,19 +15,7 @@ impl Code {
         &self.fragments
     }
 
-    pub fn append(&mut self, to_append: Fragment) -> FragmentId {
-        // This function is less regular than it could be, if the root where
-        // another kind of fragment. Then it wouldn't need special handling
-        // here.
-        //
-        // However, I think that would be problematic in different ways. Not the
-        // least, by adding another kind of fragment that is only allowed to be
-        // used in a single place.
-        //
-        // I'm not sure that it would be worth it, especially since I've already
-        // got this working, it seems. It's something to keep an eye on though,
-        // for sure.
-
+    pub fn find_innermost_fragment_with_valid_body(&self) -> FragmentPath {
         let mut innermost_valid_body = FragmentPath { inner: Vec::new() };
         let mut body = &self.root;
 
@@ -70,6 +58,25 @@ impl Code {
             innermost_valid_body.inner.push(id);
             body = &fragment.body;
         }
+
+        innermost_valid_body
+    }
+
+    pub fn append(&mut self, to_append: Fragment) -> FragmentId {
+        // This function is less regular than it could be, if the root where
+        // another kind of fragment. Then it wouldn't need special handling
+        // here.
+        //
+        // However, I think that would be problematic in different ways. Not the
+        // least, by adding another kind of fragment that is only allowed to be
+        // used in a single place.
+        //
+        // I'm not sure that it would be worth it, especially since I've already
+        // got this working, it seems. It's something to keep an eye on though,
+        // for sure.
+
+        let mut innermost_valid_body =
+            self.find_innermost_fragment_with_valid_body();
 
         let Some(to_update_id) = innermost_valid_body.inner.pop() else {
             return self.root.push(to_append, &mut self.fragments);
