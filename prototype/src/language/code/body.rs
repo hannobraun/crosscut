@@ -20,7 +20,7 @@ impl Body {
         self.inner.first()
     }
 
-    pub fn ids(&self) -> impl Iterator<Item = &FragmentId> {
+    pub fn ids(&self) -> impl DoubleEndedIterator<Item = &FragmentId> {
         self.inner.iter()
     }
 
