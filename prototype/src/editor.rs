@@ -74,13 +74,14 @@ impl Editor {
         host: &Host,
         interpreter: &Interpreter,
     ) -> anyhow::Result<()> {
-        Renderer {
+        let mut renderer = Renderer {
             code: &self.code,
             host,
             interpreter,
             w: stdout(),
-        }
-        .render_code()?;
+        };
+
+        renderer.render_code()?;
 
         Ok(())
     }
