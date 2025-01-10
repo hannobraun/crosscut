@@ -1,4 +1,4 @@
-use super::{Fragment, FragmentId, Fragments};
+use super::{Expression, Fragment, FragmentId, Fragments};
 
 #[derive(Clone, Debug, Default, Eq, PartialEq, udigest::Digestable)]
 pub struct Body {
@@ -36,8 +36,16 @@ impl Body {
     /// The presence of errors has no significance for the return value of this
     /// function. Its purpose, rather, is to indicate whether the addition of
     /// more fragments would also result in the addition of _more_ errors.
-    pub fn is_complete(&self, fragments: &Fragments) -> bool {
-        self.fragments(fragments)
-            .any(|fragment| matches!(fragment, Fragment::Expression { .. }))
+    pub fn is_complete<'r>(
+        &'r self,
+        fragments: &'r Fragments,
+    ) -> Option<&'r Expression> {
+        self.fragments(fragments).find_map(|fragment| {
+            if let Fragment::Expression { expression } = fragment {
+                Some(expression)
+            } else {
+                None
+            }
+        })
     }
 }
