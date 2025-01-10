@@ -147,7 +147,9 @@ where
             write!(self.w, "    ")?;
         }
 
-        match &self.code.fragments().get(id).kind {
+        let fragment = self.code.fragments().get(id);
+
+        match &fragment.kind {
             FragmentKind::Expression { expression } => {
                 self.render_expression(expression)?;
             }
