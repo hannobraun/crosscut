@@ -1,4 +1,4 @@
-use std::io::{self, stdout};
+use std::io::{self, stdout, Stdout};
 
 use crossterm::{
     style::{Attribute, Color, ResetColor, SetAttribute, SetForegroundColor},
@@ -74,12 +74,7 @@ impl Editor {
         host: &Host,
         interpreter: &Interpreter,
     ) -> anyhow::Result<()> {
-        let mut renderer = Renderer {
-            code: &self.code,
-            host,
-            interpreter,
-            w: stdout(),
-        };
+        let mut renderer = Renderer::new(&self.code, host, interpreter);
 
         renderer.render_code()?;
         renderer.render_prompt()?;
@@ -93,6 +88,21 @@ pub struct Renderer<'r, W> {
     host: &'r Host,
     interpreter: &'r Interpreter,
     w: W,
+}
+
+impl<'r> Renderer<'r, Stdout> {
+    pub fn new(
+        code: &'r Code,
+        host: &'r Host,
+        interpreter: &'r Interpreter,
+    ) -> Self {
+        Self {
+            code,
+            host,
+            interpreter,
+            w: stdout(),
+        }
+    }
 }
 
 impl<W> Renderer<'_, W>
