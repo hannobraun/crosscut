@@ -35,7 +35,10 @@ pub fn compile(input: &str, host: &Host, code: &mut Code) {
 
         let is_error = matches!(fragment, FragmentKind::UnexpectedToken { .. });
 
-        let hash = code.push(Fragment { kind: fragment });
+        let hash = code.push(Fragment {
+            kind: fragment,
+            body: Body::default(),
+        });
 
         if is_error {
             code.errors.insert(hash);

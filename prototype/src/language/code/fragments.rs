@@ -1,6 +1,6 @@
 use std::collections::BTreeMap;
 
-use super::{Expression, Token};
+use super::{Body, Expression, Token};
 
 #[derive(Clone, Debug, Default, Eq, PartialEq)]
 pub struct Fragments {
@@ -52,6 +52,7 @@ impl FragmentId {
 #[derive(Clone, Debug, Eq, PartialEq, udigest::Digestable)]
 pub struct Fragment {
     pub kind: FragmentKind,
+    pub body: Body,
 }
 
 #[derive(Clone, Debug, Eq, PartialEq, udigest::Digestable)]
