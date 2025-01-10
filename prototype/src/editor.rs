@@ -82,6 +82,7 @@ impl Editor {
         };
 
         renderer.render_code()?;
+        renderer.render_prompt()?;
 
         Ok(())
     }
@@ -103,6 +104,12 @@ where
 
         self.render_body(&self.code.root)?;
 
+        self.w.flush()?;
+
+        Ok(())
+    }
+
+    pub fn render_prompt(&mut self) -> anyhow::Result<()> {
         writeln!(self.w)?;
         write!(self.w, "{} > ", self.interpreter.state(self.code))?;
 
