@@ -30,12 +30,12 @@ impl Code {
     }
 
     pub fn push(&mut self, fragment: Fragment) -> Id {
-        let hash = Id::of(&fragment);
+        let id = Id::of(&fragment);
 
-        self.fragments.insert(hash, fragment);
-        self.root.push(hash);
+        self.fragments.insert(id, fragment);
+        self.root.push(id);
 
-        hash
+        id
     }
 
     /// # Indicate whether this is complete, meaning contains an expression
