@@ -2,7 +2,7 @@ use std::collections::BTreeMap;
 
 use super::{Expression, Token};
 
-#[derive(Clone, Debug, Default, PartialEq)]
+#[derive(Clone, Debug, Default, Eq, PartialEq)]
 pub struct Fragments {
     inner: BTreeMap<FragmentId, Fragment>,
 }
@@ -30,7 +30,7 @@ impl FragmentId {
     }
 }
 
-#[derive(Clone, Debug, PartialEq, udigest::Digestable)]
+#[derive(Clone, Debug, Eq, PartialEq, udigest::Digestable)]
 pub enum Fragment {
     Expression { expression: Expression },
     MissingArgument,

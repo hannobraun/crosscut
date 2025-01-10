@@ -2,7 +2,7 @@ use std::collections::BTreeSet;
 
 use super::{fragments::Fragments, Fragment, FragmentId};
 
-#[derive(Clone, Debug, Default, PartialEq)]
+#[derive(Clone, Debug, Default, Eq, PartialEq)]
 pub struct Code {
     fragments: Fragments,
 
@@ -55,13 +55,13 @@ impl Code {
     }
 }
 
-#[derive(Clone, Debug, PartialEq, udigest::Digestable)]
+#[derive(Clone, Debug, Eq, PartialEq, udigest::Digestable)]
 pub enum Expression {
     FunctionCall { target: usize, argument: FragmentId },
     LiteralValue { value: u32 },
 }
 
-#[derive(Clone, Debug, PartialEq, udigest::Digestable)]
+#[derive(Clone, Debug, Eq, PartialEq, udigest::Digestable)]
 pub enum Token {
     Identifier { name: String },
     LiteralNumber { value: u32 },
