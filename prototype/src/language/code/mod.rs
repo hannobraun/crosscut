@@ -1,7 +1,7 @@
 mod code;
-mod hash;
+mod fragments;
 
 pub use self::{
     code::{Code, Expression, Fragment, Token},
-    hash::Hash,
+    fragments::Hash,
 };

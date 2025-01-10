@@ -1,6 +1,6 @@
 use std::collections::BTreeSet;
 
-use super::{hash::Fragments, Hash};
+use super::{fragments::Fragments, Hash};
 
 #[derive(Clone, Debug, Default, PartialEq)]
 pub struct Code {
