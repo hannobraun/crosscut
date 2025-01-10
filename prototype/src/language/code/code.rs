@@ -20,7 +20,7 @@ impl Code {
     }
 
     pub fn root(&self) -> impl Iterator<Item = &Fragment> {
-        self.root.ids().map(|hash| self.fragments.get(hash))
+        self.root.fragments(self.fragments())
     }
 
     pub fn push(&mut self, fragment: Fragment) -> FragmentId {
