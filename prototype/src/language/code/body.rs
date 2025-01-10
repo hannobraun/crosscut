@@ -43,4 +43,24 @@ impl Body {
             }
         })
     }
+
+    pub fn replace(
+        &mut self,
+        to_replace: FragmentId,
+        replacement: Fragment,
+        fragments: &mut Fragments,
+    ) -> FragmentId {
+        for id in self.inner.iter_mut() {
+            if *id == to_replace {
+                let replacement = fragments.insert(replacement);
+                *id = replacement;
+                return replacement;
+            }
+        }
+
+        panic!(
+            "Expecting `Body::replace` to replace a fragment, but none was \
+            found."
+        );
+    }
 }
