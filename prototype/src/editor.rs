@@ -194,3 +194,10 @@ where
         Ok(())
     }
 }
+
+#[cfg(test)]
+#[allow(unused)] // used sporadically, for debugging tests
+pub fn render_code(code: &Code, host: &Host, interpreter: &Interpreter) {
+    let mut renderer = Renderer::new(code, host, interpreter);
+    renderer.render_code().unwrap();
+}
