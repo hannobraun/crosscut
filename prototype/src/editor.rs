@@ -6,7 +6,7 @@ use crossterm::{
 };
 
 use crate::language::{
-    code::{Code, Expression, Fragment, FragmentId, Token},
+    code::{Body, Code, Expression, Fragment, FragmentId, Token},
     compiler::compile,
     host::Host,
     interpreter::Interpreter,
@@ -100,14 +100,20 @@ where
     fn render_code(mut self) -> anyhow::Result<()> {
         writeln!(self.w)?;
 
-        for hash in self.code.root.ids() {
-            self.render_fragment(hash)?;
-        }
+        self.render_body(&self.code.root)?;
 
         writeln!(self.w)?;
         write!(self.w, "{} > ", self.interpreter.state(self.code))?;
 
         self.w.flush()?;
+
+        Ok(())
+    }
+
+    fn render_body(&mut self, body: &Body) -> anyhow::Result<()> {
+        for hash in body.ids() {
+            self.render_fragment(hash)?;
+        }
 
         Ok(())
     }
