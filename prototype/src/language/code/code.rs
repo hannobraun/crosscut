@@ -4,7 +4,8 @@ use super::Hash;
 
 #[derive(Clone, Debug, Default, PartialEq)]
 pub struct Code {
-    pub fragments: BTreeMap<Hash, Fragment>,
+    fragments: BTreeMap<Hash, Fragment>,
+
     pub root: Vec<Hash>,
     pub errors: BTreeSet<Hash>,
 }
