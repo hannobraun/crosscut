@@ -1,4 +1,8 @@
+use std::collections::BTreeMap;
+
 use super::Fragment;
+
+pub type Fragments = BTreeMap<Hash, Fragment>;
 
 #[derive(
     Clone, Copy, Debug, Eq, Ord, PartialEq, PartialOrd, udigest::Digestable,

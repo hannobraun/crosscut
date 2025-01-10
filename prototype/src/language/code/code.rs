@@ -1,10 +1,10 @@
-use std::collections::{BTreeMap, BTreeSet};
+use std::collections::BTreeSet;
 
-use super::Hash;
+use super::{hash::Fragments, Hash};
 
 #[derive(Clone, Debug, Default, PartialEq)]
 pub struct Code {
-    fragments: BTreeMap<Hash, Fragment>,
+    fragments: Fragments,
 
     pub root: Vec<Hash>,
     pub errors: BTreeSet<Hash>,
