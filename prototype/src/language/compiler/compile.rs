@@ -32,10 +32,13 @@ pub fn compile(input: &str, host: &Host, code: &mut Code) {
 
         let is_error = matches!(fragment, FragmentKind::UnexpectedToken { .. });
 
-        let id = code.append(Fragment {
-            kind: fragment,
-            body: Body::default(),
-        });
+        let id = code.append(
+            Fragment {
+                kind: fragment,
+                body: Body::default(),
+            },
+            code.find_innermost_fragment_with_valid_body(),
+        );
 
         if is_error {
             code.errors.insert(id);

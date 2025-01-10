@@ -57,7 +57,11 @@ impl Code {
         path
     }
 
-    pub fn append(&mut self, to_append: Fragment) -> FragmentId {
+    pub fn append(
+        &mut self,
+        to_append: Fragment,
+        mut path: FragmentPath,
+    ) -> FragmentId {
         // This function is less regular than it could be, if the root where
         // another kind of fragment. Then it wouldn't need special handling
         // here.
@@ -69,8 +73,6 @@ impl Code {
         // I'm not sure that it would be worth it, especially since I've already
         // got this working, it seems. It's something to keep an eye on though,
         // for sure.
-
-        let mut path = self.find_innermost_fragment_with_valid_body();
 
         let Some(to_update_id) = path.inner.pop() else {
             return self.root.push(to_append, &mut self.fragments);
