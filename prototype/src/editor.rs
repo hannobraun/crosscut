@@ -124,7 +124,7 @@ where
             write!(self.w, "    ")?;
         }
 
-        match self.code.fragment_by_id(id) {
+        match self.code.fragments().get(id) {
             Fragment::Expression { expression } => {
                 self.render_expression(expression)?;
             }
