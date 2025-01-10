@@ -76,7 +76,7 @@ impl Code {
         };
 
         let mut to_update = self.fragments.get(&to_update_id).clone();
-        let id_of_pushed = to_update.body.push(to_append, &mut self.fragments);
+        let appended = to_update.body.push(to_append, &mut self.fragments);
 
         let id_before_update = to_update_id;
         let updated = to_update;
@@ -88,7 +88,7 @@ impl Code {
         self.root
             .replace(id_before_update, updated, &mut self.fragments);
 
-        id_of_pushed
+        appended
     }
 }
 
