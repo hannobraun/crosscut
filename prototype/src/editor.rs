@@ -134,9 +134,6 @@ where
             Fragment::Expression { expression } => {
                 self.render_expression(expression)?;
             }
-            Fragment::MissingArgument => {
-                writeln!(self.w, "missing argument")?;
-            }
             Fragment::UnexpectedToken { token } => {
                 match token {
                     Token::Identifier { name } => {
@@ -170,7 +167,7 @@ where
                 };
 
                 writeln!(self.w, "{name}")?;
-                self.render_fragment(argument)?;
+                self.render_body(argument)?;
             }
             Expression::LiteralValue { value } => {
                 writeln!(self.w, "{value}")?;

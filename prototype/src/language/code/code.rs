@@ -22,7 +22,7 @@ impl Code {
 
 #[derive(Clone, Debug, Eq, PartialEq, udigest::Digestable)]
 pub enum Expression {
-    FunctionCall { target: usize, argument: FragmentId },
+    FunctionCall { target: usize, argument: Body },
     LiteralValue { value: u32 },
 }
 

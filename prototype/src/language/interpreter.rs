@@ -32,7 +32,7 @@ impl Interpreter {
             match expression {
                 Expression::FunctionCall { target, argument } => {
                     self.active_call = Some(*target);
-                    self.next = Some(*argument);
+                    self.next = argument.entry().copied();
                 }
                 Expression::LiteralValue { value } => {
                     if let Some(id) = self.active_call {

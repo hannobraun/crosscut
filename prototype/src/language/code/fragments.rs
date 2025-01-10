@@ -52,6 +52,5 @@ impl FragmentId {
 #[derive(Clone, Debug, Eq, PartialEq, udigest::Digestable)]
 pub enum Fragment {
     Expression { expression: Expression },
-    MissingArgument,
     UnexpectedToken { token: Token },
 }

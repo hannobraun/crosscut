@@ -1,5 +1,5 @@
 use crate::language::{
-    code::{Code, Expression, Fragment, Token},
+    code::{Body, Code, Expression, Fragment, Token},
     host::Host,
 };
 
@@ -11,7 +11,7 @@ pub fn compile(input: &str, host: &Host, code: &mut Code) {
                     Fragment::Expression {
                         expression: Expression::FunctionCall {
                             target: id,
-                            argument: code.push(Fragment::MissingArgument),
+                            argument: Body::default(),
                         },
                     }
                 } else {
