@@ -74,7 +74,7 @@ fn parse_token(
 }
 
 fn check_for_error(fragment: &Fragment) -> Option<()> {
-    match fragment.kind {
+    match &fragment.kind {
         FragmentKind::Expression {
             expression: Expression::FunctionCall { .. },
         } => {
