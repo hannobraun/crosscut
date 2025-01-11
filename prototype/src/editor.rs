@@ -12,12 +12,17 @@ use crate::language::{
     interpreter::Interpreter,
 };
 
-#[derive(Default)]
 pub struct Editor {
     code: Code,
 }
 
 impl Editor {
+    pub fn new() -> Self {
+        Self {
+            code: Code::default(),
+        }
+    }
+
     pub fn code(&self) -> &Code {
         &self.code
     }
@@ -80,6 +85,12 @@ impl Editor {
         renderer.render_prompt()?;
 
         Ok(())
+    }
+}
+
+impl Default for Editor {
+    fn default() -> Self {
+        Self::new()
     }
 }
 
