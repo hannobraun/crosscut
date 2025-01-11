@@ -207,7 +207,8 @@ where
             self.w.queue(SetForegroundColor(Color::Red))?;
         }
 
-        if Some(id) == self.interpreter.next() {
+        let interpreter = self.interpreter;
+        if Some(id) == interpreter.next() {
             self.w.queue(SetAttribute(Attribute::Bold))?;
             write!(self.w, " => ")?;
         } else {
