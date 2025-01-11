@@ -56,9 +56,9 @@ fn missing_function_call_argument_is_an_error() {
 
     compile("f", &host, &mut code);
     let f = code.fragments().get(&code.root).body.ids().next().unwrap();
-    assert!(code.errors.contains_key(f));
+    assert_eq!(code.errors.get(f), Some(&CodeError::MissingArgument));
 
     compile("1", &host, &mut code);
     let f = code.fragments().get(&code.root).body.ids().next().unwrap();
-    assert!(!code.errors.contains_key(f));
+    assert_eq!(code.errors.get(f), None);
 }
