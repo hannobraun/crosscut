@@ -1,6 +1,7 @@
 mod body;
 mod code;
 mod fragments;
+mod path;
 
 pub use self::{
     body::Body,
