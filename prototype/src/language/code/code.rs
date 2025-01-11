@@ -31,7 +31,7 @@ impl Code {
 
     pub fn find_innermost_fragment_with_valid_body(&self) -> FragmentPath {
         let mut next = self.root;
-        let mut path = FragmentPath { inner: Vec::new() };
+        let mut path = Vec::new();
 
         loop {
             let Some(body) = self.fragments.get(&next).valid_body() else {
@@ -40,7 +40,7 @@ impl Code {
                 break;
             };
 
-            path.inner.push(next);
+            path.push(next);
 
             let Some(id) = body.ids().next_back().copied() else {
                 // The body we're currently looking at, is the innermost valid
@@ -63,7 +63,7 @@ impl Code {
         }
 
         assert!(
-            !path.inner.is_empty(),
+            !path.is_empty(),
             "Constructing an empty fragment path is invalid, as it must at \
             least contain the root fragment.\n\
             \n\
@@ -72,7 +72,7 @@ impl Code {
             loop above.",
         );
 
-        path
+        FragmentPath { inner: path }
     }
 
     pub fn append(
