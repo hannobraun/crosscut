@@ -76,14 +76,9 @@ impl Code {
     pub fn append(
         &mut self,
         to_append: Fragment,
-        mut path: FragmentPath,
+        path: FragmentPath,
     ) -> FragmentId {
-        let Some(to_update_id) = path.inner.pop() else {
-            unreachable!(
-                "A fragment path must consist of at least one component, the \
-                root. This one doesn't: `{path:#?}`"
-            );
-        };
+        let (to_update_id, path) = path.into_id_and_path();
 
         let mut to_update = self.fragments.get(&to_update_id).clone();
         let appended = to_update.body.push(to_append, &mut self.fragments);
@@ -91,7 +86,7 @@ impl Code {
         let mut id_before_update = to_update_id;
         let mut updated = to_update;
 
-        for to_update_id in path.inner.into_iter().rev() {
+        for to_update_id in path {
             let mut to_update = self.fragments.get(&to_update_id).clone();
             to_update.body.replace(
                 id_before_update,
@@ -139,6 +134,19 @@ impl FragmentPath {
             );
         };
         id
+    }
+
+    pub fn into_id_and_path(
+        mut self,
+    ) -> (FragmentId, impl Iterator<Item = FragmentId>) {
+        let Some(id) = self.inner.pop() else {
+            unreachable!(
+                "A fragment path must consist of at least one component, the \
+                root."
+            );
+        };
+
+        (id, self.inner.into_iter().rev())
     }
 }
 
