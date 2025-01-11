@@ -46,9 +46,9 @@ impl Code {
             };
 
             let fragment = self.fragments.get(&id);
-            if fragment.valid_body().is_some() {
+            if let Some(body) = fragment.valid_body() {
                 path.inner.push(id);
-                current_body = &fragment.body;
+                current_body = body;
             } else {
                 // The body we're currently looking at does have children, and
                 // we've been looking at the last of those. That child is not an
