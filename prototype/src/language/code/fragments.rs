@@ -80,13 +80,11 @@ impl Fragment {
     /// nesting. That includes function calls, for example, whose argument is
     /// nested within the function call fragment's body.
     pub fn valid_body(&self) -> Option<&Body> {
-        if let FragmentKind::Expression {
-            expression: Expression::FunctionCall { .. },
-        } = self.kind
-        {
-            Some(&self.body)
-        } else {
-            None
+        match self.kind {
+            FragmentKind::Expression {
+                expression: Expression::FunctionCall { .. },
+            } => Some(&self.body),
+            _ => None,
         }
     }
 }
