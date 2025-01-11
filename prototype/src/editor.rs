@@ -87,6 +87,15 @@ impl Editor {
                 };
 
                 compile(input_code, host, &mut self.code);
+
+                let is_running = matches!(
+                    interpreter.state(&self.code),
+                    InterpreterState::Running
+                );
+
+                if !is_running {
+                    interpreter.reset(&self.code);
+                }
             }
             command @ ":clear" => {
                 let None = command_and_arguments.next() else {
