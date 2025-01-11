@@ -20,17 +20,12 @@ pub fn compile(input: &str, host: &Host, code: &mut Code) {
                 }
             }
             Token::LiteralNumber { value } => {
-                let can_append_expression = if let Some(id) = append_to.id() {
-                    code.fragments()
-                        .get(id)
-                        .body
-                        .expression(code.fragments())
-                        .is_none()
-                } else {
-                    unreachable!(
-                        "`FragmentPath` must be able to produce an ID."
-                    );
-                };
+                let can_append_expression = code
+                    .fragments()
+                    .get(append_to.id())
+                    .body
+                    .expression(code.fragments())
+                    .is_none();
 
                 if can_append_expression {
                     FragmentKind::Expression {
