@@ -19,7 +19,7 @@ pub fn compile(input: &str, host: &Host, code: &mut Code) {
             body: Body::default(),
         };
 
-        let is_error = check_for_error(&fragment);
+        let is_error = check_for_error(&fragment).is_some();
 
         let id = code.append(fragment, append_to);
 
@@ -73,12 +73,20 @@ fn parse_token(
     }
 }
 
-fn check_for_error(fragment: &Fragment) -> bool {
+fn check_for_error(fragment: &Fragment) -> Option<()> {
     match fragment.kind {
         FragmentKind::Expression {
             expression: Expression::FunctionCall { .. },
-        } => fragment.body.is_empty(),
-        FragmentKind::Error { .. } => true,
-        _ => false,
+        } => {
+            if fragment.body.is_empty() {
+                return Some(());
+            }
+        }
+        FragmentKind::Error { .. } => {
+            return Some(());
+        }
+        _ => {}
     }
+
+    None
 }
