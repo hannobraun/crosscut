@@ -14,7 +14,7 @@ pub struct GameEngine {
 
 impl GameEngine {
     pub fn start(game_output_tx: Sender<GameOutput>) -> anyhow::Result<Self> {
-        let host = Host::empty();
+        let host = Host::from_functions(["dim"]);
         let mut editor = Editor::default();
         let mut interpreter = Interpreter::new(editor.code());
 
@@ -28,10 +28,21 @@ impl GameEngine {
                     match interpreter.step(editor.code()) {
                         InterpreterState::CallToHostFunction {
                             id,
-                            input: _,
-                            output: _,
+                            input,
+                            output,
                         } => {
-                            unreachable!("Undefined host function: `{id}`");
+                            match id {
+                                0 => {
+                                    // `dim`
+
+                                    *output = input / 2;
+                                }
+                                id => {
+                                    unreachable!(
+                                        "Undefined host function: `{id}`"
+                                    );
+                                }
+                            }
                         }
                         InterpreterState::Error => {
                             // Not handling errors right now. Eventually, those

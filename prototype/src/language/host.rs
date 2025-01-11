@@ -13,7 +13,6 @@ impl Host {
         }
     }
 
-    #[cfg(test)]
     pub fn from_functions(
         names: impl IntoIterator<Item = impl Into<String>>,
     ) -> Self {
