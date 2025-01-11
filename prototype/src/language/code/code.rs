@@ -52,12 +52,12 @@ impl Code {
             };
 
             // We have found a nested fragment, but are only considering the
-            // _last_ fragment in the current body.  In principle, we'd need to
-            // look at _all_ of them though.
+            // _last_ fragment in the body. In principle, we'd need to look at
+            // _all_ of them.
             //
-            // But as long as we're just pushing new fragments to the end of the
-            // innermost body, I don't think it's possible to construct a case
-            // where this makes a difference.
+            // But as long as `Code` is only capable of pushing new fragments to
+            // the end of the innermost body, I don't think it's possible to
+            // construct a case where this makes a difference.
 
             next = id;
         }
