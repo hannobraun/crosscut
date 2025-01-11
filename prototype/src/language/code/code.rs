@@ -122,7 +122,13 @@ pub struct FragmentPath {
 
 impl FragmentPath {
     pub fn id(&self) -> Option<&FragmentId> {
-        self.inner.last()
+        let Some(id) = self.inner.last() else {
+            unreachable!(
+                "A fragment path must consist of at least one component, the \
+                root."
+            );
+        };
+        Some(id)
     }
 }
 
