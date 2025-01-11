@@ -6,7 +6,8 @@ use crate::language::{
 };
 
 pub fn compile(input: &str, host: &Host, code: &mut Code) {
-    for token in tokenize(input) {
+    let tokens = tokenize(input);
+    for token in tokens {
         let append_to = code.find_innermost_fragment_with_valid_body();
 
         let fragment = match token {
