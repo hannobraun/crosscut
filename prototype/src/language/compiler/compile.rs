@@ -19,11 +19,11 @@ pub fn compile(input: &str, host: &Host, code: &mut Code) {
             body: Body::default(),
         };
 
-        let error = check_for_error(&fragment);
+        let maybe_error = check_for_error(&fragment);
 
         let id = code.append(fragment, append_to);
 
-        if let Some(err) = error {
+        if let Some(err) = maybe_error {
             code.errors.insert(id, err);
         }
     }
