@@ -45,6 +45,14 @@ impl Code {
                 break;
             };
 
+            // We have found a nested fragment, but are only considering the
+            // _last_ fragment in the current body.  In principle, we'd need to
+            // look at _all_ of them though.
+            //
+            // But as long as we're just pushing new fragments to the end of the
+            // innermost body, I don't think it's possible to construct a case
+            // where this makes a difference.
+
             if let Some(body) = self.fragments.get(&id).valid_body() {
                 path.inner.push(id);
                 current_body = body;
@@ -53,12 +61,6 @@ impl Code {
                 // we've been looking at the last of those. That child is not an
                 // expression though, which means it has no valid body. We're
                 // done with our search.
-                //
-                // (In principle, we'd need to look at _all_ the children, to
-                // see of any of them has a valid body. But as long as we're
-                // just pushing new stuff to the end of the innermost body, I
-                // don't think it's possible to construct a case where this
-                // makes a difference.)
                 break;
             }
         }
