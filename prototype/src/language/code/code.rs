@@ -6,17 +6,21 @@ use super::{Body, Fragment, FragmentId, FragmentKind, Fragments};
 pub struct Code {
     fragments: Fragments,
 
-    pub root: Body,
+    pub root: FragmentId,
     pub errors: BTreeSet<FragmentId>,
 }
 
 impl Code {
     pub fn new() -> Self {
-        let fragments = Fragments::default();
+        let mut fragments = Fragments::default();
+        let root = fragments.insert(Fragment {
+            kind: FragmentKind::Root,
+            body: Body::default(),
+        });
 
         Self {
             fragments,
-            root: Body::default(),
+            root,
             errors: BTreeSet::default(),
         }
     }
@@ -26,8 +30,10 @@ impl Code {
     }
 
     pub fn find_innermost_fragment_with_valid_body(&self) -> FragmentPath {
-        let mut path = FragmentPath { inner: Vec::new() };
-        let mut current_body = &self.root;
+        let mut path = FragmentPath {
+            inner: vec![self.root],
+        };
+        let mut current_body = &self.fragments().get(&self.root).body;
 
         loop {
             let Some(id) = current_body.ids().next_back().copied() else {
@@ -85,7 +91,10 @@ impl Code {
         // for sure.
 
         let Some(to_update_id) = path.inner.pop() else {
-            return self.root.push(to_append, &mut self.fragments);
+            unreachable!(
+                "A fragment path must consist of at least one component, the \
+                root. This one doesn't: `{path:#?}`"
+            );
         };
 
         let mut to_update = self.fragments.get(&to_update_id).clone();
@@ -106,8 +115,7 @@ impl Code {
             updated = to_update;
         }
 
-        self.root
-            .replace(id_before_update, updated, &mut self.fragments);
+        self.root = self.fragments.insert(updated);
 
         appended
     }

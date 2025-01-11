@@ -170,7 +170,7 @@ where
 {
     pub fn render_code(&mut self) -> anyhow::Result<()> {
         writeln!(self.w)?;
-        self.render_body(&self.code.root)?;
+        self.render_fragment(&self.code.root)?;
 
         self.w.flush()?;
 
@@ -219,6 +219,10 @@ where
         let fragment = self.code.fragments().get(id);
 
         match &fragment.kind {
+            FragmentKind::Root => {
+                // Nothing to render in the root fragment, except the body.
+                // Which we're already doing below, unconditionally.
+            }
             FragmentKind::Expression { expression } => {
                 self.render_expression(expression)?;
             }

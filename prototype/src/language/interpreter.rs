@@ -17,7 +17,8 @@ impl Interpreter {
     }
 
     pub fn reset(&mut self, code: &Code) {
-        self.next = code.root.entry().copied();
+        let root = code.fragments().get(&code.root);
+        self.next = root.body.entry().copied();
     }
 
     pub fn next(&self) -> Option<&FragmentId> {

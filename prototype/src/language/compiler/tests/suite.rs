@@ -17,7 +17,13 @@ fn code_after_expression_is_an_error() {
     let mut code = Code::default();
     compile("1 2", &host, &mut code);
 
-    let (a, b) = code.root.ids().collect_tuple().unwrap();
+    let (a, b) = code
+        .fragments()
+        .get(&code.root)
+        .body
+        .ids()
+        .collect_tuple()
+        .unwrap();
 
     assert!(!code.errors.contains(a));
     assert!(code.errors.contains(b));

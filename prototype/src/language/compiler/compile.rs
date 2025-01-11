@@ -27,7 +27,9 @@ pub fn compile(input: &str, host: &Host, code: &mut Code) {
                         .expression(code.fragments())
                         .is_none()
                 } else {
-                    code.root.expression(code.fragments()).is_none()
+                    unreachable!(
+                        "`FragmentPath` must be able to produce an ID."
+                    );
                 };
 
                 if can_append_expression {
