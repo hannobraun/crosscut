@@ -62,6 +62,16 @@ impl Code {
             next = id;
         }
 
+        assert!(
+            !path.inner.is_empty(),
+            "Constructing an empty fragment path is invalid, as it must at \
+            least contain the root fragment.\n\
+            \n\
+            It should not be possible to run into this problem here, as the \
+            root fragment has a valid body. We _must_ have added it in the \
+            loop above.",
+        );
+
         path
     }
 
