@@ -25,8 +25,8 @@ fn code_after_expression_is_an_error() {
         .collect_tuple()
         .unwrap();
 
-    assert!(!code.errors.contains(a));
-    assert!(code.errors.contains(b));
+    assert!(!code.errors.contains_key(a));
+    assert!(code.errors.contains_key(b));
 }
 
 #[test]
@@ -40,7 +40,7 @@ fn unresolved_identifier_is_an_error() {
 
     let f = code.fragments().get(&code.root).body.ids().next().unwrap();
 
-    assert!(code.errors.contains(f));
+    assert!(code.errors.contains_key(f));
 }
 
 #[test]
@@ -54,9 +54,9 @@ fn missing_function_call_argument_is_an_error() {
 
     compile("f", &host, &mut code);
     let f = code.fragments().get(&code.root).body.ids().next().unwrap();
-    assert!(code.errors.contains(f));
+    assert!(code.errors.contains_key(f));
 
     compile("1", &host, &mut code);
     let f = code.fragments().get(&code.root).body.ids().next().unwrap();
-    assert!(!code.errors.contains(f));
+    assert!(!code.errors.contains_key(f));
 }

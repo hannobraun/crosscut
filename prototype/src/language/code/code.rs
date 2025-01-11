@@ -1,7 +1,8 @@
-use std::collections::BTreeSet;
+use std::collections::BTreeMap;
 
 use super::{
-    Body, Fragment, FragmentId, FragmentKind, FragmentPath, Fragments,
+    Body, CodeError, Fragment, FragmentId, FragmentKind, FragmentPath,
+    Fragments,
 };
 
 #[derive(Clone, Debug, Eq, PartialEq)]
@@ -9,7 +10,7 @@ pub struct Code {
     fragments: Fragments,
 
     pub root: FragmentId,
-    pub errors: BTreeSet<FragmentId>,
+    pub errors: BTreeMap<FragmentId, CodeError>,
 }
 
 impl Code {
@@ -23,7 +24,7 @@ impl Code {
         Self {
             fragments,
             root,
-            errors: BTreeSet::default(),
+            errors: BTreeMap::default(),
         }
     }
 

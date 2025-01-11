@@ -23,8 +23,8 @@ pub fn compile(input: &str, host: &Host, code: &mut Code) {
 
         let id = code.append(fragment, append_to);
 
-        if error.is_some() {
-            code.errors.insert(id);
+        if let Some(err) = error {
+            code.errors.insert(id, err);
         }
     }
 }

@@ -210,7 +210,7 @@ where
     }
 
     fn render_fragment(&mut self, id: &FragmentId) -> anyhow::Result<()> {
-        if self.code.errors.contains(id) {
+        if self.code.errors.contains_key(id) {
             self.w.queue(SetForegroundColor(Color::Red))?;
         }
 
