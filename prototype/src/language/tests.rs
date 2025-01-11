@@ -59,7 +59,7 @@ fn call_to_host_function() {
                 break output;
             }
             result => {
-                panic!("Unexpected state: {result:#?}");
+                panic!("Unexpected result: {result:#?}");
             }
         }
     };
