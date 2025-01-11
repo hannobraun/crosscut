@@ -11,16 +11,16 @@ pub fn compile(input: &str, host: &Host, code: &mut Code) {
     for token in tokens {
         let append_to = code.find_innermost_fragment_with_valid_body();
 
-        let fragment = match parse_token(token, &append_to, code, host) {
+        let kind = match parse_token(token, &append_to, code, host) {
             Ok(expression) => FragmentKind::Expression { expression },
             Err(err) => FragmentKind::Error { err },
         };
 
-        let is_error = matches!(fragment, FragmentKind::Error { .. });
+        let is_error = matches!(kind, FragmentKind::Error { .. });
 
         let id = code.append(
             Fragment {
-                kind: fragment,
+                kind,
                 body: Body::default(),
             },
             append_to,
