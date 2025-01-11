@@ -81,7 +81,8 @@ impl Fragment {
     /// nested within the function call fragment's body.
     pub fn valid_body(&self) -> Option<&Body> {
         match self.kind {
-            FragmentKind::Expression {
+            FragmentKind::Root
+            | FragmentKind::Expression {
                 expression: Expression::FunctionCall { .. },
             } => Some(&self.body),
             _ => None,
