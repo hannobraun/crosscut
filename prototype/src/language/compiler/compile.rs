@@ -74,5 +74,11 @@ fn parse_token(
 }
 
 fn check_for_error(fragment: &Fragment) -> bool {
-    matches!(fragment.kind, FragmentKind::Error { .. })
+    match fragment.kind {
+        FragmentKind::Expression {
+            expression: Expression::FunctionCall { .. },
+        } => fragment.body.is_empty(),
+        FragmentKind::Error { .. } => true,
+        _ => false,
+    }
 }

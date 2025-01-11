@@ -42,3 +42,21 @@ fn unresolved_identifier_is_an_error() {
 
     assert!(code.errors.contains(f));
 }
+
+#[test]
+fn missing_function_call_argument_is_an_error() {
+    // A function call with a missing argument is an error. If an argument is
+    // added, that error goes away.
+
+    let host = Host::from_functions(["f"]);
+
+    let mut code = Code::default();
+
+    compile("f", &host, &mut code);
+    let f = code.fragments().get(&code.root).body.ids().next().unwrap();
+    assert!(code.errors.contains(f));
+
+    compile("1", &host, &mut code);
+    let f = code.fragments().get(&code.root).body.ids().next().unwrap();
+    assert!(!code.errors.contains(f));
+}
