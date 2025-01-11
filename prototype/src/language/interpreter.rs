@@ -7,10 +7,13 @@ pub struct Interpreter {
 
 impl Interpreter {
     pub fn new(code: &Code) -> Self {
-        Self {
-            next: code.root.entry().copied(),
+        let mut interpreter = Self {
+            next: None,
             active_calls: Vec::new(),
-        }
+        };
+        interpreter.reset(code);
+
+        interpreter
     }
 
     pub fn next(&self) -> Option<&FragmentId> {
