@@ -72,7 +72,7 @@ impl Code {
             loop above.",
         );
 
-        FragmentPath { inner: path }
+        FragmentPath::new(path)
     }
 
     pub fn append(
@@ -123,6 +123,10 @@ pub struct FragmentPath {
 }
 
 impl FragmentPath {
+    pub fn new(path: Vec<FragmentId>) -> Self {
+        Self { inner: path }
+    }
+
     pub fn id(&self) -> &FragmentId {
         let Some(id) = self.inner.last() else {
             unreachable!(
