@@ -46,10 +46,13 @@ impl Code {
             };
 
             let fragment = self.fragments.get(&id);
-            let FragmentKind::Expression {
+            if let FragmentKind::Expression {
                 expression: Expression::FunctionCall { .. },
             } = fragment.kind
-            else {
+            {
+                path.inner.push(id);
+                current_body = &fragment.body;
+            } else {
                 // The body we're currently looking at does have children, and
                 // we've been looking at the last of those. That child is not an
                 // expression though, which means it has no valid body. We're
@@ -61,10 +64,7 @@ impl Code {
                 // don't think it's possible to construct a case where this
                 // makes a difference.)
                 break;
-            };
-
-            path.inner.push(id);
-            current_body = &fragment.body;
+            }
         }
 
         path
