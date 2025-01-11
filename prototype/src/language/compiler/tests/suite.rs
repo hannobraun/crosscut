@@ -18,5 +18,7 @@ fn code_after_expression_is_an_error() {
     compile("1 2", &host, &mut code);
 
     let (_a, b) = code.root.ids().collect_tuple().unwrap();
+
+    assert!(!code.errors.contains(_a));
     assert!(code.errors.contains(b));
 }
