@@ -14,7 +14,6 @@ pub fn compile(input: &str, host: &Host, code: &mut Code) {
             Ok(expression) => FragmentKind::Expression { expression },
             Err(err) => FragmentKind::Error { err },
         };
-
         let is_error = matches!(kind, FragmentKind::Error { .. });
 
         let id = code.append(
