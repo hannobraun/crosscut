@@ -46,13 +46,9 @@ impl Code {
             };
 
             let fragment = self.fragments.get(&id);
-            let fragment @ Fragment {
-                kind:
-                    FragmentKind::Expression {
-                        expression: Expression::FunctionCall { .. },
-                    },
-                ..
-            } = fragment
+            let FragmentKind::Expression {
+                expression: Expression::FunctionCall { .. },
+            } = fragment.kind
             else {
                 // The body we're currently looking at does have children, and
                 // we've been looking at the last of those. That child is not an
