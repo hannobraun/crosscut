@@ -143,7 +143,7 @@ impl Default for Editor {
 pub struct Renderer<'r, W> {
     code: &'r Code,
     host: &'r Host,
-    interpreter: &'r Interpreter,
+    interpreter: Option<&'r Interpreter>,
     w: W,
     indent: u32,
 }
@@ -157,7 +157,7 @@ impl<'r> Renderer<'r, Stdout> {
         Self {
             code,
             host,
-            interpreter,
+            interpreter: Some(interpreter),
             w: stdout(),
             indent: 0,
         }
@@ -178,7 +178,12 @@ where
     }
 
     pub fn render_prompt(&mut self) -> anyhow::Result<()> {
-        let interpreter = self.interpreter;
+        let Some(interpreter) = self.interpreter else {
+            unreachable!(
+                "Rendering the prompt is only done in the full editor, where \
+                the interpreter is available."
+            );
+        };
 
         let state = match interpreter.state(self.code) {
             InterpreterState::Running => "running",
@@ -207,10 +212,13 @@ where
             self.w.queue(SetForegroundColor(Color::Red))?;
         }
 
-        let interpreter = self.interpreter;
-        if Some(id) == interpreter.next() {
-            self.w.queue(SetAttribute(Attribute::Bold))?;
-            write!(self.w, " => ")?;
+        if let Some(interpreter) = self.interpreter {
+            if Some(id) == interpreter.next() {
+                self.w.queue(SetAttribute(Attribute::Bold))?;
+                write!(self.w, " => ")?;
+            } else {
+                self.render_indent()?;
+            }
         } else {
             self.render_indent()?;
         }
