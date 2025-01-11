@@ -36,15 +36,6 @@ impl Editor {
         };
 
         match command {
-            command @ ":clear" => {
-                let None = command_and_arguments.next() else {
-                    println!("`{command}` command expects no arguments.");
-                    return;
-                };
-
-                self.code = Code::default();
-                interpreter.reset(&self.code);
-            }
             command @ ":append" => {
                 let Some(input_code) = command_and_arguments.next() else {
                     println!(
@@ -54,6 +45,15 @@ impl Editor {
                 };
 
                 compile(input_code, host, &mut self.code);
+            }
+            command @ ":clear" => {
+                let None = command_and_arguments.next() else {
+                    println!("`{command}` command expects no arguments.");
+                    return;
+                };
+
+                self.code = Code::default();
+                interpreter.reset(&self.code);
             }
             command @ ":reset" => {
                 let None = command_and_arguments.next() else {
