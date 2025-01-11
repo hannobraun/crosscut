@@ -247,26 +247,24 @@ where
             FragmentKind::Expression { expression } => {
                 self.render_expression(expression)?;
             }
-            FragmentKind::Error {
-                err: FragmentError::UnexpectedToken { token },
-            } => {
-                match token {
-                    Token::Identifier { name } => {
-                        write!(self.w, "{name}")?;
+            FragmentKind::Error { err } => match err {
+                FragmentError::UnexpectedToken { token } => {
+                    match token {
+                        Token::Identifier { name } => {
+                            write!(self.w, "{name}")?;
+                        }
+                        Token::LiteralNumber { value } => {
+                            write!(self.w, "{value}")?;
+                        }
                     }
-                    Token::LiteralNumber { value } => {
-                        write!(self.w, "{value}")?;
-                    }
-                }
 
-                writeln!(self.w, "    error: unexpected token")?;
-            }
-            FragmentKind::Error {
-                err: FragmentError::UnresolvedIdentifier { name },
-            } => {
-                write!(self.w, "{name}")?;
-                writeln!(self.w, "    error: unresolved identifier")?;
-            }
+                    writeln!(self.w, "    error: unexpected token")?;
+                }
+                FragmentError::UnresolvedIdentifier { name } => {
+                    write!(self.w, "{name}")?;
+                    writeln!(self.w, "    error: unresolved identifier")?;
+                }
+            },
         }
 
         self.indent += 1;
