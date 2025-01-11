@@ -11,7 +11,10 @@ pub fn compile(input: &str, host: &Host, code: &mut Code) {
     for token in tokens {
         let append_to = code.find_innermost_fragment_with_valid_body();
 
-        let fragment = parse_token(token, &append_to, code, host);
+        let fragment = match parse_token(token, &append_to, code, host) {
+            Ok(expression) => FragmentKind::Expression { expression },
+            Err(err) => FragmentKind::Error { err },
+        };
 
         let is_error = matches!(fragment, FragmentKind::Error { .. });
 
@@ -45,19 +48,15 @@ fn parse_token(
     append_to: &FragmentPath,
     code: &Code,
     host: &Host,
-) -> FragmentKind {
+) -> Result<Expression, FragmentError> {
     match token {
         Token::Identifier { name } => {
             if let Some(id) = host.functions_by_name.get(&name).copied() {
-                FragmentKind::Expression {
-                    expression: Expression::FunctionCall { target: id },
-                }
+                Ok(Expression::FunctionCall { target: id })
             } else {
-                FragmentKind::Error {
-                    err: FragmentError::UnexpectedToken {
-                        token: Token::Identifier { name },
-                    },
-                }
+                Err(FragmentError::UnexpectedToken {
+                    token: Token::Identifier { name },
+                })
             }
         }
         Token::LiteralNumber { value } => {
@@ -69,15 +68,11 @@ fn parse_token(
                 .is_none();
 
             if can_append_expression {
-                FragmentKind::Expression {
-                    expression: Expression::LiteralValue { value },
-                }
+                Ok(Expression::LiteralValue { value })
             } else {
-                FragmentKind::Error {
-                    err: FragmentError::UnexpectedToken {
-                        token: Token::LiteralNumber { value },
-                    },
-                }
+                Err(FragmentError::UnexpectedToken {
+                    token: Token::LiteralNumber { value },
+                })
             }
         }
     }
