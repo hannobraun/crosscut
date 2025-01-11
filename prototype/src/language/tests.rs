@@ -58,8 +58,8 @@ fn call_to_host_function() {
             StepResult::Finished { output } => {
                 break output;
             }
-            state => {
-                panic!("Unexpected state: {state:#?}");
+            result => {
+                panic!("Unexpected state: {result:#?}");
             }
         }
     };
