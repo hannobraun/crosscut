@@ -16,6 +16,10 @@ impl Interpreter {
         interpreter
     }
 
+    pub fn reset(&mut self, code: &Code) {
+        self.next = code.root.entry().copied();
+    }
+
     pub fn next(&self) -> Option<&FragmentId> {
         self.next.as_ref()
     }
@@ -84,10 +88,6 @@ impl Interpreter {
             self.next = None;
             StepResult::Finished { output: value }
         }
-    }
-
-    pub fn reset(&mut self, code: &Code) {
-        self.next = code.root.entry().copied();
     }
 
     pub fn next_expression<'r>(&self, code: &'r Code) -> NextExpression<'r> {
