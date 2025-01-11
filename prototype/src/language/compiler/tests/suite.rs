@@ -1,7 +1,7 @@
 use itertools::Itertools;
 
 use crate::language::{
-    code::{Code, CodeError, Token},
+    code::{Code, CodeError},
     compiler::tests::infra::compile,
     host::Host,
 };
@@ -28,14 +28,7 @@ fn code_after_expression_is_an_error() {
         .unwrap();
 
     assert_eq!(code.errors.get(a), None);
-    assert_eq!(
-        code.errors.get(b),
-        Some(&CodeError::Fragment {
-            err: crate::language::code::FragmentError::UnexpectedToken {
-                token: Token::LiteralNumber { value: 2 }
-            }
-        }),
-    );
+    assert_eq!(code.errors.get(b), Some(&CodeError::UnexpectedToken));
 }
 
 #[test]

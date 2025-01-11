@@ -82,8 +82,15 @@ fn check_for_error(fragment: &Fragment) -> Option<CodeError> {
                 return Some(CodeError::MissingArgument);
             }
         }
-        FragmentKind::Error { err } => {
-            return Some(CodeError::Fragment { err: err.clone() });
+        FragmentKind::Error {
+            err: FragmentError::UnexpectedToken { .. },
+        } => {
+            return Some(CodeError::UnexpectedToken);
+        }
+        FragmentKind::Error {
+            err: FragmentError::UnresolvedIdentifier { .. },
+        } => {
+            return Some(CodeError::UnresolvedIdentifier);
         }
         _ => {}
     }
