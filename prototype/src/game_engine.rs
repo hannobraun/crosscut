@@ -25,38 +25,47 @@ impl GameEngine {
                 Event::EditorInput { line } => {
                     editor.process_input(line, &host, &mut interpreter);
 
-                    match interpreter.step(editor.code()) {
-                        InterpreterState::CallToHostFunction {
-                            id,
-                            input,
-                            output,
-                        } => {
-                            match id {
-                                0 => {
-                                    // `dim`
+                    loop {
+                        match interpreter.step(editor.code()) {
+                            InterpreterState::CallToHostFunction {
+                                id,
+                                input,
+                                output,
+                            } => {
+                                match id {
+                                    0 => {
+                                        // `dim`
 
-                                    *output = input / 2;
+                                        *output = input / 2;
+                                    }
+                                    id => {
+                                        unreachable!(
+                                            "Undefined host function: `{id}`"
+                                        );
+                                    }
                                 }
-                                id => {
-                                    unreachable!(
-                                        "Undefined host function: `{id}`"
-                                    );
-                                }
+
+                                continue;
+                            }
+                            InterpreterState::Error => {
+                                // Not handling errors right now. Eventually,
+                                // those should be properly encoded in `Code`
+                                // and therefore visible in the editor. But in
+                                // any case, there's nothing to do here, at
+                                // least for now.
+                            }
+                            InterpreterState::Finished { output } => {
+                                let color = output as f64 / 255.;
+
+                                game_output_tx.send(
+                                    GameOutput::SubmitColor {
+                                        color: [color, color, color, 1.],
+                                    },
+                                )?;
                             }
                         }
-                        InterpreterState::Error => {
-                            // Not handling errors right now. Eventually, those
-                            // should be properly encoded in `Code` and
-                            // therefore visible in the editor. But in any case,
-                            // there's nothing to do here, at least for now.
-                        }
-                        InterpreterState::Finished { output } => {
-                            let color = output as f64 / 255.;
 
-                            game_output_tx.send(GameOutput::SubmitColor {
-                                color: [color, color, color, 1.],
-                            })?;
-                        }
+                        break;
                     }
 
                     editor.render(&host, &interpreter)?;
