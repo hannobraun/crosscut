@@ -172,7 +172,7 @@ where
         let state = self.interpreter.state(self.code);
 
         writeln!(self.w)?;
-        write!(self.w, "{} > ", state)?;
+        write!(self.w, "{state} > ")?;
 
         self.w.flush()?;
 
