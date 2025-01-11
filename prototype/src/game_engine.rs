@@ -27,11 +27,11 @@ impl GameEngine {
 
                     match interpreter.step(editor.code()) {
                         InterpreterState::CallToHostFunction {
-                            id: _,
+                            id,
                             input: _,
                             output: _,
                         } => {
-                            // No host functions are defined, currently.
+                            unreachable!("Undefined host function: `{id}`");
                         }
                         InterpreterState::Error => {
                             // Not handling errors right now. Eventually, those
