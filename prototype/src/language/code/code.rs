@@ -12,8 +12,10 @@ pub struct Code {
 
 impl Code {
     pub fn new() -> Self {
+        let fragments = Fragments::default();
+
         Self {
-            fragments: Fragments::default(),
+            fragments,
             root: Body::default(),
             errors: BTreeSet::default(),
         }
