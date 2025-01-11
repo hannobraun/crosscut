@@ -14,15 +14,14 @@ pub fn compile(input: &str, host: &Host, code: &mut Code) {
             Ok(expression) => FragmentKind::Expression { expression },
             Err(err) => FragmentKind::Error { err },
         };
-        let is_error = check_for_error(&kind);
+        let fragment = Fragment {
+            kind,
+            body: Body::default(),
+        };
 
-        let id = code.append(
-            Fragment {
-                kind,
-                body: Body::default(),
-            },
-            append_to,
-        );
+        let is_error = check_for_error(&fragment.kind);
+
+        let id = code.append(fragment, append_to);
 
         if is_error {
             code.errors.insert(id);
