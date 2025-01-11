@@ -19,7 +19,7 @@ pub fn compile(input: &str, host: &Host, code: &mut Code) {
             body: Body::default(),
         };
 
-        let is_error = check_for_error(&fragment.kind);
+        let is_error = check_for_error(&fragment);
 
         let id = code.append(fragment, append_to);
 
@@ -73,6 +73,6 @@ fn parse_token(
     }
 }
 
-fn check_for_error(kind: &FragmentKind) -> bool {
-    matches!(kind, FragmentKind::Error { .. })
+fn check_for_error(kind: &Fragment) -> bool {
+    matches!(kind.kind, FragmentKind::Error { .. })
 }
