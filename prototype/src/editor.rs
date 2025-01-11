@@ -211,9 +211,9 @@ where
     }
 
     fn render_fragment(&mut self, id: &FragmentId) -> anyhow::Result<()> {
-        let error = self.code.errors.get(id);
+        let maybe_error = self.code.errors.get(id);
 
-        if error.is_some() {
+        if maybe_error.is_some() {
             self.w.queue(SetForegroundColor(Color::Red))?;
         }
 
@@ -265,7 +265,7 @@ where
             },
         }
 
-        if let Some(err) = error {
+        if let Some(err) = maybe_error {
             let message = match err {
                 CodeError::MissingArgument => "missing argument",
                 CodeError::UnexpectedToken => "unexpected token",
