@@ -30,13 +30,17 @@ impl Code {
     }
 
     pub fn find_innermost_fragment_with_valid_body(&self) -> FragmentPath {
-        let mut path = FragmentPath {
-            inner: vec![self.root],
-        };
-        let mut current_body = &self.fragments().get(&self.root).body;
+        let mut next = self.root;
+        let mut path = FragmentPath { inner: vec![] };
 
         loop {
-            let Some(id) = current_body.ids().next_back().copied() else {
+            let Some(body) = self.fragments.get(&next).valid_body() else {
+                break;
+            };
+
+            path.inner.push(next);
+
+            let Some(id) = body.ids().next_back().copied() else {
                 // The body we're currently looking at, is the innermost valid
                 // one that we have found so far. If it doesn't have any
                 // children, then it is the innermost valid one, period.
@@ -53,12 +57,7 @@ impl Code {
             // innermost body, I don't think it's possible to construct a case
             // where this makes a difference.
 
-            let Some(body) = self.fragments.get(&id).valid_body() else {
-                break;
-            };
-
-            path.inner.push(id);
-            current_body = body;
+            next = id;
         }
 
         path
