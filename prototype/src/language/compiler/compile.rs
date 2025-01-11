@@ -1,7 +1,7 @@
 use crate::language::{
     code::{
-        Body, Code, Expression, Fragment, FragmentError, FragmentKind,
-        FragmentPath, Token,
+        Body, Code, CodeError, Expression, Fragment, FragmentError,
+        FragmentKind, FragmentPath, Token,
     },
     host::Host,
 };
@@ -73,17 +73,17 @@ fn parse_token(
     }
 }
 
-fn check_for_error(fragment: &Fragment) -> Option<()> {
+fn check_for_error(fragment: &Fragment) -> Option<CodeError> {
     match &fragment.kind {
         FragmentKind::Expression {
             expression: Expression::FunctionCall { .. },
         } => {
             if fragment.body.is_empty() {
-                return Some(());
+                return Some(CodeError::MissingArgument);
             }
         }
-        FragmentKind::Error { .. } => {
-            return Some(());
+        FragmentKind::Error { err } => {
+            return Some(CodeError::Fragment { err: err.clone() });
         }
         _ => {}
     }
