@@ -31,7 +31,7 @@ impl Code {
 
     pub fn find_innermost_fragment_with_valid_body(&self) -> FragmentPath {
         let mut next = self.root;
-        let mut path = FragmentPath { inner: vec![] };
+        let mut path = FragmentPath { inner: Vec::new() };
 
         loop {
             let Some(body) = self.fragments.get(&next).valid_body() else {
