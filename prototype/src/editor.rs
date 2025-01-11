@@ -261,6 +261,12 @@ where
 
                 writeln!(self.w, "    error: unexpected token")?;
             }
+            FragmentKind::Error {
+                err: FragmentError::UnresolvedIdentifier { name },
+            } => {
+                write!(self.w, "{name}")?;
+                writeln!(self.w, "    error: unresolved identifier")?;
+            }
         }
 
         self.indent += 1;

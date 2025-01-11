@@ -52,9 +52,7 @@ fn parse_token(
             if let Some(id) = host.functions_by_name.get(&name).copied() {
                 Ok(Expression::FunctionCall { target: id })
             } else {
-                Err(FragmentError::UnexpectedToken {
-                    token: Token::Identifier { name },
-                })
+                Err(FragmentError::UnresolvedIdentifier { name })
             }
         }
         Token::LiteralNumber { value } => {

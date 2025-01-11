@@ -100,4 +100,5 @@ pub enum FragmentKind {
 #[derive(Clone, Debug, Eq, PartialEq, udigest::Digestable)]
 pub enum FragmentError {
     UnexpectedToken { token: Token },
+    UnresolvedIdentifier { name: String },
 }
