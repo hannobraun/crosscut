@@ -25,18 +25,18 @@ pub fn compile(input: &str, host: &Host, code: &mut Code) {
                         .get(id)
                         .body
                         .expression(code.fragments())
-                        .is_some()
+                        .is_none()
                 } else {
-                    code.root.expression(code.fragments()).is_some()
+                    code.root.expression(code.fragments()).is_none()
                 };
 
                 if can_append_expression {
-                    FragmentKind::UnexpectedToken {
-                        token: Token::LiteralNumber { value },
-                    }
-                } else {
                     FragmentKind::Expression {
                         expression: Expression::LiteralValue { value },
+                    }
+                } else {
+                    FragmentKind::UnexpectedToken {
+                        token: Token::LiteralNumber { value },
                     }
                 }
             }
