@@ -53,12 +53,12 @@ impl Code {
             // innermost body, I don't think it's possible to construct a case
             // where this makes a difference.
 
-            if let Some(body) = self.fragments.get(&id).valid_body() {
-                path.inner.push(id);
-                current_body = body;
-            } else {
+            let Some(body) = self.fragments.get(&id).valid_body() else {
                 break;
-            }
+            };
+
+            path.inner.push(id);
+            current_body = body;
         }
 
         path
