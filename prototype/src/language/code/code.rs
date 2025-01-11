@@ -62,17 +62,15 @@ impl Code {
             next = id;
         }
 
-        assert!(
-            !path.is_empty(),
-            "Constructing an empty fragment path is invalid, as it must at \
-            least contain the root fragment.\n\
-            \n\
-            It should not be possible to run into this problem here, as the \
-            root fragment has a valid body. We _must_ have added it in the \
-            loop above.",
-        );
+        let Some(path) = FragmentPath::new(path) else {
+            unreachable!(
+                "It should be impossible to construct an invalid path here, as \
+                the root fragment has a valid body. We _must_ have added it in \
+                the loop above.",
+            );
+        };
 
-        FragmentPath::new(path)
+        path
     }
 
     pub fn append(
@@ -123,8 +121,14 @@ pub struct FragmentPath {
 }
 
 impl FragmentPath {
-    pub fn new(path: Vec<FragmentId>) -> Self {
-        Self { inner: path }
+    pub fn new(path: Vec<FragmentId>) -> Option<Self> {
+        if path.is_empty() {
+            // An empty fragment path is not valid, as every path must at least
+            // contain the root.
+            None
+        } else {
+            Some(Self { inner: path })
+        }
     }
 
     pub fn id(&self) -> &FragmentId {
