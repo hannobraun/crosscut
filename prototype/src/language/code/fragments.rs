@@ -23,9 +23,7 @@ impl Fragments {
 
     pub fn insert(&mut self, fragment: Fragment) -> FragmentId {
         let id = FragmentId::generate(&fragment);
-
         self.inner.insert(id, fragment);
-
         id
     }
 }
