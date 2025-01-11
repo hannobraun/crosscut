@@ -2,14 +2,14 @@ use super::code::{Body, Code, Expression, FragmentId, FragmentKind};
 
 pub struct Interpreter {
     next: Option<FragmentId>,
-    active_call: Vec<ActiveCall>,
+    active_calls: Vec<ActiveCall>,
 }
 
 impl Interpreter {
     pub fn new(code: &Code) -> Self {
         Self {
             next: code.root.entry().copied(),
-            active_call: Vec::new(),
+            active_calls: Vec::new(),
         }
     }
 
@@ -43,13 +43,13 @@ impl Interpreter {
                     if let Some(ActiveCall::ToHostFunction {
                         output: Some(output),
                         ..
-                    }) = self.active_call.last()
+                    }) = self.active_calls.last()
                     {
                         let output = *output;
-                        self.active_call.pop();
+                        self.active_calls.pop();
                         return self.evaluate_value(output);
                     } else {
-                        self.active_call.push(ActiveCall::ToHostFunction {
+                        self.active_calls.push(ActiveCall::ToHostFunction {
                             id: *target,
                             fragment,
                             output: None,
@@ -69,7 +69,7 @@ impl Interpreter {
             id,
             fragment,
             output,
-        }) = self.active_call.last_mut()
+        }) = self.active_calls.last_mut()
         {
             self.next = Some(*fragment);
             StepResult::CallToHostFunction {
