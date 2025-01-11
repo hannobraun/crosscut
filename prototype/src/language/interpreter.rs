@@ -43,8 +43,9 @@ impl Interpreter {
                     if let Some(ActiveCall::ToHostFunction {
                         output: Some(output),
                         ..
-                    }) = self.active_call
+                    }) = &self.active_call
                     {
+                        let output = *output;
                         self.active_call = None;
                         return self.evaluate_value(output);
                     } else {
