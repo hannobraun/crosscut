@@ -66,3 +66,32 @@ fn call_to_host_function() {
 
     assert_eq!(output, 32);
 }
+
+#[test]
+fn nested_calls_to_host_function() {
+    // It is possible use a function call as the argument of another function
+    // call.
+
+    let mut code = Code::default();
+
+    let host = Host::from_functions(["half"]);
+    compile("half half 64", &host, &mut code);
+
+    let mut interpreter = Interpreter::new(&code);
+    let output = loop {
+        match interpreter.step(&code) {
+            StepResult::CallToHostFunction { id, input, output } => {
+                assert_eq!(id, 0);
+                *output = input / 2;
+            }
+            StepResult::Finished { output } => {
+                break output;
+            }
+            state => {
+                panic!("Unexpected state: {state:#?}");
+            }
+        }
+    };
+
+    assert_eq!(output, 16);
+}
