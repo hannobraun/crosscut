@@ -14,7 +14,7 @@ pub fn compile(input: &str, host: &Host, code: &mut Code) {
             Ok(expression) => FragmentKind::Expression { expression },
             Err(err) => FragmentKind::Error { err },
         };
-        let is_error = matches!(kind, FragmentKind::Error { .. });
+        let is_error = check_for_error(&kind);
 
         let id = code.append(
             Fragment {
@@ -72,4 +72,8 @@ fn parse_token(
             }
         }
     }
+}
+
+fn check_for_error(kind: &FragmentKind) -> bool {
+    matches!(kind, FragmentKind::Error { .. })
 }
