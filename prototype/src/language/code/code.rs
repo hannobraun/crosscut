@@ -46,10 +46,7 @@ impl Code {
             };
 
             let fragment = self.fragments.get(&id);
-            if let FragmentKind::Expression {
-                expression: Expression::FunctionCall { .. },
-            } = fragment.kind
-            {
+            if fragment.valid_body().is_some() {
                 path.inner.push(id);
                 current_body = &fragment.body;
             } else {

@@ -73,6 +73,24 @@ pub struct Fragment {
     pub body: Body,
 }
 
+impl Fragment {
+    /// # Returns the body of the fragment, if this kind can have a valid one
+    ///
+    /// Fragments that can have a valid body, are all fragments that allow
+    /// nesting. That includes function calls, for example, whose argument is
+    /// nested within the function call fragment's body.
+    pub fn valid_body(&self) -> Option<&Body> {
+        if let FragmentKind::Expression {
+            expression: Expression::FunctionCall { .. },
+        } = self.kind
+        {
+            Some(&self.body)
+        } else {
+            None
+        }
+    }
+}
+
 #[derive(Clone, Debug, Eq, PartialEq, udigest::Digestable)]
 pub enum FragmentKind {
     Root,
