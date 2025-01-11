@@ -178,7 +178,9 @@ where
     }
 
     pub fn render_prompt(&mut self) -> anyhow::Result<()> {
-        let state = match self.interpreter.state(self.code) {
+        let interpreter = self.interpreter;
+
+        let state = match interpreter.state(self.code) {
             InterpreterState::Running => "running",
             InterpreterState::Finished => "finished",
             InterpreterState::Error => "error",
