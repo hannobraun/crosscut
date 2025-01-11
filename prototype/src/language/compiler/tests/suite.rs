@@ -28,3 +28,17 @@ fn code_after_expression_is_an_error() {
     assert!(!code.errors.contains(a));
     assert!(code.errors.contains(b));
 }
+
+#[test]
+fn unresolved_identifier_is_an_error() {
+    // An identifier that does not refer to a function is an error.
+
+    let host = Host::empty();
+
+    let mut code = Code::default();
+    compile("f 1", &host, &mut code);
+
+    let f = code.fragments().get(&code.root).body.ids().next().unwrap();
+
+    assert!(code.errors.contains(f));
+}
