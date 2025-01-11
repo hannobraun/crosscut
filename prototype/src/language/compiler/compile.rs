@@ -73,6 +73,6 @@ fn parse_token(
     }
 }
 
-fn check_for_error(kind: &Fragment) -> bool {
-    matches!(kind.kind, FragmentKind::Error { .. })
+fn check_for_error(fragment: &Fragment) -> bool {
+    matches!(fragment.kind, FragmentKind::Error { .. })
 }
