@@ -10,7 +10,8 @@ use crossterm::{
 
 use crate::language::{
     code::{
-        Body, Code, Expression, FragmentError, FragmentId, FragmentKind, Token,
+        Body, Code, CodeError, Expression, FragmentError, FragmentId,
+        FragmentKind, Token,
     },
     compiler::compile,
     host::Host,
@@ -249,31 +250,30 @@ where
             FragmentKind::Expression { expression } => {
                 self.render_expression(expression)?;
             }
-            FragmentKind::Error { err } => {
-                let message = match err {
-                    FragmentError::UnexpectedToken { token } => {
-                        match token {
-                            Token::Identifier { name } => {
-                                write!(self.w, "{name}")?;
-                            }
-                            Token::LiteralNumber { value } => {
-                                write!(self.w, "{value}")?;
-                            }
-                        }
-
-                        "unexpected token"
-                    }
-                    FragmentError::UnresolvedIdentifier { name } => {
+            FragmentKind::Error { err } => match err {
+                FragmentError::UnexpectedToken { token } => match token {
+                    Token::Identifier { name } => {
                         write!(self.w, "{name}")?;
-
-                        "unresolved identifier"
                     }
-                };
-
-                write!(self.w, "    error: {message}")?;
-            }
+                    Token::LiteralNumber { value } => {
+                        write!(self.w, "{value}")?;
+                    }
+                },
+                FragmentError::UnresolvedIdentifier { name } => {
+                    write!(self.w, "{name}")?;
+                }
+            },
         }
 
+        if let Some(err) = error {
+            let message = match err {
+                CodeError::MissingArgument => "missing argument",
+                CodeError::UnexpectedToken => "unexpected token",
+                CodeError::UnresolvedIdentifier => "unresolved identifier",
+            };
+
+            write!(self.w, "    error: {message}")?;
+        }
         writeln!(self.w)?;
 
         self.indent += 1;
