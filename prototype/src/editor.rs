@@ -1,4 +1,7 @@
-use std::io::{self, stdout, Stdout};
+use std::{
+    collections::{BTreeSet, VecDeque},
+    io::{self, stdout, Stdout},
+};
 
 use crossterm::{
     style::{Attribute, Color, ResetColor, SetAttribute, SetForegroundColor},
@@ -14,12 +17,23 @@ use crate::language::{
 
 pub struct Editor {
     code: Code,
+    commands: BTreeSet<&'static str>,
 }
 
 impl Editor {
     pub fn new() -> Self {
+        // All of the trie crates I could find where overly complex, unsuitable
+        // for my use case, or dubious in other ways. Let's just do this by
+        // hand.
+
+        let mut commands = BTreeSet::new();
+        commands.insert(":append");
+        commands.insert(":clear");
+        commands.insert(":reset");
+
         Self {
             code: Code::default(),
+            commands,
         }
     }
 
@@ -40,7 +54,30 @@ impl Editor {
             return;
         };
 
-        match command {
+        let mut matched_commands = self
+            .commands
+            .iter()
+            .filter(|c| c.starts_with(command))
+            .collect::<VecDeque<_>>();
+
+        let Some(&matched_command) = matched_commands.pop_front() else {
+            println!("Unknown command: `{command}`");
+            return;
+        };
+        if !matched_commands.is_empty() {
+            print!(
+                "`{command}` could refer to multiple commands: \
+                `{matched_command}`"
+            );
+            for matched_command in matched_commands {
+                print!(", `{matched_command}`");
+            }
+            println!();
+
+            return;
+        }
+
+        match matched_command {
             command @ ":append" => {
                 let Some(input_code) = command_and_arguments.next() else {
                     println!(
@@ -68,8 +105,8 @@ impl Editor {
 
                 interpreter.reset(&self.code);
             }
-            command => {
-                println!("Unknown command: `{command}`");
+            _ => {
+                unreachable!("Ruled out that command is unknown, above.")
             }
         }
     }
