@@ -119,6 +119,7 @@ impl Default for Code {
     }
 }
 
+#[derive(Debug)]
 pub struct FragmentPath {
     inner: Vec<FragmentId>,
 }
