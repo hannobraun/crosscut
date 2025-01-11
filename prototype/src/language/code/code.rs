@@ -57,10 +57,6 @@ impl Code {
                 path.inner.push(id);
                 current_body = body;
             } else {
-                // The body we're currently looking at does have children, and
-                // we've been looking at the last of those. That child is not an
-                // expression though, which means it has no valid body. We're
-                // done with our search.
                 break;
             }
         }
