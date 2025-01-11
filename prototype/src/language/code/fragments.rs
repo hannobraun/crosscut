@@ -28,6 +28,27 @@ impl Fragments {
     }
 }
 
+/// # The ID of a fragment
+///
+/// Fragment IDs are based on hashing. This means that different fragments
+/// should result in different hashes. Hash collisions, meaning the same IDs for
+/// equal hashes, should be exceedingly unlikely.
+///
+/// Another consequence of this, is that equal fragments end up with the same
+/// ID, even if they are located in different parts of the syntax tree. This is
+/// not a problem, because if those fragments are truly equal, there's really no
+/// reason to not also consider them identical.
+///
+/// There is one aspect here that might be a bit unintuitive: That fragments
+/// that are rendered similarly in the editor, can actually still be distinct.
+/// For example:
+///
+/// - Two calls to the same function `f` can still be distinct fragments, as
+///   their arguments are included in the fragment, and thus influence their ID.
+/// - A simple value like `1` can be a perfectly valid expression fragment,
+///   while the same value in another place would be an unexpected token. The
+///   compiler would emit those as different kinds of fragments, which would
+///   then have different IDs.
 #[derive(Clone, Copy, Eq, Ord, PartialEq, PartialOrd, udigest::Digestable)]
 pub struct FragmentId {
     hash: [u8; 32],
