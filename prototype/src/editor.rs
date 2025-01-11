@@ -169,8 +169,10 @@ where
     }
 
     pub fn render_prompt(&mut self) -> anyhow::Result<()> {
+        let state = self.interpreter.state(self.code);
+
         writeln!(self.w)?;
-        write!(self.w, "{} > ", self.interpreter.state(self.code))?;
+        write!(self.w, "{} > ", state)?;
 
         self.w.flush()?;
 
