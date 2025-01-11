@@ -81,12 +81,20 @@ impl Code {
         let mut to_update = self.fragments.get(&to_update_id).clone();
         let appended = to_update.body.push(to_append, &mut self.fragments);
 
-        let id_before_update = to_update_id;
-        let updated = to_update;
+        let mut id_before_update = to_update_id;
+        let mut updated = to_update;
 
-        // We're missing code here that handles the rest of the fragments to
-        // update. The test suite doesn't cover this yet, though, so I've
-        // decided not to add it, for the time being.
+        for to_update_id in path.inner.into_iter().rev() {
+            let mut to_update = self.fragments.get(&to_update_id).clone();
+            to_update.body.replace(
+                id_before_update,
+                updated,
+                &mut self.fragments,
+            );
+
+            id_before_update = to_update_id;
+            updated = to_update;
+        }
 
         self.root
             .replace(id_before_update, updated, &mut self.fragments);
