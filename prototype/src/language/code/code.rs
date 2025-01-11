@@ -35,6 +35,8 @@ impl Code {
 
         loop {
             let Some(body) = self.fragments.get(&next).valid_body() else {
+                // The next fragment has no valid body. Which means the most
+                // recent one we added is already is the innermost one!
                 break;
             };
 
