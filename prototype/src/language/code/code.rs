@@ -1,7 +1,7 @@
 use std::collections::BTreeSet;
 
 use super::{
-    path::FragmentPath, Body, Fragment, FragmentId, FragmentKind, Fragments,
+    Body, Fragment, FragmentId, FragmentKind, FragmentPath, Fragments,
 };
 
 #[derive(Clone, Debug, Eq, PartialEq)]
