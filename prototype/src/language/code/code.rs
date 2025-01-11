@@ -78,18 +78,6 @@ impl Code {
         to_append: Fragment,
         mut path: FragmentPath,
     ) -> FragmentId {
-        // This function is less regular than it could be, if the root where
-        // another kind of fragment. Then it wouldn't need special handling
-        // here.
-        //
-        // However, I think that would be problematic in different ways. Not the
-        // least, by adding another kind of fragment that is only allowed to be
-        // used in a single place.
-        //
-        // I'm not sure that it would be worth it, especially since I've already
-        // got this working, it seems. It's something to keep an eye on though,
-        // for sure.
-
         let Some(to_update_id) = path.inner.pop() else {
             unreachable!(
                 "A fragment path must consist of at least one component, the \
