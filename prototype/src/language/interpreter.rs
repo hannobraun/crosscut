@@ -17,11 +17,13 @@ impl Interpreter {
         self.next.as_ref()
     }
 
-    pub fn state(&self, code: &Code) -> &'static str {
+    pub fn state(&self, code: &Code) -> InterpreterState {
+        use InterpreterState::*;
+
         match self.next_expression(code) {
-            NextExpression::Expression { .. } => "running",
-            NextExpression::NoMoreFragments => "finished",
-            NextExpression::NextFragmentIsNotAnExpression => "error",
+            NextExpression::Expression { .. } => Running,
+            NextExpression::NoMoreFragments => Finished,
+            NextExpression::NextFragmentIsNotAnExpression => Error,
         }
     }
 
@@ -99,6 +101,12 @@ impl Interpreter {
             fragment: id,
         }
     }
+}
+
+pub enum InterpreterState {
+    Running,
+    Finished,
+    Error,
 }
 
 #[derive(Debug, PartialEq)]

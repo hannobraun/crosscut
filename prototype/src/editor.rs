@@ -12,7 +12,7 @@ use crate::language::{
     code::{Body, Code, Expression, FragmentId, FragmentKind, Token},
     compiler::compile,
     host::Host,
-    interpreter::Interpreter,
+    interpreter::{Interpreter, InterpreterState},
 };
 
 pub struct Editor {
@@ -169,7 +169,11 @@ where
     }
 
     pub fn render_prompt(&mut self) -> anyhow::Result<()> {
-        let state = self.interpreter.state(self.code);
+        let state = match self.interpreter.state(self.code) {
+            InterpreterState::Running => "running",
+            InterpreterState::Finished => "finished",
+            InterpreterState::Error => "error",
+        };
 
         writeln!(self.w)?;
         write!(self.w, "{state} > ")?;
