@@ -101,7 +101,7 @@ impl Interpreter {
     }
 }
 
-pub enum ActiveCall {
+enum ActiveCall {
     ToHostFunction {
         id: usize,
         fragment: FragmentId,
