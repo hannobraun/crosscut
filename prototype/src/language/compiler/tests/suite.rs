@@ -42,7 +42,7 @@ fn unresolved_identifier_is_an_error() {
 
     let f = code.fragments().get(&code.root).body.ids().next().unwrap();
 
-    assert!(code.errors.contains_key(f));
+    assert_eq!(code.errors.get(f), Some(&CodeError::UnresolvedIdentifier));
 }
 
 #[test]
