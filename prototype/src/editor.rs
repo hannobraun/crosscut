@@ -125,7 +125,7 @@ impl Editor {
         host: &Host,
         interpreter: &Interpreter,
     ) -> anyhow::Result<()> {
-        let mut renderer = Renderer::new(&self.code, host, interpreter);
+        let mut renderer = Renderer::new(&self.code, host, Some(interpreter));
 
         renderer.render_code()?;
         renderer.render_prompt()?;
@@ -152,12 +152,12 @@ impl<'r> Renderer<'r, Stdout> {
     pub fn new(
         code: &'r Code,
         host: &'r Host,
-        interpreter: &'r Interpreter,
+        interpreter: Option<&'r Interpreter>,
     ) -> Self {
         Self {
             code,
             host,
-            interpreter: Some(interpreter),
+            interpreter,
             w: stdout(),
             indent: 0,
         }
@@ -292,6 +292,6 @@ where
 #[cfg(test)]
 #[allow(unused)] // used sporadically, for debugging tests
 pub fn render_code(code: &Code, host: &Host, interpreter: &Interpreter) {
-    let mut renderer = Renderer::new(code, host, interpreter);
+    let mut renderer = Renderer::new(code, host, Some(interpreter));
     renderer.render_code().unwrap();
 }
