@@ -212,18 +212,24 @@ where
             self.w.queue(SetForegroundColor(Color::Red))?;
         }
 
-        if let Some(interpreter) = self.interpreter {
+        let indent = if let Some(interpreter) = self.interpreter {
             if Some(id) == interpreter.next() {
                 self.w.queue(SetAttribute(Attribute::Bold))?;
                 write!(self.w, " => ")?;
+
+                self.indent
             } else {
                 self.render_indent()?;
+
+                self.indent
             }
         } else {
             self.render_indent()?;
-        }
 
-        for _ in 0..self.indent {
+            self.indent
+        };
+
+        for _ in 0..indent {
             self.render_indent()?;
         }
 
