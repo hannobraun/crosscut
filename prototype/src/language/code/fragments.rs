@@ -94,5 +94,10 @@ impl Fragment {
 pub enum FragmentKind {
     Root,
     Expression { expression: Expression },
+    Error { err: FragmentError },
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, udigest::Digestable)]
+pub enum FragmentError {
     UnexpectedToken { token: Token },
 }

@@ -1,5 +1,7 @@
 use crate::language::{
-    code::{Body, Code, Expression, Fragment, FragmentKind, Token},
+    code::{
+        Body, Code, Expression, Fragment, FragmentError, FragmentKind, Token,
+    },
     host::Host,
 };
 
@@ -14,8 +16,10 @@ pub fn compile(input: &str, host: &Host, code: &mut Code) {
                         expression: Expression::FunctionCall { target: id },
                     }
                 } else {
-                    FragmentKind::UnexpectedToken {
-                        token: Token::Identifier { name },
+                    FragmentKind::Error {
+                        err: FragmentError::UnexpectedToken {
+                            token: Token::Identifier { name },
+                        },
                     }
                 }
             }
@@ -32,14 +36,16 @@ pub fn compile(input: &str, host: &Host, code: &mut Code) {
                         expression: Expression::LiteralValue { value },
                     }
                 } else {
-                    FragmentKind::UnexpectedToken {
-                        token: Token::LiteralNumber { value },
+                    FragmentKind::Error {
+                        err: FragmentError::UnexpectedToken {
+                            token: Token::LiteralNumber { value },
+                        },
                     }
                 }
             }
         };
 
-        let is_error = matches!(fragment, FragmentKind::UnexpectedToken { .. });
+        let is_error = matches!(fragment, FragmentKind::Error { .. });
 
         let id = code.append(
             Fragment {

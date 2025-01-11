@@ -9,7 +9,9 @@ use crossterm::{
 };
 
 use crate::language::{
-    code::{Body, Code, Expression, FragmentId, FragmentKind, Token},
+    code::{
+        Body, Code, Expression, FragmentError, FragmentId, FragmentKind, Token,
+    },
     compiler::compile,
     host::Host,
     interpreter::{Interpreter, InterpreterState},
@@ -245,7 +247,9 @@ where
             FragmentKind::Expression { expression } => {
                 self.render_expression(expression)?;
             }
-            FragmentKind::UnexpectedToken { token } => {
+            FragmentKind::Error {
+                err: FragmentError::UnexpectedToken { token },
+            } => {
                 match token {
                     Token::Identifier { name } => {
                         write!(self.w, "{name}")?;
