@@ -270,9 +270,11 @@ where
                     }
                 };
 
-                writeln!(self.w, "    error: {message}")?;
+                write!(self.w, "    error: {message}")?;
             }
         }
+
+        writeln!(self.w)?;
 
         self.indent += 1;
         self.render_body(&fragment.body)?;
@@ -301,10 +303,10 @@ where
                     );
                 };
 
-                writeln!(self.w, "{name}")?;
+                write!(self.w, "{name}")?;
             }
             Expression::LiteralValue { value } => {
-                writeln!(self.w, "{value}")?;
+                write!(self.w, "{value}")?;
             }
         }
 
