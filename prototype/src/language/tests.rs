@@ -1,7 +1,7 @@
 use pretty_assertions::assert_eq;
 
 use crate::language::{
-    compiler::tests::infra::compile, host::Host, interpreter::InterpreterState,
+    compiler::tests::infra::compile, host::Host, interpreter::StepResult,
 };
 
 use super::{code::Code, interpreter::Interpreter};
@@ -17,10 +17,7 @@ fn evaluate_single_expression() {
     compile("1", &host, &mut code);
 
     let mut interpreter = Interpreter::new(&code);
-    assert_eq!(
-        interpreter.step(&code),
-        InterpreterState::Finished { output: 1 },
-    );
+    assert_eq!(interpreter.step(&code), StepResult::Finished { output: 1 },);
 }
 
 #[test]
@@ -37,11 +34,8 @@ fn code_after_expression_is_an_error() {
     compile("1 2", &host, &mut code);
 
     let mut interpreter = Interpreter::new(&code);
-    assert_eq!(
-        interpreter.step(&code),
-        InterpreterState::Finished { output: 1 },
-    );
-    assert_eq!(interpreter.step(&code), InterpreterState::Error);
+    assert_eq!(interpreter.step(&code), StepResult::Finished { output: 1 },);
+    assert_eq!(interpreter.step(&code), StepResult::Error);
 }
 #[test]
 fn call_to_host_function() {
@@ -56,11 +50,11 @@ fn call_to_host_function() {
     let mut interpreter = Interpreter::new(&code);
     let output = loop {
         match interpreter.step(&code) {
-            InterpreterState::CallToHostFunction { id, input, output } => {
+            StepResult::CallToHostFunction { id, input, output } => {
                 assert_eq!(id, 0);
                 *output = input / 2;
             }
-            InterpreterState::Finished { output } => {
+            StepResult::Finished { output } => {
                 break output;
             }
             state => {

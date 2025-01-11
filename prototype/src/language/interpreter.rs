@@ -25,7 +25,7 @@ impl Interpreter {
         }
     }
 
-    pub fn step(&mut self, code: &Code) -> InterpreterState {
+    pub fn step(&mut self, code: &Code) -> StepResult {
         loop {
             let NextExpression::Expression {
                 expression,
@@ -33,7 +33,7 @@ impl Interpreter {
                 fragment,
             } = self.next_expression(code)
             else {
-                return InterpreterState::Error;
+                return StepResult::Error;
             };
 
             match expression {
@@ -61,7 +61,7 @@ impl Interpreter {
         }
     }
 
-    fn evaluate_value(&mut self, value: u32) -> InterpreterState {
+    fn evaluate_value(&mut self, value: u32) -> StepResult {
         if let Some(ActiveCall::ToHostFunction {
             id,
             fragment,
@@ -69,14 +69,14 @@ impl Interpreter {
         }) = &mut self.active_call
         {
             self.next = Some(*fragment);
-            InterpreterState::CallToHostFunction {
+            StepResult::CallToHostFunction {
                 id: *id,
                 input: value,
                 output: output.insert(0),
             }
         } else {
             self.next = None;
-            InterpreterState::Finished { output: value }
+            StepResult::Finished { output: value }
         }
     }
 
@@ -110,7 +110,7 @@ pub enum ActiveCall {
 }
 
 #[derive(Debug, PartialEq)]
-pub enum InterpreterState<'r> {
+pub enum StepResult<'r> {
     CallToHostFunction {
         id: usize,
         input: u32,

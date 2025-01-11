@@ -3,7 +3,7 @@ use crate::{
     editor::Editor,
     language::{
         host::Host,
-        interpreter::{Interpreter, InterpreterState},
+        interpreter::{Interpreter, StepResult},
     },
 };
 
@@ -27,7 +27,7 @@ impl GameEngine {
 
                     loop {
                         match interpreter.step(editor.code()) {
-                            InterpreterState::CallToHostFunction {
+                            StepResult::CallToHostFunction {
                                 id,
                                 input,
                                 output,
@@ -47,14 +47,14 @@ impl GameEngine {
 
                                 continue;
                             }
-                            InterpreterState::Error => {
+                            StepResult::Error => {
                                 // Not handling errors right now. Eventually,
                                 // those should be properly encoded in `Code`
                                 // and therefore visible in the editor. But in
                                 // any case, there's nothing to do here, at
                                 // least for now.
                             }
-                            InterpreterState::Finished { output } => {
+                            StepResult::Finished { output } => {
                                 let color = output as f64 / 255.;
 
                                 game_output_tx.send(
