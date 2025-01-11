@@ -37,6 +37,7 @@ fn code_after_expression_is_an_error() {
     assert_eq!(interpreter.step(&code), StepResult::Finished { output: 1 },);
     assert_eq!(interpreter.step(&code), StepResult::Error);
 }
+
 #[test]
 fn call_to_host_function() {
     // The host can define functions. Those functions take one argument, return
