@@ -2,7 +2,7 @@ use std::collections::BTreeSet;
 
 use super::{Body, Fragment, FragmentId, FragmentKind, Fragments};
 
-#[derive(Clone, Debug, Default, Eq, PartialEq)]
+#[derive(Clone, Debug, Eq, PartialEq)]
 pub struct Code {
     fragments: Fragments,
 
@@ -11,6 +11,14 @@ pub struct Code {
 }
 
 impl Code {
+    pub fn new() -> Self {
+        Self {
+            fragments: Fragments::default(),
+            root: Body::default(),
+            errors: BTreeSet::default(),
+        }
+    }
+
     pub fn fragments(&self) -> &Fragments {
         &self.fragments
     }
@@ -100,6 +108,12 @@ impl Code {
             .replace(id_before_update, updated, &mut self.fragments);
 
         appended
+    }
+}
+
+impl Default for Code {
+    fn default() -> Self {
+        Self::new()
     }
 }
 
