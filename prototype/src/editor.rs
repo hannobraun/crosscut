@@ -212,16 +212,23 @@ where
             self.w.queue(SetForegroundColor(Color::Red))?;
         }
 
-        let indent = self.indent;
+        let mut indent = self.indent;
         if let Some(interpreter) = self.interpreter {
             if Some(id) == interpreter.next() {
                 self.w.queue(SetAttribute(Attribute::Bold))?;
                 write!(self.w, " => ")?;
-            } else {
-                self.render_indent()?;
+
+                // This is worth one indentation level. We need to adjust for
+                // that.
+                let Some(adjusted) = self.indent.checked_sub(1) else {
+                    unreachable!(
+                        "Every fragment body gets one level of indentation. \
+                        The root is a fragment. Hence, we must have at least \
+                        one level of indentation."
+                    );
+                };
+                indent = adjusted;
             }
-        } else {
-            self.render_indent()?;
         };
 
         for _ in 0..indent {
