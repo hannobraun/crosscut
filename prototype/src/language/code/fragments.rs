@@ -24,15 +24,7 @@ impl Fragments {
     pub fn insert(&mut self, fragment: Fragment) -> FragmentId {
         let id = FragmentId::generate(&fragment);
 
-        let existing = self.inner.insert(id, fragment);
-        assert!(
-            existing.is_none(),
-            "Hash collision! The hash `{:?}` was generated twice.\n\
-            \n\
-            This is either incredibly unlikely (as in, less likely than being \
-            hit by lightning, according to my understanding) or a bug.",
-            id,
-        );
+        self.inner.insert(id, fragment);
 
         id
     }
