@@ -45,7 +45,7 @@ impl Editor {
                 self.code = Code::default();
                 interpreter.reset(&self.code);
             }
-            command @ ":insert" => {
+            command @ ":append" => {
                 let Some(input_code) = command_and_arguments.next() else {
                     println!(
                         "`{command}` command expects input code as argument."
