@@ -45,8 +45,7 @@ impl Code {
                 break;
             };
 
-            let fragment = self.fragments.get(&id);
-            if let Some(body) = fragment.valid_body() {
+            if let Some(body) = self.fragments.get(&id).valid_body() {
                 path.inner.push(id);
                 current_body = body;
             } else {
