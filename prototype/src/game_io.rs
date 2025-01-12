@@ -11,8 +11,8 @@ use winit::{
 };
 
 use crate::{
-    thread::{self, Receiver, Sender},
     game_engine::{GameInput, GameOutput},
+    thread::{self, Receiver, Sender},
 };
 
 pub fn start_and_wait(
