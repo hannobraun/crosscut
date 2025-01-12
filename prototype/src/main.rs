@@ -3,17 +3,17 @@
 // annoying for what little value it might provide.
 #![allow(clippy::module_inception)]
 
-mod actor;
 mod editor;
 mod game_engine;
 mod game_io;
 mod language;
 mod stdin;
+mod thread;
 
 fn main() -> anyhow::Result<()> {
     use game_engine::GameEngine;
 
-    let (game_output_tx, game_output_rx) = actor::channel();
+    let (game_output_tx, game_output_rx) = thread::channel();
 
     let game_engine = GameEngine::start(game_output_tx)?;
     let editor = stdin::start(game_engine.senders.editor_input);

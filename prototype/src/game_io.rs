@@ -11,7 +11,7 @@ use winit::{
 };
 
 use crate::{
-    actor::{self, Receiver, Sender},
+    thread::{self, Receiver, Sender},
     game_engine::{GameInput, GameOutput},
 };
 
@@ -87,7 +87,7 @@ impl ApplicationHandler for Handler {
                 event_loop.exit();
             }
             WindowEvent::RedrawRequested => {
-                if let Err(actor::ChannelDisconnected) =
+                if let Err(thread::ChannelDisconnected) =
                     self.game_io.input.send(GameInput::RenderingFrame)
                 {
                     // The other end has hung up. We should shut down too.
@@ -107,7 +107,7 @@ impl ApplicationHandler for Handler {
                             // update before, we'll use that one below.
                             break;
                         }
-                        Err(actor::ChannelDisconnected) => {
+                        Err(thread::ChannelDisconnected) => {
                             // The other end has hung up. Time for us to shut
                             // down too.
                             event_loop.exit();

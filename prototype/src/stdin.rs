@@ -2,7 +2,7 @@ use std::thread;
 
 use crossterm::event::{self, Event, KeyCode};
 
-use crate::actor::{Sender, ThreadHandle};
+use crate::thread::{Sender, ThreadHandle};
 
 pub fn start(editor_input: Sender<String>) -> ThreadHandle {
     let mut line = String::new();

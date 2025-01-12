@@ -1,5 +1,5 @@
 use crate::{
-    actor::{self, Sender, ThreadHandle},
+    thread::{self, Sender, ThreadHandle},
     editor::Editor,
     language::{
         host::Host,
@@ -20,9 +20,9 @@ impl GameEngine {
 
         editor.render(&host, &interpreter)?;
 
-        let (events_tx, events_rx) = actor::channel();
+        let (events_tx, events_rx) = thread::channel();
 
-        let handle_events = actor::spawn(move || {
+        let handle_events = thread::spawn(move || {
             let event = events_rx.recv()?;
 
             match event {
@@ -88,17 +88,17 @@ impl GameEngine {
             Ok(())
         });
 
-        let (editor_input_tx, editor_input_rx) = actor::channel();
+        let (editor_input_tx, editor_input_rx) = thread::channel();
         let events_from_editor_input = events_tx.clone();
-        let handle_editor_input = actor::spawn(move || {
+        let handle_editor_input = thread::spawn(move || {
             let line = editor_input_rx.recv()?;
             events_from_editor_input.send(Event::EditorInput { line })?;
             Ok(())
         });
 
-        let (game_input_tx, game_input_rx) = actor::channel();
+        let (game_input_tx, game_input_rx) = thread::channel();
         let events_from_game_input = events_tx;
-        let handle_game_input = actor::spawn(move || {
+        let handle_game_input = thread::spawn(move || {
             let input = game_input_rx.recv()?;
             events_from_game_input.send(Event::GameInput(input))?;
             Ok(())
