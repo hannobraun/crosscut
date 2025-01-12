@@ -90,32 +90,20 @@ impl From<anyhow::Error> for Error {
 
 #[derive(Debug)]
 pub struct ThreadHandle {
-    inner: Option<JoinHandle<anyhow::Result<()>>>,
+    inner: JoinHandle<anyhow::Result<()>>,
 }
 
 impl ThreadHandle {
     pub fn new(handle: JoinHandle<anyhow::Result<()>>) -> Self {
-        Self {
-            inner: Some(handle),
-        }
+        Self { inner: handle }
     }
 
-    pub fn join(mut self) -> anyhow::Result<()> {
-        if self.inner.is_none() {
-            panic!("You must not join an actor that has already been joined.");
-        }
-
-        if let Some(handle) = self.inner.take() {
-            match handle.join() {
-                Ok(result) => {
-                    result?;
-                }
-                Err(payload) => {
-                    panic::resume_unwind(payload);
-                }
+    pub fn join(self) -> anyhow::Result<()> {
+        match self.inner.join() {
+            Ok(result) => result,
+            Err(payload) => {
+                panic::resume_unwind(payload);
             }
         }
-
-        Ok(())
     }
 }
