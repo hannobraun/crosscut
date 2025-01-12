@@ -42,7 +42,7 @@ impl GameEngine {
                     )
                 }
                 recv(game_input_rx.inner()) -> result => {
-                    result.map(Event::GameInput)
+                    result.map(|input| Event::GameInput { input })
                 }
             };
             let Ok(event) = event else {
@@ -104,7 +104,9 @@ impl GameEngine {
 
                     editor.render(&host, &interpreter)?;
                 }
-                Event::GameInput(GameInput::RenderingFrame) => {
+                Event::GameInput {
+                    input: GameInput::RenderingFrame,
+                } => {
                     // This loop is coupled to the frame rate of the renderer.
                 }
                 Event::Heartbeat => {}
@@ -126,7 +128,9 @@ enum Event {
     EditorInput {
         line: String,
     },
-    GameInput(GameInput),
+    GameInput {
+        input: GameInput,
+    },
 
     /// # An event that has no effect when processed
     ///
