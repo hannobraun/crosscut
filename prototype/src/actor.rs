@@ -23,7 +23,7 @@ impl<I> Actor<I> {
             while let Ok(input) = receiver.recv() {
                 match f(input) {
                     Ok(()) => {}
-                    Err(Error::ChannelDisconnected(_)) => {
+                    Err(Error::ChannelDisconnected { .. }) => {
                         break;
                     }
                     Err(Error::Other { err }) => {
@@ -55,7 +55,9 @@ pub struct Sender<T> {
 impl<T> Sender<T> {
     pub fn send(&self, value: T) -> Result<(), Error> {
         self.inner.send(value).map_err(|SendError(_)| {
-            Error::ChannelDisconnected(ChannelDisconnected)
+            Error::ChannelDisconnected {
+                err: ChannelDisconnected,
+            }
         })
     }
 }
@@ -90,7 +92,7 @@ pub enum Error {
     /// scope of this application, this means that the overall system either
     /// already is shutting down, or should be going into shutdown.
     #[error(transparent)]
-    ChannelDisconnected(ChannelDisconnected),
+    ChannelDisconnected { err: ChannelDisconnected },
 
     #[error(transparent)]
     Other { err: anyhow::Error },
