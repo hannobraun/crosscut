@@ -85,13 +85,10 @@ pub enum Error {
     },
 
     #[error(transparent)]
-    Other { err: anyhow::Error },
-}
-
-impl From<anyhow::Error> for Error {
-    fn from(err: anyhow::Error) -> Self {
-        Self::Other { err }
-    }
+    Other {
+        #[from]
+        err: anyhow::Error,
+    },
 }
 
 #[derive(Debug, thiserror::Error)]
