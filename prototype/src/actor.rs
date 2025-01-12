@@ -73,10 +73,8 @@ pub struct Receiver<T> {
 }
 
 impl<T> Receiver<T> {
-    pub fn recv(&self) -> Result<T, Error> {
-        self.inner.recv().map_err(|RecvError| {
-            Error::ChannelDisconnected(ChannelDisconnected)
-        })
+    pub fn recv(&self) -> Result<T, ChannelDisconnected> {
+        self.inner.recv().map_err(|RecvError| ChannelDisconnected)
     }
 
     pub fn try_recv(&self) -> Result<T, TryRecvError> {
