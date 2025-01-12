@@ -3,7 +3,7 @@ use std::{
     thread::{self, JoinHandle},
 };
 
-use crossbeam_channel::{RecvError, SendError, TryRecvError};
+use crossbeam_channel::{SendError, TryRecvError};
 
 pub fn spawn<F>(mut f: F) -> ThreadHandle
 where
@@ -59,16 +59,16 @@ pub struct Receiver<T> {
 }
 
 impl<T> Receiver<T> {
-    pub fn recv(&self) -> Result<T, ChannelDisconnected> {
-        self.inner.recv().map_err(|RecvError| ChannelDisconnected)
-    }
-
     pub fn try_recv(&self) -> Result<Option<T>, ChannelDisconnected> {
         match self.inner.try_recv() {
             Ok(message) => Ok(Some(message)),
             Err(TryRecvError::Empty) => Ok(None),
             Err(TryRecvError::Disconnected) => Err(ChannelDisconnected),
         }
+    }
+
+    pub fn inner(&self) -> &crossbeam_channel::Receiver<T> {
+        &self.inner
     }
 }
 

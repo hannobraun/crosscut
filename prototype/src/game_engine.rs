@@ -1,10 +1,12 @@
+use crossbeam_channel::select;
+
 use crate::{
     editor::Editor,
     language::{
         host::Host,
         interpreter::{Interpreter, StepResult, Value},
     },
-    thread::{self, Sender, ThreadHandle},
+    thread::{self, ChannelDisconnected, Sender, ThreadHandle},
 };
 
 pub struct GameEngine {
@@ -20,10 +22,31 @@ impl GameEngine {
 
         editor.render(&host, &interpreter)?;
 
-        let (events_tx, events_rx) = thread::channel();
+        // Need to specify the types of the channels explicitly, to work around
+        // this bug in rust-analyzer:
+        // https://github.com/rust-lang/rust-analyzer/issues/15984
+        let (editor_input_tx, editor_input_rx) =
+            thread::channel::<Option<String>>();
+        let (game_input_tx, game_input_rx) = thread::channel::<GameInput>();
 
         let handle_events = thread::spawn(move || {
-            let event = events_rx.recv()?;
+            let event = select! {
+                recv(editor_input_rx.inner()) -> result => {
+                    result.map(|line|
+                        if let Some(line) = line {
+                            Event::EditorInput { line }}
+                        else {
+                            Event::Heartbeat
+                        }
+                    )
+                }
+                recv(game_input_rx.inner()) -> result => {
+                    result.map(Event::GameInput)
+                }
+            };
+            let Ok(event) = event else {
+                return Err(ChannelDisconnected.into());
+            };
 
             match event {
                 Event::EditorInput { line } => {
@@ -83,33 +106,14 @@ impl GameEngine {
                 Event::GameInput(GameInput::RenderingFrame) => {
                     // This loop is coupled to the frame rate of the renderer.
                 }
+                Event::Heartbeat => {}
             }
 
-            Ok(())
-        });
-
-        let (editor_input_tx, editor_input_rx) = thread::channel();
-        let events_from_editor_input = events_tx.clone();
-        let handle_editor_input = thread::spawn(move || {
-            let line = editor_input_rx.recv()?;
-            if let Some(line) = line {
-                events_from_editor_input.send(Event::EditorInput { line })?;
-            }
-            Ok(())
-        });
-
-        let (game_input_tx, game_input_rx) = thread::channel();
-        let events_from_game_input = events_tx;
-        let handle_game_input = thread::spawn(move || {
-            let input = game_input_rx.recv()?;
-            events_from_game_input.send(Event::GameInput(input))?;
             Ok(())
         });
 
         let threads = GameEngineThreads {
             handle: handle_events,
-            handle_editor_input,
-            handle_game_input,
         };
         let senders = GameEngineSenders {
             editor_input: editor_input_tx,
@@ -122,15 +126,11 @@ impl GameEngine {
 
 pub struct GameEngineThreads {
     handle: ThreadHandle,
-    handle_editor_input: ThreadHandle,
-    handle_game_input: ThreadHandle,
 }
 
 impl GameEngineThreads {
     pub fn join(self) -> anyhow::Result<()> {
         self.handle.join()?;
-        self.handle_editor_input.join()?;
-        self.handle_game_input.join()?;
 
         Ok(())
     }
@@ -143,8 +143,25 @@ pub struct GameEngineSenders {
 
 #[derive(Debug)]
 enum Event {
-    EditorInput { line: String },
+    EditorInput {
+        line: String,
+    },
     GameInput(GameInput),
+
+    /// # An event that has no effect when processed
+    ///
+    /// If a thread shuts down, either because of an error, or because the
+    /// application is supposed to shut down as a whole, that needs to propagate
+    /// to the other threads.
+    ///
+    /// For some threads, this is easily achieved, because they block on reading
+    /// from a channel from another thread, which will fail the moment that
+    /// other thread shuts down. Other threads block on something else, and
+    /// don't benefit from this mechanism.
+    ///
+    /// Those other threads need to instead _send_ to another thread from time
+    /// to time, to learn about the shutdown. This is what this event is for.
+    Heartbeat,
 }
 
 #[derive(Debug)]
