@@ -116,13 +116,18 @@ impl Default for Code {
 #[derive(Clone, Debug, Eq, PartialEq, udigest::Digestable)]
 pub enum Expression {
     FunctionCall { target: usize },
-    LiteralInteger { value: u32 },
+    Literal { literal: Literal },
 }
 
 #[derive(Clone, Debug, Eq, PartialEq, udigest::Digestable)]
 pub enum Token {
     Identifier { name: String },
-    LiteralInteger { value: u32 },
+    Literal { literal: Literal },
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, udigest::Digestable)]
+pub enum Literal {
+    Integer { value: u32 },
 }
 
 #[derive(Clone, Copy, Debug, PartialEq)]

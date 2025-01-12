@@ -1,4 +1,4 @@
-use super::code::{Body, Code, Expression, FragmentId, FragmentKind};
+use super::code::{Body, Code, Expression, FragmentId, FragmentKind, Literal};
 
 pub struct Interpreter {
     next: Option<FragmentId>,
@@ -65,7 +65,9 @@ impl Interpreter {
                         self.next = body.entry().copied();
                     }
                 }
-                Expression::LiteralInteger { value } => {
+                Expression::Literal {
+                    literal: Literal::Integer { value },
+                } => {
                     return self
                         .evaluate_value(Value::Integer { value: *value });
                 }

@@ -11,7 +11,7 @@ use crossterm::{
 use crate::language::{
     code::{
         Body, Code, CodeError, Expression, FragmentError, FragmentId,
-        FragmentKind, Token,
+        FragmentKind, Literal, Token,
     },
     compiler::compile,
     host::Host,
@@ -255,7 +255,9 @@ where
                     Token::Identifier { name } => {
                         write!(self.w, "{name}")?;
                     }
-                    Token::LiteralInteger { value } => {
+                    Token::Literal {
+                        literal: Literal::Integer { value },
+                    } => {
                         write!(self.w, "{value}")?;
                     }
                 },
@@ -305,7 +307,9 @@ where
 
                 write!(self.w, "{name}")?;
             }
-            Expression::LiteralInteger { value } => {
+            Expression::Literal {
+                literal: Literal::Integer { value },
+            } => {
                 write!(self.w, "{value}")?;
             }
         }

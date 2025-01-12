@@ -1,7 +1,7 @@
 use crate::language::{
     code::{
         Body, Code, CodeError, Expression, Fragment, FragmentError,
-        FragmentKind, FragmentPath, Token,
+        FragmentKind, FragmentPath, Literal, Token,
     },
     host::Host,
 };
@@ -33,7 +33,9 @@ fn tokenize(input: &str) -> impl Iterator<Item = Token> + '_ {
     input
         .split_whitespace()
         .map(|token| match token.parse::<u32>() {
-            Ok(value) => Token::LiteralInteger { value },
+            Ok(value) => Token::Literal {
+                literal: Literal::Integer { value },
+            },
             Err(_) => Token::Identifier {
                 name: token.to_string(),
             },
@@ -54,7 +56,9 @@ fn parse_token(
                 Err(FragmentError::UnresolvedIdentifier { name })
             }
         }
-        Token::LiteralInteger { value } => {
+        Token::Literal {
+            literal: Literal::Integer { value },
+        } => {
             let can_append_expression = code
                 .fragments()
                 .get(append_to.id())
@@ -63,10 +67,14 @@ fn parse_token(
                 .is_none();
 
             if can_append_expression {
-                Ok(Expression::LiteralInteger { value })
+                Ok(Expression::Literal {
+                    literal: Literal::Integer { value },
+                })
             } else {
                 Err(FragmentError::UnexpectedToken {
-                    token: Token::LiteralInteger { value },
+                    token: Token::Literal {
+                        literal: Literal::Integer { value },
+                    },
                 })
             }
         }
