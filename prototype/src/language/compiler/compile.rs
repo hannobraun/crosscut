@@ -41,6 +41,11 @@ fn parse_token(
     code: &Code,
     host: &Host,
 ) -> Result<Expression, FragmentError> {
+    assert!(
+        !token.chars().any(|ch| ch.is_whitespace()),
+        "Expecting tokens to not contain any whitespace.",
+    );
+
     let can_append_expression = code
         .fragments()
         .get(append_to.target())
