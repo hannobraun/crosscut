@@ -73,7 +73,7 @@ fn compile_and_run(input: &str) -> Value {
     let host = TestHost::new();
 
     compile(input, &host.inner, &mut code);
-    host.run(&code)
+    run(&code)
 }
 
 struct TestHost {
@@ -86,23 +86,23 @@ impl TestHost {
             inner: Host::from_functions(["half"]),
         }
     }
+}
 
-    fn run(&self, code: &Code) -> Value {
-        let mut interpreter = Interpreter::new(code);
+fn run(code: &Code) -> Value {
+    let mut interpreter = Interpreter::new(code);
 
-        loop {
-            match interpreter.step(code) {
-                StepResult::CallToHostFunction { id, input, output } => {
-                    assert_eq!(id, 0);
-                    let Value::Integer { value: input } = input;
-                    *output = input / 2;
-                }
-                StepResult::Finished { output } => {
-                    break output;
-                }
-                state => {
-                    panic!("Unexpected state: {state:#?}");
-                }
+    loop {
+        match interpreter.step(code) {
+            StepResult::CallToHostFunction { id, input, output } => {
+                assert_eq!(id, 0);
+                let Value::Integer { value: input } = input;
+                *output = input / 2;
+            }
+            StepResult::Finished { output } => {
+                break output;
+            }
+            state => {
+                panic!("Unexpected state: {state:#?}");
             }
         }
     }
