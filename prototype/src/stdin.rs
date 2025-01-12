@@ -4,7 +4,7 @@ use crossterm::event::{self, Event, KeyCode};
 
 use crate::actor::{Sender, ThreadHandle};
 
-pub fn start(lines: Sender<String>) -> ThreadHandle {
+pub fn start(editor_input: Sender<String>) -> ThreadHandle {
     let mut line = String::new();
 
     let handle = thread::spawn(move || loop {
@@ -19,7 +19,7 @@ pub fn start(lines: Sender<String>) -> ThreadHandle {
                 line.push(ch);
             }
             KeyCode::Enter => {
-                lines.send(line.clone())?;
+                editor_input.send(line.clone())?;
                 line.clear();
             }
             _ => {
