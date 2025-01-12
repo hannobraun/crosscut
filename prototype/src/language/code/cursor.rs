@@ -12,8 +12,8 @@ use super::FragmentId;
 /// to construct a situation where that matters.
 ///
 /// In any case, this can be fixed by attaching the index of the fragment within
-/// its parent's body to each element of the cursor. I intend to do so, as soon
-/// as it's possible to write a test that covers this.
+/// its parent's body to each component of the cursor. I intend to do so, as
+/// soon as it's possible to write a test that covers this.
 #[derive(Debug)]
 pub struct Cursor {
     inner: Vec<FragmentId>,
