@@ -87,7 +87,9 @@ impl Interpreter {
             }
         } else {
             self.next = None;
-            StepResult::Finished { output: value }
+            StepResult::Finished {
+                output: Value::Integer { value },
+            }
         }
     }
 
@@ -123,7 +125,7 @@ pub enum StepResult<'r> {
     },
     Error,
     Finished {
-        output: u32,
+        output: Value,
     },
 }
 
@@ -143,4 +145,9 @@ enum ActiveCall {
         fragment: FragmentId,
         output: Option<u32>,
     },
+}
+
+#[derive(Debug, PartialEq)]
+pub enum Value {
+    Integer { value: u32 },
 }

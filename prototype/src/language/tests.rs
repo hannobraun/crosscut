@@ -1,7 +1,9 @@
 use pretty_assertions::assert_eq;
 
 use crate::language::{
-    compiler::tests::infra::compile, host::Host, interpreter::StepResult,
+    compiler::tests::infra::compile,
+    host::Host,
+    interpreter::{StepResult, Value},
 };
 
 use super::{code::Code, interpreter::Interpreter};
@@ -17,7 +19,12 @@ fn evaluate_single_expression() {
     compile("1", &host, &mut code);
 
     let mut interpreter = Interpreter::new(&code);
-    assert_eq!(interpreter.step(&code), StepResult::Finished { output: 1 },);
+    assert_eq!(
+        interpreter.step(&code),
+        StepResult::Finished {
+            output: Value::Integer { value: 1 }
+        },
+    );
 }
 
 #[test]
@@ -34,7 +41,12 @@ fn code_after_expression_is_an_error() {
     compile("1 2", &host, &mut code);
 
     let mut interpreter = Interpreter::new(&code);
-    assert_eq!(interpreter.step(&code), StepResult::Finished { output: 1 },);
+    assert_eq!(
+        interpreter.step(&code),
+        StepResult::Finished {
+            output: Value::Integer { value: 1 }
+        },
+    );
     assert_eq!(interpreter.step(&code), StepResult::Error);
 }
 
@@ -64,7 +76,7 @@ fn call_to_host_function() {
         }
     };
 
-    assert_eq!(output, 32);
+    assert_eq!(output, Value::Integer { value: 32 });
 }
 
 #[test]
@@ -93,5 +105,5 @@ fn nested_calls_to_host_function() {
         }
     };
 
-    assert_eq!(output, 16);
+    assert_eq!(output, Value::Integer { value: 16 });
 }

@@ -3,7 +3,7 @@ use crate::{
     editor::Editor,
     language::{
         host::Host,
-        interpreter::{Interpreter, StepResult},
+        interpreter::{Interpreter, StepResult, Value},
     },
 };
 
@@ -55,6 +55,7 @@ impl GameEngine {
                                 // least for now.
                             }
                             StepResult::Finished { output } => {
+                                let Value::Integer { value: output } = output;
                                 let color = output as f64 / 255.;
 
                                 game_output_tx.send(
