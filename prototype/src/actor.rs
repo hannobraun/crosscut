@@ -1,6 +1,6 @@
 use std::{
     panic,
-    sync::mpsc::{self, SendError},
+    sync::mpsc::{self, RecvError, SendError, TryRecvError},
     thread::{self, JoinHandle},
 };
 
@@ -12,7 +12,7 @@ pub struct Actor<I> {
 impl<I> Actor<I> {
     pub fn spawn<F>(
         sender: Sender<I>,
-        receiver: mpsc::Receiver<I>,
+        receiver: Receiver<I>,
         mut f: F,
     ) -> Actor<I>
     where
@@ -45,7 +45,7 @@ impl<I> Actor<I> {
 pub fn channel<T>() -> (Sender<T>, Receiver<T>) {
     let (sender, receiver) = mpsc::channel();
 
-    (Sender { inner: sender }, receiver)
+    (Sender { inner: sender }, Receiver { inner: receiver })
 }
 
 pub struct Sender<T> {
@@ -68,7 +68,19 @@ impl<T> Clone for Sender<T> {
     }
 }
 
-pub type Receiver<T> = mpsc::Receiver<T>;
+pub struct Receiver<T> {
+    inner: mpsc::Receiver<T>,
+}
+
+impl<T> Receiver<T> {
+    pub fn recv(&self) -> Result<T, RecvError> {
+        self.inner.recv()
+    }
+
+    pub fn try_recv(&self) -> Result<T, TryRecvError> {
+        self.inner.try_recv()
+    }
+}
 
 #[derive(Debug, thiserror::Error)]
 pub enum Error {
