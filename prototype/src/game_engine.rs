@@ -1,5 +1,5 @@
 use crate::{
-    actor::{Actor, Sender, ThreadHandle},
+    actor::{self, Actor, Sender, ThreadHandle},
     editor::Editor,
     language::{
         host::Host,
@@ -20,7 +20,9 @@ impl GameEngine {
 
         editor.render(&host, &interpreter)?;
 
-        let handle_events = Actor::spawn(move |event| {
+        let (events_tx, events_rx) = actor::channel();
+
+        let handle_events = Actor::spawn(events_tx, events_rx, move |event| {
             match event {
                 Event::EditorInput { line } => {
                     editor.process_input(line, &host, &mut interpreter);
@@ -84,17 +86,21 @@ impl GameEngine {
             Ok(())
         });
 
+        let (editor_input_tx, editor_input_rx) = actor::channel();
         let events_from_editor_input = handle_events.sender.clone();
-        let handle_editor_input = Actor::spawn(move |line| {
-            events_from_editor_input.send(Event::EditorInput { line })?;
-            Ok(())
-        });
+        let handle_editor_input =
+            Actor::spawn(editor_input_tx, editor_input_rx, move |line| {
+                events_from_editor_input.send(Event::EditorInput { line })?;
+                Ok(())
+            });
 
+        let (game_input_tx, game_input_rx) = actor::channel();
         let events_from_game_input = handle_events.sender;
-        let handle_game_input = Actor::spawn(move |input| {
-            events_from_game_input.send(Event::GameInput(input))?;
-            Ok(())
-        });
+        let handle_game_input =
+            Actor::spawn(game_input_tx, game_input_rx, move |input| {
+                events_from_game_input.send(Event::GameInput(input))?;
+                Ok(())
+            });
 
         let threads = GameEngineThreads {
             handle: handle_events.handle,

@@ -10,13 +10,15 @@ pub struct Actor<I> {
 }
 
 impl<I> Actor<I> {
-    pub fn spawn<F>(mut f: F) -> Actor<I>
+    pub fn spawn<F>(
+        sender: Sender<I>,
+        receiver: mpsc::Receiver<I>,
+        mut f: F,
+    ) -> Actor<I>
     where
         I: Send + 'static,
         F: FnMut(I) -> Result<(), Error> + Send + 'static,
     {
-        let (sender, receiver) = channel();
-
         let handle = thread::spawn(move || {
             while let Ok(input) = receiver.recv() {
                 match f(input) {
