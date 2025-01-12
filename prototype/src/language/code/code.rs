@@ -1,8 +1,7 @@
 use std::collections::BTreeMap;
 
 use super::{
-    Body, CodeError, Fragment, FragmentId, FragmentKind, FragmentPath,
-    Fragments,
+    Body, CodeError, Cursor, Fragment, FragmentId, FragmentKind, Fragments,
 };
 
 #[derive(Clone, Debug, Eq, PartialEq)]
@@ -32,7 +31,7 @@ impl Code {
         &self.fragments
     }
 
-    pub fn find_innermost_fragment_with_valid_body(&self) -> FragmentPath {
+    pub fn find_innermost_fragment_with_valid_body(&self) -> Cursor {
         let mut next = self.root;
         let mut path = Vec::new();
 
@@ -65,7 +64,7 @@ impl Code {
             next = id;
         }
 
-        let Some(path) = FragmentPath::new(path) else {
+        let Some(path) = Cursor::new(path) else {
             unreachable!(
                 "It should be impossible to construct an invalid path here, as \
                 the root fragment has a valid body. We _must_ have added it in \
@@ -78,7 +77,7 @@ impl Code {
 
     pub fn append_to_body_at(
         &mut self,
-        path: FragmentPath,
+        path: Cursor,
         to_append: Fragment,
     ) -> FragmentId {
         let (to_update_id, path) = path.into_id_and_path();

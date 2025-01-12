@@ -1,11 +1,11 @@
 use super::FragmentId;
 
 #[derive(Debug)]
-pub struct FragmentPath {
+pub struct Cursor {
     inner: Vec<FragmentId>,
 }
 
-impl FragmentPath {
+impl Cursor {
     pub fn new(path: Vec<FragmentId>) -> Option<Self> {
         if path.is_empty() {
             // An empty fragment path is not valid, as every path must at least

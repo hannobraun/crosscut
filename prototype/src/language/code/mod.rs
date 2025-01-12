@@ -9,5 +9,5 @@ pub use self::{
     code::{Code, Expression, Literal},
     errors::CodeError,
     fragments::{Fragment, FragmentError, FragmentId, FragmentKind, Fragments},
-    path::FragmentPath,
+    path::Cursor,
 };

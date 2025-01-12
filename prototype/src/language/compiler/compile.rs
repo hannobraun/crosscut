@@ -2,8 +2,8 @@ use std::num::IntErrorKind;
 
 use crate::language::{
     code::{
-        Body, Code, CodeError, Expression, Fragment, FragmentError,
-        FragmentKind, FragmentPath, Literal,
+        Body, Code, CodeError, Cursor, Expression, Fragment, FragmentError,
+        FragmentKind, Literal,
     },
     host::Host,
 };
@@ -37,7 +37,7 @@ fn tokenize(input: &str) -> impl Iterator<Item = &str> + '_ {
 
 fn parse_token(
     token: &str,
-    append_to: &FragmentPath,
+    append_to: &Cursor,
     code: &Code,
     host: &Host,
 ) -> Result<Expression, FragmentError> {
