@@ -2,9 +2,12 @@ use std::time::Duration;
 
 use crossterm::event::{self, Event, KeyCode};
 
-use crate::thread::{self, Sender, ThreadHandle};
+use crate::{
+    editor::EditorInput,
+    thread::{self, Sender, ThreadHandle},
+};
 
-pub fn start(editor_input: Sender<Option<String>>) -> ThreadHandle {
+pub fn start(editor_input: Sender<Option<EditorInput>>) -> ThreadHandle {
     let mut line = String::new();
 
     thread::spawn(move || {
@@ -31,7 +34,8 @@ pub fn start(editor_input: Sender<Option<String>>) -> ThreadHandle {
                 line.push(ch);
             }
             KeyCode::Enter => {
-                editor_input.send(Some(line.clone()))?;
+                let input = EditorInput { line: line.clone() };
+                editor_input.send(Some(input))?;
                 line.clear();
             }
             _ => {}

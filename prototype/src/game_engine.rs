@@ -11,7 +11,7 @@ use crate::{
 
 pub struct GameEngine {
     pub handle: ThreadHandle,
-    pub editor_input: Sender<Option<String>>,
+    pub editor_input: Sender<Option<EditorInput>>,
     pub game_input: Sender<GameInput>,
 }
 
@@ -27,15 +27,14 @@ impl GameEngine {
         // this bug in rust-analyzer:
         // https://github.com/rust-lang/rust-analyzer/issues/15984
         let (editor_input_tx, editor_input_rx) =
-            thread::channel::<Option<String>>();
+            thread::channel::<Option<EditorInput>>();
         let (game_input_tx, game_input_rx) = thread::channel::<GameInput>();
 
         let handle = thread::spawn(move || {
             let event = select! {
                 recv(editor_input_rx.inner()) -> result => {
                     result.map(|line|
-                        if let Some(line) = line {
-                            let input = EditorInput { line };
+                        if let Some(input) = line {
                             Event::EditorInput { input }}
                         else {
                             Event::Heartbeat
