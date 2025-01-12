@@ -255,15 +255,9 @@ where
                     write!(self.w, "{value}")?;
                 }
                 FragmentError::UnexpectedToken { token } => match token {
-                    Token::Identifier { name } => {
-                        write!(self.w, "{name}")?;
-                    }
                     Token::Literal {
                         literal: Literal::Integer { value },
                     } => {
-                        write!(self.w, "{value}")?;
-                    }
-                    Token::OverflowedInteger { value } => {
                         write!(self.w, "{value}")?;
                     }
                 },

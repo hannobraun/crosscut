@@ -121,9 +121,7 @@ pub enum Expression {
 
 #[derive(Clone, Debug, Eq, PartialEq, udigest::Digestable)]
 pub enum Token {
-    Identifier { name: String },
     Literal { literal: Literal },
-    OverflowedInteger { value: String },
 }
 
 #[derive(Clone, Debug, Eq, PartialEq, udigest::Digestable)]

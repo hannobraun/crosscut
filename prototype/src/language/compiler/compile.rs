@@ -31,43 +31,18 @@ pub fn compile(input: &str, host: &Host, code: &mut Code) {
     }
 }
 
-fn tokenize(input: &str) -> impl Iterator<Item = Token> + '_ {
-    input
-        .split_whitespace()
-        .map(|token| match token.parse::<u32>() {
-            Ok(value) => Token::Literal {
-                literal: Literal::Integer { value },
-            },
-            Err(err) => match err.kind() {
-                IntErrorKind::PosOverflow | IntErrorKind::NegOverflow => {
-                    let value = token.to_string();
-                    Token::OverflowedInteger { value }
-                }
-                _ => {
-                    let name = token.to_string();
-                    Token::Identifier { name }
-                }
-            },
-        })
+fn tokenize(input: &str) -> impl Iterator<Item = &str> + '_ {
+    input.split_whitespace()
 }
 
 fn parse_token(
-    token: Token,
+    token: &str,
     append_to: &FragmentPath,
     code: &Code,
     host: &Host,
 ) -> Result<Expression, FragmentError> {
-    match token {
-        Token::Identifier { name } => {
-            if let Some(id) = host.functions_by_name.get(&name).copied() {
-                Ok(Expression::FunctionCall { target: id })
-            } else {
-                Err(FragmentError::UnresolvedIdentifier { name })
-            }
-        }
-        Token::Literal {
-            literal: Literal::Integer { value },
-        } => {
+    match token.parse::<u32>() {
+        Ok(value) => {
             let can_append_expression = code
                 .fragments()
                 .get(append_to.id())
@@ -87,9 +62,21 @@ fn parse_token(
                 })
             }
         }
-        Token::OverflowedInteger { value } => {
-            Err(FragmentError::IntegerOverflow { value })
-        }
+        Err(err) => match err.kind() {
+            IntErrorKind::PosOverflow | IntErrorKind::NegOverflow => {
+                let value = token.to_string();
+                Err(FragmentError::IntegerOverflow { value })
+            }
+            _ => {
+                let name = token.to_string();
+
+                if let Some(id) = host.functions_by_name.get(&name).copied() {
+                    Ok(Expression::FunctionCall { target: id })
+                } else {
+                    Err(FragmentError::UnresolvedIdentifier { name })
+                }
+            }
+        },
     }
 }
 
