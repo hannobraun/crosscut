@@ -1,15 +1,13 @@
-use std::io::stdin;
+use std::{io::stdin, thread};
 
-use crate::actor::{Actor, Sender, ThreadHandle};
+use crate::actor::{Sender, ThreadHandle};
 
 pub fn start(lines: Sender<String>) -> ThreadHandle {
-    Actor::spawn(move |line| {
-        lines.send(line)?;
-        Ok(())
-    })
-    .provide_input(|| {
+    let handle = thread::spawn(move || loop {
         let mut line = String::new();
         stdin().read_line(&mut line)?;
-        Ok(line)
-    })
+        lines.send(line)?;
+    });
+
+    ThreadHandle::new(handle)
 }

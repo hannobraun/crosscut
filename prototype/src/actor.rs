@@ -38,28 +38,6 @@ impl<I> Actor<I> {
             handle: ThreadHandle::new(handle),
         }
     }
-
-    pub fn provide_input<F>(mut self, mut f: F) -> ThreadHandle
-    where
-        I: Send + 'static,
-        F: FnMut() -> anyhow::Result<I> + Send + 'static,
-    {
-        let handle = thread::spawn(move || {
-            loop {
-                let input = f()?;
-
-                if let Err(Error::ChannelDisconnected) = self.sender.send(input)
-                {
-                    break;
-                }
-            }
-
-            Ok(())
-        });
-
-        self.handle.input = Some(handle);
-        self.handle
-    }
 }
 
 pub fn channel<T>() -> (Sender<T>, Receiver<T>) {
