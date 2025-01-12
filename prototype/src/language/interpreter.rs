@@ -53,10 +53,9 @@ impl Interpreter {
                         ..
                     }) = self.active_calls.last()
                     {
-                        let output = *output;
+                        let output = output.clone();
                         self.active_calls.pop();
-                        return self
-                            .evaluate_value(Value::Integer { value: output });
+                        return self.evaluate_value(output);
                     } else {
                         self.active_calls.push(ActiveCall::ToHostFunction {
                             id: *target,
@@ -83,7 +82,8 @@ impl Interpreter {
         {
             self.next = Some(*fragment);
 
-            let output = output.insert(0);
+            let Value::Integer { value: output } =
+                output.insert(Value::Integer { value: 0 });
             StepResult::CallToHostFunction {
                 id: *id,
                 input: value,
@@ -145,7 +145,7 @@ enum ActiveCall {
     ToHostFunction {
         id: usize,
         fragment: FragmentId,
-        output: Option<u32>,
+        output: Option<Value>,
     },
 }
 
