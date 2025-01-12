@@ -33,7 +33,7 @@ fn tokenize(input: &str) -> impl Iterator<Item = Token> + '_ {
     input
         .split_whitespace()
         .map(|token| match token.parse::<u32>() {
-            Ok(value) => Token::LiteralNumber { value },
+            Ok(value) => Token::LiteralInteger { value },
             Err(_) => Token::Identifier {
                 name: token.to_string(),
             },
@@ -54,7 +54,7 @@ fn parse_token(
                 Err(FragmentError::UnresolvedIdentifier { name })
             }
         }
-        Token::LiteralNumber { value } => {
+        Token::LiteralInteger { value } => {
             let can_append_expression = code
                 .fragments()
                 .get(append_to.id())
@@ -66,7 +66,7 @@ fn parse_token(
                 Ok(Expression::LiteralInteger { value })
             } else {
                 Err(FragmentError::UnexpectedToken {
-                    token: Token::LiteralNumber { value },
+                    token: Token::LiteralInteger { value },
                 })
             }
         }

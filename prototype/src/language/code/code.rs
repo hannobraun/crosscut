@@ -122,7 +122,7 @@ pub enum Expression {
 #[derive(Clone, Debug, Eq, PartialEq, udigest::Digestable)]
 pub enum Token {
     Identifier { name: String },
-    LiteralNumber { value: u32 },
+    LiteralInteger { value: u32 },
 }
 
 #[derive(Clone, Copy, Debug, PartialEq)]

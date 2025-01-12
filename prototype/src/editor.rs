@@ -255,7 +255,7 @@ where
                     Token::Identifier { name } => {
                         write!(self.w, "{name}")?;
                     }
-                    Token::LiteralNumber { value } => {
+                    Token::LiteralInteger { value } => {
                         write!(self.w, "{value}")?;
                     }
                 },
