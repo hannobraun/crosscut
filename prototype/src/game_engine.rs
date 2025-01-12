@@ -10,7 +10,7 @@ use crate::{
 };
 
 pub struct GameEngine {
-    pub threads: ThreadHandle,
+    pub handle: ThreadHandle,
     pub senders: GameEngineSenders,
 }
 
@@ -118,7 +118,7 @@ impl GameEngine {
         };
 
         Ok(Self {
-            threads: handle_events,
+            handle: handle_events,
             senders,
         })
     }
