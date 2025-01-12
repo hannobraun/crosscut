@@ -57,8 +57,8 @@ fn call_to_host_function() {
 
     let mut code = Code::default();
 
-    let host = Host::from_functions(["half"]);
-    compile("half 64", &host, &mut code);
+    let host = TestHost::new();
+    compile("half 64", &host.inner, &mut code);
 
     let mut interpreter = Interpreter::new(&code);
     let output = loop {
@@ -87,8 +87,8 @@ fn nested_calls_to_host_function() {
 
     let mut code = Code::default();
 
-    let host = Host::from_functions(["half"]);
-    compile("half half 64", &host, &mut code);
+    let host = TestHost::new();
+    compile("half half 64", &host.inner, &mut code);
 
     let mut interpreter = Interpreter::new(&code);
     let output = loop {
@@ -108,4 +108,16 @@ fn nested_calls_to_host_function() {
     };
 
     assert_eq!(output, Value::Integer { value: 16 });
+}
+
+struct TestHost {
+    inner: Host,
+}
+
+impl TestHost {
+    fn new() -> Self {
+        Self {
+            inner: Host::from_functions(["half"]),
+        }
+    }
 }
