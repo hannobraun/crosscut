@@ -141,6 +141,7 @@ pub struct GameEngineSenders {
     pub game_input: Sender<GameInput>,
 }
 
+#[derive(Debug)]
 enum Event {
     EditorInput { line: String },
     GameInput(GameInput),
