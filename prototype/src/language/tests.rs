@@ -70,22 +70,10 @@ fn nested_calls_to_host_function() {
 
 fn compile_and_run(input: &str) -> Value {
     let mut code = Code::default();
-    let host = TestHost::new();
+    let host = Host::from_functions(["half"]);
 
-    compile(input, &host.inner, &mut code);
+    compile(input, &host, &mut code);
     run(&code)
-}
-
-struct TestHost {
-    inner: Host,
-}
-
-impl TestHost {
-    fn new() -> Self {
-        Self {
-            inner: Host::from_functions(["half"]),
-        }
-    }
 }
 
 fn run(code: &Code) -> Value {
