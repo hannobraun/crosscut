@@ -1,13 +1,11 @@
-use std::thread;
-
 use crossterm::event::{self, Event, KeyCode};
 
-use crate::thread::{Sender, ThreadHandle};
+use crate::thread::{self, Sender, ThreadHandle};
 
 pub fn start(editor_input: Sender<String>) -> ThreadHandle {
     let mut line = String::new();
 
-    let handle = thread::spawn(move || loop {
+    thread::spawn(move || loop {
         let event = event::read()?;
 
         let Event::Key(key_event) = event else {
@@ -26,7 +24,5 @@ pub fn start(editor_input: Sender<String>) -> ThreadHandle {
                 continue;
             }
         }
-    });
-
-    ThreadHandle::new(handle)
+    })
 }
