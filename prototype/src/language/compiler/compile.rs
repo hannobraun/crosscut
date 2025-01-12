@@ -44,9 +44,10 @@ fn tokenize(input: &str) -> impl Iterator<Item = Token> + '_ {
                         value: token.to_string(),
                     }
                 }
-                _ => Token::Identifier {
-                    name: token.to_string(),
-                },
+                _ => {
+                    let name = token.to_string();
+                    Token::Identifier { name }
+                }
             },
         })
 }
