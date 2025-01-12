@@ -6,13 +6,13 @@ pub struct Cursor {
 }
 
 impl Cursor {
-    pub fn new(path: Vec<FragmentId>) -> Option<Self> {
-        if path.is_empty() {
+    pub fn new(inner: Vec<FragmentId>) -> Option<Self> {
+        if inner.is_empty() {
             // An empty fragment path is not valid, as every path must at least
             // contain the root.
             None
         } else {
-            Some(Self { inner: path })
+            Some(Self { inner })
         }
     }
 
