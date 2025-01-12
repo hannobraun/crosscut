@@ -63,7 +63,7 @@ fn parse_token(
                 .is_none();
 
             if can_append_expression {
-                Ok(Expression::LiteralValue { value })
+                Ok(Expression::LiteralInteger { value })
             } else {
                 Err(FragmentError::UnexpectedToken {
                     token: Token::LiteralNumber { value },

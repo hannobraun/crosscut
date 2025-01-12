@@ -65,7 +65,7 @@ impl Interpreter {
                         self.next = body.entry().copied();
                     }
                 }
-                Expression::LiteralValue { value } => {
+                Expression::LiteralInteger { value } => {
                     return self
                         .evaluate_value(Value::Integer { value: *value });
                 }

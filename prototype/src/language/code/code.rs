@@ -116,7 +116,7 @@ impl Default for Code {
 #[derive(Clone, Debug, Eq, PartialEq, udigest::Digestable)]
 pub enum Expression {
     FunctionCall { target: usize },
-    LiteralValue { value: u32 },
+    LiteralInteger { value: u32 },
 }
 
 #[derive(Clone, Debug, Eq, PartialEq, udigest::Digestable)]

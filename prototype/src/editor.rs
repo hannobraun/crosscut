@@ -305,7 +305,7 @@ where
 
                 write!(self.w, "{name}")?;
             }
-            Expression::LiteralValue { value } => {
+            Expression::LiteralInteger { value } => {
                 write!(self.w, "{value}")?;
             }
         }
