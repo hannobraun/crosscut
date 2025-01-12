@@ -56,10 +56,9 @@ fn call_to_host_function() {
     // one value, and can be called from Crosscut code.
 
     let mut code = Code::default();
-
     let host = TestHost::new();
-    compile("half 64", &host.inner, &mut code);
 
+    compile("half 64", &host.inner, &mut code);
     let output = host.run(&code);
 
     assert_eq!(output, Value::Integer { value: 32 });
@@ -71,10 +70,9 @@ fn nested_calls_to_host_function() {
     // call.
 
     let mut code = Code::default();
-
     let host = TestHost::new();
-    compile("half half 64", &host.inner, &mut code);
 
+    compile("half half 64", &host.inner, &mut code);
     let output = host.run(&code);
 
     assert_eq!(output, Value::Integer { value: 16 });
