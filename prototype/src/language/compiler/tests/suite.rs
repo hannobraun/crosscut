@@ -15,8 +15,8 @@ fn code_after_expression_is_an_error() {
     // is an error.
 
     let host = Host::empty();
-
     let mut code = Code::default();
+
     compile("1 2", &host, &mut code);
 
     let (a, b) = code
@@ -36,8 +36,8 @@ fn unresolved_identifier_is_an_error() {
     // An identifier that does not refer to a function is an error.
 
     let host = Host::empty();
-
     let mut code = Code::default();
+
     compile("f 1", &host, &mut code);
 
     let f = code.fragments().get(&code.root).body.ids().next().unwrap();
@@ -51,7 +51,6 @@ fn missing_function_call_argument_is_an_error() {
     // added, that error goes away.
 
     let host = Host::from_functions(["f"]);
-
     let mut code = Code::default();
 
     compile("f", &host, &mut code);
