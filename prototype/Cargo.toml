@@ -11,6 +11,7 @@ crossterm = "*"
 itertools = "*"
 pollster = "*"
 pretty_assertions = "*"
+thiserror = "*"
 wgpu = "*"
 winit = "*"
 

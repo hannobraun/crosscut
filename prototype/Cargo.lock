@@ -354,6 +354,7 @@ dependencies = [
  "itertools",
  "pollster",
  "pretty_assertions",
+ "thiserror",
  "udigest",
  "wgpu",
  "winit",
