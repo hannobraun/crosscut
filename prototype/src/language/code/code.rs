@@ -77,10 +77,10 @@ impl Code {
 
     pub fn append_to_body_at(
         &mut self,
-        path: Cursor,
+        cursor: Cursor,
         to_append: Fragment,
     ) -> FragmentId {
-        let (to_update_id, path) = path.into_id_and_path();
+        let (to_update_id, path) = cursor.into_id_and_path();
 
         let mut to_update = self.fragments.get(&to_update_id).clone();
         let appended = to_update.body.push(to_append, &mut self.fragments);
