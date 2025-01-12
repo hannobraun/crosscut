@@ -10,7 +10,7 @@ use crate::{
 };
 
 pub struct GameEngine {
-    pub threads: GameEngineThreads,
+    pub threads: ThreadHandle,
     pub senders: GameEngineSenders,
 }
 
@@ -112,27 +112,15 @@ impl GameEngine {
             Ok(())
         });
 
-        let threads = GameEngineThreads {
-            handle: handle_events,
-        };
         let senders = GameEngineSenders {
             editor_input: editor_input_tx,
             game_input: game_input_tx,
         };
 
-        Ok(Self { threads, senders })
-    }
-}
-
-pub struct GameEngineThreads {
-    handle: ThreadHandle,
-}
-
-impl GameEngineThreads {
-    pub fn join(self) -> anyhow::Result<()> {
-        self.handle.join()?;
-
-        Ok(())
+        Ok(Self {
+            threads: handle_events,
+            senders,
+        })
     }
 }
 
