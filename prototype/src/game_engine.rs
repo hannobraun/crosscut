@@ -51,7 +51,8 @@ impl GameEngine {
 
             match event {
                 Event::EditorInput { input } => {
-                    editor.process_input(input, &host, &mut interpreter);
+                    let render =
+                        editor.process_input(input, &host, &mut interpreter);
 
                     loop {
                         match interpreter.step(editor.code()) {
@@ -102,7 +103,9 @@ impl GameEngine {
                         break;
                     }
 
-                    editor.render(&host, &interpreter)?;
+                    if render {
+                        editor.render(&host, &interpreter)?;
+                    }
                 }
                 Event::GameInput {
                     input: GameInput::RenderingFrame,

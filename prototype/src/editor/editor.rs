@@ -40,12 +40,12 @@ impl Editor {
         EditorInput { line }: EditorInput,
         host: &Host,
         interpreter: &mut Interpreter,
-    ) {
+    ) -> bool {
         let mut command_and_arguments =
             line.trim().splitn(2, |ch: char| ch.is_whitespace());
 
         let Some(command) = command_and_arguments.next() else {
-            return;
+            return false;
         };
 
         let mut matched_commands = self
@@ -56,7 +56,7 @@ impl Editor {
 
         let Some(&matched_command) = matched_commands.pop_front() else {
             println!("Unknown command: `{command}`");
-            return;
+            return true;
         };
         if !matched_commands.is_empty() {
             print!(
@@ -68,7 +68,7 @@ impl Editor {
             }
             println!();
 
-            return;
+            return true;
         }
 
         match matched_command {
@@ -77,7 +77,7 @@ impl Editor {
                     println!(
                         "`{command}` command expects input code as argument."
                     );
-                    return;
+                    return true;
                 };
 
                 compile(input_code, host, &mut self.code);
@@ -94,7 +94,7 @@ impl Editor {
             command @ ":clear" => {
                 let None = command_and_arguments.next() else {
                     println!("`{command}` command expects no arguments.");
-                    return;
+                    return true;
                 };
 
                 self.code = Code::default();
@@ -103,7 +103,7 @@ impl Editor {
             command @ ":reset" => {
                 let None = command_and_arguments.next() else {
                     println!("`{command}` command expects no arguments.");
-                    return;
+                    return true;
                 };
 
                 interpreter.reset(&self.code);
@@ -112,6 +112,8 @@ impl Editor {
                 unreachable!("Ruled out that command is unknown, above.")
             }
         }
+
+        true
     }
 
     pub fn render(
