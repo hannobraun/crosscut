@@ -23,7 +23,7 @@ impl<I> Actor<I> {
             while let Ok(input) = receiver.recv() {
                 match f(input) {
                     Ok(()) => {}
-                    Err(Error::ChannelDisconnected) => {
+                    Err(Error::ChannelDisconnected(_)) => {
                         break;
                     }
                     Err(Error::Other { err }) => {
@@ -54,9 +54,9 @@ pub struct Sender<T> {
 
 impl<T> Sender<T> {
     pub fn send(&self, value: T) -> Result<(), Error> {
-        self.inner
-            .send(value)
-            .map_err(|SendError(_)| Error::ChannelDisconnected)
+        self.inner.send(value).map_err(|SendError(_)| {
+            Error::ChannelDisconnected(ChannelDisconnected)
+        })
     }
 }
 
@@ -74,9 +74,9 @@ pub struct Receiver<T> {
 
 impl<T> Receiver<T> {
     pub fn recv(&self) -> Result<T, Error> {
-        self.inner
-            .recv()
-            .map_err(|RecvError| Error::ChannelDisconnected)
+        self.inner.recv().map_err(|RecvError| {
+            Error::ChannelDisconnected(ChannelDisconnected)
+        })
     }
 
     pub fn try_recv(&self) -> Result<T, TryRecvError> {
@@ -91,8 +91,8 @@ pub enum Error {
     /// This should only happen, if another thread has shut down. Within the
     /// scope of this application, this means that the overall system either
     /// already is shutting down, or should be going into shutdown.
-    #[error("Channel disconnected")]
-    ChannelDisconnected,
+    #[error(transparent)]
+    ChannelDisconnected(ChannelDisconnected),
 
     #[error(transparent)]
     Other { err: anyhow::Error },
@@ -103,6 +103,10 @@ impl From<anyhow::Error> for Error {
         Self::Other { err }
     }
 }
+
+#[derive(Debug, thiserror::Error)]
+#[error("Channel disconnected")]
+pub struct ChannelDisconnected;
 
 #[derive(Debug)]
 pub struct ThreadHandle {
