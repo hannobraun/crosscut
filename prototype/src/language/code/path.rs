@@ -31,13 +31,13 @@ impl Cursor {
     }
 
     pub fn target(&self) -> &FragmentId {
-        let Some(id) = self.inner.last() else {
+        let Some(target) = self.inner.last() else {
             unreachable!(
                 "A fragment path must consist of at least one component, the \
                 root."
             );
         };
-        id
+        target
     }
 
     pub fn into_target_and_parents(
