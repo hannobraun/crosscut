@@ -76,7 +76,7 @@ impl Code {
         path
     }
 
-    pub fn append(
+    pub fn append_to_body_at(
         &mut self,
         to_append: Fragment,
         path: FragmentPath,
