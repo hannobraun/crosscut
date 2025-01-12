@@ -29,7 +29,7 @@ impl GameEngine {
             thread::channel::<Option<String>>();
         let (game_input_tx, game_input_rx) = thread::channel::<GameInput>();
 
-        let handle_events = thread::spawn(move || {
+        let handle = thread::spawn(move || {
             let event = select! {
                 recv(editor_input_rx.inner()) -> result => {
                     result.map(|line|
@@ -117,10 +117,7 @@ impl GameEngine {
             game_input: game_input_tx,
         };
 
-        Ok(Self {
-            handle: handle_events,
-            senders,
-        })
+        Ok(Self { handle, senders })
     }
 }
 
