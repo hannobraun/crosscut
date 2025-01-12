@@ -8,30 +8,28 @@ pub struct Actor {
     pub handle: ThreadHandle,
 }
 
-impl Actor {
-    pub fn spawn<F>(mut f: F) -> Actor
-    where
-        F: FnMut() -> Result<(), Error> + Send + 'static,
-    {
-        let handle = thread::spawn(move || {
-            loop {
-                match f() {
-                    Ok(()) => {}
-                    Err(Error::ChannelDisconnected { .. }) => {
-                        break;
-                    }
-                    Err(Error::Other { err }) => {
-                        return Err(err);
-                    }
+pub fn spawn<F>(mut f: F) -> Actor
+where
+    F: FnMut() -> Result<(), Error> + Send + 'static,
+{
+    let handle = thread::spawn(move || {
+        loop {
+            match f() {
+                Ok(()) => {}
+                Err(Error::ChannelDisconnected { .. }) => {
+                    break;
+                }
+                Err(Error::Other { err }) => {
+                    return Err(err);
                 }
             }
-
-            Ok(())
-        });
-
-        Actor {
-            handle: ThreadHandle::new(handle),
         }
+
+        Ok(())
+    });
+
+    Actor {
+        handle: ThreadHandle::new(handle),
     }
 }
 
