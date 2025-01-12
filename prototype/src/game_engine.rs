@@ -22,7 +22,7 @@ impl GameEngine {
 
         let (events_tx, events_rx) = actor::channel();
 
-        let handle_events = Actor::spawn(events_tx, move || {
+        let handle_events = Actor::spawn(move || {
             let event = events_rx.recv()?;
 
             match event {
@@ -89,16 +89,16 @@ impl GameEngine {
         });
 
         let (editor_input_tx, editor_input_rx) = actor::channel();
-        let events_from_editor_input = handle_events.sender.clone();
-        let handle_editor_input = Actor::spawn(editor_input_tx, move || {
+        let events_from_editor_input = events_tx.clone();
+        let handle_editor_input = Actor::spawn(move || {
             let line = editor_input_rx.recv()?;
             events_from_editor_input.send(Event::EditorInput { line })?;
             Ok(())
         });
 
         let (game_input_tx, game_input_rx) = actor::channel();
-        let events_from_game_input = handle_events.sender;
-        let handle_game_input = Actor::spawn(game_input_tx, move || {
+        let events_from_game_input = events_tx;
+        let handle_game_input = Actor::spawn(move || {
             let input = game_input_rx.recv()?;
             events_from_game_input.send(Event::GameInput(input))?;
             Ok(())
@@ -110,8 +110,8 @@ impl GameEngine {
             handle_game_input: handle_game_input.handle,
         };
         let senders = GameEngineSenders {
-            editor_input: handle_editor_input.sender,
-            game_input: handle_game_input.sender,
+            editor_input: editor_input_tx,
+            game_input: game_input_tx,
         };
 
         Ok(Self { threads, senders })

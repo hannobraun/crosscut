@@ -4,15 +4,13 @@ use std::{
     thread::{self, JoinHandle},
 };
 
-pub struct Actor<I> {
-    pub sender: Sender<I>,
+pub struct Actor {
     pub handle: ThreadHandle,
 }
 
-impl<I> Actor<I> {
-    pub fn spawn<F>(sender: Sender<I>, mut f: F) -> Actor<I>
+impl Actor {
+    pub fn spawn<F>(mut f: F) -> Actor
     where
-        I: Send + 'static,
         F: FnMut() -> Result<(), Error> + Send + 'static,
     {
         let handle = thread::spawn(move || {
@@ -32,7 +30,6 @@ impl<I> Actor<I> {
         });
 
         Actor {
-            sender,
             handle: ThreadHandle::new(handle),
         }
     }
