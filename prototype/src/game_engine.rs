@@ -35,7 +35,8 @@ impl GameEngine {
                 recv(editor_input_rx.inner()) -> result => {
                     result.map(|line|
                         if let Some(line) = line {
-                            Event::EditorInput { line }}
+                            let input = EditorInput { line };
+                            Event::EditorInput { input }}
                         else {
                             Event::Heartbeat
                         }
@@ -50,8 +51,7 @@ impl GameEngine {
             };
 
             match event {
-                Event::EditorInput { line } => {
-                    let input = EditorInput { line };
+                Event::EditorInput { input } => {
                     editor.process_input(input, &host, &mut interpreter);
 
                     loop {
@@ -127,7 +127,7 @@ impl GameEngine {
 #[derive(Debug)]
 enum Event {
     EditorInput {
-        line: String,
+        input: EditorInput,
     },
 
     GameInput {
