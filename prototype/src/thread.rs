@@ -1,8 +1,9 @@
 use std::{
     io, panic,
-    sync::mpsc::{self, RecvError, SendError, TryRecvError},
     thread::{self, JoinHandle},
 };
+
+use crossbeam_channel::{RecvError, SendError, TryRecvError};
 
 pub fn spawn<F>(mut f: F) -> ThreadHandle
 where
@@ -28,13 +29,13 @@ where
 }
 
 pub fn channel<T>() -> (Sender<T>, Receiver<T>) {
-    let (sender, receiver) = mpsc::channel();
+    let (sender, receiver) = crossbeam_channel::unbounded();
 
     (Sender { inner: sender }, Receiver { inner: receiver })
 }
 
 pub struct Sender<T> {
-    inner: mpsc::Sender<T>,
+    inner: crossbeam_channel::Sender<T>,
 }
 
 impl<T> Sender<T> {
@@ -54,7 +55,7 @@ impl<T> Clone for Sender<T> {
 }
 
 pub struct Receiver<T> {
-    inner: mpsc::Receiver<T>,
+    inner: crossbeam_channel::Receiver<T>,
 }
 
 impl<T> Receiver<T> {
