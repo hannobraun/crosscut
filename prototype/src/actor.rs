@@ -92,7 +92,10 @@ pub enum Error {
     /// scope of this application, this means that the overall system either
     /// already is shutting down, or should be going into shutdown.
     #[error(transparent)]
-    ChannelDisconnected { err: ChannelDisconnected },
+    ChannelDisconnected {
+        #[from]
+        err: ChannelDisconnected,
+    },
 
     #[error(transparent)]
     Other { err: anyhow::Error },
