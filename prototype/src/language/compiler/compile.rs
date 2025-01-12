@@ -10,9 +10,9 @@ use crate::language::{
 
 pub fn compile(input: &str, host: &Host, code: &mut Code) {
     for token in tokenize(input) {
-        let append_to = code.find_innermost_fragment_with_valid_body();
+        let cursor = code.find_innermost_fragment_with_valid_body();
 
-        let kind = match parse_token(token, &append_to, code, host) {
+        let kind = match parse_token(token, &cursor, code, host) {
             Ok(expression) => FragmentKind::Expression { expression },
             Err(err) => FragmentKind::Error { err },
         };
@@ -23,7 +23,7 @@ pub fn compile(input: &str, host: &Host, code: &mut Code) {
 
         let maybe_error = check_for_error(&fragment);
 
-        let id = code.append_to_body_at(append_to, fragment);
+        let id = code.append_to_body_at(cursor, fragment);
 
         if let Some(err) = maybe_error {
             code.errors.insert(id, err);
