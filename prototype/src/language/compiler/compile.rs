@@ -90,16 +90,14 @@ fn check_for_error(fragment: &Fragment) -> Option<CodeError> {
                 return Some(CodeError::MissingArgument);
             }
         }
-        FragmentKind::Error {
-            err: FragmentError::UnexpectedToken { .. },
-        } => {
-            return Some(CodeError::UnexpectedToken);
-        }
-        FragmentKind::Error {
-            err: FragmentError::UnresolvedIdentifier { .. },
-        } => {
-            return Some(CodeError::UnresolvedIdentifier);
-        }
+        FragmentKind::Error { err } => match err {
+            FragmentError::UnexpectedToken { .. } => {
+                return Some(CodeError::UnexpectedToken);
+            }
+            FragmentError::UnresolvedIdentifier { .. } => {
+                return Some(CodeError::UnresolvedIdentifier);
+            }
+        },
         _ => {}
     }
 
