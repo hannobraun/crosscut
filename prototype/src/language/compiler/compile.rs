@@ -40,9 +40,8 @@ fn tokenize(input: &str) -> impl Iterator<Item = Token> + '_ {
             },
             Err(err) => match err.kind() {
                 IntErrorKind::PosOverflow | IntErrorKind::NegOverflow => {
-                    Token::OverflowedInteger {
-                        value: token.to_string(),
-                    }
+                    let value = token.to_string();
+                    Token::OverflowedInteger { value }
                 }
                 _ => {
                     let name = token.to_string();
