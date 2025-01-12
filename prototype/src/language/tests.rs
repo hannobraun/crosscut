@@ -60,22 +60,7 @@ fn call_to_host_function() {
     let host = TestHost::new();
     compile("half 64", &host.inner, &mut code);
 
-    let mut interpreter = Interpreter::new(&code);
-    let output = loop {
-        match interpreter.step(&code) {
-            StepResult::CallToHostFunction { id, input, output } => {
-                assert_eq!(id, 0);
-                let Value::Integer { value: input } = input;
-                *output = input / 2;
-            }
-            StepResult::Finished { output } => {
-                break output;
-            }
-            result => {
-                panic!("Unexpected result: {result:#?}");
-            }
-        }
-    };
+    let output = host.run(&code);
 
     assert_eq!(output, Value::Integer { value: 32 });
 }
@@ -90,22 +75,7 @@ fn nested_calls_to_host_function() {
     let host = TestHost::new();
     compile("half half 64", &host.inner, &mut code);
 
-    let mut interpreter = Interpreter::new(&code);
-    let output = loop {
-        match interpreter.step(&code) {
-            StepResult::CallToHostFunction { id, input, output } => {
-                assert_eq!(id, 0);
-                let Value::Integer { value: input } = input;
-                *output = input / 2;
-            }
-            StepResult::Finished { output } => {
-                break output;
-            }
-            state => {
-                panic!("Unexpected state: {state:#?}");
-            }
-        }
-    };
+    let output = host.run(&code);
 
     assert_eq!(output, Value::Integer { value: 16 });
 }
@@ -118,6 +88,26 @@ impl TestHost {
     fn new() -> Self {
         Self {
             inner: Host::from_functions(["half"]),
+        }
+    }
+
+    fn run(&self, code: &Code) -> Value {
+        let mut interpreter = Interpreter::new(code);
+
+        loop {
+            match interpreter.step(code) {
+                StepResult::CallToHostFunction { id, input, output } => {
+                    assert_eq!(id, 0);
+                    let Value::Integer { value: input } = input;
+                    *output = input / 2;
+                }
+                StepResult::Finished { output } => {
+                    break output;
+                }
+                state => {
+                    panic!("Unexpected state: {state:#?}");
+                }
+            }
         }
     }
 }
