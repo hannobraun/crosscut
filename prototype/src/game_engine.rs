@@ -1,10 +1,10 @@
 use crate::{
-    thread::{self, Sender, ThreadHandle},
     editor::Editor,
     language::{
         host::Host,
         interpreter::{Interpreter, StepResult, Value},
     },
+    thread::{self, Sender, ThreadHandle},
 };
 
 pub struct GameEngine {
@@ -92,7 +92,9 @@ impl GameEngine {
         let events_from_editor_input = events_tx.clone();
         let handle_editor_input = thread::spawn(move || {
             let line = editor_input_rx.recv()?;
-            events_from_editor_input.send(Event::EditorInput { line })?;
+            if let Some(line) = line {
+                events_from_editor_input.send(Event::EditorInput { line })?;
+            }
             Ok(())
         });
 
@@ -135,7 +137,7 @@ impl GameEngineThreads {
 }
 
 pub struct GameEngineSenders {
-    pub editor_input: Sender<String>,
+    pub editor_input: Sender<Option<String>>,
     pub game_input: Sender<GameInput>,
 }
 
