@@ -35,10 +35,7 @@ impl<I> Actor<I> {
 
         Actor {
             sender,
-            handle: ThreadHandle {
-                main: Some(handle),
-                input: None,
-            },
+            handle: ThreadHandle::new(handle),
         }
     }
 
@@ -119,6 +116,13 @@ pub struct ThreadHandle {
 }
 
 impl ThreadHandle {
+    pub fn new(handle: JoinHandle<anyhow::Result<()>>) -> Self {
+        Self {
+            main: Some(handle),
+            input: None,
+        }
+    }
+
     pub fn join(&mut self) -> anyhow::Result<()> {
         if self.main.is_none() {
             panic!("You must not join an actor that has already been joined.");
