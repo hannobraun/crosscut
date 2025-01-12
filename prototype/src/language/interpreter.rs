@@ -82,10 +82,12 @@ impl Interpreter {
         }) = self.active_calls.last_mut()
         {
             self.next = Some(*fragment);
+
+            let output = output.insert(0);
             StepResult::CallToHostFunction {
                 id: *id,
                 input: value,
-                output: output.insert(0),
+                output,
             }
         } else {
             self.next = None;
