@@ -1,3 +1,5 @@
+use std::num::IntErrorKind;
+
 use crate::language::{
     code::{
         Body, Code, CodeError, Expression, Fragment, FragmentError,
@@ -36,8 +38,15 @@ fn tokenize(input: &str) -> impl Iterator<Item = Token> + '_ {
             Ok(value) => Token::Literal {
                 literal: Literal::Integer { value },
             },
-            Err(_) => Token::Identifier {
-                name: token.to_string(),
+            Err(err) => match err.kind() {
+                IntErrorKind::PosOverflow | IntErrorKind::NegOverflow => {
+                    Token::OverflowedInteger {
+                        value: token.to_string(),
+                    }
+                }
+                _ => Token::Identifier {
+                    name: token.to_string(),
+                },
             },
         })
 }
@@ -78,6 +87,9 @@ fn parse_token(
                 })
             }
         }
+        Token::OverflowedInteger { value } => {
+            Err(FragmentError::IntegerOverflow { value })
+        }
     }
 }
 
@@ -91,6 +103,9 @@ fn check_for_error(fragment: &Fragment) -> Option<CodeError> {
             }
         }
         FragmentKind::Error { err } => match err {
+            FragmentError::IntegerOverflow { .. } => {
+                return Some(CodeError::IntegerOverflow);
+            }
             FragmentError::UnexpectedToken { .. } => {
                 return Some(CodeError::UnexpectedToken);
             }

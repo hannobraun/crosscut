@@ -251,6 +251,9 @@ where
                 self.render_expression(expression)?;
             }
             FragmentKind::Error { err } => match err {
+                FragmentError::IntegerOverflow { value } => {
+                    write!(self.w, "{value}")?;
+                }
                 FragmentError::UnexpectedToken { token } => match token {
                     Token::Identifier { name } => {
                         write!(self.w, "{name}")?;
@@ -258,6 +261,9 @@ where
                     Token::Literal {
                         literal: Literal::Integer { value },
                     } => {
+                        write!(self.w, "{value}")?;
+                    }
+                    Token::OverflowedInteger { value } => {
                         write!(self.w, "{value}")?;
                     }
                 },
@@ -269,6 +275,7 @@ where
 
         if let Some(err) = maybe_error {
             let message = match err {
+                CodeError::IntegerOverflow => "integer overflow",
                 CodeError::MissingArgument => "missing argument",
                 CodeError::UnexpectedToken => "unexpected token",
                 CodeError::UnresolvedIdentifier => "unresolved identifier",

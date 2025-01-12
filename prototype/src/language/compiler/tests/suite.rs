@@ -7,6 +7,23 @@ use crate::language::{
 };
 
 #[test]
+fn integer_literal_larger_than_32_bits_is_an_error() {
+    // If an integer literal is larger than 32 bits, that is an error.
+
+    let host = Host::empty();
+
+    let mut code = Code::default();
+    compile("4294967295", &host, &mut code);
+    let i = code.fragments().get(&code.root).body.ids().next().unwrap();
+    assert_eq!(code.errors.get(i), None);
+
+    let mut code = Code::default();
+    compile("4294967296", &host, &mut code);
+    let i = code.fragments().get(&code.root).body.ids().next().unwrap();
+    assert_eq!(code.errors.get(i), Some(&CodeError::IntegerOverflow));
+}
+
+#[test]
 fn code_after_expression_is_an_error() {
     // An expression returns a value. That value can be returned when the
     // program finishes, or it can be used as the argument of a function call.

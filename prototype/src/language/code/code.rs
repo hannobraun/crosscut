@@ -123,6 +123,7 @@ pub enum Expression {
 pub enum Token {
     Identifier { name: String },
     Literal { literal: Literal },
+    OverflowedInteger { value: String },
 }
 
 #[derive(Clone, Debug, Eq, PartialEq, udigest::Digestable)]
