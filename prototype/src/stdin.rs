@@ -20,9 +20,7 @@ pub fn start(editor_input: Sender<Option<String>>) -> ThreadHandle {
                 editor_input.send(Some(line.clone()))?;
                 line.clear();
             }
-            _ => {
-                continue;
-            }
+            _ => {}
         }
     })
 }
