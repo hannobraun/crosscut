@@ -102,17 +102,21 @@ fn check_for_error(fragment: &Fragment) -> Option<CodeError> {
                 return Some(CodeError::MissingArgument);
             }
         }
-        FragmentKind::Error { err } => match err {
-            FragmentError::IntegerOverflow { .. } => {
-                return Some(CodeError::IntegerOverflow);
-            }
-            FragmentError::UnexpectedToken { .. } => {
-                return Some(CodeError::UnexpectedToken);
-            }
-            FragmentError::UnresolvedIdentifier { .. } => {
-                return Some(CodeError::UnresolvedIdentifier);
-            }
-        },
+        FragmentKind::Error { err } => {
+            let err = match err {
+                FragmentError::IntegerOverflow { .. } => {
+                    CodeError::IntegerOverflow
+                }
+                FragmentError::UnexpectedToken { .. } => {
+                    CodeError::UnexpectedToken
+                }
+                FragmentError::UnresolvedIdentifier { .. } => {
+                    CodeError::UnresolvedIdentifier
+                }
+            };
+
+            return Some(err);
+        }
         _ => {}
     }
 
