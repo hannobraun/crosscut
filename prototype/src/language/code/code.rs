@@ -33,7 +33,7 @@ impl Code {
 
     pub fn find_innermost_fragment_with_valid_body(&self) -> Cursor {
         let mut next = self.root;
-        let mut path = Vec::new();
+        let mut cursor = Vec::new();
 
         loop {
             let Some(body) = self.fragments.get(&next).valid_body() else {
@@ -42,7 +42,7 @@ impl Code {
                 break;
             };
 
-            path.push(next);
+            cursor.push(next);
 
             let Some(id) = body.ids().next_back().copied() else {
                 // The body we're currently looking at, is the innermost valid
@@ -64,7 +64,7 @@ impl Code {
             next = id;
         }
 
-        let Some(path) = Cursor::new(path) else {
+        let Some(path) = Cursor::new(cursor) else {
             unreachable!(
                 "It should be impossible to construct an invalid path here, as \
                 the root fragment has a valid body. We _must_ have added it in \
