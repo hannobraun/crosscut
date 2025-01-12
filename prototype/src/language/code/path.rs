@@ -1,5 +1,19 @@
 use super::FragmentId;
 
+/// # A unique identifier for a fragment at a specific location
+///
+/// This is distinct from [`FragmentId`], which could can identify multiple
+/// identical fragments at different locations in the syntax tree.
+///
+/// ## Implementation Note
+///
+/// The uniqueness that the text above promises is actually not guaranteed right
+/// now. However, it with the limited means available, it should be impossible
+/// to construct a situation where that matters.
+///
+/// In any case, this can be fixed by attaching the index of the fragment within
+/// its parent's body to each element of the cursor. I intend to do so, as soon
+/// as it's possible to write a test that covers this.
 #[derive(Debug)]
 pub struct Cursor {
     inner: Vec<FragmentId>,
