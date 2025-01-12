@@ -90,17 +90,18 @@ impl<T> Clone for Sender<T> {
 
 pub type Receiver<T> = mpsc::Receiver<T>;
 
+#[derive(Debug, thiserror::Error)]
 pub enum Error {
     /// # Channel is disconnected
     ///
     /// This should only happen, if another thread has shut down. Within the
     /// scope of this application, this means that the overall system either
     /// already is shutting down, or should be going into shutdown.
+    #[error("Channel disconnected")]
     ChannelDisconnected,
 
-    Other {
-        err: anyhow::Error,
-    },
+    #[error(transparent)]
+    Other { err: anyhow::Error },
 }
 
 impl From<anyhow::Error> for Error {
