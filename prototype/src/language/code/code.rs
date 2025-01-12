@@ -78,8 +78,8 @@ impl Code {
 
     pub fn append_to_body_at(
         &mut self,
-        to_append: Fragment,
         path: FragmentPath,
+        to_append: Fragment,
     ) -> FragmentId {
         let (to_update_id, path) = path.into_id_and_path();
 
