@@ -1,5 +1,5 @@
 use std::{
-    panic,
+    io, panic,
     sync::mpsc::{self, RecvError, SendError, TryRecvError},
     thread::{self, JoinHandle},
 };
@@ -89,6 +89,12 @@ pub enum Error {
         #[from]
         err: anyhow::Error,
     },
+}
+
+impl From<io::Error> for Error {
+    fn from(err: io::Error) -> Self {
+        Self::Other { err: err.into() }
+    }
 }
 
 #[derive(Debug, thiserror::Error)]
