@@ -53,12 +53,10 @@ pub struct Sender<T> {
 }
 
 impl<T> Sender<T> {
-    pub fn send(&self, value: T) -> Result<(), Error> {
-        self.inner.send(value).map_err(|SendError(_)| {
-            Error::ChannelDisconnected {
-                err: ChannelDisconnected,
-            }
-        })
+    pub fn send(&self, value: T) -> Result<(), ChannelDisconnected> {
+        self.inner
+            .send(value)
+            .map_err(|SendError(_)| ChannelDisconnected)
     }
 }
 

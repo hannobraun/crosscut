@@ -87,7 +87,7 @@ impl ApplicationHandler for Handler {
                 event_loop.exit();
             }
             WindowEvent::RedrawRequested => {
-                if let Err(actor::Error::ChannelDisconnected { .. }) =
+                if let Err(actor::ChannelDisconnected) =
                     self.game_io.input.send(GameInput::RenderingFrame)
                 {
                     // The other end has hung up. We should shut down too.
