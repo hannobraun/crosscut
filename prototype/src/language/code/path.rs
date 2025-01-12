@@ -40,7 +40,7 @@ impl Cursor {
         id
     }
 
-    pub fn into_id_and_path(
+    pub fn into_target_and_parents(
         mut self,
     ) -> (FragmentId, impl Iterator<Item = FragmentId>) {
         let Some(id) = self.inner.pop() else {

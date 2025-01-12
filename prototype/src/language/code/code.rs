@@ -80,7 +80,7 @@ impl Code {
         cursor: Cursor,
         to_append: Fragment,
     ) -> FragmentId {
-        let (to_update_id, parent_ids) = cursor.into_id_and_path();
+        let (to_update_id, parent_ids) = cursor.into_target_and_parents();
 
         let mut to_update = self.fragments.get(&to_update_id).clone();
         let appended = to_update.body.push(to_append, &mut self.fragments);
