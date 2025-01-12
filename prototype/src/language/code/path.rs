@@ -44,13 +44,13 @@ impl Cursor {
     pub fn into_target_and_parents(
         mut self,
     ) -> (FragmentId, impl Iterator<Item = FragmentId>) {
-        let Some(id) = self.inner.pop() else {
+        let Some(target) = self.inner.pop() else {
             unreachable!(
                 "A fragment path must consist of at least one component, the \
                 root."
             );
         };
 
-        (id, self.inner.into_iter().rev())
+        (target, self.inner.into_iter().rev())
     }
 }
