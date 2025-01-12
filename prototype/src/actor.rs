@@ -100,7 +100,7 @@ impl ThreadHandle {
         }
     }
 
-    pub fn join(&mut self) -> anyhow::Result<()> {
+    pub fn join(mut self) -> anyhow::Result<()> {
         if self.inner.is_none() {
             panic!("You must not join an actor that has already been joined.");
         }

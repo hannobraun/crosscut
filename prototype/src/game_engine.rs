@@ -117,7 +117,7 @@ pub struct GameEngineThreads {
 }
 
 impl GameEngineThreads {
-    pub fn join(mut self) -> anyhow::Result<()> {
+    pub fn join(self) -> anyhow::Result<()> {
         self.handle.join()?;
         self.handle_editor_input.join()?;
         self.handle_game_input.join()?;
