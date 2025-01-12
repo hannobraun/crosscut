@@ -11,7 +11,8 @@ use crate::{
 
 pub struct GameEngine {
     pub handle: ThreadHandle,
-    pub senders: GameEngineSenders,
+    pub editor_input: Sender<Option<String>>,
+    pub game_input: Sender<GameInput>,
 }
 
 impl GameEngine {
@@ -112,18 +113,12 @@ impl GameEngine {
             Ok(())
         });
 
-        let senders = GameEngineSenders {
+        Ok(Self {
+            handle,
             editor_input: editor_input_tx,
             game_input: game_input_tx,
-        };
-
-        Ok(Self { handle, senders })
+        })
     }
-}
-
-pub struct GameEngineSenders {
-    pub editor_input: Sender<Option<String>>,
-    pub game_input: Sender<GameInput>,
 }
 
 #[derive(Debug)]
