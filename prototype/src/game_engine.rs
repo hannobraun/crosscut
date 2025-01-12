@@ -36,6 +36,9 @@ impl GameEngine {
                                     0 => {
                                         // `dim`
 
+                                        let Value::Integer { value: input } =
+                                            input;
+
                                         *output = input / 2;
                                     }
                                     id => {

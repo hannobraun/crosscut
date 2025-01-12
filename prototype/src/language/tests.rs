@@ -65,6 +65,7 @@ fn call_to_host_function() {
         match interpreter.step(&code) {
             StepResult::CallToHostFunction { id, input, output } => {
                 assert_eq!(id, 0);
+                let Value::Integer { value: input } = input;
                 *output = input / 2;
             }
             StepResult::Finished { output } => {
@@ -94,6 +95,7 @@ fn nested_calls_to_host_function() {
         match interpreter.step(&code) {
             StepResult::CallToHostFunction { id, input, output } => {
                 assert_eq!(id, 0);
+                let Value::Integer { value: input } = input;
                 *output = input / 2;
             }
             StepResult::Finished { output } => {
