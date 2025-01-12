@@ -43,7 +43,7 @@ fn parse_token(
 ) -> Result<Expression, FragmentError> {
     let can_append_expression = code
         .fragments()
-        .get(append_to.id())
+        .get(append_to.target())
         .body
         .expression(code.fragments())
         .is_none();

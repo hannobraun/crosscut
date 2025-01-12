@@ -30,7 +30,7 @@ impl Cursor {
         }
     }
 
-    pub fn id(&self) -> &FragmentId {
+    pub fn target(&self) -> &FragmentId {
         let Some(id) = self.inner.last() else {
             unreachable!(
                 "A fragment path must consist of at least one component, the \
