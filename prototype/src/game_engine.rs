@@ -146,6 +146,7 @@ enum Event {
     GameInput(GameInput),
 }
 
+#[derive(Debug)]
 pub enum GameInput {
     RenderingFrame,
 }
