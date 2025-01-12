@@ -1,7 +1,7 @@
 use crossbeam_channel::select;
 
 use crate::{
-    editor::Editor,
+    editor::{Editor, EditorInput},
     language::{
         host::Host,
         interpreter::{Interpreter, StepResult, Value},
@@ -51,7 +51,8 @@ impl GameEngine {
 
             match event {
                 Event::EditorInput { line } => {
-                    editor.process_input(line, &host, &mut interpreter);
+                    let input = EditorInput { line };
+                    editor.process_input(input, &host, &mut interpreter);
 
                     loop {
                         match interpreter.step(editor.code()) {

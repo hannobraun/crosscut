@@ -1,7 +1,8 @@
 mod editor;
+mod input;
 mod renderer;
 
-pub use self::{editor::Editor, renderer::Renderer};
+pub use self::{editor::Editor, input::EditorInput, renderer::Renderer};
 
 #[cfg(test)]
 #[allow(unused)] // used sporadically, for debugging tests

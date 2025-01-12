@@ -7,7 +7,7 @@ use crate::language::{
     interpreter::{Interpreter, InterpreterState},
 };
 
-use super::Renderer;
+use super::{EditorInput, Renderer};
 
 pub struct Editor {
     code: Code,
@@ -37,7 +37,7 @@ impl Editor {
 
     pub fn process_input(
         &mut self,
-        line: String,
+        EditorInput { line }: EditorInput,
         host: &Host,
         interpreter: &mut Interpreter,
     ) {
