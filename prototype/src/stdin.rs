@@ -5,11 +5,11 @@ use crate::thread::{self, Sender, ThreadHandle};
 pub fn start(editor_input: Sender<Option<String>>) -> ThreadHandle {
     let mut line = String::new();
 
-    thread::spawn(move || loop {
+    thread::spawn(move || {
         let event = event::read()?;
 
         let Event::Key(key_event) = event else {
-            continue;
+            return Ok(());
         };
 
         match key_event.code {
@@ -22,5 +22,7 @@ pub fn start(editor_input: Sender<Option<String>>) -> ThreadHandle {
             }
             _ => {}
         }
+
+        Ok(())
     })
 }
