@@ -14,6 +14,13 @@ use crate::language::{
     interpreter::{Interpreter, InterpreterState},
 };
 
+#[cfg(test)]
+#[allow(unused)] // used sporadically, for debugging tests
+pub fn render_code(code: &Code, host: &Host) {
+    let mut renderer = Renderer::new(code, host, None);
+    renderer.render_code().unwrap();
+}
+
 pub struct Renderer<'r, W> {
     code: &'r Code,
     host: &'r Host,
@@ -184,11 +191,4 @@ where
 
         Ok(())
     }
-}
-
-#[cfg(test)]
-#[allow(unused)] // used sporadically, for debugging tests
-pub fn render_code(code: &Code, host: &Host) {
-    let mut renderer = Renderer::new(code, host, None);
-    renderer.render_code().unwrap();
 }
