@@ -6,7 +6,7 @@ mod path;
 
 pub use self::{
     body::Body,
-    code::{Code, Expression, Literal, Token},
+    code::{Code, Expression, Literal},
     errors::CodeError,
     fragments::{Fragment, FragmentError, FragmentId, FragmentKind, Fragments},
     path::FragmentPath,

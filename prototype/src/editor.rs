@@ -11,7 +11,7 @@ use crossterm::{
 use crate::language::{
     code::{
         Body, Code, CodeError, Expression, FragmentError, FragmentId,
-        FragmentKind, Literal, Token,
+        FragmentKind, Literal,
     },
     compiler::compile,
     host::Host,
@@ -254,13 +254,9 @@ where
                 FragmentError::IntegerOverflow { value } => {
                     write!(self.w, "{value}")?;
                 }
-                FragmentError::UnexpectedToken { token } => match token {
-                    Token::Literal {
-                        literal: Literal::Integer { value },
-                    } => {
-                        write!(self.w, "{value}")?;
-                    }
-                },
+                FragmentError::UnexpectedToken { token } => {
+                    write!(self.w, "{token}")?;
+                }
                 FragmentError::UnresolvedIdentifier { name } => {
                     write!(self.w, "{name}")?;
                 }

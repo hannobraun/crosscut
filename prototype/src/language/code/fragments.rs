@@ -2,7 +2,7 @@ use std::{collections::BTreeMap, fmt};
 
 use base64::{prelude::BASE64_STANDARD_NO_PAD, Engine};
 
-use super::{Body, Expression, Token};
+use super::{Body, Expression};
 
 #[derive(Clone, Debug, Default, Eq, PartialEq)]
 pub struct Fragments {
@@ -100,6 +100,6 @@ pub enum FragmentKind {
 #[derive(Clone, Debug, Eq, PartialEq, udigest::Digestable)]
 pub enum FragmentError {
     IntegerOverflow { value: String },
-    UnexpectedToken { token: Token },
+    UnexpectedToken { token: String },
     UnresolvedIdentifier { name: String },
 }

@@ -3,7 +3,7 @@ use std::num::IntErrorKind;
 use crate::language::{
     code::{
         Body, Code, CodeError, Expression, Fragment, FragmentError,
-        FragmentKind, FragmentPath, Literal, Token,
+        FragmentKind, FragmentPath, Literal,
     },
     host::Host,
 };
@@ -41,27 +41,23 @@ fn parse_token(
     code: &Code,
     host: &Host,
 ) -> Result<Expression, FragmentError> {
-    match token.parse::<u32>() {
-        Ok(value) => {
-            let can_append_expression = code
-                .fragments()
-                .get(append_to.id())
-                .body
-                .expression(code.fragments())
-                .is_none();
+    let can_append_expression = code
+        .fragments()
+        .get(append_to.id())
+        .body
+        .expression(code.fragments())
+        .is_none();
 
-            if can_append_expression {
-                Ok(Expression::Literal {
-                    literal: Literal::Integer { value },
-                })
-            } else {
-                Err(FragmentError::UnexpectedToken {
-                    token: Token::Literal {
-                        literal: Literal::Integer { value },
-                    },
-                })
-            }
-        }
+    if !can_append_expression {
+        return Err(FragmentError::UnexpectedToken {
+            token: token.to_string(),
+        });
+    }
+
+    match token.parse::<u32>() {
+        Ok(value) => Ok(Expression::Literal {
+            literal: Literal::Integer { value },
+        }),
         Err(err) => match err.kind() {
             IntErrorKind::PosOverflow | IntErrorKind::NegOverflow => {
                 let value = token.to_string();

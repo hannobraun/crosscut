@@ -120,11 +120,6 @@ pub enum Expression {
 }
 
 #[derive(Clone, Debug, Eq, PartialEq, udigest::Digestable)]
-pub enum Token {
-    Literal { literal: Literal },
-}
-
-#[derive(Clone, Debug, Eq, PartialEq, udigest::Digestable)]
 pub enum Literal {
     Integer { value: u32 },
 }
