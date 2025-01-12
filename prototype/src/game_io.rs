@@ -1,4 +1,4 @@
-use std::sync::{mpsc::TryRecvError, Arc};
+use std::sync::Arc;
 
 use anyhow::anyhow;
 use pollster::FutureExt;
@@ -97,17 +97,17 @@ impl ApplicationHandler for Handler {
 
                 loop {
                     match self.game_io.output.try_recv() {
-                        Ok(GameOutput::SubmitColor {
+                        Ok(Some(GameOutput::SubmitColor {
                             color: [r, g, b, a],
-                        }) => {
+                        })) => {
                             self.color = wgpu::Color { r, g, b, a };
                         }
-                        Err(TryRecvError::Empty) => {
+                        Ok(None) => {
                             // No update, so nothing to do here. If we had an
                             // update before, we'll use that one below.
                             break;
                         }
-                        Err(TryRecvError::Disconnected) => {
+                        Err(actor::ChannelDisconnected) => {
                             // The other end has hung up. Time for us to shut
                             // down too.
                             event_loop.exit();

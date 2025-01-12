@@ -77,8 +77,12 @@ impl<T> Receiver<T> {
         self.inner.recv().map_err(|RecvError| ChannelDisconnected)
     }
 
-    pub fn try_recv(&self) -> Result<T, TryRecvError> {
-        self.inner.try_recv()
+    pub fn try_recv(&self) -> Result<Option<T>, ChannelDisconnected> {
+        match self.inner.try_recv() {
+            Ok(message) => Ok(Some(message)),
+            Err(TryRecvError::Empty) => Ok(None),
+            Err(TryRecvError::Disconnected) => Err(ChannelDisconnected),
+        }
     }
 }
 
