@@ -105,9 +105,9 @@ impl GameEngine {
         });
 
         let threads = GameEngineThreads {
-            handle: handle_events.handle,
-            handle_editor_input: handle_editor_input.handle,
-            handle_game_input: handle_game_input.handle,
+            handle: handle_events,
+            handle_editor_input,
+            handle_game_input,
         };
         let senders = GameEngineSenders {
             editor_input: editor_input_tx,

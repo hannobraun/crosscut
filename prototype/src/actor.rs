@@ -4,11 +4,7 @@ use std::{
     thread::{self, JoinHandle},
 };
 
-pub struct Actor {
-    pub handle: ThreadHandle,
-}
-
-pub fn spawn<F>(mut f: F) -> Actor
+pub fn spawn<F>(mut f: F) -> ThreadHandle
 where
     F: FnMut() -> Result<(), Error> + Send + 'static,
 {
@@ -28,9 +24,7 @@ where
         Ok(())
     });
 
-    Actor {
-        handle: ThreadHandle::new(handle),
-    }
+    ThreadHandle::new(handle)
 }
 
 pub fn channel<T>() -> (Sender<T>, Receiver<T>) {
