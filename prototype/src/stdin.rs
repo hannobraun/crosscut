@@ -8,8 +8,6 @@ use crate::{
 };
 
 pub fn start(editor_input: Sender<Option<EditorInput>>) -> ThreadHandle {
-    let mut line = String::new();
-
     thread::spawn(move || {
         let timeout = Duration::from_millis(500);
         let event_ready = event::poll(timeout)?;
@@ -31,12 +29,10 @@ pub fn start(editor_input: Sender<Option<EditorInput>>) -> ThreadHandle {
 
         match key_event.code {
             KeyCode::Char(ch) => {
-                line.push(ch);
+                editor_input.send(Some(EditorInput::Char { value: ch }))?;
             }
             KeyCode::Enter => {
-                let input = EditorInput { line: line.clone() };
-                editor_input.send(Some(input))?;
-                line.clear();
+                editor_input.send(Some(EditorInput::Enter))?;
             }
             _ => {}
         }

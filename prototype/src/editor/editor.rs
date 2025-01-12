@@ -11,6 +11,7 @@ use super::{EditorInput, Renderer};
 
 pub struct Editor {
     code: Code,
+    input: String,
     commands: BTreeSet<&'static str>,
 }
 
@@ -27,6 +28,7 @@ impl Editor {
 
         Self {
             code: Code::default(),
+            input: String::new(),
             commands,
         }
     }
@@ -37,10 +39,22 @@ impl Editor {
 
     pub fn process_input(
         &mut self,
-        EditorInput { line }: EditorInput,
+        input: EditorInput,
         host: &Host,
         interpreter: &mut Interpreter,
     ) -> bool {
+        let line = match input {
+            EditorInput::Char { value } => {
+                self.input.push(value);
+                return false;
+            }
+            EditorInput::Enter => {
+                let line = self.input.clone();
+                self.input.clear();
+                line
+            }
+        };
+
         let mut command_and_arguments =
             line.trim().splitn(2, |ch: char| ch.is_whitespace());
 

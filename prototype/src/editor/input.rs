@@ -1,4 +1,5 @@
 #[derive(Debug)]
-pub struct EditorInput {
-    pub line: String,
+pub enum EditorInput {
+    Char { value: char },
+    Enter,
 }
