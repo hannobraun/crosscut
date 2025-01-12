@@ -128,6 +128,7 @@ enum Event {
     EditorInput {
         line: String,
     },
+
     GameInput {
         input: GameInput,
     },
