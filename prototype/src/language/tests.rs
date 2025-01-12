@@ -55,12 +55,7 @@ fn call_to_host_function() {
     // The host can define functions. Those functions take one argument, return
     // one value, and can be called from Crosscut code.
 
-    let mut code = Code::default();
-    let host = TestHost::new();
-
-    compile("half 64", &host.inner, &mut code);
-    let output = host.run(&code);
-
+    let output = compile_and_run("half 64");
     assert_eq!(output, Value::Integer { value: 32 });
 }
 
@@ -69,13 +64,16 @@ fn nested_calls_to_host_function() {
     // It is possible use a function call as the argument of another function
     // call.
 
+    let output = compile_and_run("half half 64");
+    assert_eq!(output, Value::Integer { value: 16 });
+}
+
+fn compile_and_run(input: &str) -> Value {
     let mut code = Code::default();
     let host = TestHost::new();
 
-    compile("half half 64", &host.inner, &mut code);
-    let output = host.run(&code);
-
-    assert_eq!(output, Value::Integer { value: 16 });
+    compile(input, &host.inner, &mut code);
+    host.run(&code)
 }
 
 struct TestHost {
