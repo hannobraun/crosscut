@@ -83,7 +83,10 @@ fn run(code: &Code) -> Value {
         match interpreter.step(code) {
             StepResult::CallToHostFunction { id, input, output } => {
                 assert_eq!(id, 0);
+
                 let Value::Integer { value: input } = input;
+                let Value::Integer { value: output } = output;
+
                 *output = input / 2;
             }
             StepResult::Finished { output } => {

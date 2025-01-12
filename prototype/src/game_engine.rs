@@ -38,6 +38,8 @@ impl GameEngine {
 
                                         let Value::Integer { value: input } =
                                             input;
+                                        let Value::Integer { value: output } =
+                                            output;
 
                                         *output = input / 2;
                                     }

@@ -82,8 +82,7 @@ impl Interpreter {
         {
             self.next = Some(*fragment);
 
-            let Value::Integer { value: output } =
-                output.insert(Value::Integer { value: 0 });
+            let output = output.insert(Value::Integer { value: 0 });
             StepResult::CallToHostFunction {
                 id: *id,
                 input: value,
@@ -123,7 +122,7 @@ pub enum StepResult<'r> {
     CallToHostFunction {
         id: usize,
         input: Value,
-        output: &'r mut u32,
+        output: &'r mut Value,
     },
     Error,
     Finished {
