@@ -55,7 +55,8 @@ impl Interpreter {
                     {
                         let output = *output;
                         self.active_calls.pop();
-                        return self.evaluate_value(output);
+                        return self
+                            .evaluate_value(Value::Integer { value: output });
                     } else {
                         self.active_calls.push(ActiveCall::ToHostFunction {
                             id: *target,
@@ -66,13 +67,14 @@ impl Interpreter {
                     }
                 }
                 Expression::LiteralValue { value } => {
-                    return self.evaluate_value(*value);
+                    return self
+                        .evaluate_value(Value::Integer { value: *value });
                 }
             }
         }
     }
 
-    fn evaluate_value(&mut self, value: u32) -> StepResult {
+    fn evaluate_value(&mut self, value: Value) -> StepResult {
         if let Some(ActiveCall::ToHostFunction {
             id,
             fragment,
@@ -82,14 +84,12 @@ impl Interpreter {
             self.next = Some(*fragment);
             StepResult::CallToHostFunction {
                 id: *id,
-                input: Value::Integer { value },
+                input: value,
                 output: output.insert(0),
             }
         } else {
             self.next = None;
-            StepResult::Finished {
-                output: Value::Integer { value },
-            }
+            StepResult::Finished { output: value }
         }
     }
 
