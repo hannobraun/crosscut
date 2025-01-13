@@ -5,16 +5,17 @@ use crossterm::{
     QueueableCommand,
 };
 
-use crate::language::{
-    code::{
-        Body, Code, CodeError, Expression, FragmentError, FragmentId,
-        FragmentKind, Literal,
+use crate::{
+    editor::Editor,
+    language::{
+        code::{
+            Body, Code, CodeError, Expression, FragmentError, FragmentId,
+            FragmentKind, Literal,
+        },
+        host::Host,
+        interpreter::{Interpreter, InterpreterState},
     },
-    host::Host,
-    interpreter::{Interpreter, InterpreterState},
 };
-
-use super::Editor;
 
 #[cfg(test)]
 #[allow(unused)] // used sporadically, for debugging tests
