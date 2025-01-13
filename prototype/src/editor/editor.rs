@@ -63,13 +63,13 @@ impl Editor {
             EditorMode::Append => {
                 self.process_code(host, interpreter);
                 self.mode = EditorMode::Command;
+                self.input.clear();
             }
             EditorMode::Command => {
                 self.process_command(interpreter);
+                self.input.clear();
             }
         }
-
-        self.input.clear();
 
         true
     }
