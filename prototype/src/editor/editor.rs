@@ -88,13 +88,10 @@ impl Editor {
         }
 
         match matched_command {
-            command @ ":append" => {
+            ":append" => {
                 self.mode = Mode::Append;
 
                 let Some(code) = command_and_arguments.next() else {
-                    println!(
-                        "`{command}` command expects input code as argument."
-                    );
                     return true;
                 };
 
