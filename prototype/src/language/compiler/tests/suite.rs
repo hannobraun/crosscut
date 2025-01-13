@@ -2,7 +2,7 @@ use itertools::Itertools;
 
 use crate::language::{
     code::{Code, CodeError},
-    compiler::tests::infra::compile,
+    compiler::tests::infra::compile_all,
     host::Host,
 };
 
@@ -13,12 +13,12 @@ fn integer_literal_larger_than_32_bits_is_an_error() {
     let host = Host::empty();
 
     let mut code = Code::default();
-    compile("4294967295", &host, &mut code);
+    compile_all("4294967295", &host, &mut code);
     let i = code.fragments().get(&code.root).body.ids().next().unwrap();
     assert_eq!(code.errors.get(i), None);
 
     let mut code = Code::default();
-    compile("4294967296", &host, &mut code);
+    compile_all("4294967296", &host, &mut code);
     let i = code.fragments().get(&code.root).body.ids().next().unwrap();
     assert_eq!(code.errors.get(i), Some(&CodeError::IntegerOverflow));
 }
@@ -34,7 +34,7 @@ fn code_after_expression_is_an_error() {
     let host = Host::empty();
     let mut code = Code::default();
 
-    compile("1 2", &host, &mut code);
+    compile_all("1 2", &host, &mut code);
 
     let (a, b) = code
         .fragments()
@@ -55,7 +55,7 @@ fn unresolved_identifier_is_an_error() {
     let host = Host::empty();
     let mut code = Code::default();
 
-    compile("f 1", &host, &mut code);
+    compile_all("f 1", &host, &mut code);
 
     let f = code.fragments().get(&code.root).body.ids().next().unwrap();
 
@@ -70,11 +70,11 @@ fn missing_function_call_argument_is_an_error() {
     let host = Host::from_functions(["f"]);
     let mut code = Code::default();
 
-    compile("f", &host, &mut code);
+    compile_all("f", &host, &mut code);
     let f = code.fragments().get(&code.root).body.ids().next().unwrap();
     assert_eq!(code.errors.get(f), Some(&CodeError::MissingArgument));
 
-    compile("1", &host, &mut code);
+    compile_all("1", &host, &mut code);
     let f = code.fragments().get(&code.root).body.ids().next().unwrap();
     assert_eq!(code.errors.get(f), None);
 }

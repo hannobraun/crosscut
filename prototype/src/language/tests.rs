@@ -1,7 +1,7 @@
 use pretty_assertions::assert_eq;
 
 use crate::language::{
-    compiler::tests::infra::compile,
+    compiler::tests::infra::compile_all,
     host::Host,
     interpreter::{StepResult, Value},
 };
@@ -16,7 +16,7 @@ fn evaluate_single_expression() {
     let host = Host::empty();
     let mut code = Code::default();
 
-    compile("1", &host, &mut code);
+    compile_all("1", &host, &mut code);
 
     let mut interpreter = Interpreter::new(&code);
     assert_eq!(
@@ -38,7 +38,7 @@ fn code_after_expression_is_an_error() {
     let host = Host::empty();
     let mut code = Code::default();
 
-    compile("1 2", &host, &mut code);
+    compile_all("1 2", &host, &mut code);
 
     let mut interpreter = Interpreter::new(&code);
     assert_eq!(
@@ -72,7 +72,7 @@ fn compile_and_run(input: &str) -> Value {
     let mut code = Code::default();
     let host = Host::from_functions(["half"]);
 
-    compile(input, &host, &mut code);
+    compile_all(input, &host, &mut code);
     run(&code)
 }
 
