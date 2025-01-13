@@ -151,7 +151,7 @@ impl Default for Editor {
 }
 
 #[derive(Debug)]
-enum Mode {
+pub enum Mode {
     Append,
     Command,
 }
