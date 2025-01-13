@@ -52,22 +52,24 @@ impl Editor {
         match input {
             EditorInput::Char { value } => {
                 self.input.push(value);
-                return false;
+                false
             }
-            EditorInput::Enter => match self.mode {
-                EditorMode::Append => {
-                    self.process_code(host, interpreter);
-                    self.mode = EditorMode::Command;
-                    self.input.clear();
+            EditorInput::Enter => {
+                match self.mode {
+                    EditorMode::Append => {
+                        self.process_code(host, interpreter);
+                        self.mode = EditorMode::Command;
+                        self.input.clear();
+                    }
+                    EditorMode::Command => {
+                        self.process_command(interpreter);
+                        self.input.clear();
+                    }
                 }
-                EditorMode::Command => {
-                    self.process_command(interpreter);
-                    self.input.clear();
-                }
-            },
-        }
 
-        true
+                true
+            }
+        }
     }
 
     fn process_command(&mut self, interpreter: &mut Interpreter) {
