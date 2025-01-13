@@ -54,21 +54,17 @@ impl Editor {
                 self.input.push(value);
                 return false;
             }
-            EditorInput::Enter => {
-                // Rest of function can do its thing now.
-            }
-        }
-
-        match self.mode {
-            EditorMode::Append => {
-                self.process_code(host, interpreter);
-                self.mode = EditorMode::Command;
-                self.input.clear();
-            }
-            EditorMode::Command => {
-                self.process_command(interpreter);
-                self.input.clear();
-            }
+            EditorInput::Enter => match self.mode {
+                EditorMode::Append => {
+                    self.process_code(host, interpreter);
+                    self.mode = EditorMode::Command;
+                    self.input.clear();
+                }
+                EditorMode::Command => {
+                    self.process_command(interpreter);
+                    self.input.clear();
+                }
+            },
         }
 
         true
