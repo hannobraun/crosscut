@@ -1,4 +1,4 @@
-use std::io::{self, stdout, Stdout};
+use std::io::{stdout, Stdout, Write};
 
 use crossterm::{
     style::{Attribute, Color, ResetColor, SetAttribute, SetForegroundColor},
@@ -29,20 +29,15 @@ pub fn render_code(code: &Code, host: &Host) {
     renderer.render_code(&mut context).unwrap();
 }
 
-pub struct Renderer<W> {
-    w: W,
+pub struct Renderer {
+    w: Stdout,
 }
 
-impl Renderer<Stdout> {
+impl Renderer {
     pub fn new() -> Self {
         Self { w: stdout() }
     }
-}
 
-impl<W> Renderer<W>
-where
-    W: io::Write,
-{
     pub fn render(
         &mut self,
         editor: &Editor,
