@@ -39,6 +39,10 @@ impl Editor {
         &self.code
     }
 
+    pub fn mode(&self) -> &Mode {
+        &self.mode
+    }
+
     pub fn process_input(
         &mut self,
         input: EditorInput,

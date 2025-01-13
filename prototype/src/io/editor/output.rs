@@ -6,7 +6,7 @@ use crossterm::{
 };
 
 use crate::{
-    editor::Editor,
+    editor::{Editor, Mode},
     language::{
         code::{
             Body, Code, CodeError, Expression, FragmentError, FragmentId,
@@ -54,7 +54,7 @@ impl Renderer {
         };
 
         self.render_code(&mut context)?;
-        self.render_prompt()?;
+        self.render_prompt(editor.mode())?;
 
         Ok(())
     }
@@ -81,9 +81,14 @@ impl Renderer {
         Ok(())
     }
 
-    fn render_prompt(&mut self) -> anyhow::Result<()> {
+    fn render_prompt(&mut self, mode: &Mode) -> anyhow::Result<()> {
+        let mode = match mode {
+            Mode::Append => "append",
+            Mode::Command => "command",
+        };
+
         writeln!(self.w)?;
-        write!(self.w, "> ")?;
+        write!(self.w, "{mode} > ")?;
 
         self.w.flush()?;
 
