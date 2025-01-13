@@ -41,6 +41,13 @@ impl<W> Renderer<'_, W>
 where
     W: io::Write,
 {
+    pub fn render(&mut self) -> anyhow::Result<()> {
+        self.render_code()?;
+        self.render_prompt()?;
+
+        Ok(())
+    }
+
     pub fn render_code(&mut self) -> anyhow::Result<()> {
         writeln!(self.w)?;
         self.render_fragment(&self.context.code.root)?;

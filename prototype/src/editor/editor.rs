@@ -149,10 +149,7 @@ impl Editor {
         interpreter: &Interpreter,
     ) -> anyhow::Result<()> {
         let mut renderer = Renderer::new(&self.code, host, Some(interpreter));
-
-        renderer.render_code()?;
-        renderer.render_prompt()?;
-
+        renderer.render()?;
         Ok(())
     }
 }
