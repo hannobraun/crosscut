@@ -61,7 +61,7 @@ impl Editor {
 
         match self.mode {
             EditorMode::Append => {
-                self.process_code(&self.input.clone(), host, interpreter);
+                self.process_code(host, interpreter);
                 self.mode = EditorMode::Command;
             }
             EditorMode::Command => {
@@ -121,12 +121,7 @@ impl Editor {
         false
     }
 
-    fn process_code(
-        &mut self,
-        _: &str,
-        host: &Host,
-        interpreter: &mut Interpreter,
-    ) {
+    fn process_code(&mut self, host: &Host, interpreter: &mut Interpreter) {
         for token in self.input.split_whitespace() {
             compile(token, host, &mut self.code);
         }
