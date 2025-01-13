@@ -148,8 +148,8 @@ impl Editor {
         host: &Host,
         interpreter: &Interpreter,
     ) -> anyhow::Result<()> {
-        let mut renderer = Renderer::new(&self.code, host, Some(interpreter));
-        renderer.render()?;
+        let mut renderer = Renderer::new();
+        renderer.render(&self.code, host, Some(interpreter))?;
         Ok(())
     }
 }
