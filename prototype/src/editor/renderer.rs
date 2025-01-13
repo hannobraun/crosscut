@@ -17,6 +17,7 @@ use crate::language::{
 use super::Editor;
 
 #[cfg(test)]
+#[allow(unused)] // used sporadically, for debugging tests
 pub fn render_code(code: &Code, host: &Host) {
     let mut context = RenderContext {
         code,
