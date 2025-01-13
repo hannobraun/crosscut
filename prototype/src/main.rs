@@ -17,7 +17,7 @@ fn main() -> anyhow::Result<()> {
 
     let game_engine = GameEngine::start(game_output_tx)?;
     let editor = stdin::start(game_engine.editor_input);
-    io::game_io::start_and_wait(game_engine.game_input, game_output_rx)?;
+    io::game_engine::start_and_wait(game_engine.game_input, game_output_rx)?;
 
     game_engine.handle.join()?;
     editor.join()?;
