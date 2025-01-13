@@ -74,11 +74,9 @@ impl Editor {
         true
     }
 
-    fn process_command(
-        &mut self,
-        command: &str,
-        interpreter: &mut Interpreter,
-    ) {
+    fn process_command(&mut self, _: &str, interpreter: &mut Interpreter) {
+        let command = &self.input;
+
         let mut matched_commands = self
             .commands
             .iter()
