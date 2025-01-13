@@ -78,7 +78,7 @@ impl Editor {
         &mut self,
         command: &str,
         interpreter: &mut Interpreter,
-    ) -> bool {
+    ) {
         let mut matched_commands = self
             .commands
             .iter()
@@ -87,7 +87,7 @@ impl Editor {
 
         let Some(&matched_command) = matched_commands.pop_front() else {
             println!("Unknown command: `{command}`");
-            return true;
+            return;
         };
         if !matched_commands.is_empty() {
             print!(
@@ -99,7 +99,7 @@ impl Editor {
             }
             println!();
 
-            return true;
+            return;
         }
 
         match matched_command {
@@ -117,8 +117,6 @@ impl Editor {
                 unreachable!("Ruled out that command is unknown, above.")
             }
         }
-
-        false
     }
 
     fn process_code(&mut self, host: &Host, interpreter: &mut Interpreter) {
