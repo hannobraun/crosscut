@@ -54,7 +54,7 @@ where
         Ok(())
     }
 
-    pub fn render_code(&mut self) -> anyhow::Result<()> {
+    fn render_code(&mut self) -> anyhow::Result<()> {
         writeln!(self.w)?;
         self.render_fragment(&self.context.code.root)?;
 
