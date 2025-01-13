@@ -149,7 +149,7 @@ impl Editor {
         interpreter: &Interpreter,
     ) -> anyhow::Result<()> {
         let mut renderer = Renderer::new();
-        renderer.render(&self.code, host, Some(interpreter))?;
+        renderer.render(self, host, Some(interpreter))?;
         Ok(())
     }
 }

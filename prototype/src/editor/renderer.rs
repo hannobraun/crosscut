@@ -14,6 +14,8 @@ use crate::language::{
     interpreter::{Interpreter, InterpreterState},
 };
 
+use super::Editor;
+
 #[cfg(test)]
 pub fn render_code(code: &Code, host: &Host) {
     let mut context = RenderContext {
@@ -43,12 +45,12 @@ where
 {
     pub fn render(
         &mut self,
-        code: &Code,
+        editor: &Editor,
         host: &Host,
         interpreter: Option<&Interpreter>,
     ) -> anyhow::Result<()> {
         let mut context = RenderContext {
-            code,
+            code: editor.code(),
             host,
             interpreter,
             indent: 0,
