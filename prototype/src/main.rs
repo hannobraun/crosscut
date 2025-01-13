@@ -15,11 +15,11 @@ fn main() -> anyhow::Result<()> {
     let (game_output_tx, game_output_rx) = thread::channel();
 
     let game_engine = GameEngine::start(game_output_tx)?;
-    let editor = io::editor::input::start(game_engine.editor_input);
+    let editor_input = io::editor::input::start(game_engine.editor_input);
     io::game_engine::start_and_wait(game_engine.game_input, game_output_rx)?;
 
     game_engine.handle.join()?;
-    editor.join()?;
+    editor_input.join()?;
 
     Ok(())
 }
