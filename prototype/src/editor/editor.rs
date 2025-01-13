@@ -91,11 +91,9 @@ impl Editor {
             ":append" => {
                 self.mode = Mode::Append;
 
-                let Some(code) = command_and_arguments.next() else {
-                    return true;
-                };
-
-                self.process_code(code, host, interpreter);
+                if let Some(code) = command_and_arguments.next() {
+                    self.process_code(code, host, interpreter);
+                }
             }
             command @ ":clear" => {
                 let None = command_and_arguments.next() else {
