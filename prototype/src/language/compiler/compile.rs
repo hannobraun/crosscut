@@ -8,31 +8,25 @@ use crate::language::{
     host::Host,
 };
 
-pub fn compile(input: &str, host: &Host, code: &mut Code) {
-    for token in tokenize(input) {
-        let cursor = code.find_innermost_fragment_with_valid_body();
+pub fn compile(token: &str, host: &Host, code: &mut Code) {
+    let cursor = code.find_innermost_fragment_with_valid_body();
 
-        let kind = match parse_token(token, &cursor, code, host) {
-            Ok(expression) => FragmentKind::Expression { expression },
-            Err(err) => FragmentKind::Error { err },
-        };
-        let fragment = Fragment {
-            kind,
-            body: Body::default(),
-        };
+    let kind = match parse_token(token, &cursor, code, host) {
+        Ok(expression) => FragmentKind::Expression { expression },
+        Err(err) => FragmentKind::Error { err },
+    };
+    let fragment = Fragment {
+        kind,
+        body: Body::default(),
+    };
 
-        let maybe_error = check_for_error(&fragment);
+    let maybe_error = check_for_error(&fragment);
 
-        let id = code.append_to_body_at(cursor, fragment);
+    let id = code.append_to_body_at(cursor, fragment);
 
-        if let Some(err) = maybe_error {
-            code.errors.insert(id, err);
-        }
+    if let Some(err) = maybe_error {
+        code.errors.insert(id, err);
     }
-}
-
-fn tokenize(input: &str) -> impl Iterator<Item = &str> + '_ {
-    input.split_whitespace()
 }
 
 fn parse_token(

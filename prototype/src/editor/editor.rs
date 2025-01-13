@@ -94,7 +94,9 @@ impl Editor {
                     return true;
                 };
 
-                compile(input_code, host, &mut self.code);
+                for token in input_code.split_whitespace() {
+                    compile(token, host, &mut self.code);
+                }
 
                 let is_running = matches!(
                     interpreter.state(&self.code),
