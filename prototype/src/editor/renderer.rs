@@ -57,7 +57,7 @@ where
         Ok(())
     }
 
-    pub fn render_prompt(&mut self) -> anyhow::Result<()> {
+    fn render_prompt(&mut self) -> anyhow::Result<()> {
         let Some(interpreter) = self.context.interpreter else {
             unreachable!(
                 "Rendering the prompt is only done in the full editor, where \
