@@ -11,6 +11,7 @@ use super::{EditorInput, Renderer};
 
 pub struct Editor {
     code: Code,
+    mode: Mode,
     input: String,
     commands: BTreeSet<&'static str>,
 }
@@ -28,6 +29,7 @@ impl Editor {
 
         Self {
             code: Code::default(),
+            mode: Mode::Command,
             input: String::new(),
             commands,
         }
@@ -87,6 +89,8 @@ impl Editor {
 
         match matched_command {
             command @ ":append" => {
+                self.mode = Mode::Append;
+
                 let Some(code) = command_and_arguments.next() else {
                     println!(
                         "`{command}` command expects input code as argument."
@@ -116,6 +120,10 @@ impl Editor {
             _ => {
                 unreachable!("Ruled out that command is unknown, above.")
             }
+        }
+
+        if let Mode::Append = self.mode {
+            self.mode = Mode::Command;
         }
 
         true
@@ -157,4 +165,9 @@ impl Default for Editor {
     fn default() -> Self {
         Self::new()
     }
+}
+
+enum Mode {
+    Append,
+    Command,
 }
