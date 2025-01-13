@@ -15,10 +15,7 @@ use crate::language::{
 };
 
 #[cfg(test)]
-pub fn render_code(
-    code: &crate::language::code::Code,
-    host: &crate::language::host::Host,
-) {
+pub fn render_code(code: &Code, host: &Host) {
     let mut renderer = Renderer::new(code, host, None);
     renderer.render_code().unwrap();
 }
