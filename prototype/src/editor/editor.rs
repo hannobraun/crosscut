@@ -68,6 +68,7 @@ impl Editor {
         let Some(command) = command_and_arguments.next() else {
             return false;
         };
+        let arguments = command_and_arguments.next();
 
         let mut matched_commands = self
             .commands
@@ -97,7 +98,7 @@ impl Editor {
                 self.mode = EditorMode::Append;
             }
             command @ ":clear" => {
-                let None = command_and_arguments.next() else {
+                let None = arguments else {
                     println!("`{command}` command expects no arguments.");
                     return true;
                 };
@@ -106,7 +107,7 @@ impl Editor {
                 interpreter.reset(&self.code);
             }
             command @ ":reset" => {
-                let None = command_and_arguments.next() else {
+                let None = arguments else {
                     println!("`{command}` command expects no arguments.");
                     return true;
                 };
@@ -119,7 +120,7 @@ impl Editor {
         }
 
         if let EditorMode::Append = self.mode {
-            if let Some(code) = command_and_arguments.next() {
+            if let Some(code) = arguments {
                 self.process_code(code, host, interpreter);
             }
 
