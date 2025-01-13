@@ -87,14 +87,14 @@ impl Editor {
 
         match matched_command {
             command @ ":append" => {
-                let Some(input_code) = command_and_arguments.next() else {
+                let Some(code) = command_and_arguments.next() else {
                     println!(
                         "`{command}` command expects input code as argument."
                     );
                     return true;
                 };
 
-                self.process_code(input_code, host, interpreter);
+                self.process_code(code, host, interpreter);
             }
             command @ ":clear" => {
                 let None = command_and_arguments.next() else {
