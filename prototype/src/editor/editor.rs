@@ -97,21 +97,11 @@ impl Editor {
             ":append" => {
                 self.mode = EditorMode::Append;
             }
-            command @ ":clear" => {
-                let None = arguments else {
-                    println!("`{command}` command expects no arguments.");
-                    return true;
-                };
-
+            ":clear" => {
                 self.code = Code::default();
                 interpreter.reset(&self.code);
             }
-            command @ ":reset" => {
-                let None = arguments else {
-                    println!("`{command}` command expects no arguments.");
-                    return true;
-                };
-
+            ":reset" => {
                 interpreter.reset(&self.code);
             }
             _ => {
