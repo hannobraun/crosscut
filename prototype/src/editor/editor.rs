@@ -72,6 +72,19 @@ impl Editor {
         }
     }
 
+    fn process_code(&mut self, host: &Host, interpreter: &mut Interpreter) {
+        for token in self.input.split_whitespace() {
+            compile(token, host, &mut self.code);
+        }
+
+        let is_running =
+            matches!(interpreter.state(&self.code), InterpreterState::Running);
+
+        if !is_running {
+            interpreter.reset(&self.code);
+        }
+    }
+
     fn process_command(&mut self, interpreter: &mut Interpreter) {
         let command = &self.input;
 
@@ -112,19 +125,6 @@ impl Editor {
             _ => {
                 unreachable!("Ruled out that command is unknown, above.")
             }
-        }
-    }
-
-    fn process_code(&mut self, host: &Host, interpreter: &mut Interpreter) {
-        for token in self.input.split_whitespace() {
-            compile(token, host, &mut self.code);
-        }
-
-        let is_running =
-            matches!(interpreter.state(&self.code), InterpreterState::Running);
-
-        if !is_running {
-            interpreter.reset(&self.code);
         }
     }
 }
