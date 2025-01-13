@@ -20,7 +20,7 @@ impl GameEngine {
     pub fn start(game_output_tx: Sender<GameOutput>) -> anyhow::Result<Self> {
         let host = Host::from_functions(["dim"]);
         let mut editor = Editor::default();
-        let mut renderer = Renderer::new();
+        let mut renderer = Renderer::new()?;
         let mut interpreter = Interpreter::new(editor.code());
 
         renderer.render(&editor, &host, Some(&interpreter))?;

@@ -27,7 +27,7 @@ pub fn render_code(code: &Code, host: &Host) {
         indent: 0,
     };
 
-    let mut renderer = Renderer::new();
+    let mut renderer = Renderer::new().unwrap();
     renderer.render_code(&mut context).unwrap();
 }
 
@@ -36,8 +36,8 @@ pub struct Renderer {
 }
 
 impl Renderer {
-    pub fn new() -> Self {
-        Self { w: stdout() }
+    pub fn new() -> anyhow::Result<Self> {
+        Ok(Self { w: stdout() })
     }
 
     pub fn render(
