@@ -9,7 +9,7 @@ use crate::{
 
 pub fn start(editor_input: Sender<Option<EditorInput>>) -> ThreadHandle {
     thread::spawn(move || {
-        let timeout = Duration::from_millis(500);
+        let timeout = Duration::from_millis(50);
         let event_ready = event::poll(timeout)?;
 
         if !event_ready {
