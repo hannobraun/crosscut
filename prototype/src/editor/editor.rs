@@ -70,6 +70,26 @@ impl Editor {
         };
         let arguments = command_and_arguments.next();
 
+        if self.process_command(command, interpreter) {
+            return true;
+        }
+
+        if let EditorMode::Append = self.mode {
+            if let Some(code) = arguments {
+                self.process_code(code, host, interpreter);
+            }
+
+            self.mode = EditorMode::Command;
+        }
+
+        true
+    }
+
+    fn process_command(
+        &mut self,
+        command: &str,
+        interpreter: &mut Interpreter,
+    ) -> bool {
         let mut matched_commands = self
             .commands
             .iter()
@@ -109,15 +129,7 @@ impl Editor {
             }
         }
 
-        if let EditorMode::Append = self.mode {
-            if let Some(code) = arguments {
-                self.process_code(code, host, interpreter);
-            }
-
-            self.mode = EditorMode::Command;
-        }
-
-        true
+        false
     }
 
     fn process_code(
