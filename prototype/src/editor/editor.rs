@@ -59,7 +59,6 @@ impl Editor {
                     EditorMode::Append => {
                         self.process_code(host, interpreter);
                         self.mode = EditorMode::Command;
-                        self.input.clear();
                     }
                     EditorMode::Command => {
                         self.process_command(interpreter);
@@ -76,6 +75,8 @@ impl Editor {
         for token in self.input.split_whitespace() {
             compile(token, host, &mut self.code);
         }
+
+        self.input.clear();
 
         let is_running =
             matches!(interpreter.state(&self.code), InterpreterState::Running);
