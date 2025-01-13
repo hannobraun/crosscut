@@ -16,6 +16,7 @@ fn main() -> anyhow::Result<()> {
 
     let game_engine = GameEngine::start(game_output_tx)?;
     let editor_input = io::editor::input::start(game_engine.editor_input);
+
     io::game_engine::start_and_wait(game_engine.game_input, game_output_rx)?;
     // At this point, we're blocking until any of the threads shut down. There's
     // nothing to join yet, because the game engine I/O is using `winit`
