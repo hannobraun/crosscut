@@ -7,7 +7,7 @@ use crate::language::{
     interpreter::{Interpreter, InterpreterState},
 };
 
-use super::{EditorInput, Renderer};
+use super::EditorInput;
 
 pub struct Editor {
     code: Code,
@@ -141,16 +141,6 @@ impl Editor {
         if !is_running {
             interpreter.reset(&self.code);
         }
-    }
-
-    pub fn render(
-        &self,
-        host: &Host,
-        interpreter: &Interpreter,
-        renderer: &mut Renderer,
-    ) -> anyhow::Result<()> {
-        renderer.render(self, host, Some(interpreter))?;
-        Ok(())
     }
 }
 
