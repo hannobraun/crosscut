@@ -11,7 +11,7 @@ use super::EditorInput;
 
 pub struct Editor {
     code: Code,
-    mode: Mode,
+    mode: EditorMode,
     input: String,
     commands: BTreeSet<&'static str>,
 }
@@ -29,7 +29,7 @@ impl Editor {
 
         Self {
             code: Code::default(),
-            mode: Mode::Command,
+            mode: EditorMode::Command,
             input: String::new(),
             commands,
         }
@@ -39,7 +39,7 @@ impl Editor {
         &self.code
     }
 
-    pub fn mode(&self) -> &Mode {
+    pub fn mode(&self) -> &EditorMode {
         &self.mode
     }
 
@@ -94,7 +94,7 @@ impl Editor {
 
         match matched_command {
             ":append" => {
-                self.mode = Mode::Append;
+                self.mode = EditorMode::Append;
             }
             command @ ":clear" => {
                 let None = command_and_arguments.next() else {
@@ -118,12 +118,12 @@ impl Editor {
             }
         }
 
-        if let Mode::Append = self.mode {
+        if let EditorMode::Append = self.mode {
             if let Some(code) = command_and_arguments.next() {
                 self.process_code(code, host, interpreter);
             }
 
-            self.mode = Mode::Command;
+            self.mode = EditorMode::Command;
         }
 
         true
@@ -155,7 +155,7 @@ impl Default for Editor {
 }
 
 #[derive(Debug)]
-pub enum Mode {
+pub enum EditorMode {
     Append,
     Command,
 }

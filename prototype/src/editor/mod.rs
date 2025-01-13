@@ -2,6 +2,6 @@ mod editor;
 mod input;
 
 pub use self::{
-    editor::{Editor, Mode},
+    editor::{Editor, EditorMode},
     input::EditorInput,
 };
