@@ -15,7 +15,6 @@ use crate::language::{
 };
 
 #[cfg(test)]
-#[allow(unused)] // used sporadically, for debugging tests
 pub fn render_code(
     code: &crate::language::code::Code,
     host: &crate::language::host::Host,
