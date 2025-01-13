@@ -63,6 +63,17 @@ impl Renderer {
         &mut self,
         context: &mut RenderContext,
     ) -> anyhow::Result<()> {
+        if let Some(interpreter) = context.interpreter {
+            let state = match interpreter.state(context.code) {
+                InterpreterState::Running => "running",
+                InterpreterState::Finished => "finished",
+                InterpreterState::Error => "error",
+            };
+
+            writeln!(self.w)?;
+            writeln!(self.w, "process {state}")?;
+        };
+
         writeln!(self.w)?;
         self.render_fragment(&context.code.root, context)?;
 
@@ -71,22 +82,9 @@ impl Renderer {
         Ok(())
     }
 
-    fn render_prompt(&mut self, context: &RenderContext) -> anyhow::Result<()> {
-        let Some(interpreter) = context.interpreter else {
-            unreachable!(
-                "Rendering the prompt is only done in the full editor, where \
-                the interpreter is available."
-            );
-        };
-
-        let state = match interpreter.state(context.code) {
-            InterpreterState::Running => "running",
-            InterpreterState::Finished => "finished",
-            InterpreterState::Error => "error",
-        };
-
+    fn render_prompt(&mut self, _: &RenderContext) -> anyhow::Result<()> {
         writeln!(self.w)?;
-        write!(self.w, "{state} > ")?;
+        write!(self.w, "> ")?;
 
         self.w.flush()?;
 
