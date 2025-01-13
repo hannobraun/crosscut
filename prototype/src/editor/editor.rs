@@ -94,18 +94,7 @@ impl Editor {
                     return true;
                 };
 
-                for token in input_code.split_whitespace() {
-                    compile(token, host, &mut self.code);
-                }
-
-                let is_running = matches!(
-                    interpreter.state(&self.code),
-                    InterpreterState::Running
-                );
-
-                if !is_running {
-                    interpreter.reset(&self.code);
-                }
+                self.process_code(input_code, host, interpreter);
             }
             command @ ":clear" => {
                 let None = command_and_arguments.next() else {
@@ -130,6 +119,24 @@ impl Editor {
         }
 
         true
+    }
+
+    fn process_code(
+        &mut self,
+        input_code: &str,
+        host: &Host,
+        interpreter: &mut Interpreter,
+    ) {
+        for token in input_code.split_whitespace() {
+            compile(token, host, &mut self.code);
+        }
+
+        let is_running =
+            matches!(interpreter.state(&self.code), InterpreterState::Running);
+
+        if !is_running {
+            interpreter.reset(&self.code);
+        }
     }
 
     pub fn render(
