@@ -1,7 +1,8 @@
 use crossbeam_channel::select;
 
 use crate::{
-    editor::{Editor, EditorInput, Renderer},
+    editor::{Editor, EditorInput},
+    io::editor::renderer::Renderer,
     language::{
         host::Host,
         interpreter::{Interpreter, StepResult, Value},
