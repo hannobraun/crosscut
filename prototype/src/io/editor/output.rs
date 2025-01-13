@@ -54,7 +54,7 @@ impl Renderer {
         };
 
         self.render_code(&mut context)?;
-        self.render_prompt(&context)?;
+        self.render_prompt()?;
 
         Ok(())
     }
@@ -81,7 +81,7 @@ impl Renderer {
         Ok(())
     }
 
-    fn render_prompt(&mut self, _: &RenderContext) -> anyhow::Result<()> {
+    fn render_prompt(&mut self) -> anyhow::Result<()> {
         writeln!(self.w)?;
         write!(self.w, "> ")?;
 
