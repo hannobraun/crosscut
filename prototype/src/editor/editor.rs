@@ -147,8 +147,8 @@ impl Editor {
         &self,
         host: &Host,
         interpreter: &Interpreter,
+        renderer: &mut Renderer,
     ) -> anyhow::Result<()> {
-        let mut renderer = Renderer::new();
         renderer.render(self, host, Some(interpreter))?;
         Ok(())
     }
