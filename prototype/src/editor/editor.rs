@@ -59,28 +59,17 @@ impl Editor {
             }
         }
 
-        let line = self.input.clone();
-        self.input.clear();
-
-        let mut command_and_arguments =
-            line.trim().splitn(2, |ch: char| ch.is_whitespace());
-
-        let Some(command) = command_and_arguments.next() else {
-            return false;
-        };
-        let arguments = command_and_arguments.next();
-
-        if self.process_command(command, interpreter) {
-            return true;
-        }
-
-        if let EditorMode::Append = self.mode {
-            if let Some(code) = arguments {
-                self.process_code(code, host, interpreter);
+        match self.mode {
+            EditorMode::Append => {
+                self.process_code(&self.input.clone(), host, interpreter);
+                self.mode = EditorMode::Command;
             }
-
-            self.mode = EditorMode::Command;
+            EditorMode::Command => {
+                self.process_command(&self.input.clone(), interpreter);
+            }
         }
+
+        self.input.clear();
 
         true
     }
