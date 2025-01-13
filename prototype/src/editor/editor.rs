@@ -90,10 +90,6 @@ impl Editor {
         match matched_command {
             ":append" => {
                 self.mode = Mode::Append;
-
-                if let Some(code) = command_and_arguments.next() {
-                    self.process_code(code, host, interpreter);
-                }
             }
             command @ ":clear" => {
                 let None = command_and_arguments.next() else {
@@ -118,6 +114,10 @@ impl Editor {
         }
 
         if let Mode::Append = self.mode {
+            if let Some(code) = command_and_arguments.next() {
+                self.process_code(code, host, interpreter);
+            }
+
             self.mode = Mode::Command;
         }
 
