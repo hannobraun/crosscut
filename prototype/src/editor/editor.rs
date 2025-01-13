@@ -45,17 +45,18 @@ impl Editor {
         host: &Host,
         interpreter: &mut Interpreter,
     ) -> bool {
-        let line = match input {
+        match input {
             EditorInput::Char { value } => {
                 self.input.push(value);
                 return false;
             }
             EditorInput::Enter => {
-                let line = self.input.clone();
-                self.input.clear();
-                line
+                // Rest of function can do its thing now.
             }
-        };
+        }
+
+        let line = self.input.clone();
+        self.input.clear();
 
         let mut command_and_arguments =
             line.trim().splitn(2, |ch: char| ch.is_whitespace());
