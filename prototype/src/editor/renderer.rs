@@ -15,11 +15,8 @@ use crate::language::{
 };
 
 pub struct Renderer<'r, W> {
-    code: &'r Code,
-    host: &'r Host,
-    interpreter: Option<&'r Interpreter>,
     w: W,
-    indent: u32,
+    context: RenderContext<'r>,
 }
 
 impl<'r> Renderer<'r, Stdout> {
@@ -29,11 +26,13 @@ impl<'r> Renderer<'r, Stdout> {
         interpreter: Option<&'r Interpreter>,
     ) -> Self {
         Self {
-            code,
-            host,
-            interpreter,
             w: stdout(),
-            indent: 0,
+            context: RenderContext {
+                code,
+                host,
+                interpreter,
+                indent: 0,
+            },
         }
     }
 }
@@ -44,7 +43,7 @@ where
 {
     pub fn render_code(&mut self) -> anyhow::Result<()> {
         writeln!(self.w)?;
-        self.render_fragment(&self.code.root)?;
+        self.render_fragment(&self.context.code.root)?;
 
         self.w.flush()?;
 
@@ -52,14 +51,14 @@ where
     }
 
     pub fn render_prompt(&mut self) -> anyhow::Result<()> {
-        let Some(interpreter) = self.interpreter else {
+        let Some(interpreter) = self.context.interpreter else {
             unreachable!(
                 "Rendering the prompt is only done in the full editor, where \
                 the interpreter is available."
             );
         };
 
-        let state = match interpreter.state(self.code) {
+        let state = match interpreter.state(self.context.code) {
             InterpreterState::Running => "running",
             InterpreterState::Finished => "finished",
             InterpreterState::Error => "error",
@@ -82,21 +81,21 @@ where
     }
 
     fn render_fragment(&mut self, id: &FragmentId) -> anyhow::Result<()> {
-        let maybe_error = self.code.errors.get(id);
+        let maybe_error = self.context.code.errors.get(id);
 
         if maybe_error.is_some() {
             self.w.queue(SetForegroundColor(Color::Red))?;
         }
 
-        let mut indent = self.indent;
-        if let Some(interpreter) = self.interpreter {
+        let mut indent = self.context.indent;
+        if let Some(interpreter) = self.context.interpreter {
             if Some(id) == interpreter.next() {
                 self.w.queue(SetAttribute(Attribute::Bold))?;
                 write!(self.w, " => ")?;
 
                 // This is worth one indentation level. We need to adjust for
                 // that.
-                let Some(adjusted) = self.indent.checked_sub(1) else {
+                let Some(adjusted) = self.context.indent.checked_sub(1) else {
                     unreachable!(
                         "Every fragment body gets one level of indentation. \
                         The root is a fragment. Hence, we must have at least \
@@ -111,7 +110,7 @@ where
             self.render_indent()?;
         }
 
-        let fragment = self.code.fragments().get(id);
+        let fragment = self.context.code.fragments().get(id);
 
         match &fragment.kind {
             FragmentKind::Root => {
@@ -146,9 +145,9 @@ where
         }
         writeln!(self.w)?;
 
-        self.indent += 1;
+        self.context.indent += 1;
         self.render_body(&fragment.body)?;
-        self.indent -= 1;
+        self.context.indent -= 1;
 
         self.w.queue(ResetColor)?;
         self.w.queue(SetAttribute(Attribute::Reset))?;
@@ -167,7 +166,8 @@ where
     ) -> anyhow::Result<()> {
         match expression {
             Expression::FunctionCall { target } => {
-                let Some(name) = self.host.functions_by_id.get(target) else {
+                let Some(name) = self.context.host.functions_by_id.get(target)
+                else {
                     unreachable!(
                         "Function call refers to non-existing function {target}"
                     );
@@ -184,4 +184,11 @@ where
 
         Ok(())
     }
+}
+
+struct RenderContext<'r> {
+    code: &'r Code,
+    host: &'r Host,
+    interpreter: Option<&'r Interpreter>,
+    indent: u32,
 }
