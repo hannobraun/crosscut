@@ -65,7 +65,7 @@ impl Editor {
                 self.mode = EditorMode::Command;
             }
             EditorMode::Command => {
-                self.process_command(&self.input.clone(), interpreter);
+                self.process_command(interpreter);
             }
         }
 
@@ -74,7 +74,7 @@ impl Editor {
         true
     }
 
-    fn process_command(&mut self, _: &str, interpreter: &mut Interpreter) {
+    fn process_command(&mut self, interpreter: &mut Interpreter) {
         let command = &self.input;
 
         let mut matched_commands = self
