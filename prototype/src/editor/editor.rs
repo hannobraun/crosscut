@@ -123,11 +123,11 @@ impl Editor {
 
     fn process_code(
         &mut self,
-        code: &str,
+        _: &str,
         host: &Host,
         interpreter: &mut Interpreter,
     ) {
-        for token in code.split_whitespace() {
+        for token in self.input.split_whitespace() {
             compile(token, host, &mut self.code);
         }
 
