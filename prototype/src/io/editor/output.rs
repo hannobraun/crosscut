@@ -1,7 +1,7 @@
 use std::io::{stdout, Stdout, Write};
 
 use crossterm::{
-    cursor::MoveToNextLine,
+    cursor::{self, MoveToNextLine},
     style::{Attribute, Color, ResetColor, SetAttribute, SetForegroundColor},
     terminal::{self, Clear, ClearType},
     QueueableCommand,
@@ -67,6 +67,8 @@ impl Renderer {
         };
 
         self.w.queue(Clear(ClearType::All))?;
+        self.w.queue(cursor::MoveTo(1, 1))?;
+
         self.render_code(&mut context)?;
         self.render_prompt(editor.mode(), editor.input())?;
 
