@@ -3,7 +3,8 @@ use std::io::{stdout, Stdout, Write};
 use crossterm::{
     cursor::MoveToNextLine,
     style::{Attribute, Color, ResetColor, SetAttribute, SetForegroundColor},
-    terminal, QueueableCommand,
+    terminal::{self, Clear, ClearType},
+    QueueableCommand,
 };
 
 use crate::{
@@ -65,7 +66,7 @@ impl Renderer {
             indent: 0,
         };
 
-        self.w.queue(MoveToNextLine(1))?;
+        self.w.queue(Clear(ClearType::All))?;
         self.render_code(&mut context)?;
         self.render_prompt(editor.mode(), editor.input())?;
 
