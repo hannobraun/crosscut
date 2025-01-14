@@ -39,14 +39,7 @@ pub struct Renderer {
 
 impl Renderer {
     pub fn new() -> anyhow::Result<Self> {
-        let mut w = stdout();
-
-        // We render everything to the terminal's alternate screen. Entering the
-        // alternate screen is undone in this type's `Drop` implementation.
-        //
-        // This way, we preserve the contents of the terminal as of before the
-        // application was started. Just clearing those seems rude.
-        w.queue(terminal::EnterAlternateScreen)?;
+        let w = stdout();
 
         // Nothing forces us to enable raw mode right here. It's also tied to
         // input, so we could enable it there.
@@ -251,7 +244,6 @@ impl Drop for Renderer {
     fn drop(&mut self) {
         // Nothing we can do about a potential error here.
         let _ = terminal::disable_raw_mode();
-        let _ = self.w.queue(terminal::LeaveAlternateScreen);
     }
 }
 
