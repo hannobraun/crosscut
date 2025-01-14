@@ -261,6 +261,22 @@ struct RenderContext<'r> {
     indent: u32,
 }
 
+/// # Adapter between the renderer and the terminal
+///
+/// Unfortunately, terminals are an ancient technology and suck very badly. As a
+/// result, writing to the terminal directly turned out to be impractical.
+///
+/// The specific problem encountered, was that determining the cursor position
+/// can't be read without causing a flush, which leads to visual artifacts when
+/// then resuming the rendering. As a result, we at least need something to
+/// track the cursor position throughout the render. Hence this adapter.
+///
+/// ## Implementation Note
+///
+/// This won't work correctly with most Unicode character.
+///
+/// The API of this type leaves something to be desired. It was initially
+/// created to support the existing (Crossterm-based) usage patterns.
 struct TerminalAdapter {
     w: Stdout,
     cursor: [u16; 2],
