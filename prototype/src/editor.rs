@@ -151,12 +151,6 @@ impl Default for Editor {
     }
 }
 
-pub struct EditorPrompt<'r> {
-    pub mode: &'r EditorMode,
-    pub input: &'r String,
-    pub error: Option<&'r String>,
-}
-
 #[derive(Debug)]
 pub enum EditorMode {
     Command,
@@ -167,4 +161,10 @@ pub enum EditorMode {
 pub enum InputEvent {
     Char { value: char },
     Enter,
+}
+
+pub struct EditorPrompt<'r> {
+    pub mode: &'r EditorMode,
+    pub input: &'r String,
+    pub error: Option<&'r String>,
 }
