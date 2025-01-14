@@ -13,7 +13,7 @@ use crate::language::{
 pub struct Editor {
     code: Code,
     mode: EditorMode,
-    input: String,
+    input: Input,
     error: Option<String>,
     commands: BTreeSet<&'static str>,
 }
@@ -32,7 +32,9 @@ impl Editor {
         Self {
             code: Code::default(),
             mode: EditorMode::Command,
-            input: String::new(),
+            input: Input {
+                buffer: String::new(),
+            },
             error: None,
             commands,
         }
@@ -45,7 +47,7 @@ impl Editor {
     pub fn prompt(&self) -> EditorPrompt {
         EditorPrompt {
             mode: &self.mode,
-            input: &self.input,
+            input: &self.input.buffer,
             error: self.error.as_ref(),
         }
     }
@@ -63,13 +65,13 @@ impl Editor {
                         self.process_code(host, interpreter);
                     }
                 } else {
-                    self.input.push(value);
+                    self.input.buffer.push(value);
                 }
             }
             InputEvent::Enter => match self.mode {
                 EditorMode::Command => {
                     self.process_command(interpreter)?;
-                    self.input.clear();
+                    self.input.buffer.clear();
                 }
                 EditorMode::Edit => {
                     self.process_code(host, interpreter);
@@ -82,9 +84,9 @@ impl Editor {
     }
 
     fn process_code(&mut self, host: &Host, interpreter: &mut Interpreter) {
-        compile(&self.input, host, &mut self.code);
+        compile(&self.input.buffer, host, &mut self.code);
 
-        self.input.clear();
+        self.input.buffer.clear();
 
         let is_running =
             matches!(interpreter.state(&self.code), InterpreterState::Running);
@@ -99,7 +101,7 @@ impl Editor {
         interpreter: &mut Interpreter,
     ) -> anyhow::Result<()> {
         self.error = None;
-        let command = &self.input;
+        let command = &self.input.buffer;
 
         let mut matched_commands = self
             .commands
@@ -155,6 +157,10 @@ impl Default for Editor {
 pub enum EditorMode {
     Command,
     Edit,
+}
+
+pub struct Input {
+    pub buffer: String,
 }
 
 #[derive(Debug)]
