@@ -3,7 +3,7 @@ use std::io::{stdout, Stdout, Write};
 use crossterm::{
     cursor::{self, MoveToNextLine},
     style::{Attribute, Color, ResetColor, SetAttribute, SetForegroundColor},
-    terminal::{self, Clear, ClearType},
+    terminal::{self, ClearType},
     QueueableCommand,
 };
 
@@ -66,7 +66,7 @@ impl Renderer {
             indent: 0,
         };
 
-        self.w.queue(Clear(ClearType::All))?;
+        self.w.queue(terminal::Clear(ClearType::All))?;
         self.w.queue(cursor::MoveTo(1, 1))?;
 
         self.render_code(&mut context)?;
