@@ -68,7 +68,7 @@ impl Editor {
                     self.mode = EditorMode::Command;
                 }
                 EditorMode::Command => {
-                    self.process_command(interpreter);
+                    self.process_command(interpreter)?;
                     self.input.clear();
                 }
             },
@@ -90,7 +90,10 @@ impl Editor {
         }
     }
 
-    fn process_command(&mut self, interpreter: &mut Interpreter) {
+    fn process_command(
+        &mut self,
+        interpreter: &mut Interpreter,
+    ) -> anyhow::Result<()> {
         let command = &self.input;
 
         let mut matched_commands = self
@@ -101,7 +104,7 @@ impl Editor {
 
         let Some(&matched_command) = matched_commands.pop_front() else {
             println!("Unknown command: `{command}`");
-            return;
+            return Ok(());
         };
         if !matched_commands.is_empty() {
             print!(
@@ -113,7 +116,7 @@ impl Editor {
             }
             println!();
 
-            return;
+            return Ok(());
         }
 
         match matched_command {
@@ -131,6 +134,8 @@ impl Editor {
                 unreachable!("Ruled out that command is unknown, above.")
             }
         }
+
+        Ok(())
     }
 }
 
