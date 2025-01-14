@@ -102,37 +102,6 @@ impl Renderer {
         Ok(())
     }
 
-    fn render_prompt(&mut self, prompt: EditorPrompt) -> anyhow::Result<()> {
-        let mode = match prompt.mode {
-            EditorMode::Command => "command",
-            EditorMode::Edit => "edit",
-        };
-        let input = &prompt.input.buffer;
-
-        if let Some(err) = prompt.error {
-            self.w.move_to_next_line()?;
-            write!(self.w, "{err}")?;
-        }
-
-        self.w.move_to_next_line()?;
-        write!(self.w, "{mode} > ")?;
-
-        let [x, y] = self.w.cursor;
-        let x = {
-            let x: usize = x.into();
-            let x = x.saturating_add(prompt.input.cursor);
-            let x: u16 = x.try_into().unwrap_or(u16::MAX);
-            x
-        };
-
-        write!(self.w, "{input}")?;
-        self.w.move_to(x, y)?;
-
-        self.w.flush()?;
-
-        Ok(())
-    }
-
     fn render_body(
         &mut self,
         body: &Body,
@@ -251,6 +220,37 @@ impl Renderer {
                 write!(self.w, "{value}")?;
             }
         }
+
+        Ok(())
+    }
+
+    fn render_prompt(&mut self, prompt: EditorPrompt) -> anyhow::Result<()> {
+        let mode = match prompt.mode {
+            EditorMode::Command => "command",
+            EditorMode::Edit => "edit",
+        };
+        let input = &prompt.input.buffer;
+
+        if let Some(err) = prompt.error {
+            self.w.move_to_next_line()?;
+            write!(self.w, "{err}")?;
+        }
+
+        self.w.move_to_next_line()?;
+        write!(self.w, "{mode} > ")?;
+
+        let [x, y] = self.w.cursor;
+        let x = {
+            let x: usize = x.into();
+            let x = x.saturating_add(prompt.input.cursor);
+            let x: u16 = x.try_into().unwrap_or(u16::MAX);
+            x
+        };
+
+        write!(self.w, "{input}")?;
+        self.w.move_to(x, y)?;
+
+        self.w.flush()?;
 
         Ok(())
     }
