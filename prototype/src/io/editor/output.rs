@@ -71,7 +71,8 @@ impl Renderer {
             };
 
             writeln!(self.w)?;
-            writeln!(self.w, "process {state}")?;
+            write!(self.w, "process {state}")?;
+            writeln!(self.w)?;
         };
 
         self.render_fragment(&context.code.root, context)?;
