@@ -68,8 +68,7 @@ impl Editor {
             }
 
             InputEvent::Backspace => {
-                self.input.buffer.pop();
-                self.input.move_cursor_left();
+                self.input.remove_left();
             }
             InputEvent::Enter => match self.mode {
                 EditorMode::Command => {
@@ -186,6 +185,11 @@ impl Input {
     fn insert(&mut self, ch: char) {
         self.buffer.push(ch);
         self.move_cursor_right();
+    }
+
+    fn remove_left(&mut self) {
+        self.buffer.pop();
+        self.move_cursor_left();
     }
 }
 
