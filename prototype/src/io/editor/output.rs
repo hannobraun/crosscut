@@ -39,7 +39,10 @@ pub struct Renderer {
 
 impl Renderer {
     pub fn new() -> anyhow::Result<Self> {
-        let w = TerminalAdapter { w: stdout() };
+        let w = TerminalAdapter {
+            w: stdout(),
+            cursor: [0, 0],
+        };
 
         // Nothing forces us to enable raw mode right here. It's also tied to
         // input, so we could enable it there.
@@ -260,6 +263,7 @@ struct RenderContext<'r> {
 
 struct TerminalAdapter {
     w: Stdout,
+    cursor: [u16; 2],
 }
 
 impl TerminalAdapter {
@@ -270,11 +274,16 @@ impl TerminalAdapter {
 
     fn move_to(&mut self, x: u16, y: u16) -> anyhow::Result<()> {
         self.w.queue(cursor::MoveTo(x, y))?;
+        self.cursor = [x, y];
         Ok(())
     }
 
     fn move_to_next_line(&mut self) -> anyhow::Result<()> {
         self.w.queue(MoveToNextLine(1))?;
+        self.cursor = {
+            let [_, y] = self.cursor;
+            [0, y + 1]
+        };
         Ok(())
     }
 
@@ -296,7 +305,15 @@ impl TerminalAdapter {
 
 impl io::Write for TerminalAdapter {
     fn write(&mut self, buf: &[u8]) -> io::Result<usize> {
-        self.w.write(buf)
+        // This is _not_ going to work for most Unicode characters. I don't know
+        // what to do about this yet.
+        //
+        // This also doesn't take line breaks into account.
+        //
+        // A more sophisticated solution is going to be needed eventually.
+        let bytes_written = self.w.write(buf)?;
+        self.cursor[0] += bytes_written as u16;
+        Ok(bytes_written)
     }
 
     fn flush(&mut self) -> io::Result<()> {
