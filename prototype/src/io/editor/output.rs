@@ -282,8 +282,6 @@ struct RenderContext<'r> {
 ///
 /// ## Implementation Note
 ///
-/// This won't work correctly with most Unicode character.
-///
 /// The API of this type leaves something to be desired. It was initially
 /// created to support the existing (Crossterm-based) usage patterns.
 struct TerminalAdapter {
