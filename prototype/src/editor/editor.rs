@@ -10,8 +10,6 @@ use crate::language::{
     interpreter::{Interpreter, InterpreterState},
 };
 
-use super::InputEvent;
-
 pub struct Editor {
     code: Code,
     mode: EditorMode,
@@ -163,4 +161,10 @@ pub struct EditorPrompt<'r> {
 pub enum EditorMode {
     Command,
     Edit,
+}
+
+#[derive(Debug)]
+pub enum InputEvent {
+    Char { value: char },
+    Enter,
 }
