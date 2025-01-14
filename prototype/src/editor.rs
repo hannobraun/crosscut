@@ -191,7 +191,8 @@ impl Input {
     }
 
     fn move_cursor_right(&mut self) {
-        self.cursor = self.cursor.saturating_add(1);
+        self.cursor =
+            usize::min(self.cursor.saturating_add(1), self.buffer.len());
     }
 }
 
