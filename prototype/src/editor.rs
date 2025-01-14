@@ -180,8 +180,10 @@ impl Input {
     }
 
     fn remove_left(&mut self) {
-        self.buffer.pop();
-        self.move_cursor_left();
+        if let Some(cursor) = self.cursor.checked_sub(1) {
+            self.buffer.remove(cursor);
+            self.move_cursor_left();
+        }
     }
 
     fn move_cursor_left(&mut self) {
