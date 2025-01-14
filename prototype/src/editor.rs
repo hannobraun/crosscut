@@ -73,7 +73,7 @@ impl Editor {
             InputEvent::Enter => match self.mode {
                 EditorMode::Command => {
                     self.process_command(interpreter)?;
-                    self.input.buffer.clear();
+                    self.input.clear();
                 }
                 EditorMode::Edit => {
                     self.process_code(host, interpreter);
@@ -94,7 +94,7 @@ impl Editor {
     fn process_code(&mut self, host: &Host, interpreter: &mut Interpreter) {
         compile(&self.input.buffer, host, &mut self.code);
 
-        self.input.buffer.clear();
+        self.input.clear();
 
         let is_running =
             matches!(interpreter.state(&self.code), InterpreterState::Running);
@@ -196,6 +196,10 @@ impl Input {
     fn move_cursor_right(&mut self) {
         self.cursor =
             usize::min(self.cursor.saturating_add(1), self.buffer.len());
+    }
+
+    pub fn clear(&mut self) {
+        self.buffer.clear();
     }
 }
 
