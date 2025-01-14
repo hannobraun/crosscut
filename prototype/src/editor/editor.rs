@@ -55,7 +55,13 @@ impl Editor {
     ) {
         match input {
             EditorInput::Char { value } => {
-                self.input.push(value);
+                if value.is_whitespace() {
+                    if let EditorMode::Append = self.mode {
+                        self.process_code(host, interpreter);
+                    }
+                } else {
+                    self.input.push(value);
+                }
             }
             EditorInput::Enter => match self.mode {
                 EditorMode::Append => {
@@ -71,9 +77,7 @@ impl Editor {
     }
 
     fn process_code(&mut self, host: &Host, interpreter: &mut Interpreter) {
-        for token in self.input.split_whitespace() {
-            compile(token, host, &mut self.code);
-        }
+        compile(&self.input, host, &mut self.code);
 
         self.input.clear();
 
