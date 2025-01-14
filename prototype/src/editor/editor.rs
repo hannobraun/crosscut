@@ -61,7 +61,7 @@ impl Editor {
         match input {
             EditorInput::Char { value } => {
                 if value.is_whitespace() {
-                    if let EditorMode::Append = self.mode {
+                    if let EditorMode::Edit = self.mode {
                         self.process_code(host, interpreter);
                     }
                 } else {
@@ -69,7 +69,7 @@ impl Editor {
                 }
             }
             EditorInput::Enter => match self.mode {
-                EditorMode::Append => {
+                EditorMode::Edit => {
                     self.process_code(host, interpreter);
                     self.mode = EditorMode::Command;
                 }
@@ -133,7 +133,7 @@ impl Editor {
                 interpreter.reset(&self.code);
             }
             "edit" => {
-                self.mode = EditorMode::Append;
+                self.mode = EditorMode::Edit;
             }
             "reset" => {
                 interpreter.reset(&self.code);
@@ -161,6 +161,6 @@ pub struct EditorPrompt<'r> {
 
 #[derive(Debug)]
 pub enum EditorMode {
-    Append,
+    Edit,
     Command,
 }
