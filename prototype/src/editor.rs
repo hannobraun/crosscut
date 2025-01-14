@@ -69,6 +69,7 @@ impl Editor {
 
             InputEvent::Backspace => {
                 self.input.buffer.pop();
+                self.input.cursor = self.input.cursor.saturating_sub(1);
             }
             InputEvent::Enter => match self.mode {
                 EditorMode::Command => {
@@ -163,10 +164,12 @@ pub enum EditorMode {
 
 pub struct Input {
     pub buffer: String,
+    pub cursor: usize,
 }
 impl Input {
     fn new(buffer: String) -> Self {
-        Self { buffer }
+        let cursor = buffer.len();
+        Self { buffer, cursor }
     }
 }
 
