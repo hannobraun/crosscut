@@ -31,6 +31,9 @@ pub fn start(editor_input: Sender<Option<InputEvent>>) -> ThreadHandle {
             KeyCode::Char('c')
                 if key_event.modifiers.contains(KeyModifiers::CONTROL) =>
             {
+                // The terminal is in raw mode, so we have to handle CTRL+C
+                // manually.
+                //
                 // Ending this thread is enough. It will drop its channel, which
                 // will propagate the shutdown to all other threads.
                 return Ok(ControlFlow::Break(()));
