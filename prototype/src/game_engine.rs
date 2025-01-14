@@ -3,7 +3,7 @@ use std::ops::ControlFlow;
 use crossbeam_channel::select;
 
 use crate::{
-    editor::{Editor, EditorInput, EditorTask},
+    editor::{Editor, EditorInput},
     io::editor::output::Renderer,
     language::{
         host::Host,
@@ -55,8 +55,7 @@ impl GameEngine {
 
             match event {
                 Event::EditorInput { input } => {
-                    let maybe_editor_task =
-                        editor.process_input(input, &host, &mut interpreter);
+                    editor.process_input(input, &host, &mut interpreter);
 
                     loop {
                         match interpreter.step(editor.code()) {
@@ -107,17 +106,7 @@ impl GameEngine {
                         break;
                     }
 
-                    if let Some(task) = maybe_editor_task {
-                        match task {
-                            EditorTask::Render => {
-                                renderer.render(
-                                    &editor,
-                                    &host,
-                                    Some(&interpreter),
-                                )?;
-                            }
-                        }
-                    }
+                    renderer.render(&editor, &host, Some(&interpreter))?;
                 }
                 Event::GameInput {
                     input: GameInput::RenderingFrame,

@@ -52,26 +52,21 @@ impl Editor {
         input: EditorInput,
         host: &Host,
         interpreter: &mut Interpreter,
-    ) -> Option<EditorTask> {
+    ) {
         match input {
             EditorInput::Char { value } => {
                 self.input.push(value);
-                Some(EditorTask::Render)
             }
-            EditorInput::Enter => {
-                match self.mode {
-                    EditorMode::Append => {
-                        self.process_code(host, interpreter);
-                        self.mode = EditorMode::Command;
-                    }
-                    EditorMode::Command => {
-                        self.process_command(interpreter);
-                        self.input.clear();
-                    }
+            EditorInput::Enter => match self.mode {
+                EditorMode::Append => {
+                    self.process_code(host, interpreter);
+                    self.mode = EditorMode::Command;
                 }
-
-                Some(EditorTask::Render)
-            }
+                EditorMode::Command => {
+                    self.process_command(interpreter);
+                    self.input.clear();
+                }
+            },
         }
     }
 
@@ -144,8 +139,4 @@ impl Default for Editor {
 pub enum EditorMode {
     Append,
     Command,
-}
-
-pub enum EditorTask {
-    Render,
 }
