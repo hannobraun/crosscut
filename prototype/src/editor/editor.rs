@@ -23,9 +23,9 @@ impl Editor {
         // hand.
 
         let mut commands = BTreeSet::new();
-        commands.insert(":append");
-        commands.insert(":clear");
-        commands.insert(":reset");
+        commands.insert("append");
+        commands.insert("clear");
+        commands.insert("reset");
 
         Self {
             code: Code::default(),
@@ -116,14 +116,14 @@ impl Editor {
         }
 
         match matched_command {
-            ":append" => {
+            "append" => {
                 self.mode = EditorMode::Append;
             }
-            ":clear" => {
+            "clear" => {
                 self.code = Code::default();
                 interpreter.reset(&self.code);
             }
-            ":reset" => {
+            "reset" => {
                 interpreter.reset(&self.code);
             }
             _ => {
