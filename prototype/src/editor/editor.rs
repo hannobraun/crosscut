@@ -51,7 +51,7 @@ impl Editor {
         input: EditorInput,
         host: &Host,
         interpreter: &mut Interpreter,
-    ) {
+    ) -> anyhow::Result<()> {
         match input {
             EditorInput::Char { value } => {
                 if value.is_whitespace() {
@@ -73,6 +73,8 @@ impl Editor {
                 }
             },
         }
+
+        Ok(())
     }
 
     fn process_code(&mut self, host: &Host, interpreter: &mut Interpreter) {

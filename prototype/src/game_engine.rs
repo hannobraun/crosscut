@@ -55,7 +55,7 @@ impl GameEngine {
 
             match event {
                 Event::EditorInput { input } => {
-                    editor.process_input(input, &host, &mut interpreter);
+                    editor.process_input(input, &host, &mut interpreter)?;
 
                     loop {
                         match interpreter.step(editor.code()) {
