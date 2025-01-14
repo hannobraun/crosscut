@@ -1,5 +1,7 @@
 use std::{
-    io, panic,
+    io,
+    ops::ControlFlow,
+    panic,
     thread::{self, JoinHandle},
 };
 
@@ -7,12 +9,15 @@ use crossbeam_channel::{SendError, TryRecvError};
 
 pub fn spawn<F>(mut f: F) -> ThreadHandle
 where
-    F: FnMut() -> Result<(), Error> + Send + 'static,
+    F: FnMut() -> Result<ControlFlow<()>, Error> + Send + 'static,
 {
     let handle = thread::spawn(move || {
         loop {
             match f() {
-                Ok(()) => {}
+                Ok(ControlFlow::Continue(())) => {}
+                Ok(ControlFlow::Break(())) => {
+                    break;
+                }
                 Err(Error::ChannelDisconnected { .. }) => {
                     break;
                 }

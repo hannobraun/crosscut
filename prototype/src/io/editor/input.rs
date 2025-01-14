@@ -1,4 +1,4 @@
-use std::time::Duration;
+use std::{ops::ControlFlow, time::Duration};
 
 use crossterm::event::{self, Event, KeyCode};
 
@@ -18,13 +18,13 @@ pub fn start(editor_input: Sender<Option<EditorInput>>) -> ThreadHandle {
             // will hang forever, blocking on input, preventing the application
             // from shutting down.
             editor_input.send(None)?;
-            return Ok(());
+            return Ok(ControlFlow::Continue(()));
         }
 
         let event = event::read()?;
 
         let Event::Key(key_event) = event else {
-            return Ok(());
+            return Ok(ControlFlow::Continue(()));
         };
 
         match key_event.code {
@@ -37,6 +37,6 @@ pub fn start(editor_input: Sender<Option<EditorInput>>) -> ThreadHandle {
             _ => {}
         }
 
-        Ok(())
+        Ok(ControlFlow::Continue(()))
     })
 }

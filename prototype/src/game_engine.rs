@@ -1,3 +1,5 @@
+use std::ops::ControlFlow;
+
 use crossbeam_channel::select;
 
 use crate::{
@@ -125,7 +127,7 @@ impl GameEngine {
                 Event::Heartbeat => {}
             }
 
-            Ok(())
+            Ok(ControlFlow::Continue(()))
         });
 
         Ok(Self {
