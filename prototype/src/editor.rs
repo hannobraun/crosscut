@@ -200,6 +200,7 @@ impl Input {
 
     pub fn clear(&mut self) {
         self.buffer.clear();
+        self.cursor = 0;
     }
 }
 
