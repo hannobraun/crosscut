@@ -183,7 +183,7 @@ impl Input {
     }
 
     fn insert(&mut self, ch: char) {
-        self.buffer.push(ch);
+        self.buffer.insert(self.cursor, ch);
         self.move_cursor_right();
     }
 
