@@ -27,7 +27,7 @@ impl Editor {
         // hand.
 
         let mut commands = BTreeSet::new();
-        commands.insert("append");
+        commands.insert("edit");
         commands.insert("clear");
         commands.insert("reset");
 
@@ -128,7 +128,7 @@ impl Editor {
         }
 
         match matched_command {
-            "append" => {
+            "edit" => {
                 self.mode = EditorMode::Append;
             }
             "clear" => {
