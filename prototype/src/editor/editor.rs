@@ -1,4 +1,7 @@
-use std::collections::{BTreeSet, VecDeque};
+use std::{
+    collections::{BTreeSet, VecDeque},
+    fmt::Write,
+};
 
 use crate::language::{
     code::Code,
@@ -13,6 +16,7 @@ pub struct Editor {
     code: Code,
     mode: EditorMode,
     input: String,
+    error: Option<String>,
     commands: BTreeSet<&'static str>,
 }
 
@@ -31,6 +35,7 @@ impl Editor {
             code: Code::default(),
             mode: EditorMode::Command,
             input: String::new(),
+            error: None,
             commands,
         }
     }
@@ -43,6 +48,7 @@ impl Editor {
         EditorPrompt {
             mode: &self.mode,
             input: &self.input,
+            error: self.error.as_ref(),
         }
     }
 
@@ -94,6 +100,7 @@ impl Editor {
         &mut self,
         interpreter: &mut Interpreter,
     ) -> anyhow::Result<()> {
+        self.error = None;
         let command = &self.input;
 
         let mut matched_commands = self
@@ -103,18 +110,19 @@ impl Editor {
             .collect::<VecDeque<_>>();
 
         let Some(&matched_command) = matched_commands.pop_front() else {
-            println!("Unknown command: `{command}`");
+            self.error = Some(format!("Unknown command: `{command}`"));
             return Ok(());
         };
         if !matched_commands.is_empty() {
-            print!(
+            let mut error = format!(
                 "`{command}` could refer to multiple commands: \
                 `{matched_command}`"
             );
             for matched_command in matched_commands {
-                print!(", `{matched_command}`");
+                write!(error, ", `{matched_command}`")?;
             }
-            println!();
+
+            self.error = Some(error);
 
             return Ok(());
         }
@@ -148,6 +156,7 @@ impl Default for Editor {
 pub struct EditorPrompt<'r> {
     pub mode: &'r EditorMode,
     pub input: &'r String,
+    pub error: Option<&'r String>,
 }
 
 #[derive(Debug)]

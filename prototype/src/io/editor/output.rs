@@ -106,6 +106,11 @@ impl Renderer {
         };
         let input = prompt.input;
 
+        if let Some(err) = prompt.error {
+            self.w.queue(MoveToNextLine(1))?;
+            write!(self.w, "{err}")?;
+        }
+
         self.w.queue(MoveToNextLine(1))?;
         write!(self.w, "{mode} > {input}")?;
 
