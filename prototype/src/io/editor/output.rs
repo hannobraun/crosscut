@@ -1,4 +1,4 @@
-use std::io::{stdout, Stdout, Write};
+use std::io::{self, stdout, Stdout, Write};
 
 use crossterm::{
     cursor::{self, MoveToNextLine},
@@ -34,12 +34,12 @@ pub fn render_code(code: &Code, host: &Host) {
 }
 
 pub struct Renderer {
-    w: Stdout,
+    w: TerminalAdapter,
 }
 
 impl Renderer {
     pub fn new() -> anyhow::Result<Self> {
-        let w = stdout();
+        let w = TerminalAdapter { w: stdout() };
 
         // Nothing forces us to enable raw mode right here. It's also tied to
         // input, so we could enable it there.
@@ -68,8 +68,8 @@ impl Renderer {
             indent: 0,
         };
 
-        self.w.queue(terminal::Clear(ClearType::All))?;
-        self.w.queue(cursor::MoveTo(0, 0))?;
+        self.w.clear()?;
+        self.w.move_to(0, 0)?;
 
         self.render_code(&mut context)?;
         self.render_prompt(editor.prompt())?;
@@ -89,7 +89,7 @@ impl Renderer {
             };
 
             write!(self.w, "process {state}")?;
-            self.w.queue(MoveToNextLine(1))?;
+            self.w.move_to_next_line()?;
         };
 
         self.render_fragment(&context.code.root, context)?;
@@ -107,11 +107,11 @@ impl Renderer {
         let input = &prompt.input.buffer;
 
         if let Some(err) = prompt.error {
-            self.w.queue(MoveToNextLine(1))?;
+            self.w.move_to_next_line()?;
             write!(self.w, "{err}")?;
         }
 
-        self.w.queue(MoveToNextLine(1))?;
+        self.w.move_to_next_line()?;
         write!(self.w, "{mode} > ")?;
 
         write!(self.w, "{input}")?;
@@ -141,13 +141,13 @@ impl Renderer {
         let maybe_error = context.code.errors.get(id);
 
         if maybe_error.is_some() {
-            self.w.queue(SetForegroundColor(Color::Red))?;
+            self.w.set_foreground_color(Color::Red)?;
         }
 
         let mut indent = context.indent;
         if let Some(interpreter) = context.interpreter {
             if Some(id) == interpreter.next() {
-                self.w.queue(SetAttribute(Attribute::Bold))?;
+                self.w.set_attribute(Attribute::Bold)?;
                 write!(self.w, " => ")?;
 
                 // This is worth one indentation level. We need to adjust for
@@ -200,14 +200,14 @@ impl Renderer {
 
             write!(self.w, "    error: {message}")?;
         }
-        self.w.queue(MoveToNextLine(1))?;
+        self.w.move_to_next_line()?;
 
         context.indent += 1;
         self.render_body(&fragment.body, context)?;
         context.indent -= 1;
 
-        self.w.queue(ResetColor)?;
-        self.w.queue(SetAttribute(Attribute::Reset))?;
+        self.w.reset_color()?;
+        self.w.set_attribute(Attribute::Reset)?;
 
         Ok(())
     }
@@ -256,4 +256,50 @@ struct RenderContext<'r> {
     host: &'r Host,
     interpreter: Option<&'r Interpreter>,
     indent: u32,
+}
+
+struct TerminalAdapter {
+    w: Stdout,
+}
+
+impl TerminalAdapter {
+    fn clear(&mut self) -> anyhow::Result<()> {
+        self.w.queue(terminal::Clear(ClearType::All))?;
+        Ok(())
+    }
+
+    fn move_to(&mut self, x: u16, y: u16) -> anyhow::Result<()> {
+        self.w.queue(cursor::MoveTo(x, y))?;
+        Ok(())
+    }
+
+    fn move_to_next_line(&mut self) -> anyhow::Result<()> {
+        self.w.queue(MoveToNextLine(1))?;
+        Ok(())
+    }
+
+    fn set_foreground_color(&mut self, color: Color) -> anyhow::Result<()> {
+        self.w.queue(SetForegroundColor(color))?;
+        Ok(())
+    }
+
+    fn set_attribute(&mut self, attribute: Attribute) -> anyhow::Result<()> {
+        self.w.queue(SetAttribute(attribute))?;
+        Ok(())
+    }
+
+    fn reset_color(&mut self) -> anyhow::Result<()> {
+        self.w.queue(ResetColor)?;
+        Ok(())
+    }
+}
+
+impl io::Write for TerminalAdapter {
+    fn write(&mut self, buf: &[u8]) -> io::Result<usize> {
+        self.w.write(buf)
+    }
+
+    fn flush(&mut self) -> io::Result<()> {
+        self.w.flush()
+    }
 }
