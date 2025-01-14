@@ -104,7 +104,7 @@ impl Renderer {
             EditorMode::Command => "command",
             EditorMode::Edit => "edit",
         };
-        let input = prompt.input;
+        let input = &prompt.input.buffer;
 
         if let Some(err) = prompt.error {
             self.w.queue(MoveToNextLine(1))?;

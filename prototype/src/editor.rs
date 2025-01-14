@@ -47,7 +47,7 @@ impl Editor {
     pub fn prompt(&self) -> EditorPrompt {
         EditorPrompt {
             mode: &self.mode,
-            input: &self.input.buffer,
+            input: &self.input,
             error: self.error.as_ref(),
         }
     }
@@ -177,6 +177,6 @@ pub enum InputEvent {
 
 pub struct EditorPrompt<'r> {
     pub mode: &'r EditorMode,
-    pub input: &'r String,
+    pub input: &'r Input,
     pub error: Option<&'r String>,
 }
