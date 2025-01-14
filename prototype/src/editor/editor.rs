@@ -39,12 +39,11 @@ impl Editor {
         &self.code
     }
 
-    pub fn mode(&self) -> &EditorMode {
-        &self.mode
-    }
-
-    pub fn input(&self) -> &String {
-        &self.input
+    pub fn prompt(&self) -> EditorPrompt {
+        EditorPrompt {
+            mode: &self.mode,
+            input: &self.input,
+        }
     }
 
     pub fn process_input(
@@ -137,6 +136,11 @@ impl Default for Editor {
     fn default() -> Self {
         Self::new()
     }
+}
+
+pub struct EditorPrompt<'r> {
+    pub mode: &'r EditorMode,
+    pub input: &'r String,
 }
 
 #[derive(Debug)]

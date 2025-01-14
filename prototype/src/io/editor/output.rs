@@ -8,7 +8,7 @@ use crossterm::{
 };
 
 use crate::{
-    editor::{Editor, EditorMode},
+    editor::{Editor, EditorMode, EditorPrompt},
     language::{
         code::{
             Body, Code, CodeError, Expression, FragmentError, FragmentId,
@@ -72,7 +72,7 @@ impl Renderer {
         self.w.queue(cursor::MoveTo(0, 0))?;
 
         self.render_code(&mut context)?;
-        self.render_prompt(editor.mode(), editor.input())?;
+        self.render_prompt(editor.prompt())?;
 
         Ok(())
     }
@@ -99,15 +99,12 @@ impl Renderer {
         Ok(())
     }
 
-    fn render_prompt(
-        &mut self,
-        mode: &EditorMode,
-        input: &String,
-    ) -> anyhow::Result<()> {
-        let mode = match mode {
+    fn render_prompt(&mut self, prompt: EditorPrompt) -> anyhow::Result<()> {
+        let mode = match prompt.mode {
             EditorMode::Append => "append",
             EditorMode::Command => "command",
         };
+        let input = prompt.input;
 
         self.w.queue(MoveToNextLine(1))?;
         write!(self.w, "{mode} > {input}")?;
