@@ -35,7 +35,15 @@ pub fn start(editor_input: Sender<Option<InputEvent>>) -> ThreadHandle {
                 // will propagate the shutdown to all other threads.
                 return Ok(ControlFlow::Break(()));
             }
-            KeyCode::Char(ch) => {
+            KeyCode::Char(ch) if ch.is_ascii() => {
+                // We have code that needs to keep track of the cursor. That
+                // code won't work with most Unicode characters, and I don't
+                // know how to fix that. It's a complicated topic.
+                //
+                // Long-term, the terminal-based interface can only be a
+                // placeholder anyway. So I think restricting input to ASCII
+                // characters is a reasonable compromise.
+
                 editor_input.send(Some(InputEvent::Char { value: ch }))?;
             }
 
