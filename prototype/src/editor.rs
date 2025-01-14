@@ -63,8 +63,7 @@ impl Editor {
                         self.process_code(host, interpreter);
                     }
                 } else {
-                    self.input.buffer.push(value);
-                    self.input.move_cursor_right();
+                    self.input.insert(value);
                 }
             }
 
@@ -182,6 +181,11 @@ impl Input {
 
     fn move_cursor_right(&mut self) {
         self.cursor = self.cursor.saturating_add(1);
+    }
+
+    fn insert(&mut self, ch: char) {
+        self.buffer.push(ch);
+        self.move_cursor_right();
     }
 }
 
