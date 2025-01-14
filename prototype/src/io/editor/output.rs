@@ -328,12 +328,8 @@ impl TerminalAdapter {
 
 impl io::Write for TerminalAdapter {
     fn write(&mut self, buf: &[u8]) -> io::Result<usize> {
-        // This is _not_ going to work for most Unicode characters. I don't know
-        // what to do about this yet.
-        //
-        // This also doesn't take line breaks into account.
-        //
-        // A more sophisticated solution is going to be needed eventually.
+        // We're only accepting ASCII characters from the terminal right now, so
+        // this should work fine.
         let bytes_written = self.w.write(buf)?;
         self.cursor[0] += bytes_written as u16;
         Ok(bytes_written)
