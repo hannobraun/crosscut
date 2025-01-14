@@ -112,7 +112,9 @@ impl Renderer {
         }
 
         self.w.queue(MoveToNextLine(1))?;
-        write!(self.w, "{mode} > {input}")?;
+        write!(self.w, "{mode} > ")?;
+
+        write!(self.w, "{input}")?;
 
         self.w.flush()?;
 
