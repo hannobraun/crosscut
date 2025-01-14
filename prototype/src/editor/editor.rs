@@ -10,7 +10,7 @@ use crate::language::{
     interpreter::{Interpreter, InterpreterState},
 };
 
-use super::EditorInput;
+use super::InputEvent;
 
 pub struct Editor {
     code: Code,
@@ -54,12 +54,12 @@ impl Editor {
 
     pub fn process_input(
         &mut self,
-        input: EditorInput,
+        input: InputEvent,
         host: &Host,
         interpreter: &mut Interpreter,
     ) -> anyhow::Result<()> {
         match input {
-            EditorInput::Char { value } => {
+            InputEvent::Char { value } => {
                 if value.is_whitespace() {
                     if let EditorMode::Edit = self.mode {
                         self.process_code(host, interpreter);
@@ -68,7 +68,7 @@ impl Editor {
                     self.input.push(value);
                 }
             }
-            EditorInput::Enter => match self.mode {
+            InputEvent::Enter => match self.mode {
                 EditorMode::Command => {
                     self.process_command(interpreter)?;
                     self.input.clear();

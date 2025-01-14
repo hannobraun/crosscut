@@ -3,11 +3,11 @@ use std::{ops::ControlFlow, time::Duration};
 use crossterm::event::{self, Event, KeyCode, KeyModifiers};
 
 use crate::{
-    editor::EditorInput,
+    editor::InputEvent,
     thread::{self, Sender, ThreadHandle},
 };
 
-pub fn start(editor_input: Sender<Option<EditorInput>>) -> ThreadHandle {
+pub fn start(editor_input: Sender<Option<InputEvent>>) -> ThreadHandle {
     thread::spawn(move || {
         let timeout = Duration::from_millis(50);
         let event_ready = event::poll(timeout)?;
@@ -36,10 +36,10 @@ pub fn start(editor_input: Sender<Option<EditorInput>>) -> ThreadHandle {
                 return Ok(ControlFlow::Break(()));
             }
             KeyCode::Char(ch) => {
-                editor_input.send(Some(EditorInput::Char { value: ch }))?;
+                editor_input.send(Some(InputEvent::Char { value: ch }))?;
             }
             KeyCode::Enter => {
-                editor_input.send(Some(EditorInput::Enter))?;
+                editor_input.send(Some(InputEvent::Enter))?;
             }
             _ => {}
         }

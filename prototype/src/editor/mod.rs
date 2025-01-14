@@ -3,5 +3,5 @@ mod input;
 
 pub use self::{
     editor::{Editor, EditorMode, EditorPrompt},
-    input::EditorInput,
+    input::InputEvent,
 };

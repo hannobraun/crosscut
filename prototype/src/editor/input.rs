@@ -1,5 +1,5 @@
 #[derive(Debug)]
-pub enum EditorInput {
+pub enum InputEvent {
     Char { value: char },
     Enter,
 }
