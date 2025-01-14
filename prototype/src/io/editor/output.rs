@@ -102,18 +102,6 @@ impl Renderer {
         Ok(())
     }
 
-    fn render_body(
-        &mut self,
-        body: &Body,
-        context: &mut RenderContext,
-    ) -> anyhow::Result<()> {
-        for hash in body.ids() {
-            self.render_fragment(hash, context)?;
-        }
-
-        Ok(())
-    }
-
     fn render_fragment(
         &mut self,
         id: &FragmentId,
@@ -219,6 +207,18 @@ impl Renderer {
             } => {
                 write!(self.w, "{value}")?;
             }
+        }
+
+        Ok(())
+    }
+
+    fn render_body(
+        &mut self,
+        body: &Body,
+        context: &mut RenderContext,
+    ) -> anyhow::Result<()> {
+        for hash in body.ids() {
+            self.render_fragment(hash, context)?;
         }
 
         Ok(())
