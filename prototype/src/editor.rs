@@ -168,7 +168,7 @@ pub struct Input {
 }
 impl Input {
     fn new(buffer: String) -> Self {
-        let cursor = buffer.len();
+        let cursor = buffer.chars().count();
         Self { buffer, cursor }
     }
 
