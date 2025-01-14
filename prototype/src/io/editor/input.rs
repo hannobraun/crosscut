@@ -1,6 +1,6 @@
 use std::{ops::ControlFlow, time::Duration};
 
-use crossterm::event::{self, Event, KeyCode};
+use crossterm::event::{self, Event, KeyCode, KeyModifiers};
 
 use crate::{
     editor::EditorInput,
@@ -28,6 +28,13 @@ pub fn start(editor_input: Sender<Option<EditorInput>>) -> ThreadHandle {
         };
 
         match key_event.code {
+            KeyCode::Char('c')
+                if key_event.modifiers.contains(KeyModifiers::CONTROL) =>
+            {
+                // Ending this thread is enough. It will drop its channel, which
+                // will propagate the shutdown to all other threads.
+                return Ok(ControlFlow::Break(()));
+            }
             KeyCode::Char(ch) => {
                 editor_input.send(Some(EditorInput::Char { value: ch }))?;
             }
