@@ -8,8 +8,8 @@ use super::FragmentId;
 /// ## Implementation Note
 ///
 /// The uniqueness that the text above promises is actually not guaranteed right
-/// now. However, it with the limited means available, it should be impossible
-/// to construct a situation where that matters.
+/// now. However, with the limited means available, it should be impossible to
+/// construct a situation where that matters.
 ///
 /// In any case, this can be fixed by attaching the index of the fragment within
 /// its parent's body to each component of the cursor. I intend to do so, as
