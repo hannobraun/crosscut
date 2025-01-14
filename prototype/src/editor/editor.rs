@@ -48,11 +48,11 @@ impl Editor {
         input: EditorInput,
         host: &Host,
         interpreter: &mut Interpreter,
-    ) -> bool {
+    ) -> Option<EditorTask> {
         match input {
             EditorInput::Char { value } => {
                 self.input.push(value);
-                false
+                None
             }
             EditorInput::Enter => {
                 match self.mode {
@@ -66,7 +66,7 @@ impl Editor {
                     }
                 }
 
-                true
+                Some(EditorTask::Render)
             }
         }
     }
@@ -140,4 +140,8 @@ impl Default for Editor {
 pub enum EditorMode {
     Append,
     Command,
+}
+
+pub enum EditorTask {
+    Render,
 }

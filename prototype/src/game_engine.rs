@@ -1,7 +1,7 @@
 use crossbeam_channel::select;
 
 use crate::{
-    editor::{Editor, EditorInput},
+    editor::{Editor, EditorInput, EditorTask},
     io::editor::output::Renderer,
     language::{
         host::Host,
@@ -105,8 +105,16 @@ impl GameEngine {
                         break;
                     }
 
-                    if render {
-                        renderer.render(&editor, &host, Some(&interpreter))?;
+                    if let Some(task) = render {
+                        match task {
+                            EditorTask::Render => {
+                                renderer.render(
+                                    &editor,
+                                    &host,
+                                    Some(&interpreter),
+                                )?;
+                            }
+                        }
                     }
                 }
                 Event::GameInput {
