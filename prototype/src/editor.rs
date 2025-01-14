@@ -32,9 +32,7 @@ impl Editor {
         Self {
             code: Code::default(),
             mode: EditorMode::Command,
-            input: Input {
-                buffer: String::new(),
-            },
+            input: Input::new(String::new()),
             error: None,
             commands,
         }
@@ -165,6 +163,11 @@ pub enum EditorMode {
 
 pub struct Input {
     pub buffer: String,
+}
+impl Input {
+    fn new(buffer: String) -> Self {
+        Self { buffer }
+    }
 }
 
 #[derive(Debug)]
