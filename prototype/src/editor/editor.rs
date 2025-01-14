@@ -43,6 +43,10 @@ impl Editor {
         &self.mode
     }
 
+    pub fn input(&self) -> &String {
+        &self.input
+    }
+
     pub fn process_input(
         &mut self,
         input: EditorInput,
@@ -52,7 +56,7 @@ impl Editor {
         match input {
             EditorInput::Char { value } => {
                 self.input.push(value);
-                None
+                Some(EditorTask::Render)
             }
             EditorInput::Enter => {
                 match self.mode {

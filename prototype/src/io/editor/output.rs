@@ -1,8 +1,9 @@
 use std::io::{stdout, Stdout, Write};
 
 use crossterm::{
+    cursor::MoveToNextLine,
     style::{Attribute, Color, ResetColor, SetAttribute, SetForegroundColor},
-    QueueableCommand,
+    terminal, QueueableCommand,
 };
 
 use crate::{
@@ -37,6 +38,17 @@ pub struct Renderer {
 
 impl Renderer {
     pub fn new() -> anyhow::Result<Self> {
+        // Nothing forces us to enable raw mode right here. It's also tied to
+        // input, so we could enable it there.
+        //
+        // It is very important, however, that we _disable_ it consistently,
+        // depending on where we enabled it. Otherwise the terminal will remain
+        // in raw mode after the application exited.
+        //
+        // We are taking care of that here, by disabling raw mode in the `Drop`
+        // implementation of this type. So raw mode is bound to its lifetime.
+        terminal::enable_raw_mode()?;
+
         Ok(Self { w: stdout() })
     }
 
@@ -53,8 +65,9 @@ impl Renderer {
             indent: 0,
         };
 
+        self.w.queue(MoveToNextLine(1))?;
         self.render_code(&mut context)?;
-        self.render_prompt(editor.mode())?;
+        self.render_prompt(editor.mode(), editor.input())?;
 
         Ok(())
     }
@@ -70,9 +83,9 @@ impl Renderer {
                 InterpreterState::Error => "error",
             };
 
-            writeln!(self.w)?;
+            self.w.queue(MoveToNextLine(1))?;
             write!(self.w, "process {state}")?;
-            writeln!(self.w)?;
+            self.w.queue(MoveToNextLine(1))?;
         };
 
         self.render_fragment(&context.code.root, context)?;
@@ -82,14 +95,18 @@ impl Renderer {
         Ok(())
     }
 
-    fn render_prompt(&mut self, mode: &EditorMode) -> anyhow::Result<()> {
+    fn render_prompt(
+        &mut self,
+        mode: &EditorMode,
+        input: &String,
+    ) -> anyhow::Result<()> {
         let mode = match mode {
             EditorMode::Append => "append",
             EditorMode::Command => "command",
         };
 
-        writeln!(self.w)?;
-        write!(self.w, "{mode} > ")?;
+        self.w.queue(MoveToNextLine(1))?;
+        write!(self.w, "{mode} > {input}")?;
 
         self.w.flush()?;
 
@@ -175,7 +192,7 @@ impl Renderer {
 
             write!(self.w, "    error: {message}")?;
         }
-        writeln!(self.w)?;
+        self.w.queue(MoveToNextLine(1))?;
 
         context.indent += 1;
         self.render_body(&fragment.body, context)?;
@@ -216,6 +233,13 @@ impl Renderer {
         }
 
         Ok(())
+    }
+}
+
+impl Drop for Renderer {
+    fn drop(&mut self) {
+        // Nothing we can do about a potential error here.
+        let _ = terminal::disable_raw_mode();
     }
 }
 
