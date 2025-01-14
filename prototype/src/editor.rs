@@ -81,6 +81,9 @@ impl Editor {
                     self.mode = EditorMode::Command;
                 }
             },
+            InputEvent::Left => {
+                self.input.move_cursor_left();
+            }
         }
 
         Ok(())
@@ -183,6 +186,7 @@ pub enum InputEvent {
 
     Backspace,
     Enter,
+    Left,
 }
 
 pub struct EditorPrompt<'r> {
