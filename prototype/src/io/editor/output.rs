@@ -76,7 +76,7 @@ impl Renderer {
         };
 
         self.w.queue(terminal::Clear(ClearType::All))?;
-        self.w.queue(cursor::MoveTo(1, 1))?;
+        self.w.queue(cursor::MoveTo(0, 0))?;
 
         self.render_code(&mut context)?;
         self.render_prompt(editor.mode(), editor.input())?;
