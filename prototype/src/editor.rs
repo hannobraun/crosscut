@@ -68,6 +68,10 @@ impl Editor {
                     self.input.buffer.push(value);
                 }
             }
+
+            InputEvent::Backspace => {
+                self.input.buffer.pop();
+            }
             InputEvent::Enter => match self.mode {
                 EditorMode::Command => {
                     self.process_command(interpreter)?;
@@ -166,6 +170,8 @@ pub struct Input {
 #[derive(Debug)]
 pub enum InputEvent {
     Char { value: char },
+
+    Backspace,
     Enter,
 }
 

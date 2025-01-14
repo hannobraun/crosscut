@@ -38,6 +38,10 @@ pub fn start(editor_input: Sender<Option<InputEvent>>) -> ThreadHandle {
             KeyCode::Char(ch) => {
                 editor_input.send(Some(InputEvent::Char { value: ch }))?;
             }
+
+            KeyCode::Backspace => {
+                editor_input.send(Some(InputEvent::Backspace))?;
+            }
             KeyCode::Enter => {
                 editor_input.send(Some(InputEvent::Enter))?;
             }
