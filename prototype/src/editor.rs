@@ -69,7 +69,7 @@ impl Editor {
 
             InputEvent::Backspace => {
                 self.input.buffer.pop();
-                self.input.cursor = self.input.cursor.saturating_sub(1);
+                self.input.move_cursor_left();
             }
             InputEvent::Enter => match self.mode {
                 EditorMode::Command => {
@@ -170,6 +170,10 @@ impl Input {
     fn new(buffer: String) -> Self {
         let cursor = buffer.len();
         Self { buffer, cursor }
+    }
+
+    fn move_cursor_left(&mut self) {
+        self.cursor = self.cursor.saturating_sub(1);
     }
 }
 
