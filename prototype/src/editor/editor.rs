@@ -69,13 +69,13 @@ impl Editor {
                 }
             }
             EditorInput::Enter => match self.mode {
-                EditorMode::Edit => {
-                    self.process_code(host, interpreter);
-                    self.mode = EditorMode::Command;
-                }
                 EditorMode::Command => {
                     self.process_command(interpreter)?;
                     self.input.clear();
+                }
+                EditorMode::Edit => {
+                    self.process_code(host, interpreter);
+                    self.mode = EditorMode::Command;
                 }
             },
         }
@@ -161,6 +161,6 @@ pub struct EditorPrompt<'r> {
 
 #[derive(Debug)]
 pub enum EditorMode {
-    Edit,
     Command,
+    Edit,
 }
