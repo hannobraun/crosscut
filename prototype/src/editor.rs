@@ -174,14 +174,6 @@ impl Input {
         Self { buffer, cursor }
     }
 
-    fn move_cursor_left(&mut self) {
-        self.cursor = self.cursor.saturating_sub(1);
-    }
-
-    fn move_cursor_right(&mut self) {
-        self.cursor = self.cursor.saturating_add(1);
-    }
-
     fn insert(&mut self, ch: char) {
         self.buffer.insert(self.cursor, ch);
         self.move_cursor_right();
@@ -190,6 +182,14 @@ impl Input {
     fn remove_left(&mut self) {
         self.buffer.pop();
         self.move_cursor_left();
+    }
+
+    fn move_cursor_left(&mut self) {
+        self.cursor = self.cursor.saturating_sub(1);
+    }
+
+    fn move_cursor_right(&mut self) {
+        self.cursor = self.cursor.saturating_add(1);
     }
 }
 
