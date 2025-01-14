@@ -95,7 +95,6 @@ impl Renderer {
                 InterpreterState::Error => "error",
             };
 
-            self.w.queue(MoveToNextLine(1))?;
             write!(self.w, "process {state}")?;
             self.w.queue(MoveToNextLine(1))?;
         };
