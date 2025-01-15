@@ -85,8 +85,13 @@ impl Code {
         let appended = append_to.body.push(to_append, &mut self.fragments);
 
         // And now, update all of its parents, down to the root.
+        self.replace_at(location, append_to);
 
-        let mut next_to_replace_with = append_to;
+        appended
+    }
+
+    pub fn replace_at(&mut self, location: Location, replace_with: Fragment) {
+        let mut next_to_replace_with = replace_with;
 
         for (id, parent) in location.components_with_parent() {
             let mut parent = self.fragments.get(parent).clone();
@@ -98,8 +103,6 @@ impl Code {
         }
 
         self.root = self.fragments.insert(next_to_replace_with);
-
-        appended
     }
 }
 
