@@ -22,7 +22,7 @@ impl Fragments {
     }
 
     pub fn insert(&mut self, fragment: Fragment) -> FragmentId {
-        let id = FragmentId::generate(&fragment);
+        let id = FragmentId::generate_for(&fragment);
         self.inner.insert(id, fragment);
         id
     }
@@ -54,7 +54,7 @@ pub struct FragmentId {
     hash: [u8; 32],
 }
 impl FragmentId {
-    fn generate(fragment: &Fragment) -> Self {
+    fn generate_for(fragment: &Fragment) -> Self {
         let hash = udigest::hash::<blake3::Hasher>(fragment).into();
         Self { hash }
     }
