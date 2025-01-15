@@ -30,7 +30,6 @@ pub fn compile(token: &str, host: &Host, code: &mut Code) {
         kind: parse_token(token, host),
         body: Body::default(),
     };
-
     let maybe_error = check_for_error(&fragment);
 
     let location_of_compiled_fragment =
