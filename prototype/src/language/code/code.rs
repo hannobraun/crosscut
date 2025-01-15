@@ -64,7 +64,7 @@ impl Code {
             next = id;
         }
 
-        let Some(cursor) = Location::new(location) else {
+        let Some(location) = Location::new(location) else {
             unreachable!(
                 "It should be impossible to construct an invalid path here, as \
                 the root fragment has a valid body. We _must_ have added it in \
@@ -72,7 +72,7 @@ impl Code {
             );
         };
 
-        cursor
+        location
     }
 
     pub fn append_to_body_at(
