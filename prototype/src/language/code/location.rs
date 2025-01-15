@@ -22,7 +22,7 @@ pub struct Location {
 }
 
 impl Location {
-    pub fn new(inner: Vec<FragmentId>) -> Option<Self> {
+    pub fn from_components(inner: Vec<FragmentId>) -> Option<Self> {
         if inner.is_empty() {
             // An empty fragment path is not valid, as every path must at least
             // contain the root.

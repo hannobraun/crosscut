@@ -65,7 +65,7 @@ impl Code {
             next = id;
         }
 
-        let Some(location) = Location::new(location) else {
+        let Some(location) = Location::from_components(location) else {
             unreachable!(
                 "It should be impossible to construct an invalid path here, as \
                 the root fragment has a valid body. We _must_ have added it in \
