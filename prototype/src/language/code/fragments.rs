@@ -104,6 +104,7 @@ impl Fragment {
 #[derive(Clone, Debug, Eq, PartialEq, udigest::Digestable)]
 pub enum FragmentKind {
     Root,
+    Empty,
     Expression { expression: Expression },
     Error { err: FragmentError },
 }

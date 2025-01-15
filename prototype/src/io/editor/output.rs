@@ -143,6 +143,9 @@ impl Renderer {
                 // Nothing to render in the root fragment, except the body.
                 // Which we're already doing below, unconditionally.
             }
+            FragmentKind::Empty => {
+                write!(self.w, "empty fragment")?;
+            }
             FragmentKind::Expression { expression } => {
                 self.render_expression(expression, context)?;
             }
