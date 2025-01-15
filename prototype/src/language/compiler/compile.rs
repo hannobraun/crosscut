@@ -11,7 +11,7 @@ use crate::language::{
 pub fn compile(token: &str, host: &Host, code: &mut Code) {
     let location = code.find_innermost_fragment_with_valid_body();
 
-    let location_already_has_an_expression = code
+    let location_already_had_an_expression = code
         .fragments()
         .get(location.target())
         .body
@@ -31,7 +31,7 @@ pub fn compile(token: &str, host: &Host, code: &mut Code) {
 
     let location_of_compiled_fragment = code.append_to(&location, fragment);
 
-    if location_already_has_an_expression {
+    if location_already_had_an_expression {
         code.errors.insert(
             *location_of_compiled_fragment.target(),
             CodeError::UnexpectedToken,
