@@ -3,7 +3,7 @@ use std::num::IntErrorKind;
 use crate::language::{
     code::{
         Body, Code, CodeError, Expression, Fragment, FragmentError,
-        FragmentKind, Literal, Location,
+        FragmentKind, Literal,
     },
     host::Host,
 };
@@ -11,7 +11,7 @@ use crate::language::{
 pub fn compile(token: &str, host: &Host, code: &mut Code) {
     let location = code.find_innermost_fragment_with_valid_body();
 
-    let kind = match parse_token(token, &location, code, host) {
+    let kind = match parse_token(token, host) {
         Ok(expression) => FragmentKind::Expression { expression },
         Err(err) => FragmentKind::Error { err },
     };
@@ -38,12 +38,7 @@ pub fn compile(token: &str, host: &Host, code: &mut Code) {
     }
 }
 
-fn parse_token(
-    token: &str,
-    _: &Location,
-    _: &Code,
-    host: &Host,
-) -> Result<Expression, FragmentError> {
+fn parse_token(token: &str, host: &Host) -> Result<Expression, FragmentError> {
     assert!(
         !token.chars().any(|ch| ch.is_whitespace()),
         "Expecting tokens to not contain any whitespace.",
