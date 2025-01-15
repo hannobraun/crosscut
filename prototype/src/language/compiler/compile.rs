@@ -29,7 +29,7 @@ pub fn compile(token: &str, host: &Host, code: &mut Code) {
 
     let maybe_error = check_for_error(&fragment);
 
-    let id = code.append_to_body_at(&location, fragment);
+    let id = code.append_to(&location, fragment);
 
     if location_already_has_an_expression {
         code.errors.insert(*id.target(), CodeError::UnexpectedToken);

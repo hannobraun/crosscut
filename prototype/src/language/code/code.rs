@@ -76,7 +76,7 @@ impl Code {
         location
     }
 
-    pub fn append_to_body_at(
+    pub fn append_to(
         &mut self,
         location: &Location,
         to_append: Fragment,
@@ -159,7 +159,7 @@ mod tests {
         let b = call(1);
 
         assert_eq!(
-            code.append_to_body_at(
+            code.append_to(
                 &code.find_innermost_fragment_with_valid_body(),
                 a.clone(),
             ),
@@ -167,7 +167,7 @@ mod tests {
         );
 
         assert_eq!(
-            code.append_to_body_at(
+            code.append_to(
                 &code.find_innermost_fragment_with_valid_body(),
                 b.clone(),
             ),
