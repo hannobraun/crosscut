@@ -92,19 +92,34 @@ impl Code {
         appended
     }
 
-    pub fn replace_at(&mut self, location: &Location, replace_with: Fragment) {
+    pub fn replace_at(
+        &mut self,
+        location: &Location,
+        replace_with: Fragment,
+    ) -> Location {
         let mut next_to_replace_with = replace_with;
+        let mut location_components_of_new_fragment_reverse = Vec::new();
 
         for (id, parent) in location.components_with_parent() {
             let mut parent = self.fragments.get(parent).clone();
-            parent
-                .body
-                .replace(id, next_to_replace_with, &mut self.fragments);
+            let id_of_replacement = parent.body.replace(
+                id,
+                next_to_replace_with,
+                &mut self.fragments,
+            );
 
             next_to_replace_with = parent;
+            location_components_of_new_fragment_reverse.push(id_of_replacement);
         }
 
         self.root = self.fragments.insert(next_to_replace_with);
+        let location = Location::from_component(self.root);
+
+        location.with_components(
+            location_components_of_new_fragment_reverse
+                .into_iter()
+                .rev(),
+        )
     }
 }
 

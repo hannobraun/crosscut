@@ -22,6 +22,12 @@ pub struct Location {
 }
 
 impl Location {
+    pub fn from_component(component: FragmentId) -> Self {
+        Self {
+            inner: vec![component],
+        }
+    }
+
     pub fn from_components(inner: Vec<FragmentId>) -> Option<Self> {
         if inner.is_empty() {
             // An empty fragment path is not valid, as every path must at least
@@ -30,6 +36,14 @@ impl Location {
         } else {
             Some(Self { inner })
         }
+    }
+
+    pub fn with_components(
+        mut self,
+        components: impl IntoIterator<Item = FragmentId>,
+    ) -> Self {
+        self.inner.extend(components);
+        self
     }
 
     pub fn target(&self) -> &FragmentId {
