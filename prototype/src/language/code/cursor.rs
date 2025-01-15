@@ -1,9 +1,9 @@
 use super::FragmentId;
 
-/// # A unique identifier for a fragment at a specific location
+/// # The unique location of a fragment
 ///
 /// This is distinct from [`FragmentId`], which could can identify multiple
-/// identical fragments at different locations in the syntax tree.
+/// identical fragments at different locations in the code.
 ///
 /// ## Implementation Note
 ///
