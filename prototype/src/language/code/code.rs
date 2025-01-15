@@ -97,7 +97,7 @@ impl Code {
         {
             let mut to_update = self.fragments.get(&to_update_id).clone();
             to_update.body.replace(
-                id_before_update,
+                &id_before_update,
                 updated,
                 &mut self.fragments,
             );
