@@ -18,10 +18,7 @@ pub fn compile(token: &str, host: &Host, code: &mut Code) {
         .expression(code.fragments())
         .is_some();
 
-    let kind = match parse_token(token, host) {
-        Ok(expression) => FragmentKind::Expression { expression },
-        Err(err) => FragmentKind::Error { err },
-    };
+    let kind = parse_token(token, host);
     let fragment = Fragment {
         kind,
         body: Body::default(),
@@ -43,28 +40,36 @@ pub fn compile(token: &str, host: &Host, code: &mut Code) {
     }
 }
 
-fn parse_token(token: &str, host: &Host) -> Result<Expression, FragmentError> {
+fn parse_token(token: &str, host: &Host) -> FragmentKind {
     assert!(
         !token.chars().any(|ch| ch.is_whitespace()),
         "Expecting tokens to not contain any whitespace.",
     );
 
     match token.parse::<u32>() {
-        Ok(value) => Ok(Expression::Literal {
-            literal: Literal::Integer { value },
-        }),
+        Ok(value) => FragmentKind::Expression {
+            expression: Expression::Literal {
+                literal: Literal::Integer { value },
+            },
+        },
         Err(err) => match err.kind() {
             IntErrorKind::PosOverflow | IntErrorKind::NegOverflow => {
                 let value = token.to_string();
-                Err(FragmentError::IntegerOverflow { value })
+                FragmentKind::Error {
+                    err: FragmentError::IntegerOverflow { value },
+                }
             }
             _ => {
                 let name = token.to_string();
 
                 if let Some(id) = host.functions_by_name.get(&name).copied() {
-                    Ok(Expression::FunctionCall { target: id })
+                    FragmentKind::Expression {
+                        expression: Expression::FunctionCall { target: id },
+                    }
                 } else {
-                    Err(FragmentError::UnresolvedIdentifier { name })
+                    FragmentKind::Error {
+                        err: FragmentError::UnresolvedIdentifier { name },
+                    }
                 }
             }
         },
