@@ -15,6 +15,7 @@ pub struct Code {
 impl Code {
     pub fn new() -> Self {
         let mut fragments = Fragments::default();
+
         let root = fragments.insert(Fragment {
             kind: FragmentKind::Root,
             body: Body::default(),
