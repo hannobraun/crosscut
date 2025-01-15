@@ -41,15 +41,16 @@ impl Location {
         target
     }
 
-    pub fn into_target_and_parent(mut self) -> (FragmentId, Location) {
+    pub fn into_target_and_parent(mut self) -> (FragmentId, Option<Location>) {
         let Some(target) = self.inner.pop() else {
             unreachable!(
                 "A fragment path must consist of at least one component, the \
                 root."
             );
         };
+        let parent = self.inner;
 
-        (target, self)
+        (target, Self::new(parent))
     }
 
     pub fn into_components(self) -> impl Iterator<Item = FragmentId> {

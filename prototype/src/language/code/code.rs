@@ -88,7 +88,10 @@ impl Code {
         let mut id_before_update = append_to_id;
         let mut updated = append_to;
 
-        for to_update_id in parent_location.into_components() {
+        for to_update_id in parent_location
+            .into_iter()
+            .flat_map(|location| location.into_components())
+        {
             let mut to_update = self.fragments.get(&to_update_id).clone();
             to_update.body.replace(
                 id_before_update,
