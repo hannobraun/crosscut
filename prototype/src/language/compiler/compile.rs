@@ -18,9 +18,8 @@ pub fn compile(token: &str, host: &Host, code: &mut Code) {
         .expression(code.fragments())
         .is_some();
 
-    let kind = parse_token(token, host);
     let fragment = Fragment {
-        kind,
+        kind: parse_token(token, host),
         body: Body::default(),
     };
 
