@@ -80,33 +80,24 @@ impl Code {
         location: Location,
         to_append: Fragment,
     ) -> FragmentId {
-        let (append_to_id, parent_location) = location.into_target_and_parent();
-
         // Append the new fragment where we're supposed to append it.
-        let mut append_to = self.fragments.get(&append_to_id).clone();
+        let mut append_to = self.fragments.get(location.target()).clone();
         let appended = append_to.body.push(to_append, &mut self.fragments);
 
         // And now, update all of its parents, down to the root.
 
-        let mut id_before_update = append_to_id;
-        let mut updated = append_to;
+        let mut next_to_replace_with = append_to;
 
-        for to_update_id in parent_location
-            .into_iter()
-            .flat_map(|location| location.into_components())
-        {
-            let mut to_update = self.fragments.get(&to_update_id).clone();
-            to_update.body.replace(
-                &id_before_update,
-                updated,
-                &mut self.fragments,
-            );
+        for (id, parent) in location.components_with_parent() {
+            let mut parent = self.fragments.get(parent).clone();
+            parent
+                .body
+                .replace(id, next_to_replace_with, &mut self.fragments);
 
-            id_before_update = to_update_id;
-            updated = to_update;
+            next_to_replace_with = parent;
         }
 
-        self.root = self.fragments.insert(updated);
+        self.root = self.fragments.insert(next_to_replace_with);
 
         appended
     }
