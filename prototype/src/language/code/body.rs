@@ -51,12 +51,12 @@ impl Body {
     pub fn replace(
         &mut self,
         to_replace: &FragmentId,
-        replacement: Fragment,
+        replace_with: Fragment,
         fragments: &mut Fragments,
     ) -> FragmentId {
         for id in self.inner.iter_mut() {
             if id == to_replace {
-                let replacement = fragments.insert(replacement);
+                let replacement = fragments.insert(replace_with);
                 *id = replacement;
                 return replacement;
             }
