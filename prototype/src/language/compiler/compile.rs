@@ -22,8 +22,17 @@ pub fn compile(token: &str, host: &Host, code: &mut Code) {
 
     let maybe_error = check_for_error(&fragment);
 
+    let already_has_an_expression = code
+        .fragments()
+        .get(location.target())
+        .body
+        .expression(code.fragments())
+        .is_some();
     let id = code.append_to_body_at(&location, fragment);
 
+    if already_has_an_expression {
+        code.errors.insert(id, CodeError::UnexpectedToken);
+    }
     if let Some(err) = maybe_error {
         code.errors.insert(id, err);
     }
@@ -31,27 +40,14 @@ pub fn compile(token: &str, host: &Host, code: &mut Code) {
 
 fn parse_token(
     token: &str,
-    append_to: &Location,
-    code: &Code,
+    _: &Location,
+    _: &Code,
     host: &Host,
 ) -> Result<Expression, FragmentError> {
     assert!(
         !token.chars().any(|ch| ch.is_whitespace()),
         "Expecting tokens to not contain any whitespace.",
     );
-
-    let can_append_expression = code
-        .fragments()
-        .get(append_to.target())
-        .body
-        .expression(code.fragments())
-        .is_none();
-
-    if !can_append_expression {
-        return Err(FragmentError::UnexpectedToken {
-            token: token.to_string(),
-        });
-    }
 
     match token.parse::<u32>() {
         Ok(value) => Ok(Expression::Literal {
@@ -88,9 +84,6 @@ fn check_for_error(fragment: &Fragment) -> Option<CodeError> {
             let err = match err {
                 FragmentError::IntegerOverflow { .. } => {
                     CodeError::IntegerOverflow
-                }
-                FragmentError::UnexpectedToken { .. } => {
-                    CodeError::UnexpectedToken
                 }
                 FragmentError::UnresolvedIdentifier { .. } => {
                     CodeError::UnresolvedIdentifier

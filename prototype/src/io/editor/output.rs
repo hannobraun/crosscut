@@ -150,9 +150,6 @@ impl Renderer {
                 FragmentError::IntegerOverflow { value } => {
                     write!(self.w, "{value}")?;
                 }
-                FragmentError::UnexpectedToken { token } => {
-                    write!(self.w, "{token}")?;
-                }
                 FragmentError::UnresolvedIdentifier { name } => {
                     write!(self.w, "{name}")?;
                 }

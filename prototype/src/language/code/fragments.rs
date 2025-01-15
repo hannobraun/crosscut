@@ -100,6 +100,5 @@ pub enum FragmentKind {
 #[derive(Clone, Debug, Eq, PartialEq, udigest::Digestable)]
 pub enum FragmentError {
     IntegerOverflow { value: String },
-    UnexpectedToken { token: String },
     UnresolvedIdentifier { name: String },
 }
