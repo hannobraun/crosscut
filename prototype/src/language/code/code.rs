@@ -82,8 +82,11 @@ impl Code {
     ) -> FragmentId {
         let (append_to_id, parent_location) = location.into_target_and_parent();
 
+        // Append the new fragment where we're supposed to append it.
         let mut append_to = self.fragments.get(&append_to_id).clone();
         let appended = append_to.body.push(to_append, &mut self.fragments);
+
+        // And now, update all of its parents, down to the root.
 
         let mut id_before_update = append_to_id;
         let mut updated = append_to;
