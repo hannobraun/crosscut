@@ -56,9 +56,9 @@ impl Body {
     ) -> FragmentId {
         for id in self.inner.iter_mut() {
             if id == to_replace {
-                let replacement = fragments.insert(replace_with);
-                *id = replacement;
-                return replacement;
+                let id_of_replacement = fragments.insert(replace_with);
+                *id = id_of_replacement;
+                return id_of_replacement;
             }
         }
 
