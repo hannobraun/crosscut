@@ -11,6 +11,13 @@ use crate::language::{
 pub fn compile(token: &str, host: &Host, code: &mut Code) {
     let location = code.find_innermost_fragment_with_valid_body();
 
+    let already_has_an_expression = code
+        .fragments()
+        .get(location.target())
+        .body
+        .expression(code.fragments())
+        .is_some();
+
     let kind = match parse_token(token, host) {
         Ok(expression) => FragmentKind::Expression { expression },
         Err(err) => FragmentKind::Error { err },
@@ -22,12 +29,6 @@ pub fn compile(token: &str, host: &Host, code: &mut Code) {
 
     let maybe_error = check_for_error(&fragment);
 
-    let already_has_an_expression = code
-        .fragments()
-        .get(location.target())
-        .body
-        .expression(code.fragments())
-        .is_some();
     let id = code.append_to_body_at(&location, fragment);
 
     if already_has_an_expression {
