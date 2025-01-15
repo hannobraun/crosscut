@@ -41,7 +41,7 @@ impl Location {
         target
     }
 
-    pub fn into_target_and_parents(mut self) -> (FragmentId, Location) {
+    pub fn into_target_and_parent(mut self) -> (FragmentId, Location) {
         let Some(target) = self.inner.pop() else {
             unreachable!(
                 "A fragment path must consist of at least one component, the \

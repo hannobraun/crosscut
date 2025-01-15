@@ -80,8 +80,7 @@ impl Code {
         location: Location,
         to_append: Fragment,
     ) -> FragmentId {
-        let (append_to_id, parent_location) =
-            location.into_target_and_parents();
+        let (append_to_id, parent_location) = location.into_target_and_parent();
 
         let mut append_to = self.fragments.get(&append_to_id).clone();
         let appended = append_to.body.push(to_append, &mut self.fragments);
