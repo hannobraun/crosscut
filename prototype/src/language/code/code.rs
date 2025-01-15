@@ -77,7 +77,7 @@ impl Code {
 
     pub fn append_to_body_at(
         &mut self,
-        location: Location,
+        location: &Location,
         to_append: Fragment,
     ) -> FragmentId {
         // Append the new fragment where we're supposed to append it.
@@ -85,7 +85,7 @@ impl Code {
         let appended = append_to.body.push(to_append, &mut self.fragments);
 
         // And now, update all of its parents, down to the root.
-        self.replace_at(&location, append_to);
+        self.replace_at(location, append_to);
 
         appended
     }
