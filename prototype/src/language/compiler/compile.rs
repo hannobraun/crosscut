@@ -32,10 +32,10 @@ pub fn compile(token: &str, host: &Host, code: &mut Code) {
     let id = code.append_to_body_at(&location, fragment);
 
     if location_already_has_an_expression {
-        code.errors.insert(id, CodeError::UnexpectedToken);
+        code.errors.insert(*id.target(), CodeError::UnexpectedToken);
     }
     if let Some(err) = maybe_error {
-        code.errors.insert(id, err);
+        code.errors.insert(*id.target(), err);
     }
 }
 

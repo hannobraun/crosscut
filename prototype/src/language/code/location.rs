@@ -38,6 +38,11 @@ impl Location {
         }
     }
 
+    pub fn with_component(mut self, component: FragmentId) -> Self {
+        self.inner.push(component);
+        self
+    }
+
     pub fn with_components(
         mut self,
         components: impl IntoIterator<Item = FragmentId>,

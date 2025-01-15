@@ -80,16 +80,16 @@ impl Code {
         &mut self,
         location: &Location,
         to_append: Fragment,
-    ) -> FragmentId {
+    ) -> Location {
         // Append the new fragment where we're supposed to append it.
         let mut append_to = self.fragments.get(location.target()).clone();
         let appended =
             append_to.body.push_fragment(to_append, &mut self.fragments);
 
         // And now, update all of its parents, down to the root.
-        self.replace_at(location, append_to);
+        let location = self.replace_at(location, append_to);
 
-        appended
+        location.with_component(appended)
     }
 
     pub fn replace_at(
@@ -143,4 +143,46 @@ pub enum Literal {
 #[derive(Clone, Copy, Debug, PartialEq)]
 pub struct HostFunction {
     pub id: usize,
+}
+
+#[cfg(test)]
+mod tests {
+    use crate::language::code::{Body, Fragment, FragmentKind, Location};
+
+    use super::{Code, Expression};
+
+    #[test]
+    fn append_return_location() {
+        let mut code = Code::new();
+
+        let a = call(0);
+        let b = call(1);
+
+        assert_eq!(
+            code.append_to_body_at(
+                &code.find_innermost_fragment_with_valid_body(),
+                a.clone(),
+            ),
+            Location::from_component(code.root).with_component(a.id()),
+        );
+
+        assert_eq!(
+            code.append_to_body_at(
+                &code.find_innermost_fragment_with_valid_body(),
+                b.clone(),
+            ),
+            Location::from_component(code.root)
+                .with_component(a.with_child(b.id()).id())
+                .with_component(b.id()),
+        );
+    }
+
+    fn call(target: usize) -> Fragment {
+        Fragment {
+            kind: FragmentKind::Expression {
+                expression: Expression::FunctionCall { target },
+            },
+            body: Body::default(),
+        }
+    }
 }

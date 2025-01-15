@@ -74,6 +74,11 @@ pub struct Fragment {
 }
 
 impl Fragment {
+    #[cfg(test)]
+    pub fn id(&self) -> FragmentId {
+        FragmentId::generate_for(self)
+    }
+
     /// # Returns the body of the fragment, if this kind can have a valid one
     ///
     /// Fragments that can have a valid body, are all fragments that allow
@@ -87,6 +92,12 @@ impl Fragment {
             } => Some(&self.body),
             _ => None,
         }
+    }
+
+    #[cfg(test)]
+    pub fn with_child(mut self, child: FragmentId) -> Self {
+        self.body.push_id(child);
+        self
     }
 }
 
