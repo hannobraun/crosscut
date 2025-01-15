@@ -54,7 +54,7 @@ pub struct FragmentId {
     hash: [u8; 32],
 }
 impl FragmentId {
-    fn generate_for(fragment: &Fragment) -> Self {
+    pub fn generate_for(fragment: &Fragment) -> Self {
         let hash = udigest::hash::<blake3::Hasher>(fragment).into();
         Self { hash }
     }
