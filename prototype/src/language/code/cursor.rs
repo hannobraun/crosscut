@@ -15,11 +15,11 @@ use super::FragmentId;
 /// its parent's body to each component of the cursor. I intend to do so, as
 /// soon as it's possible to write a test that covers this.
 #[derive(Debug)]
-pub struct Cursor {
+pub struct Location {
     inner: Vec<FragmentId>,
 }
 
-impl Cursor {
+impl Location {
     pub fn new(inner: Vec<FragmentId>) -> Option<Self> {
         if inner.is_empty() {
             // An empty fragment path is not valid, as every path must at least

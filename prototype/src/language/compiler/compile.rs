@@ -2,8 +2,8 @@ use std::num::IntErrorKind;
 
 use crate::language::{
     code::{
-        Body, Code, CodeError, Cursor, Expression, Fragment, FragmentError,
-        FragmentKind, Literal,
+        Body, Code, CodeError, Expression, Fragment, FragmentError,
+        FragmentKind, Literal, Location,
     },
     host::Host,
 };
@@ -31,7 +31,7 @@ pub fn compile(token: &str, host: &Host, code: &mut Code) {
 
 fn parse_token(
     token: &str,
-    append_to: &Cursor,
+    append_to: &Location,
     code: &Code,
     host: &Host,
 ) -> Result<Expression, FragmentError> {
