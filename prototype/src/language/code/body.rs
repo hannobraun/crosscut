@@ -6,7 +6,7 @@ pub struct Body {
 }
 
 impl Body {
-    pub fn push(
+    pub fn push_fragment(
         &mut self,
         fragment: Fragment,
         fragments: &mut Fragments,
