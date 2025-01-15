@@ -29,13 +29,14 @@ pub fn compile(token: &str, host: &Host, code: &mut Code) {
 
     let maybe_error = check_for_error(&fragment);
 
-    let id = code.append_to(&location, fragment);
+    let location = code.append_to(&location, fragment);
 
     if location_already_has_an_expression {
-        code.errors.insert(*id.target(), CodeError::UnexpectedToken);
+        code.errors
+            .insert(*location.target(), CodeError::UnexpectedToken);
     }
     if let Some(err) = maybe_error {
-        code.errors.insert(*id.target(), err);
+        code.errors.insert(*location.target(), err);
     }
 }
 
