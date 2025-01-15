@@ -82,11 +82,11 @@ impl Code {
     ) -> FragmentId {
         let (append_to_id, parent) = location.into_target_and_parents();
 
-        let mut to_update = self.fragments.get(&append_to_id).clone();
-        let appended = to_update.body.push(to_append, &mut self.fragments);
+        let mut append_to = self.fragments.get(&append_to_id).clone();
+        let appended = append_to.body.push(to_append, &mut self.fragments);
 
         let mut id_before_update = append_to_id;
-        let mut updated = to_update;
+        let mut updated = append_to;
 
         for to_update_id in parent.into_components() {
             let mut to_update = self.fragments.get(&to_update_id).clone();
