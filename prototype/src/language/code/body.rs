@@ -12,8 +12,12 @@ impl Body {
         fragments: &mut Fragments,
     ) -> FragmentId {
         let id = fragments.insert(fragment);
-        self.inner.push(id);
+        self.push_id(id);
         id
+    }
+
+    pub fn push_id(&mut self, id: FragmentId) {
+        self.inner.push(id);
     }
 
     pub fn is_empty(&self) -> bool {
