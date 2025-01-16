@@ -233,6 +233,9 @@ impl Renderer {
         if let Some(error) = prompt.error {
             self.w.move_to_next_line()?;
             match error {
+                EditorError::UnknownCommand { command } => {
+                    write!(self.w, "Unknown command: `{command}`")?;
+                }
                 EditorError::Other { message } => {
                     write!(self.w, "{message}")?;
                 }

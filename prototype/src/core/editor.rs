@@ -139,8 +139,8 @@ impl Editor {
             .collect::<VecDeque<_>>();
 
         let Some(&matched_command) = matched_commands.pop_front() else {
-            self.error = Some(EditorError::Other {
-                message: format!("Unknown command: `{command}`"),
+            self.error = Some(EditorError::UnknownCommand {
+                command: command.clone(),
             });
             return Ok(());
         };
@@ -244,5 +244,6 @@ pub struct EditorPrompt<'r> {
 }
 
 pub enum EditorError {
+    UnknownCommand { command: String },
     Other { message: String },
 }
