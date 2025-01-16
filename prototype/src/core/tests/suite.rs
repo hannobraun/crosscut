@@ -1,6 +1,7 @@
 use pretty_assertions::assert_eq;
 
 use crate::core::{
+    self,
     code::Code,
     compiler::tests::infra::compile_all,
     host::Host,
@@ -14,14 +15,13 @@ fn evaluate_single_expression() {
     // evaluated, and its value returned by the interpreter.
 
     let host = Host::empty();
-    let mut code = Code::default();
-    let mut interpreter = Interpreter::new(&code);
+    let mut core = core::Instance::new();
 
-    compile_all("1", &host, &mut code);
-    interpreter.reset(&code);
+    compile_all("1", &host, &mut core.code);
+    core.interpreter.reset(&core.code);
 
     assert_eq!(
-        interpreter.step(&code),
+        core.interpreter.step(&core.code),
         StepResult::Finished {
             output: Value::Integer { value: 1 }
         },
