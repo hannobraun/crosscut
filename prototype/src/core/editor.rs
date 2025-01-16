@@ -60,8 +60,8 @@ impl Editor {
         &mut self,
         input: InputEvent,
         code: &mut Code,
-        host: &Host,
         interpreter: &mut Interpreter,
+        host: &Host,
     ) -> anyhow::Result<()> {
         match input {
             InputEvent::Char { value } => {

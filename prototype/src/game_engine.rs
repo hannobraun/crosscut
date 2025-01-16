@@ -62,8 +62,8 @@ impl GameEngine {
                     editor.process_input(
                         input,
                         &mut code,
-                        &host,
                         &mut interpreter,
+                        &host,
                     )?;
 
                     loop {
