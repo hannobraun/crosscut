@@ -65,8 +65,8 @@ impl Renderer {
     ) -> anyhow::Result<()> {
         let mut context = RenderContext {
             code,
-            host,
             interpreter,
+            host,
             indent: 0,
         };
 
@@ -264,8 +264,8 @@ impl Drop for Renderer {
 
 struct RenderContext<'r> {
     code: &'r Code,
-    host: &'r Host,
     interpreter: Option<&'r Interpreter>,
+    host: &'r Host,
     indent: u32,
 }
 
