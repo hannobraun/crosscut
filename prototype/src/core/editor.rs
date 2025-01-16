@@ -132,21 +132,21 @@ impl Editor {
         self.error = None;
         let command = &self.input.buffer;
 
-        let mut matched_commands = self
+        let mut candidates = self
             .commands
             .iter()
             .filter(|c| c.starts_with(command))
             .collect::<VecDeque<_>>();
 
-        let Some(&matched_command) = matched_commands.pop_front() else {
+        let Some(&matched_command) = candidates.pop_front() else {
             self.error = Some(EditorError::UnknownCommand {
                 command: command.clone(),
             });
             return Ok(());
         };
-        if !matched_commands.is_empty() {
+        if !candidates.is_empty() {
             let candidates = iter::once(matched_command)
-                .chain(matched_commands.into_iter().copied())
+                .chain(candidates.into_iter().copied())
                 .collect();
 
             self.error = Some(EditorError::AmbiguousCommand {
