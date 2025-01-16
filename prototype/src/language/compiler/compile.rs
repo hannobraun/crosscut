@@ -33,16 +33,12 @@ pub fn compile(token: &str, host: &Host, code: &mut Code) {
 
     let location_of_compiled_fragment = code.replace(&to_replace, fragment);
 
-    let maybe_error = check_for_error(&location_of_compiled_fragment, code);
+    check_for_error(&location_of_compiled_fragment, code);
     if location_already_had_an_expression {
         code.errors.insert(
             *location_of_compiled_fragment.target(),
             CodeError::UnexpectedToken,
         );
-    }
-    if let Some(err) = maybe_error {
-        code.errors
-            .insert(*location_of_compiled_fragment.target(), err);
     }
 }
 
@@ -82,15 +78,17 @@ fn parse_token(token: &str, host: &Host) -> FragmentKind {
     }
 }
 
-fn check_for_error(location: &Location, code: &mut Code) -> Option<CodeError> {
+fn check_for_error(location: &Location, code: &mut Code) {
     let fragment = code.fragments().get(location.target());
 
-    match &fragment.kind {
+    let maybe_error = match &fragment.kind {
         FragmentKind::Expression {
             expression: Expression::FunctionCall { .. },
         } => {
             if fragment.body.is_empty() {
-                return Some(CodeError::MissingArgument);
+                Some(CodeError::MissingArgument)
+            } else {
+                None
             }
         }
         FragmentKind::Error { err } => {
@@ -103,10 +101,12 @@ fn check_for_error(location: &Location, code: &mut Code) -> Option<CodeError> {
                 }
             };
 
-            return Some(err);
+            Some(err)
         }
-        _ => {}
-    }
+        _ => None,
+    };
 
-    None
+    if let Some(err) = maybe_error {
+        code.errors.insert(*location.target(), err);
+    }
 }
