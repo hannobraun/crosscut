@@ -59,11 +59,12 @@ impl Renderer {
     pub fn render(
         &mut self,
         editor: &Editor,
+        code: &Code,
         host: &Host,
         interpreter: Option<&Interpreter>,
     ) -> anyhow::Result<()> {
         let mut context = RenderContext {
-            code: editor.code(),
+            code,
             host,
             interpreter,
             indent: 0,

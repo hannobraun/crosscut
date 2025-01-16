@@ -25,7 +25,7 @@ impl GameEngine {
         let mut renderer = Renderer::new()?;
         let mut interpreter = Interpreter::new(editor.code());
 
-        renderer.render(&editor, &host, Some(&interpreter))?;
+        renderer.render(&editor, editor.code(), &host, Some(&interpreter))?;
 
         // Need to specify the types of the channels explicitly, to work around
         // this bug in rust-analyzer:
@@ -106,7 +106,12 @@ impl GameEngine {
                         break;
                     }
 
-                    renderer.render(&editor, &host, Some(&interpreter))?;
+                    renderer.render(
+                        &editor,
+                        editor.code(),
+                        &host,
+                        Some(&interpreter),
+                    )?;
                 }
                 Event::GameInput {
                     input: GameInput::RenderingFrame,
