@@ -22,10 +22,12 @@ pub struct GameEngine {
 impl GameEngine {
     pub fn start(game_output_tx: Sender<GameOutput>) -> anyhow::Result<Self> {
         let host = Host::from_functions(["dim"]);
+
         let mut code = Code::default();
         let mut editor = Editor::default();
-        let mut renderer = Renderer::new()?;
         let mut interpreter = Interpreter::new(&code);
+
+        let mut renderer = Renderer::new()?;
 
         renderer.render(&editor, &code, &host, Some(&interpreter))?;
 
