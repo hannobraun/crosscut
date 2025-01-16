@@ -15,10 +15,11 @@ fn evaluate_single_expression() {
 
     let host = Host::empty();
     let mut code = Code::default();
+    let mut interpreter = Interpreter::new(&code);
 
     compile_all("1", &host, &mut code);
+    interpreter.reset(&code);
 
-    let mut interpreter = Interpreter::new(&code);
     assert_eq!(
         interpreter.step(&code),
         StepResult::Finished {
@@ -37,10 +38,11 @@ fn code_after_expression_is_an_error() {
 
     let host = Host::empty();
     let mut code = Code::default();
+    let mut interpreter = Interpreter::new(&code);
 
     compile_all("1 2", &host, &mut code);
+    interpreter.reset(&code);
 
-    let mut interpreter = Interpreter::new(&code);
     assert_eq!(
         interpreter.step(&code),
         StepResult::Finished {
