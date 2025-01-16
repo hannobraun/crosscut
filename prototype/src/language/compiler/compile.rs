@@ -18,7 +18,7 @@ pub fn compile(token: &str, host: &Host, code: &mut Code) {
         .expression(code.fragments())
         .is_some();
 
-    let location_of_empty_fragment = code.append_to(
+    let to_replace = code.append_to(
         &location,
         Fragment {
             kind: FragmentKind::Empty,
@@ -32,8 +32,7 @@ pub fn compile(token: &str, host: &Host, code: &mut Code) {
     };
     let maybe_error = check_for_error(&fragment);
 
-    let location_of_compiled_fragment =
-        code.replace(&location_of_empty_fragment, fragment);
+    let location_of_compiled_fragment = code.replace(&to_replace, fragment);
 
     if location_already_had_an_expression {
         code.errors.insert(
