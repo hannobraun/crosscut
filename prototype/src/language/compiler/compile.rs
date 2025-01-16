@@ -9,10 +9,8 @@ use crate::language::{
 };
 
 pub fn compile(token: &str, host: &Host, code: &mut Code) {
-    let location = code.find_innermost_fragment_with_valid_body();
-
     let to_replace = code.append_to(
-        &location,
+        &code.find_innermost_fragment_with_valid_body(),
         Fragment {
             kind: FragmentKind::Empty,
             body: Body::default(),
