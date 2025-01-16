@@ -15,7 +15,7 @@ pub fn compile(token: &str, host: &Host, code: &mut Code) {
         .fragments()
         .get(location.target())
         .body
-        .expression(code.fragments())
+        .expressions(code.fragments())
         .next()
         .is_some();
 

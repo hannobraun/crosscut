@@ -39,7 +39,7 @@ impl Body {
         self.ids().map(|hash| fragments.get(hash))
     }
 
-    pub fn expression<'r>(
+    pub fn expressions<'r>(
         &'r self,
         fragments: &'r Fragments,
     ) -> impl Iterator<Item = (&'r Expression, &'r Body)> {
