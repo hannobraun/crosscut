@@ -232,8 +232,11 @@ impl Renderer {
 
         if let Some(error) = prompt.error {
             self.w.move_to_next_line()?;
-            let EditorError::Other { message } = error;
-            write!(self.w, "{message}")?;
+            match error {
+                EditorError::Other { message } => {
+                    write!(self.w, "{message}")?;
+                }
+            }
         }
 
         self.w.move_to_next_line()?;
