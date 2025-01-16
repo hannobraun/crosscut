@@ -1,6 +1,6 @@
 use std::{
     collections::{BTreeSet, VecDeque},
-    fmt::Write,
+    iter,
 };
 
 use crate::core::{
@@ -145,15 +145,14 @@ impl Editor {
             return Ok(());
         };
         if !matched_commands.is_empty() {
-            let mut error = format!(
-                "`{command}` could refer to multiple commands: \
-                `{matched_command}`"
-            );
-            for matched_command in matched_commands {
-                write!(error, ", `{matched_command}`")?;
-            }
+            let candidates = iter::once(matched_command)
+                .chain(matched_commands.into_iter().copied())
+                .collect();
 
-            self.error = Some(EditorError::Other { message: error });
+            self.error = Some(EditorError::AmbiguousCommand {
+                command: command.clone(),
+                candidates,
+            });
 
             return Ok(());
         }
@@ -244,6 +243,11 @@ pub struct EditorPrompt<'r> {
 }
 
 pub enum EditorError {
-    UnknownCommand { command: String },
-    Other { message: String },
+    AmbiguousCommand {
+        command: String,
+        candidates: Vec<&'static str>,
+    },
+    UnknownCommand {
+        command: String,
+    },
 }

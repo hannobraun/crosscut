@@ -233,11 +233,22 @@ impl Renderer {
         if let Some(error) = prompt.error {
             self.w.move_to_next_line()?;
             match error {
+                EditorError::AmbiguousCommand {
+                    command,
+                    candidates,
+                } => {
+                    write!(
+                        self.w,
+                        "`{command}` could refer to multiple commands:",
+                    )?;
+                    self.w.move_to_next_line()?;
+                    for candidate in candidates {
+                        write!(self.w, "- `{candidate}`")?;
+                        self.w.move_to_next_line()?;
+                    }
+                }
                 EditorError::UnknownCommand { command } => {
                     write!(self.w, "Unknown command: `{command}`")?;
-                }
-                EditorError::Other { message } => {
-                    write!(self.w, "{message}")?;
                 }
             }
         }
