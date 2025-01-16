@@ -81,14 +81,13 @@ fn parse_token(token: &str, host: &Host) -> FragmentKind {
 fn handle_errors(location: &Location, code: &mut Code) {
     let fragment = code.fragments().get(location.target());
 
-    let maybe_error = match &fragment.kind {
+    match &fragment.kind {
         FragmentKind::Expression {
             expression: Expression::FunctionCall { .. },
         } => {
             if fragment.body.is_empty() {
-                Some(CodeError::MissingArgument)
-            } else {
-                None
+                code.errors
+                    .insert(*location.target(), CodeError::MissingArgument);
             }
         }
         FragmentKind::Error { err } => {
@@ -101,12 +100,8 @@ fn handle_errors(location: &Location, code: &mut Code) {
                 }
             };
 
-            Some(err)
+            code.errors.insert(*location.target(), err);
         }
-        _ => None,
-    };
-
-    if let Some(err) = maybe_error {
-        code.errors.insert(*location.target(), err);
+        _ => {}
     }
 }
