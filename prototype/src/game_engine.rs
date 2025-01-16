@@ -65,7 +65,7 @@ impl GameEngine {
                         &mut core.code,
                         &mut core.interpreter,
                         &host,
-                    )?;
+                    );
 
                     loop {
                         match core.interpreter.step(&core.code) {

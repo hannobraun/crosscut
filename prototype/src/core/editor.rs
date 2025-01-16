@@ -62,7 +62,7 @@ impl Editor {
         code: &mut Code,
         interpreter: &mut Interpreter,
         host: &Host,
-    ) -> anyhow::Result<()> {
+    ) {
         match input {
             InputEvent::Char { value } => {
                 if value.is_whitespace() {
@@ -94,8 +94,6 @@ impl Editor {
                 self.input.move_cursor_right();
             }
         }
-
-        Ok(())
     }
 
     fn process_code(
