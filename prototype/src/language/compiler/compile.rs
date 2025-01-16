@@ -30,7 +30,7 @@ pub fn compile(token: &str, host: &Host, code: &mut Code) {
         kind: parse_token(token, host),
         body: Body::default(),
     };
-    let maybe_error = check_for_error(&fragment);
+    let maybe_error = check_for_error(&fragment, code);
 
     let location_of_compiled_fragment = code.replace(&to_replace, fragment);
 
@@ -82,7 +82,7 @@ fn parse_token(token: &str, host: &Host) -> FragmentKind {
     }
 }
 
-fn check_for_error(fragment: &Fragment) -> Option<CodeError> {
+fn check_for_error(fragment: &Fragment, _: &Code) -> Option<CodeError> {
     match &fragment.kind {
         FragmentKind::Expression {
             expression: Expression::FunctionCall { .. },
