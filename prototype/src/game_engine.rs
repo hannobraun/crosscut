@@ -23,7 +23,6 @@ impl GameEngine {
         let host = Host::from_functions(["dim"]);
 
         let mut core = core::Instance::new();
-
         let mut renderer = Renderer::new()?;
 
         renderer.render(
