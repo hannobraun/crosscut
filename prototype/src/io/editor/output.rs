@@ -230,9 +230,9 @@ impl Renderer {
         };
         let input = &prompt.input.buffer;
 
-        if let Some(err) = prompt.error {
+        if let Some(error) = prompt.error {
             self.w.move_to_next_line()?;
-            let EditorError::Other { message: err } = err;
+            let EditorError::Other { message: err } = error;
             write!(self.w, "{err}")?;
         }
 
