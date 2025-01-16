@@ -49,12 +49,10 @@ impl Editor {
     }
 
     pub fn prompt(&self) -> EditorPrompt {
-        let error = self.error.as_ref();
-
         EditorPrompt {
             mode: &self.mode,
             input: &self.input,
-            error,
+            error: self.error.as_ref(),
         }
     }
 
