@@ -4,6 +4,7 @@ use crossbeam_channel::select;
 
 use crate::{
     core::{
+        code::Code,
         editor::{self, Editor},
         host::Host,
         interpreter::{Interpreter, StepResult, Value},
@@ -21,11 +22,12 @@ pub struct GameEngine {
 impl GameEngine {
     pub fn start(game_output_tx: Sender<GameOutput>) -> anyhow::Result<Self> {
         let host = Host::from_functions(["dim"]);
+        let mut code = Code::default();
         let mut editor = Editor::default();
         let mut renderer = Renderer::new()?;
-        let mut interpreter = Interpreter::new(editor.code());
+        let mut interpreter = Interpreter::new(&code);
 
-        renderer.render(&editor, editor.code(), &host, Some(&interpreter))?;
+        renderer.render(&editor, &code, &host, Some(&interpreter))?;
 
         // Need to specify the types of the channels explicitly, to work around
         // this bug in rust-analyzer:
@@ -55,10 +57,15 @@ impl GameEngine {
 
             match event {
                 Event::EditorInput { input } => {
-                    editor.process_input(input, &host, &mut interpreter)?;
+                    editor.process_input(
+                        input,
+                        &mut code,
+                        &host,
+                        &mut interpreter,
+                    )?;
 
                     loop {
-                        match interpreter.step(editor.code()) {
+                        match interpreter.step(&code) {
                             StepResult::CallToHostFunction {
                                 id,
                                 input,
@@ -108,7 +115,7 @@ impl GameEngine {
 
                     renderer.render(
                         &editor,
-                        editor.code(),
+                        &code,
                         &host,
                         Some(&interpreter),
                     )?;

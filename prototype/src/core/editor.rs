@@ -23,7 +23,6 @@ use crate::core::{
 /// like "go to parent" or "leave current context", instead of "up" and
 /// "escape".
 pub struct Editor {
-    code: Code,
     mode: EditorMode,
     input: Input,
     error: Option<String>,
@@ -42,16 +41,11 @@ impl Editor {
         commands.insert("reset");
 
         Self {
-            code: Code::default(),
             mode: EditorMode::Command,
             input: Input::new(String::new()),
             error: None,
             commands,
         }
-    }
-
-    pub fn code(&self) -> &Code {
-        &self.code
     }
 
     pub fn prompt(&self) -> EditorPrompt {
@@ -65,6 +59,7 @@ impl Editor {
     pub fn process_input(
         &mut self,
         input: InputEvent,
+        code: &mut Code,
         host: &Host,
         interpreter: &mut Interpreter,
     ) -> anyhow::Result<()> {
@@ -72,7 +67,7 @@ impl Editor {
             InputEvent::Char { value } => {
                 if value.is_whitespace() {
                     if let EditorMode::Edit = self.mode {
-                        self.process_code(host, interpreter);
+                        self.process_code(code, host, interpreter);
                     }
                 } else {
                     self.input.insert(value);
@@ -84,11 +79,11 @@ impl Editor {
             }
             InputEvent::Enter => match self.mode {
                 EditorMode::Command => {
-                    self.process_command(interpreter)?;
+                    self.process_command(code, interpreter)?;
                     self.input.clear();
                 }
                 EditorMode::Edit => {
-                    self.process_code(host, interpreter);
+                    self.process_code(code, host, interpreter);
                     self.mode = EditorMode::Command;
                 }
             },
@@ -103,34 +98,35 @@ impl Editor {
         Ok(())
     }
 
-    fn process_code(&mut self, host: &Host, interpreter: &mut Interpreter) {
-        let to_replace = self.code.append_to(
-            &self.code.find_innermost_fragment_with_valid_body(),
+    fn process_code(
+        &mut self,
+        code: &mut Code,
+        host: &Host,
+        interpreter: &mut Interpreter,
+    ) {
+        let to_replace = code.append_to(
+            &code.find_innermost_fragment_with_valid_body(),
             Fragment {
                 kind: FragmentKind::Empty,
                 body: Body::default(),
             },
         );
 
-        compile_and_replace(
-            &self.input.buffer,
-            &to_replace,
-            host,
-            &mut self.code,
-        );
+        compile_and_replace(&self.input.buffer, &to_replace, host, code);
 
         self.input.clear();
 
         let is_running =
-            matches!(interpreter.state(&self.code), InterpreterState::Running);
+            matches!(interpreter.state(code), InterpreterState::Running);
 
         if !is_running {
-            interpreter.reset(&self.code);
+            interpreter.reset(code);
         }
     }
 
     fn process_command(
         &mut self,
+        code: &mut Code,
         interpreter: &mut Interpreter,
     ) -> anyhow::Result<()> {
         self.error = None;
@@ -162,14 +158,14 @@ impl Editor {
 
         match matched_command {
             "clear" => {
-                self.code = Code::default();
-                interpreter.reset(&self.code);
+                *code = Code::default();
+                interpreter.reset(code);
             }
             "edit" => {
                 self.mode = EditorMode::Edit;
             }
             "reset" => {
-                interpreter.reset(&self.code);
+                interpreter.reset(code);
             }
             _ => {
                 unreachable!("Ruled out that command is unknown, above.")
