@@ -7,16 +7,14 @@ use crossterm::{
     QueueableCommand,
 };
 
-use crate::{
-    editor::{Editor, EditorMode, EditorPrompt},
-    language::{
-        code::{
-            Body, Code, CodeError, Expression, FragmentError, FragmentId,
-            FragmentKind, Literal,
-        },
-        host::Host,
-        interpreter::{Interpreter, InterpreterState},
+use crate::language::{
+    code::{
+        Body, Code, CodeError, Expression, FragmentError, FragmentId,
+        FragmentKind, Literal,
     },
+    editor::{Editor, EditorMode, EditorPrompt},
+    host::Host,
+    interpreter::{Interpreter, InterpreterState},
 };
 
 #[cfg(test)]

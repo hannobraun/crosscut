@@ -3,7 +3,7 @@ use std::{ops::ControlFlow, time::Duration};
 use crossterm::event::{self, Event, KeyCode, KeyModifiers};
 
 use crate::{
-    editor::InputEvent,
+    language::editor::InputEvent,
     thread::{self, Sender, ThreadHandle},
 };
 

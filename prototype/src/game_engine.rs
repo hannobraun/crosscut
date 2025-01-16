@@ -3,9 +3,9 @@ use std::ops::ControlFlow;
 use crossbeam_channel::select;
 
 use crate::{
-    editor::{self, Editor},
     io::editor::output::Renderer,
     language::{
+        editor::{self, Editor},
         host::Host,
         interpreter::{Interpreter, StepResult, Value},
     },

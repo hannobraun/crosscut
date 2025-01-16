@@ -3,7 +3,6 @@
 // annoying for what little value it might provide.
 #![allow(clippy::module_inception)]
 
-mod editor;
 mod game_engine;
 mod io;
 mod language;
