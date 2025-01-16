@@ -82,7 +82,7 @@ fn parse_token(token: &str, host: &Host) -> FragmentKind {
     }
 }
 
-fn check_for_error(location: &Location, code: &Code) -> Option<CodeError> {
+fn check_for_error(location: &Location, code: &mut Code) -> Option<CodeError> {
     let fragment = code.fragments().get(location.target());
 
     match &fragment.kind {
