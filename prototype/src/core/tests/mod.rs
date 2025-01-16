@@ -1,12 +1,12 @@
 use pretty_assertions::assert_eq;
 
 use crate::core::{
+    code::Code,
     compiler::tests::infra::compile_all,
     host::Host,
+    interpreter::Interpreter,
     interpreter::{StepResult, Value},
 };
-
-use super::{code::Code, interpreter::Interpreter};
 
 #[test]
 fn evaluate_single_expression() {
