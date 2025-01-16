@@ -3,7 +3,7 @@ use std::num::IntErrorKind;
 use crate::language::{
     code::{
         Body, Code, CodeError, Expression, Fragment, FragmentError,
-        FragmentKind, Literal,
+        FragmentKind, Literal, Location,
     },
     host::Host,
 };
@@ -30,10 +30,10 @@ pub fn compile(token: &str, host: &Host, code: &mut Code) {
         kind: parse_token(token, host),
         body: Body::default(),
     };
-    let maybe_error = check_for_error(&fragment, code);
 
     let location_of_compiled_fragment = code.replace(&to_replace, fragment);
 
+    let maybe_error = check_for_error(&location_of_compiled_fragment, code);
     if location_already_had_an_expression {
         code.errors.insert(
             *location_of_compiled_fragment.target(),
@@ -82,7 +82,9 @@ fn parse_token(token: &str, host: &Host) -> FragmentKind {
     }
 }
 
-fn check_for_error(fragment: &Fragment, _: &Code) -> Option<CodeError> {
+fn check_for_error(location: &Location, code: &Code) -> Option<CodeError> {
+    let fragment = code.fragments().get(location.target());
+
     match &fragment.kind {
         FragmentKind::Expression {
             expression: Expression::FunctionCall { .. },
