@@ -166,7 +166,8 @@ struct Renderer {
 
 impl Renderer {
     async fn new(window: &Arc<Window>) -> anyhow::Result<Self> {
-        let instance = wgpu::Instance::new(wgpu::InstanceDescriptor::default());
+        let instance =
+            wgpu::Instance::new(&wgpu::InstanceDescriptor::default());
         let surface = instance.create_surface(window.clone())?;
 
         let Some(adapter) = instance
