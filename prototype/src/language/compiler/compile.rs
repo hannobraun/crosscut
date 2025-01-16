@@ -19,12 +19,13 @@ pub fn compile(token: &str, host: &Host, code: &mut Code) {
         },
     );
 
-    let fragment = Fragment {
-        kind: parse_token(token, host),
-        body: Body::default(),
-    };
-
-    let location_of_compiled_fragment = code.replace(&to_replace, fragment);
+    let location_of_compiled_fragment = code.replace(
+        &to_replace,
+        Fragment {
+            kind: parse_token(token, host),
+            body: Body::default(),
+        },
+    );
 
     handle_errors(&location_of_compiled_fragment, code);
 }
