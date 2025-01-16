@@ -67,7 +67,7 @@ impl Editor {
             InputEvent::Char { value } => {
                 if value.is_whitespace() {
                     if let EditorMode::Edit = self.mode {
-                        self.process_code(code, host, interpreter);
+                        self.process_code(code, interpreter, host);
                     }
                 } else {
                     self.input.insert(value);
@@ -83,7 +83,7 @@ impl Editor {
                     self.input.clear();
                 }
                 EditorMode::Edit => {
-                    self.process_code(code, host, interpreter);
+                    self.process_code(code, interpreter, host);
                     self.mode = EditorMode::Command;
                 }
             },
@@ -101,8 +101,8 @@ impl Editor {
     fn process_code(
         &mut self,
         code: &mut Code,
-        host: &Host,
         interpreter: &mut Interpreter,
+        host: &Host,
     ) {
         let to_replace = code.append_to(
             &code.find_innermost_fragment_with_valid_body(),
