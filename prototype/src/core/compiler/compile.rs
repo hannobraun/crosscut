@@ -1,6 +1,6 @@
 use std::num::IntErrorKind;
 
-use crate::language::{
+use crate::core::{
     code::{
         Body, Code, CodeError, Expression, Fragment, FragmentError,
         FragmentKind, Literal, Location,

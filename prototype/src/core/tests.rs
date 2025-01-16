@@ -1,6 +1,6 @@
 use pretty_assertions::assert_eq;
 
-use crate::language::{
+use crate::core::{
     compiler::tests::infra::compile_all,
     host::Host,
     interpreter::{StepResult, Value},

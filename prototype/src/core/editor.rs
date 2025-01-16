@@ -3,7 +3,7 @@ use std::{
     fmt::Write,
 };
 
-use crate::language::{
+use crate::core::{
     code::{Body, Code, Fragment, FragmentKind},
     compiler::compile_and_replace,
     host::Host,

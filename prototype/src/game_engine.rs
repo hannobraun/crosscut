@@ -3,12 +3,12 @@ use std::ops::ControlFlow;
 use crossbeam_channel::select;
 
 use crate::{
-    io::editor::output::Renderer,
-    language::{
+    core::{
         editor::{self, Editor},
         host::Host,
         interpreter::{Interpreter, StepResult, Value},
     },
+    io::editor::output::Renderer,
     thread::{self, ChannelDisconnected, Sender, ThreadHandle},
 };
 

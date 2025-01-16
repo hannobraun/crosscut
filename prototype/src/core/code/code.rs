@@ -147,7 +147,7 @@ pub struct HostFunction {
 
 #[cfg(test)]
 mod tests {
-    use crate::language::code::{Body, Fragment, FragmentKind, Location};
+    use crate::core::code::{Body, Fragment, FragmentKind, Location};
 
     use super::{Code, Expression};
 
