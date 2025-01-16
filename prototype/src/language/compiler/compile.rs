@@ -8,17 +8,14 @@ use crate::language::{
     host::Host,
 };
 
-pub fn compile(token: &str, host: &Host, code: &mut Code) {
-    let to_replace = code.append_to(
-        &code.find_innermost_fragment_with_valid_body(),
-        Fragment {
-            kind: FragmentKind::Empty,
-            body: Body::default(),
-        },
-    );
-
+pub fn compile(
+    token: &str,
+    to_replace: &Location,
+    host: &Host,
+    code: &mut Code,
+) {
     let location_of_compiled_fragment = code.replace(
-        &to_replace,
+        to_replace,
         Fragment {
             kind: parse_token(token, host),
             body: Body::default(),

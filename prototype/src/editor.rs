@@ -4,7 +4,7 @@ use std::{
 };
 
 use crate::language::{
-    code::Code,
+    code::{Body, Code, Fragment, FragmentKind},
     compiler::compile,
     host::Host,
     interpreter::{Interpreter, InterpreterState},
@@ -92,7 +92,15 @@ impl Editor {
     }
 
     fn process_code(&mut self, host: &Host, interpreter: &mut Interpreter) {
-        compile(&self.input.buffer, host, &mut self.code);
+        let to_replace = self.code.append_to(
+            &self.code.find_innermost_fragment_with_valid_body(),
+            Fragment {
+                kind: FragmentKind::Empty,
+                body: Body::default(),
+            },
+        );
+
+        compile(&self.input.buffer, &to_replace, host, &mut self.code);
 
         self.input.clear();
 
