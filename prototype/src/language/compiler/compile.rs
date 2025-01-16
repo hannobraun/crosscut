@@ -33,7 +33,7 @@ pub fn compile(token: &str, host: &Host, code: &mut Code) {
 
     let location_of_compiled_fragment = code.replace(&to_replace, fragment);
 
-    check_for_error(&location_of_compiled_fragment, code);
+    handle_errors(&location_of_compiled_fragment, code);
     if location_already_had_an_expression {
         code.errors.insert(
             *location_of_compiled_fragment.target(),
@@ -78,7 +78,7 @@ fn parse_token(token: &str, host: &Host) -> FragmentKind {
     }
 }
 
-fn check_for_error(location: &Location, code: &mut Code) {
+fn handle_errors(location: &Location, code: &mut Code) {
     let fragment = code.fragments().get(location.target());
 
     let maybe_error = match &fragment.kind {
