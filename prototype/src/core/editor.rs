@@ -25,7 +25,7 @@ use crate::core::{
 pub struct Editor {
     mode: EditorMode,
     input: Input,
-    error: Option<String>,
+    error: Option<EditorError>,
     commands: BTreeSet<&'static str>,
 }
 
@@ -49,7 +49,10 @@ impl Editor {
     }
 
     pub fn prompt(&self) -> EditorPrompt {
-        let error = self.error.as_ref();
+        let error = self.error.as_ref().map(|error| {
+            let EditorError::Other { message } = error;
+            message
+        });
 
         EditorPrompt {
             mode: &self.mode,
@@ -141,7 +144,9 @@ impl Editor {
             .collect::<VecDeque<_>>();
 
         let Some(&matched_command) = matched_commands.pop_front() else {
-            self.error = Some(format!("Unknown command: `{command}`"));
+            self.error = Some(EditorError::Other {
+                message: format!("Unknown command: `{command}`"),
+            });
             return Ok(());
         };
         if !matched_commands.is_empty() {
@@ -153,7 +158,7 @@ impl Editor {
                 write!(error, ", `{matched_command}`")?;
             }
 
-            self.error = Some(error);
+            self.error = Some(EditorError::Other { message: error });
 
             return Ok(());
         }
@@ -241,4 +246,8 @@ pub struct EditorPrompt<'r> {
     pub mode: &'r EditorMode,
     pub input: &'r Input,
     pub error: Option<&'r String>,
+}
+
+pub enum EditorError {
+    Other { message: String },
 }
