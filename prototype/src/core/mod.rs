@@ -6,5 +6,9 @@ pub mod editor;
 pub mod host;
 pub mod interpreter;
 
+mod instance;
+
+pub use self::instance::Instance;
+
 #[cfg(test)]
 mod tests;

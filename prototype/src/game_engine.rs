@@ -4,6 +4,7 @@ use crossbeam_channel::select;
 
 use crate::{
     core::{
+        self,
         code::Code,
         editor::{self, Editor},
         host::Host,
@@ -23,13 +24,24 @@ impl GameEngine {
     pub fn start(game_output_tx: Sender<GameOutput>) -> anyhow::Result<Self> {
         let host = Host::from_functions(["dim"]);
 
-        let mut code = Code::default();
-        let mut editor = Editor::default();
-        let mut interpreter = Interpreter::new(&code);
+        let code = Code::default();
+        let editor = Editor::default();
+        let interpreter = Interpreter::new(&code);
+
+        let mut core = core::Instance {
+            code,
+            editor,
+            interpreter,
+        };
 
         let mut renderer = Renderer::new()?;
 
-        renderer.render(&editor, &code, Some(&interpreter), &host)?;
+        renderer.render(
+            &core.editor,
+            &core.code,
+            Some(&core.interpreter),
+            &host,
+        )?;
 
         // Need to specify the types of the channels explicitly, to work around
         // this bug in rust-analyzer:
@@ -59,15 +71,15 @@ impl GameEngine {
 
             match event {
                 Event::EditorInput { input } => {
-                    editor.process_input(
+                    core.editor.process_input(
                         input,
-                        &mut code,
-                        &mut interpreter,
+                        &mut core.code,
+                        &mut core.interpreter,
                         &host,
                     )?;
 
                     loop {
-                        match interpreter.step(&code) {
+                        match core.interpreter.step(&core.code) {
                             StepResult::CallToHostFunction {
                                 id,
                                 input,
@@ -116,9 +128,9 @@ impl GameEngine {
                     }
 
                     renderer.render(
-                        &editor,
-                        &code,
-                        Some(&interpreter),
+                        &core.editor,
+                        &core.code,
+                        Some(&core.interpreter),
                         &host,
                     )?;
                 }
