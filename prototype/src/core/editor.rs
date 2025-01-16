@@ -79,7 +79,7 @@ impl Editor {
             }
             InputEvent::Enter => match self.mode {
                 EditorMode::Command => {
-                    self.process_command(code, interpreter)?;
+                    self.process_command(code, interpreter);
                     self.input.clear();
                 }
                 EditorMode::Edit => {
@@ -128,7 +128,7 @@ impl Editor {
         &mut self,
         code: &mut Code,
         interpreter: &mut Interpreter,
-    ) -> anyhow::Result<()> {
+    ) {
         self.error = None;
         let command = &self.input.buffer;
 
@@ -142,7 +142,7 @@ impl Editor {
             self.error = Some(EditorError::UnknownCommand {
                 command: command.clone(),
             });
-            return Ok(());
+            return;
         };
         if !candidates.is_empty() {
             let candidates = iter::once(candidate)
@@ -154,7 +154,7 @@ impl Editor {
                 candidates,
             });
 
-            return Ok(());
+            return;
         }
 
         match candidate {
@@ -172,8 +172,6 @@ impl Editor {
                 unreachable!("Ruled out that command is unknown, above.")
             }
         }
-
-        Ok(())
     }
 }
 
