@@ -138,14 +138,14 @@ impl Editor {
             .filter(|c| c.starts_with(command))
             .collect::<VecDeque<_>>();
 
-        let Some(&matched_command) = candidates.pop_front() else {
+        let Some(&candidate) = candidates.pop_front() else {
             self.error = Some(EditorError::UnknownCommand {
                 command: command.clone(),
             });
             return Ok(());
         };
         if !candidates.is_empty() {
-            let candidates = iter::once(matched_command)
+            let candidates = iter::once(candidate)
                 .chain(candidates.into_iter().copied())
                 .collect();
 
@@ -157,7 +157,7 @@ impl Editor {
             return Ok(());
         }
 
-        match matched_command {
+        match candidate {
             "clear" => {
                 *code = Code::default();
                 interpreter.reset(code);
