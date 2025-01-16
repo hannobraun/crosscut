@@ -5,7 +5,7 @@ use std::{
 
 use crate::language::{
     code::{Body, Code, Fragment, FragmentKind},
-    compiler::compile,
+    compiler::compile_and_replace,
     host::Host,
     interpreter::{Interpreter, InterpreterState},
 };
@@ -100,7 +100,12 @@ impl Editor {
             },
         );
 
-        compile(&self.input.buffer, &to_replace, host, &mut self.code);
+        compile_and_replace(
+            &self.input.buffer,
+            &to_replace,
+            host,
+            &mut self.code,
+        );
 
         self.input.clear();
 

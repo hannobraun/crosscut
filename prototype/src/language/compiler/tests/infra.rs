@@ -14,6 +14,6 @@ pub fn compile_all(input: &str, host: &Host, code: &mut Code) {
             },
         );
 
-        compiler::compile(token, &to_replace, host, code);
+        compiler::compile_and_replace(token, &to_replace, host, code);
     }
 }
