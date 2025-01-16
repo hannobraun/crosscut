@@ -62,6 +62,10 @@ impl Location {
         target
     }
 
+    pub fn parent(&self) -> Option<&FragmentId> {
+        self.inner.iter().rev().nth(1)
+    }
+
     pub fn components_with_parent(
         &self,
     ) -> impl Iterator<Item = (&FragmentId, &FragmentId)> {

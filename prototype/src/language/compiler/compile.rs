@@ -11,14 +11,6 @@ use crate::language::{
 pub fn compile(token: &str, host: &Host, code: &mut Code) {
     let location = code.find_innermost_fragment_with_valid_body();
 
-    let location_already_had_an_expression = code
-        .fragments()
-        .get(location.target())
-        .body
-        .expressions(code.fragments())
-        .next()
-        .is_some();
-
     let to_replace = code.append_to(
         &location,
         Fragment {
@@ -35,12 +27,6 @@ pub fn compile(token: &str, host: &Host, code: &mut Code) {
     let location_of_compiled_fragment = code.replace(&to_replace, fragment);
 
     handle_errors(&location_of_compiled_fragment, code);
-    if location_already_had_an_expression {
-        code.errors.insert(
-            *location_of_compiled_fragment.target(),
-            CodeError::UnexpectedToken,
-        );
-    }
 }
 
 fn parse_token(token: &str, host: &Host) -> FragmentKind {
@@ -104,5 +90,20 @@ fn handle_errors(location: &Location, code: &mut Code) {
             code.errors.insert(*location.target(), err);
         }
         _ => {}
+    }
+
+    if let Some(parent) = location.parent() {
+        let parent_already_had_an_expression = code
+            .fragments()
+            .get(parent)
+            .body
+            .expressions(code.fragments())
+            .count()
+            > 1;
+
+        if parent_already_had_an_expression {
+            code.errors
+                .insert(*location.target(), CodeError::UnexpectedToken);
+        }
     }
 }
