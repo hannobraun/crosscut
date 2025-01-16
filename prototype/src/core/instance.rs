@@ -5,3 +5,17 @@ pub struct Instance {
     pub editor: Editor,
     pub interpreter: Interpreter,
 }
+
+impl Instance {
+    pub fn new() -> Self {
+        let code = Code::default();
+        let editor = Editor::default();
+        let interpreter = Interpreter::new(&code);
+
+        Self {
+            code,
+            editor,
+            interpreter,
+        }
+    }
+}

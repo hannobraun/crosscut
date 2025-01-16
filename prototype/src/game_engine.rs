@@ -4,11 +4,9 @@ use crossbeam_channel::select;
 
 use crate::{
     core::{
-        self,
-        code::Code,
-        editor::{self, Editor},
+        self, editor,
         host::Host,
-        interpreter::{Interpreter, StepResult, Value},
+        interpreter::{StepResult, Value},
     },
     io::editor::output::Renderer,
     thread::{self, ChannelDisconnected, Sender, ThreadHandle},
@@ -24,15 +22,7 @@ impl GameEngine {
     pub fn start(game_output_tx: Sender<GameOutput>) -> anyhow::Result<Self> {
         let host = Host::from_functions(["dim"]);
 
-        let code = Code::default();
-        let editor = Editor::default();
-        let interpreter = Interpreter::new(&code);
-
-        let mut core = core::Instance {
-            code,
-            editor,
-            interpreter,
-        };
+        let mut core = core::Instance::new();
 
         let mut renderer = Renderer::new()?;
 
