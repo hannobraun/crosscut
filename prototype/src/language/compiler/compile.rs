@@ -16,6 +16,7 @@ pub fn compile(token: &str, host: &Host, code: &mut Code) {
         .get(location.target())
         .body
         .expression(code.fragments())
+        .next()
         .is_some();
 
     let to_replace = code.append_to(
