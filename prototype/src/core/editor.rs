@@ -49,10 +49,7 @@ impl Editor {
     }
 
     pub fn prompt(&self) -> EditorPrompt {
-        let error = self.error.as_ref().map(|error| {
-            let EditorError::Other { message } = error;
-            message
-        });
+        let error = self.error.as_ref();
 
         EditorPrompt {
             mode: &self.mode,
@@ -245,7 +242,7 @@ pub enum InputEvent {
 pub struct EditorPrompt<'r> {
     pub mode: &'r EditorMode,
     pub input: &'r Input,
-    pub error: Option<&'r String>,
+    pub error: Option<&'r EditorError>,
 }
 
 pub enum EditorError {

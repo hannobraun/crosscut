@@ -12,7 +12,7 @@ use crate::core::{
         Body, Code, CodeError, Expression, FragmentError, FragmentId,
         FragmentKind, Literal,
     },
-    editor::{Editor, EditorMode, EditorPrompt},
+    editor::{Editor, EditorError, EditorMode, EditorPrompt},
     host::Host,
     interpreter::{Interpreter, InterpreterState},
 };
@@ -232,6 +232,7 @@ impl Renderer {
 
         if let Some(err) = prompt.error {
             self.w.move_to_next_line()?;
+            let EditorError::Other { message: err } = err;
             write!(self.w, "{err}")?;
         }
 
