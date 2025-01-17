@@ -26,7 +26,7 @@ impl Instance {
     }
 
     #[cfg(test)]
-    pub fn command(&mut self, command: &str, host: &Host) {
+    pub fn on_command(&mut self, command: &str, host: &Host) {
         assert_eq!(
             *self.editor.mode(),
             EditorMode::Command,
