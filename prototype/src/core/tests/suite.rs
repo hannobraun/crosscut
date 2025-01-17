@@ -71,12 +71,11 @@ fn compile_and_run(input: &str) -> Value {
     let mut code = Code::default();
 
     compile_all(input, &host, &mut code);
-    run(&code)
+    let mut interpreter = Interpreter::new(&code);
+    run(&code, &mut interpreter)
 }
 
-fn run(code: &Code) -> Value {
-    let mut interpreter = Interpreter::new(code);
-
+fn run(code: &Code, interpreter: &mut Interpreter) -> Value {
     loop {
         match interpreter.step(code) {
             StepResult::CallToHostFunction { id, input, output } => {
