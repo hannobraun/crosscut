@@ -3,7 +3,6 @@ use pretty_assertions::assert_eq;
 use crate::core::{
     self,
     code::Code,
-    compiler::tests::infra::compile_all,
     host::Host,
     interpreter::{Interpreter, StepResult, Value},
 };
@@ -70,7 +69,7 @@ fn compile_and_run(input: &str) -> Value {
     let host = Host::from_functions(["half"]);
     let mut core = core::Instance::new();
 
-    compile_all(input, &host, &mut core.code);
+    core.edit(input, &host);
     core.interpreter.reset(&core.code);
     run(&core.code, &mut core.interpreter)
 }
