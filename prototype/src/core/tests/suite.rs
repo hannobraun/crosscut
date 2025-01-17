@@ -17,18 +17,7 @@ fn evaluate_single_expression() {
     let host = Host::empty();
     let mut core = core::Instance::new();
 
-    core.editor.process_input(
-        InputEvent::Char { value: 'e' },
-        &mut core.code,
-        &mut core.interpreter,
-        &host,
-    );
-    core.editor.process_input(
-        InputEvent::Enter,
-        &mut core.code,
-        &mut core.interpreter,
-        &host,
-    );
+    core.command("e", &host);
     core.editor.process_input(
         InputEvent::Char { value: '1' },
         &mut core.code,
