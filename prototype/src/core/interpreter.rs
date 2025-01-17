@@ -114,7 +114,7 @@ impl Interpreter {
     }
 }
 
-#[derive(Eq, PartialEq)]
+#[derive(Debug, Eq, PartialEq)]
 pub enum InterpreterState {
     Running,
     Finished,
