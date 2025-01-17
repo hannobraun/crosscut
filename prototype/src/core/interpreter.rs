@@ -1,5 +1,6 @@
 use super::code::{Body, Code, Expression, FragmentId, FragmentKind, Literal};
 
+#[derive(Debug)]
 pub struct Interpreter {
     next: Option<FragmentId>,
     active_calls: Vec<ActiveCall>,
@@ -142,6 +143,7 @@ pub enum NextExpression<'r> {
     NextFragmentIsNotAnExpression,
 }
 
+#[derive(Debug)]
 enum ActiveCall {
     ToHostFunction {
         id: usize,
