@@ -33,15 +33,15 @@ fn code_after_expression_is_an_error() {
     // is an error.
 
     let host = Host::empty();
-    let mut core = lang::Instance::new();
+    let mut lang = lang::Instance::new();
 
-    core.edit("1 2", &host);
+    lang.edit("1 2", &host);
 
     assert_eq!(
-        core.interpreter.step(&core.code),
+        lang.interpreter.step(&lang.code),
         StepResult::Finished {
             output: Value::Integer { value: 1 }
         },
     );
-    assert_eq!(core.interpreter.step(&core.code), StepResult::Error);
+    assert_eq!(lang.interpreter.step(&lang.code), StepResult::Error);
 }
