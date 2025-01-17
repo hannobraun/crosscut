@@ -12,7 +12,7 @@ use crate::core::{
         Body, Code, CodeError, Expression, FragmentError, FragmentId,
         FragmentKind, Literal,
     },
-    editor::{Editor, EditorError, EditorMode, EditorPrompt},
+    editor::{Editor, EditorError, EditorMode},
     host::Host,
     interpreter::{Interpreter, InterpreterState},
 };
@@ -74,7 +74,7 @@ impl Renderer {
         self.w.move_to(0, 0)?;
 
         self.render_code(&mut context)?;
-        self.render_prompt(editor.prompt())?;
+        self.render_prompt(editor)?;
 
         Ok(())
     }
@@ -223,7 +223,9 @@ impl Renderer {
         Ok(())
     }
 
-    fn render_prompt(&mut self, prompt: EditorPrompt) -> anyhow::Result<()> {
+    fn render_prompt(&mut self, editor: &Editor) -> anyhow::Result<()> {
+        let prompt = editor.prompt();
+
         let mode = match prompt.mode {
             EditorMode::Command => "command",
             EditorMode::Edit => "edit",
