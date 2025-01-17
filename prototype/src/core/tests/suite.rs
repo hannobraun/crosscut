@@ -38,8 +38,8 @@ fn code_after_expression_is_an_error() {
     let host = Host::empty();
     let mut core = core::Instance::new();
 
-    compile_all("1 2", &host, &mut core.code);
-    core.interpreter.reset(&core.code);
+    core.on_command("edit", &host);
+    core.on_code("1 2", &host);
 
     assert_eq!(
         core.interpreter.step(&core.code),
