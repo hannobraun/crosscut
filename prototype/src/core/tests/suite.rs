@@ -18,18 +18,8 @@ fn evaluate_single_expression() {
     let mut core = core::Instance::new();
 
     core.command("e", &host);
-    core.editor.process_input(
-        InputEvent::Char { value: '1' },
-        &mut core.code,
-        &mut core.interpreter,
-        &host,
-    );
-    core.editor.process_input(
-        InputEvent::Enter,
-        &mut core.code,
-        &mut core.interpreter,
-        &host,
-    );
+    core.input_event(InputEvent::Char { value: '1' }, &host);
+    core.input_event(InputEvent::Enter, &host);
 
     // compile_all("1", &host, &mut core.code);
     // core.interpreter.reset(&core.code);
