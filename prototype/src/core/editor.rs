@@ -56,10 +56,8 @@ impl Editor {
         &self.input
     }
 
-    pub fn prompt(&self) -> EditorPrompt {
-        EditorPrompt {
-            error: self.error.as_ref(),
-        }
+    pub fn error(&self) -> Option<&EditorError> {
+        self.error.as_ref()
     }
 
     pub fn process_input(
@@ -236,10 +234,6 @@ pub enum InputEvent {
     Enter,
     Left,
     Right,
-}
-
-pub struct EditorPrompt<'r> {
-    pub error: Option<&'r EditorError>,
 }
 
 pub enum EditorError {

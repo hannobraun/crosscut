@@ -224,15 +224,13 @@ impl Renderer {
     }
 
     fn render_prompt(&mut self, editor: &Editor) -> anyhow::Result<()> {
-        let prompt = editor.prompt();
-
         let mode = match editor.mode() {
             EditorMode::Command => "command",
             EditorMode::Edit => "edit",
         };
         let input = &editor.input().buffer;
 
-        if let Some(error) = prompt.error {
+        if let Some(error) = editor.error() {
             self.w.move_to_next_line()?;
             match error {
                 EditorError::AmbiguousCommand {
