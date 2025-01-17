@@ -44,7 +44,7 @@ impl GameEngine {
                 recv(editor_input_rx.inner()) -> result => {
                     result.map(|maybe_input|
                         if let Some(input) = maybe_input {
-                            Event::EditorInput { input }}
+                            Event::EditorInput { event: input }}
                         else {
                             Event::Heartbeat
                         }
@@ -59,7 +59,7 @@ impl GameEngine {
             };
 
             match event {
-                Event::EditorInput { input } => {
+                Event::EditorInput { event: input } => {
                     core.on_input(input, &host);
 
                     loop {
@@ -140,7 +140,7 @@ impl GameEngine {
 #[derive(Debug)]
 enum Event {
     EditorInput {
-        input: editor::InputEvent,
+        event: editor::InputEvent,
     },
 
     GameInput {
