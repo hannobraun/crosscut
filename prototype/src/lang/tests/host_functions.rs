@@ -25,9 +25,9 @@ fn nested_calls_to_host_function() {
 
 fn compile_and_run(input_code: &str) -> Value {
     let host = Host::from_functions(["half"]);
-    let mut core = lang::Instance::new();
+    let mut lang = lang::Instance::new();
 
-    core.edit(input_code, &host);
+    lang.edit(input_code, &host);
 
     // The editor already resets the interpreter, but only if it's not running.
     // The tests that use this function provide multiple tokens. The editor
@@ -40,9 +40,9 @@ fn compile_and_run(input_code: &str) -> Value {
     //
     // So we need to reset again manually, once all code has been provided, so
     // the interpreter actually runs the most recent version of the code.
-    core.interpreter.reset(&core.code);
+    lang.interpreter.reset(&lang.code);
 
-    run(&core.code, &mut core.interpreter)
+    run(&lang.code, &mut lang.interpreter)
 }
 
 fn run(code: &Code, interpreter: &mut Interpreter) -> Value {
