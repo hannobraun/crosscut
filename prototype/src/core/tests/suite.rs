@@ -21,9 +21,6 @@ fn evaluate_single_expression() {
     core.on_input(InputEvent::Char { value: '1' }, &host);
     core.on_input(InputEvent::Enter, &host);
 
-    // compile_all("1", &host, &mut core.code);
-    // core.interpreter.reset(&core.code);
-
     assert_eq!(
         core.interpreter.step(&core.code),
         StepResult::Finished {
