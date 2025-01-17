@@ -16,8 +16,7 @@ fn evaluate_single_expression() {
     let host = Host::empty();
     let mut core = core::Instance::new();
 
-    core.on_command("edit", &host);
-    core.on_code("1", &host);
+    core.edit("1", &host);
 
     assert_eq!(
         core.interpreter.step(&core.code),
@@ -38,8 +37,7 @@ fn code_after_expression_is_an_error() {
     let host = Host::empty();
     let mut core = core::Instance::new();
 
-    core.on_command("edit", &host);
-    core.on_code("1 2", &host);
+    core.edit("1 2", &host);
 
     assert_eq!(
         core.interpreter.step(&core.code),

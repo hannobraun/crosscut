@@ -28,6 +28,12 @@ impl Instance {
     }
 
     #[cfg(test)]
+    pub fn edit(&mut self, code: &str, host: &Host) {
+        self.on_command("edit", host);
+        self.on_code(code, host);
+    }
+
+    #[cfg(test)]
     pub fn on_command(&mut self, command: &str, host: &Host) {
         assert_eq!(
             *self.editor.mode(),
