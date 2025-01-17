@@ -67,8 +67,8 @@ fn nested_calls_to_host_function() {
 }
 
 fn compile_and_run(input: &str) -> Value {
-    let mut code = Code::default();
     let host = Host::from_functions(["half"]);
+    let mut code = Code::default();
 
     compile_all(input, &host, &mut code);
     run(&code)
