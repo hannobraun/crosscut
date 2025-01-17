@@ -90,11 +90,9 @@ impl GameEngine {
                                 continue;
                             }
                             StepResult::Error => {
-                                // Not handling errors right now. Eventually,
-                                // those should be properly encoded in `Code`
-                                // and therefore visible in the editor. But in
-                                // any case, there's nothing to do here, at
-                                // least for now.
+                                // Not handling errors right now. They should be
+                                // properly encoded in `Code` and therefore
+                                // visible in the editor.
                             }
                             StepResult::Finished { output } => {
                                 let Value::Integer { value: output } = output;
