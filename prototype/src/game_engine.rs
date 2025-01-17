@@ -42,8 +42,8 @@ impl GameEngine {
         let handle = thread::spawn(move || {
             let event = select! {
                 recv(editor_input_rx.inner()) -> result => {
-                    result.map(|maybe_input|
-                        if let Some(event) = maybe_input {
+                    result.map(|maybe_event|
+                        if let Some(event) = maybe_event {
                             Event::EditorInput { event }}
                         else {
                             Event::Heartbeat
