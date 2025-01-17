@@ -60,12 +60,7 @@ impl GameEngine {
 
             match event {
                 Event::EditorInput { input } => {
-                    core.editor.process_input(
-                        input,
-                        &mut core.code,
-                        &mut core.interpreter,
-                        &host,
-                    );
+                    core.on_input(input, &host);
 
                     loop {
                         match core.interpreter.step(&core.code) {

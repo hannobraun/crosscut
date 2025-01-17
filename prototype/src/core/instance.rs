@@ -1,10 +1,12 @@
 #[cfg(test)]
-use crate::core::editor::{EditorMode, InputEvent};
+use crate::core::editor::EditorMode;
 
-use super::{code::Code, editor::Editor, interpreter::Interpreter};
-
-#[cfg(test)]
-use super::host::Host;
+use super::{
+    code::Code,
+    editor::{Editor, InputEvent},
+    host::Host,
+    interpreter::Interpreter,
+};
 
 pub struct Instance {
     pub code: Code,
@@ -40,7 +42,6 @@ impl Instance {
         self.on_input(InputEvent::Enter, host);
     }
 
-    #[cfg(test)]
     pub fn on_input(&mut self, event: InputEvent, host: &Host) {
         self.editor.process_input(
             event,
