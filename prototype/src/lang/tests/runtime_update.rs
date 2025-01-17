@@ -6,26 +6,26 @@ fn reset_interpreter_on_code_update_if_finished() {
     // code should reset it, so it starts again from the top.
 
     let host = Host::empty();
-    let mut core = lang::Instance::new();
+    let mut lang = lang::Instance::new();
 
     assert_eq!(
-        core.interpreter.state(&core.code),
+        lang.interpreter.state(&lang.code),
         InterpreterState::Finished,
     );
 
-    core.edit("1", &host);
-    let initial_expression = core
+    lang.edit("1", &host);
+    let initial_expression = lang
         .code
         .fragments()
-        .get(&core.code.root)
+        .get(&lang.code.root)
         .body
         .ids()
         .next()
         .unwrap();
 
     assert_eq!(
-        core.interpreter.state(&core.code),
+        lang.interpreter.state(&lang.code),
         InterpreterState::Running,
     );
-    assert_eq!(core.interpreter.next(), Some(initial_expression));
+    assert_eq!(lang.interpreter.next(), Some(initial_expression));
 }
