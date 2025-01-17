@@ -12,12 +12,12 @@ fn evaluate_single_expression() {
     // evaluated, and its value returned by the interpreter.
 
     let host = Host::empty();
-    let mut core = lang::Instance::new();
+    let mut lang = lang::Instance::new();
 
-    core.edit("1", &host);
+    lang.edit("1", &host);
 
     assert_eq!(
-        core.interpreter.step(&core.code),
+        lang.interpreter.step(&lang.code),
         StepResult::Finished {
             output: Value::Integer { value: 1 }
         },
