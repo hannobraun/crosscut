@@ -36,19 +36,18 @@ fn code_after_expression_is_an_error() {
     // is an error.
 
     let host = Host::empty();
-    let mut code = Code::default();
-    let mut interpreter = Interpreter::new(&code);
+    let mut core = core::Instance::new();
 
-    compile_all("1 2", &host, &mut code);
-    interpreter.reset(&code);
+    compile_all("1 2", &host, &mut core.code);
+    core.interpreter.reset(&core.code);
 
     assert_eq!(
-        interpreter.step(&code),
+        core.interpreter.step(&core.code),
         StepResult::Finished {
             output: Value::Integer { value: 1 }
         },
     );
-    assert_eq!(interpreter.step(&code), StepResult::Error);
+    assert_eq!(core.interpreter.step(&core.code), StepResult::Error);
 }
 
 #[test]
