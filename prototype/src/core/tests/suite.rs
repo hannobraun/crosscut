@@ -17,7 +17,7 @@ fn evaluate_single_expression() {
     let host = Host::empty();
     let mut core = core::Instance::new();
 
-    core.command("e", &host);
+    core.command("edit", &host);
     core.input_event(InputEvent::Char { value: '1' }, &host);
     core.input_event(InputEvent::Enter, &host);
 
