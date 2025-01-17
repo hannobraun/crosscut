@@ -183,7 +183,7 @@ impl Default for Editor {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Eq, PartialEq)]
 pub enum EditorMode {
     Command,
     Edit,
