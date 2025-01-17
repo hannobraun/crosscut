@@ -34,14 +34,14 @@ impl Instance {
         );
 
         for ch in command.chars() {
-            self.input_event(InputEvent::Char { value: ch }, host);
+            self.on_input(InputEvent::Char { value: ch }, host);
         }
 
-        self.input_event(InputEvent::Enter, host);
+        self.on_input(InputEvent::Enter, host);
     }
 
     #[cfg(test)]
-    pub fn input_event(&mut self, event: InputEvent, host: &Host) {
+    pub fn on_input(&mut self, event: InputEvent, host: &Host) {
         self.editor.process_input(
             event,
             &mut self.code,
