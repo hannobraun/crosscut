@@ -230,7 +230,7 @@ impl Renderer {
             EditorMode::Command => "command",
             EditorMode::Edit => "edit",
         };
-        let input = &prompt.input.buffer;
+        let input = &editor.input().buffer;
 
         if let Some(error) = prompt.error {
             self.w.move_to_next_line()?;
@@ -261,7 +261,7 @@ impl Renderer {
         let [x, y] = self.w.cursor;
         let x = {
             let x: usize = x.into();
-            let x = x.saturating_add(prompt.input.cursor);
+            let x = x.saturating_add(editor.input().cursor);
             let x: u16 = x.try_into().unwrap_or(u16::MAX);
             x
         };
