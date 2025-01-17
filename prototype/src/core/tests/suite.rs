@@ -65,11 +65,11 @@ fn nested_calls_to_host_function() {
     assert_eq!(output, Value::Integer { value: 16 });
 }
 
-fn compile_and_run(input: &str) -> Value {
+fn compile_and_run(input_code: &str) -> Value {
     let host = Host::from_functions(["half"]);
     let mut core = core::Instance::new();
 
-    core.edit(input, &host);
+    core.edit(input_code, &host);
 
     // The editor already resets the interpreter, but only if it's not running.
     // The tests that use this function provide multiple tokens. The editor
