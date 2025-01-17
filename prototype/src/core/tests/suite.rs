@@ -4,7 +4,6 @@ use crate::core::{
     self,
     code::Code,
     compiler::tests::infra::compile_all,
-    editor::InputEvent,
     host::Host,
     interpreter::{Interpreter, StepResult, Value},
 };
@@ -18,8 +17,7 @@ fn evaluate_single_expression() {
     let mut core = core::Instance::new();
 
     core.on_command("edit", &host);
-    core.on_input(InputEvent::Char { value: '1' }, &host);
-    core.on_input(InputEvent::Enter, &host);
+    core.on_code("1", &host);
 
     assert_eq!(
         core.interpreter.step(&core.code),

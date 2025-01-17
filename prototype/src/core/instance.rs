@@ -42,6 +42,21 @@ impl Instance {
         self.on_input(InputEvent::Enter, host);
     }
 
+    #[cfg(test)]
+    pub fn on_code(&mut self, code: &str, host: &Host) {
+        assert_eq!(
+            *self.editor.mode(),
+            EditorMode::Edit,
+            "Trying to input code, but editor is not in edit mode.",
+        );
+
+        for ch in code.chars() {
+            self.on_input(InputEvent::Char { value: ch }, host);
+        }
+
+        self.on_input(InputEvent::Enter, host);
+    }
+
     pub fn on_input(&mut self, event: InputEvent, host: &Host) {
         self.editor.process_input(
             event,
