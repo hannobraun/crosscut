@@ -1,6 +1,6 @@
 use itertools::Itertools;
 
-use crate::core::{
+use crate::lang::{
     code::{Code, CodeError},
     compiler::tests::infra::compile_all,
     host::Host,

@@ -1,4 +1,4 @@
-use crate::core::{
+use crate::lang::{
     self,
     code::Code,
     host::Host,
@@ -25,7 +25,7 @@ fn nested_calls_to_host_function() {
 
 fn compile_and_run(input_code: &str) -> Value {
     let host = Host::from_functions(["half"]);
-    let mut core = core::Instance::new();
+    let mut core = lang::Instance::new();
 
     core.edit(input_code, &host);
 

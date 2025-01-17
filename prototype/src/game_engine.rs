@@ -3,12 +3,12 @@ use std::ops::ControlFlow;
 use crossbeam_channel::select;
 
 use crate::{
-    core::{
+    io::editor::output::Renderer,
+    lang::{
         self, editor,
         host::Host,
         interpreter::{StepResult, Value},
     },
-    io::editor::output::Renderer,
     thread::{self, ChannelDisconnected, Sender, ThreadHandle},
 };
 
@@ -22,7 +22,7 @@ impl GameEngine {
     pub fn start(game_output_tx: Sender<GameOutput>) -> anyhow::Result<Self> {
         let host = Host::from_functions(["dim"]);
 
-        let mut core = core::Instance::new();
+        let mut core = lang::Instance::new();
         let mut renderer = Renderer::new()?;
 
         renderer.render(

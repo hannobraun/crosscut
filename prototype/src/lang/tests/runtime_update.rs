@@ -1,4 +1,4 @@
-use crate::core::{self, host::Host, interpreter::InterpreterState};
+use crate::lang::{self, host::Host, interpreter::InterpreterState};
 
 #[test]
 fn reset_interpreter_on_code_update_if_finished() {
@@ -6,7 +6,7 @@ fn reset_interpreter_on_code_update_if_finished() {
     // code should reset it, so it starts again from the top.
 
     let host = Host::empty();
-    let mut core = core::Instance::new();
+    let mut core = lang::Instance::new();
 
     assert_eq!(
         core.interpreter.state(&core.code),

@@ -3,7 +3,7 @@ use std::{
     iter,
 };
 
-use crate::core::{
+use crate::lang::{
     code::{Body, Code, Fragment, FragmentKind},
     compiler::compile_and_replace,
     host::Host,

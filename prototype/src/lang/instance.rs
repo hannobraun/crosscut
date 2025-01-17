@@ -1,5 +1,5 @@
 #[cfg(test)]
-use crate::core::editor::EditorMode;
+use crate::lang::editor::EditorMode;
 
 use super::{
     code::Code,

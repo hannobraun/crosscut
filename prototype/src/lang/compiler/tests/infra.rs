@@ -1,4 +1,4 @@
-use crate::core::{
+use crate::lang::{
     code::{Body, Code, Fragment, FragmentKind},
     compiler,
     host::Host,
