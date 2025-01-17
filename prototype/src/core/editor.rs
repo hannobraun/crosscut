@@ -24,7 +24,7 @@ use crate::core::{
 /// "escape".
 pub struct Editor {
     mode: EditorMode,
-    input: Input,
+    input: EditorInput,
     error: Option<EditorError>,
     commands: BTreeSet<&'static str>,
 }
@@ -42,7 +42,7 @@ impl Editor {
 
         Self {
             mode: EditorMode::Command,
-            input: Input::new(String::new()),
+            input: EditorInput::new(String::new()),
             error: None,
             commands,
         }
@@ -52,7 +52,7 @@ impl Editor {
         &self.mode
     }
 
-    pub fn input(&self) -> &Input {
+    pub fn input(&self) -> &EditorInput {
         &self.input
     }
 
@@ -191,11 +191,11 @@ pub enum EditorMode {
     Edit,
 }
 
-pub struct Input {
+pub struct EditorInput {
     pub buffer: String,
     pub cursor: usize,
 }
-impl Input {
+impl EditorInput {
     fn new(buffer: String) -> Self {
         let cursor = buffer.chars().count();
         Self { buffer, cursor }
