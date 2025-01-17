@@ -226,7 +226,7 @@ impl Renderer {
     fn render_prompt(&mut self, editor: &Editor) -> anyhow::Result<()> {
         let prompt = editor.prompt();
 
-        let mode = match prompt.mode {
+        let mode = match editor.mode() {
             EditorMode::Command => "command",
             EditorMode::Edit => "edit",
         };

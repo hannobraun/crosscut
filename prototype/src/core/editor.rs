@@ -48,9 +48,12 @@ impl Editor {
         }
     }
 
+    pub fn mode(&self) -> &EditorMode {
+        &self.mode
+    }
+
     pub fn prompt(&self) -> EditorPrompt {
         EditorPrompt {
-            mode: &self.mode,
             input: &self.input,
             error: self.error.as_ref(),
         }
@@ -233,7 +236,6 @@ pub enum InputEvent {
 }
 
 pub struct EditorPrompt<'r> {
-    pub mode: &'r EditorMode,
     pub input: &'r Input,
     pub error: Option<&'r EditorError>,
 }
