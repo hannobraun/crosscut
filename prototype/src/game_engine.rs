@@ -22,13 +22,13 @@ impl GameEngine {
     pub fn start(game_output_tx: Sender<GameOutput>) -> anyhow::Result<Self> {
         let host = Host::from_functions(["dim"]);
 
-        let mut core = lang::Instance::new();
+        let mut lang = lang::Instance::new();
         let mut renderer = Renderer::new()?;
 
         renderer.render(
-            &core.editor,
-            &core.code,
-            Some(&core.interpreter),
+            &lang.editor,
+            &lang.code,
+            Some(&lang.interpreter),
             &host,
         )?;
 
@@ -60,10 +60,10 @@ impl GameEngine {
 
             match event {
                 Event::EditorInput { event } => {
-                    core.on_input(event, &host);
+                    lang.on_input(event, &host);
 
                     loop {
-                        match core.interpreter.step(&core.code) {
+                        match lang.interpreter.step(&lang.code) {
                             StepResult::CallToHostFunction {
                                 id,
                                 input,
@@ -112,9 +112,9 @@ impl GameEngine {
                     }
 
                     renderer.render(
-                        &core.editor,
-                        &core.code,
-                        Some(&core.interpreter),
+                        &lang.editor,
+                        &lang.code,
+                        Some(&lang.interpreter),
                         &host,
                     )?;
                 }
