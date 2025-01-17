@@ -4,9 +4,9 @@ use crate::core::{
     self,
     code::Code,
     compiler::tests::infra::compile_all,
+    editor::InputEvent,
     host::Host,
-    interpreter::Interpreter,
-    interpreter::{StepResult, Value},
+    interpreter::{Interpreter, StepResult, Value},
 };
 
 #[test]
@@ -17,8 +17,33 @@ fn evaluate_single_expression() {
     let host = Host::empty();
     let mut core = core::Instance::new();
 
-    compile_all("1", &host, &mut core.code);
-    core.interpreter.reset(&core.code);
+    core.editor.process_input(
+        InputEvent::Char { value: 'e' },
+        &mut core.code,
+        &mut core.interpreter,
+        &host,
+    );
+    core.editor.process_input(
+        InputEvent::Enter,
+        &mut core.code,
+        &mut core.interpreter,
+        &host,
+    );
+    core.editor.process_input(
+        InputEvent::Char { value: '1' },
+        &mut core.code,
+        &mut core.interpreter,
+        &host,
+    );
+    core.editor.process_input(
+        InputEvent::Enter,
+        &mut core.code,
+        &mut core.interpreter,
+        &host,
+    );
+
+    // compile_all("1", &host, &mut core.code);
+    // core.interpreter.reset(&core.code);
 
     assert_eq!(
         core.interpreter.step(&core.code),
