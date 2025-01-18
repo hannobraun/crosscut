@@ -51,34 +51,36 @@ impl Interpreter {
             };
 
             match expression {
-                Expression::FunctionCall { target } => match target {
-                    FunctionCallTarget::HostFunction { id } => {
-                        if let Some(ActiveCall {
-                            output: Some(output),
-                            ..
-                        }) = self.active_calls.last()
-                        {
-                            let output = output.clone();
-                            self.active_calls.pop();
-                            return self.evaluate_value(output);
-                        }
+                Expression::FunctionCall { target } => {
+                    if let Some(ActiveCall {
+                        output: Some(output),
+                        ..
+                    }) = self.active_calls.last()
+                    {
+                        let output = output.clone();
+                        self.active_calls.pop();
+                        return self.evaluate_value(output);
+                    }
 
-                        self.active_calls.push(ActiveCall {
-                            fragment,
-                            output: None,
-                            target: FunctionCallTarget::HostFunction {
-                                id: *id,
-                            },
-                        });
-                        self.next = body.entry().copied();
+                    match target {
+                        FunctionCallTarget::HostFunction { id } => {
+                            self.active_calls.push(ActiveCall {
+                                fragment,
+                                output: None,
+                                target: FunctionCallTarget::HostFunction {
+                                    id: *id,
+                                },
+                            });
+                            self.next = body.entry().copied();
+                        }
+                        FunctionCallTarget::IntrinsicFunction => {
+                            todo!(
+                                "Calls to intrinsic functions are not \
+                                supported yet."
+                            )
+                        }
                     }
-                    FunctionCallTarget::IntrinsicFunction => {
-                        todo!(
-                            "Calls to intrinsic functions are not supported \
-                            yet."
-                        )
-                    }
-                },
+                }
                 Expression::Literal {
                     literal: Literal::Integer { value },
                 } => {
