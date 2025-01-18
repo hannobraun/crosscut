@@ -138,6 +138,12 @@ pub enum InterpreterState {
     Error,
 }
 
+impl InterpreterState {
+    pub fn is_running(&self) -> bool {
+        matches!(self, InterpreterState::Running)
+    }
+}
+
 #[derive(Debug, PartialEq)]
 pub enum StepResult<'r> {
     CallToHostFunction {

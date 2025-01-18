@@ -7,7 +7,7 @@ use crate::lang::{
     code::{Body, Code, Fragment, FragmentKind},
     compiler::compile_and_replace,
     host::Host,
-    interpreter::{Interpreter, InterpreterState},
+    interpreter::Interpreter,
 };
 
 /// # Platform-independent and I/O-less editor core
@@ -118,8 +118,7 @@ impl Editor {
 
         self.input.clear();
 
-        let is_running =
-            matches!(interpreter.state(code), InterpreterState::Running);
+        let is_running = interpreter.state(code).is_running();
 
         if !is_running {
             interpreter.reset(code);
