@@ -130,6 +130,15 @@ impl Interpreter {
     }
 }
 
+#[derive(Debug)]
+enum ActiveCall {
+    ToHostFunction {
+        id: usize,
+        fragment: FragmentId,
+        output: Option<Value>,
+    },
+}
+
 #[derive(Debug, Eq, PartialEq)]
 pub enum InterpreterState {
     Running,
@@ -158,15 +167,6 @@ pub enum NextExpression<'r> {
     },
     NoMoreFragments,
     NextFragmentIsNotAnExpression,
-}
-
-#[derive(Debug)]
-enum ActiveCall {
-    ToHostFunction {
-        id: usize,
-        fragment: FragmentId,
-        output: Option<Value>,
-    },
 }
 
 #[derive(Clone, Debug, PartialEq)]
