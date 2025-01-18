@@ -1,4 +1,6 @@
-use super::code::{Body, Code, Expression, FragmentId, FragmentKind, Literal};
+use super::code::{
+    Body, Code, Expression, FragmentId, FragmentKind, Function, Literal,
+};
 
 #[derive(Debug)]
 pub struct Interpreter {
@@ -48,24 +50,28 @@ impl Interpreter {
             };
 
             match expression {
-                Expression::FunctionCall { target: id } => {
-                    if let Some(ActiveCall::ToHostFunction {
-                        output: Some(output),
-                        ..
-                    }) = self.active_calls.last()
-                    {
-                        let output = output.clone();
-                        self.active_calls.pop();
-                        return self.evaluate_value(output);
-                    } else {
-                        self.active_calls.push(ActiveCall::ToHostFunction {
-                            id: *id,
-                            fragment,
-                            output: None,
-                        });
-                        self.next = body.entry().copied();
+                Expression::FunctionCall { target: id } => match id {
+                    Function::HostFunction { id } => {
+                        if let Some(ActiveCall::ToHostFunction {
+                            output: Some(output),
+                            ..
+                        }) = self.active_calls.last()
+                        {
+                            let output = output.clone();
+                            self.active_calls.pop();
+                            return self.evaluate_value(output);
+                        } else {
+                            self.active_calls.push(
+                                ActiveCall::ToHostFunction {
+                                    id: *id,
+                                    fragment,
+                                    output: None,
+                                },
+                            );
+                            self.next = body.entry().copied();
+                        }
                     }
-                }
+                },
                 Expression::Literal {
                     literal: Literal::Integer { value },
                 } => {

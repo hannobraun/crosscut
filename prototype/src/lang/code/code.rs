@@ -131,8 +131,13 @@ impl Default for Code {
 
 #[derive(Clone, Debug, Eq, PartialEq, udigest::Digestable)]
 pub enum Expression {
-    FunctionCall { target: usize },
+    FunctionCall { target: Function },
     Literal { literal: Literal },
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, udigest::Digestable)]
+pub enum Function {
+    HostFunction { id: usize },
 }
 
 #[derive(Clone, Debug, Eq, PartialEq, udigest::Digestable)]
@@ -149,7 +154,7 @@ pub struct HostFunction {
 mod tests {
     use crate::lang::code::{Body, Fragment, FragmentKind, Location};
 
-    use super::{Code, Expression};
+    use super::{Code, Expression, Function};
 
     #[test]
     fn append_return_location() {
@@ -180,7 +185,9 @@ mod tests {
     fn call(target: usize) -> Fragment {
         Fragment {
             kind: FragmentKind::Expression {
-                expression: Expression::FunctionCall { target },
+                expression: Expression::FunctionCall {
+                    target: Function::HostFunction { id: target },
+                },
             },
             body: Body::default(),
         }

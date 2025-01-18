@@ -10,7 +10,7 @@ use crossterm::{
 use crate::lang::{
     code::{
         Body, Code, CodeError, Expression, FragmentError, FragmentId,
-        FragmentKind, Literal,
+        FragmentKind, Function, Literal,
     },
     editor::{Editor, EditorError, EditorMode},
     host::Host,
@@ -191,15 +191,18 @@ impl Renderer {
         context: &RenderContext,
     ) -> anyhow::Result<()> {
         match expression {
-            Expression::FunctionCall { target: id } => {
-                let Some(name) = context.host.functions_by_id.get(id) else {
-                    unreachable!(
-                        "Function call refers to non-existing function {id}"
-                    );
-                };
+            Expression::FunctionCall { target: id } => match id {
+                Function::HostFunction { id } => {
+                    let Some(name) = context.host.functions_by_id.get(id)
+                    else {
+                        unreachable!(
+                            "Function call refers to non-existing function {id}"
+                        );
+                    };
 
-                write!(self.w, "{name}")?;
-            }
+                    write!(self.w, "{name}")?;
+                }
+            },
             Expression::Literal {
                 literal: Literal::Integer { value },
             } => {
