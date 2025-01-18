@@ -191,7 +191,7 @@ impl Renderer {
         context: &RenderContext,
     ) -> anyhow::Result<()> {
         match expression {
-            Expression::FunctionCall { target: id } => match id {
+            Expression::FunctionCall { target } => match target {
                 Function::HostFunction { id } => {
                     let Some(name) = context.host.functions_by_id.get(id)
                     else {
