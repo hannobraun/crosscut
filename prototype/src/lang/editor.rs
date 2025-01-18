@@ -118,9 +118,7 @@ impl Editor {
 
         self.input.clear();
 
-        let is_running = interpreter.state(code).is_running();
-
-        if !is_running {
+        if !interpreter.state(code).is_running() {
             interpreter.reset(code);
         }
     }
