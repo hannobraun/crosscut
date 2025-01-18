@@ -90,10 +90,10 @@ impl Interpreter {
             return StepResult::Finished { output: value };
         };
 
+        self.next = Some(*fragment);
+
         match target {
             FunctionCallTarget::HostFunction { id } => {
-                self.next = Some(*fragment);
-
                 let output = output.insert(Value::Integer { value: 0 });
                 StepResult::CallToHostFunction {
                     id: *id,
