@@ -118,7 +118,8 @@ impl Editor {
 
         self.input.clear();
 
-        if !interpreter.state(code).is_running() {
+        if interpreter.state(code).is_running() {
+        } else {
             interpreter.reset(code);
         }
     }
