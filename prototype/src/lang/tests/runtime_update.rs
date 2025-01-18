@@ -1,7 +1,7 @@
 use crate::lang::{
     self,
     host::Host,
-    interpreter::{InterpreterState, StepResult, Value},
+    interpreter::{InterpreterState, Value},
 };
 
 #[test]
@@ -47,23 +47,7 @@ fn update_interpreter_on_code_update() {
     let mut lang = lang::Instance::new();
 
     lang.edit("identity 1", &host);
-
-    let output = loop {
-        match lang.interpreter.step(&lang.code) {
-            StepResult::CallToHostFunction { id, .. } => {
-                panic!("Unexpected call to host function `{id}`");
-            }
-            StepResult::CallToIntrinsicFunction => {
-                // No need to do anything about this.
-            }
-            StepResult::Error => {
-                panic!("Unexpected error while stepping interpreter.");
-            }
-            StepResult::Finished { output } => {
-                break output;
-            }
-        }
-    };
+    let output = lang.run_until_finished();
 
     assert_eq!(output, Value::Integer { value: 1 });
 }

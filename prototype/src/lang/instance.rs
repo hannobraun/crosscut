@@ -8,6 +8,9 @@ use super::{
     interpreter::Interpreter,
 };
 
+#[cfg(test)]
+use super::interpreter::Value;
+
 pub struct Instance {
     pub code: Code,
     pub editor: Editor,
@@ -70,5 +73,27 @@ impl Instance {
             &mut self.interpreter,
             host,
         );
+    }
+
+    #[cfg(test)]
+    pub fn run_until_finished(&mut self) -> Value {
+        use super::interpreter::StepResult;
+
+        loop {
+            match self.interpreter.step(&self.code) {
+                StepResult::CallToHostFunction { id, .. } => {
+                    panic!("Unexpected call to host function `{id}`");
+                }
+                StepResult::CallToIntrinsicFunction => {
+                    // No need to do anything about this.
+                }
+                StepResult::Error => {
+                    panic!("Unexpected error while stepping interpreter.");
+                }
+                StepResult::Finished { output } => {
+                    break output;
+                }
+            }
+        }
     }
 }
