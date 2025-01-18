@@ -177,11 +177,11 @@ mod tests {
         );
     }
 
-    fn call(target: usize) -> Fragment {
+    fn call(id: usize) -> Fragment {
         Fragment {
             kind: FragmentKind::Expression {
                 expression: Expression::FunctionCall {
-                    target: Function::HostFunction { id: target },
+                    target: Function::HostFunction { id },
                 },
             },
             body: Body::default(),
