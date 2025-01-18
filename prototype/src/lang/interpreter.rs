@@ -25,6 +25,17 @@ impl Interpreter {
         self.next = root.body.entry().copied();
     }
 
+    pub fn update(&mut self, code: &Code) {
+        if let Some(id) = &mut self.next {
+            *id = code.latest_version_of(id);
+        }
+
+        for active_call in &mut self.active_calls {
+            active_call.fragment =
+                code.latest_version_of(&active_call.fragment);
+        }
+    }
+
     pub fn next(&self) -> Option<&FragmentId> {
         self.next.as_ref()
     }

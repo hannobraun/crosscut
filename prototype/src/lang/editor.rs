@@ -119,6 +119,7 @@ impl Editor {
         self.input.clear();
 
         if interpreter.state(code).is_running() {
+            interpreter.update(code);
         } else {
             interpreter.reset(code);
         }
