@@ -196,7 +196,8 @@ impl Renderer {
                     let Some(name) = context.host.functions_by_id.get(id)
                     else {
                         unreachable!(
-                            "Function call refers to non-existing function {id}"
+                            "Function call refers to non-existing host \
+                            function `{id}`"
                         );
                     };
 
