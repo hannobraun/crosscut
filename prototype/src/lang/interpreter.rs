@@ -63,9 +63,11 @@ impl Interpreter {
                             return self.evaluate_value(output);
                         } else {
                             self.active_calls.push(ActiveCall {
-                                id: *id,
                                 fragment,
                                 output: None,
+                                target: FunctionCallTarget::HostFunction {
+                                    id: *id,
+                                },
                             });
                             self.next = body.entry().copied();
                         }
@@ -94,10 +96,16 @@ impl Interpreter {
         };
 
         let ActiveCall {
-            id,
             fragment,
             output,
-        } = active_call;
+            target: FunctionCallTarget::HostFunction { id },
+        } = active_call
+        else {
+            todo!(
+                "Only function calls to host functions are supported at this \
+                point."
+            );
+        };
 
         self.next = Some(*fragment);
 
@@ -128,9 +136,9 @@ impl Interpreter {
 
 #[derive(Debug)]
 struct ActiveCall {
-    id: usize,
     fragment: FragmentId,
     output: Option<Value>,
+    target: FunctionCallTarget,
 }
 
 #[derive(Debug, Eq, PartialEq)]
