@@ -154,6 +154,7 @@ pub enum StepResult<'r> {
     },
 }
 
+#[derive(Debug)]
 pub enum NextExpression<'r> {
     Expression {
         expression: &'r Expression,
