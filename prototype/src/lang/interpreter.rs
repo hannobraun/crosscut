@@ -101,10 +101,8 @@ impl Interpreter {
                 }
             }
             FunctionCallTarget::IntrinsicFunction => {
-                todo!(
-                    "Only function calls to host functions are supported at \
-                    this point."
-                );
+                *output = Some(value);
+                StepResult::CallToIntrinsicFunction
             }
         }
     }
@@ -147,6 +145,7 @@ pub enum StepResult<'r> {
         input: Value,
         output: &'r mut Value,
     },
+    CallToIntrinsicFunction,
     Error,
     Finished {
         output: Value,
