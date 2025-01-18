@@ -138,6 +138,7 @@ pub enum Expression {
 #[derive(Clone, Debug, Eq, PartialEq, udigest::Digestable)]
 pub enum FunctionCallTarget {
     HostFunction { id: usize },
+    IntrinsicFunction,
 }
 
 #[derive(Clone, Debug, Eq, PartialEq, udigest::Digestable)]

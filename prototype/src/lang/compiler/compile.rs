@@ -47,7 +47,15 @@ fn parse_token(token: &str, host: &Host) -> FragmentKind {
             _ => {
                 let name = token.to_string();
 
-                if let Some(id) = host.functions_by_name.get(&name).copied() {
+                if name == "identity" {
+                    FragmentKind::Expression {
+                        expression: Expression::FunctionCall {
+                            target: FunctionCallTarget::IntrinsicFunction,
+                        },
+                    }
+                } else if let Some(id) =
+                    host.functions_by_name.get(&name).copied()
+                {
                     FragmentKind::Expression {
                         expression: Expression::FunctionCall {
                             target: FunctionCallTarget::HostFunction { id },

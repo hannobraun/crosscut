@@ -203,6 +203,9 @@ impl Renderer {
 
                     write!(self.w, "{name}")?;
                 }
+                FunctionCallTarget::IntrinsicFunction => {
+                    write!(self.w, "identity")?;
+                }
             },
             Expression::Literal {
                 literal: Literal::Integer { value },

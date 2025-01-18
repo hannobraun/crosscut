@@ -72,6 +72,12 @@ impl Interpreter {
                             self.next = body.entry().copied();
                         }
                     }
+                    FunctionCallTarget::IntrinsicFunction => {
+                        todo!(
+                            "Calls to intrinsic functions are not supported \
+                            yet."
+                        )
+                    }
                 },
                 Expression::Literal {
                     literal: Literal::Integer { value },
