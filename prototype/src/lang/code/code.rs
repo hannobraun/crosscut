@@ -145,11 +145,6 @@ pub enum Literal {
     Integer { value: u32 },
 }
 
-#[derive(Clone, Copy, Debug, PartialEq)]
-pub struct HostFunction {
-    pub id: usize,
-}
-
 #[cfg(test)]
 mod tests {
     use crate::lang::code::{Body, Fragment, FragmentKind, Location};
