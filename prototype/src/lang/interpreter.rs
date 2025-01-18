@@ -90,16 +90,15 @@ impl Interpreter {
     }
 
     fn evaluate_value(&mut self, value: Value) -> StepResult {
-        let Some(active_call) = self.active_calls.last_mut() else {
-            self.next = None;
-            return StepResult::Finished { output: value };
-        };
-
-        let ActiveCall {
+        let Some(ActiveCall {
             fragment,
             output,
             target,
-        } = active_call;
+        }) = self.active_calls.last_mut()
+        else {
+            self.next = None;
+            return StepResult::Finished { output: value };
+        };
 
         match target {
             FunctionCallTarget::HostFunction { id } => {
