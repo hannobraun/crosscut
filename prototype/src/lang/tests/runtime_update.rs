@@ -1,7 +1,7 @@
 use crate::lang::{
     self,
     host::Host,
-    interpreter::{InterpreterState, Value},
+    interpreter::{InterpreterState, StepResult, Value},
 };
 
 #[test]
@@ -16,6 +16,37 @@ fn reset_interpreter_on_code_update_if_finished() {
         lang.interpreter.state(&lang.code),
         InterpreterState::Finished,
     );
+
+    lang.edit("1", &host);
+    let initial_expression = lang
+        .code
+        .fragments()
+        .get(&lang.code.root)
+        .body
+        .ids()
+        .next()
+        .unwrap();
+
+    assert_eq!(
+        lang.interpreter.state(&lang.code),
+        InterpreterState::Running,
+    );
+    assert_eq!(lang.interpreter.next(), Some(initial_expression));
+}
+
+#[test]
+fn reset_interpreter_on_code_update_if_error() {
+    // If the interpreter is currently in an error state, every update to the
+    // code should reset it, so it starts again from the top.
+
+    let host = Host::empty();
+    let mut lang = lang::Instance::new();
+
+    lang.edit("identity", &host);
+    let step = lang.interpreter.step(&lang.code);
+
+    assert_eq!(step, StepResult::Error);
+    assert_eq!(lang.interpreter.state(&lang.code), InterpreterState::Error,);
 
     lang.edit("1", &host);
     let initial_expression = lang
