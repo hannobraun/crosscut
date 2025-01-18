@@ -7,6 +7,7 @@ use super::{
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub struct Code {
     fragments: Fragments,
+    updates: BTreeMap<FragmentId, FragmentId>,
 
     pub root: FragmentId,
     pub errors: BTreeMap<FragmentId, CodeError>,
@@ -23,6 +24,7 @@ impl Code {
 
         Self {
             fragments,
+            updates: BTreeMap::new(),
             root,
             errors: BTreeMap::new(),
         }
@@ -107,6 +109,8 @@ impl Code {
                 next_to_replace_with,
                 &mut self.fragments,
             );
+
+            self.updates.insert(*id, id_of_replacement);
 
             next_to_replace_with = parent;
             location_components_of_new_fragment_reverse.push(id_of_replacement);
