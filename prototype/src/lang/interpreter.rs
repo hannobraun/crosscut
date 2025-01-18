@@ -48,7 +48,7 @@ impl Interpreter {
             };
 
             match expression {
-                Expression::FunctionCall { target } => {
+                Expression::FunctionCall { target: id } => {
                     if let Some(ActiveCall::ToHostFunction {
                         output: Some(output),
                         ..
@@ -59,7 +59,7 @@ impl Interpreter {
                         return self.evaluate_value(output);
                     } else {
                         self.active_calls.push(ActiveCall::ToHostFunction {
-                            id: *target,
+                            id: *id,
                             fragment,
                             output: None,
                         });
