@@ -45,7 +45,10 @@ impl Interpreter {
 
         match self.next_expression(code) {
             NextExpression::Expression { .. } => Running,
-            NextExpression::NoMoreFragments => Finished,
+            NextExpression::NoMoreFragments if self.active_calls.is_empty() => {
+                Finished
+            }
+            NextExpression::NoMoreFragments => Error,
             NextExpression::NextFragmentIsNotAnExpression => Error,
         }
     }
