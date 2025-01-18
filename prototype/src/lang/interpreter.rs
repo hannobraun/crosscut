@@ -53,7 +53,7 @@ impl Interpreter {
             match expression {
                 Expression::FunctionCall { target } => match target {
                     FunctionCallTarget::HostFunction { id } => {
-                        if let Some(ActiveCall::ToHostFunction {
+                        if let Some(ActiveCall {
                             output: Some(output),
                             ..
                         }) = self.active_calls.last()
@@ -62,13 +62,11 @@ impl Interpreter {
                             self.active_calls.pop();
                             return self.evaluate_value(output);
                         } else {
-                            self.active_calls.push(
-                                ActiveCall::ToHostFunction {
-                                    id: *id,
-                                    fragment,
-                                    output: None,
-                                },
-                            );
+                            self.active_calls.push(ActiveCall {
+                                id: *id,
+                                fragment,
+                                output: None,
+                            });
                             self.next = body.entry().copied();
                         }
                     }
@@ -95,21 +93,19 @@ impl Interpreter {
             return StepResult::Finished { output: value };
         };
 
-        match active_call {
-            ActiveCall::ToHostFunction {
-                id,
-                fragment,
-                output,
-            } => {
-                self.next = Some(*fragment);
+        let ActiveCall {
+            id,
+            fragment,
+            output,
+        } = active_call;
 
-                let output = output.insert(Value::Integer { value: 0 });
-                StepResult::CallToHostFunction {
-                    id: *id,
-                    input: value,
-                    output,
-                }
-            }
+        self.next = Some(*fragment);
+
+        let output = output.insert(Value::Integer { value: 0 });
+        StepResult::CallToHostFunction {
+            id: *id,
+            input: value,
+            output,
         }
     }
 
@@ -131,12 +127,10 @@ impl Interpreter {
 }
 
 #[derive(Debug)]
-enum ActiveCall {
-    ToHostFunction {
-        id: usize,
-        fragment: FragmentId,
-        output: Option<Value>,
-    },
+struct ActiveCall {
+    id: usize,
+    fragment: FragmentId,
+    output: Option<Value>,
 }
 
 #[derive(Debug, Eq, PartialEq)]
