@@ -61,16 +61,16 @@ impl Interpreter {
                             let output = output.clone();
                             self.active_calls.pop();
                             return self.evaluate_value(output);
-                        } else {
-                            self.active_calls.push(ActiveCall {
-                                fragment,
-                                output: None,
-                                target: FunctionCallTarget::HostFunction {
-                                    id: *id,
-                                },
-                            });
-                            self.next = body.entry().copied();
                         }
+
+                        self.active_calls.push(ActiveCall {
+                            fragment,
+                            output: None,
+                            target: FunctionCallTarget::HostFunction {
+                                id: *id,
+                            },
+                        });
+                        self.next = body.entry().copied();
                     }
                     FunctionCallTarget::IntrinsicFunction => {
                         todo!(
