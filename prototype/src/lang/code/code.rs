@@ -135,7 +135,7 @@ pub enum Expression {
     Literal { literal: Literal },
 }
 
-#[derive(Clone, Debug, Eq, PartialEq, udigest::Digestable)]
+#[derive(Clone, Copy, Debug, Eq, PartialEq, udigest::Digestable)]
 pub enum FunctionCallTarget {
     HostFunction { id: usize },
     IntrinsicFunction,
