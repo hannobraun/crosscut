@@ -50,7 +50,7 @@ impl Interpreter {
             };
 
             match expression {
-                Expression::FunctionCall { target: id } => match id {
+                Expression::FunctionCall { target } => match target {
                     Function::HostFunction { id } => {
                         if let Some(ActiveCall::ToHostFunction {
                             output: Some(output),
