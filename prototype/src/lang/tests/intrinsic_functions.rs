@@ -14,7 +14,6 @@ fn identity() {
     let mut lang = lang::Instance::new();
 
     lang.edit("identity 1", &host);
-    lang.interpreter.reset(&lang.code);
 
     let step = lang.interpreter.step(&lang.code);
     assert_eq!(step, StepResult::CallToIntrinsicFunction);

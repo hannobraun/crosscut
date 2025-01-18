@@ -28,20 +28,6 @@ fn compile_and_run(input_code: &str) -> Value {
     let mut lang = lang::Instance::new();
 
     lang.edit(input_code, &host);
-
-    // The editor already resets the interpreter, but only if it's not running.
-    // The tests that use this function provide multiple tokens. The editor
-    // resets the interpreter after the first token, and then it _is_ running,
-    // but never actually stepped until all code has been provided.
-    //
-    // As a result, the interpreter then tries to run the fragment resulting
-    // from that first token, which doesn't have arguments yet, resulting in an
-    // error.
-    //
-    // So we need to reset again manually, once all code has been provided, so
-    // the interpreter actually runs the most recent version of the code.
-    lang.interpreter.reset(&lang.code);
-
     run(&lang.code, &mut lang.interpreter)
 }
 
