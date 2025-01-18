@@ -90,23 +90,26 @@ impl Interpreter {
     }
 
     fn evaluate_value(&mut self, value: Value) -> StepResult {
-        let Some(ActiveCall::ToHostFunction {
-            id,
-            fragment,
-            output,
-        }) = self.active_calls.last_mut()
-        else {
+        let Some(active_call) = self.active_calls.last_mut() else {
             self.next = None;
             return StepResult::Finished { output: value };
         };
 
-        self.next = Some(*fragment);
+        match active_call {
+            ActiveCall::ToHostFunction {
+                id,
+                fragment,
+                output,
+            } => {
+                self.next = Some(*fragment);
 
-        let output = output.insert(Value::Integer { value: 0 });
-        StepResult::CallToHostFunction {
-            id: *id,
-            input: value,
-            output,
+                let output = output.insert(Value::Integer { value: 0 });
+                StepResult::CallToHostFunction {
+                    id: *id,
+                    input: value,
+                    output,
+                }
+            }
         }
     }
 
