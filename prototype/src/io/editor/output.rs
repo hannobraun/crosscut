@@ -191,11 +191,10 @@ impl Renderer {
         context: &RenderContext,
     ) -> anyhow::Result<()> {
         match expression {
-            Expression::FunctionCall { target } => {
-                let Some(name) = context.host.functions_by_id.get(target)
-                else {
+            Expression::FunctionCall { target: id } => {
+                let Some(name) = context.host.functions_by_id.get(id) else {
                     unreachable!(
-                        "Function call refers to non-existing function {target}"
+                        "Function call refers to non-existing function {id}"
                     );
                 };
 
