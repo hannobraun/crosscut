@@ -24,7 +24,7 @@ impl Code {
         Self {
             fragments,
             root,
-            errors: BTreeMap::default(),
+            errors: BTreeMap::new(),
         }
     }
 
