@@ -94,11 +94,10 @@ impl Interpreter {
 
         match target {
             FunctionCallTarget::HostFunction { id } => {
-                let output = output.insert(Value::Integer { value: 0 });
                 StepResult::CallToHostFunction {
                     id: *id,
                     input: value,
-                    output,
+                    output: output.insert(Value::Integer { value: 0 }),
                 }
             }
             FunctionCallTarget::IntrinsicFunction => {
