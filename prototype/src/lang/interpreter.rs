@@ -98,22 +98,26 @@ impl Interpreter {
         let ActiveCall {
             fragment,
             output,
-            target: FunctionCallTarget::HostFunction { id },
-        } = active_call
-        else {
-            todo!(
-                "Only function calls to host functions are supported at this \
-                point."
-            );
-        };
+            target,
+        } = active_call;
 
-        self.next = Some(*fragment);
+        match target {
+            FunctionCallTarget::HostFunction { id } => {
+                self.next = Some(*fragment);
 
-        let output = output.insert(Value::Integer { value: 0 });
-        StepResult::CallToHostFunction {
-            id: *id,
-            input: value,
-            output,
+                let output = output.insert(Value::Integer { value: 0 });
+                StepResult::CallToHostFunction {
+                    id: *id,
+                    input: value,
+                    output,
+                }
+            }
+            FunctionCallTarget::IntrinsicFunction => {
+                todo!(
+                    "Only function calls to host functions are supported at \
+                    this point."
+                );
+            }
         }
     }
 
