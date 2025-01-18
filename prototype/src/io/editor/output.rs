@@ -10,7 +10,7 @@ use crossterm::{
 use crate::lang::{
     code::{
         Body, Code, CodeError, Expression, FragmentError, FragmentId,
-        FragmentKind, Function, Literal,
+        FragmentKind, FunctionCallTarget, Literal,
     },
     editor::{Editor, EditorError, EditorMode},
     host::Host,
@@ -192,7 +192,7 @@ impl Renderer {
     ) -> anyhow::Result<()> {
         match expression {
             Expression::FunctionCall { target } => match target {
-                Function::HostFunction { id } => {
+                FunctionCallTarget::HostFunction { id } => {
                     let Some(name) = context.host.functions_by_id.get(id)
                     else {
                         unreachable!(

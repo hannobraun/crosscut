@@ -3,7 +3,7 @@ use std::num::IntErrorKind;
 use crate::lang::{
     code::{
         Body, Code, CodeError, Expression, Fragment, FragmentError,
-        FragmentKind, Function, Literal, Location,
+        FragmentKind, FunctionCallTarget, Literal, Location,
     },
     host::Host,
 };
@@ -50,7 +50,7 @@ fn parse_token(token: &str, host: &Host) -> FragmentKind {
                 if let Some(id) = host.functions_by_name.get(&name).copied() {
                     FragmentKind::Expression {
                         expression: Expression::FunctionCall {
-                            target: Function::HostFunction { id },
+                            target: FunctionCallTarget::HostFunction { id },
                         },
                     }
                 } else {

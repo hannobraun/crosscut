@@ -1,5 +1,6 @@
 use super::code::{
-    Body, Code, Expression, FragmentId, FragmentKind, Function, Literal,
+    Body, Code, Expression, FragmentId, FragmentKind, FunctionCallTarget,
+    Literal,
 };
 
 #[derive(Debug)]
@@ -51,7 +52,7 @@ impl Interpreter {
 
             match expression {
                 Expression::FunctionCall { target } => match target {
-                    Function::HostFunction { id } => {
+                    FunctionCallTarget::HostFunction { id } => {
                         if let Some(ActiveCall::ToHostFunction {
                             output: Some(output),
                             ..
