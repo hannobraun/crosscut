@@ -113,9 +113,8 @@ impl Code {
         }
 
         self.root = self.fragments.insert(next_to_replace_with);
-        let new_location = Location::from_component(self.root);
 
-        new_location.with_components(
+        Location::from_component(self.root).with_components(
             location_components_of_new_fragment_reverse
                 .into_iter()
                 .rev(),
