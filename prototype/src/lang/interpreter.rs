@@ -62,24 +62,12 @@ impl Interpreter {
                         return self.evaluate_value(output);
                     }
 
-                    match target {
-                        FunctionCallTarget::HostFunction { id } => {
-                            self.active_calls.push(ActiveCall {
-                                fragment,
-                                output: None,
-                                target: FunctionCallTarget::HostFunction {
-                                    id: *id,
-                                },
-                            });
-                            self.next = body.entry().copied();
-                        }
-                        FunctionCallTarget::IntrinsicFunction => {
-                            todo!(
-                                "Calls to intrinsic functions are not \
-                                supported yet."
-                            )
-                        }
-                    }
+                    self.active_calls.push(ActiveCall {
+                        fragment,
+                        output: None,
+                        target: *target,
+                    });
+                    self.next = body.entry().copied();
                 }
                 Expression::Literal {
                     literal: Literal::Integer { value },
