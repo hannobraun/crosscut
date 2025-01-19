@@ -73,8 +73,8 @@ impl Editor {
         match input {
             InputEvent::Char { value } => {
                 if value.is_whitespace() {
-                    if let EditorMode::Edit = &mut self.mode {
-                        let mut location = code.append_to(
+                    if let EditorMode::Edit { location } = &mut self.mode {
+                        *location = code.append_to(
                             &code.find_innermost_fragment_with_valid_body(),
                             Fragment {
                                 kind: FragmentKind::Empty,
@@ -82,16 +82,20 @@ impl Editor {
                             },
                         );
 
+                        self.input.clear();
+                    }
+                } else {
+                    self.input.insert(value);
+
+                    if let EditorMode::Edit { location } = &mut self.mode {
                         Self::process_code(
                             &mut self.input,
-                            &mut location,
+                            location,
                             code,
                             interpreter,
                             host,
                         );
                     }
-                } else {
-                    self.input.insert(value);
                 }
             }
             InputEvent::Backspace => {
@@ -102,22 +106,16 @@ impl Editor {
                     self.process_command(code, interpreter);
                     self.input.clear();
                 }
-                EditorMode::Edit => {
-                    let mut location = code.append_to(
-                        &code.find_innermost_fragment_with_valid_body(),
-                        Fragment {
-                            kind: FragmentKind::Empty,
-                            body: Body::default(),
-                        },
-                    );
+                EditorMode::Edit { location } => {
                     Self::process_code(
                         &mut self.input,
-                        &mut location,
+                        location,
                         code,
                         interpreter,
                         host,
                     );
                     self.mode = EditorMode::Command;
+                    self.input.clear();
                 }
             },
             InputEvent::Left => {
@@ -138,8 +136,6 @@ impl Editor {
     ) {
         *to_replace =
             compile_and_replace(&input.buffer, to_replace, host, code);
-
-        input.clear();
 
         if interpreter.state(code).is_running() {
             interpreter.update(code);
@@ -187,7 +183,14 @@ impl Editor {
                 interpreter.reset(code);
             }
             "edit" => {
-                self.mode = EditorMode::Edit;
+                let location = code.append_to(
+                    &code.find_innermost_fragment_with_valid_body(),
+                    Fragment {
+                        kind: FragmentKind::Empty,
+                        body: Body::default(),
+                    },
+                );
+                self.mode = EditorMode::Edit { location };
             }
             "reset" => {
                 interpreter.reset(code);
@@ -208,7 +211,7 @@ impl Default for Editor {
 #[derive(Debug, Eq, PartialEq)]
 pub enum EditorMode {
     Command,
-    Edit,
+    Edit { location: Location },
 }
 
 #[derive(Debug)]
