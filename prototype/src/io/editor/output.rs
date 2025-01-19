@@ -327,11 +327,21 @@ impl TerminalAdapter {
     }
 
     fn move_to_next_line(&mut self) -> anyhow::Result<()> {
-        self.w.queue(MoveToNextLine(1))?;
+        if terminal::is_raw_mode_enabled()? {
+            self.w.queue(MoveToNextLine(1))?;
+        } else {
+            // Terminal is not in raw mode, which means we're probably doing
+            // debug output. Don't mess around with commands, as to not
+            // interfere with other output that's possible being written around
+            // the same time.
+            writeln!(self.w)?;
+        }
+
         self.cursor = {
             let [_, y] = self.cursor;
             [0, y + 1]
         };
+
         Ok(())
     }
 
