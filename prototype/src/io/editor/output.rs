@@ -74,7 +74,7 @@ impl Renderer {
         self.w.move_to(0, 0)?;
 
         self.render_code(&mut context)?;
-        Self::render_prompt(&mut self.w, editor)?;
+        render_prompt(&mut self.w, editor)?;
 
         Ok(())
     }
@@ -228,55 +228,6 @@ impl Renderer {
 
         Ok(())
     }
-
-    fn render_prompt(
-        w: &mut TerminalAdapter,
-        editor: &Editor,
-    ) -> anyhow::Result<()> {
-        let mode = match editor.mode() {
-            EditorMode::Command => "command",
-            EditorMode::Edit { .. } => "edit",
-        };
-        let input = &editor.input().buffer;
-
-        if let Some(error) = editor.error() {
-            w.move_to_next_line()?;
-            match error {
-                EditorError::AmbiguousCommand {
-                    command,
-                    candidates,
-                } => {
-                    write!(w, "`{command}` could refer to multiple commands:",)?;
-                    w.move_to_next_line()?;
-                    for candidate in candidates {
-                        write!(w, "- `{candidate}`")?;
-                        w.move_to_next_line()?;
-                    }
-                }
-                EditorError::UnknownCommand { command } => {
-                    write!(w, "Unknown command: `{command}`")?;
-                }
-            }
-        }
-
-        w.move_to_next_line()?;
-        write!(w, "{mode} > ")?;
-
-        let [x, y] = w.cursor;
-        let x = {
-            let x: usize = x.into();
-            let x = x.saturating_add(editor.input().cursor);
-            let x: u16 = x.try_into().unwrap_or(u16::MAX);
-            x
-        };
-
-        write!(w, "{input}")?;
-        w.move_to(x, y)?;
-
-        w.flush()?;
-
-        Ok(())
-    }
 }
 
 impl Drop for Renderer {
@@ -284,6 +235,55 @@ impl Drop for Renderer {
         // Nothing we can do about a potential error here.
         let _ = terminal::disable_raw_mode();
     }
+}
+
+fn render_prompt(
+    w: &mut TerminalAdapter,
+    editor: &Editor,
+) -> anyhow::Result<()> {
+    let mode = match editor.mode() {
+        EditorMode::Command => "command",
+        EditorMode::Edit { .. } => "edit",
+    };
+    let input = &editor.input().buffer;
+
+    if let Some(error) = editor.error() {
+        w.move_to_next_line()?;
+        match error {
+            EditorError::AmbiguousCommand {
+                command,
+                candidates,
+            } => {
+                write!(w, "`{command}` could refer to multiple commands:",)?;
+                w.move_to_next_line()?;
+                for candidate in candidates {
+                    write!(w, "- `{candidate}`")?;
+                    w.move_to_next_line()?;
+                }
+            }
+            EditorError::UnknownCommand { command } => {
+                write!(w, "Unknown command: `{command}`")?;
+            }
+        }
+    }
+
+    w.move_to_next_line()?;
+    write!(w, "{mode} > ")?;
+
+    let [x, y] = w.cursor;
+    let x = {
+        let x: usize = x.into();
+        let x = x.saturating_add(editor.input().cursor);
+        let x: u16 = x.try_into().unwrap_or(u16::MAX);
+        x
+    };
+
+    write!(w, "{input}")?;
+    w.move_to(x, y)?;
+
+    w.flush()?;
+
+    Ok(())
 }
 
 struct RenderContext<'r> {
