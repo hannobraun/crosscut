@@ -2,12 +2,13 @@ use std::collections::BTreeMap;
 
 use super::{
     Body, CodeError, Fragment, FragmentId, FragmentKind, Fragments, Location,
+    Replacements,
 };
 
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub struct Code {
     fragments: Fragments,
-    replacements: BTreeMap<FragmentId, FragmentId>,
+    replacements: Replacements,
 
     pub root: FragmentId,
     pub errors: BTreeMap<FragmentId, CodeError>,
