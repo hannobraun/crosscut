@@ -28,7 +28,7 @@ pub fn render_code(code: &Code, host: &Host) {
     };
 
     let mut renderer = Renderer::new().unwrap();
-    renderer.render_code(&mut context).unwrap();
+    Renderer::render_code(&mut renderer, &mut context).unwrap();
 }
 
 pub struct Renderer {
