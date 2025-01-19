@@ -132,7 +132,7 @@ impl Renderer {
         };
 
         for _ in 0..indent {
-            Self::render_indent(&mut self.w)?;
+            render_indent(&mut self.w)?;
         }
 
         let fragment = context.code.fragments().get(id);
@@ -180,11 +180,6 @@ impl Renderer {
         Ok(())
     }
 
-    fn render_indent(w: &mut TerminalAdapter) -> anyhow::Result<()> {
-        write!(w, "    ")?;
-        Ok(())
-    }
-
     fn render_body(
         &mut self,
         body: &Body,
@@ -203,6 +198,11 @@ impl Drop for Renderer {
         // Nothing we can do about a potential error here.
         let _ = terminal::disable_raw_mode();
     }
+}
+
+fn render_indent(w: &mut TerminalAdapter) -> anyhow::Result<()> {
+    write!(w, "    ")?;
+    Ok(())
 }
 
 fn render_expression(
