@@ -25,9 +25,7 @@ impl Code {
 
         Self {
             fragments,
-            replacements: Replacements {
-                inner: BTreeMap::new(),
-            },
+            replacements: Replacements::default(),
             root,
             errors: BTreeMap::new(),
         }
