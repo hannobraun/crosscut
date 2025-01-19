@@ -19,7 +19,7 @@ use crate::lang::{
 
 #[cfg(test)]
 #[allow(unused)] // used sporadically, for debugging tests
-pub fn render_code(code: &Code, host: &Host) {
+pub fn print_code(code: &Code, host: &Host) {
     let mut context = RenderContext {
         code,
         host,
