@@ -28,7 +28,7 @@ pub fn render_code(code: &Code, host: &Host) {
     };
 
     let mut renderer = Renderer::new().unwrap();
-    Renderer::render_code(&mut renderer, &mut context).unwrap();
+    Renderer::render_code(&mut renderer.w, &mut context).unwrap();
 }
 
 pub struct Renderer {
@@ -73,14 +73,14 @@ impl Renderer {
         self.w.clear()?;
         self.w.move_to(0, 0)?;
 
-        Self::render_code(self, &mut context)?;
+        Self::render_code(&mut self.w, &mut context)?;
         render_prompt(&mut self.w, editor)?;
 
         Ok(())
     }
 
     fn render_code(
-        &mut self,
+        w: &mut TerminalAdapter,
         context: &mut RenderContext,
     ) -> anyhow::Result<()> {
         if let Some(interpreter) = context.interpreter {
@@ -90,13 +90,13 @@ impl Renderer {
                 InterpreterState::Error => "error",
             };
 
-            write!(self.w, "process {state}")?;
-            self.w.move_to_next_line()?;
+            write!(w, "process {state}")?;
+            w.move_to_next_line()?;
         };
 
-        render_fragment(&mut self.w, &context.code.root, context)?;
+        render_fragment(w, &context.code.root, context)?;
 
-        self.w.flush()?;
+        w.flush()?;
 
         Ok(())
     }
