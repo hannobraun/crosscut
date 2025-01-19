@@ -186,7 +186,7 @@ impl Renderer {
         context: &mut RenderContext,
     ) -> anyhow::Result<()> {
         for hash in body.ids() {
-            self.render_fragment(hash, context)?;
+            Self::render_fragment(self, hash, context)?;
         }
 
         Ok(())
