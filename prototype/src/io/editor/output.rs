@@ -171,23 +171,11 @@ impl Renderer {
         w.move_to_next_line()?;
 
         context.indent += 1;
-        Self::render_body(w, &fragment.body, context)?;
+        render_body(w, &fragment.body, context)?;
         context.indent -= 1;
 
         w.reset_color()?;
         w.set_attribute(Attribute::Reset)?;
-
-        Ok(())
-    }
-
-    fn render_body(
-        w: &mut TerminalAdapter,
-        body: &Body,
-        context: &mut RenderContext,
-    ) -> anyhow::Result<()> {
-        for hash in body.ids() {
-            Renderer::render_fragment(w, hash, context)?;
-        }
 
         Ok(())
     }
@@ -231,6 +219,18 @@ fn render_expression(
         } => {
             write!(w, "{value}")?;
         }
+    }
+
+    Ok(())
+}
+
+fn render_body(
+    w: &mut TerminalAdapter,
+    body: &Body,
+    context: &mut RenderContext,
+) -> anyhow::Result<()> {
+    for hash in body.ids() {
+        Renderer::render_fragment(w, hash, context)?;
     }
 
     Ok(())
