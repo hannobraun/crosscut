@@ -94,88 +94,9 @@ impl Renderer {
             self.w.move_to_next_line()?;
         };
 
-        Self::render_fragment(&mut self.w, &context.code.root, context)?;
+        render_fragment(&mut self.w, &context.code.root, context)?;
 
         self.w.flush()?;
-
-        Ok(())
-    }
-
-    fn render_fragment(
-        w: &mut TerminalAdapter,
-        id: &FragmentId,
-        context: &mut RenderContext,
-    ) -> anyhow::Result<()> {
-        let maybe_error = context.code.errors.get(id);
-
-        if maybe_error.is_some() {
-            w.set_foreground_color(Color::Red)?;
-        }
-
-        let mut indent = context.indent;
-        if let Some(interpreter) = context.interpreter {
-            if Some(id) == interpreter.next() {
-                w.set_attribute(Attribute::Bold)?;
-                write!(w, " => ")?;
-
-                // This is worth one indentation level. We need to adjust for
-                // that.
-                let Some(adjusted) = context.indent.checked_sub(1) else {
-                    unreachable!(
-                        "Every fragment body gets one level of indentation. \
-                        The root is a fragment. Hence, we must have at least \
-                        one level of indentation."
-                    );
-                };
-                indent = adjusted;
-            }
-        };
-
-        for _ in 0..indent {
-            render_indent(w)?;
-        }
-
-        let fragment = context.code.fragments().get(id);
-
-        match &fragment.kind {
-            FragmentKind::Root => {
-                // Nothing to render in the root fragment, except the body.
-                // Which we're already doing below, unconditionally.
-            }
-            FragmentKind::Empty => {
-                write!(w, "empty fragment")?;
-            }
-            FragmentKind::Expression { expression } => {
-                render_expression(w, expression, context)?;
-            }
-            FragmentKind::Error { err } => match err {
-                FragmentError::IntegerOverflow { value } => {
-                    write!(w, "{value}")?;
-                }
-                FragmentError::UnresolvedIdentifier { name } => {
-                    write!(w, "{name}")?;
-                }
-            },
-        }
-
-        if let Some(err) = maybe_error {
-            let message = match err {
-                CodeError::IntegerOverflow => "integer overflow",
-                CodeError::MissingArgument => "missing argument",
-                CodeError::UnexpectedToken => "unexpected token",
-                CodeError::UnresolvedIdentifier => "unresolved identifier",
-            };
-
-            write!(w, "    error: {message}")?;
-        }
-        w.move_to_next_line()?;
-
-        context.indent += 1;
-        render_body(w, &fragment.body, context)?;
-        context.indent -= 1;
-
-        w.reset_color()?;
-        w.set_attribute(Attribute::Reset)?;
 
         Ok(())
     }
@@ -186,6 +107,85 @@ impl Drop for Renderer {
         // Nothing we can do about a potential error here.
         let _ = terminal::disable_raw_mode();
     }
+}
+
+fn render_fragment(
+    w: &mut TerminalAdapter,
+    id: &FragmentId,
+    context: &mut RenderContext,
+) -> anyhow::Result<()> {
+    let maybe_error = context.code.errors.get(id);
+
+    if maybe_error.is_some() {
+        w.set_foreground_color(Color::Red)?;
+    }
+
+    let mut indent = context.indent;
+    if let Some(interpreter) = context.interpreter {
+        if Some(id) == interpreter.next() {
+            w.set_attribute(Attribute::Bold)?;
+            write!(w, " => ")?;
+
+            // This is worth one indentation level. We need to adjust for
+            // that.
+            let Some(adjusted) = context.indent.checked_sub(1) else {
+                unreachable!(
+                    "Every fragment body gets one level of indentation. \
+                        The root is a fragment. Hence, we must have at least \
+                        one level of indentation."
+                );
+            };
+            indent = adjusted;
+        }
+    };
+
+    for _ in 0..indent {
+        render_indent(w)?;
+    }
+
+    let fragment = context.code.fragments().get(id);
+
+    match &fragment.kind {
+        FragmentKind::Root => {
+            // Nothing to render in the root fragment, except the body.
+            // Which we're already doing below, unconditionally.
+        }
+        FragmentKind::Empty => {
+            write!(w, "empty fragment")?;
+        }
+        FragmentKind::Expression { expression } => {
+            render_expression(w, expression, context)?;
+        }
+        FragmentKind::Error { err } => match err {
+            FragmentError::IntegerOverflow { value } => {
+                write!(w, "{value}")?;
+            }
+            FragmentError::UnresolvedIdentifier { name } => {
+                write!(w, "{name}")?;
+            }
+        },
+    }
+
+    if let Some(err) = maybe_error {
+        let message = match err {
+            CodeError::IntegerOverflow => "integer overflow",
+            CodeError::MissingArgument => "missing argument",
+            CodeError::UnexpectedToken => "unexpected token",
+            CodeError::UnresolvedIdentifier => "unresolved identifier",
+        };
+
+        write!(w, "    error: {message}")?;
+    }
+    w.move_to_next_line()?;
+
+    context.indent += 1;
+    render_body(w, &fragment.body, context)?;
+    context.indent -= 1;
+
+    w.reset_color()?;
+    w.set_attribute(Attribute::Reset)?;
+
+    Ok(())
 }
 
 fn render_indent(w: &mut TerminalAdapter) -> anyhow::Result<()> {
@@ -230,7 +230,7 @@ fn render_body(
     context: &mut RenderContext,
 ) -> anyhow::Result<()> {
     for hash in body.ids() {
-        Renderer::render_fragment(w, hash, context)?;
+        render_fragment(w, hash, context)?;
     }
 
     Ok(())
