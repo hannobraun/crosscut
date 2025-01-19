@@ -146,7 +146,7 @@ impl Renderer {
                 write!(self.w, "empty fragment")?;
             }
             FragmentKind::Expression { expression } => {
-                self.render_expression(expression, context)?;
+                Self::render_expression(self, expression, context)?;
             }
             FragmentKind::Error { err } => match err {
                 FragmentError::IntegerOverflow { value } => {
