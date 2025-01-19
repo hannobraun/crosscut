@@ -115,7 +115,8 @@ impl Code {
                 &mut self.fragments,
             );
 
-            self.replacements.inner.insert(*id, id_of_replacement);
+            self.replacements
+                .insert_original_and_replacement(*id, id_of_replacement);
 
             next_to_replace_with = parent;
             location_components_of_new_fragment_reverse.push(id_of_replacement);

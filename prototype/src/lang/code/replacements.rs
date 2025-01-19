@@ -8,6 +8,14 @@ pub struct Replacements {
 }
 
 impl Replacements {
+    pub fn insert_original_and_replacement(
+        &mut self,
+        original: FragmentId,
+        replacement: FragmentId,
+    ) {
+        self.inner.insert(original, replacement);
+    }
+
     pub fn latest_version_of(&self, id: &FragmentId) -> FragmentId {
         let mut id = id;
 
