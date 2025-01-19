@@ -97,7 +97,7 @@ impl Editor {
             InputEvent::Backspace => {
                 self.input.remove_left();
             }
-            InputEvent::Enter => match &self.mode {
+            InputEvent::Enter => match &mut self.mode {
                 EditorMode::Command => {
                     self.process_command(code, interpreter);
                     self.input.clear();
