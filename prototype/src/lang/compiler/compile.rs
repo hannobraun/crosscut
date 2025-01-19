@@ -13,7 +13,7 @@ pub fn compile_and_replace(
     to_replace: &Location,
     host: &Host,
     code: &mut Code,
-) {
+) -> Location {
     let location_of_compiled_fragment = code.replace(
         to_replace,
         Fragment {
@@ -23,6 +23,8 @@ pub fn compile_and_replace(
     );
 
     handle_errors(&location_of_compiled_fragment, code);
+
+    location_of_compiled_fragment
 }
 
 fn parse_token(token: &str, host: &Host) -> FragmentKind {
