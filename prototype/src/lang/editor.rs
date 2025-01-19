@@ -136,7 +136,8 @@ impl Editor {
         interpreter: &mut Interpreter,
         host: &Host,
     ) {
-        compile_and_replace(&input.buffer, to_replace, host, code);
+        *to_replace =
+            compile_and_replace(&input.buffer, to_replace, host, code);
 
         input.clear();
 
