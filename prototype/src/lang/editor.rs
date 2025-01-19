@@ -93,7 +93,6 @@ impl Editor {
                     self.input.insert(value);
                 }
             }
-
             InputEvent::Backspace => {
                 self.input.remove_left();
             }
