@@ -106,14 +106,7 @@ impl Editor {
                     self.process_command(code, interpreter);
                     self.input.clear();
                 }
-                EditorMode::Edit { location } => {
-                    Self::process_code(
-                        &mut self.input,
-                        location,
-                        code,
-                        interpreter,
-                        host,
-                    );
+                EditorMode::Edit { .. } => {
                     self.mode = EditorMode::Command;
                     self.input.clear();
                 }
