@@ -73,7 +73,7 @@ impl Editor {
             InputEvent::Char { value } => {
                 if value.is_whitespace() {
                     if let EditorMode::Edit = &self.mode {
-                        let to_replace = code.append_to(
+                        let location = code.append_to(
                             &code.find_innermost_fragment_with_valid_body(),
                             Fragment {
                                 kind: FragmentKind::Empty,
@@ -81,7 +81,7 @@ impl Editor {
                             },
                         );
 
-                        self.process_code(to_replace, code, interpreter, host);
+                        self.process_code(location, code, interpreter, host);
                     }
                 } else {
                     self.input.insert(value);
