@@ -81,7 +81,7 @@ impl Editor {
                             },
                         );
 
-                        self.process_code(location, code, interpreter, host);
+                        self.process_code(&location, code, interpreter, host);
                     }
                 } else {
                     self.input.insert(value);
@@ -104,7 +104,7 @@ impl Editor {
                             body: Body::default(),
                         },
                     );
-                    self.process_code(to_replace, code, interpreter, host);
+                    self.process_code(&to_replace, code, interpreter, host);
                     self.mode = EditorMode::Command;
                 }
             },
@@ -119,12 +119,12 @@ impl Editor {
 
     fn process_code(
         &mut self,
-        to_replace: Location,
+        to_replace: &Location,
         code: &mut Code,
         interpreter: &mut Interpreter,
         host: &Host,
     ) {
-        compile_and_replace(&self.input.buffer, &to_replace, host, code);
+        compile_and_replace(&self.input.buffer, to_replace, host, code);
 
         self.input.clear();
 
