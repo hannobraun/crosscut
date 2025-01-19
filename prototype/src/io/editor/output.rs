@@ -94,7 +94,7 @@ impl Renderer {
             self.w.move_to_next_line()?;
         };
 
-        self.render_fragment(&context.code.root, context)?;
+        Self::render_fragment(self, &context.code.root, context)?;
 
         self.w.flush()?;
 
