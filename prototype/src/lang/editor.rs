@@ -82,7 +82,7 @@ impl Editor {
                         );
 
                         Self::process_code(
-                            self,
+                            &mut self.input,
                             &location,
                             code,
                             interpreter,
@@ -111,7 +111,7 @@ impl Editor {
                         },
                     );
                     Self::process_code(
-                        self,
+                        &mut self.input,
                         &location,
                         code,
                         interpreter,
@@ -130,15 +130,15 @@ impl Editor {
     }
 
     fn process_code(
-        &mut self,
+        input: &mut EditorInput,
         to_replace: &Location,
         code: &mut Code,
         interpreter: &mut Interpreter,
         host: &Host,
     ) {
-        compile_and_replace(&self.input.buffer, to_replace, host, code);
+        compile_and_replace(&input.buffer, to_replace, host, code);
 
-        self.input.clear();
+        input.clear();
 
         if interpreter.state(code).is_running() {
             interpreter.update(code);
