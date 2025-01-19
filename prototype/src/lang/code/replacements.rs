@@ -2,4 +2,7 @@ use std::collections::BTreeMap;
 
 use super::FragmentId;
 
-pub type Replacements = BTreeMap<FragmentId, FragmentId>;
+#[derive(Clone, Debug, Eq, PartialEq)]
+pub struct Replacements {
+    pub inner: BTreeMap<FragmentId, FragmentId>,
+}

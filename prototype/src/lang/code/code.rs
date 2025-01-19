@@ -25,7 +25,9 @@ impl Code {
 
         Self {
             fragments,
-            replacements: BTreeMap::new(),
+            replacements: Replacements {
+                inner: BTreeMap::new(),
+            },
             root,
             errors: BTreeMap::new(),
         }
@@ -82,7 +84,7 @@ impl Code {
     pub fn latest_version_of(&self, id: &FragmentId) -> FragmentId {
         let mut id = id;
 
-        while let Some(replacement) = self.replacements.get(id) {
+        while let Some(replacement) = self.replacements.inner.get(id) {
             id = replacement;
         }
 
@@ -121,7 +123,7 @@ impl Code {
                 &mut self.fragments,
             );
 
-            self.replacements.insert(*id, id_of_replacement);
+            self.replacements.inner.insert(*id, id_of_replacement);
 
             next_to_replace_with = parent;
             location_components_of_new_fragment_reverse.push(id_of_replacement);
