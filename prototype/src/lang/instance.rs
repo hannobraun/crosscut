@@ -53,9 +53,8 @@ impl Instance {
 
     #[cfg(test)]
     pub fn on_code(&mut self, code: &str, host: &Host) {
-        assert_eq!(
-            *self.editor.mode(),
-            EditorMode::Edit,
+        assert!(
+            matches!(*self.editor.mode(), EditorMode::Edit),
             "Trying to input code, but editor is not in edit mode.",
         );
 
