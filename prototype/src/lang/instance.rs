@@ -45,7 +45,7 @@ impl Instance {
         );
 
         for ch in command.chars() {
-            self.on_input(InputEvent::Char { value: ch }, host);
+            self.on_char(ch, host);
         }
 
         self.on_input(InputEvent::Enter, host);
@@ -60,10 +60,15 @@ impl Instance {
         );
 
         for ch in code.chars() {
-            self.on_input(InputEvent::Char { value: ch }, host);
+            self.on_char(ch, host);
         }
 
         self.on_input(InputEvent::Enter, host);
+    }
+
+    #[cfg(test)]
+    pub fn on_char(&mut self, ch: char, host: &Host) {
+        self.on_input(InputEvent::Char { value: ch }, host);
     }
 
     pub fn on_input(&mut self, event: InputEvent, host: &Host) {
