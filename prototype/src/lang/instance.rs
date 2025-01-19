@@ -11,6 +11,7 @@ use super::{
 #[cfg(test)]
 use super::interpreter::Value;
 
+#[derive(Debug)]
 pub struct Instance {
     pub code: Code,
     pub editor: Editor,
