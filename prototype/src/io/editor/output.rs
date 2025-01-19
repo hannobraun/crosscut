@@ -31,7 +31,7 @@ pub fn print_code(code: &Code, host: &Host) {
         w: stdout(),
         cursor: [0, 0],
     };
-    Renderer::render_code(&mut w, &mut context).unwrap();
+    render_code(&mut w, &mut context).unwrap();
 }
 
 pub struct Renderer {
@@ -76,30 +76,8 @@ impl Renderer {
         self.w.clear()?;
         self.w.move_to(0, 0)?;
 
-        Self::render_code(&mut self.w, &mut context)?;
+        render_code(&mut self.w, &mut context)?;
         render_prompt(&mut self.w, editor)?;
-
-        Ok(())
-    }
-
-    fn render_code(
-        w: &mut TerminalAdapter,
-        context: &mut RenderContext,
-    ) -> anyhow::Result<()> {
-        if let Some(interpreter) = context.interpreter {
-            let state = match interpreter.state(context.code) {
-                InterpreterState::Running => "running",
-                InterpreterState::Finished => "finished",
-                InterpreterState::Error => "error",
-            };
-
-            write!(w, "process {state}")?;
-            w.move_to_next_line()?;
-        };
-
-        render_fragment(w, &context.code.root, context)?;
-
-        w.flush()?;
 
         Ok(())
     }
@@ -110,6 +88,28 @@ impl Drop for Renderer {
         // Nothing we can do about a potential error here.
         let _ = terminal::disable_raw_mode();
     }
+}
+
+fn render_code(
+    w: &mut TerminalAdapter,
+    context: &mut RenderContext,
+) -> anyhow::Result<()> {
+    if let Some(interpreter) = context.interpreter {
+        let state = match interpreter.state(context.code) {
+            InterpreterState::Running => "running",
+            InterpreterState::Finished => "finished",
+            InterpreterState::Error => "error",
+        };
+
+        write!(w, "process {state}")?;
+        w.move_to_next_line()?;
+    };
+
+    render_fragment(w, &context.code.root, context)?;
+
+    w.flush()?;
+
+    Ok(())
 }
 
 fn render_fragment(
