@@ -74,7 +74,7 @@ impl Renderer {
         self.w.move_to(0, 0)?;
 
         self.render_code(&mut context)?;
-        self.render_prompt(editor)?;
+        Self::render_prompt(&mut self.w, editor)?;
 
         Ok(())
     }
@@ -229,7 +229,10 @@ impl Renderer {
         Ok(())
     }
 
-    fn render_prompt(&mut self, editor: &Editor) -> anyhow::Result<()> {
+    fn render_prompt(
+        w: &mut TerminalAdapter,
+        editor: &Editor,
+    ) -> anyhow::Result<()> {
         let mode = match editor.mode() {
             EditorMode::Command => "command",
             EditorMode::Edit { .. } => "edit",
@@ -237,32 +240,29 @@ impl Renderer {
         let input = &editor.input().buffer;
 
         if let Some(error) = editor.error() {
-            self.w.move_to_next_line()?;
+            w.move_to_next_line()?;
             match error {
                 EditorError::AmbiguousCommand {
                     command,
                     candidates,
                 } => {
-                    write!(
-                        self.w,
-                        "`{command}` could refer to multiple commands:",
-                    )?;
-                    self.w.move_to_next_line()?;
+                    write!(w, "`{command}` could refer to multiple commands:",)?;
+                    w.move_to_next_line()?;
                     for candidate in candidates {
-                        write!(self.w, "- `{candidate}`")?;
-                        self.w.move_to_next_line()?;
+                        write!(w, "- `{candidate}`")?;
+                        w.move_to_next_line()?;
                     }
                 }
                 EditorError::UnknownCommand { command } => {
-                    write!(self.w, "Unknown command: `{command}`")?;
+                    write!(w, "Unknown command: `{command}`")?;
                 }
             }
         }
 
-        self.w.move_to_next_line()?;
-        write!(self.w, "{mode} > ")?;
+        w.move_to_next_line()?;
+        write!(w, "{mode} > ")?;
 
-        let [x, y] = self.w.cursor;
+        let [x, y] = w.cursor;
         let x = {
             let x: usize = x.into();
             let x = x.saturating_add(editor.input().cursor);
@@ -270,10 +270,10 @@ impl Renderer {
             x
         };
 
-        write!(self.w, "{input}")?;
-        self.w.move_to(x, y)?;
+        write!(w, "{input}")?;
+        w.move_to(x, y)?;
 
-        self.w.flush()?;
+        w.flush()?;
 
         Ok(())
     }
