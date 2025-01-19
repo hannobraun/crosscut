@@ -13,6 +13,15 @@ impl Replacements {
         original: FragmentId,
         replacement: FragmentId,
     ) {
+        if original == replacement {
+            // It seems like this check should maybe be an assertion instead,
+            // but it's actually quite easy to get into a situation where a
+            // token gets compiled unchanged, which will lead to this case. And
+            // there might actually not be an easier place to catch than, than
+            // here.
+            return;
+        }
+
         self.inner.insert(original, replacement);
     }
 
