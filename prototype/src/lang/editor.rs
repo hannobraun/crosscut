@@ -74,7 +74,7 @@ impl Editor {
             InputEvent::Char { value } => {
                 if value.is_whitespace() {
                     if let EditorMode::Edit = &mut self.mode {
-                        let location = code.append_to(
+                        let mut location = code.append_to(
                             &code.find_innermost_fragment_with_valid_body(),
                             Fragment {
                                 kind: FragmentKind::Empty,
@@ -84,7 +84,7 @@ impl Editor {
 
                         Self::process_code(
                             &mut self.input,
-                            &location,
+                            &mut location,
                             code,
                             interpreter,
                             host,
@@ -103,7 +103,7 @@ impl Editor {
                     self.input.clear();
                 }
                 EditorMode::Edit => {
-                    let location = code.append_to(
+                    let mut location = code.append_to(
                         &code.find_innermost_fragment_with_valid_body(),
                         Fragment {
                             kind: FragmentKind::Empty,
@@ -112,7 +112,7 @@ impl Editor {
                     );
                     Self::process_code(
                         &mut self.input,
-                        &location,
+                        &mut location,
                         code,
                         interpreter,
                         host,
@@ -131,7 +131,7 @@ impl Editor {
 
     fn process_code(
         input: &mut EditorInput,
-        to_replace: &Location,
+        to_replace: &mut Location,
         code: &mut Code,
         interpreter: &mut Interpreter,
         host: &Host,
