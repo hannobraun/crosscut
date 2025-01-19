@@ -24,6 +24,7 @@ use super::code::Location;
 /// but can translate from specific key presses to more higher-level concepts,
 /// like "go to parent" or "leave current context", instead of "up" and
 /// "escape".
+#[derive(Debug)]
 pub struct Editor {
     mode: EditorMode,
     input: EditorInput,
@@ -209,6 +210,7 @@ pub enum EditorMode {
     Edit,
 }
 
+#[derive(Debug)]
 pub struct EditorInput {
     pub buffer: String,
     pub cursor: usize,
@@ -256,6 +258,7 @@ pub enum InputEvent {
     Right,
 }
 
+#[derive(Debug)]
 pub enum EditorError {
     AmbiguousCommand {
         command: String,
