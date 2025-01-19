@@ -72,7 +72,7 @@ impl Editor {
         match input {
             InputEvent::Char { value } => {
                 if value.is_whitespace() {
-                    if let EditorMode::Edit = self.mode {
+                    if let EditorMode::Edit = &self.mode {
                         let to_replace = code.append_to(
                             &code.find_innermost_fragment_with_valid_body(),
                             Fragment {
