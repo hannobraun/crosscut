@@ -146,7 +146,7 @@ impl Renderer {
                 write!(self.w, "empty fragment")?;
             }
             FragmentKind::Expression { expression } => {
-                Self::render_expression(self, expression, context)?;
+                Self::render_expression(&mut self.w, expression, context)?;
             }
             FragmentKind::Error { err } => match err {
                 FragmentError::IntegerOverflow { value } => {
@@ -186,7 +186,7 @@ impl Renderer {
     }
 
     fn render_expression(
-        &mut self,
+        w: &mut TerminalAdapter,
         expression: &Expression,
         context: &RenderContext,
     ) -> anyhow::Result<()> {
@@ -201,16 +201,16 @@ impl Renderer {
                         );
                     };
 
-                    write!(self.w, "{name}")?;
+                    write!(w, "{name}")?;
                 }
                 FunctionCallTarget::IntrinsicFunction => {
-                    write!(self.w, "identity")?;
+                    write!(w, "identity")?;
                 }
             },
             Expression::Literal {
                 literal: Literal::Integer { value },
             } => {
-                write!(self.w, "{value}")?;
+                write!(w, "{value}")?;
             }
         }
 
