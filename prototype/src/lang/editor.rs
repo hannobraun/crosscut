@@ -10,6 +10,8 @@ use crate::lang::{
     interpreter::Interpreter,
 };
 
+use super::code::Location;
+
 /// # Platform-independent and I/O-less editor core
 ///
 /// ## Implementation Note
@@ -71,7 +73,15 @@ impl Editor {
             InputEvent::Char { value } => {
                 if value.is_whitespace() {
                     if let EditorMode::Edit = self.mode {
-                        self.process_code(code, interpreter, host);
+                        let to_replace = code.append_to(
+                            &code.find_innermost_fragment_with_valid_body(),
+                            Fragment {
+                                kind: FragmentKind::Empty,
+                                body: Body::default(),
+                            },
+                        );
+
+                        self.process_code(to_replace, code, interpreter, host);
                     }
                 } else {
                     self.input.insert(value);
@@ -87,7 +97,14 @@ impl Editor {
                     self.input.clear();
                 }
                 EditorMode::Edit => {
-                    self.process_code(code, interpreter, host);
+                    let to_replace = code.append_to(
+                        &code.find_innermost_fragment_with_valid_body(),
+                        Fragment {
+                            kind: FragmentKind::Empty,
+                            body: Body::default(),
+                        },
+                    );
+                    self.process_code(to_replace, code, interpreter, host);
                     self.mode = EditorMode::Command;
                 }
             },
@@ -102,18 +119,11 @@ impl Editor {
 
     fn process_code(
         &mut self,
+        to_replace: Location,
         code: &mut Code,
         interpreter: &mut Interpreter,
         host: &Host,
     ) {
-        let to_replace = code.append_to(
-            &code.find_innermost_fragment_with_valid_body(),
-            Fragment {
-                kind: FragmentKind::Empty,
-                body: Body::default(),
-            },
-        );
-
         compile_and_replace(&self.input.buffer, &to_replace, host, code);
 
         self.input.clear();
