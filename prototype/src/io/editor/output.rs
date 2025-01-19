@@ -27,8 +27,11 @@ pub fn render_code(code: &Code, host: &Host) {
         indent: 0,
     };
 
-    let mut renderer = Renderer::new().unwrap();
-    Renderer::render_code(&mut renderer.w, &mut context).unwrap();
+    let mut w = TerminalAdapter {
+        w: stdout(),
+        cursor: [0, 0],
+    };
+    Renderer::render_code(&mut w, &mut context).unwrap();
 }
 
 pub struct Renderer {
