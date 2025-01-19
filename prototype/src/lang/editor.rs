@@ -97,14 +97,14 @@ impl Editor {
                     self.input.clear();
                 }
                 EditorMode::Edit => {
-                    let to_replace = code.append_to(
+                    let location = code.append_to(
                         &code.find_innermost_fragment_with_valid_body(),
                         Fragment {
                             kind: FragmentKind::Empty,
                             body: Body::default(),
                         },
                     );
-                    self.process_code(&to_replace, code, interpreter, host);
+                    self.process_code(&location, code, interpreter, host);
                     self.mode = EditorMode::Command;
                 }
             },
