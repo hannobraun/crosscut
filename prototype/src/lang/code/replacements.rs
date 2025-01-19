@@ -1,4 +1,4 @@
-use std::collections::BTreeMap;
+use std::collections::{BTreeMap, BTreeSet};
 
 use super::FragmentId;
 
@@ -17,9 +17,18 @@ impl Replacements {
     }
 
     pub fn latest_version_of(&self, id: &FragmentId) -> FragmentId {
+        let mut already_seen = BTreeSet::new();
         let mut current_id = id;
 
         while let Some(replacement) = self.inner.get(current_id) {
+            if already_seen.contains(replacement) {
+                unreachable!(
+                    "Detected endless loop while searching for latest version \
+                    of {id:?}. IDs found: {already_seen:?}"
+                );
+            }
+
+            already_seen.insert(id);
             current_id = replacement;
         }
 
