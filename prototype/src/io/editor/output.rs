@@ -171,7 +171,7 @@ impl Renderer {
         self.w.move_to_next_line()?;
 
         context.indent += 1;
-        self.render_body(&fragment.body, context)?;
+        Self::render_body(self, &fragment.body, context)?;
         context.indent -= 1;
 
         self.w.reset_color()?;
