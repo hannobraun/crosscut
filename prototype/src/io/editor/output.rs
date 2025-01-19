@@ -132,7 +132,7 @@ impl Renderer {
         };
 
         for _ in 0..indent {
-            self.render_indent()?;
+            Self::render_indent(self)?;
         }
 
         let fragment = context.code.fragments().get(id);
