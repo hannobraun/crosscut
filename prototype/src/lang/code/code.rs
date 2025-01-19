@@ -7,7 +7,7 @@ use super::{
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub struct Code {
     fragments: Fragments,
-    updates: BTreeMap<FragmentId, FragmentId>,
+    replacements: BTreeMap<FragmentId, FragmentId>,
 
     pub root: FragmentId,
     pub errors: BTreeMap<FragmentId, CodeError>,
@@ -24,7 +24,7 @@ impl Code {
 
         Self {
             fragments,
-            updates: BTreeMap::new(),
+            replacements: BTreeMap::new(),
             root,
             errors: BTreeMap::new(),
         }
@@ -81,7 +81,7 @@ impl Code {
     pub fn latest_version_of(&self, id: &FragmentId) -> FragmentId {
         let mut id = id;
 
-        while let Some(replacement) = self.updates.get(id) {
+        while let Some(replacement) = self.replacements.get(id) {
             id = replacement;
         }
 
@@ -120,7 +120,7 @@ impl Code {
                 &mut self.fragments,
             );
 
-            self.updates.insert(*id, id_of_replacement);
+            self.replacements.insert(*id, id_of_replacement);
 
             next_to_replace_with = parent;
             location_components_of_new_fragment_reverse.push(id_of_replacement);
