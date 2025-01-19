@@ -73,7 +73,7 @@ impl Renderer {
         self.w.clear()?;
         self.w.move_to(0, 0)?;
 
-        self.render_code(&mut context)?;
+        Self::render_code(self, &mut context)?;
         render_prompt(&mut self.w, editor)?;
 
         Ok(())
