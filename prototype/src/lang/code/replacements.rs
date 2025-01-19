@@ -17,12 +17,12 @@ impl Replacements {
     }
 
     pub fn latest_version_of(&self, id: &FragmentId) -> FragmentId {
-        let mut id = id;
+        let mut current_id = id;
 
-        while let Some(replacement) = self.inner.get(id) {
-            id = replacement;
+        while let Some(replacement) = self.inner.get(current_id) {
+            current_id = replacement;
         }
 
-        *id
+        *current_id
     }
 }
