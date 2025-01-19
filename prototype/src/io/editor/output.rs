@@ -146,7 +146,7 @@ impl Renderer {
                 write!(self.w, "empty fragment")?;
             }
             FragmentKind::Expression { expression } => {
-                Self::render_expression(&mut self.w, expression, context)?;
+                render_expression(&mut self.w, expression, context)?;
             }
             FragmentKind::Error { err } => match err {
                 FragmentError::IntegerOverflow { value } => {
@@ -185,38 +185,6 @@ impl Renderer {
         Ok(())
     }
 
-    fn render_expression(
-        w: &mut TerminalAdapter,
-        expression: &Expression,
-        context: &RenderContext,
-    ) -> anyhow::Result<()> {
-        match expression {
-            Expression::FunctionCall { target } => match target {
-                FunctionCallTarget::HostFunction { id } => {
-                    let Some(name) = context.host.functions_by_id.get(id)
-                    else {
-                        unreachable!(
-                            "Function call refers to non-existing host \
-                            function `{id}`"
-                        );
-                    };
-
-                    write!(w, "{name}")?;
-                }
-                FunctionCallTarget::IntrinsicFunction => {
-                    write!(w, "identity")?;
-                }
-            },
-            Expression::Literal {
-                literal: Literal::Integer { value },
-            } => {
-                write!(w, "{value}")?;
-            }
-        }
-
-        Ok(())
-    }
-
     fn render_body(
         &mut self,
         body: &Body,
@@ -235,6 +203,37 @@ impl Drop for Renderer {
         // Nothing we can do about a potential error here.
         let _ = terminal::disable_raw_mode();
     }
+}
+
+fn render_expression(
+    w: &mut TerminalAdapter,
+    expression: &Expression,
+    context: &RenderContext,
+) -> anyhow::Result<()> {
+    match expression {
+        Expression::FunctionCall { target } => match target {
+            FunctionCallTarget::HostFunction { id } => {
+                let Some(name) = context.host.functions_by_id.get(id) else {
+                    unreachable!(
+                        "Function call refers to non-existing host \
+                            function `{id}`"
+                    );
+                };
+
+                write!(w, "{name}")?;
+            }
+            FunctionCallTarget::IntrinsicFunction => {
+                write!(w, "identity")?;
+            }
+        },
+        Expression::Literal {
+            literal: Literal::Integer { value },
+        } => {
+            write!(w, "{value}")?;
+        }
+    }
+
+    Ok(())
 }
 
 fn render_prompt(
