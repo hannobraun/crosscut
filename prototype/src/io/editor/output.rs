@@ -94,7 +94,7 @@ impl Renderer {
             self.w.move_to_next_line()?;
         };
 
-        Self::render_fragment(self, &context.code.root, context)?;
+        Self::render_fragment(&mut self.w, &context.code.root, context)?;
 
         self.w.flush()?;
 
@@ -102,21 +102,21 @@ impl Renderer {
     }
 
     fn render_fragment(
-        &mut self,
+        w: &mut TerminalAdapter,
         id: &FragmentId,
         context: &mut RenderContext,
     ) -> anyhow::Result<()> {
         let maybe_error = context.code.errors.get(id);
 
         if maybe_error.is_some() {
-            self.w.set_foreground_color(Color::Red)?;
+            w.set_foreground_color(Color::Red)?;
         }
 
         let mut indent = context.indent;
         if let Some(interpreter) = context.interpreter {
             if Some(id) == interpreter.next() {
-                self.w.set_attribute(Attribute::Bold)?;
-                write!(self.w, " => ")?;
+                w.set_attribute(Attribute::Bold)?;
+                write!(w, " => ")?;
 
                 // This is worth one indentation level. We need to adjust for
                 // that.
@@ -132,7 +132,7 @@ impl Renderer {
         };
 
         for _ in 0..indent {
-            render_indent(&mut self.w)?;
+            render_indent(w)?;
         }
 
         let fragment = context.code.fragments().get(id);
@@ -143,17 +143,17 @@ impl Renderer {
                 // Which we're already doing below, unconditionally.
             }
             FragmentKind::Empty => {
-                write!(self.w, "empty fragment")?;
+                write!(w, "empty fragment")?;
             }
             FragmentKind::Expression { expression } => {
-                render_expression(&mut self.w, expression, context)?;
+                render_expression(w, expression, context)?;
             }
             FragmentKind::Error { err } => match err {
                 FragmentError::IntegerOverflow { value } => {
-                    write!(self.w, "{value}")?;
+                    write!(w, "{value}")?;
                 }
                 FragmentError::UnresolvedIdentifier { name } => {
-                    write!(self.w, "{name}")?;
+                    write!(w, "{name}")?;
                 }
             },
         }
@@ -166,27 +166,27 @@ impl Renderer {
                 CodeError::UnresolvedIdentifier => "unresolved identifier",
             };
 
-            write!(self.w, "    error: {message}")?;
+            write!(w, "    error: {message}")?;
         }
-        self.w.move_to_next_line()?;
+        w.move_to_next_line()?;
 
         context.indent += 1;
-        Self::render_body(self, &fragment.body, context)?;
+        Self::render_body(w, &fragment.body, context)?;
         context.indent -= 1;
 
-        self.w.reset_color()?;
-        self.w.set_attribute(Attribute::Reset)?;
+        w.reset_color()?;
+        w.set_attribute(Attribute::Reset)?;
 
         Ok(())
     }
 
     fn render_body(
-        &mut self,
+        w: &mut TerminalAdapter,
         body: &Body,
         context: &mut RenderContext,
     ) -> anyhow::Result<()> {
         for hash in body.ids() {
-            Self::render_fragment(self, hash, context)?;
+            Self::render_fragment(w, hash, context)?;
         }
 
         Ok(())
