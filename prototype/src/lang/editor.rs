@@ -81,7 +81,13 @@ impl Editor {
                             },
                         );
 
-                        self.process_code(&location, code, interpreter, host);
+                        Self::process_code(
+                            self,
+                            &location,
+                            code,
+                            interpreter,
+                            host,
+                        );
                     }
                 } else {
                     self.input.insert(value);
@@ -104,7 +110,13 @@ impl Editor {
                             body: Body::default(),
                         },
                     );
-                    self.process_code(&location, code, interpreter, host);
+                    Self::process_code(
+                        self,
+                        &location,
+                        code,
+                        interpreter,
+                        host,
+                    );
                     self.mode = EditorMode::Command;
                 }
             },
