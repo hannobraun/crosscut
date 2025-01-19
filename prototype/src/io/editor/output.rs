@@ -132,7 +132,7 @@ impl Renderer {
         };
 
         for _ in 0..indent {
-            Self::render_indent(self)?;
+            Self::render_indent(&mut self.w)?;
         }
 
         let fragment = context.code.fragments().get(id);
@@ -180,8 +180,8 @@ impl Renderer {
         Ok(())
     }
 
-    fn render_indent(&mut self) -> anyhow::Result<()> {
-        write!(self.w, "    ")?;
+    fn render_indent(w: &mut TerminalAdapter) -> anyhow::Result<()> {
+        write!(w, "    ")?;
         Ok(())
     }
 
