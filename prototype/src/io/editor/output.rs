@@ -202,21 +202,24 @@ fn render_expression(
     context: &RenderContext,
 ) -> anyhow::Result<()> {
     match expression {
-        Expression::FunctionCall { target } => match target {
-            FunctionCallTarget::HostFunction { id } => {
-                let Some(name) = context.host.functions_by_id.get(id) else {
-                    unreachable!(
-                        "Function call refers to non-existing host \
+        Expression::FunctionCall { target } => {
+            let name = match target {
+                FunctionCallTarget::HostFunction { id } => {
+                    let Some(name) = context.host.functions_by_id.get(id)
+                    else {
+                        unreachable!(
+                            "Function call refers to non-existing host \
                             function `{id}`"
-                    );
-                };
+                        );
+                    };
 
-                write!(w, "{name}")?;
-            }
-            FunctionCallTarget::IntrinsicFunction => {
-                write!(w, "identity")?;
-            }
-        },
+                    name
+                }
+                FunctionCallTarget::IntrinsicFunction => "identity",
+            };
+
+            write!(w, "{name}")?;
+        }
         Expression::Literal {
             literal: Literal::Integer { value },
         } => {
