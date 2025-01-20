@@ -20,16 +20,15 @@ use crate::lang::{
 #[cfg(test)]
 #[allow(unused)] // used sporadically, for debugging tests
 pub fn print_code(code: &Code, host: &Host) {
+    let mut w = TerminalAdapter {
+        w: stdout(),
+        cursor: [0, 0],
+    };
     let mut context = RenderContext {
         code,
         host,
         interpreter: None,
         indent: 0,
-    };
-
-    let mut w = TerminalAdapter {
-        w: stdout(),
-        cursor: [0, 0],
     };
     render_code(&mut w, &mut context).unwrap();
 }
