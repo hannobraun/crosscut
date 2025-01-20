@@ -81,6 +81,10 @@ impl Renderer {
         render_code(&mut self.w, &mut context)?;
         render_prompt(&mut self.w, editor, &mut context)?;
 
+        if let Some([x, y]) = context.cursor {
+            self.w.move_to(x, y)?;
+        }
+
         self.w.flush()?;
 
         Ok(())
@@ -303,10 +307,6 @@ fn render_prompt(
     context.cursor = Some([x, y]);
 
     write!(w, "{input}")?;
-
-    if let Some([x, y]) = context.cursor {
-        w.move_to(x, y)?;
-    }
 
     Ok(())
 }
