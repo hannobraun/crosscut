@@ -29,6 +29,7 @@ pub fn print_code(code: &Code, host: &Host) {
         host,
         interpreter: None,
         indent: 0,
+        cursor: None,
     };
 
     render_code(&mut w, &mut context).unwrap();
@@ -71,6 +72,7 @@ impl Renderer {
             interpreter,
             host,
             indent: 0,
+            cursor: None,
         };
 
         self.w.clear()?;
@@ -257,7 +259,7 @@ fn render_body(
 fn render_prompt(
     w: &mut TerminalAdapter,
     editor: &Editor,
-    _: &mut RenderContext,
+    context: &mut RenderContext,
 ) -> anyhow::Result<()> {
     let mode = match editor.mode() {
         EditorMode::Command => "command",
@@ -296,8 +298,13 @@ fn render_prompt(
         x
     };
 
+    context.cursor = Some([x, y]);
+
     write!(w, "{input}")?;
-    w.move_to(x, y)?;
+
+    if let Some([x, y]) = context.cursor {
+        w.move_to(x, y)?;
+    }
 
     w.flush()?;
 
@@ -309,6 +316,7 @@ struct RenderContext<'r> {
     interpreter: Option<&'r Interpreter>,
     host: &'r Host,
     indent: u32,
+    cursor: Option<[u16; 2]>,
 }
 
 /// # Adapter between the renderer and the terminal
