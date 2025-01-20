@@ -156,9 +156,12 @@ fn render_fragment(
         render_indent(w)?;
     }
 
+    let mut currently_editing_this_fragment = false;
     if let Some(editor) = &context.editor {
         if let EditorMode::Edit { location } = editor.mode() {
             if location.target() == id {
+                currently_editing_this_fragment = true;
+
                 context.cursor = {
                     let [x, y] = w.cursor;
                     let x = {
@@ -182,7 +185,13 @@ fn render_fragment(
             // Which we're already doing below, unconditionally.
         }
         FragmentKind::Empty => {
-            write!(w, "empty fragment")?;
+            if currently_editing_this_fragment {
+                // We're already drawing the cursor right here. Drawing anything
+                // else for an empty fragment is only going to interfere with
+                // that.
+            } else {
+                write!(w, "empty fragment")?;
+            }
         }
         FragmentKind::Expression { expression } => {
             render_expression(w, expression, context)?;
