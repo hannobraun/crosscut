@@ -11,15 +11,13 @@ pub struct Interpreter {
 
 impl Interpreter {
     pub fn new(code: &Code) -> Self {
-        let mut interpreter = Self {
-            next: None,
-            active_calls: Vec::new(),
-        };
-
         let root = code.fragments().get(&code.root);
-        interpreter.next = root.body.entry().copied();
+        let next = root.body.entry().copied();
 
-        interpreter
+        Self {
+            next,
+            active_calls: Vec::new(),
+        }
     }
 
     pub fn reset(&mut self, code: &Code) {
