@@ -203,8 +203,10 @@ fn render_expression(
 ) -> anyhow::Result<()> {
     match expression {
         Expression::FunctionCall { target } => {
-            let name = match target {
+            let (color, name) = match target {
                 FunctionCallTarget::HostFunction { id } => {
+                    let color = Color::DarkMagenta;
+
                     let Some(name) = context.host.functions_by_id.get(id)
                     else {
                         unreachable!(
@@ -213,12 +215,16 @@ fn render_expression(
                         );
                     };
 
-                    name.as_str()
+                    (color, name.as_str())
                 }
-                FunctionCallTarget::IntrinsicFunction => "identity",
+                FunctionCallTarget::IntrinsicFunction => {
+                    (Color::DarkBlue, "identity")
+                }
             };
 
+            w.queue(SetForegroundColor(color))?;
             write!(w, "{name}")?;
+            w.queue(ResetColor)?;
         }
         Expression::Literal {
             literal: Literal::Integer { value },
