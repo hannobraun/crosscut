@@ -30,6 +30,7 @@ pub fn print_code(code: &Code, host: &Host) {
         interpreter: None,
         indent: 0,
     };
+
     render_code(&mut w, &mut context).unwrap();
 }
 
