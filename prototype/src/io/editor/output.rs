@@ -27,6 +27,7 @@ pub fn print_code(code: &Code, host: &Host) {
     let mut context = RenderContext {
         code,
         host,
+        editor: None,
         interpreter: None,
         indent: 0,
         cursor: None,
@@ -70,6 +71,7 @@ impl Renderer {
         let mut context = RenderContext {
             code,
             interpreter,
+            editor: Some(editor),
             host,
             indent: 0,
             cursor: None,
@@ -152,6 +154,24 @@ fn render_fragment(
 
     for _ in 0..indent {
         render_indent(w)?;
+    }
+
+    if let Some(editor) = &context.editor {
+        if let EditorMode::Edit { location } = editor.mode() {
+            if location.target() == id {
+                context.cursor = {
+                    let [x, y] = w.cursor;
+                    let x = {
+                        let x: usize = x.into();
+                        let x = x.saturating_add(editor.input().cursor);
+                        let x: u16 = x.try_into().unwrap_or(u16::MAX);
+                        x
+                    };
+
+                    Some([x, y])
+                };
+            }
+        }
     }
 
     let fragment = context.code.fragments().get(id);
@@ -265,7 +285,7 @@ fn render_body(
 fn render_prompt(
     w: &mut TerminalAdapter,
     editor: &Editor,
-    context: &mut RenderContext,
+    _: &mut RenderContext,
 ) -> anyhow::Result<()> {
     let mode = match editor.mode() {
         EditorMode::Command => "command",
@@ -296,18 +316,6 @@ fn render_prompt(
     w.move_to_next_line()?;
     write!(w, "{mode} > ")?;
 
-    context.cursor = {
-        let [x, y] = w.cursor;
-        let x = {
-            let x: usize = x.into();
-            let x = x.saturating_add(editor.input().cursor);
-            let x: u16 = x.try_into().unwrap_or(u16::MAX);
-            x
-        };
-
-        Some([x, y])
-    };
-
     write!(w, "{input}")?;
 
     Ok(())
@@ -315,6 +323,7 @@ fn render_prompt(
 
 struct RenderContext<'r> {
     code: &'r Code,
+    editor: Option<&'r Editor>,
     interpreter: Option<&'r Interpreter>,
     host: &'r Host,
     indent: u32,
