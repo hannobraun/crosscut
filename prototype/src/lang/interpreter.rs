@@ -23,6 +23,9 @@ impl Interpreter {
     }
 
     pub fn reset(&mut self, code: &Code) {
+        // Let's use re-use the constructor instead of trying to do anything
+        // more advanced (and possibly efficient) here. That way, we make sure
+        // we're never going to forget to reset anything specific.
         *self = Self::new(code);
     }
 
