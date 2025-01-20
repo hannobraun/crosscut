@@ -213,7 +213,7 @@ fn render_expression(
                         );
                     };
 
-                    name
+                    name.as_str()
                 }
                 FunctionCallTarget::IntrinsicFunction => "identity",
             };
