@@ -81,6 +81,8 @@ impl Renderer {
         render_code(&mut self.w, &mut context)?;
         render_prompt(&mut self.w, editor, &mut context)?;
 
+        self.w.flush()?;
+
         Ok(())
     }
 }
@@ -305,8 +307,6 @@ fn render_prompt(
     if let Some([x, y]) = context.cursor {
         w.move_to(x, y)?;
     }
-
-    w.flush()?;
 
     Ok(())
 }
