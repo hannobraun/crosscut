@@ -15,14 +15,15 @@ impl Interpreter {
             next: None,
             active_calls: Vec::new(),
         };
-        interpreter.reset(code);
+
+        let root = code.fragments().get(&code.root);
+        interpreter.next = root.body.entry().copied();
 
         interpreter
     }
 
     pub fn reset(&mut self, code: &Code) {
-        let root = code.fragments().get(&code.root);
-        self.next = root.body.entry().copied();
+        *self = Self::new(code);
     }
 
     pub fn update(&mut self, code: &Code) {
