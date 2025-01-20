@@ -2,6 +2,7 @@
 pub enum CodeError {
     IntegerOverflow,
     MissingArgument,
+    MultiResolvedIdentifier,
     UnexpectedToken,
     UnresolvedIdentifier,
 }

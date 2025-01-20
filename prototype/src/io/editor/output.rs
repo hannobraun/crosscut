@@ -163,6 +163,9 @@ fn render_fragment(
             FragmentError::IntegerOverflow { value } => {
                 write!(w, "{value}")?;
             }
+            FragmentError::MultiResolvedIdentifier { name } => {
+                write!(w, "{name}")?;
+            }
             FragmentError::UnresolvedIdentifier { name } => {
                 write!(w, "{name}")?;
             }
@@ -173,6 +176,9 @@ fn render_fragment(
         let message = match err {
             CodeError::IntegerOverflow => "integer overflow",
             CodeError::MissingArgument => "missing argument",
+            CodeError::MultiResolvedIdentifier => {
+                "identifier resolved multiple times"
+            }
             CodeError::UnexpectedToken => "unexpected token",
             CodeError::UnresolvedIdentifier => "unresolved identifier",
         };

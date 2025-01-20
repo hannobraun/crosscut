@@ -62,6 +62,23 @@ fn unresolved_identifier_is_an_error() {
 }
 
 #[test]
+fn identifier_that_resolves_to_multiple_functions_is_an_error() {
+    // If a function shares a name with a different type of function, then an
+    // identifier with that name should result in an error.
+
+    let host = Host::from_functions(["identity"]);
+    let mut code = Code::default();
+
+    compile_all("identity 1", &host, &mut code);
+
+    let identity = code.fragments().get(&code.root).body.ids().next().unwrap();
+    assert_eq!(
+        code.errors.get(identity),
+        Some(&CodeError::MultiResolvedIdentifier)
+    );
+}
+
+#[test]
 fn missing_function_call_argument_is_an_error() {
     // A function call with a missing argument is an error. If an argument is
     // added, that error goes away.
