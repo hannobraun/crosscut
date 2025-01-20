@@ -91,6 +91,7 @@ impl GameEngine {
                             }
                             StepResult::CallToIntrinsicFunction => {
                                 // Nothing to be done about this.
+                                continue;
                             }
                             StepResult::Error => {
                                 // Not handling errors right now. They should be
