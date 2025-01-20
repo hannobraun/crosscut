@@ -315,7 +315,15 @@ fn render_prompt(
     w.move_to_next_line()?;
     write!(w, "{mode} > ")?;
 
-    write!(w, "{input}")?;
+    match editor.mode() {
+        EditorMode::Command => {
+            write!(w, "{input}")?;
+        }
+        EditorMode::Edit { .. } => {
+            // If we're in edit mode, the editing happens directly where the
+            // code is displayed, and there's no need to display any input here.
+        }
+    }
 
     Ok(())
 }
