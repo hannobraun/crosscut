@@ -1,5 +1,6 @@
 use crate::lang::{
     self,
+    editor::InputEvent,
     host::Host,
     interpreter::{StepResult, Value},
 };
@@ -27,6 +28,34 @@ fn update_on_each_character() {
         lang.interpreter.step(&lang.code),
         StepResult::Finished {
             output: Value::Integer { value: 12 }
+        },
+    );
+}
+
+#[test]
+fn update_on_backspace() {
+    // When deleting code while in edit mode, the editor should compile the code
+    // and update the interpreter immediately.
+
+    let host = Host::empty();
+    let mut lang = lang::Instance::new();
+
+    lang.on_command("edit", &host);
+
+    lang.on_char('1', &host);
+    lang.on_char('2', &host);
+    assert_eq!(
+        lang.interpreter.step(&lang.code),
+        StepResult::Finished {
+            output: Value::Integer { value: 12 }
+        },
+    );
+
+    lang.on_input(InputEvent::Backspace, &host);
+    assert_eq!(
+        lang.interpreter.step(&lang.code),
+        StepResult::Finished {
+            output: Value::Integer { value: 1 }
         },
     );
 }

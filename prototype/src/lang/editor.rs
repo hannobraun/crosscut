@@ -100,6 +100,16 @@ impl Editor {
             }
             InputEvent::Backspace => {
                 self.input.remove_left();
+
+                if let EditorMode::Edit { location } = &mut self.mode {
+                    Self::process_code(
+                        &mut self.input,
+                        location,
+                        code,
+                        interpreter,
+                        host,
+                    );
+                }
             }
             InputEvent::Enter => match &self.mode {
                 EditorMode::Command => {
