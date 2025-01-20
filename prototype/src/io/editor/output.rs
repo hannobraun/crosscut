@@ -65,13 +65,13 @@ impl Renderer {
         &mut self,
         editor: &Editor,
         code: &Code,
-        interpreter: Option<&Interpreter>,
+        interpreter: &Interpreter,
         host: &Host,
     ) -> anyhow::Result<()> {
         let mut context = RenderContext {
             code,
             editor: Some(editor),
-            interpreter,
+            interpreter: Some(interpreter),
             host,
             indent: 0,
             cursor: None,
