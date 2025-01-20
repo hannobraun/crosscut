@@ -58,7 +58,6 @@ fn unresolved_identifier_is_an_error() {
     compile_all("f 1", &host, &mut code);
 
     let f = code.fragments().get(&code.root).body.ids().next().unwrap();
-
     assert_eq!(code.errors.get(f), Some(&CodeError::UnresolvedIdentifier));
 }
 
