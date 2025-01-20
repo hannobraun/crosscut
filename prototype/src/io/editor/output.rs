@@ -296,15 +296,17 @@ fn render_prompt(
     w.move_to_next_line()?;
     write!(w, "{mode} > ")?;
 
-    let [x, y] = w.cursor;
-    let x = {
-        let x: usize = x.into();
-        let x = x.saturating_add(editor.input().cursor);
-        let x: u16 = x.try_into().unwrap_or(u16::MAX);
-        x
-    };
+    context.cursor = {
+        let [x, y] = w.cursor;
+        let x = {
+            let x: usize = x.into();
+            let x = x.saturating_add(editor.input().cursor);
+            let x: u16 = x.try_into().unwrap_or(u16::MAX);
+            x
+        };
 
-    context.cursor = Some([x, y]);
+        Some([x, y])
+    };
 
     write!(w, "{input}")?;
 
