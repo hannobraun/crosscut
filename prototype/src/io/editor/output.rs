@@ -70,8 +70,8 @@ impl Renderer {
     ) -> anyhow::Result<()> {
         let mut context = RenderContext {
             code,
-            interpreter,
             editor: Some(editor),
+            interpreter,
             host,
             indent: 0,
             cursor: None,
