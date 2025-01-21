@@ -152,8 +152,8 @@ impl Editor {
         code: &mut Code,
         interpreter: &mut Interpreter,
     ) {
-        self.error = None;
         let command = &self.input.buffer;
+        self.error = None;
 
         let mut candidates = self
             .commands
