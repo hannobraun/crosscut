@@ -20,7 +20,7 @@ use crate::lang::{
 #[cfg(test)]
 #[allow(unused)] // used sporadically, for debugging tests
 pub fn print_code(code: &Code, host: &Host) {
-    let mut w = TerminalAdapter {
+    let mut w = OutputAdapter {
         w: stdout(),
         cursor: [0, 0],
     };
@@ -37,12 +37,12 @@ pub fn print_code(code: &Code, host: &Host) {
 }
 
 pub struct Renderer {
-    w: TerminalAdapter,
+    w: OutputAdapter,
 }
 
 impl Renderer {
     pub fn new() -> anyhow::Result<Self> {
-        let w = TerminalAdapter {
+        let w = OutputAdapter {
             w: stdout(),
             cursor: [0, 0],
         };
@@ -101,7 +101,7 @@ impl Drop for Renderer {
 }
 
 fn render_code(
-    w: &mut TerminalAdapter,
+    w: &mut OutputAdapter,
     context: &mut RenderContext,
 ) -> anyhow::Result<()> {
     if let Some(interpreter) = context.interpreter {
@@ -124,7 +124,7 @@ fn render_code(
 }
 
 fn render_fragment(
-    w: &mut TerminalAdapter,
+    w: &mut OutputAdapter,
     located: Located,
     context: &mut RenderContext,
 ) -> anyhow::Result<()> {
@@ -233,13 +233,13 @@ fn render_fragment(
     Ok(())
 }
 
-fn render_indent(w: &mut TerminalAdapter) -> anyhow::Result<()> {
+fn render_indent(w: &mut OutputAdapter) -> anyhow::Result<()> {
     write!(w, "    ")?;
     Ok(())
 }
 
 fn render_expression(
-    w: &mut TerminalAdapter,
+    w: &mut OutputAdapter,
     expression: &Expression,
     context: &RenderContext,
 ) -> anyhow::Result<()> {
@@ -279,7 +279,7 @@ fn render_expression(
 }
 
 fn render_prompt(
-    w: &mut TerminalAdapter,
+    w: &mut OutputAdapter,
     editor: &Editor,
     context: &mut RenderContext,
 ) -> anyhow::Result<()> {
@@ -359,12 +359,12 @@ struct RenderContext<'r> {
 ///
 /// The API of this type leaves something to be desired. It was initially
 /// created to support the existing (Crossterm-based) usage patterns.
-struct TerminalAdapter {
+struct OutputAdapter {
     w: Stdout,
     cursor: [u16; 2],
 }
 
-impl TerminalAdapter {
+impl OutputAdapter {
     fn clear(&mut self) -> anyhow::Result<()> {
         self.w.queue(terminal::Clear(ClearType::All))?;
         Ok(())
@@ -411,7 +411,7 @@ impl TerminalAdapter {
     }
 }
 
-impl io::Write for TerminalAdapter {
+impl io::Write for OutputAdapter {
     fn write(&mut self, buf: &[u8]) -> io::Result<usize> {
         // We're only accepting ASCII characters from the terminal right now, so
         // this should work fine.
