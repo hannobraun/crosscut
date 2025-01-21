@@ -9,7 +9,7 @@ mod lang;
 mod thread;
 
 fn main() -> anyhow::Result<()> {
-    use game_engine::GameEngine;
+    use crate::game_engine::GameEngine;
 
     let (game_output_tx, game_output_rx) = thread::channel();
 
