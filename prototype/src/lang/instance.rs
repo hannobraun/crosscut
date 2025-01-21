@@ -38,7 +38,12 @@ impl Instance {
             "Trying to input code, but editor is not in edit mode.",
         );
 
-        for ch in code.chars() {
+        self.on_input(code, host);
+    }
+
+    #[cfg(test)]
+    pub fn on_input(&mut self, input: &str, host: &Host) {
+        for ch in input.chars() {
             self.on_char(ch, host);
         }
     }
