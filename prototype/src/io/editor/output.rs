@@ -159,22 +159,21 @@ fn render_fragment(
 
     let mut currently_editing_this_fragment = false;
     if let Some(editor) = &context.editor {
-        if let Some(editing) = editor.editing() {
-            if editing == &located.location {
-                currently_editing_this_fragment = true;
+        let editing = editor.editing();
+        if editing == Some(&located.location) {
+            currently_editing_this_fragment = true;
 
-                context.cursor = {
-                    let [x, y] = w.cursor;
-                    let x = {
-                        let x: usize = x.into();
-                        let x = x.saturating_add(editor.input().cursor);
-                        let x: u16 = x.try_into().unwrap_or(u16::MAX);
-                        x
-                    };
-
-                    Some([x, y])
+            context.cursor = {
+                let [x, y] = w.cursor;
+                let x = {
+                    let x: usize = x.into();
+                    let x = x.saturating_add(editor.input().cursor);
+                    let x: u16 = x.try_into().unwrap_or(u16::MAX);
+                    x
                 };
-            }
+
+                Some([x, y])
+            };
         }
     }
 
