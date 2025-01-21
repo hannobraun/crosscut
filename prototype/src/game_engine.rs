@@ -51,7 +51,12 @@ impl GameEngineThread {
 
             match event {
                 Event::EditorInput { event } => {
-                    game_engine.on_editor_input(event, &game_output_tx)?;
+                    let mut game_events = Vec::new();
+                    game_engine.on_editor_input(event, &mut game_events)?;
+
+                    for event in game_events {
+                        game_output_tx.send(event)?;
+                    }
                 }
                 Event::GameInput {
                     input: GameInput::RenderingFrame,
@@ -118,7 +123,7 @@ impl GameEngine {
     pub fn on_editor_input(
         &mut self,
         event: editor::InputEvent,
-        game_output: &Sender<GameOutput>,
+        game_output: &mut Vec<GameOutput>,
     ) -> anyhow::Result<()> {
         self.lang.on_event(event, &self.host);
 
@@ -154,9 +159,9 @@ impl GameEngine {
                     let Value::Integer { value: output } = output;
                     let color = output as f64 / 255.;
 
-                    game_output.send(GameOutput::SubmitColor {
+                    game_output.push(GameOutput::SubmitColor {
                         color: [color, color, color, 1.],
-                    })?;
+                    });
                 }
             }
 
