@@ -55,7 +55,7 @@ impl GameEngine {
 
             match event {
                 Event::EditorInput { event } => {
-                    lang.on_input(event, &host);
+                    lang.on_event(event, &host);
 
                     loop {
                         match lang.interpreter.step(&lang.code) {

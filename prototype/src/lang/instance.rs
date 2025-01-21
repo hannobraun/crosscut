@@ -45,10 +45,10 @@ impl Instance {
 
     #[cfg(test)]
     pub fn on_char(&mut self, ch: char, host: &Host) {
-        self.on_input(InputEvent::Char { value: ch }, host);
+        self.on_event(InputEvent::Char { value: ch }, host);
     }
 
-    pub fn on_input(&mut self, event: InputEvent, host: &Host) {
+    pub fn on_event(&mut self, event: InputEvent, host: &Host) {
         self.editor.process_input(
             event,
             &mut self.code,
