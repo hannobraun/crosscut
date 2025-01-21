@@ -11,8 +11,7 @@ pub struct Interpreter {
 
 impl Interpreter {
     pub fn new(code: &Code) -> Self {
-        let root = code.root().1;
-        let next = root.body.entry().copied();
+        let next = code.root().1.body.entry().copied();
 
         Self {
             next,
