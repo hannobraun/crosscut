@@ -16,7 +16,7 @@ fn integer_literal_larger_than_32_bits_is_an_error() {
     compile_all("4294967295", &host, &mut code);
     let i = code
         .fragments()
-        .get(&code.root())
+        .get(&code.root().0)
         .body
         .ids()
         .next()
@@ -27,7 +27,7 @@ fn integer_literal_larger_than_32_bits_is_an_error() {
     compile_all("4294967296", &host, &mut code);
     let i = code
         .fragments()
-        .get(&code.root())
+        .get(&code.root().0)
         .body
         .ids()
         .next()
@@ -50,7 +50,7 @@ fn code_after_expression_is_an_error() {
 
     let (a, b) = code
         .fragments()
-        .get(&code.root())
+        .get(&code.root().0)
         .body
         .ids()
         .collect_tuple()
@@ -71,7 +71,7 @@ fn unresolved_identifier_is_an_error() {
 
     let f = code
         .fragments()
-        .get(&code.root())
+        .get(&code.root().0)
         .body
         .ids()
         .next()
@@ -91,7 +91,7 @@ fn identifier_that_resolves_to_multiple_functions_is_an_error() {
 
     let identity = code
         .fragments()
-        .get(&code.root())
+        .get(&code.root().0)
         .body
         .ids()
         .next()
@@ -113,7 +113,7 @@ fn missing_function_call_argument_is_an_error() {
     compile_all("f", &host, &mut code);
     let f = code
         .fragments()
-        .get(&code.root())
+        .get(&code.root().0)
         .body
         .ids()
         .next()
@@ -123,7 +123,7 @@ fn missing_function_call_argument_is_an_error() {
     compile_all("1", &host, &mut code);
     let f = code
         .fragments()
-        .get(&code.root())
+        .get(&code.root().0)
         .body
         .ids()
         .next()

@@ -21,7 +21,7 @@ fn reset_interpreter_on_code_update_if_finished() {
     let initial_expression = lang
         .code
         .fragments()
-        .get(&lang.code.root())
+        .get(&lang.code.root().0)
         .body
         .ids()
         .next()
@@ -52,7 +52,7 @@ fn reset_interpreter_on_code_update_if_error() {
     let initial_expression = lang
         .code
         .fragments()
-        .get(&lang.code.root())
+        .get(&lang.code.root().0)
         .body
         .ids()
         .next()

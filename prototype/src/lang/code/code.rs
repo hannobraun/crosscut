@@ -35,8 +35,8 @@ impl Code {
         &self.fragments
     }
 
-    pub fn root(&self) -> FragmentId {
-        self.root
+    pub fn root(&self) -> (FragmentId, &Fragment) {
+        (self.root, self.fragments.get(&self.root))
     }
 
     pub fn find_innermost_fragment_with_valid_body(&self) -> Location {
