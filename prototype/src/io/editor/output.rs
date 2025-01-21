@@ -81,7 +81,7 @@ impl Renderer {
         self.w.move_to(0, 0)?;
 
         render_code(&mut self.w, &mut context)?;
-        render_prompt(&mut self.w, editor)?;
+        render_prompt(&mut self.w, editor, &mut context)?;
 
         if let Some([x, y]) = context.cursor {
             self.w.move_to(x, y)?;
@@ -281,6 +281,7 @@ fn render_expression(
 fn render_prompt(
     w: &mut TerminalAdapter,
     editor: &Editor,
+    _: &mut RenderContext,
 ) -> anyhow::Result<()> {
     let mode = match editor.mode() {
         EditorMode::Command { .. } => "command",
