@@ -46,6 +46,7 @@ impl Editor {
         let mut commands = BTreeSet::new();
         commands.insert("clear");
         commands.insert("edit");
+        commands.insert("nop");
         commands.insert("reset");
 
         Self {
@@ -191,6 +192,11 @@ impl Editor {
                     },
                 );
                 self.mode = EditorMode::Edit;
+            }
+            "nop" => {
+                // This command does nothing. It exists to give tests something
+                // to execute, if they don't want to actually do something
+                // except test command interaction itself.
             }
             "reset" => {
                 interpreter.reset(code);
