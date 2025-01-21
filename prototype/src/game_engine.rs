@@ -20,12 +20,10 @@ pub struct GameEngineThread {
 
 impl GameEngineThread {
     pub fn start(game_output_tx: Sender<GameOutput>) -> anyhow::Result<Self> {
-        let renderer = Renderer::new()?;
-
         let mut game_engine = GameEngine {
             host: Host::from_functions(["dim"]),
             lang: lang::Instance::new(),
-            renderer,
+            renderer: Renderer::new()?,
         };
 
         game_engine.renderer.render(
