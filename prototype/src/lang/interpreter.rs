@@ -155,12 +155,12 @@ pub enum InterpreterState {
 
 impl InterpreterState {
     pub fn is_running(&self) -> bool {
-        matches!(self, InterpreterState::Running)
+        matches!(self, Self::Running)
     }
 
     #[cfg(test)]
     pub fn is_finished(&self) -> bool {
-        matches!(self, InterpreterState::Finished)
+        matches!(self, Self::Finished)
     }
 }
 
