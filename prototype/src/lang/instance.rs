@@ -21,7 +21,7 @@ pub struct Instance {
 impl Instance {
     pub fn new() -> Self {
         let code = Code::default();
-        let editor = Editor::default();
+        let editor = Editor::new();
         let interpreter = Interpreter::new(&code);
 
         Self {
