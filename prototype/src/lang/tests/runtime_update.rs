@@ -40,9 +40,9 @@ fn reset_interpreter_on_code_update_if_error() {
 
     lang.on_char(' ', &host);
     lang.on_code("1", &host);
-    let start = lang.code.root().fragment.body.ids().next().unwrap();
-
     assert!(lang.state().is_running());
+
+    let start = lang.code.root().fragment.body.ids().next().unwrap();
     assert_eq!(lang.interpreter.next(), Some(start));
 }
 
