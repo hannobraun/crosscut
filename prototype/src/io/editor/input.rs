@@ -36,7 +36,7 @@ fn read_event(
         return Ok(ControlFlow::Continue(()));
     };
 
-    match key_event.code {
+    let event = match key_event.code {
         KeyCode::Char('c')
             if key_event.modifiers.contains(KeyModifiers::CONTROL) =>
         {
@@ -56,26 +56,17 @@ fn read_event(
             // placeholder anyway. So I think restricting input to ASCII
             // characters is a reasonable compromise.
 
-            editor_input.send(Some(InputEvent::Char { value: ch }))?;
+            Some(InputEvent::Char { value: ch })
         }
 
-        KeyCode::Backspace => {
-            editor_input.send(Some(InputEvent::Backspace))?;
-        }
-        KeyCode::Enter => {
-            editor_input.send(Some(InputEvent::Enter))?;
-        }
-        KeyCode::Left => {
-            editor_input.send(Some(InputEvent::Left))?;
-        }
-        KeyCode::Right => {
-            editor_input.send(Some(InputEvent::Right))?;
-        }
-        KeyCode::Esc => {
-            editor_input.send(Some(InputEvent::Escape))?;
-        }
-        _ => {}
-    }
+        KeyCode::Backspace => Some(InputEvent::Backspace),
+        KeyCode::Enter => Some(InputEvent::Enter),
+        KeyCode::Left => Some(InputEvent::Left),
+        KeyCode::Right => Some(InputEvent::Right),
+        KeyCode::Esc => Some(InputEvent::Escape),
+        _ => None,
+    };
 
+    editor_input.send(event)?;
     Ok(ControlFlow::Continue(()))
 }
