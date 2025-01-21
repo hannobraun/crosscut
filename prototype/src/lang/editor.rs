@@ -128,12 +128,22 @@ impl Editor {
                     self.input.clear();
                 }
             },
-            InputEvent::Left => {
-                self.input.move_cursor_left();
-            }
-            InputEvent::Right => {
-                self.input.move_cursor_right();
-            }
+            InputEvent::Left => match &mut self.mode {
+                EditorMode::Command { input: _ } => {
+                    self.input.move_cursor_left();
+                }
+                EditorMode::Edit => {
+                    self.input.move_cursor_left();
+                }
+            },
+            InputEvent::Right => match &mut self.mode {
+                EditorMode::Command { input: _ } => {
+                    self.input.move_cursor_right();
+                }
+                EditorMode::Edit => {
+                    self.input.move_cursor_right();
+                }
+            },
         }
     }
 
