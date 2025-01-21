@@ -113,6 +113,7 @@ fn render_code(
 
         write!(w, "process {state}")?;
         w.move_to_next_line()?;
+        w.move_to_next_line()?;
     };
 
     render_fragment(w, context.code.root(), context)?;
