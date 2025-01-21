@@ -121,7 +121,7 @@ impl Editor {
                 }
                 EditorMode::Edit { .. } => {
                     self.mode = EditorMode::Command {
-                        input: String::new(),
+                        input: EditorInput::new(String::new()),
                     };
                     self.input.clear();
                 }
@@ -216,7 +216,7 @@ impl Editor {
 
 #[derive(Debug, Eq, PartialEq)]
 pub enum EditorMode {
-    Command { input: String },
+    Command { input: EditorInput },
     Edit,
 }
 
