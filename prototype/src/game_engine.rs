@@ -118,7 +118,7 @@ impl GameEngine {
     pub fn on_editor_input(
         &mut self,
         event: editor::InputEvent,
-        game_output_tx: &Sender<GameOutput>,
+        game_output: &Sender<GameOutput>,
     ) -> anyhow::Result<()> {
         self.lang.on_event(event, &self.host);
 
@@ -154,7 +154,7 @@ impl GameEngine {
                     let Value::Integer { value: output } = output;
                     let color = output as f64 / 255.;
 
-                    game_output_tx.send(GameOutput::SubmitColor {
+                    game_output.send(GameOutput::SubmitColor {
                         color: [color, color, color, 1.],
                     })?;
                 }
