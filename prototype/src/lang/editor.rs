@@ -57,8 +57,8 @@ impl Editor {
         }
     }
 
-    pub fn editing(&self) -> Option<&Location> {
-        Some(&self.editing)
+    pub fn editing(&self) -> &Location {
+        &self.editing
     }
 
     pub fn mode(&self) -> &EditorMode {
