@@ -96,7 +96,7 @@ impl Editor {
                         self.input.clear();
                     }
                 } else {
-                    match self.mode {
+                    match &mut self.mode {
                         EditorMode::Command { input: _ } => {
                             self.input.insert(value);
                         }
