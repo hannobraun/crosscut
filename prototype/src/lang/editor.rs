@@ -33,7 +33,7 @@ pub struct Editor {
 }
 
 impl Editor {
-    pub fn new(_: &Code) -> Self {
+    pub fn new(_: &mut Code) -> Self {
         let mut commands = BTreeSet::new();
         commands.insert("clear");
         commands.insert("edit");
