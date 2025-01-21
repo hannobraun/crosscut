@@ -2,21 +2,7 @@ use std::{ops::ControlFlow, time::Duration};
 
 use crossterm::event::{self, Event, KeyCode, KeyModifiers};
 
-use crate::{
-    lang::editor::InputEvent,
-    thread::{self, Sender, ThreadHandle},
-};
-
-pub fn start(editor_input: Sender<Option<InputEvent>>) -> ThreadHandle {
-    thread::spawn(move || match read_event() {
-        Ok(ControlFlow::Continue(event)) => {
-            editor_input.send(event)?;
-            Ok(ControlFlow::Continue(()))
-        }
-        Ok(ControlFlow::Break(())) => Ok(ControlFlow::Break(())),
-        Err(err) => Err(thread::Error::Other { err }),
-    })
-}
+use crate::lang::editor::InputEvent;
 
 pub fn read_event() -> anyhow::Result<ControlFlow<(), Option<InputEvent>>> {
     let timeout = Duration::from_millis(50);

@@ -9,12 +9,21 @@ mod lang;
 mod thread;
 
 fn main() -> anyhow::Result<()> {
-    use crate::game_engine::GameEngine;
+    use std::ops::ControlFlow;
+
+    use crate::{game_engine::GameEngine, io::editor::input::read_event};
 
     let (game_output_tx, game_output_rx) = thread::channel();
 
     let game_engine = GameEngine::start(game_output_tx)?;
-    let editor_input = io::editor::input::start(game_engine.editor_input);
+    let editor_input = thread::spawn(move || match read_event() {
+        Ok(ControlFlow::Continue(event)) => {
+            game_engine.editor_input.send(event)?;
+            Ok(ControlFlow::Continue(()))
+        }
+        Ok(ControlFlow::Break(())) => Ok(ControlFlow::Break(())),
+        Err(err) => Err(thread::Error::Other { err }),
+    });
 
     io::game_engine::start_and_wait(game_engine.game_input, game_output_rx)?;
     // At this point, we're blocking until any of the threads shut down. There's
