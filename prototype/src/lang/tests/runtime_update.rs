@@ -14,7 +14,7 @@ fn reset_interpreter_on_code_update_if_finished() {
 
     lang.on_char('1', &host);
     lang.run_until_finished();
-    assert_eq!(lang.state(), InterpreterState::Finished);
+    assert!(lang.state().is_finished());
 
     lang.on_char('2', &host);
     let initial_expression =

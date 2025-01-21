@@ -157,6 +157,11 @@ impl InterpreterState {
     pub fn is_running(&self) -> bool {
         matches!(self, InterpreterState::Running)
     }
+
+    #[cfg(test)]
+    pub fn is_finished(&self) -> bool {
+        matches!(self, InterpreterState::Finished)
+    }
 }
 
 #[derive(Debug, PartialEq)]
