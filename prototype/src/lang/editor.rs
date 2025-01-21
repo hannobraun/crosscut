@@ -117,7 +117,7 @@ impl Editor {
                 }
             },
             InputEvent::Enter => match &self.mode {
-                EditorMode::Command { .. } => {
+                EditorMode::Command { input: _ } => {
                     self.process_command(code, interpreter);
                     self.input.clear();
                 }
