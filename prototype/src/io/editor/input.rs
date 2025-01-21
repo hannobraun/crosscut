@@ -8,7 +8,7 @@ use crate::{
 };
 
 pub fn start(editor_input: Sender<Option<InputEvent>>) -> ThreadHandle {
-    thread::spawn(move || match read_event(&editor_input) {
+    thread::spawn(move || match read_event() {
         Ok(ControlFlow::Continue(event)) => {
             editor_input.send(event)?;
             Ok(ControlFlow::Continue(()))
@@ -18,9 +18,7 @@ pub fn start(editor_input: Sender<Option<InputEvent>>) -> ThreadHandle {
     })
 }
 
-fn read_event(
-    _: &Sender<Option<InputEvent>>,
-) -> Result<ControlFlow<(), Option<InputEvent>>, thread::Error> {
+fn read_event() -> Result<ControlFlow<(), Option<InputEvent>>, thread::Error> {
     let timeout = Duration::from_millis(50);
     let event_ready = event::poll(timeout)?;
 
