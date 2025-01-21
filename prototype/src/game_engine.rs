@@ -23,10 +23,10 @@ impl GameEngineThread {
         let mut game_engine = GameEngine {
             host: Host::from_functions(["dim"]),
             lang: lang::Instance::new(),
-            renderer: EditorOutput::new()?,
+            editor_output: EditorOutput::new()?,
         };
 
-        game_engine.renderer.render(
+        game_engine.editor_output.render(
             &game_engine.lang.editor,
             &game_engine.lang.code,
             &game_engine.lang.interpreter,
@@ -118,7 +118,7 @@ impl GameEngineThread {
                         break;
                     }
 
-                    game_engine.renderer.render(
+                    game_engine.editor_output.render(
                         &game_engine.lang.editor,
                         &game_engine.lang.code,
                         &game_engine.lang.interpreter,
@@ -173,7 +173,7 @@ enum Event {
 pub struct GameEngine {
     host: Host,
     lang: lang::Instance,
-    renderer: EditorOutput,
+    editor_output: EditorOutput,
 }
 
 #[derive(Debug)]
