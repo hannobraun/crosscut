@@ -18,7 +18,7 @@ pub fn start(editor_input: Sender<Option<InputEvent>>) -> ThreadHandle {
     })
 }
 
-fn read_event() -> anyhow::Result<ControlFlow<(), Option<InputEvent>>> {
+pub fn read_event() -> anyhow::Result<ControlFlow<(), Option<InputEvent>>> {
     let timeout = Duration::from_millis(50);
     let event_ready = event::poll(timeout)?;
 
