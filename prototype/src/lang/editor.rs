@@ -196,14 +196,13 @@ impl Editor {
                 interpreter.reset(code);
             }
             "edit" => {
-                let location = code.append_to(
+                self.editing = code.append_to(
                     &code.find_innermost_fragment_with_valid_body(),
                     Fragment {
                         kind: FragmentKind::Empty,
                         body: Body::default(),
                     },
                 );
-                self.editing = location;
                 self.mode = EditorMode::Edit;
             }
             "reset" => {
