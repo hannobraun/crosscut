@@ -14,24 +14,12 @@ fn integer_literal_larger_than_32_bits_is_an_error() {
 
     let mut code = Code::default();
     compile_all("4294967295", &host, &mut code);
-    let i = code
-        .fragments()
-        .get(&code.root().0)
-        .body
-        .ids()
-        .next()
-        .unwrap();
+    let i = code.root().1.body.ids().next().unwrap();
     assert_eq!(code.errors.get(i), None);
 
     let mut code = Code::default();
     compile_all("4294967296", &host, &mut code);
-    let i = code
-        .fragments()
-        .get(&code.root().0)
-        .body
-        .ids()
-        .next()
-        .unwrap();
+    let i = code.root().1.body.ids().next().unwrap();
     assert_eq!(code.errors.get(i), Some(&CodeError::IntegerOverflow));
 }
 
@@ -48,13 +36,7 @@ fn code_after_expression_is_an_error() {
 
     compile_all("1 2", &host, &mut code);
 
-    let (a, b) = code
-        .fragments()
-        .get(&code.root().0)
-        .body
-        .ids()
-        .collect_tuple()
-        .unwrap();
+    let (a, b) = code.root().1.body.ids().collect_tuple().unwrap();
 
     assert_eq!(code.errors.get(a), None);
     assert_eq!(code.errors.get(b), Some(&CodeError::UnexpectedToken));
@@ -69,13 +51,7 @@ fn unresolved_identifier_is_an_error() {
 
     compile_all("f 1", &host, &mut code);
 
-    let f = code
-        .fragments()
-        .get(&code.root().0)
-        .body
-        .ids()
-        .next()
-        .unwrap();
+    let f = code.root().1.body.ids().next().unwrap();
     assert_eq!(code.errors.get(f), Some(&CodeError::UnresolvedIdentifier));
 }
 
@@ -89,13 +65,7 @@ fn identifier_that_resolves_to_multiple_functions_is_an_error() {
 
     compile_all("identity 1", &host, &mut code);
 
-    let identity = code
-        .fragments()
-        .get(&code.root().0)
-        .body
-        .ids()
-        .next()
-        .unwrap();
+    let identity = code.root().1.body.ids().next().unwrap();
     assert_eq!(
         code.errors.get(identity),
         Some(&CodeError::MultiResolvedIdentifier)
@@ -111,22 +81,10 @@ fn missing_function_call_argument_is_an_error() {
     let mut code = Code::default();
 
     compile_all("f", &host, &mut code);
-    let f = code
-        .fragments()
-        .get(&code.root().0)
-        .body
-        .ids()
-        .next()
-        .unwrap();
+    let f = code.root().1.body.ids().next().unwrap();
     assert_eq!(code.errors.get(f), Some(&CodeError::MissingArgument));
 
     compile_all("1", &host, &mut code);
-    let f = code
-        .fragments()
-        .get(&code.root().0)
-        .body
-        .ids()
-        .next()
-        .unwrap();
+    let f = code.root().1.body.ids().next().unwrap();
     assert_eq!(code.errors.get(f), None);
 }
