@@ -10,7 +10,7 @@ pub struct Code {
     fragments: Fragments,
     replacements: Replacements,
 
-    pub root: FragmentId,
+    root: FragmentId,
     pub errors: BTreeMap<FragmentId, CodeError>,
 }
 
