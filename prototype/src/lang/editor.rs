@@ -220,7 +220,7 @@ pub enum EditorMode {
     Edit,
 }
 
-#[derive(Debug)]
+#[derive(Debug, Eq, PartialEq)]
 pub struct EditorInput {
     pub buffer: String,
     pub cursor: usize,
