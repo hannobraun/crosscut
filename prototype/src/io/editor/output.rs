@@ -9,8 +9,8 @@ use crossterm::{
 
 use crate::lang::{
     code::{
-        Body, Code, CodeError, Expression, FragmentError, FragmentId,
-        FragmentKind, FunctionCallTarget, Literal,
+        Code, CodeError, Expression, FragmentError, FragmentId, FragmentKind,
+        FunctionCallTarget, Literal,
     },
     editor::{Editor, EditorError, EditorMode},
     host::Host,
@@ -225,7 +225,9 @@ fn render_fragment(
     w.move_to_next_line()?;
 
     context.indent += 1;
-    render_body(w, &fragment.body, context)?;
+    for id in fragment.body.ids() {
+        render_fragment(w, id, context)?;
+    }
     context.indent -= 1;
 
     w.reset_color()?;
@@ -274,18 +276,6 @@ fn render_expression(
         } => {
             write!(w, "{value}")?;
         }
-    }
-
-    Ok(())
-}
-
-fn render_body(
-    w: &mut TerminalAdapter,
-    body: &Body,
-    context: &mut RenderContext,
-) -> anyhow::Result<()> {
-    for id in body.ids() {
-        render_fragment(w, id, context)?;
     }
 
     Ok(())
