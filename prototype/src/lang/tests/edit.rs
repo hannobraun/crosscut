@@ -13,8 +13,6 @@ fn update_on_each_character() {
     let host = Host::empty();
     let mut lang = lang::Instance::new();
 
-    lang.on_command("edit", &host);
-
     lang.on_char('1', &host);
     assert_eq!(
         lang.interpreter.step(&lang.code),
@@ -39,8 +37,6 @@ fn update_on_backspace() {
 
     let host = Host::empty();
     let mut lang = lang::Instance::new();
-
-    lang.on_command("edit", &host);
 
     lang.on_char('1', &host);
     lang.on_char('2', &host);

@@ -33,7 +33,9 @@ impl Instance {
 
     #[cfg(test)]
     pub fn edit(&mut self, code: &str, host: &Host) {
-        self.on_command("edit", host);
+        if let EditorMode::Command = self.editor.mode() {
+            self.on_command("edit", host);
+        }
         self.on_code(code, host);
     }
 

@@ -33,14 +33,22 @@ pub struct Editor {
 }
 
 impl Editor {
-    pub fn new(_: &mut Code) -> Self {
+    pub fn new(code: &mut Code) -> Self {
+        let location = code.append_to(
+            &code.find_innermost_fragment_with_valid_body(),
+            Fragment {
+                kind: FragmentKind::Empty,
+                body: Body::default(),
+            },
+        );
+
         let mut commands = BTreeSet::new();
         commands.insert("clear");
         commands.insert("edit");
         commands.insert("reset");
 
         Self {
-            mode: EditorMode::Command,
+            mode: EditorMode::Edit { location },
             input: EditorInput::new(String::new()),
             error: None,
             commands,

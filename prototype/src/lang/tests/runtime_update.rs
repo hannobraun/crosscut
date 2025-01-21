@@ -12,7 +12,6 @@ fn reset_interpreter_on_code_update_if_finished() {
     let host = Host::empty();
     let mut lang = lang::Instance::new();
 
-    lang.on_command("edit", &host);
     lang.on_char('1', &host);
     lang.run_until_finished();
     assert_eq!(
