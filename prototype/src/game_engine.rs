@@ -12,13 +12,13 @@ use crate::{
     thread::{self, ChannelDisconnected, Sender, ThreadHandle},
 };
 
-pub struct GameEngine {
+pub struct GameEngineThread {
     pub handle: ThreadHandle,
     pub editor_input: Sender<Option<editor::InputEvent>>,
     pub game_input: Sender<GameInput>,
 }
 
-impl GameEngine {
+impl GameEngineThread {
     pub fn start(game_output_tx: Sender<GameOutput>) -> anyhow::Result<Self> {
         let host = Host::from_functions(["dim"]);
 

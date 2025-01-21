@@ -11,11 +11,11 @@ mod thread;
 fn main() -> anyhow::Result<()> {
     use std::ops::ControlFlow;
 
-    use crate::{game_engine::GameEngine, io::editor::input::read_event};
+    use crate::{game_engine::GameEngineThread, io::editor::input::read_event};
 
     let (game_output_tx, game_output_rx) = thread::channel();
 
-    let game_engine = GameEngine::start(game_output_tx)?;
+    let game_engine = GameEngineThread::start(game_output_tx)?;
     let editor_input = thread::spawn(move || match read_event() {
         Ok(ControlFlow::Continue(event)) => {
             game_engine.editor_input.send(event)?;
