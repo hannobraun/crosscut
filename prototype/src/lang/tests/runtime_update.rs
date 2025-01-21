@@ -14,19 +14,13 @@ fn reset_interpreter_on_code_update_if_finished() {
 
     lang.on_char('1', &host);
     lang.run_until_finished();
-    assert_eq!(
-        lang.interpreter.state(&lang.code),
-        InterpreterState::Finished,
-    );
+    assert_eq!(lang.state(), InterpreterState::Finished);
 
     lang.on_char('2', &host);
     let initial_expression =
         lang.code.root().fragment.body.ids().next().unwrap();
 
-    assert_eq!(
-        lang.interpreter.state(&lang.code),
-        InterpreterState::Running,
-    );
+    assert_eq!(lang.state(), InterpreterState::Running);
     assert_eq!(lang.interpreter.next(), Some(initial_expression));
 }
 
@@ -42,17 +36,14 @@ fn reset_interpreter_on_code_update_if_error() {
     let step = lang.interpreter.step(&lang.code);
 
     assert_eq!(step, StepResult::Error);
-    assert_eq!(lang.interpreter.state(&lang.code), InterpreterState::Error);
+    assert_eq!(lang.state(), InterpreterState::Error);
 
     lang.on_char(' ', &host);
     lang.on_code("1", &host);
     let initial_expression =
         lang.code.root().fragment.body.ids().next().unwrap();
 
-    assert_eq!(
-        lang.interpreter.state(&lang.code),
-        InterpreterState::Running,
-    );
+    assert_eq!(lang.state(), InterpreterState::Running);
     assert_eq!(lang.interpreter.next(), Some(initial_expression));
 }
 

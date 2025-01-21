@@ -9,7 +9,7 @@ use super::{
 };
 
 #[cfg(test)]
-use super::interpreter::Value;
+use super::interpreter::{InterpreterState, Value};
 
 #[derive(Debug)]
 pub struct Instance {
@@ -29,6 +29,11 @@ impl Instance {
             editor,
             interpreter,
         }
+    }
+
+    #[cfg(test)]
+    pub fn state(&self) -> InterpreterState {
+        self.interpreter.state(&self.code)
     }
 
     #[cfg(test)]
