@@ -35,7 +35,7 @@ pub struct Editor {
 
 impl Editor {
     pub fn new(code: &mut Code) -> Self {
-        let location = code.append_to(
+        let editing = code.append_to(
             &code.find_innermost_fragment_with_valid_body(),
             Fragment {
                 kind: FragmentKind::Empty,
@@ -49,7 +49,7 @@ impl Editor {
         commands.insert("reset");
 
         Self {
-            editing: location,
+            editing,
             mode: EditorMode::Edit,
             input: EditorInput::new(String::new()),
             error: None,
