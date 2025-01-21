@@ -55,6 +55,14 @@ impl Editor {
         }
     }
 
+    pub fn editing(&self) -> Option<&Location> {
+        if let EditorMode::Edit { location } = &self.mode {
+            Some(location)
+        } else {
+            None
+        }
+    }
+
     pub fn mode(&self) -> &EditorMode {
         &self.mode
     }
