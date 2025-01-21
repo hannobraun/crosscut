@@ -281,7 +281,7 @@ fn render_expression(
 fn render_prompt(
     w: &mut TerminalAdapter,
     editor: &Editor,
-    _: &mut RenderContext,
+    context: &mut RenderContext,
 ) -> anyhow::Result<()> {
     let mode = match editor.mode() {
         EditorMode::Command { .. } => "command",
@@ -313,6 +313,18 @@ fn render_prompt(
 
     match editor.mode() {
         EditorMode::Command { .. } => {
+            context.cursor = {
+                let [x, y] = w.cursor;
+                let x = {
+                    let x: usize = x.into();
+                    let x = x.saturating_add(editor.input().cursor);
+                    let x: u16 = x.try_into().unwrap_or(u16::MAX);
+                    x
+                };
+
+                Some([x, y])
+            };
+
             write!(w, "{}", editor.input().buffer)?;
         }
         EditorMode::Edit { .. } => {
