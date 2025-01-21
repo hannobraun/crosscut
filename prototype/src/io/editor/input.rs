@@ -14,11 +14,11 @@ pub fn start(editor_input: Sender<Option<InputEvent>>) -> ThreadHandle {
             Ok(ControlFlow::Continue(()))
         }
         Ok(ControlFlow::Break(())) => Ok(ControlFlow::Break(())),
-        Err(err) => Err(err),
+        Err(err) => Err(thread::Error::Other { err }),
     })
 }
 
-fn read_event() -> Result<ControlFlow<(), Option<InputEvent>>, thread::Error> {
+fn read_event() -> anyhow::Result<ControlFlow<(), Option<InputEvent>>> {
     let timeout = Duration::from_millis(50);
     let event_ready = event::poll(timeout)?;
 
