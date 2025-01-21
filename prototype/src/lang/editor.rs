@@ -107,20 +107,15 @@ impl Editor {
                     }
                 }
             }
-            InputEvent::Backspace => {
-                match &mut self.mode {
-                    EditorMode::Command { .. } => {
-                        self.input.remove_left();
-                    }
-                    EditorMode::Edit => {
-                        self.input.remove_left();
-                    }
+            InputEvent::Backspace => match &mut self.mode {
+                EditorMode::Command { .. } => {
+                    self.input.remove_left();
                 }
-
-                if let EditorMode::Edit = self.mode {
+                EditorMode::Edit => {
+                    self.input.remove_left();
                     self.process_code(code, interpreter, host);
                 }
-            }
+            },
             InputEvent::Enter => match &self.mode {
                 EditorMode::Command { .. } => {
                     self.process_command(code, interpreter);
