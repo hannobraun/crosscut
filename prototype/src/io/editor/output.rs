@@ -9,8 +9,8 @@ use crossterm::{
 
 use crate::lang::{
     code::{
-        Code, CodeError, Expression, FragmentError, FragmentId, FragmentKind,
-        FunctionCallTarget, Literal,
+        Code, CodeError, Expression, FragmentError, FragmentKind,
+        FunctionCallTarget, Literal, Location,
     },
     editor::{Editor, EditorError, EditorMode},
     host::Host,
@@ -115,7 +115,7 @@ fn render_code(
         w.move_to_next_line()?;
     };
 
-    render_fragment(w, context.code.root().location.target(), context)?;
+    render_fragment(w, &context.code.root().location, context)?;
 
     w.flush()?;
 
@@ -124,10 +124,10 @@ fn render_code(
 
 fn render_fragment(
     w: &mut TerminalAdapter,
-    id: &FragmentId,
+    location: &Location,
     context: &mut RenderContext,
 ) -> anyhow::Result<()> {
-    let maybe_error = context.code.errors.get(id);
+    let maybe_error = context.code.errors.get(location.target());
 
     if maybe_error.is_some() {
         w.set_foreground_color(Color::Red)?;
@@ -135,7 +135,7 @@ fn render_fragment(
 
     let mut indent = context.indent;
     if let Some(interpreter) = context.interpreter {
-        if Some(id) == interpreter.next() {
+        if Some(location.target()) == interpreter.next() {
             w.set_attribute(Attribute::Bold)?;
             write!(w, " => ")?;
 
@@ -159,7 +159,7 @@ fn render_fragment(
     let mut currently_editing_this_fragment = false;
     if let Some(editor) = &context.editor {
         if let EditorMode::Edit { location: editing } = editor.mode() {
-            if editing.target() == id {
+            if editing.target() == location.target() {
                 currently_editing_this_fragment = true;
 
                 context.cursor = {
@@ -177,7 +177,7 @@ fn render_fragment(
         }
     }
 
-    let fragment = context.code.fragments().get(id);
+    let fragment = context.code.fragments().get(location.target());
 
     match &fragment.kind {
         FragmentKind::Root => {
@@ -226,7 +226,8 @@ fn render_fragment(
 
     context.indent += 1;
     for id in fragment.body.ids() {
-        render_fragment(w, id, context)?;
+        let location = location.clone().with_component(*id);
+        render_fragment(w, &location, context)?;
     }
     context.indent -= 1;
 
