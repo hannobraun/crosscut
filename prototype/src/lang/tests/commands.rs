@@ -1,4 +1,4 @@
-use crate::lang::{self, editor::InputEvent, host::Host};
+use crate::lang::{self, editor::InputEvent, host::Host, interpreter::Value};
 
 #[test]
 fn reset_interpreter_on_reset_command() {
@@ -19,4 +19,25 @@ fn reset_interpreter_on_reset_command() {
 
     let start = lang.code.root().fragment.body.ids().next().unwrap();
     assert_eq!(lang.interpreter.next(), Some(start));
+}
+
+#[test]
+fn return_to_edit_mode_after_command_execution() {
+    // After a command has been executed, the editor should return to edit mode.
+
+    let host = Host::empty();
+    let mut lang = lang::Instance::new();
+
+    // Start editing the code.
+    lang.on_code("1", &host);
+
+    // Execute a command in between editing.
+    lang.on_event(InputEvent::Enter, &host); // enter command mode
+    lang.on_input("nop", &host);
+    lang.on_event(InputEvent::Enter, &host);
+
+    // Continue editing.
+    lang.on_code("2", &host);
+
+    assert_eq!(lang.run_until_finished(), Value::Integer { value: 12 });
 }

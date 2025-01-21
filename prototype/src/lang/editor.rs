@@ -232,6 +232,8 @@ impl Editor {
                 unreachable!("Ruled out that command is unknown, above.")
             }
         }
+
+        self.mode = EditorMode::Edit;
     }
 }
 
