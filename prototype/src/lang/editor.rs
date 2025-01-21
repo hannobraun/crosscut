@@ -98,13 +98,7 @@ impl Editor {
                     self.input.insert(value);
 
                     if let EditorMode::Edit = self.mode {
-                        Self::process_code(
-                            &mut self.input,
-                            &mut self.editing,
-                            code,
-                            interpreter,
-                            host,
-                        );
+                        Self::process_code(self, code, interpreter, host);
                     }
                 }
             }
@@ -112,13 +106,7 @@ impl Editor {
                 self.input.remove_left();
 
                 if let EditorMode::Edit = self.mode {
-                    Self::process_code(
-                        &mut self.input,
-                        &mut self.editing,
-                        code,
-                        interpreter,
-                        host,
-                    );
+                    Self::process_code(self, code, interpreter, host);
                 }
             }
             InputEvent::Enter => match &self.mode {
@@ -141,14 +129,13 @@ impl Editor {
     }
 
     fn process_code(
-        input: &mut EditorInput,
-        to_replace: &mut Location,
+        &mut self,
         code: &mut Code,
         interpreter: &mut Interpreter,
         host: &Host,
     ) {
-        *to_replace =
-            compile_and_replace(&input.buffer, to_replace, host, code);
+        self.editing =
+            compile_and_replace(&self.input.buffer, &self.editing, host, code);
 
         if interpreter.state(code).is_running() {
             interpreter.update(code);
