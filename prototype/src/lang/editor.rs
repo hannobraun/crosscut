@@ -143,7 +143,9 @@ impl Editor {
                 }
             },
             InputEvent::Escape => match &mut self.mode {
-                EditorMode::Command { input: _ } => {}
+                EditorMode::Command { input: _ } => {
+                    self.mode = EditorMode::Edit;
+                }
                 EditorMode::Edit => {}
             },
         }
