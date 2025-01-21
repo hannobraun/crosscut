@@ -26,12 +26,7 @@ impl GameEngineThread {
             editor_output: EditorOutput::new()?,
         };
 
-        game_engine.editor_output.render(
-            &game_engine.lang.editor,
-            &game_engine.lang.code,
-            &game_engine.lang.interpreter,
-            &game_engine.host,
-        )?;
+        game_engine.render_editor()?;
 
         // Need to specify the types of the channels explicitly, to work around
         // this bug in rust-analyzer:
@@ -118,12 +113,7 @@ impl GameEngineThread {
                         break;
                     }
 
-                    game_engine.editor_output.render(
-                        &game_engine.lang.editor,
-                        &game_engine.lang.code,
-                        &game_engine.lang.interpreter,
-                        &game_engine.host,
-                    )?;
+                    game_engine.render_editor()?;
                 }
                 Event::GameInput {
                     input: GameInput::RenderingFrame,
@@ -174,6 +164,19 @@ pub struct GameEngine {
     host: Host,
     lang: lang::Instance,
     editor_output: EditorOutput,
+}
+
+impl GameEngine {
+    fn render_editor(&mut self) -> anyhow::Result<()> {
+        self.editor_output.render(
+            &self.lang.editor,
+            &self.lang.code,
+            &self.lang.interpreter,
+            &self.host,
+        )?;
+
+        Ok(())
+    }
 }
 
 #[derive(Debug)]
