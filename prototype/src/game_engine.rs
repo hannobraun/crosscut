@@ -21,7 +21,6 @@ pub struct GameEngineThread {
 impl GameEngineThread {
     pub fn start(game_output_tx: Sender<GameOutput>) -> anyhow::Result<Self> {
         let mut game_engine = GameEngine::new()?;
-
         game_engine.render_editor()?;
 
         // Need to specify the types of the channels explicitly, to work around
