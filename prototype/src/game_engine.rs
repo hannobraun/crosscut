@@ -20,11 +20,7 @@ pub struct GameEngineThread {
 
 impl GameEngineThread {
     pub fn start(game_output_tx: Sender<GameOutput>) -> anyhow::Result<Self> {
-        let mut game_engine = GameEngine {
-            host: Host::from_functions(["dim"]),
-            lang: lang::Instance::new(),
-            editor_output: EditorOutput::new()?,
-        };
+        let mut game_engine = GameEngine::new()?;
 
         game_engine.render_editor()?;
 
@@ -167,6 +163,14 @@ pub struct GameEngine {
 }
 
 impl GameEngine {
+    pub fn new() -> anyhow::Result<Self> {
+        Ok(Self {
+            host: Host::from_functions(["dim"]),
+            lang: lang::Instance::new(),
+            editor_output: EditorOutput::new()?,
+        })
+    }
+
     fn render_editor(&mut self) -> anyhow::Result<()> {
         self.editor_output.render(
             &self.lang.editor,
