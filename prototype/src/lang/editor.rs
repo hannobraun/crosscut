@@ -142,7 +142,10 @@ impl Editor {
                     self.input.move_cursor_right();
                 }
             },
-            InputEvent::Escape => {}
+            InputEvent::Escape => match &mut self.mode {
+                EditorMode::Command { input: _ } => {}
+                EditorMode::Edit => {}
+            },
         }
     }
 
