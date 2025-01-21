@@ -83,7 +83,7 @@ impl Editor {
         match input {
             InputEvent::Char { value } => {
                 if value.is_whitespace() {
-                    if let EditorMode::Edit = &mut self.mode {
+                    if let EditorMode::Edit = self.mode {
                         self.editing = code.append_to(
                             &code.find_innermost_fragment_with_valid_body(),
                             Fragment {
@@ -97,7 +97,7 @@ impl Editor {
                 } else {
                     self.input.insert(value);
 
-                    if let EditorMode::Edit = &mut self.mode {
+                    if let EditorMode::Edit = self.mode {
                         Self::process_code(
                             &mut self.input,
                             &mut self.editing,
@@ -111,7 +111,7 @@ impl Editor {
             InputEvent::Backspace => {
                 self.input.remove_left();
 
-                if let EditorMode::Edit = &mut self.mode {
+                if let EditorMode::Edit = self.mode {
                     Self::process_code(
                         &mut self.input,
                         &mut self.editing,
