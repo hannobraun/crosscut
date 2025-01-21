@@ -34,10 +34,6 @@ pub struct Editor {
 
 impl Editor {
     pub fn new() -> Self {
-        // All of the trie crates I could find where overly complex, unsuitable
-        // for my use case, or dubious in other ways. Let's just do this by
-        // hand.
-
         let mut commands = BTreeSet::new();
         commands.insert("clear");
         commands.insert("edit");
