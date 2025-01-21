@@ -62,6 +62,9 @@ pub fn start(editor_input: Sender<Option<InputEvent>>) -> ThreadHandle {
             KeyCode::Right => {
                 editor_input.send(Some(InputEvent::Right))?;
             }
+            KeyCode::Esc => {
+                editor_input.send(Some(InputEvent::Escape))?;
+            }
             _ => {}
         }
 
