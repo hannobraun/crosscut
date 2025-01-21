@@ -17,7 +17,7 @@ pub fn start(editor_input: Sender<Option<InputEvent>>) -> ThreadHandle {
 
 fn read_event(
     editor_input: &Sender<Option<InputEvent>>,
-) -> Result<ControlFlow<()>, thread::Error> {
+) -> Result<ControlFlow<(), ()>, thread::Error> {
     let timeout = Duration::from_millis(50);
     let event_ready = event::poll(timeout)?;
 
