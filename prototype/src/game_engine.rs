@@ -51,64 +51,7 @@ impl GameEngineThread {
 
             match event {
                 Event::EditorInput { event } => {
-                    game_engine.lang.on_event(event, &game_engine.host);
-
-                    loop {
-                        match game_engine
-                            .lang
-                            .interpreter
-                            .step(&game_engine.lang.code)
-                        {
-                            StepResult::CallToHostFunction {
-                                id,
-                                input,
-                                output,
-                            } => {
-                                match id {
-                                    0 => {
-                                        // `dim`
-
-                                        let Value::Integer { value: input } =
-                                            input;
-                                        let Value::Integer { value: output } =
-                                            output;
-
-                                        *output = input / 2;
-                                    }
-                                    id => {
-                                        unreachable!(
-                                            "Undefined host function: `{id}`"
-                                        );
-                                    }
-                                }
-
-                                continue;
-                            }
-                            StepResult::CallToIntrinsicFunction => {
-                                // Nothing to be done about this.
-                                continue;
-                            }
-                            StepResult::Error => {
-                                // Not handling errors right now. They should be
-                                // properly encoded in `Code` and therefore
-                                // visible in the editor.
-                            }
-                            StepResult::Finished { output } => {
-                                let Value::Integer { value: output } = output;
-                                let color = output as f64 / 255.;
-
-                                game_output_tx.send(
-                                    GameOutput::SubmitColor {
-                                        color: [color, color, color, 1.],
-                                    },
-                                )?;
-                            }
-                        }
-
-                        break;
-                    }
-
-                    game_engine.render_editor()?;
+                    game_engine.on_editor_input(event, &game_output_tx)?;
                 }
                 Event::GameInput {
                     input: GameInput::RenderingFrame,
@@ -170,6 +113,59 @@ impl GameEngine {
             lang: lang::Instance::new(),
             editor_output,
         })
+    }
+
+    pub fn on_editor_input(
+        &mut self,
+        event: editor::InputEvent,
+        game_output_tx: &Sender<GameOutput>,
+    ) -> anyhow::Result<()> {
+        self.lang.on_event(event, &self.host);
+
+        loop {
+            match self.lang.interpreter.step(&self.lang.code) {
+                StepResult::CallToHostFunction { id, input, output } => {
+                    match id {
+                        0 => {
+                            // `dim`
+
+                            let Value::Integer { value: input } = input;
+                            let Value::Integer { value: output } = output;
+
+                            *output = input / 2;
+                        }
+                        id => {
+                            unreachable!("Undefined host function: `{id}`");
+                        }
+                    }
+
+                    continue;
+                }
+                StepResult::CallToIntrinsicFunction => {
+                    // Nothing to be done about this.
+                    continue;
+                }
+                StepResult::Error => {
+                    // Not handling errors right now. They should be
+                    // properly encoded in `Code` and therefore
+                    // visible in the editor.
+                }
+                StepResult::Finished { output } => {
+                    let Value::Integer { value: output } = output;
+                    let color = output as f64 / 255.;
+
+                    game_output_tx.send(GameOutput::SubmitColor {
+                        color: [color, color, color, 1.],
+                    })?;
+                }
+            }
+
+            break;
+        }
+
+        self.render_editor()?;
+
+        Ok(())
     }
 
     fn render_editor(&mut self) -> anyhow::Result<()> {
