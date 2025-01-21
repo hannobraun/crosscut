@@ -14,12 +14,24 @@ fn integer_literal_larger_than_32_bits_is_an_error() {
 
     let mut code = Code::default();
     compile_all("4294967295", &host, &mut code);
-    let i = code.fragments().get(&code.root).body.ids().next().unwrap();
+    let i = code
+        .fragments()
+        .get(&code.root())
+        .body
+        .ids()
+        .next()
+        .unwrap();
     assert_eq!(code.errors.get(i), None);
 
     let mut code = Code::default();
     compile_all("4294967296", &host, &mut code);
-    let i = code.fragments().get(&code.root).body.ids().next().unwrap();
+    let i = code
+        .fragments()
+        .get(&code.root())
+        .body
+        .ids()
+        .next()
+        .unwrap();
     assert_eq!(code.errors.get(i), Some(&CodeError::IntegerOverflow));
 }
 
@@ -38,7 +50,7 @@ fn code_after_expression_is_an_error() {
 
     let (a, b) = code
         .fragments()
-        .get(&code.root)
+        .get(&code.root())
         .body
         .ids()
         .collect_tuple()
@@ -57,7 +69,13 @@ fn unresolved_identifier_is_an_error() {
 
     compile_all("f 1", &host, &mut code);
 
-    let f = code.fragments().get(&code.root).body.ids().next().unwrap();
+    let f = code
+        .fragments()
+        .get(&code.root())
+        .body
+        .ids()
+        .next()
+        .unwrap();
     assert_eq!(code.errors.get(f), Some(&CodeError::UnresolvedIdentifier));
 }
 
@@ -71,7 +89,13 @@ fn identifier_that_resolves_to_multiple_functions_is_an_error() {
 
     compile_all("identity 1", &host, &mut code);
 
-    let identity = code.fragments().get(&code.root).body.ids().next().unwrap();
+    let identity = code
+        .fragments()
+        .get(&code.root())
+        .body
+        .ids()
+        .next()
+        .unwrap();
     assert_eq!(
         code.errors.get(identity),
         Some(&CodeError::MultiResolvedIdentifier)
@@ -87,10 +111,22 @@ fn missing_function_call_argument_is_an_error() {
     let mut code = Code::default();
 
     compile_all("f", &host, &mut code);
-    let f = code.fragments().get(&code.root).body.ids().next().unwrap();
+    let f = code
+        .fragments()
+        .get(&code.root())
+        .body
+        .ids()
+        .next()
+        .unwrap();
     assert_eq!(code.errors.get(f), Some(&CodeError::MissingArgument));
 
     compile_all("1", &host, &mut code);
-    let f = code.fragments().get(&code.root).body.ids().next().unwrap();
+    let f = code
+        .fragments()
+        .get(&code.root())
+        .body
+        .ids()
+        .next()
+        .unwrap();
     assert_eq!(code.errors.get(f), None);
 }

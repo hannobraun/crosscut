@@ -35,6 +35,10 @@ impl Code {
         &self.fragments
     }
 
+    pub fn root(&self) -> FragmentId {
+        self.root
+    }
+
     pub fn find_innermost_fragment_with_valid_body(&self) -> Location {
         let mut next = self.root;
         let mut location = Vec::new();
