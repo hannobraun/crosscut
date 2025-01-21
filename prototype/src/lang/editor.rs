@@ -96,7 +96,14 @@ impl Editor {
                         self.input.clear();
                     }
                 } else {
-                    self.input.insert(value);
+                    match self.mode {
+                        EditorMode::Command { input: _ } => {
+                            self.input.insert(value);
+                        }
+                        EditorMode::Edit => {
+                            self.input.insert(value);
+                        }
+                    }
 
                     if let EditorMode::Edit = self.mode {
                         self.process_code(code, interpreter, host);
