@@ -36,7 +36,7 @@ fn return_to_edit_mode_after_command_execution() {
     lang.on_input("nop", &host);
     lang.on_event(InputEvent::Enter, &host);
 
-    // Continue editing.
+    // Continue editing. Won't work, unless we're back in edit mode.
     lang.on_code("2", &host);
 
     assert_eq!(lang.run_until_finished(), Value::Integer { value: 12 });
