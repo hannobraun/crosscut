@@ -312,7 +312,7 @@ fn render_prompt(
     write!(w, "{mode} > ")?;
 
     match editor.mode() {
-        EditorMode::Command { .. } => {
+        EditorMode::Command { input: _ } => {
             context.cursor = {
                 let [x, y] = w.cursor;
                 let x = {
