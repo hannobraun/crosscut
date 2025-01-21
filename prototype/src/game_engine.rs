@@ -163,10 +163,12 @@ pub struct GameEngine {
 
 impl GameEngine {
     pub fn new() -> anyhow::Result<Self> {
+        let editor_output = EditorOutput::new()?;
+
         Ok(Self {
             host: Host::from_functions(["dim"]),
             lang: lang::Instance::new(),
-            editor_output: EditorOutput::new()?,
+            editor_output,
         })
     }
 
