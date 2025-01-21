@@ -120,11 +120,7 @@ impl Editor {
                 EditorMode::Command { input: _ } => {
                     self.process_command(code, interpreter);
                 }
-                EditorMode::Edit { .. } => {
-                    self.mode = EditorMode::Command {
-                        input: EditorInput::new(String::new()),
-                    };
-                }
+                EditorMode::Edit { .. } => {}
             },
             InputEvent::Left => match &mut self.mode {
                 EditorMode::Command { input } => {
@@ -146,7 +142,11 @@ impl Editor {
                 EditorMode::Command { input: _ } => {
                     self.mode = EditorMode::Edit;
                 }
-                EditorMode::Edit => {}
+                EditorMode::Edit => {
+                    self.mode = EditorMode::Command {
+                        input: EditorInput::new(String::new()),
+                    };
+                }
             },
         }
     }
