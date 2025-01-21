@@ -177,9 +177,7 @@ fn render_fragment(
         }
     }
 
-    let fragment = context.code.fragments().get(located.location.target());
-
-    match &fragment.kind {
+    match &located.fragment.kind {
         FragmentKind::Root => {
             // Nothing to render in the root fragment, except the body.
             // Which we're already doing below, unconditionally.
