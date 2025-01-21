@@ -207,6 +207,7 @@ impl Editor {
         match candidate {
             "clear" => {
                 *code = Code::default();
+                *self = Self::new(code);
                 interpreter.reset(code);
             }
             "edit" => {
