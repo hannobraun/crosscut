@@ -26,6 +26,7 @@ use super::code::Location;
 /// "escape".
 #[derive(Debug)]
 pub struct Editor {
+    editing: Location,
     mode: EditorMode,
     input: EditorInput,
     error: Option<EditorError>,
@@ -48,7 +49,8 @@ impl Editor {
         commands.insert("reset");
 
         Self {
-            mode: EditorMode::Edit { location },
+            editing: location,
+            mode: EditorMode::Edit,
             input: EditorInput::new(String::new()),
             error: None,
             commands,
@@ -56,11 +58,7 @@ impl Editor {
     }
 
     pub fn editing(&self) -> Option<&Location> {
-        if let EditorMode::Edit { location } = &self.mode {
-            Some(location)
-        } else {
-            None
-        }
+        Some(&self.editing)
     }
 
     pub fn mode(&self) -> &EditorMode {
@@ -85,8 +83,8 @@ impl Editor {
         match input {
             InputEvent::Char { value } => {
                 if value.is_whitespace() {
-                    if let EditorMode::Edit { location } = &mut self.mode {
-                        *location = code.append_to(
+                    if let EditorMode::Edit = &mut self.mode {
+                        self.editing = code.append_to(
                             &code.find_innermost_fragment_with_valid_body(),
                             Fragment {
                                 kind: FragmentKind::Empty,
@@ -99,10 +97,10 @@ impl Editor {
                 } else {
                     self.input.insert(value);
 
-                    if let EditorMode::Edit { location } = &mut self.mode {
+                    if let EditorMode::Edit = &mut self.mode {
                         Self::process_code(
                             &mut self.input,
-                            location,
+                            &mut self.editing,
                             code,
                             interpreter,
                             host,
@@ -113,10 +111,10 @@ impl Editor {
             InputEvent::Backspace => {
                 self.input.remove_left();
 
-                if let EditorMode::Edit { location } = &mut self.mode {
+                if let EditorMode::Edit = &mut self.mode {
                     Self::process_code(
                         &mut self.input,
-                        location,
+                        &mut self.editing,
                         code,
                         interpreter,
                         host,
@@ -205,7 +203,8 @@ impl Editor {
                         body: Body::default(),
                     },
                 );
-                self.mode = EditorMode::Edit { location };
+                self.editing = location;
+                self.mode = EditorMode::Edit;
             }
             "reset" => {
                 interpreter.reset(code);
@@ -220,7 +219,7 @@ impl Editor {
 #[derive(Debug, Eq, PartialEq)]
 pub enum EditorMode {
     Command,
-    Edit { location: Location },
+    Edit,
 }
 
 #[derive(Debug)]
