@@ -98,7 +98,7 @@ impl Editor {
                     self.input.insert(value);
 
                     if let EditorMode::Edit = self.mode {
-                        Self::process_code(self, code, interpreter, host);
+                        self.process_code(code, interpreter, host);
                     }
                 }
             }
@@ -106,7 +106,7 @@ impl Editor {
                 self.input.remove_left();
 
                 if let EditorMode::Edit = self.mode {
-                    Self::process_code(self, code, interpreter, host);
+                    self.process_code(code, interpreter, host);
                 }
             }
             InputEvent::Enter => match &self.mode {
