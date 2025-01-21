@@ -97,8 +97,8 @@ impl Editor {
                     }
                 } else {
                     match &mut self.mode {
-                        EditorMode::Command { input: _ } => {
-                            self.input.insert(value);
+                        EditorMode::Command { input } => {
+                            input.insert(value);
                         }
                         EditorMode::Edit => {
                             self.input.insert(value);
@@ -108,8 +108,8 @@ impl Editor {
                 }
             }
             InputEvent::Backspace => match &mut self.mode {
-                EditorMode::Command { input: _ } => {
-                    self.input.remove_left();
+                EditorMode::Command { input } => {
+                    input.remove_left();
                 }
                 EditorMode::Edit => {
                     self.input.remove_left();
@@ -119,26 +119,24 @@ impl Editor {
             InputEvent::Enter => match &self.mode {
                 EditorMode::Command { input: _ } => {
                     self.process_command(code, interpreter);
-                    self.input.clear();
                 }
                 EditorMode::Edit { .. } => {
                     self.mode = EditorMode::Command {
                         input: EditorInput::new(String::new()),
                     };
-                    self.input.clear();
                 }
             },
             InputEvent::Left => match &mut self.mode {
-                EditorMode::Command { input: _ } => {
-                    self.input.move_cursor_left();
+                EditorMode::Command { input } => {
+                    input.move_cursor_left();
                 }
                 EditorMode::Edit => {
                     self.input.move_cursor_left();
                 }
             },
             InputEvent::Right => match &mut self.mode {
-                EditorMode::Command { input: _ } => {
-                    self.input.move_cursor_right();
+                EditorMode::Command { input } => {
+                    input.move_cursor_right();
                 }
                 EditorMode::Edit => {
                     self.input.move_cursor_right();
@@ -168,7 +166,15 @@ impl Editor {
         code: &mut Code,
         interpreter: &mut Interpreter,
     ) {
-        let command = &self.input.buffer;
+        // This is an ugly hack, but it's temporary, as I transition to making
+        // "command mode" not be a thing here.
+        let EditorMode::Command { ref mut input } = &mut self.mode else {
+            unreachable!(
+                "This method is never called, unless we're in command mode."
+            );
+        };
+        let command = &input.buffer;
+
         self.error = None;
 
         let mut candidates = self
@@ -195,6 +201,8 @@ impl Editor {
 
             return;
         }
+
+        input.clear();
 
         match candidate {
             "clear" => {

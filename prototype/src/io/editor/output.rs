@@ -312,12 +312,12 @@ fn render_prompt(
     write!(w, "{mode} > ")?;
 
     match editor.mode() {
-        EditorMode::Command { input: _ } => {
+        EditorMode::Command { input } => {
             context.cursor = {
                 let [x, y] = w.cursor;
                 let x = {
                     let x: usize = x.into();
-                    let x = x.saturating_add(editor.input().cursor);
+                    let x = x.saturating_add(input.cursor);
                     let x: u16 = x.try_into().unwrap_or(u16::MAX);
                     x
                 };
@@ -325,7 +325,7 @@ fn render_prompt(
                 Some([x, y])
             };
 
-            write!(w, "{}", editor.input().buffer)?;
+            write!(w, "{}", input.buffer)?;
         }
         EditorMode::Edit { .. } => {
             // If we're in edit mode, the editing happens directly where the
