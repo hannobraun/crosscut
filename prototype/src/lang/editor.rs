@@ -220,6 +220,12 @@ pub enum EditorMode {
     Edit,
 }
 
+impl EditorMode {
+    pub fn is_edit(&self) -> bool {
+        matches!(self, Self::Edit)
+    }
+}
+
 #[derive(Debug, Eq, PartialEq)]
 pub struct EditorInput {
     pub buffer: String,
