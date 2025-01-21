@@ -22,10 +22,21 @@ impl GameEngineThread {
     pub fn start(game_output_tx: Sender<GameOutput>) -> anyhow::Result<Self> {
         let host = Host::from_functions(["dim"]);
 
-        let mut lang = lang::Instance::new();
-        let mut renderer = Renderer::new()?;
+        let lang = lang::Instance::new();
+        let renderer = Renderer::new()?;
 
-        renderer.render(&lang.editor, &lang.code, &lang.interpreter, &host)?;
+        let mut game_engine = GameEngine {
+            host,
+            lang,
+            renderer,
+        };
+
+        game_engine.renderer.render(
+            &game_engine.lang.editor,
+            &game_engine.lang.code,
+            &game_engine.lang.interpreter,
+            &game_engine.host,
+        )?;
 
         // Need to specify the types of the channels explicitly, to work around
         // this bug in rust-analyzer:
@@ -55,10 +66,14 @@ impl GameEngineThread {
 
             match event {
                 Event::EditorInput { event } => {
-                    lang.on_event(event, &host);
+                    game_engine.lang.on_event(event, &game_engine.host);
 
                     loop {
-                        match lang.interpreter.step(&lang.code) {
+                        match game_engine
+                            .lang
+                            .interpreter
+                            .step(&game_engine.lang.code)
+                        {
                             StepResult::CallToHostFunction {
                                 id,
                                 input,
@@ -108,11 +123,11 @@ impl GameEngineThread {
                         break;
                     }
 
-                    renderer.render(
-                        &lang.editor,
-                        &lang.code,
-                        &lang.interpreter,
-                        &host,
+                    game_engine.renderer.render(
+                        &game_engine.lang.editor,
+                        &game_engine.lang.code,
+                        &game_engine.lang.interpreter,
+                        &game_engine.host,
                     )?;
                 }
                 Event::GameInput {
@@ -158,6 +173,12 @@ enum Event {
     /// Those other threads need to instead _send_ to another thread from time
     /// to time, to learn about the shutdown. This is what this event is for.
     Heartbeat,
+}
+
+pub struct GameEngine {
+    host: Host,
+    lang: lang::Instance,
+    renderer: Renderer,
 }
 
 #[derive(Debug)]
