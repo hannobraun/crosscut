@@ -284,8 +284,8 @@ fn render_body(
     body: &Body,
     context: &mut RenderContext,
 ) -> anyhow::Result<()> {
-    for hash in body.ids() {
-        render_fragment(w, hash, context)?;
+    for id in body.ids() {
+        render_fragment(w, id, context)?;
     }
 
     Ok(())
