@@ -38,14 +38,14 @@ fn reset_interpreter_on_code_update_if_error() {
     let host = Host::empty();
     let mut lang = lang::Instance::new();
 
-    lang.edit("identity", &host);
+    lang.on_code("identity", &host);
     let step = lang.interpreter.step(&lang.code);
 
     assert_eq!(step, StepResult::Error);
     assert_eq!(lang.interpreter.state(&lang.code), InterpreterState::Error);
 
     lang.on_char(' ', &host);
-    lang.edit("1", &host);
+    lang.on_code("1", &host);
     let initial_expression =
         lang.code.root().fragment.body.ids().next().unwrap();
 
@@ -68,7 +68,7 @@ fn update_interpreter_on_code_update() {
     let host = Host::empty();
     let mut lang = lang::Instance::new();
 
-    lang.edit("identity 1", &host);
+    lang.on_code("identity 1", &host);
     let output = lang.run_until_finished();
 
     assert_eq!(output, Value::Integer { value: 1 });

@@ -32,11 +32,6 @@ impl Instance {
     }
 
     #[cfg(test)]
-    pub fn edit(&mut self, code: &str, host: &Host) {
-        self.on_code(code, host);
-    }
-
-    #[cfg(test)]
     pub fn on_code(&mut self, code: &str, host: &Host) {
         assert!(
             matches!(self.editor.mode(), EditorMode::Edit { .. }),

@@ -27,7 +27,7 @@ fn compile_and_run(input_code: &str) -> Value {
     let host = Host::from_functions(["half"]);
     let mut lang = lang::Instance::new();
 
-    lang.edit(input_code, &host);
+    lang.on_code(input_code, &host);
     run(&lang.code, &mut lang.interpreter)
 }
 

@@ -13,7 +13,7 @@ fn identity() {
     let host = Host::empty();
     let mut lang = lang::Instance::new();
 
-    lang.edit("identity 1", &host);
+    lang.on_code("identity 1", &host);
 
     let step = lang.interpreter.step(&lang.code);
     assert_eq!(step, StepResult::CallToIntrinsicFunction);
