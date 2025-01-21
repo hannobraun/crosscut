@@ -9,8 +9,8 @@ use super::{
 pub struct Code {
     fragments: Fragments,
     replacements: Replacements,
-
     root: FragmentId,
+
     pub errors: BTreeMap<FragmentId, CodeError>,
 }
 
