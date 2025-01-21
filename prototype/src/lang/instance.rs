@@ -33,25 +33,7 @@ impl Instance {
 
     #[cfg(test)]
     pub fn edit(&mut self, code: &str, host: &Host) {
-        if let EditorMode::Command = self.editor.mode() {
-            self.on_command("edit", host);
-        }
         self.on_code(code, host);
-    }
-
-    #[cfg(test)]
-    pub fn on_command(&mut self, command: &str, host: &Host) {
-        assert_eq!(
-            *self.editor.mode(),
-            EditorMode::Command,
-            "Trying to execute command, but editor is not in command mode.",
-        );
-
-        for ch in command.chars() {
-            self.on_char(ch, host);
-        }
-
-        self.on_input(InputEvent::Enter, host);
     }
 
     #[cfg(test)]
@@ -64,8 +46,6 @@ impl Instance {
         for ch in code.chars() {
             self.on_char(ch, host);
         }
-
-        self.on_input(InputEvent::Enter, host);
     }
 
     #[cfg(test)]
