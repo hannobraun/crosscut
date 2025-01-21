@@ -158,8 +158,8 @@ fn render_fragment(
 
     let mut currently_editing_this_fragment = false;
     if let Some(editor) = &context.editor {
-        if let EditorMode::Edit { location } = editor.mode() {
-            if location.target() == id {
+        if let EditorMode::Edit { location: editing } = editor.mode() {
+            if editing.target() == id {
                 currently_editing_this_fragment = true;
 
                 context.cursor = {
