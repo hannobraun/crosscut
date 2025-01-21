@@ -9,15 +9,18 @@ use crate::{
 
 pub fn start(editor_input: Sender<Option<InputEvent>>) -> ThreadHandle {
     thread::spawn(move || match read_event(&editor_input) {
-        Ok(ControlFlow::Continue(())) => Ok(ControlFlow::Continue(())),
+        Ok(ControlFlow::Continue(event)) => {
+            editor_input.send(event)?;
+            Ok(ControlFlow::Continue(()))
+        }
         Ok(ControlFlow::Break(())) => Ok(ControlFlow::Break(())),
         Err(err) => Err(err),
     })
 }
 
 fn read_event(
-    editor_input: &Sender<Option<InputEvent>>,
-) -> Result<ControlFlow<(), ()>, thread::Error> {
+    _: &Sender<Option<InputEvent>>,
+) -> Result<ControlFlow<(), Option<InputEvent>>, thread::Error> {
     let timeout = Duration::from_millis(50);
     let event_ready = event::poll(timeout)?;
 
@@ -26,14 +29,13 @@ fn read_event(
         // learn if the other thread has shut down. Otherwise, this thread
         // will hang forever, blocking on input, preventing the application
         // from shutting down.
-        editor_input.send(None)?;
-        return Ok(ControlFlow::Continue(()));
+        return Ok(ControlFlow::Continue(None));
     }
 
     let event = event::read()?;
 
     let Event::Key(key_event) = event else {
-        return Ok(ControlFlow::Continue(()));
+        return Ok(ControlFlow::Continue(None));
     };
 
     let event = match key_event.code {
@@ -67,6 +69,5 @@ fn read_event(
         _ => None,
     };
 
-    editor_input.send(event)?;
-    Ok(ControlFlow::Continue(()))
+    Ok(ControlFlow::Continue(event))
 }
