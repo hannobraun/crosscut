@@ -1,3 +1,4 @@
+mod commands;
 mod edit;
 mod host_functions;
 mod intrinsic_functions;
