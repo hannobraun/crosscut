@@ -286,7 +286,6 @@ fn render_prompt(
         EditorMode::Command { .. } => "command",
         EditorMode::Edit { .. } => "edit",
     };
-    let input = &editor.input().buffer;
 
     if let Some(error) = editor.error() {
         w.move_to_next_line()?;
@@ -313,7 +312,7 @@ fn render_prompt(
 
     match editor.mode() {
         EditorMode::Command { .. } => {
-            write!(w, "{}", input)?;
+            write!(w, "{}", editor.input().buffer)?;
         }
         EditorMode::Edit { .. } => {
             // If we're in edit mode, the editing happens directly where the
