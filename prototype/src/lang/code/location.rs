@@ -1,6 +1,6 @@
 use itertools::Itertools;
 
-use super::{Fragment, FragmentId};
+use super::{Fragment, FragmentId, Fragments};
 
 /// # The unique location of a fragment
 ///
@@ -76,4 +76,18 @@ impl Location {
 pub struct Located<'r> {
     pub location: Location,
     pub fragment: &'r Fragment,
+}
+
+impl<'r> Located<'r> {
+    pub fn body(
+        &'r self,
+        fragments: &'r Fragments,
+    ) -> impl Iterator<Item = Located<'r>> {
+        self.fragment.body.ids().map(|id| {
+            let location = self.location.clone().with_component(*id);
+            let fragment = fragments.get(id);
+
+            Located { location, fragment }
+        })
+    }
 }
