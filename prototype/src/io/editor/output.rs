@@ -283,7 +283,7 @@ fn render_prompt(
     editor: &Editor,
 ) -> anyhow::Result<()> {
     let mode = match editor.mode() {
-        EditorMode::Command => "command",
+        EditorMode::Command { .. } => "command",
         EditorMode::Edit { .. } => "edit",
     };
     let input = &editor.input().buffer;
@@ -312,7 +312,7 @@ fn render_prompt(
     write!(w, "{mode} > ")?;
 
     match editor.mode() {
-        EditorMode::Command => {
+        EditorMode::Command { .. } => {
             write!(w, "{input}")?;
         }
         EditorMode::Edit { .. } => {
