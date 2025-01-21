@@ -210,16 +210,6 @@ impl Editor {
                 *self = Self::new(code);
                 interpreter.reset(code);
             }
-            "edit" => {
-                self.editing = code.append_to(
-                    &code.find_innermost_fragment_with_valid_body(),
-                    Fragment {
-                        kind: FragmentKind::Empty,
-                        body: Body::default(),
-                    },
-                );
-                self.mode = EditorMode::Edit;
-            }
             "nop" => {
                 // This command does nothing. It exists to give tests something
                 // to execute, if they don't want to actually do something
