@@ -1,8 +1,8 @@
 use std::collections::BTreeMap;
 
 use super::{
-    Body, CodeError, Fragment, FragmentId, FragmentKind, Fragments, Location,
-    Replacements,
+    Body, CodeError, Fragment, FragmentId, FragmentKind, Fragments, Located,
+    Location, Replacements,
 };
 
 #[derive(Clone, Debug, Eq, PartialEq)]
@@ -35,11 +35,11 @@ impl Code {
         &self.fragments
     }
 
-    pub fn root(&self) -> (Location, &Fragment) {
-        (
-            Location::from_component(self.root),
-            self.fragments.get(&self.root),
-        )
+    pub fn root(&self) -> Located {
+        Located {
+            location: Location::from_component(self.root),
+            fragment: self.fragments.get(&self.root),
+        }
     }
 
     pub fn find_innermost_fragment_with_valid_body(&self) -> Location {

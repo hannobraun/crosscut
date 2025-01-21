@@ -115,7 +115,7 @@ fn render_code(
         w.move_to_next_line()?;
     };
 
-    render_fragment(w, context.code.root().0.target(), context)?;
+    render_fragment(w, context.code.root().location.target(), context)?;
 
     w.flush()?;
 

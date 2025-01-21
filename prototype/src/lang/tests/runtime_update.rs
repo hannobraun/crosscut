@@ -18,7 +18,8 @@ fn reset_interpreter_on_code_update_if_finished() {
     );
 
     lang.edit("1", &host);
-    let initial_expression = lang.code.root().1.body.ids().next().unwrap();
+    let initial_expression =
+        lang.code.root().fragment.body.ids().next().unwrap();
 
     assert_eq!(
         lang.interpreter.state(&lang.code),
@@ -42,7 +43,8 @@ fn reset_interpreter_on_code_update_if_error() {
     assert_eq!(lang.interpreter.state(&lang.code), InterpreterState::Error,);
 
     lang.edit("1", &host);
-    let initial_expression = lang.code.root().1.body.ids().next().unwrap();
+    let initial_expression =
+        lang.code.root().fragment.body.ids().next().unwrap();
 
     assert_eq!(
         lang.interpreter.state(&lang.code),

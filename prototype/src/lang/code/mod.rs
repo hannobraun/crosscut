@@ -10,6 +10,6 @@ pub use self::{
     code::{Code, Expression, FunctionCallTarget, Literal},
     errors::CodeError,
     fragments::{Fragment, FragmentError, FragmentId, FragmentKind, Fragments},
-    location::Location,
+    location::{Located, Location},
     replacements::Replacements,
 };

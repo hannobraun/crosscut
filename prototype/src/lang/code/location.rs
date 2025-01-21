@@ -1,6 +1,6 @@
 use itertools::Itertools;
 
-use super::FragmentId;
+use super::{Fragment, FragmentId};
 
 /// # The unique location of a fragment
 ///
@@ -71,4 +71,9 @@ impl Location {
     ) -> impl Iterator<Item = (&FragmentId, &FragmentId)> {
         self.inner.iter().rev().tuple_windows()
     }
+}
+
+pub struct Located<'r> {
+    pub location: Location,
+    pub fragment: &'r Fragment,
 }
