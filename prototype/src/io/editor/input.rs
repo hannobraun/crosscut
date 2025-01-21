@@ -8,7 +8,11 @@ use crate::{
 };
 
 pub fn start(editor_input: Sender<Option<InputEvent>>) -> ThreadHandle {
-    thread::spawn(move || read_event(&editor_input))
+    thread::spawn(move || match read_event(&editor_input) {
+        Ok(ControlFlow::Continue(())) => Ok(ControlFlow::Continue(())),
+        Ok(ControlFlow::Break(())) => Ok(ControlFlow::Break(())),
+        Err(err) => Err(err),
+    })
 }
 
 fn read_event(
