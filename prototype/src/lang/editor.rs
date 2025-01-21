@@ -33,7 +33,7 @@ pub struct Editor {
 }
 
 impl Editor {
-    pub fn new() -> Self {
+    pub fn new(_: &Code) -> Self {
         let mut commands = BTreeSet::new();
         commands.insert("clear");
         commands.insert("edit");
@@ -198,12 +198,6 @@ impl Editor {
                 unreachable!("Ruled out that command is unknown, above.")
             }
         }
-    }
-}
-
-impl Default for Editor {
-    fn default() -> Self {
-        Self::new()
     }
 }
 
