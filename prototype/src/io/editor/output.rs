@@ -313,7 +313,7 @@ fn render_prompt(
 
     match editor.mode() {
         EditorMode::Command { .. } => {
-            write!(w, "{input}")?;
+            write!(w, "{}", input)?;
         }
         EditorMode::Edit { .. } => {
             // If we're in edit mode, the editing happens directly where the
