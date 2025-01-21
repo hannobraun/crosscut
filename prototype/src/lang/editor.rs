@@ -102,11 +102,8 @@ impl Editor {
                         }
                         EditorMode::Edit => {
                             self.input.insert(value);
+                            self.process_code(code, interpreter, host);
                         }
-                    }
-
-                    if let EditorMode::Edit = self.mode {
-                        self.process_code(code, interpreter, host);
                     }
                 }
             }
