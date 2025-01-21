@@ -40,7 +40,7 @@ fn reset_interpreter_on_code_update_if_error() {
     let step = lang.interpreter.step(&lang.code);
 
     assert_eq!(step, StepResult::Error);
-    assert_eq!(lang.interpreter.state(&lang.code), InterpreterState::Error,);
+    assert_eq!(lang.interpreter.state(&lang.code), InterpreterState::Error);
 
     lang.edit("1", &host);
     let initial_expression =
