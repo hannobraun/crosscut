@@ -3,7 +3,7 @@ use std::ops::ControlFlow;
 use crossbeam_channel::select;
 
 use crate::{
-    io::editor::output::Renderer,
+    io::editor::output::EditorOutput,
     lang::{
         self, editor,
         host::Host,
@@ -23,7 +23,7 @@ impl GameEngineThread {
         let mut game_engine = GameEngine {
             host: Host::from_functions(["dim"]),
             lang: lang::Instance::new(),
-            renderer: Renderer::new()?,
+            renderer: EditorOutput::new()?,
         };
 
         game_engine.renderer.render(
@@ -173,7 +173,7 @@ enum Event {
 pub struct GameEngine {
     host: Host,
     lang: lang::Instance,
-    renderer: Renderer,
+    renderer: EditorOutput,
 }
 
 #[derive(Debug)]
