@@ -8,8 +8,8 @@ use super::{
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub struct Code {
     fragments: Fragments,
-    replacements: Replacements,
     root: FragmentId,
+    replacements: Replacements,
 
     pub errors: BTreeMap<FragmentId, CodeError>,
 }
@@ -25,8 +25,8 @@ impl Code {
 
         Self {
             fragments,
-            replacements: Replacements::default(),
             root,
+            replacements: Replacements::default(),
             errors: BTreeMap::new(),
         }
     }
