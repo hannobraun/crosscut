@@ -47,10 +47,9 @@ pub fn start() -> anyhow::Result<Threads> {
 
         match event {
             GameEngineEvent::EditorInput { event } => {
-                let mut game_events = Vec::new();
-                game_engine.on_editor_input(event, &mut game_events)?;
+                game_engine.on_editor_input(event)?;
 
-                for event in game_events {
+                for event in game_engine.game_output() {
                     game_output_tx.send(event)?;
                 }
             }

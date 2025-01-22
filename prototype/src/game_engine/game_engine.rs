@@ -10,6 +10,7 @@ use crate::{
 pub struct GameEngine {
     host: Host,
     lang: lang::Instance,
+    game_output: Vec<GameOutput>,
     editor_output: EditorOutput,
 }
 
@@ -20,6 +21,7 @@ impl GameEngine {
         Ok(Self {
             host: Host::from_functions(["dim"]),
             lang: lang::Instance::new(),
+            game_output: Vec::new(),
             editor_output,
         })
     }
@@ -38,7 +40,6 @@ impl GameEngine {
     pub fn on_editor_input(
         &mut self,
         event: editor::InputEvent,
-        game_output: &mut Vec<GameOutput>,
     ) -> anyhow::Result<()> {
         self.lang.on_event(event, &self.host);
 
@@ -73,7 +74,7 @@ impl GameEngine {
                     let Value::Integer { value: output } = output;
                     let color = output as f64 / 255.;
 
-                    game_output.push(GameOutput::SubmitColor {
+                    self.game_output.push(GameOutput::SubmitColor {
                         color: [color, color, color, 1.],
                     });
                 }
@@ -85,6 +86,10 @@ impl GameEngine {
         self.render_editor()?;
 
         Ok(())
+    }
+
+    pub fn game_output(&mut self) -> impl Iterator<Item = GameOutput> + '_ {
+        self.game_output.drain(..)
     }
 }
 
