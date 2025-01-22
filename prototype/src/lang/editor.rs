@@ -45,7 +45,6 @@ impl Editor {
 
         let mut commands = BTreeSet::new();
         commands.insert("clear");
-        commands.insert("edit");
         commands.insert("nop");
         commands.insert("reset");
 
