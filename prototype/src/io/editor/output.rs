@@ -422,6 +422,14 @@ impl EditorOutputAdapter {
     fn flush(&mut self) -> io::Result<()> {
         self.w.flush()
     }
+
+    fn queue(
+        &mut self,
+        command: impl crossterm::Command,
+    ) -> anyhow::Result<()> {
+        self.w.queue(command)?;
+        Ok(())
+    }
 }
 
 impl io::Write for EditorOutputAdapter {
