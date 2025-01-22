@@ -125,7 +125,7 @@ fn render_fragment(
     let maybe_error = context.code.errors.get(located.location.target());
 
     if maybe_error.is_some() {
-        w.set_foreground_color(Color::Red)?;
+        w.color(Color::Red)?;
     }
 
     let mut indent = context.indent;
@@ -407,7 +407,7 @@ impl EditorOutputAdapter {
         Ok(())
     }
 
-    fn set_foreground_color(&mut self, color: Color) -> anyhow::Result<()> {
+    fn color(&mut self, color: Color) -> anyhow::Result<()> {
         self.w.queue(SetForegroundColor(color))?;
         Ok(())
     }
