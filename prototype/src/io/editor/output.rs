@@ -379,7 +379,7 @@ impl EditorOutputAdapter {
             } else {
                 let mut buf = [0; 4];
                 self.w
-                    .write(ch.encode_utf8(&mut buf).as_bytes())
+                    .write_all(ch.encode_utf8(&mut buf).as_bytes())
                     .map(|_| ())
                     .map_err(|_| fmt::Error)?;
 
