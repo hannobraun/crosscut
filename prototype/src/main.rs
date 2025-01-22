@@ -16,8 +16,9 @@ fn main() -> anyhow::Result<()> {
     // nothing to join yet, because the game engine I/O is using `winit`
     // internally, which requires its own special handling.
 
-    threads.handle.join()?;
-    threads.editor_input.join()?;
+    for handle in [threads.handle, threads.editor_input] {
+        handle.join()?;
+    }
 
     Ok(())
 }
