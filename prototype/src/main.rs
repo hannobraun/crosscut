@@ -13,9 +13,7 @@ fn main() -> anyhow::Result<()> {
 
     use crate::{io::editor::input::read_event, threads::GameEngineThread};
 
-    let (game_output_tx, game_output_rx) = threads::channel();
-
-    let game_engine = GameEngineThread::start(game_output_tx)?;
+    let game_engine = GameEngineThread::start()?;
     let editor_input = threads::spawn(move || match read_event() {
         Ok(ControlFlow::Continue(event)) => {
             game_engine.editor_input.send(event)?;
@@ -25,7 +23,10 @@ fn main() -> anyhow::Result<()> {
         Err(err) => Err(threads::Error::Other { err }),
     });
 
-    io::game_engine::start_and_wait(game_engine.game_input, game_output_rx)?;
+    io::game_engine::start_and_wait(
+        game_engine.game_input,
+        game_engine.game_output,
+    )?;
     // At this point, we're blocking until any of the threads shut down. There's
     // nothing to join yet, because the game engine I/O is using `winit`
     // internally, which requires its own special handling.

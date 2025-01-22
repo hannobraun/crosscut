@@ -16,10 +16,13 @@ pub struct GameEngineThread {
     pub handle: ThreadHandle,
     pub editor_input: Sender<Option<editor::InputEvent>>,
     pub game_input: Sender<GameInput>,
+    pub game_output: Receiver<GameOutput>,
 }
 
 impl GameEngineThread {
-    pub fn start(game_output_tx: Sender<GameOutput>) -> anyhow::Result<Self> {
+    pub fn start() -> anyhow::Result<Self> {
+        let (game_output_tx, game_output_rx) = channel();
+
         let mut game_engine = GameEngine::new()?;
         game_engine.render_editor()?;
 
@@ -73,6 +76,7 @@ impl GameEngineThread {
             handle,
             editor_input: editor_input_tx,
             game_input: game_input_tx,
+            game_output: game_output_rx,
         })
     }
 }
