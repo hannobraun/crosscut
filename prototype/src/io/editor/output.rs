@@ -1,4 +1,4 @@
-use std::io::{self, stdout, Stdout, Write};
+use std::io::{self, stdout, Stdout, Write as _};
 
 use crossterm::{
     cursor::{self, MoveToNextLine},
