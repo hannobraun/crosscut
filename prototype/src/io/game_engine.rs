@@ -12,7 +12,7 @@ use winit::{
 
 use crate::{
     game_engine::{GameInput, GameOutput},
-    thread::{self, Receiver, Sender},
+    threads::{self, Receiver, Sender},
 };
 
 pub fn start_and_wait(
@@ -87,7 +87,7 @@ impl ApplicationHandler for Handler {
                 event_loop.exit();
             }
             WindowEvent::RedrawRequested => {
-                if let Err(thread::ChannelDisconnected) =
+                if let Err(threads::ChannelDisconnected) =
                     self.game_io.input.send(GameInput::RenderingFrame)
                 {
                     // The other end has hung up. We should shut down too.
@@ -107,7 +107,7 @@ impl ApplicationHandler for Handler {
                             // update before, we'll use that one below.
                             break;
                         }
-                        Err(thread::ChannelDisconnected) => {
+                        Err(threads::ChannelDisconnected) => {
                             // The other end has hung up. Time for us to shut
                             // down too.
                             event_loop.exit();

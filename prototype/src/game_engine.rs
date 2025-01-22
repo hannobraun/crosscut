@@ -9,7 +9,7 @@ use crate::{
         host::Host,
         interpreter::{StepResult, Value},
     },
-    thread::{self, ChannelDisconnected, Sender, ThreadHandle},
+    threads::{self, ChannelDisconnected, Sender, ThreadHandle},
 };
 
 pub struct GameEngineThread {
@@ -27,10 +27,10 @@ impl GameEngineThread {
         // this bug in rust-analyzer:
         // https://github.com/rust-lang/rust-analyzer/issues/15984
         let (editor_input_tx, editor_input_rx) =
-            thread::channel::<Option<editor::InputEvent>>();
-        let (game_input_tx, game_input_rx) = thread::channel::<GameInput>();
+            threads::channel::<Option<editor::InputEvent>>();
+        let (game_input_tx, game_input_rx) = threads::channel::<GameInput>();
 
-        let handle = thread::spawn(move || {
+        let handle = threads::spawn(move || {
             let event = select! {
                 recv(editor_input_rx.inner()) -> result => {
                     result.map(|maybe_event|

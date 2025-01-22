@@ -6,23 +6,23 @@
 mod game_engine;
 mod io;
 mod lang;
-mod thread;
+mod threads;
 
 fn main() -> anyhow::Result<()> {
     use std::ops::ControlFlow;
 
     use crate::{game_engine::GameEngineThread, io::editor::input::read_event};
 
-    let (game_output_tx, game_output_rx) = thread::channel();
+    let (game_output_tx, game_output_rx) = threads::channel();
 
     let game_engine = GameEngineThread::start(game_output_tx)?;
-    let editor_input = thread::spawn(move || match read_event() {
+    let editor_input = threads::spawn(move || match read_event() {
         Ok(ControlFlow::Continue(event)) => {
             game_engine.editor_input.send(event)?;
             Ok(ControlFlow::Continue(()))
         }
         Ok(ControlFlow::Break(())) => Ok(ControlFlow::Break(())),
-        Err(err) => Err(thread::Error::Other { err }),
+        Err(err) => Err(threads::Error::Other { err }),
     });
 
     io::game_engine::start_and_wait(game_engine.game_input, game_output_rx)?;
