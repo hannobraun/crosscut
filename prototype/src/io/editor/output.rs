@@ -407,7 +407,7 @@ impl EditorOutputAdapter {
         Ok(())
     }
 
-    fn color(&mut self, color: Color) -> anyhow::Result<()> {
+    fn color(&mut self, color: Color) -> io::Result<()> {
         self.w.queue(SetForegroundColor(color))?;
         Ok(())
     }
