@@ -400,7 +400,7 @@ impl EditorOutputAdapter {
         Ok(())
     }
 
-    fn move_to_next_line(&mut self) -> anyhow::Result<()> {
+    fn move_to_next_line(&mut self) -> io::Result<()> {
         if terminal::is_raw_mode_enabled()? {
             self.w.queue(MoveToNextLine(1))?;
         } else {
