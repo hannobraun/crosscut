@@ -1,4 +1,7 @@
-use std::io::{self, stdout, Stdout, Write as _};
+use std::{
+    fmt::{self, Write as _},
+    io::{self, stdout, Stdout, Write as _},
+};
 
 use crossterm::{
     cursor::{self, MoveToNextLine},
@@ -432,12 +435,8 @@ impl EditorOutputAdapter {
     }
 }
 
-impl io::Write for EditorOutputAdapter {
-    fn write(&mut self, buf: &[u8]) -> io::Result<usize> {
-        self.write(buf)
-    }
-
-    fn flush(&mut self) -> io::Result<()> {
-        self.flush()
+impl fmt::Write for EditorOutputAdapter {
+    fn write_str(&mut self, s: &str) -> fmt::Result {
+        self.write(s.as_bytes()).map(|_| ()).map_err(|_| fmt::Error)
     }
 }
