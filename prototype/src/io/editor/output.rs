@@ -418,6 +418,10 @@ impl EditorOutputAdapter {
         self.cursor[0] += bytes_written as u16;
         Ok(bytes_written)
     }
+
+    fn flush(&mut self) -> io::Result<()> {
+        self.w.flush()
+    }
 }
 
 impl io::Write for EditorOutputAdapter {
@@ -426,6 +430,6 @@ impl io::Write for EditorOutputAdapter {
     }
 
     fn flush(&mut self) -> io::Result<()> {
-        self.w.flush()
+        self.flush()
     }
 }
