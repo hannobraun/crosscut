@@ -414,7 +414,6 @@ impl EditorOutputAdapter {
         // We're only accepting ASCII characters from the terminal right now, so
         // this should work fine.
         let bytes_written = self.w.write(buf)?;
-        self.cursor[0] += bytes_written as u16;
         Ok(bytes_written)
     }
 
@@ -443,6 +442,8 @@ impl fmt::Write for EditorOutputAdapter {
                 self.write(ch.encode_utf8(&mut buf).as_bytes())
                     .map(|_| ())
                     .map_err(|_| fmt::Error)?;
+
+                self.cursor[0] += 1;
             }
         }
 
