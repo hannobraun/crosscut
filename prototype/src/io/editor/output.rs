@@ -370,6 +370,30 @@ impl EditorOutputAdapter {
         Ok(())
     }
 
+    fn write(&mut self, s: &str) -> fmt::Result {
+        for ch in s.chars() {
+            if ch == '\n' {
+                self.move_to_next_line()
+                    .map(|_| ())
+                    .map_err(|_| fmt::Error)?;
+            } else {
+                let mut buf = [0; 4];
+                self.w
+                    .write(ch.encode_utf8(&mut buf).as_bytes())
+                    .map(|_| ())
+                    .map_err(|_| fmt::Error)?;
+
+                assert!(
+                    ch.is_ascii(),
+                    "Editor input adapter only accepts ASCII characters.",
+                );
+                self.cursor[0] += 1;
+            }
+        }
+
+        Ok(())
+    }
+
     fn move_to(&mut self, x: u16, y: u16) -> anyhow::Result<()> {
         self.w.queue(cursor::MoveTo(x, y))?;
         self.cursor = [x, y];
@@ -425,26 +449,6 @@ impl EditorOutputAdapter {
 
 impl fmt::Write for EditorOutputAdapter {
     fn write_str(&mut self, s: &str) -> fmt::Result {
-        for ch in s.chars() {
-            if ch == '\n' {
-                self.move_to_next_line()
-                    .map(|_| ())
-                    .map_err(|_| fmt::Error)?;
-            } else {
-                let mut buf = [0; 4];
-                self.w
-                    .write(ch.encode_utf8(&mut buf).as_bytes())
-                    .map(|_| ())
-                    .map_err(|_| fmt::Error)?;
-
-                assert!(
-                    ch.is_ascii(),
-                    "Editor input adapter only accepts ASCII characters.",
-                );
-                self.cursor[0] += 1;
-            }
-        }
-
-        Ok(())
+        self.write(s)
     }
 }
