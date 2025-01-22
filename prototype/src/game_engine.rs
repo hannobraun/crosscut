@@ -1,7 +1,3 @@
-use std::ops::ControlFlow;
-
-use crossbeam_channel::select;
-
 use crate::{
     io::editor::output::EditorOutput,
     lang::{
@@ -9,99 +5,7 @@ use crate::{
         host::Host,
         interpreter::{StepResult, Value},
     },
-    threads::{self, ChannelDisconnected, Sender, ThreadHandle},
 };
-
-pub struct GameEngineThread {
-    pub handle: ThreadHandle,
-    pub editor_input: Sender<Option<editor::InputEvent>>,
-    pub game_input: Sender<GameInput>,
-}
-
-impl GameEngineThread {
-    pub fn start(game_output_tx: Sender<GameOutput>) -> anyhow::Result<Self> {
-        let mut game_engine = GameEngine::new()?;
-        game_engine.render_editor()?;
-
-        // Need to specify the types of the channels explicitly, to work around
-        // this bug in rust-analyzer:
-        // https://github.com/rust-lang/rust-analyzer/issues/15984
-        let (editor_input_tx, editor_input_rx) =
-            threads::channel::<Option<editor::InputEvent>>();
-        let (game_input_tx, game_input_rx) = threads::channel::<GameInput>();
-
-        let handle = threads::spawn(move || {
-            let event = select! {
-                recv(editor_input_rx.inner()) -> result => {
-                    result.map(|maybe_event|
-                        if let Some(event) = maybe_event {
-                            GameEngineEvent::EditorInput { event }}
-                        else {
-                            GameEngineEvent::Heartbeat
-                        }
-                    )
-                }
-                recv(game_input_rx.inner()) -> result => {
-                    result.map(|input| GameEngineEvent::GameInput { input })
-                }
-            };
-            let Ok(event) = event else {
-                return Err(ChannelDisconnected.into());
-            };
-
-            match event {
-                GameEngineEvent::EditorInput { event } => {
-                    let mut game_events = Vec::new();
-                    game_engine.on_editor_input(event, &mut game_events)?;
-
-                    for event in game_events {
-                        game_output_tx.send(event)?;
-                    }
-                }
-                GameEngineEvent::GameInput {
-                    input: GameInput::RenderingFrame,
-                } => {
-                    // This loop is coupled to the frame rate of the renderer.
-                }
-                GameEngineEvent::Heartbeat => {}
-            }
-
-            Ok(ControlFlow::Continue(()))
-        });
-
-        Ok(Self {
-            handle,
-            editor_input: editor_input_tx,
-            game_input: game_input_tx,
-        })
-    }
-}
-
-#[derive(Debug)]
-enum GameEngineEvent {
-    EditorInput {
-        event: editor::InputEvent,
-    },
-
-    GameInput {
-        input: GameInput,
-    },
-
-    /// # An event that has no effect when processed
-    ///
-    /// If a thread shuts down, either because of an error, or because the
-    /// application is supposed to shut down as a whole, that needs to propagate
-    /// to the other threads.
-    ///
-    /// For some threads, this is easily achieved, because they block on reading
-    /// from a channel from another thread, which will fail the moment that
-    /// other thread shuts down. Other threads block on something else, and
-    /// don't benefit from this mechanism.
-    ///
-    /// Those other threads need to instead _send_ to another thread from time
-    /// to time, to learn about the shutdown. This is what this event is for.
-    Heartbeat,
-}
 
 pub struct GameEngine {
     host: Host,

@@ -11,7 +11,7 @@ mod threads;
 fn main() -> anyhow::Result<()> {
     use std::ops::ControlFlow;
 
-    use crate::{game_engine::GameEngineThread, io::editor::input::read_event};
+    use crate::{io::editor::input::read_event, threads::GameEngineThread};
 
     let (game_output_tx, game_output_rx) = threads::channel();
 
