@@ -9,19 +9,9 @@ mod lang;
 mod threads;
 
 fn main() -> anyhow::Result<()> {
-    use std::ops::ControlFlow;
-
-    use crate::{io::editor::input::read_event, threads::GameEngineThread};
+    use crate::threads::GameEngineThread;
 
     let game_engine = GameEngineThread::start()?;
-    let editor_input = threads::spawn(move || match read_event() {
-        Ok(ControlFlow::Continue(event)) => {
-            game_engine.editor_input.send(event)?;
-            Ok(ControlFlow::Continue(()))
-        }
-        Ok(ControlFlow::Break(())) => Ok(ControlFlow::Break(())),
-        Err(err) => Err(threads::Error::Other { err }),
-    });
 
     io::game_engine::start_and_wait(
         game_engine.game_input,
@@ -32,7 +22,7 @@ fn main() -> anyhow::Result<()> {
     // internally, which requires its own special handling.
 
     game_engine.handle.join()?;
-    editor_input.join()?;
+    game_engine.editor_input.join()?;
 
     Ok(())
 }
