@@ -131,7 +131,7 @@ fn render_fragment(
     let mut indent = context.indent;
     if let Some(interpreter) = context.interpreter {
         if Some(located.location.target()) == interpreter.next() {
-            w.set_attribute(Attribute::Bold)?;
+            w.attribute(Attribute::Bold)?;
             write!(w, " => ")?;
 
             // This is worth one indentation level. We need to adjust for
@@ -222,7 +222,7 @@ fn render_fragment(
     context.indent -= 1;
 
     w.reset_color()?;
-    w.set_attribute(Attribute::Reset)?;
+    w.attribute(Attribute::Reset)?;
 
     Ok(())
 }
@@ -412,7 +412,7 @@ impl EditorOutputAdapter {
         Ok(())
     }
 
-    fn set_attribute(&mut self, attribute: Attribute) -> anyhow::Result<()> {
+    fn attribute(&mut self, attribute: Attribute) -> anyhow::Result<()> {
         self.w.queue(SetAttribute(attribute))?;
         Ok(())
     }
