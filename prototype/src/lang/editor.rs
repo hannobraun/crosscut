@@ -218,6 +218,15 @@ impl Editor {
             }
         };
 
+        self.on_command(command, code, interpreter);
+    }
+
+    pub fn on_command(
+        &mut self,
+        command: Command,
+        code: &mut Code,
+        interpreter: &mut Interpreter,
+    ) {
         match command {
             Command::Clear => {
                 *code = Code::default();
