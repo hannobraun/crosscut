@@ -75,16 +75,14 @@ pub fn start() -> anyhow::Result<Threads> {
     });
 
     Ok(Threads {
-        handle: game_engine,
-        editor_input,
+        handles: [game_engine, editor_input],
         game_input: game_input_tx,
         game_output: game_output_rx,
     })
 }
 
 pub struct Threads {
-    pub handle: ThreadHandle,
-    pub editor_input: ThreadHandle,
+    pub handles: [ThreadHandle; 2],
     pub game_input: Sender<GameInput>,
     pub game_output: Receiver<GameOutput>,
 }
