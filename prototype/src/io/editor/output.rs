@@ -364,7 +364,7 @@ impl EditorOutputAdapter {
         }
     }
 
-    fn clear(&mut self) -> anyhow::Result<()> {
+    fn clear(&mut self) -> io::Result<()> {
         self.w.queue(terminal::Clear(ClearType::All))?;
         self.move_cursor_to(0, 0)?;
 
