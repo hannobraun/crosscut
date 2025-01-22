@@ -20,7 +20,7 @@ use crate::lang::{
 #[cfg(test)]
 #[allow(unused)] // used sporadically, for debugging tests
 pub fn print_code(code: &Code, host: &Host) {
-    let mut w = OutputAdapter::new();
+    let mut w = EditorOutputAdapter::new();
     let mut context = RenderContext {
         code,
         host,
@@ -34,12 +34,12 @@ pub fn print_code(code: &Code, host: &Host) {
 }
 
 pub struct EditorOutput {
-    w: OutputAdapter,
+    w: EditorOutputAdapter,
 }
 
 impl EditorOutput {
     pub fn new() -> anyhow::Result<Self> {
-        let w = OutputAdapter::new();
+        let w = EditorOutputAdapter::new();
 
         // Nothing forces us to enable raw mode right here. It's also tied to
         // input, so we could enable it there.
@@ -95,7 +95,7 @@ impl Drop for EditorOutput {
 }
 
 fn render_code(
-    w: &mut OutputAdapter,
+    w: &mut EditorOutputAdapter,
     context: &mut RenderContext,
 ) -> anyhow::Result<()> {
     if let Some(interpreter) = context.interpreter {
@@ -118,7 +118,7 @@ fn render_code(
 }
 
 fn render_fragment(
-    w: &mut OutputAdapter,
+    w: &mut EditorOutputAdapter,
     located: Located,
     context: &mut RenderContext,
 ) -> anyhow::Result<()> {
@@ -227,13 +227,13 @@ fn render_fragment(
     Ok(())
 }
 
-fn render_indent(w: &mut OutputAdapter) -> anyhow::Result<()> {
+fn render_indent(w: &mut EditorOutputAdapter) -> anyhow::Result<()> {
     write!(w, "    ")?;
     Ok(())
 }
 
 fn render_expression(
-    w: &mut OutputAdapter,
+    w: &mut EditorOutputAdapter,
     expression: &Expression,
     context: &RenderContext,
 ) -> anyhow::Result<()> {
@@ -273,7 +273,7 @@ fn render_expression(
 }
 
 fn render_prompt(
-    w: &mut OutputAdapter,
+    w: &mut EditorOutputAdapter,
     editor: &Editor,
     context: &mut RenderContext,
 ) -> anyhow::Result<()> {
@@ -353,12 +353,12 @@ struct RenderContext<'r> {
 ///
 /// The API of this type leaves something to be desired. It was initially
 /// created to support the existing (Crossterm-based) usage patterns.
-struct OutputAdapter {
+struct EditorOutputAdapter {
     w: Stdout,
     cursor: [u16; 2],
 }
 
-impl OutputAdapter {
+impl EditorOutputAdapter {
     fn new() -> Self {
         Self {
             w: stdout(),
@@ -412,7 +412,7 @@ impl OutputAdapter {
     }
 }
 
-impl io::Write for OutputAdapter {
+impl io::Write for EditorOutputAdapter {
     fn write(&mut self, buf: &[u8]) -> io::Result<usize> {
         // We're only accepting ASCII characters from the terminal right now, so
         // this should work fine.
