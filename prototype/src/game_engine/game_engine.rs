@@ -91,6 +91,31 @@ impl GameEngine {
     pub fn game_output(&mut self) -> impl Iterator<Item = GameOutput> + '_ {
         self.game_output.drain(..)
     }
+
+    #[cfg(test)]
+    pub fn on_code(&mut self, code: &str) {
+        use crate::lang::editor::EditorMode;
+
+        assert!(
+            matches!(self.lang.editor.mode(), EditorMode::Edit { .. }),
+            "Trying to input code, but editor is not in edit mode.",
+        );
+
+        self.on_input(code);
+    }
+
+    #[cfg(test)]
+    pub fn on_input(&mut self, input: &str) {
+        for ch in input.chars() {
+            self.on_char(ch);
+        }
+    }
+
+    #[cfg(test)]
+    pub fn on_char(&mut self, ch: char) {
+        self.on_editor_input(editor::InputEvent::Char { value: ch })
+            .unwrap();
+    }
 }
 
 #[derive(Debug)]

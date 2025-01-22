@@ -1,24 +1,32 @@
-use crate::lang::{self, editor::InputEvent, host::Host, interpreter::Value};
+use crate::{
+    game_engine::{GameEngine, GameOutput},
+    lang::{self, editor::InputEvent, host::Host, interpreter::Value},
+};
 
 #[test]
 fn return_to_edit_mode_after_command_execution() {
     // After a command has been executed, the editor should return to edit mode.
 
-    let host = Host::empty();
-    let mut lang = lang::Instance::new();
+    let mut game_engine = GameEngine::new().unwrap();
 
     // Start editing the code.
-    lang.on_code("1", &host);
+    game_engine.on_code("12");
 
     // Execute a command in between editing.
-    lang.on_event(InputEvent::Escape, &host); // enter command mode
-    lang.on_input("nop", &host);
-    lang.on_event(InputEvent::Enter, &host);
+    game_engine.on_editor_input(InputEvent::Escape).unwrap();
+    game_engine.on_input("nop");
+    game_engine.on_editor_input(InputEvent::Enter).unwrap();
+
+    // Drain output. We're only interested in the result of the next change.
+    let _ = game_engine.game_output();
 
     // Continue editing. Won't work, unless we're back in edit mode.
-    lang.on_code("2", &host);
+    game_engine.on_code("7");
 
-    assert_eq!(lang.run_until_finished(), Value::Integer { value: 12 });
+    let GameOutput::SubmitColor { color } =
+        game_engine.game_output().next().unwrap();
+    let c = 127. / 255.;
+    assert_eq!(color.as_slice(), [c, c, c, 1.0].as_slice());
 }
 
 #[test]
