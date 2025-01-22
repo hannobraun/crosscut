@@ -26,7 +26,7 @@ pub fn start() -> anyhow::Result<Threads> {
         channel::<Option<editor::InputEvent>>();
     let (game_input_tx, game_input_rx) = channel::<GameInput>();
 
-    let handle = spawn(move || {
+    let game_engine = spawn(move || {
         let event = select! {
             recv(editor_input_rx.inner()) -> result => {
                 result.map(|maybe_event|
@@ -75,7 +75,7 @@ pub fn start() -> anyhow::Result<Threads> {
     });
 
     Ok(Threads {
-        handle,
+        handle: game_engine,
         editor_input,
         game_input: game_input_tx,
         game_output: game_output_rx,
