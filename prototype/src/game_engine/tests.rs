@@ -44,7 +44,6 @@ fn abort_command_without_executing_on_escape_key() {
     // Enter a command, but abort it.
     lang.on_event(InputEvent::Escape, &host); // enter command mode
     lang.on_input("clear", &host);
-    // TASK: Update.
     lang.on_event(InputEvent::Escape, &host);
 
     // Continue editing. If the previous command was executed, this won't have
