@@ -98,7 +98,7 @@ pub enum GameInput {
     RenderingFrame,
 }
 
-#[derive(PartialEq)]
+#[derive(Debug, PartialEq)]
 pub enum GameOutput {
     SubmitColor { color: [f64; 4] },
 }
