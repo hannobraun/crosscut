@@ -410,15 +410,19 @@ impl EditorOutputAdapter {
         self.w.queue(ResetColor)?;
         Ok(())
     }
-}
 
-impl io::Write for EditorOutputAdapter {
     fn write(&mut self, buf: &[u8]) -> io::Result<usize> {
         // We're only accepting ASCII characters from the terminal right now, so
         // this should work fine.
         let bytes_written = self.w.write(buf)?;
         self.cursor[0] += bytes_written as u16;
         Ok(bytes_written)
+    }
+}
+
+impl io::Write for EditorOutputAdapter {
+    fn write(&mut self, buf: &[u8]) -> io::Result<usize> {
+        self.write(buf)
     }
 
     fn flush(&mut self) -> io::Result<()> {
