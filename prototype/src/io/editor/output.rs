@@ -443,6 +443,10 @@ impl fmt::Write for EditorOutputAdapter {
                     .map(|_| ())
                     .map_err(|_| fmt::Error)?;
 
+                assert!(
+                    ch.is_ascii(),
+                    "Editor input adapter only accepts ASCII characters.",
+                );
                 self.cursor[0] += 1;
             }
         }
