@@ -113,7 +113,7 @@ enum GameEngineEvent {
     Heartbeat,
 }
 
-pub fn spawn<F>(mut f: F) -> ThreadHandle
+fn spawn<F>(mut f: F) -> ThreadHandle
 where
     F: FnMut() -> Result<ControlFlow<()>, Error> + Send + 'static,
 {
@@ -139,7 +139,7 @@ where
     ThreadHandle::new(handle)
 }
 
-pub fn channel<T>() -> (Sender<T>, Receiver<T>) {
+fn channel<T>() -> (Sender<T>, Receiver<T>) {
     let (sender, receiver) = crossbeam_channel::unbounded();
 
     (Sender { inner: sender }, Receiver { inner: receiver })
@@ -178,13 +178,13 @@ impl<T> Receiver<T> {
         }
     }
 
-    pub fn inner(&self) -> &crossbeam_channel::Receiver<T> {
+    fn inner(&self) -> &crossbeam_channel::Receiver<T> {
         &self.inner
     }
 }
 
 #[derive(Debug, thiserror::Error)]
-pub enum Error {
+enum Error {
     /// # Channel is disconnected
     ///
     /// This should only happen, if another thread has shut down. Within the
@@ -219,7 +219,7 @@ pub struct ThreadHandle {
 }
 
 impl ThreadHandle {
-    pub fn new(handle: JoinHandle<anyhow::Result<()>>) -> Self {
+    fn new(handle: JoinHandle<anyhow::Result<()>>) -> Self {
         Self { inner: handle }
     }
 
