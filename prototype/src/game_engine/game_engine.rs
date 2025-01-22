@@ -24,6 +24,17 @@ impl GameEngine {
         })
     }
 
+    pub fn render_editor(&mut self) -> anyhow::Result<()> {
+        self.editor_output.render(
+            &self.lang.editor,
+            &self.lang.code,
+            &self.lang.interpreter,
+            &self.host,
+        )?;
+
+        Ok(())
+    }
+
     pub fn on_editor_input(
         &mut self,
         event: editor::InputEvent,
@@ -72,17 +83,6 @@ impl GameEngine {
         }
 
         self.render_editor()?;
-
-        Ok(())
-    }
-
-    pub fn render_editor(&mut self) -> anyhow::Result<()> {
-        self.editor_output.render(
-            &self.lang.editor,
-            &self.lang.code,
-            &self.lang.interpreter,
-            &self.host,
-        )?;
 
         Ok(())
     }
