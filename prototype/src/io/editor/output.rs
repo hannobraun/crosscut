@@ -258,9 +258,9 @@ fn render_expression(
                 }
             };
 
-            w.queue(SetForegroundColor(color))?;
+            w.color(color)?;
             write!(w, "{name}")?;
-            w.queue(ResetColor)?;
+            w.reset_color()?;
         }
         Expression::Literal {
             literal: Literal::Integer { value },
@@ -424,14 +424,6 @@ impl EditorOutputAdapter {
 
     fn flush(&mut self) -> io::Result<()> {
         self.w.flush()
-    }
-
-    fn queue(
-        &mut self,
-        command: impl crossterm::Command,
-    ) -> anyhow::Result<()> {
-        self.w.queue(command)?;
-        Ok(())
     }
 }
 
