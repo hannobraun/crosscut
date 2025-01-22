@@ -35,14 +35,14 @@ impl GameEngineThread {
                 recv(editor_input_rx.inner()) -> result => {
                     result.map(|maybe_event|
                         if let Some(event) = maybe_event {
-                            Event::EditorInput { event }}
+                            GameEngineEvent::EditorInput { event }}
                         else {
-                            Event::Heartbeat
+                            GameEngineEvent::Heartbeat
                         }
                     )
                 }
                 recv(game_input_rx.inner()) -> result => {
-                    result.map(|input| Event::GameInput { input })
+                    result.map(|input| GameEngineEvent::GameInput { input })
                 }
             };
             let Ok(event) = event else {
@@ -50,7 +50,7 @@ impl GameEngineThread {
             };
 
             match event {
-                Event::EditorInput { event } => {
+                GameEngineEvent::EditorInput { event } => {
                     let mut game_events = Vec::new();
                     game_engine.on_editor_input(event, &mut game_events)?;
 
@@ -58,12 +58,12 @@ impl GameEngineThread {
                         game_output_tx.send(event)?;
                     }
                 }
-                Event::GameInput {
+                GameEngineEvent::GameInput {
                     input: GameInput::RenderingFrame,
                 } => {
                     // This loop is coupled to the frame rate of the renderer.
                 }
-                Event::Heartbeat => {}
+                GameEngineEvent::Heartbeat => {}
             }
 
             Ok(ControlFlow::Continue(()))
@@ -78,7 +78,7 @@ impl GameEngineThread {
 }
 
 #[derive(Debug)]
-enum Event {
+enum GameEngineEvent {
     EditorInput {
         event: editor::InputEvent,
     },
