@@ -21,7 +21,7 @@ pub struct Threads {
 }
 
 impl Threads {
-    pub fn start() -> anyhow::Result<Self> {
+    pub fn start() -> anyhow::Result<Threads> {
         let (game_output_tx, game_output_rx) = channel();
 
         let mut game_engine = GameEngine::new()?;
@@ -82,7 +82,7 @@ impl Threads {
             Err(err) => Err(Error::Other { err }),
         });
 
-        Ok(Self {
+        Ok(Threads {
             handle,
             editor_input,
             game_input: game_input_tx,
