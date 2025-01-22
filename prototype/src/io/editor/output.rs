@@ -374,6 +374,9 @@ impl EditorOutputAdapter {
         for ch in s.chars() {
             if ch == '\n' {
                 self.move_to_next_line()?;
+
+                self.cursor[0] = 0;
+                self.cursor[1] += 1;
             } else {
                 let mut buf = [0; 4];
                 self.w.write_all(ch.encode_utf8(&mut buf).as_bytes())?;
@@ -405,11 +408,6 @@ impl EditorOutputAdapter {
             // the same time.
             writeln!(self.w)?;
         }
-
-        self.cursor = {
-            let [_, y] = self.cursor;
-            [0, y + 1]
-        };
 
         Ok(())
     }
