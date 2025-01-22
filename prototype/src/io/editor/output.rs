@@ -109,7 +109,7 @@ fn render_code(
         };
 
         write!(w, "process {state}")?;
-        w.move_to_next_line()?;
+        writeln!(w)?;
     };
 
     render_fragment(w, context.code.root(), context)?;
@@ -215,7 +215,7 @@ fn render_fragment(
 
         write!(w, "    error: {message}")?;
     }
-    w.move_to_next_line()?;
+    writeln!(w)?;
 
     context.indent += 1;
     for child in located.body(context.code.fragments()) {
@@ -285,17 +285,17 @@ fn render_prompt(
     };
 
     if let Some(error) = editor.error() {
-        w.move_to_next_line()?;
+        writeln!(w)?;
         match error {
             EditorError::AmbiguousCommand {
                 command,
                 candidates,
             } => {
                 write!(w, "`{command}` could refer to multiple commands:",)?;
-                w.move_to_next_line()?;
+                writeln!(w)?;
                 for candidate in candidates {
                     write!(w, "- `{candidate}`")?;
-                    w.move_to_next_line()?;
+                    writeln!(w)?;
                 }
             }
             EditorError::UnknownCommand { command } => {
@@ -304,7 +304,7 @@ fn render_prompt(
         }
     }
 
-    w.move_to_next_line()?;
+    writeln!(w)?;
     write!(w, "{mode} > ")?;
 
     match editor.mode() {
@@ -436,6 +436,19 @@ impl EditorOutputAdapter {
 
 impl fmt::Write for EditorOutputAdapter {
     fn write_str(&mut self, s: &str) -> fmt::Result {
-        self.write(s.as_bytes()).map(|_| ()).map_err(|_| fmt::Error)
+        for ch in s.chars() {
+            if ch == '\n' {
+                self.move_to_next_line()
+                    .map(|_| ())
+                    .map_err(|_| fmt::Error)?;
+            } else {
+                let mut buf = [0; 4];
+                self.write(ch.encode_utf8(&mut buf).as_bytes())
+                    .map(|_| ())
+                    .map_err(|_| fmt::Error)?;
+            }
+        }
+
+        Ok(())
     }
 }
