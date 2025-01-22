@@ -292,8 +292,7 @@ fn render_prompt(
             } => {
                 writeln!(w, "`{command}` could refer to multiple commands:",)?;
                 for candidate in candidates {
-                    write!(w, "- `{candidate}`")?;
-                    writeln!(w)?;
+                    writeln!(w, "- `{candidate}`")?;
                 }
             }
             EditorError::UnknownCommand { command } => {
