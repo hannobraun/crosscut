@@ -20,10 +20,7 @@ use crate::lang::{
 #[cfg(test)]
 #[allow(unused)] // used sporadically, for debugging tests
 pub fn print_code(code: &Code, host: &Host) {
-    let mut w = OutputAdapter {
-        w: stdout(),
-        cursor: [0, 0],
-    };
+    let mut w = OutputAdapter::new();
     let mut context = RenderContext {
         code,
         host,
@@ -42,10 +39,7 @@ pub struct EditorOutput {
 
 impl EditorOutput {
     pub fn new() -> anyhow::Result<Self> {
-        let w = OutputAdapter {
-            w: stdout(),
-            cursor: [0, 0],
-        };
+        let w = OutputAdapter::new();
 
         // Nothing forces us to enable raw mode right here. It's also tied to
         // input, so we could enable it there.
@@ -365,6 +359,13 @@ struct OutputAdapter {
 }
 
 impl OutputAdapter {
+    fn new() -> Self {
+        Self {
+            w: stdout(),
+            cursor: [0, 0],
+        }
+    }
+
     fn clear(&mut self) -> anyhow::Result<()> {
         self.w.queue(terminal::Clear(ClearType::All))?;
         Ok(())
