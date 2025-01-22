@@ -75,7 +75,6 @@ impl EditorOutput {
         };
 
         self.w.clear()?;
-        self.w.move_cursor_to(0, 0)?;
 
         render_code(&mut self.w, &mut context)?;
         render_prompt(&mut self.w, editor, &mut context)?;
@@ -367,6 +366,8 @@ impl EditorOutputAdapter {
 
     fn clear(&mut self) -> anyhow::Result<()> {
         self.w.queue(terminal::Clear(ClearType::All))?;
+        self.move_cursor_to(0, 0)?;
+
         Ok(())
     }
 
