@@ -32,7 +32,7 @@ fn return_to_edit_mode_after_command_execution() {
     lang.on_code("1", &host);
 
     // Execute a command in between editing.
-    lang.on_event(InputEvent::Enter, &host); // enter command mode
+    lang.on_event(InputEvent::Escape, &host); // enter command mode
     lang.on_input("nop", &host);
     lang.on_event(InputEvent::Enter, &host);
 
@@ -55,7 +55,7 @@ fn abort_command_without_executing_on_escape_key() {
     lang.on_code("1", &host);
 
     // Enter a command, but abort it.
-    lang.on_event(InputEvent::Enter, &host); // enter command mode
+    lang.on_event(InputEvent::Escape, &host); // enter command mode
     lang.on_input("clear", &host);
     // TASK: Update.
     lang.on_event(InputEvent::Escape, &host);
