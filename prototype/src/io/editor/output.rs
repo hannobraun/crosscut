@@ -290,8 +290,7 @@ fn render_prompt(
                 command,
                 candidates,
             } => {
-                write!(w, "`{command}` could refer to multiple commands:",)?;
-                writeln!(w)?;
+                writeln!(w, "`{command}` could refer to multiple commands:",)?;
                 for candidate in candidates {
                     write!(w, "- `{candidate}`")?;
                     writeln!(w)?;
