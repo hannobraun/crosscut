@@ -401,7 +401,7 @@ impl EditorOutputAdapter {
         Ok(())
     }
 
-    fn move_cursor_to(&mut self, x: u16, y: u16) -> anyhow::Result<()> {
+    fn move_cursor_to(&mut self, x: u16, y: u16) -> io::Result<()> {
         self.w.queue(cursor::MoveTo(x, y))?;
         self.cursor = [x, y];
         Ok(())
