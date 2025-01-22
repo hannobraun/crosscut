@@ -4,7 +4,8 @@ use crossterm::event::{self, Event, KeyCode, KeyModifiers};
 
 use crate::lang::editor::InputEvent;
 
-pub fn read_event() -> anyhow::Result<ControlFlow<(), Option<InputEvent>>> {
+pub fn read_editor_event() -> anyhow::Result<ControlFlow<(), Option<InputEvent>>>
+{
     let timeout = Duration::from_millis(50);
     let event_ready = event::poll(timeout)?;
 

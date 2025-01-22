@@ -9,7 +9,7 @@ use crossbeam_channel::{select, SendError, TryRecvError};
 
 use crate::{
     game_engine::{GameEngine, GameInput, GameOutput},
-    io::editor::input::read_event,
+    io::editor::input::read_editor_event,
     lang::editor,
 };
 
@@ -73,7 +73,7 @@ impl GameEngineThread {
             Ok(ControlFlow::Continue(()))
         });
 
-        let editor_input = spawn(move || match read_event() {
+        let editor_input = spawn(move || match read_editor_event() {
             Ok(ControlFlow::Continue(event)) => {
                 editor_input_tx.send(event)?;
                 Ok(ControlFlow::Continue(()))
