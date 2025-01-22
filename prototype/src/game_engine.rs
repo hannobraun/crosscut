@@ -172,7 +172,7 @@ impl GameEngine {
         Ok(())
     }
 
-    fn render_editor(&mut self) -> anyhow::Result<()> {
+    pub fn render_editor(&mut self) -> anyhow::Result<()> {
         self.editor_output.render(
             &self.lang.editor,
             &self.lang.code,
