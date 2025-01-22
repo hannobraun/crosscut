@@ -75,13 +75,13 @@ impl EditorOutput {
         };
 
         self.w.clear()?;
-        self.w.move_to(0, 0)?;
+        self.w.move_cursor_to(0, 0)?;
 
         render_code(&mut self.w, &mut context)?;
         render_prompt(&mut self.w, editor, &mut context)?;
 
         if let Some([x, y]) = context.cursor {
-            self.w.move_to(x, y)?;
+            self.w.move_cursor_to(x, y)?;
         }
 
         self.w.flush()?;
@@ -400,7 +400,7 @@ impl EditorOutputAdapter {
         Ok(())
     }
 
-    fn move_to(&mut self, x: u16, y: u16) -> anyhow::Result<()> {
+    fn move_cursor_to(&mut self, x: u16, y: u16) -> anyhow::Result<()> {
         self.w.queue(cursor::MoveTo(x, y))?;
         self.cursor = [x, y];
         Ok(())
