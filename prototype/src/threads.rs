@@ -13,14 +13,14 @@ use crate::{
     lang::editor,
 };
 
-pub struct GameEngineThread {
+pub struct Threads {
     pub handle: ThreadHandle,
     pub editor_input: ThreadHandle,
     pub game_input: Sender<GameInput>,
     pub game_output: Receiver<GameOutput>,
 }
 
-impl GameEngineThread {
+impl Threads {
     pub fn start() -> anyhow::Result<Self> {
         let (game_output_tx, game_output_rx) = channel();
 
