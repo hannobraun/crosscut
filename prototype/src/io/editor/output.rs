@@ -108,8 +108,7 @@ fn render_code(
             InterpreterState::Error => "error",
         };
 
-        write!(w, "process {state}")?;
-        writeln!(w)?;
+        writeln!(w, "process {state}")?;
     };
 
     render_fragment(w, context.code.root(), context)?;
