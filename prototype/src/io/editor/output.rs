@@ -370,18 +370,13 @@ impl EditorOutputAdapter {
         Ok(())
     }
 
-    fn write(&mut self, s: &str) -> fmt::Result {
+    fn write(&mut self, s: &str) -> io::Result<()> {
         for ch in s.chars() {
             if ch == '\n' {
-                self.move_to_next_line()
-                    .map(|_| ())
-                    .map_err(|_| fmt::Error)?;
+                self.move_to_next_line()?;
             } else {
                 let mut buf = [0; 4];
-                self.w
-                    .write_all(ch.encode_utf8(&mut buf).as_bytes())
-                    .map(|_| ())
-                    .map_err(|_| fmt::Error)?;
+                self.w.write_all(ch.encode_utf8(&mut buf).as_bytes())?;
 
                 assert!(
                     ch.is_ascii(),
@@ -449,6 +444,6 @@ impl EditorOutputAdapter {
 
 impl fmt::Write for EditorOutputAdapter {
     fn write_str(&mut self, s: &str) -> fmt::Result {
-        self.write(s)
+        self.write(s).map_err(|_| fmt::Error)
     }
 }
