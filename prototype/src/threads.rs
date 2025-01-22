@@ -13,82 +13,80 @@ use crate::{
     lang::editor,
 };
 
+pub fn start() -> anyhow::Result<Threads> {
+    let (game_output_tx, game_output_rx) = channel();
+
+    let mut game_engine = GameEngine::new()?;
+    game_engine.render_editor()?;
+
+    // Need to specify the types of the channels explicitly, to work around this
+    // bug in rust-analyzer:
+    // https://github.com/rust-lang/rust-analyzer/issues/15984
+    let (editor_input_tx, editor_input_rx) =
+        channel::<Option<editor::InputEvent>>();
+    let (game_input_tx, game_input_rx) = channel::<GameInput>();
+
+    let handle = spawn(move || {
+        let event = select! {
+            recv(editor_input_rx.inner()) -> result => {
+                result.map(|maybe_event|
+                    if let Some(event) = maybe_event {
+                        GameEngineEvent::EditorInput { event }}
+                    else {
+                        GameEngineEvent::Heartbeat
+                    }
+                )
+            }
+            recv(game_input_rx.inner()) -> result => {
+                result.map(|input| GameEngineEvent::GameInput { input })
+            }
+        };
+        let Ok(event) = event else {
+            return Err(ChannelDisconnected.into());
+        };
+
+        match event {
+            GameEngineEvent::EditorInput { event } => {
+                let mut game_events = Vec::new();
+                game_engine.on_editor_input(event, &mut game_events)?;
+
+                for event in game_events {
+                    game_output_tx.send(event)?;
+                }
+            }
+            GameEngineEvent::GameInput {
+                input: GameInput::RenderingFrame,
+            } => {
+                // This loop is coupled to the frame rate of the renderer.
+            }
+            GameEngineEvent::Heartbeat => {}
+        }
+
+        Ok(ControlFlow::Continue(()))
+    });
+
+    let editor_input = spawn(move || match read_editor_event() {
+        Ok(ControlFlow::Continue(event)) => {
+            editor_input_tx.send(event)?;
+            Ok(ControlFlow::Continue(()))
+        }
+        Ok(ControlFlow::Break(())) => Ok(ControlFlow::Break(())),
+        Err(err) => Err(Error::Other { err }),
+    });
+
+    Ok(Threads {
+        handle,
+        editor_input,
+        game_input: game_input_tx,
+        game_output: game_output_rx,
+    })
+}
+
 pub struct Threads {
     pub handle: ThreadHandle,
     pub editor_input: ThreadHandle,
     pub game_input: Sender<GameInput>,
     pub game_output: Receiver<GameOutput>,
-}
-
-impl Threads {
-    pub fn start() -> anyhow::Result<Threads> {
-        let (game_output_tx, game_output_rx) = channel();
-
-        let mut game_engine = GameEngine::new()?;
-        game_engine.render_editor()?;
-
-        // Need to specify the types of the channels explicitly, to work around
-        // this bug in rust-analyzer:
-        // https://github.com/rust-lang/rust-analyzer/issues/15984
-        let (editor_input_tx, editor_input_rx) =
-            channel::<Option<editor::InputEvent>>();
-        let (game_input_tx, game_input_rx) = channel::<GameInput>();
-
-        let handle = spawn(move || {
-            let event = select! {
-                recv(editor_input_rx.inner()) -> result => {
-                    result.map(|maybe_event|
-                        if let Some(event) = maybe_event {
-                            GameEngineEvent::EditorInput { event }}
-                        else {
-                            GameEngineEvent::Heartbeat
-                        }
-                    )
-                }
-                recv(game_input_rx.inner()) -> result => {
-                    result.map(|input| GameEngineEvent::GameInput { input })
-                }
-            };
-            let Ok(event) = event else {
-                return Err(ChannelDisconnected.into());
-            };
-
-            match event {
-                GameEngineEvent::EditorInput { event } => {
-                    let mut game_events = Vec::new();
-                    game_engine.on_editor_input(event, &mut game_events)?;
-
-                    for event in game_events {
-                        game_output_tx.send(event)?;
-                    }
-                }
-                GameEngineEvent::GameInput {
-                    input: GameInput::RenderingFrame,
-                } => {
-                    // This loop is coupled to the frame rate of the renderer.
-                }
-                GameEngineEvent::Heartbeat => {}
-            }
-
-            Ok(ControlFlow::Continue(()))
-        });
-
-        let editor_input = spawn(move || match read_editor_event() {
-            Ok(ControlFlow::Continue(event)) => {
-                editor_input_tx.send(event)?;
-                Ok(ControlFlow::Continue(()))
-            }
-            Ok(ControlFlow::Break(())) => Ok(ControlFlow::Break(())),
-            Err(err) => Err(Error::Other { err }),
-        });
-
-        Ok(Threads {
-            handle,
-            editor_input,
-            game_input: game_input_tx,
-            game_output: game_output_rx,
-        })
-    }
 }
 
 #[derive(Debug)]

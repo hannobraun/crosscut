@@ -9,9 +9,7 @@ mod lang;
 mod threads;
 
 fn main() -> anyhow::Result<()> {
-    use crate::threads::Threads;
-
-    let game_engine = Threads::start()?;
+    let game_engine = threads::start()?;
 
     io::game_engine::start_and_wait(
         game_engine.game_input,
