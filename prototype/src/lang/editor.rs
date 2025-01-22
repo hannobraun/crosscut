@@ -209,22 +209,28 @@ impl Editor {
 
         input.clear();
 
-        match candidate {
-            "clear" => {
+        let command = match candidate {
+            "clear" => Command::Clear,
+            "nop" => Command::Nop,
+            "reset" => Command::Reset,
+            _ => {
+                unreachable!("Ruled out that command is unknown, above.")
+            }
+        };
+
+        match command {
+            Command::Clear => {
                 *code = Code::default();
                 *self = Self::new(code);
                 interpreter.reset(code);
             }
-            "nop" => {
+            Command::Nop => {
                 // This command does nothing. It exists to give tests something
                 // to execute, if they don't want to actually do something
                 // except test command interaction itself.
             }
-            "reset" => {
+            Command::Reset => {
                 interpreter.reset(code);
-            }
-            _ => {
-                unreachable!("Ruled out that command is unknown, above.")
             }
         }
 
@@ -291,6 +297,12 @@ pub enum InputEvent {
     Left,
     Right,
     Escape,
+}
+
+pub enum Command {
+    Clear,
+    Nop,
+    Reset,
 }
 
 #[derive(Debug)]
