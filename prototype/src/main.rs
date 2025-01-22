@@ -9,18 +9,15 @@ mod lang;
 mod threads;
 
 fn main() -> anyhow::Result<()> {
-    let game_engine = threads::start()?;
+    let threads = threads::start()?;
 
-    io::game_engine::start_and_wait(
-        game_engine.game_input,
-        game_engine.game_output,
-    )?;
+    io::game_engine::start_and_wait(threads.game_input, threads.game_output)?;
     // At this point, we're blocking until any of the threads shut down. There's
     // nothing to join yet, because the game engine I/O is using `winit`
     // internally, which requires its own special handling.
 
-    game_engine.handle.join()?;
-    game_engine.editor_input.join()?;
+    threads.handle.join()?;
+    threads.editor_input.join()?;
 
     Ok(())
 }
