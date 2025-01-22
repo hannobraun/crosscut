@@ -410,13 +410,6 @@ impl EditorOutputAdapter {
         Ok(())
     }
 
-    fn write(&mut self, buf: &[u8]) -> io::Result<usize> {
-        // We're only accepting ASCII characters from the terminal right now, so
-        // this should work fine.
-        let bytes_written = self.w.write(buf)?;
-        Ok(bytes_written)
-    }
-
     fn flush(&mut self) -> io::Result<()> {
         self.w.flush()
     }
@@ -439,7 +432,8 @@ impl fmt::Write for EditorOutputAdapter {
                     .map_err(|_| fmt::Error)?;
             } else {
                 let mut buf = [0; 4];
-                self.write(ch.encode_utf8(&mut buf).as_bytes())
+                self.w
+                    .write(ch.encode_utf8(&mut buf).as_bytes())
                     .map(|_| ())
                     .map_err(|_| fmt::Error)?;
 
