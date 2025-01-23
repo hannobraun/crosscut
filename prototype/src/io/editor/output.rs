@@ -145,9 +145,9 @@ fn render_possibly_active_fragment(
     };
 
     if is_active {
-        adapter.attribute(Attribute::Bold, |w| {
-            write!(w, " => ")?;
-            render_fragment(w, located, adjusted_indent, context)?;
+        adapter.attribute(Attribute::Bold, |adapter| {
+            write!(adapter, " => ")?;
+            render_fragment(adapter, located, adjusted_indent, context)?;
 
             Ok(())
         })?;
