@@ -15,7 +15,7 @@ pub struct GameEngine {
 }
 
 impl GameEngine {
-    pub fn new() -> anyhow::Result<Self> {
+    pub fn with_editor() -> anyhow::Result<Self> {
         let adapter = RawTerminalAdapter::new();
         let editor_output = EditorOutput::new(adapter)?;
 
