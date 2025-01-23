@@ -439,11 +439,11 @@ pub struct RawTerminalAdapter {
 }
 
 impl RawTerminalAdapter {
-    pub fn new() -> Self {
-        Self {
+    pub fn new() -> anyhow::Result<Self> {
+        Ok(Self {
             w: stdout(),
             cursor: [0, 0],
-        }
+        })
     }
 
     fn write(&mut self, s: &str) -> io::Result<()> {
