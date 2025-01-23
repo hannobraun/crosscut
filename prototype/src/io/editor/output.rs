@@ -42,7 +42,7 @@ pub struct EditorOutput {
 
 impl EditorOutput {
     pub fn new() -> anyhow::Result<Self> {
-        let w = RawTerminalAdapter::new();
+        let adapter = RawTerminalAdapter::new();
 
         // Nothing forces us to enable raw mode right here. It's also tied to
         // input, so we could enable it there.
@@ -55,7 +55,7 @@ impl EditorOutput {
         // implementation of this type. So raw mode is bound to its lifetime.
         terminal::enable_raw_mode()?;
 
-        Ok(Self { adapter: w })
+        Ok(Self { adapter })
     }
 
     pub fn render(
