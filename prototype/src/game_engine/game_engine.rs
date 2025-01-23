@@ -21,14 +21,14 @@ impl GameEngine<DebugOutputAdapter> {
     #[cfg(test)]
     pub fn without_editor() -> anyhow::Result<Self> {
         let adapter = DebugOutputAdapter;
-        Self::new(adapter)
+        Ok(Self::new(adapter))
     }
 }
 
 impl GameEngine<RawTerminalAdapter> {
     pub fn with_editor() -> anyhow::Result<Self> {
         let adapter = RawTerminalAdapter::new()?;
-        Self::new(adapter)
+        Ok(Self::new(adapter))
     }
 }
 
@@ -36,15 +36,15 @@ impl<A> GameEngine<A>
 where
     A: EditorOutputAdapter,
 {
-    pub fn new(adapter: A) -> anyhow::Result<Self> {
+    pub fn new(adapter: A) -> Self {
         let editor_output = EditorOutput::new(adapter);
 
-        Ok(Self {
+        Self {
             host: Host::from_functions(["dim"]),
             lang: lang::Instance::new(),
             game_output: Vec::new(),
             editor_output,
-        })
+        }
     }
 
     pub fn render_editor(&mut self) -> anyhow::Result<()> {
