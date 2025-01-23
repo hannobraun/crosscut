@@ -122,35 +122,39 @@ fn render_possibly_active_fragment(
     located: Located,
     context: &mut RenderContext,
 ) -> anyhow::Result<()> {
-    render_fragment(w, located, context)?;
+    let is_active = if let Some(interpreter) = context.interpreter {
+        Some(located.location.target()) == interpreter.next()
+    } else {
+        false
+    };
+
+    render_fragment(w, located, is_active, context)?;
     Ok(())
 }
 
 fn render_fragment(
     w: &mut EditorOutputAdapter,
     located: Located,
+    is_active: bool,
     context: &mut RenderContext,
 ) -> anyhow::Result<()> {
     let maybe_error = context.code.errors.get(located.location.target());
 
     let mut adjusted_indent = context.indent;
-    if let Some(interpreter) = context.interpreter {
-        if Some(located.location.target()) == interpreter.next() {
-            w.attribute(Attribute::Bold)?;
-            write!(w, " => ")?;
+    if is_active {
+        w.attribute(Attribute::Bold)?;
+        write!(w, " => ")?;
 
-            // That arrow worth one indentation level. We need to adjust for
-            // that.
-            let Some(adjusted) = context.indent.checked_sub(1) else {
-                unreachable!(
-                    "Every fragment body gets one level of indentation. The \
-                    root is a fragment. Hence, we must have at least one level \
-                    of indentation."
-                );
-            };
-            adjusted_indent = adjusted;
-        }
-    };
+        // That arrow worth one indentation level. We need to adjust for that.
+        let Some(adjusted) = context.indent.checked_sub(1) else {
+            unreachable!(
+                "Every fragment body gets one level of indentation. The root \
+                is a fragment. Hence, we must have at least one level of \
+                indentation."
+            );
+        };
+        adjusted_indent = adjusted;
+    }
 
     for _ in 0..adjusted_indent {
         render_indent(w)?;
