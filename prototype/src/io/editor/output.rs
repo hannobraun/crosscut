@@ -219,7 +219,6 @@ fn render_fragment(
     }
     context.indent -= 1;
 
-    w.reset_color()?;
     w.attribute(Attribute::Reset)?;
 
     Ok(())
