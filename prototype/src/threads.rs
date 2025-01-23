@@ -16,7 +16,7 @@ use crate::{
 pub fn start() -> anyhow::Result<Threads> {
     let (game_output_tx, game_output_rx) = channel();
 
-    let mut game_engine = GameEngine::with_editor()?;
+    let mut game_engine = GameEngine::with_editor_ui()?;
     game_engine.render_editor()?;
 
     // Need to specify the types of the channels explicitly, to work around this

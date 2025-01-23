@@ -26,7 +26,7 @@ impl GameEngine<DebugOutputAdapter> {
 }
 
 impl GameEngine<RawTerminalAdapter> {
-    pub fn with_editor() -> anyhow::Result<Self> {
+    pub fn with_editor_ui() -> anyhow::Result<Self> {
         let adapter = RawTerminalAdapter::new()?;
         Ok(Self::new(adapter))
     }
