@@ -7,14 +7,14 @@ use crate::{
     },
 };
 
-pub struct GameEngine {
+pub struct GameEngine<A> {
     host: Host,
     lang: lang::Instance,
     game_output: Vec<GameOutput>,
-    editor_output: EditorOutput<RawTerminalAdapter>,
+    editor_output: EditorOutput<A>,
 }
 
-impl GameEngine {
+impl GameEngine<RawTerminalAdapter> {
     pub fn with_editor() -> anyhow::Result<Self> {
         let adapter = RawTerminalAdapter::new();
         let editor_output = EditorOutput::new(adapter)?;
