@@ -12,11 +12,7 @@ fn reset_interpreter_on_reset_command() {
     lang.run_until_finished();
     assert!(lang.state().is_finished());
 
-    lang.editor.on_command(
-        Command::Reset,
-        &mut lang.code,
-        &mut lang.interpreter,
-    );
+    lang.on_command(Command::Reset);
     assert!(lang.state().is_running());
 
     let start = lang.code.root().fragment.body.ids().next().unwrap();

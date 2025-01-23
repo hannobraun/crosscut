@@ -5,7 +5,7 @@ use super::{code::Code, editor::Editor, interpreter::Interpreter};
 
 #[cfg(test)]
 use super::{
-    editor::InputEvent,
+    editor::{Command, InputEvent},
     host::Host,
     interpreter::{InterpreterState, Value},
 };
@@ -65,6 +65,12 @@ impl Instance {
             &mut self.interpreter,
             host,
         );
+    }
+
+    #[cfg(test)]
+    pub fn on_command(&mut self, command: Command) {
+        self.editor
+            .on_command(command, &mut self.code, &mut self.interpreter);
     }
 
     #[cfg(test)]
