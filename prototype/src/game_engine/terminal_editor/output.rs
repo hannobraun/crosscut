@@ -55,7 +55,7 @@ where
     ) -> anyhow::Result<()> {
         let mut context = RenderContext {
             code,
-            editor: Some(editor),
+            editor: Some((editor_input, editor)),
             interpreter: Some(interpreter),
             host,
             indent: 0,
@@ -152,7 +152,7 @@ fn render_fragment<A: EditorOutputAdapter>(
     }
 
     let mut currently_editing_this_fragment = false;
-    if let Some(editor) = &context.editor {
+    if let Some((_, editor)) = &context.editor {
         if editor.mode().is_edit() && editor.editing() == &located.location {
             currently_editing_this_fragment = true;
 
@@ -333,7 +333,7 @@ fn render_prompt<A: EditorOutputAdapter>(
 
 struct RenderContext<'r> {
     code: &'r Code,
-    editor: Option<&'r Editor>,
+    editor: Option<(&'r EditorInput, &'r Editor)>,
     interpreter: Option<&'r Interpreter>,
     host: &'r Host,
     indent: u32,
