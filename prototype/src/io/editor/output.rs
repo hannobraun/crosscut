@@ -110,10 +110,19 @@ fn render_code(
         writeln!(w, "process {state}")?;
     };
 
-    render_fragment(w, context.code.root(), context)?;
+    render_possibly_active_fragment(w, context.code.root(), context)?;
 
     w.flush()?;
 
+    Ok(())
+}
+
+fn render_possibly_active_fragment(
+    w: &mut EditorOutputAdapter,
+    located: Located,
+    context: &mut RenderContext,
+) -> anyhow::Result<()> {
+    render_fragment(w, located, context)?;
     Ok(())
 }
 
@@ -213,7 +222,7 @@ fn render_fragment(
 
     context.indent += 1;
     for child in located.body(context.code.fragments()) {
-        render_fragment(w, child, context)?;
+        render_possibly_active_fragment(w, child, context)?;
     }
     context.indent -= 1;
 
