@@ -75,12 +75,12 @@ impl Editor {
 
     pub fn on_input(
         &mut self,
-        input: InputEvent,
+        event: InputEvent,
         code: &mut Code,
         interpreter: &mut Interpreter,
         host: &Host,
     ) {
-        match input {
+        match event {
             InputEvent::Char { value } => {
                 if value.is_whitespace() {
                     if let EditorMode::Edit = self.mode {
