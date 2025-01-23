@@ -9,7 +9,7 @@ use crate::{
     },
 };
 
-use super::terminal_editor::EditorOutput;
+use super::terminal_editor::output::EditorOutput;
 
 pub struct GameEngine<A> {
     host: Host,
