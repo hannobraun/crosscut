@@ -97,7 +97,7 @@ impl<A> Drop for EditorOutput<A> {
 }
 
 fn render_code(
-    w: &mut RawTerminalAdapter,
+    adapter: &mut RawTerminalAdapter,
     context: &mut RenderContext,
 ) -> anyhow::Result<()> {
     if let Some(interpreter) = context.interpreter {
@@ -107,12 +107,12 @@ fn render_code(
             InterpreterState::Error => "error",
         };
 
-        writeln!(w, "process {state}")?;
+        writeln!(adapter, "process {state}")?;
     };
 
-    render_possibly_active_fragment(w, context.code.root(), context)?;
+    render_possibly_active_fragment(adapter, context.code.root(), context)?;
 
-    w.flush()?;
+    adapter.flush()?;
 
     Ok(())
 }
