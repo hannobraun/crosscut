@@ -117,8 +117,8 @@ fn render_code(
     Ok(())
 }
 
-fn render_possibly_active_fragment(
-    adapter: &mut RawTerminalAdapter,
+fn render_possibly_active_fragment<A: EditorOutputAdapter>(
+    adapter: &mut A,
     located: Located,
     context: &mut RenderContext,
 ) -> anyhow::Result<()> {
@@ -158,8 +158,8 @@ fn render_possibly_active_fragment(
     Ok(())
 }
 
-fn render_fragment(
-    adapter: &mut RawTerminalAdapter,
+fn render_fragment<A: EditorOutputAdapter>(
+    adapter: &mut A,
     located: Located,
     adjusted_indent: u32,
     context: &mut RenderContext,
