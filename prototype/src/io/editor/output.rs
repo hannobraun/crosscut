@@ -1,5 +1,5 @@
 use std::{
-    fmt::{self, Write as _},
+    fmt,
     io::{self, stdout, Stdout, Write as _},
 };
 
@@ -290,8 +290,8 @@ fn render_expression<A: EditorOutputAdapter>(
     Ok(())
 }
 
-fn render_prompt(
-    adapter: &mut RawTerminalAdapter,
+fn render_prompt<A: EditorOutputAdapter>(
+    adapter: &mut A,
     editor: &Editor,
     context: &mut RenderContext,
 ) -> anyhow::Result<()> {
