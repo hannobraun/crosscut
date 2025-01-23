@@ -382,13 +382,13 @@ trait EditorOutputAdapter: fmt::Write {
 /// can't be done without causing a flush, which leads to visual artifacts when
 /// then resuming the rendering. As a result, we at least need something to
 /// track the cursor position throughout the render. Hence this adapter.
-struct RawTerminalAdapter {
+pub struct RawTerminalAdapter {
     w: Stdout,
     cursor: [u16; 2],
 }
 
 impl RawTerminalAdapter {
-    fn new() -> Self {
+    pub fn new() -> Self {
         Self {
             w: stdout(),
             cursor: [0, 0],
