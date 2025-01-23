@@ -442,15 +442,7 @@ impl RawTerminalAdapter {
     fn write(&mut self, s: &str) -> io::Result<()> {
         for ch in s.chars() {
             if ch == '\n' {
-                if terminal::is_raw_mode_enabled()? {
-                    self.w.queue(MoveToNextLine(1))?;
-                } else {
-                    // Terminal is not in raw mode, which means we're probably
-                    // doing debug output. Don't mess around with commands, as
-                    // to not interfere with other output that's possible being
-                    // written around the same time.
-                    writeln!(self.w)?;
-                }
+                self.w.queue(MoveToNextLine(1))?;
 
                 self.cursor[0] = 0;
                 self.cursor[1] += 1;
