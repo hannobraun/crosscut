@@ -1,5 +1,7 @@
 use crate::{
-    io::editor::output::{EditorOutput, RawTerminalAdapter},
+    io::editor::output::{
+        EditorOutput, EditorOutputAdapter, RawTerminalAdapter,
+    },
     lang::{
         self, editor,
         host::Host,
@@ -28,7 +30,10 @@ impl GameEngine<RawTerminalAdapter> {
     }
 }
 
-impl GameEngine<RawTerminalAdapter> {
+impl<A> GameEngine<A>
+where
+    A: EditorOutputAdapter,
+{
     pub fn render_editor(&mut self) -> anyhow::Result<()> {
         self.editor_output.render(
             &self.lang.editor,
