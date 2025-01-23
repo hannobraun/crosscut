@@ -254,28 +254,28 @@ pub struct EditorInputState {
 }
 
 impl EditorInputState {
-    fn new(buffer: String) -> Self {
+    pub fn new(buffer: String) -> Self {
         let cursor = buffer.chars().count();
         Self { buffer, cursor }
     }
 
-    fn insert(&mut self, ch: char) {
+    pub fn insert(&mut self, ch: char) {
         self.buffer.insert(self.cursor, ch);
         self.move_cursor_right();
     }
 
-    fn remove_left(&mut self) {
+    pub fn remove_left(&mut self) {
         if let Some(cursor) = self.cursor.checked_sub(1) {
             self.buffer.remove(cursor);
             self.move_cursor_left();
         }
     }
 
-    fn move_cursor_left(&mut self) {
+    pub fn move_cursor_left(&mut self) {
         self.cursor = self.cursor.saturating_sub(1);
     }
 
-    fn move_cursor_right(&mut self) {
+    pub fn move_cursor_right(&mut self) {
         self.cursor =
             usize::min(self.cursor.saturating_add(1), self.buffer.len());
     }
