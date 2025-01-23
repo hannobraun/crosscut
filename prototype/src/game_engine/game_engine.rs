@@ -45,7 +45,7 @@ where
             host: Host::from_functions(["dim"]),
             lang: lang::Instance::new(),
             game_output: Vec::new(),
-            editor_input: EditorInput {},
+            editor_input: EditorInput::new(),
             editor_output,
         }
     }

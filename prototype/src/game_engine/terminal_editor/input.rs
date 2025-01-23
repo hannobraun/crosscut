@@ -8,6 +8,10 @@ use crate::lang::{
 pub struct EditorInput {}
 
 impl EditorInput {
+    pub fn new() -> Self {
+        Self {}
+    }
+
     pub fn on_input(
         &mut self,
         input: InputEvent,
