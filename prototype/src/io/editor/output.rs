@@ -133,7 +133,7 @@ fn render_fragment(
 ) -> anyhow::Result<()> {
     let maybe_error = context.code.errors.get(located.location.target());
 
-    let mut indent = context.indent;
+    let mut adjusted_indent = context.indent;
     if let Some(interpreter) = context.interpreter {
         if Some(located.location.target()) == interpreter.next() {
             w.attribute(Attribute::Bold)?;
@@ -148,11 +148,11 @@ fn render_fragment(
                     of indentation."
                 );
             };
-            indent = adjusted;
+            adjusted_indent = adjusted;
         }
     };
 
-    for _ in 0..indent {
+    for _ in 0..adjusted_indent {
         render_indent(w)?;
     }
 
