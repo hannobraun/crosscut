@@ -8,7 +8,7 @@ fn reset_interpreter_on_reset_command() {
     let host = Host::empty();
     let mut lang = lang::Instance::new();
 
-    lang.on_code("1", &host);
+    lang.on_input("1", &host);
     lang.run_until_finished();
     assert!(lang.state().is_finished());
 

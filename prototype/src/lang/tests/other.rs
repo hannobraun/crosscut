@@ -14,7 +14,7 @@ fn evaluate_single_expression() {
     let host = Host::empty();
     let mut lang = lang::Instance::new();
 
-    lang.on_code("1", &host);
+    lang.on_input("1", &host);
 
     assert_eq!(
         lang.interpreter.step(&lang.code),
@@ -35,7 +35,7 @@ fn code_after_expression_is_an_error() {
     let host = Host::empty();
     let mut lang = lang::Instance::new();
 
-    lang.on_code("1 2", &host);
+    lang.on_input("1 2", &host);
 
     assert_eq!(
         lang.interpreter.step(&lang.code),

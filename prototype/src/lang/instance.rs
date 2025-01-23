@@ -33,11 +33,6 @@ impl Instance {
     }
 
     #[cfg(test)]
-    pub fn on_code(&mut self, code: &str, host: &Host) {
-        self.on_input(code, host);
-    }
-
-    #[cfg(test)]
     pub fn on_input(&mut self, input: &str, host: &Host) {
         for ch in input.chars() {
             self.on_char(ch, host);
