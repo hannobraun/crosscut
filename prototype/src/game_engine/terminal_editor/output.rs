@@ -47,7 +47,7 @@ where
 
     pub fn render(
         &mut self,
-        _: &EditorInput,
+        editor_input: &EditorInput,
         editor: &Editor,
         code: &Code,
         interpreter: &Interpreter,
@@ -65,7 +65,7 @@ where
         self.adapter.clear()?;
 
         render_code(&mut self.adapter, &mut context)?;
-        render_prompt(&mut self.adapter, editor, &mut context)?;
+        render_prompt(&mut self.adapter, editor_input, editor, &mut context)?;
 
         if let Some([x, y]) = context.cursor {
             self.adapter.move_cursor_to(x, y)?;
@@ -273,6 +273,7 @@ fn render_expression<A: EditorOutputAdapter>(
 
 fn render_prompt<A: EditorOutputAdapter>(
     adapter: &mut A,
+    _: &EditorInput,
     editor: &Editor,
     context: &mut RenderContext,
 ) -> anyhow::Result<()> {
