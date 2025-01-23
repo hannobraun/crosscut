@@ -159,7 +159,7 @@ fn render_possibly_active_fragment(
 }
 
 fn render_fragment(
-    w: &mut RawTerminalAdapter,
+    adapter: &mut RawTerminalAdapter,
     located: Located,
     adjusted_indent: u32,
     context: &mut RenderContext,
@@ -167,7 +167,7 @@ fn render_fragment(
     let maybe_error = context.code.errors.get(located.location.target());
 
     for _ in 0..adjusted_indent {
-        render_indent(w)?;
+        render_indent(adapter)?;
     }
 
     let mut currently_editing_this_fragment = false;
@@ -176,7 +176,7 @@ fn render_fragment(
             currently_editing_this_fragment = true;
 
             context.cursor = {
-                let [x, y] = w.cursor;
+                let [x, y] = adapter.cursor;
                 let x = {
                     let x: usize = x.into();
                     let x = x.saturating_add(editor.input().cursor);
@@ -200,21 +200,21 @@ fn render_fragment(
                 // else for an empty fragment is only going to interfere with
                 // that.
             } else {
-                write!(w, "empty fragment")?;
+                write!(adapter, "empty fragment")?;
             }
         }
         FragmentKind::Expression { expression } => {
-            render_expression(w, expression, context)?;
+            render_expression(adapter, expression, context)?;
         }
         FragmentKind::Error { err } => match err {
             FragmentError::IntegerOverflow { value } => {
-                write!(w, "{value}")?;
+                write!(adapter, "{value}")?;
             }
             FragmentError::MultiResolvedIdentifier { name } => {
-                write!(w, "{name}")?;
+                write!(adapter, "{name}")?;
             }
             FragmentError::UnresolvedIdentifier { name } => {
-                write!(w, "{name}")?;
+                write!(adapter, "{name}")?;
             }
         },
     }
@@ -230,13 +230,13 @@ fn render_fragment(
             CodeError::UnresolvedIdentifier => "unresolved identifier",
         };
 
-        w.color(Color::Red, |w| write!(w, "    error: {message}"))?;
+        adapter.color(Color::Red, |w| write!(w, "    error: {message}"))?;
     }
-    writeln!(w)?;
+    writeln!(adapter)?;
 
     context.indent += 1;
     for child in located.body(context.code.fragments()) {
-        render_possibly_active_fragment(w, child, context)?;
+        render_possibly_active_fragment(adapter, child, context)?;
     }
     context.indent -= 1;
 
