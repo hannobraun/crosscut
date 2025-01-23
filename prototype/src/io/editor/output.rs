@@ -230,7 +230,9 @@ fn render_fragment(
             CodeError::UnresolvedIdentifier => "unresolved identifier",
         };
 
-        adapter.color(Color::Red, |w| write!(w, "    error: {message}"))?;
+        adapter.color(Color::Red, |adapter| {
+            write!(adapter, "    error: {message}")
+        })?;
     }
     writeln!(adapter)?;
 
