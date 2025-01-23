@@ -148,6 +148,7 @@ fn render_possibly_active_fragment(
         w.attribute(Attribute::Bold)?;
         write!(w, " => ")?;
         render_fragment(w, located, adjusted_indent, context)?;
+        w.attribute(Attribute::Reset)?;
     } else {
         render_fragment(w, located, adjusted_indent, context)?;
     }
@@ -236,8 +237,6 @@ fn render_fragment(
         render_possibly_active_fragment(w, child, context)?;
     }
     context.indent -= 1;
-
-    w.attribute(Attribute::Reset)?;
 
     Ok(())
 }
