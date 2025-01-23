@@ -1,8 +1,3 @@
-use std::{
-    collections::{BTreeSet, VecDeque},
-    iter,
-};
-
 use crate::lang::{
     code::{Body, Code, Fragment, FragmentKind},
     compiler::compile_and_replace,
@@ -28,7 +23,6 @@ use super::code::Location;
 pub struct Editor {
     editing: Location,
     input: EditorInputState,
-    commands: BTreeSet<&'static str>,
 }
 
 impl Editor {
@@ -41,15 +35,9 @@ impl Editor {
             },
         );
 
-        let mut commands = BTreeSet::new();
-        commands.insert("clear");
-        commands.insert("nop");
-        commands.insert("reset");
-
         Self {
             editing,
             input: EditorInputState::new(String::new()),
-            commands,
         }
     }
 
@@ -114,52 +102,6 @@ impl Editor {
         } else {
             interpreter.reset(code);
         }
-    }
-
-    pub fn process_command(
-        &mut self,
-        input: &mut EditorInputState,
-        code: &mut Code,
-        interpreter: &mut Interpreter,
-    ) -> Option<EditorError> {
-        let command = &input.buffer;
-
-        let mut candidates = self
-            .commands
-            .iter()
-            .filter(|c| c.starts_with(command))
-            .collect::<VecDeque<_>>();
-
-        let Some(&candidate) = candidates.pop_front() else {
-            return Some(EditorError::UnknownCommand {
-                command: command.clone(),
-            });
-        };
-        if !candidates.is_empty() {
-            let candidates = iter::once(candidate)
-                .chain(candidates.into_iter().copied())
-                .collect();
-
-            return Some(EditorError::AmbiguousCommand {
-                command: command.clone(),
-                candidates,
-            });
-        }
-
-        input.clear();
-
-        let command = match candidate {
-            "clear" => Command::Clear,
-            "nop" => Command::Nop,
-            "reset" => Command::Reset,
-            _ => {
-                unreachable!("Ruled out that command is unknown, above.")
-            }
-        };
-
-        self.on_command(command, code, interpreter);
-
-        None
     }
 
     pub fn on_command(

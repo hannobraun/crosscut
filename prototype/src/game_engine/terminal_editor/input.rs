@@ -1,6 +1,11 @@
+use std::{
+    collections::{BTreeSet, VecDeque},
+    iter,
+};
+
 use crate::lang::{
     code::Code,
-    editor::{Editor, EditorError, EditorInputState, InputEvent},
+    editor::{Command, Editor, EditorError, EditorInputState, InputEvent},
     host::Host,
     interpreter::Interpreter,
 };
@@ -8,13 +13,20 @@ use crate::lang::{
 pub struct EditorInput {
     mode: EditorMode,
     error: Option<EditorError>,
+    commands: BTreeSet<&'static str>,
 }
 
 impl EditorInput {
     pub fn new() -> Self {
+        let mut commands = BTreeSet::new();
+        commands.insert("clear");
+        commands.insert("nop");
+        commands.insert("reset");
+
         Self {
             mode: EditorMode::Edit,
             error: None,
+            commands,
         }
     }
 
@@ -43,8 +55,13 @@ impl EditorInput {
                     input.remove_left();
                 }
                 InputEvent::Enter => {
-                    self.error =
-                        editor.process_command(input, code, interpreter);
+                    self.error = process_command(
+                        input,
+                        &self.commands,
+                        editor,
+                        code,
+                        interpreter,
+                    );
                     self.mode = EditorMode::Edit;
                 }
                 InputEvent::Left => {
@@ -69,6 +86,52 @@ impl EditorInput {
             },
         }
     }
+}
+
+pub fn process_command(
+    input: &mut EditorInputState,
+    commands: &BTreeSet<&'static str>,
+    editor: &mut Editor,
+    code: &mut Code,
+    interpreter: &mut Interpreter,
+) -> Option<EditorError> {
+    let command = &input.buffer;
+
+    let mut candidates = commands
+        .iter()
+        .filter(|c| c.starts_with(command))
+        .collect::<VecDeque<_>>();
+
+    let Some(&candidate) = candidates.pop_front() else {
+        return Some(EditorError::UnknownCommand {
+            command: command.clone(),
+        });
+    };
+    if !candidates.is_empty() {
+        let candidates = iter::once(candidate)
+            .chain(candidates.into_iter().copied())
+            .collect();
+
+        return Some(EditorError::AmbiguousCommand {
+            command: command.clone(),
+            candidates,
+        });
+    }
+
+    input.clear();
+
+    let command = match candidate {
+        "clear" => Command::Clear,
+        "nop" => Command::Nop,
+        "reset" => Command::Reset,
+        _ => {
+            unreachable!("Ruled out that command is unknown, above.")
+        }
+    };
+
+    editor.on_command(command, code, interpreter);
+
+    None
 }
 
 #[derive(Debug, Eq, PartialEq)]
