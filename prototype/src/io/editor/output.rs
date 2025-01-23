@@ -23,7 +23,7 @@ use crate::lang::{
 #[cfg(test)]
 #[allow(unused)] // used sporadically, for debugging tests
 pub fn print_code(code: &Code, host: &Host) {
-    let mut w = RawTerminalAdapter::new();
+    let mut adapter = RawTerminalAdapter::new();
     let mut context = RenderContext {
         code,
         host,
@@ -33,7 +33,7 @@ pub fn print_code(code: &Code, host: &Host) {
         cursor: None,
     };
 
-    render_code(&mut w, &mut context).unwrap();
+    render_code(&mut adapter, &mut context).unwrap();
 }
 
 pub struct EditorOutput<A> {
