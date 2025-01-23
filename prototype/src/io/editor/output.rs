@@ -245,7 +245,9 @@ fn render_fragment(
     Ok(())
 }
 
-fn render_indent(adapter: &mut RawTerminalAdapter) -> anyhow::Result<()> {
+fn render_indent<A: EditorOutputAdapter>(
+    adapter: &mut A,
+) -> anyhow::Result<()> {
     write!(adapter, "    ")?;
     Ok(())
 }
