@@ -1,7 +1,6 @@
 use crate::{
     io::editor::output::{
-        DebugOutputAdapter, EditorOutput, EditorOutputAdapter,
-        RawTerminalAdapter,
+        DebugOutputAdapter, EditorOutputAdapter, RawTerminalAdapter,
     },
     lang::{
         self, editor,
@@ -9,6 +8,8 @@ use crate::{
         interpreter::{StepResult, Value},
     },
 };
+
+use super::terminal_editor::EditorOutput;
 
 pub struct GameEngine<A> {
     host: Host,
