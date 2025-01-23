@@ -45,17 +45,6 @@ where
     A: EditorOutputAdapter,
 {
     pub fn new(adapter: A) -> anyhow::Result<Self> {
-        // Nothing forces us to enable raw mode right here. It's also tied to
-        // input, so we could enable it there.
-        //
-        // It is very important, however, that we _disable_ it consistently,
-        // depending on where we enabled it. Otherwise the terminal will remain
-        // in raw mode after the application exited.
-        //
-        // We are taking care of that here, by disabling raw mode in the `Drop`
-        // implementation of this type. So raw mode is bound to its lifetime.
-        terminal::enable_raw_mode()?;
-
         Ok(Self { adapter })
     }
 
@@ -87,13 +76,6 @@ where
         self.adapter.flush()?;
 
         Ok(())
-    }
-}
-
-impl<A> Drop for EditorOutput<A> {
-    fn drop(&mut self) {
-        // Nothing we can do about a potential error here.
-        let _ = terminal::disable_raw_mode();
     }
 }
 
@@ -440,6 +422,17 @@ pub struct RawTerminalAdapter {
 
 impl RawTerminalAdapter {
     pub fn new() -> anyhow::Result<Self> {
+        // Nothing forces us to enable raw mode right here. It's also tied to
+        // input, so we could enable it there.
+        //
+        // It is very important, however, that we _disable_ it consistently,
+        // depending on where we enabled it. Otherwise the terminal will remain
+        // in raw mode after the application exited.
+        //
+        // We are taking care of that here, by disabling raw mode in the `Drop`
+        // implementation of this type. So raw mode is bound to its lifetime.
+        terminal::enable_raw_mode()?;
+
         Ok(Self {
             w: stdout(),
             cursor: [0, 0],
@@ -527,5 +520,12 @@ impl EditorOutputAdapter for RawTerminalAdapter {
 impl fmt::Write for RawTerminalAdapter {
     fn write_str(&mut self, s: &str) -> fmt::Result {
         self.write(s).map_err(|_| fmt::Error)
+    }
+}
+
+impl Drop for RawTerminalAdapter {
+    fn drop(&mut self) {
+        // Nothing we can do about a potential error here.
+        let _ = terminal::disable_raw_mode();
     }
 }
