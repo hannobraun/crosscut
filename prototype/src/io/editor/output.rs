@@ -145,10 +145,12 @@ fn render_possibly_active_fragment(
     };
 
     if is_active {
-        w.attribute(Attribute::Bold)?;
-        write!(w, " => ")?;
-        render_fragment(w, located, adjusted_indent, context)?;
-        w.attribute(Attribute::Reset)?;
+        w.attribute(Attribute::Bold, |w| {
+            write!(w, " => ")?;
+            render_fragment(w, located, adjusted_indent, context)?;
+
+            Ok(())
+        })?;
     } else {
         render_fragment(w, located, adjusted_indent, context)?;
     }
@@ -431,8 +433,15 @@ impl EditorOutputAdapter {
         Ok(())
     }
 
-    fn attribute(&mut self, attribute: Attribute) -> anyhow::Result<()> {
+    fn attribute(
+        &mut self,
+        attribute: Attribute,
+        f: impl FnOnce(&mut Self) -> anyhow::Result<()>,
+    ) -> anyhow::Result<()> {
         self.w.queue(SetAttribute(attribute))?;
+        f(self)?;
+        self.w.queue(SetAttribute(Attribute::Reset))?;
+
         Ok(())
     }
 
