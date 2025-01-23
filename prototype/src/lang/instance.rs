@@ -59,7 +59,7 @@ impl Instance {
     }
 
     pub fn on_event(&mut self, event: InputEvent, host: &Host) {
-        self.editor.process_input(
+        self.editor.on_input(
             event,
             &mut self.code,
             &mut self.interpreter,

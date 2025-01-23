@@ -73,7 +73,7 @@ impl Editor {
         self.error.as_ref()
     }
 
-    pub fn process_input(
+    pub fn on_input(
         &mut self,
         input: InputEvent,
         code: &mut Code,
