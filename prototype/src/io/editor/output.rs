@@ -23,7 +23,7 @@ use crate::lang::{
 #[cfg(test)]
 #[allow(unused)] // used sporadically, for debugging tests
 pub fn print_code(code: &Code, host: &Host) {
-    let mut adapter = RawTerminalAdapter::new();
+    let mut adapter = DebugOutputAdapter;
     let mut context = RenderContext {
         code,
         host,
