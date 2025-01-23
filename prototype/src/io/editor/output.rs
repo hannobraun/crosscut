@@ -57,7 +57,12 @@ impl EditorOutput<RawTerminalAdapter> {
 
         Ok(Self { adapter })
     }
+}
 
+impl<A> EditorOutput<A>
+where
+    A: EditorOutputAdapter,
+{
     pub fn render(
         &mut self,
         editor: &Editor,
