@@ -19,9 +19,9 @@ pub struct GameEngine<A> {
 
 impl GameEngine<DebugOutputAdapter> {
     #[cfg(test)]
-    pub fn without_editor() -> anyhow::Result<Self> {
+    pub fn without_editor() -> Self {
         let adapter = DebugOutputAdapter;
-        Ok(Self::new(adapter))
+        Self::new(adapter)
     }
 }
 
