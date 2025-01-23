@@ -143,6 +143,11 @@ fn render_possibly_active_fragment(
         context.indent
     };
 
+    if is_active {
+        w.attribute(Attribute::Bold)?;
+        write!(w, " => ")?;
+    }
+
     render_fragment(w, located, is_active, adjusted_indent, context)?;
 
     Ok(())
@@ -151,16 +156,11 @@ fn render_possibly_active_fragment(
 fn render_fragment(
     w: &mut EditorOutputAdapter,
     located: Located,
-    is_active: bool,
+    _: bool,
     adjusted_indent: u32,
     context: &mut RenderContext,
 ) -> anyhow::Result<()> {
     let maybe_error = context.code.errors.get(located.location.target());
-
-    if is_active {
-        w.attribute(Attribute::Bold)?;
-        write!(w, " => ")?;
-    }
 
     for _ in 0..adjusted_indent {
         render_indent(w)?;
