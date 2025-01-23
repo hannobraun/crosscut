@@ -1,15 +1,14 @@
 #[cfg(test)]
 use crate::lang::editor::EditorMode;
 
-use super::{
-    code::Code,
-    editor::{Editor, InputEvent},
-    host::Host,
-    interpreter::Interpreter,
-};
+use super::{code::Code, editor::Editor, interpreter::Interpreter};
 
 #[cfg(test)]
-use super::interpreter::{InterpreterState, Value};
+use super::{
+    editor::InputEvent,
+    host::Host,
+    interpreter::{InterpreterState, Value},
+};
 
 #[derive(Debug)]
 pub struct Instance {
@@ -58,6 +57,7 @@ impl Instance {
         self.on_event(InputEvent::Char { value: ch }, host);
     }
 
+    #[cfg(test)]
     pub fn on_event(&mut self, event: InputEvent, host: &Host) {
         self.editor.on_input(
             event,

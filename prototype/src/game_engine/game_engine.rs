@@ -9,12 +9,13 @@ use crate::{
     },
 };
 
-use super::terminal_editor::output::EditorOutput;
+use super::terminal_editor::{input::EditorInput, output::EditorOutput};
 
 pub struct GameEngine<A> {
     host: Host,
     lang: lang::Instance,
     game_output: Vec<GameOutput>,
+    editor_input: EditorInput,
     editor_output: EditorOutput<A>,
 }
 
@@ -44,6 +45,7 @@ where
             host: Host::from_functions(["dim"]),
             lang: lang::Instance::new(),
             game_output: Vec::new(),
+            editor_input: EditorInput {},
             editor_output,
         }
     }
@@ -63,7 +65,13 @@ where
         &mut self,
         event: editor::InputEvent,
     ) -> anyhow::Result<()> {
-        self.lang.on_event(event, &self.host);
+        self.editor_input.on_input(
+            event,
+            &mut self.lang.editor,
+            &mut self.lang.code,
+            &mut self.lang.interpreter,
+            &self.host,
+        );
 
         loop {
             match self.lang.interpreter.step(&self.lang.code) {
