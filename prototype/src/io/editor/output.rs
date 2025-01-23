@@ -207,9 +207,7 @@ fn render_fragment(
             CodeError::UnresolvedIdentifier => "unresolved identifier",
         };
 
-        w.color(Color::Red)?;
-        write!(w, "    error: {message}")?;
-        w.reset_color()?;
+        w.color(Color::Red, |w| write!(w, "    error: {message}"))?;
     }
     writeln!(w)?;
 
@@ -255,9 +253,7 @@ fn render_expression(
                 }
             };
 
-            w.color(color)?;
-            write!(w, "{name}")?;
-            w.reset_color()?;
+            w.color(color, |w| write!(w, "{name}"))?;
         }
         Expression::Literal {
             literal: Literal::Integer { value },
@@ -404,8 +400,15 @@ impl EditorOutputAdapter {
         Ok(())
     }
 
-    fn color(&mut self, color: Color) -> anyhow::Result<()> {
+    fn color(
+        &mut self,
+        color: Color,
+        f: impl FnOnce(&mut Self) -> fmt::Result,
+    ) -> anyhow::Result<()> {
         self.w.queue(SetForegroundColor(color))?;
+        f(self)?;
+        self.reset_color()?;
+
         Ok(())
     }
 
