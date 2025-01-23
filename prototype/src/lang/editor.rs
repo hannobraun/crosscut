@@ -264,6 +264,7 @@ pub struct EditorInput {
     pub buffer: String,
     pub cursor: usize,
 }
+
 impl EditorInput {
     fn new(buffer: String) -> Self {
         let cursor = buffer.chars().count();
