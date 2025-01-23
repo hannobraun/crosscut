@@ -252,8 +252,8 @@ fn render_indent<A: EditorOutputAdapter>(
     Ok(())
 }
 
-fn render_expression(
-    adapter: &mut RawTerminalAdapter,
+fn render_expression<A: EditorOutputAdapter>(
+    adapter: &mut A,
     expression: &Expression,
     context: &RenderContext,
 ) -> anyhow::Result<()> {
