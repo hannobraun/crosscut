@@ -16,7 +16,8 @@ pub struct GameEngine {
 
 impl GameEngine {
     pub fn new() -> anyhow::Result<Self> {
-        let editor_output = EditorOutput::new()?;
+        let adapter = RawTerminalAdapter::new();
+        let editor_output = EditorOutput::new(adapter)?;
 
         Ok(Self {
             host: Host::from_functions(["dim"]),

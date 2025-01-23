@@ -41,9 +41,7 @@ pub struct EditorOutput<A> {
 }
 
 impl EditorOutput<RawTerminalAdapter> {
-    pub fn new() -> anyhow::Result<Self> {
-        let adapter = RawTerminalAdapter::new();
-
+    pub fn new(adapter: RawTerminalAdapter) -> anyhow::Result<Self> {
         // Nothing forces us to enable raw mode right here. It's also tied to
         // input, so we could enable it there.
         //
