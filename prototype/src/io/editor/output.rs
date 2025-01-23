@@ -118,7 +118,7 @@ fn render_code(
 }
 
 fn render_possibly_active_fragment(
-    w: &mut RawTerminalAdapter,
+    adapter: &mut RawTerminalAdapter,
     located: Located,
     context: &mut RenderContext,
 ) -> anyhow::Result<()> {
@@ -145,14 +145,14 @@ fn render_possibly_active_fragment(
     };
 
     if is_active {
-        w.attribute(Attribute::Bold, |w| {
+        adapter.attribute(Attribute::Bold, |w| {
             write!(w, " => ")?;
             render_fragment(w, located, adjusted_indent, context)?;
 
             Ok(())
         })?;
     } else {
-        render_fragment(w, located, adjusted_indent, context)?;
+        render_fragment(adapter, located, adjusted_indent, context)?;
     }
 
     Ok(())
