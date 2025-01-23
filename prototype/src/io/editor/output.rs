@@ -253,7 +253,7 @@ fn render_indent<A: EditorOutputAdapter>(
 }
 
 fn render_expression(
-    w: &mut RawTerminalAdapter,
+    adapter: &mut RawTerminalAdapter,
     expression: &Expression,
     context: &RenderContext,
 ) -> anyhow::Result<()> {
@@ -278,12 +278,12 @@ fn render_expression(
                 }
             };
 
-            w.color(color, |w| write!(w, "{name}"))?;
+            adapter.color(color, |w| write!(w, "{name}"))?;
         }
         Expression::Literal {
             literal: Literal::Integer { value },
         } => {
-            write!(w, "{value}")?;
+            write!(adapter, "{value}")?;
         }
     }
 
