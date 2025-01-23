@@ -176,7 +176,7 @@ fn render_fragment(
             currently_editing_this_fragment = true;
 
             context.cursor = {
-                let [x, y] = adapter.cursor;
+                let [x, y] = adapter.cursor();
                 let x = {
                     let x: usize = x.into();
                     let x = x.saturating_add(editor.input().cursor);
@@ -324,7 +324,7 @@ fn render_prompt(
     match editor.mode() {
         EditorMode::Command { input } => {
             context.cursor = {
-                let [x, y] = w.cursor;
+                let [x, y] = w.cursor();
                 let x = {
                     let x: usize = x.into();
                     let x = x.saturating_add(input.cursor);
@@ -359,6 +359,8 @@ trait EditorOutputAdapter: fmt::Write {
     fn clear(&mut self) -> io::Result<()>;
 
     fn write(&mut self, s: &str) -> io::Result<()>;
+
+    fn cursor(&self) -> [u16; 2];
 
     fn move_cursor_to(&mut self, x: u16, y: u16) -> io::Result<()>;
 
@@ -436,6 +438,10 @@ impl EditorOutputAdapter for RawTerminalAdapter {
         }
 
         Ok(())
+    }
+
+    fn cursor(&self) -> [u16; 2] {
+        self.cursor
     }
 
     fn move_cursor_to(&mut self, x: u16, y: u16) -> io::Result<()> {
