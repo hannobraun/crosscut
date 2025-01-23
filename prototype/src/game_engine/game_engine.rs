@@ -26,7 +26,9 @@ impl GameEngine<RawTerminalAdapter> {
             editor_output,
         })
     }
+}
 
+impl GameEngine<RawTerminalAdapter> {
     pub fn render_editor(&mut self) -> anyhow::Result<()> {
         self.editor_output.render(
             &self.lang.editor,
