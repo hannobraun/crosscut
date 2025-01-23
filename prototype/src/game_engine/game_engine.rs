@@ -19,6 +19,15 @@ pub struct GameEngine<A> {
 impl GameEngine<RawTerminalAdapter> {
     pub fn with_editor() -> anyhow::Result<Self> {
         let adapter = RawTerminalAdapter::new();
+        Self::new(adapter)
+    }
+}
+
+impl<A> GameEngine<A>
+where
+    A: EditorOutputAdapter,
+{
+    pub fn new(adapter: A) -> anyhow::Result<Self> {
         let editor_output = EditorOutput::new(adapter)?;
 
         Ok(Self {
@@ -28,12 +37,7 @@ impl GameEngine<RawTerminalAdapter> {
             editor_output,
         })
     }
-}
 
-impl<A> GameEngine<A>
-where
-    A: EditorOutputAdapter,
-{
     pub fn render_editor(&mut self) -> anyhow::Result<()> {
         self.editor_output.render(
             &self.lang.editor,
