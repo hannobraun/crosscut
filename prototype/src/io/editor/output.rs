@@ -357,7 +357,7 @@ struct RenderContext<'r> {
 /// result, writing to the terminal directly turned out to be impractical.
 ///
 /// The specific problem encountered, was that determining the cursor position
-/// can't be read without causing a flush, which leads to visual artifacts when
+/// can't be done without causing a flush, which leads to visual artifacts when
 /// then resuming the rendering. As a result, we at least need something to
 /// track the cursor position throughout the render. Hence this adapter.
 struct EditorOutputAdapter {
