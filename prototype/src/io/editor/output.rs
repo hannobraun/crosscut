@@ -130,7 +130,7 @@ fn render_fragment(
             w.attribute(Attribute::Bold)?;
             write!(w, " => ")?;
 
-            // This is worth one indentation level. We need to adjust for
+            // That arrow worth one indentation level. We need to adjust for
             // that.
             let Some(adjusted) = context.indent.checked_sub(1) else {
                 unreachable!(
