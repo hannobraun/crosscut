@@ -55,14 +55,10 @@ impl EditorInput {
                     input.remove_left();
                 }
                 InputEvent::Enter => {
-                    match process_command(
-                        input,
-                        &self.commands,
-                        editor,
-                        code,
-                        interpreter,
-                    ) {
-                        Ok(()) => {}
+                    match process_command(input, &self.commands) {
+                        Ok(command) => {
+                            editor.on_command(command, code, interpreter);
+                        }
                         Err(err) => {
                             self.error = Some(err);
                         }
@@ -97,10 +93,7 @@ impl EditorInput {
 fn process_command(
     input: &mut EditorInputState,
     commands: &BTreeSet<&'static str>,
-    editor: &mut Editor,
-    code: &mut Code,
-    interpreter: &mut Interpreter,
-) -> Result<(), EditorError> {
+) -> Result<Command, EditorError> {
     let command = &input.buffer;
 
     let mut candidates = commands
@@ -135,9 +128,7 @@ fn process_command(
         }
     };
 
-    editor.on_command(command, code, interpreter);
-
-    Ok(())
+    Ok(command)
 }
 
 #[derive(Debug, Eq, PartialEq)]
