@@ -351,6 +351,28 @@ struct RenderContext<'r> {
     cursor: Option<[u16; 2]>,
 }
 
+trait EditorOutputAdapter: fmt::Write {
+    fn clear(&mut self) -> io::Result<()>;
+
+    fn write(&mut self, s: &str) -> io::Result<()>;
+
+    fn move_cursor_to(&mut self, x: u16, y: u16) -> io::Result<()>;
+
+    fn color(
+        &mut self,
+        color: Color,
+        f: impl FnOnce(&mut Self) -> fmt::Result,
+    ) -> anyhow::Result<()>;
+
+    fn attribute(
+        &mut self,
+        attribute: Attribute,
+        f: impl FnOnce(&mut Self) -> anyhow::Result<()>,
+    ) -> anyhow::Result<()>;
+
+    fn flush(&mut self) -> io::Result<()>;
+}
+
 /// # Adapter between the renderer and the terminal
 ///
 /// Unfortunately, terminals are an ancient technology and suck very badly. As a
@@ -374,7 +396,7 @@ impl RawTerminalAdapter {
     }
 }
 
-impl RawTerminalAdapter {
+impl EditorOutputAdapter for RawTerminalAdapter {
     fn clear(&mut self) -> io::Result<()> {
         self.w.queue(terminal::Clear(ClearType::All))?;
         self.move_cursor_to(0, 0)?;
