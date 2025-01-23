@@ -128,23 +128,7 @@ fn render_possibly_active_fragment(
         false
     };
 
-    render_fragment(w, located, is_active, context)?;
-    Ok(())
-}
-
-fn render_fragment(
-    w: &mut EditorOutputAdapter,
-    located: Located,
-    is_active: bool,
-    context: &mut RenderContext,
-) -> anyhow::Result<()> {
-    let maybe_error = context.code.errors.get(located.location.target());
-
-    let mut adjusted_indent = context.indent;
-    if is_active {
-        w.attribute(Attribute::Bold)?;
-        write!(w, " => ")?;
-
+    let adjusted_indent = if is_active {
         // That arrow worth one indentation level. We need to adjust for that.
         let Some(adjusted) = context.indent.checked_sub(1) else {
             unreachable!(
@@ -153,7 +137,29 @@ fn render_fragment(
                 indentation."
             );
         };
-        adjusted_indent = adjusted;
+
+        adjusted
+    } else {
+        context.indent
+    };
+
+    render_fragment(w, located, is_active, adjusted_indent, context)?;
+
+    Ok(())
+}
+
+fn render_fragment(
+    w: &mut EditorOutputAdapter,
+    located: Located,
+    is_active: bool,
+    adjusted_indent: u32,
+    context: &mut RenderContext,
+) -> anyhow::Result<()> {
+    let maybe_error = context.code.errors.get(located.location.target());
+
+    if is_active {
+        w.attribute(Attribute::Bold)?;
+        write!(w, " => ")?;
     }
 
     for _ in 0..adjusted_indent {
