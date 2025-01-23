@@ -61,7 +61,8 @@ impl EditorInput {
                         editor,
                         code,
                         interpreter,
-                    );
+                    )
+                    .err();
                     self.mode = EditorMode::Edit;
                 }
                 InputEvent::Left => {
@@ -94,7 +95,7 @@ fn process_command(
     editor: &mut Editor,
     code: &mut Code,
     interpreter: &mut Interpreter,
-) -> Option<EditorError> {
+) -> Result<(), EditorError> {
     let command = &input.buffer;
 
     let mut candidates = commands
@@ -103,7 +104,7 @@ fn process_command(
         .collect::<VecDeque<_>>();
 
     let Some(&candidate) = candidates.pop_front() else {
-        return Some(EditorError::UnknownCommand {
+        return Err(EditorError::UnknownCommand {
             command: command.clone(),
         });
     };
@@ -112,7 +113,7 @@ fn process_command(
             .chain(candidates.into_iter().copied())
             .collect();
 
-        return Some(EditorError::AmbiguousCommand {
+        return Err(EditorError::AmbiguousCommand {
             command: command.clone(),
             candidates,
         });
@@ -131,7 +132,7 @@ fn process_command(
 
     editor.on_command(command, code, interpreter);
 
-    None
+    Ok(())
 }
 
 #[derive(Debug, Eq, PartialEq)]
