@@ -381,6 +381,49 @@ pub trait EditorOutputAdapter: fmt::Write {
     fn flush(&mut self) -> io::Result<()>;
 }
 
+pub struct DebugOutputAdapter;
+
+impl EditorOutputAdapter for DebugOutputAdapter {
+    fn clear(&mut self) -> io::Result<()> {
+        Ok(())
+    }
+
+    fn cursor(&self) -> [u16; 2] {
+        [0; 2]
+    }
+
+    fn move_cursor_to(&mut self, _: u16, _: u16) -> io::Result<()> {
+        Ok(())
+    }
+
+    fn color(
+        &mut self,
+        _: Color,
+        _: impl FnOnce(&mut Self) -> fmt::Result,
+    ) -> anyhow::Result<()> {
+        Ok(())
+    }
+
+    fn attribute(
+        &mut self,
+        _: Attribute,
+        _: impl FnOnce(&mut Self) -> anyhow::Result<()>,
+    ) -> anyhow::Result<()> {
+        Ok(())
+    }
+
+    fn flush(&mut self) -> io::Result<()> {
+        Ok(())
+    }
+}
+
+impl fmt::Write for DebugOutputAdapter {
+    fn write_str(&mut self, s: &str) -> fmt::Result {
+        print!("{s}");
+        Ok(())
+    }
+}
+
 /// # Adapter between the renderer and the terminal
 ///
 /// Unfortunately, terminals are an ancient technology and suck very badly. As a
