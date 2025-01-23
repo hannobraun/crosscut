@@ -90,6 +90,7 @@ impl Editor {
                 }
                 InputEvent::Enter => {
                     self.process_command(code, interpreter);
+                    self.mode = EditorMode::Edit;
                 }
                 InputEvent::Left => {
                     input.move_cursor_left();
@@ -230,8 +231,6 @@ impl Editor {
                 interpreter.reset(code);
             }
         }
-
-        self.mode = EditorMode::Edit;
     }
 }
 
