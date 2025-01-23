@@ -7,13 +7,13 @@ use crate::{
             Code, CodeError, Expression, FragmentError, FragmentKind,
             FunctionCallTarget, Literal, Located,
         },
-        editor::{Editor, EditorError, EditorMode},
+        editor::{Editor, EditorError},
         host::Host,
         interpreter::{Interpreter, InterpreterState},
     },
 };
 
-use super::input::EditorInput;
+use super::input::{EditorInput, EditorMode};
 
 #[cfg(test)]
 #[allow(unused)] // used sporadically, for debugging tests

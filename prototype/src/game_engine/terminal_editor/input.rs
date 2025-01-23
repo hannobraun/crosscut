@@ -1,6 +1,6 @@
 use crate::lang::{
     code::Code,
-    editor::{Editor, EditorInputState, EditorMode, InputEvent},
+    editor::{Editor, EditorInputState, InputEvent},
     host::Host,
     interpreter::Interpreter,
 };
@@ -61,5 +61,17 @@ impl EditorInput {
                 }
             },
         }
+    }
+}
+
+#[derive(Debug, Eq, PartialEq)]
+pub enum EditorMode {
+    Command { input: EditorInputState },
+    Edit,
+}
+
+impl EditorMode {
+    pub fn is_edit(&self) -> bool {
+        matches!(self, Self::Edit)
     }
 }

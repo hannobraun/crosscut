@@ -125,7 +125,7 @@ where
 
     #[cfg(test)]
     pub fn on_code(&mut self, code: &str) {
-        use crate::lang::editor::EditorMode;
+        use crate::game_engine::terminal_editor::input::EditorMode;
 
         assert!(
             matches!(self.editor_input.mode(), EditorMode::Edit { .. }),
