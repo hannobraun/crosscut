@@ -130,7 +130,7 @@ fn render_possibly_active_fragment(
 
     let adjusted_indent = if is_active {
         // That arrow worth one indentation level. We need to adjust for that.
-        let Some(adjusted) = context.indent.checked_sub(1) else {
+        let Some(adjusted_indent) = context.indent.checked_sub(1) else {
             unreachable!(
                 "Every fragment body gets one level of indentation. The root \
                 is a fragment. Hence, we must have at least one level of \
@@ -138,7 +138,7 @@ fn render_possibly_active_fragment(
             );
         };
 
-        adjusted
+        adjusted_indent
     } else {
         context.indent
     };
