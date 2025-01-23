@@ -291,7 +291,7 @@ fn render_expression<A: EditorOutputAdapter>(
 }
 
 fn render_prompt(
-    w: &mut RawTerminalAdapter,
+    adapter: &mut RawTerminalAdapter,
     editor: &Editor,
     context: &mut RenderContext,
 ) -> anyhow::Result<()> {
@@ -301,30 +301,33 @@ fn render_prompt(
     };
 
     if let Some(error) = editor.error() {
-        writeln!(w)?;
+        writeln!(adapter)?;
         match error {
             EditorError::AmbiguousCommand {
                 command,
                 candidates,
             } => {
-                writeln!(w, "`{command}` could refer to multiple commands:",)?;
+                writeln!(
+                    adapter,
+                    "`{command}` could refer to multiple commands:",
+                )?;
                 for candidate in candidates {
-                    writeln!(w, "- `{candidate}`")?;
+                    writeln!(adapter, "- `{candidate}`")?;
                 }
             }
             EditorError::UnknownCommand { command } => {
-                write!(w, "Unknown command: `{command}`")?;
+                write!(adapter, "Unknown command: `{command}`")?;
             }
         }
     }
 
-    writeln!(w)?;
-    write!(w, "{mode} > ")?;
+    writeln!(adapter)?;
+    write!(adapter, "{mode} > ")?;
 
     match editor.mode() {
         EditorMode::Command { input } => {
             context.cursor = {
-                let [x, y] = w.cursor();
+                let [x, y] = adapter.cursor();
                 let x = {
                     let x: usize = x.into();
                     let x = x.saturating_add(input.cursor);
@@ -335,7 +338,7 @@ fn render_prompt(
                 Some([x, y])
             };
 
-            write!(w, "{}", input.buffer)?;
+            write!(adapter, "{}", input.buffer)?;
         }
         EditorMode::Edit { .. } => {
             // If we're in edit mode, the editing happens directly where the
