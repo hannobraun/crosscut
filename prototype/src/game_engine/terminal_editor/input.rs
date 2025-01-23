@@ -88,7 +88,7 @@ impl EditorInput {
     }
 }
 
-pub fn process_command(
+fn process_command(
     input: &mut EditorInputState,
     commands: &BTreeSet<&'static str>,
     editor: &mut Editor,
