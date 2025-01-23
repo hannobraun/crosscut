@@ -431,7 +431,7 @@ impl EditorOutputAdapter {
         Ok(())
     }
 
-    fn attribute(&mut self, attribute: Attribute) -> io::Result<()> {
+    fn attribute(&mut self, attribute: Attribute) -> anyhow::Result<()> {
         self.w.queue(SetAttribute(attribute))?;
         Ok(())
     }
