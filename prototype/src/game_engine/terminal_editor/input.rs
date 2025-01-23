@@ -55,14 +55,19 @@ impl EditorInput {
                     input.remove_left();
                 }
                 InputEvent::Enter => {
-                    self.error = process_command(
+                    match process_command(
                         input,
                         &self.commands,
                         editor,
                         code,
                         interpreter,
-                    )
-                    .err();
+                    ) {
+                        Ok(()) => {}
+                        Err(err) => {
+                            self.error = Some(err);
+                        }
+                    }
+
                     self.mode = EditorMode::Edit;
                 }
                 InputEvent::Left => {
