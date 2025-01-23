@@ -148,7 +148,7 @@ fn render_possibly_active_fragment(
         write!(w, " => ")?;
     }
 
-    render_fragment(w, located, is_active, adjusted_indent, context)?;
+    render_fragment(w, located, adjusted_indent, context)?;
 
     Ok(())
 }
@@ -156,7 +156,6 @@ fn render_possibly_active_fragment(
 fn render_fragment(
     w: &mut EditorOutputAdapter,
     located: Located,
-    _: bool,
     adjusted_indent: u32,
     context: &mut RenderContext,
 ) -> anyhow::Result<()> {
