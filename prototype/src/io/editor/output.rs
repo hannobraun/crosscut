@@ -40,8 +40,11 @@ pub struct EditorOutput<A> {
     adapter: A,
 }
 
-impl EditorOutput<RawTerminalAdapter> {
-    pub fn new(adapter: RawTerminalAdapter) -> anyhow::Result<Self> {
+impl<A> EditorOutput<A>
+where
+    A: EditorOutputAdapter,
+{
+    pub fn new(adapter: A) -> anyhow::Result<Self> {
         // Nothing forces us to enable raw mode right here. It's also tied to
         // input, so we could enable it there.
         //
@@ -55,12 +58,7 @@ impl EditorOutput<RawTerminalAdapter> {
 
         Ok(Self { adapter })
     }
-}
 
-impl<A> EditorOutput<A>
-where
-    A: EditorOutputAdapter,
-{
     pub fn render(
         &mut self,
         editor: &Editor,
