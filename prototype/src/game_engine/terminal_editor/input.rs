@@ -5,7 +5,7 @@ use std::{
 
 use crate::lang::{
     code::Code,
-    editor::{Command, Editor, EditorError, EditorInputState, InputEvent},
+    editor::{Command, Editor, EditorInputState, InputEvent},
     host::Host,
     interpreter::Interpreter,
 };
@@ -141,4 +141,15 @@ impl EditorMode {
     pub fn is_edit(&self) -> bool {
         matches!(self, Self::Edit)
     }
+}
+
+#[derive(Debug)]
+pub enum EditorError {
+    AmbiguousCommand {
+        command: String,
+        candidates: Vec<&'static str>,
+    },
+    UnknownCommand {
+        command: String,
+    },
 }

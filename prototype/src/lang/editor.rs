@@ -183,14 +183,3 @@ pub enum Command {
     Nop,
     Reset,
 }
-
-#[derive(Debug)]
-pub enum EditorError {
-    AmbiguousCommand {
-        command: String,
-        candidates: Vec<&'static str>,
-    },
-    UnknownCommand {
-        command: String,
-    },
-}
