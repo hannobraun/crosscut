@@ -13,6 +13,8 @@ use crate::{
     },
 };
 
+use super::input::EditorInput;
+
 #[cfg(test)]
 #[allow(unused)] // used sporadically, for debugging tests
 pub fn print_code(code: &Code, host: &Host) {
@@ -45,6 +47,7 @@ where
 
     pub fn render(
         &mut self,
+        _: &EditorInput,
         editor: &Editor,
         code: &Code,
         interpreter: &Interpreter,
