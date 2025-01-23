@@ -360,11 +360,6 @@ struct RenderContext<'r> {
 /// can't be read without causing a flush, which leads to visual artifacts when
 /// then resuming the rendering. As a result, we at least need something to
 /// track the cursor position throughout the render. Hence this adapter.
-///
-/// ## Implementation Note
-///
-/// The API of this type leaves something to be desired. It was initially
-/// created to support the existing (Crossterm-based) usage patterns.
 struct EditorOutputAdapter {
     w: Stdout,
     cursor: [u16; 2],
