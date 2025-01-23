@@ -1,6 +1,7 @@
 use crate::{
     io::editor::output::{
-        EditorOutput, EditorOutputAdapter, RawTerminalAdapter,
+        DebugOutputAdapter, EditorOutput, EditorOutputAdapter,
+        RawTerminalAdapter,
     },
     lang::{
         self, editor,
@@ -14,6 +15,14 @@ pub struct GameEngine<A> {
     lang: lang::Instance,
     game_output: Vec<GameOutput>,
     editor_output: EditorOutput<A>,
+}
+
+impl GameEngine<DebugOutputAdapter> {
+    #[cfg(test)]
+    pub fn without_editor() -> anyhow::Result<Self> {
+        let adapter = DebugOutputAdapter;
+        Self::new(adapter)
+    }
 }
 
 impl GameEngine<RawTerminalAdapter> {
