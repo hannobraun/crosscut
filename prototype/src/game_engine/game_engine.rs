@@ -128,7 +128,7 @@ where
         use crate::lang::editor::EditorMode;
 
         assert!(
-            matches!(self.lang.editor.mode(), EditorMode::Edit { .. }),
+            matches!(self.editor_input.mode(), EditorMode::Edit { .. }),
             "Trying to input code, but editor is not in edit mode.",
         );
 

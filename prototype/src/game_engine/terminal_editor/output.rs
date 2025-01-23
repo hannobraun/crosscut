@@ -152,8 +152,10 @@ fn render_fragment<A: EditorOutputAdapter>(
     }
 
     let mut currently_editing_this_fragment = false;
-    if let Some((_, editor)) = &context.editor {
-        if editor.mode().is_edit() && editor.editing() == &located.location {
+    if let Some((editor_input, editor)) = &context.editor {
+        if editor_input.mode().is_edit()
+            && editor.editing() == &located.location
+        {
             currently_editing_this_fragment = true;
 
             context.cursor = {
@@ -273,11 +275,11 @@ fn render_expression<A: EditorOutputAdapter>(
 
 fn render_prompt<A: EditorOutputAdapter>(
     adapter: &mut A,
-    _: &EditorInput,
+    editor_input: &EditorInput,
     editor: &Editor,
     context: &mut RenderContext,
 ) -> anyhow::Result<()> {
-    let mode = match editor.mode() {
+    let mode = match editor_input.mode() {
         EditorMode::Command { .. } => "command",
         EditorMode::Edit { .. } => "edit",
     };
@@ -306,7 +308,7 @@ fn render_prompt<A: EditorOutputAdapter>(
     writeln!(adapter)?;
     write!(adapter, "{mode} > ")?;
 
-    match editor.mode() {
+    match editor_input.mode() {
         EditorMode::Command { input } => {
             context.cursor = {
                 let [x, y] = adapter.cursor();

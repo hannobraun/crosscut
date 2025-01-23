@@ -1,6 +1,3 @@
-#[cfg(test)]
-use crate::lang::editor::EditorMode;
-
 use super::{code::Code, editor::Editor, interpreter::Interpreter};
 
 #[cfg(test)]
@@ -37,11 +34,6 @@ impl Instance {
 
     #[cfg(test)]
     pub fn on_code(&mut self, code: &str, host: &Host) {
-        assert!(
-            matches!(self.editor.mode(), EditorMode::Edit { .. }),
-            "Trying to input code, but editor is not in edit mode.",
-        );
-
         self.on_input(code, host);
     }
 

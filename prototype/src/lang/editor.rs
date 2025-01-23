@@ -27,7 +27,6 @@ use super::code::Location;
 #[derive(Debug)]
 pub struct Editor {
     editing: Location,
-    mode: EditorMode,
     input: EditorInputState,
     error: Option<EditorError>,
     commands: BTreeSet<&'static str>,
@@ -50,7 +49,6 @@ impl Editor {
 
         Self {
             editing,
-            mode: EditorMode::Edit,
             input: EditorInputState::new(String::new()),
             error: None,
             commands,
@@ -59,10 +57,6 @@ impl Editor {
 
     pub fn editing(&self) -> &Location {
         &self.editing
-    }
-
-    pub fn mode(&self) -> &EditorMode {
-        &self.mode
     }
 
     pub fn input(&self) -> &EditorInputState {
@@ -80,62 +74,35 @@ impl Editor {
         interpreter: &mut Interpreter,
         host: &Host,
     ) {
-        match &mut self.mode {
-            EditorMode::Command { input } => match event {
-                InputEvent::Char { value } => {
-                    input.insert(value);
-                }
-                InputEvent::Backspace => {
-                    input.remove_left();
-                }
-                InputEvent::Enter => {
-                    self.process_command(code, interpreter);
-                    self.mode = EditorMode::Edit;
-                }
-                InputEvent::Left => {
-                    input.move_cursor_left();
-                }
-                InputEvent::Right => {
-                    input.move_cursor_right();
-                }
-                InputEvent::Escape => {
-                    self.mode = EditorMode::Edit;
-                }
-            },
-            EditorMode::Edit => match event {
-                InputEvent::Char { value } => {
-                    if value.is_whitespace() {
-                        self.editing = code.append_to(
-                            &code.find_innermost_fragment_with_valid_body(),
-                            Fragment {
-                                kind: FragmentKind::Empty,
-                                body: Body::default(),
-                            },
-                        );
+        match event {
+            InputEvent::Char { value } => {
+                if value.is_whitespace() {
+                    self.editing = code.append_to(
+                        &code.find_innermost_fragment_with_valid_body(),
+                        Fragment {
+                            kind: FragmentKind::Empty,
+                            body: Body::default(),
+                        },
+                    );
 
-                        self.input.clear();
-                    } else {
-                        self.input.insert(value);
-                        self.process_code(code, interpreter, host);
-                    }
-                }
-                InputEvent::Backspace => {
-                    self.input.remove_left();
+                    self.input.clear();
+                } else {
+                    self.input.insert(value);
                     self.process_code(code, interpreter, host);
                 }
-                InputEvent::Enter => {}
-                InputEvent::Left => {
-                    self.input.move_cursor_left();
-                }
-                InputEvent::Right => {
-                    self.input.move_cursor_right();
-                }
-                InputEvent::Escape => {
-                    self.mode = EditorMode::Command {
-                        input: EditorInputState::new(String::new()),
-                    };
-                }
-            },
+            }
+            InputEvent::Backspace => {
+                self.input.remove_left();
+                self.process_code(code, interpreter, host);
+            }
+            InputEvent::Enter => {}
+            InputEvent::Left => {
+                self.input.move_cursor_left();
+            }
+            InputEvent::Right => {
+                self.input.move_cursor_right();
+            }
+            InputEvent::Escape => {}
         }
     }
 
@@ -157,16 +124,10 @@ impl Editor {
 
     pub fn process_command(
         &mut self,
+        input: &mut EditorInputState,
         code: &mut Code,
         interpreter: &mut Interpreter,
     ) {
-        // This is an ugly hack, but it's temporary, as I transition to making
-        // "command mode" not be a thing here.
-        let EditorMode::Command { ref mut input } = &mut self.mode else {
-            unreachable!(
-                "This method is never called, unless we're in command mode."
-            );
-        };
         let command = &input.buffer;
 
         self.error = None;
