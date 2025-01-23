@@ -55,7 +55,7 @@ impl EditorInput {
                     input.remove_left();
                 }
                 InputEvent::Enter => {
-                    match process_command(input, &self.commands) {
+                    match parse_command(input, &self.commands) {
                         Ok(command) => {
                             editor.on_command(command, code, interpreter);
                         }
@@ -90,7 +90,7 @@ impl EditorInput {
     }
 }
 
-fn process_command(
+fn parse_command(
     input: &mut EditorInputState,
     commands: &BTreeSet<&'static str>,
 ) -> Result<Command, EditorError> {
