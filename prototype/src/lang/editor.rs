@@ -154,7 +154,7 @@ impl Editor {
         }
     }
 
-    fn process_command(
+    pub fn process_command(
         &mut self,
         code: &mut Code,
         interpreter: &mut Interpreter,
