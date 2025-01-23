@@ -407,18 +407,13 @@ impl EditorOutputAdapter {
     ) -> anyhow::Result<()> {
         self.w.queue(SetForegroundColor(color))?;
         f(self)?;
-        self.reset_color()?;
+        self.w.queue(ResetColor)?;
 
         Ok(())
     }
 
     fn attribute(&mut self, attribute: Attribute) -> io::Result<()> {
         self.w.queue(SetAttribute(attribute))?;
-        Ok(())
-    }
-
-    fn reset_color(&mut self) -> anyhow::Result<()> {
-        self.w.queue(ResetColor)?;
         Ok(())
     }
 
