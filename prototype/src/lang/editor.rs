@@ -80,10 +80,30 @@ impl Editor {
         interpreter: &mut Interpreter,
         host: &Host,
     ) {
-        match event {
-            InputEvent::Char { value } => {
-                if value.is_whitespace() {
-                    if let EditorMode::Edit = self.mode {
+        match &mut self.mode {
+            EditorMode::Command { input } => match event {
+                InputEvent::Char { value } => {
+                    input.insert(value);
+                }
+                InputEvent::Backspace => {
+                    input.remove_left();
+                }
+                InputEvent::Enter => {
+                    self.process_command(code, interpreter);
+                }
+                InputEvent::Left => {
+                    input.move_cursor_left();
+                }
+                InputEvent::Right => {
+                    input.move_cursor_right();
+                }
+                InputEvent::Escape => {
+                    self.mode = EditorMode::Edit;
+                }
+            },
+            EditorMode::Edit => match event {
+                InputEvent::Char { value } => {
+                    if value.is_whitespace() {
                         self.editing = code.append_to(
                             &code.find_innermost_fragment_with_valid_body(),
                             Fragment {
@@ -93,55 +113,23 @@ impl Editor {
                         );
 
                         self.input.clear();
-                    }
-                } else {
-                    match &mut self.mode {
-                        EditorMode::Command { input } => {
-                            input.insert(value);
-                        }
-                        EditorMode::Edit => {
-                            self.input.insert(value);
-                            self.process_code(code, interpreter, host);
-                        }
+                    } else {
+                        self.input.insert(value);
+                        self.process_code(code, interpreter, host);
                     }
                 }
-            }
-            InputEvent::Backspace => match &mut self.mode {
-                EditorMode::Command { input } => {
-                    input.remove_left();
-                }
-                EditorMode::Edit => {
+                InputEvent::Backspace => {
                     self.input.remove_left();
                     self.process_code(code, interpreter, host);
                 }
-            },
-            InputEvent::Enter => match &self.mode {
-                EditorMode::Command { input: _ } => {
-                    self.process_command(code, interpreter);
-                }
-                EditorMode::Edit { .. } => {}
-            },
-            InputEvent::Left => match &mut self.mode {
-                EditorMode::Command { input } => {
-                    input.move_cursor_left();
-                }
-                EditorMode::Edit => {
+                InputEvent::Enter => {}
+                InputEvent::Left => {
                     self.input.move_cursor_left();
                 }
-            },
-            InputEvent::Right => match &mut self.mode {
-                EditorMode::Command { input } => {
-                    input.move_cursor_right();
-                }
-                EditorMode::Edit => {
+                InputEvent::Right => {
                     self.input.move_cursor_right();
                 }
-            },
-            InputEvent::Escape => match &mut self.mode {
-                EditorMode::Command { input: _ } => {
-                    self.mode = EditorMode::Edit;
-                }
-                EditorMode::Edit => {
+                InputEvent::Escape => {
                     self.mode = EditorMode::Command {
                         input: EditorInputState::new(String::new()),
                     };
