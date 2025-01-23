@@ -28,7 +28,7 @@ use super::code::Location;
 pub struct Editor {
     editing: Location,
     mode: EditorMode,
-    input: EditorInput,
+    input: EditorInputState,
     error: Option<EditorError>,
     commands: BTreeSet<&'static str>,
 }
@@ -51,7 +51,7 @@ impl Editor {
         Self {
             editing,
             mode: EditorMode::Edit,
-            input: EditorInput::new(String::new()),
+            input: EditorInputState::new(String::new()),
             error: None,
             commands,
         }
@@ -65,7 +65,7 @@ impl Editor {
         &self.mode
     }
 
-    pub fn input(&self) -> &EditorInput {
+    pub fn input(&self) -> &EditorInputState {
         &self.input
     }
 
@@ -143,7 +143,7 @@ impl Editor {
                 }
                 EditorMode::Edit => {
                     self.mode = EditorMode::Command {
-                        input: EditorInput::new(String::new()),
+                        input: EditorInputState::new(String::new()),
                     };
                 }
             },
@@ -249,7 +249,7 @@ impl Editor {
 
 #[derive(Debug, Eq, PartialEq)]
 pub enum EditorMode {
-    Command { input: EditorInput },
+    Command { input: EditorInputState },
     Edit,
 }
 
@@ -260,12 +260,12 @@ impl EditorMode {
 }
 
 #[derive(Debug, Eq, PartialEq)]
-pub struct EditorInput {
+pub struct EditorInputState {
     pub buffer: String,
     pub cursor: usize,
 }
 
-impl EditorInput {
+impl EditorInputState {
     fn new(buffer: String) -> Self {
         let cursor = buffer.chars().count();
         Self { buffer, cursor }
