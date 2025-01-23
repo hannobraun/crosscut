@@ -1,23 +1,29 @@
 use crate::lang::{
     code::Code,
-    editor::{Editor, EditorInputState, InputEvent},
+    editor::{Editor, EditorError, EditorInputState, InputEvent},
     host::Host,
     interpreter::Interpreter,
 };
 
 pub struct EditorInput {
     mode: EditorMode,
+    error: Option<EditorError>,
 }
 
 impl EditorInput {
     pub fn new() -> Self {
         Self {
             mode: EditorMode::Edit,
+            error: None,
         }
     }
 
     pub fn mode(&self) -> &EditorMode {
         &self.mode
+    }
+
+    pub fn error(&self) -> Option<&EditorError> {
+        self.error.as_ref()
     }
 
     pub fn on_input(
@@ -37,7 +43,8 @@ impl EditorInput {
                     input.remove_left();
                 }
                 InputEvent::Enter => {
-                    editor.process_command(input, code, interpreter);
+                    self.error =
+                        editor.process_command(input, code, interpreter);
                     self.mode = EditorMode::Edit;
                 }
                 InputEvent::Left => {

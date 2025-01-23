@@ -276,7 +276,7 @@ fn render_expression<A: EditorOutputAdapter>(
 fn render_prompt<A: EditorOutputAdapter>(
     adapter: &mut A,
     editor_input: &EditorInput,
-    editor: &Editor,
+    _: &Editor,
     context: &mut RenderContext,
 ) -> anyhow::Result<()> {
     let mode = match editor_input.mode() {
@@ -284,7 +284,7 @@ fn render_prompt<A: EditorOutputAdapter>(
         EditorMode::Edit { .. } => "edit",
     };
 
-    if let Some(error) = editor.error() {
+    if let Some(error) = editor_input.error() {
         writeln!(adapter)?;
         match error {
             EditorError::AmbiguousCommand {

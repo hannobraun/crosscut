@@ -28,7 +28,6 @@ use super::code::Location;
 pub struct Editor {
     editing: Location,
     input: EditorInputState,
-    error: Option<EditorError>,
     commands: BTreeSet<&'static str>,
 }
 
@@ -50,7 +49,6 @@ impl Editor {
         Self {
             editing,
             input: EditorInputState::new(String::new()),
-            error: None,
             commands,
         }
     }
@@ -61,10 +59,6 @@ impl Editor {
 
     pub fn input(&self) -> &EditorInputState {
         &self.input
-    }
-
-    pub fn error(&self) -> Option<&EditorError> {
-        self.error.as_ref()
     }
 
     pub fn on_input(
@@ -127,10 +121,8 @@ impl Editor {
         input: &mut EditorInputState,
         code: &mut Code,
         interpreter: &mut Interpreter,
-    ) {
+    ) -> Option<EditorError> {
         let command = &input.buffer;
-
-        self.error = None;
 
         let mut candidates = self
             .commands
@@ -139,22 +131,19 @@ impl Editor {
             .collect::<VecDeque<_>>();
 
         let Some(&candidate) = candidates.pop_front() else {
-            self.error = Some(EditorError::UnknownCommand {
+            return Some(EditorError::UnknownCommand {
                 command: command.clone(),
             });
-            return;
         };
         if !candidates.is_empty() {
             let candidates = iter::once(candidate)
                 .chain(candidates.into_iter().copied())
                 .collect();
 
-            self.error = Some(EditorError::AmbiguousCommand {
+            return Some(EditorError::AmbiguousCommand {
                 command: command.clone(),
                 candidates,
             });
-
-            return;
         }
 
         input.clear();
@@ -169,6 +158,8 @@ impl Editor {
         };
 
         self.on_command(command, code, interpreter);
+
+        None
     }
 
     pub fn on_command(
