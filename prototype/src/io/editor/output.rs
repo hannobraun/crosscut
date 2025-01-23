@@ -37,7 +37,7 @@ pub fn print_code(code: &Code, host: &Host) {
 }
 
 pub struct EditorOutput {
-    w: RawTerminalAdapter,
+    adapter: RawTerminalAdapter,
 }
 
 impl EditorOutput {
@@ -55,7 +55,7 @@ impl EditorOutput {
         // implementation of this type. So raw mode is bound to its lifetime.
         terminal::enable_raw_mode()?;
 
-        Ok(Self { w })
+        Ok(Self { adapter: w })
     }
 
     pub fn render(
@@ -74,16 +74,16 @@ impl EditorOutput {
             cursor: None,
         };
 
-        self.w.clear()?;
+        self.adapter.clear()?;
 
-        render_code(&mut self.w, &mut context)?;
-        render_prompt(&mut self.w, editor, &mut context)?;
+        render_code(&mut self.adapter, &mut context)?;
+        render_prompt(&mut self.adapter, editor, &mut context)?;
 
         if let Some([x, y]) = context.cursor {
-            self.w.move_cursor_to(x, y)?;
+            self.adapter.move_cursor_to(x, y)?;
         }
 
-        self.w.flush()?;
+        self.adapter.flush()?;
 
         Ok(())
     }
