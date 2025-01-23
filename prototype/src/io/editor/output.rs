@@ -44,8 +44,8 @@ impl<A> EditorOutput<A>
 where
     A: EditorOutputAdapter,
 {
-    pub fn new(adapter: A) -> anyhow::Result<Self> {
-        Ok(Self { adapter })
+    pub fn new(adapter: A) -> Self {
+        Self { adapter }
     }
 
     pub fn render(

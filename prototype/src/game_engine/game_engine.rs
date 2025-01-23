@@ -37,7 +37,7 @@ where
     A: EditorOutputAdapter,
 {
     pub fn new(adapter: A) -> anyhow::Result<Self> {
-        let editor_output = EditorOutput::new(adapter)?;
+        let editor_output = EditorOutput::new(adapter);
 
         Ok(Self {
             host: Host::from_functions(["dim"]),
