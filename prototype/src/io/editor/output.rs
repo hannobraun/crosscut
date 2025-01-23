@@ -147,9 +147,10 @@ fn render_possibly_active_fragment(
     if is_active {
         w.attribute(Attribute::Bold)?;
         write!(w, " => ")?;
+        render_fragment(w, located, adjusted_indent, context)?;
+    } else {
+        render_fragment(w, located, adjusted_indent, context)?;
     }
-
-    render_fragment(w, located, adjusted_indent, context)?;
 
     Ok(())
 }
