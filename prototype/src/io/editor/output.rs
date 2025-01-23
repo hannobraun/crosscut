@@ -358,7 +358,7 @@ struct RenderContext<'r> {
     cursor: Option<[u16; 2]>,
 }
 
-trait EditorOutputAdapter: fmt::Write {
+pub trait EditorOutputAdapter: fmt::Write {
     fn clear(&mut self) -> io::Result<()>;
 
     fn write(&mut self, s: &str) -> io::Result<()>;
