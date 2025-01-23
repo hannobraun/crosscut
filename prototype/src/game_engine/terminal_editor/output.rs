@@ -65,7 +65,7 @@ where
         self.adapter.clear()?;
 
         render_code(&mut self.adapter, &mut context)?;
-        render_prompt(&mut self.adapter, editor_input, editor, &mut context)?;
+        render_prompt(&mut self.adapter, editor_input, &mut context)?;
 
         if let Some([x, y]) = context.cursor {
             self.adapter.move_cursor_to(x, y)?;
@@ -276,7 +276,6 @@ fn render_expression<A: EditorOutputAdapter>(
 fn render_prompt<A: EditorOutputAdapter>(
     adapter: &mut A,
     editor_input: &EditorInput,
-    _: &Editor,
     context: &mut RenderContext,
 ) -> anyhow::Result<()> {
     let mode = match editor_input.mode() {
