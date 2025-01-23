@@ -362,8 +362,6 @@ struct RenderContext<'r> {
 pub trait EditorOutputAdapter: fmt::Write {
     fn clear(&mut self) -> io::Result<()>;
 
-    fn write(&mut self, s: &str) -> io::Result<()>;
-
     fn cursor(&self) -> [u16; 2];
 
     fn move_cursor_to(&mut self, x: u16, y: u16) -> io::Result<()>;
@@ -404,15 +402,6 @@ impl RawTerminalAdapter {
             cursor: [0, 0],
         }
     }
-}
-
-impl EditorOutputAdapter for RawTerminalAdapter {
-    fn clear(&mut self) -> io::Result<()> {
-        self.w.queue(terminal::Clear(ClearType::All))?;
-        self.move_cursor_to(0, 0)?;
-
-        Ok(())
-    }
 
     fn write(&mut self, s: &str) -> io::Result<()> {
         for ch in s.chars() {
@@ -440,6 +429,15 @@ impl EditorOutputAdapter for RawTerminalAdapter {
                 self.cursor[0] += 1;
             }
         }
+
+        Ok(())
+    }
+}
+
+impl EditorOutputAdapter for RawTerminalAdapter {
+    fn clear(&mut self) -> io::Result<()> {
+        self.w.queue(terminal::Clear(ClearType::All))?;
+        self.move_cursor_to(0, 0)?;
 
         Ok(())
     }
