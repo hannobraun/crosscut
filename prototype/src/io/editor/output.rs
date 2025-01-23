@@ -134,9 +134,9 @@ fn render_fragment(
             // that.
             let Some(adjusted) = context.indent.checked_sub(1) else {
                 unreachable!(
-                    "Every fragment body gets one level of indentation. \
-                        The root is a fragment. Hence, we must have at least \
-                        one level of indentation."
+                    "Every fragment body gets one level of indentation. The \
+                    root is a fragment. Hence, we must have at least one level \
+                    of indentation."
                 );
             };
             indent = adjusted;
