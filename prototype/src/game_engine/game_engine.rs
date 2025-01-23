@@ -19,7 +19,7 @@ pub struct GameEngine<A> {
 
 impl GameEngine<DebugOutputAdapter> {
     #[cfg(test)]
-    pub fn without_editor() -> Self {
+    pub fn without_editor_ui() -> Self {
         let adapter = DebugOutputAdapter;
         Self::new(adapter)
     }

@@ -7,7 +7,7 @@ use crate::{
 fn return_to_edit_mode_after_command_execution() {
     // After a command has been executed, the editor should return to edit mode.
 
-    let mut game_engine = GameEngine::without_editor();
+    let mut game_engine = GameEngine::without_editor_ui();
 
     // Start editing the code.
     game_engine.on_code("12");
