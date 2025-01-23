@@ -96,8 +96,8 @@ impl<A> Drop for EditorOutput<A> {
     }
 }
 
-fn render_code(
-    adapter: &mut RawTerminalAdapter,
+fn render_code<A: EditorOutputAdapter>(
+    adapter: &mut A,
     context: &mut RenderContext,
 ) -> anyhow::Result<()> {
     if let Some(interpreter) = context.interpreter {
