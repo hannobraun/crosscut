@@ -124,10 +124,6 @@ fn render_fragment(
 ) -> anyhow::Result<()> {
     let maybe_error = context.code.errors.get(located.location.target());
 
-    if maybe_error.is_some() {
-        w.color(Color::Red)?;
-    }
-
     let mut indent = context.indent;
     if let Some(interpreter) = context.interpreter {
         if Some(located.location.target()) == interpreter.next() {
@@ -211,7 +207,9 @@ fn render_fragment(
             CodeError::UnresolvedIdentifier => "unresolved identifier",
         };
 
+        w.color(Color::Red)?;
         write!(w, "    error: {message}")?;
+        w.reset_color()?;
     }
     writeln!(w)?;
 
