@@ -278,7 +278,7 @@ fn render_expression(
                 }
             };
 
-            adapter.color(color, |w| write!(w, "{name}"))?;
+            adapter.color(color, |adapter| write!(adapter, "{name}"))?;
         }
         Expression::Literal {
             literal: Literal::Integer { value },
