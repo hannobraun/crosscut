@@ -23,7 +23,7 @@ use crate::lang::{
 #[cfg(test)]
 #[allow(unused)] // used sporadically, for debugging tests
 pub fn print_code(code: &Code, host: &Host) {
-    let mut w = EditorOutputAdapter::new();
+    let mut w = RawTerminalAdapter::new();
     let mut context = RenderContext {
         code,
         host,
@@ -37,12 +37,12 @@ pub fn print_code(code: &Code, host: &Host) {
 }
 
 pub struct EditorOutput {
-    w: EditorOutputAdapter,
+    w: RawTerminalAdapter,
 }
 
 impl EditorOutput {
     pub fn new() -> anyhow::Result<Self> {
-        let w = EditorOutputAdapter::new();
+        let w = RawTerminalAdapter::new();
 
         // Nothing forces us to enable raw mode right here. It's also tied to
         // input, so we could enable it there.
@@ -97,7 +97,7 @@ impl Drop for EditorOutput {
 }
 
 fn render_code(
-    w: &mut EditorOutputAdapter,
+    w: &mut RawTerminalAdapter,
     context: &mut RenderContext,
 ) -> anyhow::Result<()> {
     if let Some(interpreter) = context.interpreter {
@@ -118,7 +118,7 @@ fn render_code(
 }
 
 fn render_possibly_active_fragment(
-    w: &mut EditorOutputAdapter,
+    w: &mut RawTerminalAdapter,
     located: Located,
     context: &mut RenderContext,
 ) -> anyhow::Result<()> {
@@ -159,7 +159,7 @@ fn render_possibly_active_fragment(
 }
 
 fn render_fragment(
-    w: &mut EditorOutputAdapter,
+    w: &mut RawTerminalAdapter,
     located: Located,
     adjusted_indent: u32,
     context: &mut RenderContext,
@@ -243,13 +243,13 @@ fn render_fragment(
     Ok(())
 }
 
-fn render_indent(w: &mut EditorOutputAdapter) -> anyhow::Result<()> {
+fn render_indent(w: &mut RawTerminalAdapter) -> anyhow::Result<()> {
     write!(w, "    ")?;
     Ok(())
 }
 
 fn render_expression(
-    w: &mut EditorOutputAdapter,
+    w: &mut RawTerminalAdapter,
     expression: &Expression,
     context: &RenderContext,
 ) -> anyhow::Result<()> {
@@ -287,7 +287,7 @@ fn render_expression(
 }
 
 fn render_prompt(
-    w: &mut EditorOutputAdapter,
+    w: &mut RawTerminalAdapter,
     editor: &Editor,
     context: &mut RenderContext,
 ) -> anyhow::Result<()> {
@@ -360,12 +360,12 @@ struct RenderContext<'r> {
 /// can't be done without causing a flush, which leads to visual artifacts when
 /// then resuming the rendering. As a result, we at least need something to
 /// track the cursor position throughout the render. Hence this adapter.
-struct EditorOutputAdapter {
+struct RawTerminalAdapter {
     w: Stdout,
     cursor: [u16; 2],
 }
 
-impl EditorOutputAdapter {
+impl RawTerminalAdapter {
     fn new() -> Self {
         Self {
             w: stdout(),
@@ -445,7 +445,7 @@ impl EditorOutputAdapter {
     }
 }
 
-impl fmt::Write for EditorOutputAdapter {
+impl fmt::Write for RawTerminalAdapter {
     fn write_str(&mut self, s: &str) -> fmt::Result {
         self.write(s).map_err(|_| fmt::Error)
     }
