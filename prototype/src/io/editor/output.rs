@@ -36,11 +36,11 @@ pub fn print_code(code: &Code, host: &Host) {
     render_code(&mut w, &mut context).unwrap();
 }
 
-pub struct EditorOutput {
-    adapter: RawTerminalAdapter,
+pub struct EditorOutput<A> {
+    adapter: A,
 }
 
-impl EditorOutput {
+impl EditorOutput<RawTerminalAdapter> {
     pub fn new() -> anyhow::Result<Self> {
         let adapter = RawTerminalAdapter::new();
 
@@ -89,7 +89,7 @@ impl EditorOutput {
     }
 }
 
-impl Drop for EditorOutput {
+impl<A> Drop for EditorOutput<A> {
     fn drop(&mut self) {
         // Nothing we can do about a potential error here.
         let _ = terminal::disable_raw_mode();

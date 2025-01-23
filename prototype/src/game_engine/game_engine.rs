@@ -1,5 +1,5 @@
 use crate::{
-    io::editor::output::EditorOutput,
+    io::editor::output::{EditorOutput, RawTerminalAdapter},
     lang::{
         self, editor,
         host::Host,
@@ -11,7 +11,7 @@ pub struct GameEngine {
     host: Host,
     lang: lang::Instance,
     game_output: Vec<GameOutput>,
-    editor_output: EditorOutput,
+    editor_output: EditorOutput<RawTerminalAdapter>,
 }
 
 impl GameEngine {
