@@ -8,17 +8,6 @@ use crate::lang::{
 use super::code::Location;
 
 /// # Platform-independent and I/O-less editor core
-///
-/// ## Implementation Note
-///
-/// For being platform-independent, the input that this API processes is a bit
-/// too specific, dealing with the identity of specific keys.
-///
-/// For now, this is fine. But eventually, I think we should extract a
-/// translation layer. This translation layer can still be platform-independent,
-/// but can translate from specific key presses to more higher-level concepts,
-/// like "go to parent" or "leave current context", instead of "up" and
-/// "escape".
 #[derive(Debug)]
 pub struct Editor {
     editing: Location,
