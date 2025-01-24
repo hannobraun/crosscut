@@ -96,7 +96,7 @@ impl TerminalEditorInput {
                 TerminalInputEvent::Enter => {}
                 TerminalInputEvent::Left => {
                     editor.on_input(
-                        EditorInputEvent::Left,
+                        EditorInputEvent::MoveCursorLeft,
                         code,
                         interpreter,
                         host,

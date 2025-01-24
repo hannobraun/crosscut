@@ -77,7 +77,7 @@ impl Editor {
                 self.input.remove_left();
                 self.process_code(code, interpreter, host);
             }
-            EditorInputEvent::Left => {
+            EditorInputEvent::MoveCursorLeft => {
                 self.input.move_cursor_left();
             }
             EditorInputEvent::Right => {
@@ -178,7 +178,7 @@ pub enum EditorInputEvent {
     Character { ch: char },
 
     RemoveCharacterLeft,
-    Left,
+    MoveCursorLeft,
     Right,
 }
 
