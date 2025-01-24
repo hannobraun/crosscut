@@ -3,13 +3,16 @@ use crate::{
         DebugOutputAdapter, EditorOutputAdapter, RawTerminalAdapter,
     },
     lang::{
-        self, editor,
+        self,
         host::Host,
         interpreter::{StepResult, Value},
     },
 };
 
-use super::terminal_editor::{input::EditorInput, output::EditorOutput};
+use super::{
+    terminal_editor::{input::EditorInput, output::EditorOutput},
+    TerminalInput,
+};
 
 pub struct GameEngine<A> {
     host: Host,
@@ -64,7 +67,7 @@ where
 
     pub fn on_editor_input(
         &mut self,
-        event: editor::InputEvent,
+        event: TerminalInput,
     ) -> anyhow::Result<()> {
         self.editor_input.on_input(
             event,
@@ -144,7 +147,7 @@ where
 
     #[cfg(test)]
     pub fn on_char(&mut self, ch: char) {
-        self.on_editor_input(editor::InputEvent::Char { value: ch })
+        self.on_editor_input(TerminalInput::Char { value: ch })
             .unwrap();
     }
 }

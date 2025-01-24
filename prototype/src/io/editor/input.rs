@@ -2,10 +2,10 @@ use std::{ops::ControlFlow, time::Duration};
 
 use crossterm::event::{self, Event, KeyCode, KeyModifiers};
 
-use crate::lang::editor::InputEvent;
+use crate::game_engine::TerminalInput;
 
-pub fn read_editor_event() -> anyhow::Result<ControlFlow<(), Option<InputEvent>>>
-{
+pub fn read_editor_event(
+) -> anyhow::Result<ControlFlow<(), Option<TerminalInput>>> {
     let timeout = Duration::from_millis(50);
     let event_ready = event::poll(timeout)?;
 
@@ -43,14 +43,14 @@ pub fn read_editor_event() -> anyhow::Result<ControlFlow<(), Option<InputEvent>>
             // placeholder anyway. So I think restricting input to ASCII
             // characters is a reasonable compromise.
 
-            Some(InputEvent::Char { value: ch })
+            Some(TerminalInput::Char { value: ch })
         }
 
-        KeyCode::Backspace => Some(InputEvent::Backspace),
-        KeyCode::Enter => Some(InputEvent::Enter),
-        KeyCode::Left => Some(InputEvent::Left),
-        KeyCode::Right => Some(InputEvent::Right),
-        KeyCode::Esc => Some(InputEvent::Escape),
+        KeyCode::Backspace => Some(TerminalInput::Backspace),
+        KeyCode::Enter => Some(TerminalInput::Enter),
+        KeyCode::Left => Some(TerminalInput::Left),
+        KeyCode::Right => Some(TerminalInput::Right),
+        KeyCode::Esc => Some(TerminalInput::Escape),
         _ => None,
     };
 

@@ -1,7 +1,4 @@
-use crate::{
-    game_engine::{GameEngine, GameOutput},
-    lang::editor::InputEvent,
-};
+use crate::game_engine::{GameEngine, GameOutput, TerminalInput};
 
 #[test]
 fn return_to_edit_mode_after_command_execution() {
@@ -13,9 +10,9 @@ fn return_to_edit_mode_after_command_execution() {
     game_engine.on_code("12");
 
     // Execute a command in between editing.
-    game_engine.on_editor_input(InputEvent::Escape).unwrap();
+    game_engine.on_editor_input(TerminalInput::Escape).unwrap();
     game_engine.on_input("nop");
-    game_engine.on_editor_input(InputEvent::Enter).unwrap();
+    game_engine.on_editor_input(TerminalInput::Enter).unwrap();
 
     // Drain output. We're only interested in the result of the next change.
     let _ = game_engine.game_output();
@@ -41,9 +38,9 @@ fn abort_command_without_executing_on_escape_key() {
     game_engine.on_code("12");
 
     // Enter a command, but abort it.
-    game_engine.on_editor_input(InputEvent::Escape).unwrap();
+    game_engine.on_editor_input(TerminalInput::Escape).unwrap();
     game_engine.on_input("clear");
-    game_engine.on_editor_input(InputEvent::Escape).unwrap();
+    game_engine.on_editor_input(TerminalInput::Escape).unwrap();
 
     // Drain output. We're only interested in the result of the next change.
     let _ = game_engine.game_output();

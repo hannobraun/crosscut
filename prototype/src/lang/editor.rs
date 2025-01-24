@@ -84,7 +84,6 @@ impl Editor {
             InputEvent::Right => {
                 self.input.move_cursor_right();
             }
-            InputEvent::Escape => {}
         }
     }
 
@@ -175,7 +174,6 @@ pub enum InputEvent {
     Enter,
     Left,
     Right,
-    Escape,
 }
 
 pub enum Command {
