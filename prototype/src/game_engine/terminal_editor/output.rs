@@ -4,7 +4,7 @@ use crate::{
     io::editor::output::EditorOutputAdapter,
     lang::{
         code::{
-            Codebase, CodeError, Expression, FragmentError, FragmentKind,
+            CodeError, Codebase, Expression, FragmentError, FragmentKind,
             FunctionCallTarget, Literal, Located,
         },
         editor::Editor,

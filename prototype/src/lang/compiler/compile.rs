@@ -2,7 +2,7 @@ use std::num::IntErrorKind;
 
 use crate::lang::{
     code::{
-        Body, Codebase, CodeError, Expression, Fragment, FragmentError,
+        Body, CodeError, Codebase, Expression, Fragment, FragmentError,
         FragmentKind, FunctionCallTarget, Literal, Location,
     },
     host::Host,

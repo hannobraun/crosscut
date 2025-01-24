@@ -1,7 +1,7 @@
 use itertools::Itertools;
 
 use crate::lang::{
-    code::{Codebase, CodeError},
+    code::{CodeError, Codebase},
     compiler::tests::infra::compile_all,
     host::Host,
 };
