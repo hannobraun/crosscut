@@ -51,13 +51,13 @@ impl Editor {
 
     pub fn on_input(
         &mut self,
-        event: InputEvent,
+        event: EditorInputEvent,
         code: &mut Code,
         interpreter: &mut Interpreter,
         host: &Host,
     ) {
         match event {
-            InputEvent::Char { value } => {
+            EditorInputEvent::Char { value } => {
                 if value.is_whitespace() {
                     self.editing = code.append_to(
                         &code.find_innermost_fragment_with_valid_body(),
@@ -73,15 +73,15 @@ impl Editor {
                     self.process_code(code, interpreter, host);
                 }
             }
-            InputEvent::Backspace => {
+            EditorInputEvent::Backspace => {
                 self.input.remove_left();
                 self.process_code(code, interpreter, host);
             }
-            InputEvent::Enter => {}
-            InputEvent::Left => {
+            EditorInputEvent::Enter => {}
+            EditorInputEvent::Left => {
                 self.input.move_cursor_left();
             }
-            InputEvent::Right => {
+            EditorInputEvent::Right => {
                 self.input.move_cursor_right();
             }
         }
@@ -175,7 +175,7 @@ impl EditorInput {
 }
 
 #[derive(Debug)]
-pub enum InputEvent {
+pub enum EditorInputEvent {
     Char { value: char },
 
     Backspace,

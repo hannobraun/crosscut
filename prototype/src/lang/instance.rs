@@ -2,7 +2,7 @@ use super::{code::Code, editor::Editor, interpreter::Interpreter};
 
 #[cfg(test)]
 use super::{
-    editor::{Command, InputEvent},
+    editor::{Command, EditorInputEvent},
     host::Host,
     interpreter::{InterpreterState, Value},
 };
@@ -41,11 +41,11 @@ impl Instance {
 
     #[cfg(test)]
     pub fn on_char(&mut self, ch: char, host: &Host) {
-        self.on_event(InputEvent::Char { value: ch }, host);
+        self.on_event(EditorInputEvent::Char { value: ch }, host);
     }
 
     #[cfg(test)]
-    pub fn on_event(&mut self, event: InputEvent, host: &Host) {
+    pub fn on_event(&mut self, event: EditorInputEvent, host: &Host) {
         self.editor.on_input(
             event,
             &mut self.code,

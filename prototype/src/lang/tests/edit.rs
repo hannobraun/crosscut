@@ -1,6 +1,6 @@
 use crate::lang::{
     self,
-    editor::InputEvent,
+    editor::EditorInputEvent,
     host::Host,
     interpreter::{StepResult, Value},
 };
@@ -47,7 +47,7 @@ fn update_on_backspace() {
         },
     );
 
-    lang.on_event(InputEvent::Backspace, &host);
+    lang.on_event(EditorInputEvent::Backspace, &host);
     assert_eq!(
         lang.interpreter.step(&lang.code),
         StepResult::Finished {

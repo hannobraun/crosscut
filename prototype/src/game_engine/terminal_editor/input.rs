@@ -5,7 +5,7 @@ use std::{
 
 use crate::lang::{
     code::Code,
-    editor::{Command, Editor, EditorInput, InputEvent},
+    editor::{Command, Editor, EditorInput, EditorInputEvent},
     host::Host,
     interpreter::Interpreter,
 };
@@ -79,7 +79,7 @@ impl TerminalEditorInput {
             EditorMode::Edit => match event {
                 TerminalInputEvent::Char { value } => {
                     editor.on_input(
-                        InputEvent::Char { value },
+                        EditorInputEvent::Char { value },
                         code,
                         interpreter,
                         host,
@@ -87,20 +87,35 @@ impl TerminalEditorInput {
                 }
                 TerminalInputEvent::Backspace => {
                     editor.on_input(
-                        InputEvent::Backspace,
+                        EditorInputEvent::Backspace,
                         code,
                         interpreter,
                         host,
                     );
                 }
                 TerminalInputEvent::Enter => {
-                    editor.on_input(InputEvent::Enter, code, interpreter, host);
+                    editor.on_input(
+                        EditorInputEvent::Enter,
+                        code,
+                        interpreter,
+                        host,
+                    );
                 }
                 TerminalInputEvent::Left => {
-                    editor.on_input(InputEvent::Left, code, interpreter, host);
+                    editor.on_input(
+                        EditorInputEvent::Left,
+                        code,
+                        interpreter,
+                        host,
+                    );
                 }
                 TerminalInputEvent::Right => {
-                    editor.on_input(InputEvent::Right, code, interpreter, host);
+                    editor.on_input(
+                        EditorInputEvent::Right,
+                        code,
+                        interpreter,
+                        host,
+                    );
                 }
                 TerminalInputEvent::Escape => {
                     self.mode = EditorMode::Command {
