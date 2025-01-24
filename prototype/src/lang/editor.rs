@@ -57,8 +57,8 @@ impl Editor {
         host: &Host,
     ) {
         match event {
-            EditorInputEvent::Character { ch: value } => {
-                if value.is_whitespace() {
+            EditorInputEvent::Character { ch } => {
+                if ch.is_whitespace() {
                     self.editing = code.append_to(
                         &code.find_innermost_fragment_with_valid_body(),
                         Fragment {
@@ -69,7 +69,7 @@ impl Editor {
 
                     self.input.clear();
                 } else {
-                    self.input.insert(value);
+                    self.input.insert(ch);
                     self.process_code(code, interpreter, host);
                 }
             }
