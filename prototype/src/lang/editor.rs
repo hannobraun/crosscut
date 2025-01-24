@@ -130,7 +130,7 @@ impl Editor {
 #[derive(Debug, Eq, PartialEq)]
 pub struct EditorInput {
     buffer: String,
-    pub cursor: usize,
+    cursor: usize,
 }
 
 impl EditorInput {
