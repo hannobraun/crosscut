@@ -77,13 +77,35 @@ impl EditorInput {
                 }
             },
             EditorMode::Edit => match event {
+                InputEvent::Char { value } => {
+                    editor.on_input(
+                        InputEvent::Char { value },
+                        code,
+                        interpreter,
+                        host,
+                    );
+                }
+                InputEvent::Backspace => {
+                    editor.on_input(
+                        InputEvent::Backspace,
+                        code,
+                        interpreter,
+                        host,
+                    );
+                }
+                InputEvent::Enter => {
+                    editor.on_input(InputEvent::Enter, code, interpreter, host);
+                }
+                InputEvent::Left => {
+                    editor.on_input(InputEvent::Left, code, interpreter, host);
+                }
+                InputEvent::Right => {
+                    editor.on_input(InputEvent::Right, code, interpreter, host);
+                }
                 InputEvent::Escape => {
                     self.mode = EditorMode::Command {
                         input: EditorInputState::new(String::new()),
                     };
-                }
-                event => {
-                    editor.on_input(event, code, interpreter, host);
                 }
             },
         }
