@@ -1,5 +1,5 @@
 mod body;
-mod code;
+mod codebase;
 mod errors;
 mod fragments;
 mod location;
@@ -7,7 +7,7 @@ mod replacements;
 
 pub use self::{
     body::Body,
-    code::{Codebase, Expression, FunctionCallTarget, Literal},
+    codebase::{Codebase, Expression, FunctionCallTarget, Literal},
     errors::CodeError,
     fragments::{Fragment, FragmentError, FragmentId, FragmentKind, Fragments},
     location::{Located, Location},
