@@ -48,7 +48,7 @@ impl TerminalEditorInput {
     ) {
         match &mut self.mode {
             EditorMode::Command { input } => match event {
-                TerminalInputEvent::Character { value } => {
+                TerminalInputEvent::Character { ch: value } => {
                     input.insert(value);
                 }
                 TerminalInputEvent::Backspace => {
@@ -77,7 +77,7 @@ impl TerminalEditorInput {
                 }
             },
             EditorMode::Edit => match event {
-                TerminalInputEvent::Character { value } => {
+                TerminalInputEvent::Character { ch: value } => {
                     editor.on_input(
                         EditorInputEvent::Character { ch: value },
                         code,
@@ -193,7 +193,7 @@ pub enum EditorError {
 
 #[derive(Debug)]
 pub enum TerminalInputEvent {
-    Character { value: char },
+    Character { ch: char },
 
     Backspace,
     Enter,

@@ -43,7 +43,7 @@ pub fn read_editor_event(
             // placeholder anyway. So I think restricting input to ASCII
             // characters is a reasonable compromise.
 
-            Some(TerminalInputEvent::Character { value: ch })
+            Some(TerminalInputEvent::Character { ch })
         }
 
         KeyCode::Backspace => Some(TerminalInputEvent::Backspace),

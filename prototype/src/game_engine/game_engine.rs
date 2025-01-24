@@ -147,7 +147,7 @@ where
 
     #[cfg(test)]
     pub fn on_char(&mut self, ch: char) {
-        self.on_editor_input(TerminalInputEvent::Character { value: ch })
+        self.on_editor_input(TerminalInputEvent::Character { ch })
             .unwrap();
     }
 }
