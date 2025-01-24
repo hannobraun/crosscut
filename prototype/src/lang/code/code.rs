@@ -5,6 +5,9 @@ use super::{
     Location, Replacements,
 };
 
+/// # The complete codebase of the program
+///
+/// Alternatively, the name can be seen as a contraction of "code database".
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub struct Codebase {
     fragments: Fragments,
