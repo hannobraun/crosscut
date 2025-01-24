@@ -8,6 +8,15 @@ use super::{
 /// # The complete codebase of the program
 ///
 /// Alternatively, the name can be seen as a contraction of "code database".
+/// 
+/// This is an append-only data structure. Old fragments are never removed. They
+/// are just replaced by new ones, and become inaccessible via the root.
+/// 
+/// ## Implementation Note
+/// 
+/// This data structure only ever grows. There needs to be some kind of garbage
+/// collection eventually. As well as some way to control what can be collected,
+/// and what should be kept as history.
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub struct Codebase {
     fragments: Fragments,
