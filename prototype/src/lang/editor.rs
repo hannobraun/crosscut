@@ -177,9 +177,9 @@ impl EditorInput {
 pub enum EditorInputEvent {
     Character { ch: char },
 
-    RemoveCharacterLeft,
     MoveCursorLeft,
     MoveCursorRight,
+    RemoveCharacterLeft,
 }
 
 pub enum Command {
