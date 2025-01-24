@@ -48,8 +48,8 @@ impl TerminalEditorInput {
     ) {
         match &mut self.mode {
             EditorMode::Command { input } => match event {
-                TerminalInputEvent::Character { ch: value } => {
-                    input.insert(value);
+                TerminalInputEvent::Character { ch } => {
+                    input.insert(ch);
                 }
                 TerminalInputEvent::Backspace => {
                     input.remove_left();
