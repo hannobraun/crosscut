@@ -1,5 +1,5 @@
 use super::code::{
-    Body, Code, Expression, FragmentId, FragmentKind, FunctionCallTarget,
+    Body, Codebase, Expression, FragmentId, FragmentKind, FunctionCallTarget,
     Literal,
 };
 
@@ -10,7 +10,7 @@ pub struct Interpreter {
 }
 
 impl Interpreter {
-    pub fn new(code: &Code) -> Self {
+    pub fn new(code: &Codebase) -> Self {
         let next = code.root().fragment.body.entry().copied();
 
         Self {
@@ -19,14 +19,14 @@ impl Interpreter {
         }
     }
 
-    pub fn reset(&mut self, code: &Code) {
+    pub fn reset(&mut self, code: &Codebase) {
         // Let's use re-use the constructor instead of trying to do anything
         // more advanced (and possibly efficient) here. That way, we make sure
         // we're never going to forget to reset anything specific.
         *self = Self::new(code);
     }
 
-    pub fn update(&mut self, code: &Code) {
+    pub fn update(&mut self, code: &Codebase) {
         if let Some(id) = &mut self.next {
             *id = code.latest_version_of(id);
         }
@@ -41,7 +41,7 @@ impl Interpreter {
         self.next.as_ref()
     }
 
-    pub fn state(&self, code: &Code) -> InterpreterState {
+    pub fn state(&self, code: &Codebase) -> InterpreterState {
         use InterpreterState::*;
 
         match self.next_expression(code) {
@@ -54,7 +54,7 @@ impl Interpreter {
         }
     }
 
-    pub fn step(&mut self, code: &Code) -> StepResult {
+    pub fn step(&mut self, code: &Codebase) -> StepResult {
         loop {
             let NextExpression::Expression {
                 expression,
@@ -122,7 +122,10 @@ impl Interpreter {
         }
     }
 
-    pub fn next_expression<'r>(&self, code: &'r Code) -> NextExpression<'r> {
+    pub fn next_expression<'r>(
+        &self,
+        code: &'r Codebase,
+    ) -> NextExpression<'r> {
         let Some(id) = self.next else {
             return NextExpression::NoMoreFragments;
         };

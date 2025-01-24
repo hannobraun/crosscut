@@ -1,4 +1,4 @@
-use super::{code::Code, editor::Editor, interpreter::Interpreter};
+use super::{code::Codebase, editor::Editor, interpreter::Interpreter};
 
 #[cfg(test)]
 use super::{
@@ -9,14 +9,14 @@ use super::{
 
 #[derive(Debug)]
 pub struct Instance {
-    pub code: Code,
+    pub code: Codebase,
     pub editor: Editor,
     pub interpreter: Interpreter,
 }
 
 impl Instance {
     pub fn new() -> Self {
-        let mut code = Code::default();
+        let mut code = Codebase::default();
         let editor = Editor::new(&mut code);
         let interpreter = Interpreter::new(&code);
 

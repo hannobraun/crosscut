@@ -2,7 +2,7 @@ use std::num::IntErrorKind;
 
 use crate::lang::{
     code::{
-        Body, Code, CodeError, Expression, Fragment, FragmentError,
+        Body, Codebase, CodeError, Expression, Fragment, FragmentError,
         FragmentKind, FunctionCallTarget, Literal, Location,
     },
     host::Host,
@@ -12,7 +12,7 @@ pub fn compile_and_replace(
     token: &str,
     to_replace: &Location,
     host: &Host,
-    code: &mut Code,
+    code: &mut Codebase,
 ) -> Location {
     let location_of_compiled_fragment = code.replace(
         to_replace,
@@ -76,7 +76,7 @@ fn parse_token(token: &str, host: &Host) -> FragmentKind {
     }
 }
 
-fn handle_errors(location: &Location, code: &mut Code) {
+fn handle_errors(location: &Location, code: &mut Codebase) {
     let fragment = code.fragments().get(location.target());
 
     match &fragment.kind {

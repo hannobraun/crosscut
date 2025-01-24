@@ -1,6 +1,6 @@
 use crate::lang::{
     self,
-    code::Code,
+    code::Codebase,
     host::Host,
     interpreter::{Interpreter, StepResult, Value},
 };
@@ -31,7 +31,7 @@ fn compile_and_run(input_code: &str) -> Value {
     run(&lang.code, &mut lang.interpreter)
 }
 
-fn run(code: &Code, interpreter: &mut Interpreter) -> Value {
+fn run(code: &Codebase, interpreter: &mut Interpreter) -> Value {
     loop {
         match interpreter.step(code) {
             StepResult::CallToHostFunction { id, input, output } => {

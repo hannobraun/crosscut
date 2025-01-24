@@ -6,7 +6,7 @@ use super::{
 };
 
 #[derive(Clone, Debug, Eq, PartialEq)]
-pub struct Code {
+pub struct Codebase {
     fragments: Fragments,
     root: FragmentId,
     replacements: Replacements,
@@ -14,7 +14,7 @@ pub struct Code {
     pub errors: BTreeMap<FragmentId, CodeError>,
 }
 
-impl Code {
+impl Codebase {
     pub fn new() -> Self {
         let mut fragments = Fragments::default();
 
@@ -139,7 +139,7 @@ impl Code {
     }
 }
 
-impl Default for Code {
+impl Default for Codebase {
     fn default() -> Self {
         Self::new()
     }
@@ -166,11 +166,11 @@ pub enum Literal {
 mod tests {
     use crate::lang::code::{Body, Fragment, FragmentKind, Location};
 
-    use super::{Code, Expression, FunctionCallTarget};
+    use super::{Codebase, Expression, FunctionCallTarget};
 
     #[test]
     fn append_return_location() {
-        let mut code = Code::new();
+        let mut code = Codebase::new();
 
         let a = call(0);
         let b = call(1);

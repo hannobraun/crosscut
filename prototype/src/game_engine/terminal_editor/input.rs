@@ -4,7 +4,7 @@ use std::{
 };
 
 use crate::lang::{
-    code::Code,
+    code::Codebase,
     editor::{Command, Editor, EditorInput, EditorInputEvent},
     host::Host,
     interpreter::Interpreter,
@@ -42,7 +42,7 @@ impl TerminalEditorInput {
         &mut self,
         event: TerminalInputEvent,
         editor: &mut Editor,
-        code: &mut Code,
+        code: &mut Codebase,
         interpreter: &mut Interpreter,
         host: &Host,
     ) {

@@ -7,7 +7,7 @@ mod replacements;
 
 pub use self::{
     body::Body,
-    code::{Code, Expression, FunctionCallTarget, Literal},
+    code::{Codebase, Expression, FunctionCallTarget, Literal},
     errors::CodeError,
     fragments::{Fragment, FragmentError, FragmentId, FragmentKind, Fragments},
     location::{Located, Location},

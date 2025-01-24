@@ -1,5 +1,5 @@
 use crate::lang::{
-    code::{Body, Code, Fragment, FragmentKind},
+    code::{Body, Codebase, Fragment, FragmentKind},
     compiler::compile_and_replace,
     host::Host,
     interpreter::Interpreter,
@@ -15,7 +15,7 @@ pub struct Editor {
 }
 
 impl Editor {
-    pub fn new(code: &mut Code) -> Self {
+    pub fn new(code: &mut Codebase) -> Self {
         let editing = code.append_to(
             &code.find_innermost_fragment_with_valid_body(),
             Fragment {
@@ -41,7 +41,7 @@ impl Editor {
     pub fn on_input(
         &mut self,
         event: EditorInputEvent,
-        code: &mut Code,
+        code: &mut Codebase,
         interpreter: &mut Interpreter,
         host: &Host,
     ) {
@@ -77,7 +77,7 @@ impl Editor {
 
     fn process_code(
         &mut self,
-        code: &mut Code,
+        code: &mut Codebase,
         interpreter: &mut Interpreter,
         host: &Host,
     ) {
@@ -94,12 +94,12 @@ impl Editor {
     pub fn on_command(
         &mut self,
         command: Command,
-        code: &mut Code,
+        code: &mut Codebase,
         interpreter: &mut Interpreter,
     ) {
         match command {
             Command::Clear => {
-                *code = Code::default();
+                *code = Codebase::default();
                 *self = Self::new(code);
                 interpreter.reset(code);
             }

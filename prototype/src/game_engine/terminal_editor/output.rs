@@ -4,7 +4,7 @@ use crate::{
     io::editor::output::EditorOutputAdapter,
     lang::{
         code::{
-            Code, CodeError, Expression, FragmentError, FragmentKind,
+            Codebase, CodeError, Expression, FragmentError, FragmentKind,
             FunctionCallTarget, Literal, Located,
         },
         editor::Editor,
@@ -17,7 +17,7 @@ use super::input::{EditorError, EditorMode, TerminalEditorInput};
 
 #[cfg(test)]
 #[allow(unused)] // used sporadically, for debugging tests
-pub fn print_code(code: &Code, host: &Host) {
+pub fn print_code(code: &Codebase, host: &Host) {
     use crate::io::editor::output::DebugOutputAdapter;
 
     let mut adapter = DebugOutputAdapter;
@@ -49,7 +49,7 @@ where
         &mut self,
         editor_input: &TerminalEditorInput,
         editor: &Editor,
-        code: &Code,
+        code: &Codebase,
         interpreter: &Interpreter,
         host: &Host,
     ) -> anyhow::Result<()> {
@@ -333,7 +333,7 @@ fn render_prompt<A: EditorOutputAdapter>(
 }
 
 struct RenderContext<'r> {
-    code: &'r Code,
+    code: &'r Codebase,
     editor: Option<(&'r TerminalEditorInput, &'r Editor)>,
     interpreter: Option<&'r Interpreter>,
     host: &'r Host,
