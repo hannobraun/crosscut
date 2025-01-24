@@ -79,7 +79,7 @@ impl TerminalEditorInput {
             EditorMode::Edit => match event {
                 TerminalInputEvent::Char { value } => {
                     editor.on_input(
-                        EditorInputEvent::Character { value },
+                        EditorInputEvent::Character { ch: value },
                         code,
                         interpreter,
                         host,

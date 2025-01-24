@@ -41,7 +41,7 @@ impl Instance {
 
     #[cfg(test)]
     pub fn on_char(&mut self, ch: char, host: &Host) {
-        self.on_event(EditorInputEvent::Character { value: ch }, host);
+        self.on_event(EditorInputEvent::Character { ch }, host);
     }
 
     #[cfg(test)]
