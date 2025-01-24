@@ -93,14 +93,7 @@ impl TerminalEditorInput {
                         host,
                     );
                 }
-                TerminalInputEvent::Enter => {
-                    editor.on_input(
-                        EditorInputEvent::Enter,
-                        code,
-                        interpreter,
-                        host,
-                    );
-                }
+                TerminalInputEvent::Enter => {}
                 TerminalInputEvent::Left => {
                     editor.on_input(
                         EditorInputEvent::Left,
