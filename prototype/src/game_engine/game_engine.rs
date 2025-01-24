@@ -10,7 +10,7 @@ use crate::{
 };
 
 use super::{
-    terminal_editor::{input::EditorInput, output::EditorOutput},
+    terminal_editor::{input::TerminalEditorInput, output::EditorOutput},
     TerminalInputEvent,
 };
 
@@ -18,7 +18,7 @@ pub struct GameEngine<A> {
     host: Host,
     lang: lang::Instance,
     game_output: Vec<GameOutput>,
-    editor_input: EditorInput,
+    editor_input: TerminalEditorInput,
     editor_output: EditorOutput<A>,
 }
 
@@ -48,7 +48,7 @@ where
             host: Host::from_functions(["dim"]),
             lang: lang::Instance::new(),
             game_output: Vec::new(),
-            editor_input: EditorInput::new(),
+            editor_input: TerminalEditorInput::new(),
             editor_output,
         }
     }

@@ -10,13 +10,13 @@ use crate::lang::{
     interpreter::Interpreter,
 };
 
-pub struct EditorInput {
+pub struct TerminalEditorInput {
     mode: EditorMode,
     error: Option<EditorError>,
     commands: BTreeSet<&'static str>,
 }
 
-impl EditorInput {
+impl TerminalEditorInput {
     pub fn new() -> Self {
         let mut commands = BTreeSet::new();
         commands.insert("clear");

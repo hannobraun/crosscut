@@ -13,7 +13,7 @@ use crate::{
     },
 };
 
-use super::input::{EditorError, EditorInput, EditorMode};
+use super::input::{EditorError, EditorMode, TerminalEditorInput};
 
 #[cfg(test)]
 #[allow(unused)] // used sporadically, for debugging tests
@@ -47,7 +47,7 @@ where
 
     pub fn render(
         &mut self,
-        editor_input: &EditorInput,
+        editor_input: &TerminalEditorInput,
         editor: &Editor,
         code: &Code,
         interpreter: &Interpreter,
@@ -275,7 +275,7 @@ fn render_expression<A: EditorOutputAdapter>(
 
 fn render_prompt<A: EditorOutputAdapter>(
     adapter: &mut A,
-    editor_input: &EditorInput,
+    editor_input: &TerminalEditorInput,
     context: &mut RenderContext,
 ) -> anyhow::Result<()> {
     let mode = match editor_input.mode() {
@@ -334,7 +334,7 @@ fn render_prompt<A: EditorOutputAdapter>(
 
 struct RenderContext<'r> {
     code: &'r Code,
-    editor: Option<(&'r EditorInput, &'r Editor)>,
+    editor: Option<(&'r TerminalEditorInput, &'r Editor)>,
     interpreter: Option<&'r Interpreter>,
     host: &'r Host,
     indent: u32,
