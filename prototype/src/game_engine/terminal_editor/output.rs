@@ -162,7 +162,7 @@ fn render_fragment<A: EditorOutputAdapter>(
                 let [x, y] = adapter.cursor();
                 let x = {
                     let x: usize = x.into();
-                    let x = x.saturating_add(editor.input().cursor);
+                    let x = x.saturating_add(editor.input().cursor());
                     let x: u16 = x.try_into().unwrap_or(u16::MAX);
                     x
                 };
@@ -313,7 +313,7 @@ fn render_prompt<A: EditorOutputAdapter>(
                 let [x, y] = adapter.cursor();
                 let x = {
                     let x: usize = x.into();
-                    let x = x.saturating_add(input.cursor);
+                    let x = x.saturating_add(input.cursor());
                     let x: u16 = x.try_into().unwrap_or(u16::MAX);
                     x
                 };

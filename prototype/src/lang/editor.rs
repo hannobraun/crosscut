@@ -143,6 +143,10 @@ impl EditorInput {
         &self.buffer
     }
 
+    pub fn cursor(&self) -> usize {
+        self.cursor
+    }
+
     pub fn insert(&mut self, ch: char) {
         self.buffer.insert(self.cursor, ch);
         self.move_cursor_right();
