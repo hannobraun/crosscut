@@ -57,7 +57,7 @@ impl Editor {
         host: &Host,
     ) {
         match event {
-            EditorInputEvent::Char { value } => {
+            EditorInputEvent::Character { value } => {
                 if value.is_whitespace() {
                     self.editing = code.append_to(
                         &code.find_innermost_fragment_with_valid_body(),
@@ -176,7 +176,7 @@ impl EditorInput {
 
 #[derive(Debug)]
 pub enum EditorInputEvent {
-    Char { value: char },
+    Character { value: char },
 
     Backspace,
     Enter,
