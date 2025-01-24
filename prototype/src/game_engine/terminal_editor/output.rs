@@ -321,7 +321,7 @@ fn render_prompt<A: EditorOutputAdapter>(
                 Some([x, y])
             };
 
-            write!(adapter, "{}", input.buffer)?;
+            write!(adapter, "{}", input.buffer())?;
         }
         EditorMode::Edit { .. } => {
             // If we're in edit mode, the editing happens directly where the

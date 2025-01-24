@@ -116,7 +116,7 @@ fn parse_command(
     input: &mut EditorInput,
     commands: &BTreeSet<&'static str>,
 ) -> Result<Command, EditorError> {
-    let command = &input.buffer;
+    let command = input.buffer();
 
     let mut candidates = commands
         .iter()
