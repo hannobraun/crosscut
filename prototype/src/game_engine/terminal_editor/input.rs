@@ -104,7 +104,7 @@ impl TerminalEditorInput {
                 }
                 TerminalInputEvent::Right => {
                     editor.on_input(
-                        EditorInputEvent::Right,
+                        EditorInputEvent::MoveCursorRight,
                         code,
                         interpreter,
                         host,

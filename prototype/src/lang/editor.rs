@@ -80,7 +80,7 @@ impl Editor {
             EditorInputEvent::MoveCursorLeft => {
                 self.input.move_cursor_left();
             }
-            EditorInputEvent::Right => {
+            EditorInputEvent::MoveCursorRight => {
                 self.input.move_cursor_right();
             }
         }
@@ -179,7 +179,7 @@ pub enum EditorInputEvent {
 
     RemoveCharacterLeft,
     MoveCursorLeft,
-    Right,
+    MoveCursorRight,
 }
 
 pub enum Command {
