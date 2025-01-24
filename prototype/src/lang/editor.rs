@@ -22,7 +22,7 @@ use super::code::Location;
 #[derive(Debug)]
 pub struct Editor {
     editing: Location,
-    input: EditorInputState,
+    input: EditorInput,
 }
 
 impl Editor {
@@ -37,7 +37,7 @@ impl Editor {
 
         Self {
             editing,
-            input: EditorInputState::new(String::new()),
+            input: EditorInput::new(String::new()),
         }
     }
 
@@ -45,7 +45,7 @@ impl Editor {
         &self.editing
     }
 
-    pub fn input(&self) -> &EditorInputState {
+    pub fn input(&self) -> &EditorInput {
         &self.input
     }
 
@@ -128,12 +128,12 @@ impl Editor {
 }
 
 #[derive(Debug, Eq, PartialEq)]
-pub struct EditorInputState {
+pub struct EditorInput {
     pub buffer: String,
     pub cursor: usize,
 }
 
-impl EditorInputState {
+impl EditorInput {
     pub fn new(buffer: String) -> Self {
         let cursor = buffer.chars().count();
         Self { buffer, cursor }

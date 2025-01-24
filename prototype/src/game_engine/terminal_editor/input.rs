@@ -5,7 +5,7 @@ use std::{
 
 use crate::lang::{
     code::Code,
-    editor::{Command, Editor, EditorInputState, InputEvent},
+    editor::{Command, Editor, EditorInput, InputEvent},
     host::Host,
     interpreter::Interpreter,
 };
@@ -104,7 +104,7 @@ impl TerminalEditorInput {
                 }
                 TerminalInputEvent::Escape => {
                     self.mode = EditorMode::Command {
-                        input: EditorInputState::new(String::new()),
+                        input: EditorInput::new(String::new()),
                     };
                 }
             },
@@ -113,7 +113,7 @@ impl TerminalEditorInput {
 }
 
 fn parse_command(
-    input: &mut EditorInputState,
+    input: &mut EditorInput,
     commands: &BTreeSet<&'static str>,
 ) -> Result<Command, EditorError> {
     let command = &input.buffer;
@@ -155,7 +155,7 @@ fn parse_command(
 
 #[derive(Debug, Eq, PartialEq)]
 pub enum EditorMode {
-    Command { input: EditorInputState },
+    Command { input: EditorInput },
     Edit,
 }
 
