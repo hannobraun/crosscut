@@ -40,7 +40,7 @@ impl EditorInput {
 
     pub fn on_input(
         &mut self,
-        event: TerminalInput,
+        event: TerminalInputEvent,
         editor: &mut Editor,
         code: &mut Code,
         interpreter: &mut Interpreter,
@@ -48,13 +48,13 @@ impl EditorInput {
     ) {
         match &mut self.mode {
             EditorMode::Command { input } => match event {
-                TerminalInput::Char { value } => {
+                TerminalInputEvent::Char { value } => {
                     input.insert(value);
                 }
-                TerminalInput::Backspace => {
+                TerminalInputEvent::Backspace => {
                     input.remove_left();
                 }
-                TerminalInput::Enter => {
+                TerminalInputEvent::Enter => {
                     match parse_command(input, &self.commands) {
                         Ok(command) => {
                             editor.on_command(command, code, interpreter);
@@ -66,18 +66,18 @@ impl EditorInput {
 
                     self.mode = EditorMode::Edit;
                 }
-                TerminalInput::Left => {
+                TerminalInputEvent::Left => {
                     input.move_cursor_left();
                 }
-                TerminalInput::Right => {
+                TerminalInputEvent::Right => {
                     input.move_cursor_right();
                 }
-                TerminalInput::Escape => {
+                TerminalInputEvent::Escape => {
                     self.mode = EditorMode::Edit;
                 }
             },
             EditorMode::Edit => match event {
-                TerminalInput::Char { value } => {
+                TerminalInputEvent::Char { value } => {
                     editor.on_input(
                         InputEvent::Char { value },
                         code,
@@ -85,7 +85,7 @@ impl EditorInput {
                         host,
                     );
                 }
-                TerminalInput::Backspace => {
+                TerminalInputEvent::Backspace => {
                     editor.on_input(
                         InputEvent::Backspace,
                         code,
@@ -93,16 +93,16 @@ impl EditorInput {
                         host,
                     );
                 }
-                TerminalInput::Enter => {
+                TerminalInputEvent::Enter => {
                     editor.on_input(InputEvent::Enter, code, interpreter, host);
                 }
-                TerminalInput::Left => {
+                TerminalInputEvent::Left => {
                     editor.on_input(InputEvent::Left, code, interpreter, host);
                 }
-                TerminalInput::Right => {
+                TerminalInputEvent::Right => {
                     editor.on_input(InputEvent::Right, code, interpreter, host);
                 }
-                TerminalInput::Escape => {
+                TerminalInputEvent::Escape => {
                     self.mode = EditorMode::Command {
                         input: EditorInputState::new(String::new()),
                     };
@@ -177,7 +177,7 @@ pub enum EditorError {
 }
 
 #[derive(Debug)]
-pub enum TerminalInput {
+pub enum TerminalInputEvent {
     Char { value: char },
 
     Backspace,

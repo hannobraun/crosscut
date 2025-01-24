@@ -11,7 +11,7 @@ use crate::{
 
 use super::{
     terminal_editor::{input::EditorInput, output::EditorOutput},
-    TerminalInput,
+    TerminalInputEvent,
 };
 
 pub struct GameEngine<A> {
@@ -67,7 +67,7 @@ where
 
     pub fn on_editor_input(
         &mut self,
-        event: TerminalInput,
+        event: TerminalInputEvent,
     ) -> anyhow::Result<()> {
         self.editor_input.on_input(
             event,
@@ -147,7 +147,7 @@ where
 
     #[cfg(test)]
     pub fn on_char(&mut self, ch: char) {
-        self.on_editor_input(TerminalInput::Char { value: ch })
+        self.on_editor_input(TerminalInputEvent::Char { value: ch })
             .unwrap();
     }
 }
