@@ -73,7 +73,7 @@ impl Editor {
                     self.process_code(code, interpreter, host);
                 }
             }
-            EditorInputEvent::Backspace => {
+            EditorInputEvent::RemoveCharacterLeft => {
                 self.input.remove_left();
                 self.process_code(code, interpreter, host);
             }
@@ -178,7 +178,7 @@ impl EditorInput {
 pub enum EditorInputEvent {
     Character { ch: char },
 
-    Backspace,
+    RemoveCharacterLeft,
     Enter,
     Left,
     Right,

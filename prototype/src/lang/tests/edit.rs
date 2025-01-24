@@ -47,7 +47,7 @@ fn update_on_backspace() {
         },
     );
 
-    lang.on_event(EditorInputEvent::Backspace, &host);
+    lang.on_event(EditorInputEvent::RemoveCharacterLeft, &host);
     assert_eq!(
         lang.interpreter.step(&lang.code),
         StepResult::Finished {

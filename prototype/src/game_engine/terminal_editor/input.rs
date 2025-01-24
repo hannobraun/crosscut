@@ -87,7 +87,7 @@ impl TerminalEditorInput {
                 }
                 TerminalInputEvent::Backspace => {
                     editor.on_input(
-                        EditorInputEvent::Backspace,
+                        EditorInputEvent::RemoveCharacterLeft,
                         code,
                         interpreter,
                         host,
