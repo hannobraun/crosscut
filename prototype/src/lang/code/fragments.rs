@@ -28,27 +28,19 @@ impl Nodes {
     }
 }
 
-/// # The ID of a fragment
+// TASK: Update documentation.
+/// # The ID of a node
 ///
-/// Fragment IDs are based on hashing. This means that different fragments
-/// should result in different hashes. Hash collisions, meaning the same IDs for
-/// equal hashes, should be exceedingly unlikely.
+/// Node IDs are based on hashes. This means that nodes that are different from
+/// another should result in different hashes. Hash collisions, meaning the same
+/// IDs for different nodes, should be exceedingly unlikely.
 ///
-/// Another consequence of this, is that equal fragments end up with the same
-/// ID, even if they are located in different parts of the syntax tree. This is
-/// not a problem, because if those fragments are truly equal, there's really no
-/// reason to not also consider them identical.
+/// A consequence of this, is that equal node end up with the same ID, even if
+/// they are located in different parts of the syntax tree. In some situation,
+/// this is not a problem. Equal nodes can often be treated the same. Where the
+/// location _is_ important, you should use [`Location`] instead.
 ///
-/// There is one aspect here that might be a bit unintuitive: That fragments
-/// that are rendered similarly in the editor, can actually still be distinct.
-/// For example:
-///
-/// - Two calls to the same function `f` can still be distinct fragments, as
-///   their arguments are included in the fragment, and thus influence their ID.
-/// - A simple value like `1` can be a perfectly valid expression fragment,
-///   while the same value in another place would be an unexpected token. The
-///   compiler would emit those as different kinds of fragments, which would
-///   then have different IDs.
+/// [`Location`]: super::Location
 #[derive(Clone, Copy, Eq, Ord, PartialEq, PartialOrd, udigest::Digestable)]
 pub struct NodeId {
     hash: [u8; 32],
