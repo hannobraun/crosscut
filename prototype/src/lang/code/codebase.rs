@@ -28,15 +28,15 @@ pub struct Codebase {
 
 impl Codebase {
     pub fn new() -> Self {
-        let mut fragments = Nodes::default();
+        let mut nodes = Nodes::default();
 
-        let root = fragments.insert(Node {
+        let root = nodes.insert(Node {
             kind: FragmentKind::Root,
             body: Body::default(),
         });
 
         Self {
-            nodes: fragments,
+            nodes,
             root,
             replacements: Replacements::default(),
             errors: BTreeMap::new(),
