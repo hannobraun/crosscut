@@ -32,7 +32,7 @@ impl Body {
         self.inner.iter()
     }
 
-    pub fn fragments<'r>(
+    pub fn children<'r>(
         &'r self,
         fragments: &'r Fragments,
     ) -> impl Iterator<Item = &'r Node> {
@@ -43,7 +43,7 @@ impl Body {
         &'r self,
         fragments: &'r Fragments,
     ) -> impl Iterator<Item = (&'r Expression, &'r Body)> {
-        self.fragments(fragments).filter_map(|fragment| {
+        self.children(fragments).filter_map(|fragment| {
             if let FragmentKind::Expression { expression } = &fragment.kind {
                 Some((expression, &fragment.body))
             } else {
