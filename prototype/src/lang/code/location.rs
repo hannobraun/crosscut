@@ -81,11 +81,11 @@ pub struct Located<'r> {
 impl<'r> Located<'r> {
     pub fn body(
         &'r self,
-        fragments: &'r Nodes,
+        nodes: &'r Nodes,
     ) -> impl Iterator<Item = Located<'r>> {
         self.node.body.ids().map(|id| {
             let location = self.location.clone().with_component(*id);
-            let node = fragments.get(id);
+            let node = nodes.get(id);
 
             Located { location, node }
         })
