@@ -1,6 +1,6 @@
 use itertools::Itertools;
 
-use super::{FragmentId, Node, Nodes};
+use super::{Node, NodeId, Nodes};
 
 /// # The unique location of a fragment
 ///
@@ -18,17 +18,17 @@ use super::{FragmentId, Node, Nodes};
 /// soon as it's possible to write a test that covers this.
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub struct Location {
-    inner: Vec<FragmentId>,
+    inner: Vec<NodeId>,
 }
 
 impl Location {
-    pub fn from_component(component: FragmentId) -> Self {
+    pub fn from_component(component: NodeId) -> Self {
         Self {
             inner: vec![component],
         }
     }
 
-    pub fn from_components(inner: Vec<FragmentId>) -> Option<Self> {
+    pub fn from_components(inner: Vec<NodeId>) -> Option<Self> {
         if inner.is_empty() {
             // An empty fragment path is not valid, as every path must at least
             // contain the root.
@@ -38,20 +38,20 @@ impl Location {
         }
     }
 
-    pub fn with_component(mut self, component: FragmentId) -> Self {
+    pub fn with_component(mut self, component: NodeId) -> Self {
         self.inner.push(component);
         self
     }
 
     pub fn with_components(
         mut self,
-        components: impl IntoIterator<Item = FragmentId>,
+        components: impl IntoIterator<Item = NodeId>,
     ) -> Self {
         self.inner.extend(components);
         self
     }
 
-    pub fn target(&self) -> &FragmentId {
+    pub fn target(&self) -> &NodeId {
         let Some(target) = self.inner.last() else {
             unreachable!(
                 "A fragment path must consist of at least one component, the \
@@ -62,13 +62,13 @@ impl Location {
         target
     }
 
-    pub fn parent(&self) -> Option<&FragmentId> {
+    pub fn parent(&self) -> Option<&NodeId> {
         self.inner.iter().rev().nth(1)
     }
 
     pub fn components_with_parent(
         &self,
-    ) -> impl Iterator<Item = (&FragmentId, &FragmentId)> {
+    ) -> impl Iterator<Item = (&NodeId, &NodeId)> {
         self.inner.iter().rev().tuple_windows()
     }
 }

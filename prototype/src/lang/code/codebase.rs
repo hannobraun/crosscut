@@ -1,7 +1,7 @@
 use std::collections::BTreeMap;
 
 use super::{
-    Body, CodeError, FragmentId, FragmentKind, Located, Location, Node, Nodes,
+    Body, CodeError, FragmentKind, Located, Location, Node, NodeId, Nodes,
     Replacements,
 };
 
@@ -20,10 +20,10 @@ use super::{
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub struct Codebase {
     nodes: Nodes,
-    root: FragmentId,
+    root: NodeId,
     replacements: Replacements,
 
-    pub errors: BTreeMap<FragmentId, CodeError>,
+    pub errors: BTreeMap<NodeId, CodeError>,
 }
 
 impl Codebase {
@@ -98,7 +98,7 @@ impl Codebase {
         location
     }
 
-    pub fn latest_version_of(&self, id: &FragmentId) -> FragmentId {
+    pub fn latest_version_of(&self, id: &NodeId) -> NodeId {
         self.replacements.latest_version_of(id)
     }
 

@@ -6,11 +6,11 @@ use super::{Body, Expression};
 
 #[derive(Clone, Debug, Default, Eq, PartialEq)]
 pub struct Nodes {
-    inner: BTreeMap<FragmentId, Node>,
+    inner: BTreeMap<NodeId, Node>,
 }
 
 impl Nodes {
-    pub fn get(&self, id: &FragmentId) -> &Node {
+    pub fn get(&self, id: &NodeId) -> &Node {
         let Some(fragment) = self.inner.get(id) else {
             panic!(
                 "Fragment with ID `{id:?}` not found. This should never \
@@ -21,8 +21,8 @@ impl Nodes {
         fragment
     }
 
-    pub fn insert(&mut self, fragment: Node) -> FragmentId {
-        let id = FragmentId::generate_for(&fragment);
+    pub fn insert(&mut self, fragment: Node) -> NodeId {
+        let id = NodeId::generate_for(&fragment);
         self.inner.insert(id, fragment);
         id
     }
@@ -50,17 +50,17 @@ impl Nodes {
 ///   compiler would emit those as different kinds of fragments, which would
 ///   then have different IDs.
 #[derive(Clone, Copy, Eq, Ord, PartialEq, PartialOrd, udigest::Digestable)]
-pub struct FragmentId {
+pub struct NodeId {
     hash: [u8; 32],
 }
-impl FragmentId {
+impl NodeId {
     pub fn generate_for(node: &Node) -> Self {
         let hash = udigest::hash::<blake3::Hasher>(node).into();
         Self { hash }
     }
 }
 
-impl fmt::Debug for FragmentId {
+impl fmt::Debug for NodeId {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", BASE64_STANDARD_NO_PAD.encode(self.hash))?;
         Ok(())
@@ -75,8 +75,8 @@ pub struct Node {
 
 impl Node {
     #[cfg(test)]
-    pub fn id(&self) -> FragmentId {
-        FragmentId::generate_for(self)
+    pub fn id(&self) -> NodeId {
+        NodeId::generate_for(self)
     }
 
     /// # Returns the body of the fragment, if this kind can have a valid one
@@ -95,7 +95,7 @@ impl Node {
     }
 
     #[cfg(test)]
-    pub fn with_child(mut self, child: FragmentId) -> Self {
+    pub fn with_child(mut self, child: NodeId) -> Self {
         self.body.push_id(child);
         self
     }

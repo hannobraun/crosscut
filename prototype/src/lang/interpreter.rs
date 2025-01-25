@@ -1,11 +1,11 @@
 use super::code::{
-    Body, Codebase, Expression, FragmentId, FragmentKind, FunctionCallTarget,
-    Literal,
+    Body, Codebase, Expression, FragmentKind, FunctionCallTarget, Literal,
+    NodeId,
 };
 
 #[derive(Debug)]
 pub struct Interpreter {
-    next: Option<FragmentId>,
+    next: Option<NodeId>,
     active_calls: Vec<ActiveCall>,
 }
 
@@ -37,7 +37,7 @@ impl Interpreter {
         }
     }
 
-    pub fn next(&self) -> Option<&FragmentId> {
+    pub fn next(&self) -> Option<&NodeId> {
         self.next.as_ref()
     }
 
@@ -144,7 +144,7 @@ impl Interpreter {
 
 #[derive(Debug)]
 struct ActiveCall {
-    fragment: FragmentId,
+    fragment: NodeId,
     output: Option<Value>,
     target: FunctionCallTarget,
 }
@@ -186,7 +186,7 @@ pub enum NextExpression<'r> {
     Expression {
         expression: &'r Expression,
         body: &'r Body,
-        fragment: FragmentId,
+        fragment: NodeId,
     },
     NoMoreFragments,
     NextFragmentIsNotAnExpression,

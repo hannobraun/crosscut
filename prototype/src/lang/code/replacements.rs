@@ -1,17 +1,17 @@
 use std::collections::{BTreeMap, BTreeSet};
 
-use super::FragmentId;
+use super::NodeId;
 
 #[derive(Clone, Debug, Default, Eq, PartialEq)]
 pub struct Replacements {
-    inner: BTreeMap<FragmentId, FragmentId>,
+    inner: BTreeMap<NodeId, NodeId>,
 }
 
 impl Replacements {
     pub fn insert_original_and_replacement(
         &mut self,
-        original: FragmentId,
-        replacement: FragmentId,
+        original: NodeId,
+        replacement: NodeId,
     ) {
         if original == replacement {
             // It seems like this check should maybe be an assertion instead,
@@ -25,7 +25,7 @@ impl Replacements {
         self.inner.insert(original, replacement);
     }
 
-    pub fn latest_version_of(&self, id: &FragmentId) -> FragmentId {
+    pub fn latest_version_of(&self, id: &NodeId) -> NodeId {
         let mut already_seen = BTreeSet::new();
         let mut current_id = id;
 
