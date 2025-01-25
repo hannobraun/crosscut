@@ -43,7 +43,7 @@ impl Codebase {
         }
     }
 
-    pub fn fragments(&self) -> &Nodes {
+    pub fn nodes(&self) -> &Nodes {
         &self.nodes
     }
 

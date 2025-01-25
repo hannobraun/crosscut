@@ -77,7 +77,7 @@ fn parse_token(token: &str, host: &Host) -> FragmentKind {
 }
 
 fn handle_errors(location: &Location, code: &mut Codebase) {
-    let fragment = code.fragments().get(location.target());
+    let fragment = code.nodes().get(location.target());
 
     match &fragment.kind {
         FragmentKind::Expression {
@@ -108,10 +108,10 @@ fn handle_errors(location: &Location, code: &mut Codebase) {
 
     if let Some(parent) = location.parent() {
         let parent_already_had_an_expression = code
-            .fragments()
+            .nodes()
             .get(parent)
             .body
-            .expressions(code.fragments())
+            .expressions(code.nodes())
             .count()
             > 1;
 

@@ -220,7 +220,7 @@ fn render_fragment<A: EditorOutputAdapter>(
     writeln!(adapter)?;
 
     context.indent += 1;
-    for child in located.body(context.code.fragments()) {
+    for child in located.body(context.code.nodes()) {
         render_possibly_active_fragment(adapter, child, context)?;
     }
     context.indent -= 1;
