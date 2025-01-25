@@ -58,7 +58,7 @@ impl Interpreter {
             let NextExpression::Expression {
                 expression,
                 body,
-                fragment,
+                node: fragment,
             } = self.next_expression(code)
             else {
                 return StepResult::Error;
@@ -136,7 +136,7 @@ impl Interpreter {
         NextExpression::Expression {
             expression,
             body: &node.body,
-            fragment: id,
+            node: id,
         }
     }
 }
@@ -185,7 +185,7 @@ pub enum NextExpression<'r> {
     Expression {
         expression: &'r Expression,
         body: &'r Body,
-        fragment: NodeId,
+        node: NodeId,
     },
     NoMoreFragments,
     NextFragmentIsNotAnExpression,
