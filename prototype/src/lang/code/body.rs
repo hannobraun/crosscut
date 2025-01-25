@@ -1,4 +1,4 @@
-use super::{Expression, FragmentId, FragmentKind, Fragments, Node};
+use super::{Expression, FragmentId, FragmentKind, Node, Nodes};
 
 #[derive(Clone, Debug, Default, Eq, PartialEq, udigest::Digestable)]
 pub struct Body {
@@ -9,7 +9,7 @@ impl Body {
     pub fn push_node(
         &mut self,
         node: Node,
-        fragments: &mut Fragments,
+        fragments: &mut Nodes,
     ) -> FragmentId {
         let id = fragments.insert(node);
         self.push_id(id);
@@ -34,14 +34,14 @@ impl Body {
 
     pub fn children<'r>(
         &'r self,
-        fragments: &'r Fragments,
+        fragments: &'r Nodes,
     ) -> impl Iterator<Item = &'r Node> {
         self.ids().map(|hash| fragments.get(hash))
     }
 
     pub fn expressions<'r>(
         &'r self,
-        fragments: &'r Fragments,
+        fragments: &'r Nodes,
     ) -> impl Iterator<Item = (&'r Expression, &'r Body)> {
         self.children(fragments).filter_map(|fragment| {
             if let FragmentKind::Expression { expression } = &fragment.kind {
@@ -56,7 +56,7 @@ impl Body {
         &mut self,
         to_replace: &FragmentId,
         replace_with: Node,
-        fragments: &mut Fragments,
+        fragments: &mut Nodes,
     ) -> FragmentId {
         for id in self.children.iter_mut() {
             if id == to_replace {

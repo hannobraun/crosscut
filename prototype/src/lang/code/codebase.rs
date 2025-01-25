@@ -1,8 +1,8 @@
 use std::collections::BTreeMap;
 
 use super::{
-    Body, CodeError, FragmentId, FragmentKind, Fragments, Located, Location,
-    Node, Replacements,
+    Body, CodeError, FragmentId, FragmentKind, Located, Location, Node, Nodes,
+    Replacements,
 };
 
 /// # The complete codebase of the program
@@ -19,7 +19,7 @@ use super::{
 /// and what should be kept as history.
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub struct Codebase {
-    fragments: Fragments,
+    fragments: Nodes,
     root: FragmentId,
     replacements: Replacements,
 
@@ -28,7 +28,7 @@ pub struct Codebase {
 
 impl Codebase {
     pub fn new() -> Self {
-        let mut fragments = Fragments::default();
+        let mut fragments = Nodes::default();
 
         let root = fragments.insert(Node {
             kind: FragmentKind::Root,
@@ -43,7 +43,7 @@ impl Codebase {
         }
     }
 
-    pub fn fragments(&self) -> &Fragments {
+    pub fn fragments(&self) -> &Nodes {
         &self.fragments
     }
 

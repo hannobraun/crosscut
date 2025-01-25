@@ -5,11 +5,11 @@ use base64::{prelude::BASE64_STANDARD_NO_PAD, Engine};
 use super::{Body, Expression};
 
 #[derive(Clone, Debug, Default, Eq, PartialEq)]
-pub struct Fragments {
+pub struct Nodes {
     inner: BTreeMap<FragmentId, Node>,
 }
 
-impl Fragments {
+impl Nodes {
     pub fn get(&self, id: &FragmentId) -> &Node {
         let Some(fragment) = self.inner.get(id) else {
             panic!(
