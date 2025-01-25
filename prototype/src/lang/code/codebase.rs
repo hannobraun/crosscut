@@ -19,7 +19,7 @@ use super::{
 /// and what should be kept as history.
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub struct Codebase {
-    fragments: Nodes,
+    nodes: Nodes,
     root: FragmentId,
     replacements: Replacements,
 
@@ -36,7 +36,7 @@ impl Codebase {
         });
 
         Self {
-            fragments,
+            nodes: fragments,
             root,
             replacements: Replacements::default(),
             errors: BTreeMap::new(),
@@ -44,13 +44,13 @@ impl Codebase {
     }
 
     pub fn fragments(&self) -> &Nodes {
-        &self.fragments
+        &self.nodes
     }
 
     pub fn root(&self) -> Located {
         Located {
             location: Location::from_component(self.root),
-            node: self.fragments.get(&self.root),
+            node: self.nodes.get(&self.root),
         }
     }
 
@@ -59,7 +59,7 @@ impl Codebase {
         let mut location = Vec::new();
 
         loop {
-            let Some(body) = self.fragments.get(&next).valid_body() else {
+            let Some(body) = self.nodes.get(&next).valid_body() else {
                 // The next fragment has no valid body. Which means the most
                 // recent one we added is already is the innermost one!
                 break;
@@ -108,8 +108,8 @@ impl Codebase {
         to_append: Node,
     ) -> Location {
         // Append the new fragment where we're supposed to append it.
-        let mut append_to = self.fragments.get(location.target()).clone();
-        let appended = append_to.body.push_node(to_append, &mut self.fragments);
+        let mut append_to = self.nodes.get(location.target()).clone();
+        let appended = append_to.body.push_node(to_append, &mut self.nodes);
 
         // And now, update all of its parents, down to the root.
         let location = self.replace(location, append_to);
@@ -126,12 +126,11 @@ impl Codebase {
         let mut location_components_of_new_fragment_reverse = Vec::new();
 
         for (id, parent) in location.components_with_parent() {
-            let mut parent = self.fragments.get(parent).clone();
-            let id_of_replacement = parent.body.replace(
-                id,
-                next_to_replace_with,
-                &mut self.fragments,
-            );
+            let mut parent = self.nodes.get(parent).clone();
+            let id_of_replacement =
+                parent
+                    .body
+                    .replace(id, next_to_replace_with, &mut self.nodes);
 
             self.replacements
                 .insert_original_and_replacement(*id, id_of_replacement);
@@ -140,7 +139,7 @@ impl Codebase {
             location_components_of_new_fragment_reverse.push(id_of_replacement);
         }
 
-        self.root = self.fragments.insert(next_to_replace_with);
+        self.root = self.nodes.insert(next_to_replace_with);
 
         Location::from_component(self.root).with_components(
             location_components_of_new_fragment_reverse
