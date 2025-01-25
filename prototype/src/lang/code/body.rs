@@ -52,11 +52,11 @@ impl Body {
         &mut self,
         to_replace: &FragmentId,
         replace_with: Node,
-        fragments: &mut Nodes,
+        nodes: &mut Nodes,
     ) -> FragmentId {
         for id in self.children.iter_mut() {
             if id == to_replace {
-                let id_of_replacement = fragments.insert(replace_with);
+                let id_of_replacement = nodes.insert(replace_with);
                 *id = id_of_replacement;
                 return id_of_replacement;
             }
