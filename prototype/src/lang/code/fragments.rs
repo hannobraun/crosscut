@@ -21,9 +21,9 @@ impl Nodes {
         node
     }
 
-    pub fn insert(&mut self, fragment: Node) -> NodeId {
-        let id = NodeId::generate_for(&fragment);
-        self.inner.insert(id, fragment);
+    pub fn insert(&mut self, node: Node) -> NodeId {
+        let id = NodeId::generate_for(&node);
+        self.inner.insert(id, node);
         id
     }
 }
