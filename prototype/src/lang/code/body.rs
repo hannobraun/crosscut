@@ -2,7 +2,7 @@ use super::{Expression, FragmentId, FragmentKind, Fragments, Node};
 
 #[derive(Clone, Debug, Default, Eq, PartialEq, udigest::Digestable)]
 pub struct Body {
-    inner: Vec<FragmentId>,
+    children: Vec<FragmentId>,
 }
 
 impl Body {
@@ -17,19 +17,19 @@ impl Body {
     }
 
     pub fn push_id(&mut self, id: FragmentId) {
-        self.inner.push(id);
+        self.children.push(id);
     }
 
     pub fn is_empty(&self) -> bool {
-        self.inner.is_empty()
+        self.children.is_empty()
     }
 
     pub fn entry(&self) -> Option<&FragmentId> {
-        self.inner.first()
+        self.children.first()
     }
 
     pub fn ids(&self) -> impl DoubleEndedIterator<Item = &FragmentId> {
-        self.inner.iter()
+        self.children.iter()
     }
 
     pub fn children<'r>(
@@ -58,7 +58,7 @@ impl Body {
         replace_with: Node,
         fragments: &mut Fragments,
     ) -> FragmentId {
-        for id in self.inner.iter_mut() {
+        for id in self.children.iter_mut() {
             if id == to_replace {
                 let id_of_replacement = fragments.insert(replace_with);
                 *id = id_of_replacement;
