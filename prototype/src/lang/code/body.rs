@@ -30,9 +30,9 @@ impl Body {
 
     pub fn children<'r>(
         &'r self,
-        fragments: &'r Nodes,
+        nodes: &'r Nodes,
     ) -> impl Iterator<Item = &'r Node> {
-        self.ids().map(|hash| fragments.get(hash))
+        self.ids().map(|hash| nodes.get(hash))
     }
 
     pub fn expressions<'r>(
