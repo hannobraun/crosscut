@@ -58,7 +58,7 @@ impl Interpreter {
             let NextExpression::Expression {
                 expression,
                 body,
-                node: fragment,
+                node,
             } = self.next_expression(code)
             else {
                 return StepResult::Error;
@@ -77,7 +77,7 @@ impl Interpreter {
                     }
 
                     self.active_calls.push(ActiveCall {
-                        node: fragment,
+                        node,
                         output: None,
                         target: *target,
                     });
