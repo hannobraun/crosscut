@@ -4,8 +4,8 @@ use crate::{
     io::editor::output::EditorOutputAdapter,
     lang::{
         code::{
-            CodeError, Codebase, Expression, FragmentError, FunctionCallTarget,
-            Literal, Located, NodeKind,
+            CodeError, Codebase, Expression, FunctionCallTarget, Literal,
+            Located, NodeError, NodeKind,
         },
         editor::Editor,
         host::Host,
@@ -190,13 +190,13 @@ fn render_fragment<A: EditorOutputAdapter>(
             render_expression(adapter, expression, context)?;
         }
         NodeKind::Error { err } => match err {
-            FragmentError::IntegerOverflow { value } => {
+            NodeError::IntegerOverflow { value } => {
                 write!(adapter, "{value}")?;
             }
-            FragmentError::MultiResolvedIdentifier { name } => {
+            NodeError::MultiResolvedIdentifier { name } => {
                 write!(adapter, "{name}")?;
             }
-            FragmentError::UnresolvedIdentifier { name } => {
+            NodeError::UnresolvedIdentifier { name } => {
                 write!(adapter, "{name}")?;
             }
         },

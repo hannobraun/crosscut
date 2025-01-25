@@ -2,8 +2,8 @@ use std::num::IntErrorKind;
 
 use crate::lang::{
     code::{
-        Body, CodeError, Codebase, Expression, FragmentError,
-        FunctionCallTarget, Literal, Location, Node, NodeKind,
+        Body, CodeError, Codebase, Expression, FunctionCallTarget, Literal,
+        Location, Node, NodeError, NodeKind,
     },
     host::Host,
 };
@@ -43,7 +43,7 @@ fn parse_token(token: &str, host: &Host) -> NodeKind {
             IntErrorKind::PosOverflow | IntErrorKind::NegOverflow => {
                 let value = token.to_string();
                 NodeKind::Error {
-                    err: FragmentError::IntegerOverflow { value },
+                    err: NodeError::IntegerOverflow { value },
                 }
             }
             _ => {
@@ -65,10 +65,10 @@ fn parse_token(token: &str, host: &Host) -> NodeKind {
                         },
                     },
                     (None, None) => NodeKind::Error {
-                        err: FragmentError::UnresolvedIdentifier { name },
+                        err: NodeError::UnresolvedIdentifier { name },
                     },
                     _ => NodeKind::Error {
-                        err: FragmentError::MultiResolvedIdentifier { name },
+                        err: NodeError::MultiResolvedIdentifier { name },
                     },
                 }
             }
@@ -90,13 +90,11 @@ fn handle_errors(location: &Location, code: &mut Codebase) {
         }
         NodeKind::Error { err } => {
             let err = match err {
-                FragmentError::IntegerOverflow { .. } => {
-                    CodeError::IntegerOverflow
-                }
-                FragmentError::MultiResolvedIdentifier { .. } => {
+                NodeError::IntegerOverflow { .. } => CodeError::IntegerOverflow,
+                NodeError::MultiResolvedIdentifier { .. } => {
                     CodeError::MultiResolvedIdentifier
                 }
-                FragmentError::UnresolvedIdentifier { .. } => {
+                NodeError::UnresolvedIdentifier { .. } => {
                     CodeError::UnresolvedIdentifier
                 }
             };

@@ -98,11 +98,11 @@ pub enum NodeKind {
     Root,
     Empty,
     Expression { expression: Expression },
-    Error { err: FragmentError },
+    Error { err: NodeError },
 }
 
 #[derive(Clone, Debug, Eq, PartialEq, udigest::Digestable)]
-pub enum FragmentError {
+pub enum NodeError {
     IntegerOverflow { value: String },
     MultiResolvedIdentifier { name: String },
     UnresolvedIdentifier { name: String },
