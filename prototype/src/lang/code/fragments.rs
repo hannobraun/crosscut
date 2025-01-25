@@ -11,14 +11,14 @@ pub struct Nodes {
 
 impl Nodes {
     pub fn get(&self, id: &NodeId) -> &Node {
-        let Some(fragment) = self.inner.get(id) else {
+        let Some(node) = self.inner.get(id) else {
             panic!(
                 "Fragment with ID `{id:?}` not found. This should never \
                 happen, unless you are mixing and matching data structures \
                 from different instances of `Code`."
             );
         };
-        fragment
+        node
     }
 
     pub fn insert(&mut self, fragment: Node) -> NodeId {
