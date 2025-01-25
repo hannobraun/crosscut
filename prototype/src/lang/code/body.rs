@@ -39,9 +39,9 @@ impl Body {
         &'r self,
         nodes: &'r Nodes,
     ) -> impl Iterator<Item = (&'r Expression, &'r Body)> {
-        self.children(nodes).filter_map(|fragment| {
-            if let NodeKind::Expression { expression } = &fragment.kind {
-                Some((expression, &fragment.body))
+        self.children(nodes).filter_map(|node| {
+            if let NodeKind::Expression { expression } = &node.kind {
+                Some((expression, &node.body))
             } else {
                 None
             }
