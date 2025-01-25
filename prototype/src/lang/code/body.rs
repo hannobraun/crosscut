@@ -8,10 +8,10 @@ pub struct Body {
 impl Body {
     pub fn push_fragment(
         &mut self,
-        fragment: Node,
+        node: Node,
         fragments: &mut Fragments,
     ) -> FragmentId {
-        let id = fragments.insert(fragment);
+        let id = fragments.insert(node);
         self.push_id(id);
         id
     }
