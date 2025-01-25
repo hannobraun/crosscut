@@ -129,14 +129,14 @@ impl Interpreter {
         let Some(id) = self.next else {
             return NextExpression::NoMoreFragments;
         };
-        let fragment = code.nodes().get(&id);
-        let FragmentKind::Expression { expression } = &fragment.kind else {
+        let node = code.nodes().get(&id);
+        let FragmentKind::Expression { expression } = &node.kind else {
             return NextExpression::NextFragmentIsNotAnExpression;
         };
 
         NextExpression::Expression {
             expression,
-            body: &fragment.body,
+            body: &node.body,
             fragment: id,
         }
     }
