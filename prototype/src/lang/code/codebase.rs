@@ -50,7 +50,7 @@ impl Codebase {
     pub fn root(&self) -> Located {
         Located {
             location: Location::from_component(self.root),
-            fragment: self.fragments.get(&self.root),
+            node: self.fragments.get(&self.root),
         }
     }
 

@@ -15,6 +15,6 @@ fn reset_interpreter_on_reset_command() {
     lang.on_command(Command::Reset);
     assert!(lang.state().is_running());
 
-    let start = lang.code.root().fragment.body.ids().next().unwrap();
+    let start = lang.code.root().node.body.ids().next().unwrap();
     assert_eq!(lang.interpreter.next(), Some(start));
 }

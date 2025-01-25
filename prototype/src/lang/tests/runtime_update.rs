@@ -17,8 +17,7 @@ fn reset_interpreter_on_code_update_if_finished() {
     assert!(lang.state().is_finished());
 
     lang.on_char('2', &host);
-    let initial_expression =
-        lang.code.root().fragment.body.ids().next().unwrap();
+    let initial_expression = lang.code.root().node.body.ids().next().unwrap();
 
     assert!(lang.state().is_running());
     assert_eq!(lang.interpreter.next(), Some(initial_expression));
@@ -42,7 +41,7 @@ fn reset_interpreter_on_code_update_if_error() {
     lang.on_input("1", &host);
     assert!(lang.state().is_running());
 
-    let start = lang.code.root().fragment.body.ids().next().unwrap();
+    let start = lang.code.root().node.body.ids().next().unwrap();
     assert_eq!(lang.interpreter.next(), Some(start));
 }
 

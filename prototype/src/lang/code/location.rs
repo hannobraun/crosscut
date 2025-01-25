@@ -75,7 +75,7 @@ impl Location {
 
 pub struct Located<'r> {
     pub location: Location,
-    pub fragment: &'r Node,
+    pub node: &'r Node,
 }
 
 impl<'r> Located<'r> {
@@ -83,11 +83,14 @@ impl<'r> Located<'r> {
         &'r self,
         fragments: &'r Fragments,
     ) -> impl Iterator<Item = Located<'r>> {
-        self.fragment.body.ids().map(|id| {
+        self.node.body.ids().map(|id| {
             let location = self.location.clone().with_component(*id);
             let fragment = fragments.get(id);
 
-            Located { location, fragment }
+            Located {
+                location,
+                node: fragment,
+            }
         })
     }
 }

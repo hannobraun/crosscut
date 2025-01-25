@@ -172,7 +172,7 @@ fn render_fragment<A: EditorOutputAdapter>(
         }
     }
 
-    match &located.fragment.kind {
+    match &located.node.kind {
         FragmentKind::Root => {
             // Nothing to render in the root fragment, except the body.
             // Which we're already doing below, unconditionally.
