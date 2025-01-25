@@ -1,6 +1,5 @@
 use super::code::{
-    Body, Codebase, Expression, FragmentKind, FunctionCallTarget, Literal,
-    NodeId,
+    Body, Codebase, Expression, FunctionCallTarget, Literal, NodeId, NodeKind,
 };
 
 #[derive(Debug)]
@@ -129,7 +128,7 @@ impl Interpreter {
             return NextExpression::NoMoreFragments;
         };
         let node = code.nodes().get(&id);
-        let FragmentKind::Expression { expression } = &node.kind else {
+        let NodeKind::Expression { expression } = &node.kind else {
             return NextExpression::NextFragmentIsNotAnExpression;
         };
 

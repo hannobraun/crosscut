@@ -61,7 +61,7 @@ impl fmt::Debug for NodeId {
 
 #[derive(Clone, Debug, Eq, PartialEq, udigest::Digestable)]
 pub struct Node {
-    pub kind: FragmentKind,
+    pub kind: NodeKind,
     pub body: Body,
 }
 
@@ -78,8 +78,8 @@ impl Node {
     /// nested within the function call fragment's body.
     pub fn valid_body(&self) -> Option<&Body> {
         match self.kind {
-            FragmentKind::Root
-            | FragmentKind::Expression {
+            NodeKind::Root
+            | NodeKind::Expression {
                 expression: Expression::FunctionCall { .. },
             } => Some(&self.body),
             _ => None,
@@ -94,7 +94,7 @@ impl Node {
 }
 
 #[derive(Clone, Debug, Eq, PartialEq, udigest::Digestable)]
-pub enum FragmentKind {
+pub enum NodeKind {
     Root,
     Empty,
     Expression { expression: Expression },

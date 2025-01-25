@@ -4,8 +4,8 @@ use crate::{
     io::editor::output::EditorOutputAdapter,
     lang::{
         code::{
-            CodeError, Codebase, Expression, FragmentError, FragmentKind,
-            FunctionCallTarget, Literal, Located,
+            CodeError, Codebase, Expression, FragmentError, FunctionCallTarget,
+            Literal, Located, NodeKind,
         },
         editor::Editor,
         host::Host,
@@ -173,11 +173,11 @@ fn render_fragment<A: EditorOutputAdapter>(
     }
 
     match &located.node.kind {
-        FragmentKind::Root => {
+        NodeKind::Root => {
             // Nothing to render in the root fragment, except the body.
             // Which we're already doing below, unconditionally.
         }
-        FragmentKind::Empty => {
+        NodeKind::Empty => {
             if currently_editing_this_fragment {
                 // We're already drawing the cursor right here. Drawing anything
                 // else for an empty fragment is only going to interfere with
@@ -186,10 +186,10 @@ fn render_fragment<A: EditorOutputAdapter>(
                 write!(adapter, "empty fragment")?;
             }
         }
-        FragmentKind::Expression { expression } => {
+        NodeKind::Expression { expression } => {
             render_expression(adapter, expression, context)?;
         }
-        FragmentKind::Error { err } => match err {
+        NodeKind::Error { err } => match err {
             FragmentError::IntegerOverflow { value } => {
                 write!(adapter, "{value}")?;
             }

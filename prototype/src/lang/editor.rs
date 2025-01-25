@@ -1,5 +1,5 @@
 use crate::lang::{
-    code::{Body, Codebase, FragmentKind, Node},
+    code::{Body, Codebase, Node, NodeKind},
     compiler::compile_and_replace,
     host::Host,
     interpreter::Interpreter,
@@ -19,7 +19,7 @@ impl Editor {
         let editing = code.append_to(
             &code.find_innermost_fragment_with_valid_body(),
             Node {
-                kind: FragmentKind::Empty,
+                kind: NodeKind::Empty,
                 body: Body::default(),
             },
         );
@@ -51,7 +51,7 @@ impl Editor {
                     self.editing = code.append_to(
                         &code.find_innermost_fragment_with_valid_body(),
                         Node {
-                            kind: FragmentKind::Empty,
+                            kind: NodeKind::Empty,
                             body: Body::default(),
                         },
                     );

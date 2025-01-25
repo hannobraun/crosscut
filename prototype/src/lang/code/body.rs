@@ -1,4 +1,4 @@
-use super::{Expression, FragmentKind, Node, NodeId, Nodes};
+use super::{Expression, Node, NodeId, NodeKind, Nodes};
 
 #[derive(Clone, Debug, Default, Eq, PartialEq, udigest::Digestable)]
 pub struct Body {
@@ -40,7 +40,7 @@ impl Body {
         nodes: &'r Nodes,
     ) -> impl Iterator<Item = (&'r Expression, &'r Body)> {
         self.children(nodes).filter_map(|fragment| {
-            if let FragmentKind::Expression { expression } = &fragment.kind {
+            if let NodeKind::Expression { expression } = &fragment.kind {
                 Some((expression, &fragment.body))
             } else {
                 None

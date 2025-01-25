@@ -2,8 +2,8 @@ use std::num::IntErrorKind;
 
 use crate::lang::{
     code::{
-        Body, CodeError, Codebase, Expression, FragmentError, FragmentKind,
-        FunctionCallTarget, Literal, Location, Node,
+        Body, CodeError, Codebase, Expression, FragmentError,
+        FunctionCallTarget, Literal, Location, Node, NodeKind,
     },
     host::Host,
 };
@@ -27,14 +27,14 @@ pub fn compile_and_replace(
     location_of_compiled_fragment
 }
 
-fn parse_token(token: &str, host: &Host) -> FragmentKind {
+fn parse_token(token: &str, host: &Host) -> NodeKind {
     assert!(
         !token.chars().any(|ch| ch.is_whitespace()),
         "Expecting tokens to not contain any whitespace.",
     );
 
     match token.parse::<u32>() {
-        Ok(value) => FragmentKind::Expression {
+        Ok(value) => NodeKind::Expression {
             expression: Expression::Literal {
                 literal: Literal::Integer { value },
             },
@@ -42,7 +42,7 @@ fn parse_token(token: &str, host: &Host) -> FragmentKind {
         Err(err) => match err.kind() {
             IntErrorKind::PosOverflow | IntErrorKind::NegOverflow => {
                 let value = token.to_string();
-                FragmentKind::Error {
+                NodeKind::Error {
                     err: FragmentError::IntegerOverflow { value },
                 }
             }
@@ -54,20 +54,20 @@ fn parse_token(token: &str, host: &Host) -> FragmentKind {
                 let host_function = host.functions_by_name.get(&name).copied();
 
                 match (intrinsic_function, host_function) {
-                    (Some(()), None) => FragmentKind::Expression {
+                    (Some(()), None) => NodeKind::Expression {
                         expression: Expression::FunctionCall {
                             target: FunctionCallTarget::IntrinsicFunction,
                         },
                     },
-                    (None, Some(id)) => FragmentKind::Expression {
+                    (None, Some(id)) => NodeKind::Expression {
                         expression: Expression::FunctionCall {
                             target: FunctionCallTarget::HostFunction { id },
                         },
                     },
-                    (None, None) => FragmentKind::Error {
+                    (None, None) => NodeKind::Error {
                         err: FragmentError::UnresolvedIdentifier { name },
                     },
-                    _ => FragmentKind::Error {
+                    _ => NodeKind::Error {
                         err: FragmentError::MultiResolvedIdentifier { name },
                     },
                 }
@@ -80,7 +80,7 @@ fn handle_errors(location: &Location, code: &mut Codebase) {
     let node = code.nodes().get(location.target());
 
     match &node.kind {
-        FragmentKind::Expression {
+        NodeKind::Expression {
             expression: Expression::FunctionCall { .. },
         } => {
             if node.body.is_empty() {
@@ -88,7 +88,7 @@ fn handle_errors(location: &Location, code: &mut Codebase) {
                     .insert(*location.target(), CodeError::MissingArgument);
             }
         }
-        FragmentKind::Error { err } => {
+        NodeKind::Error { err } => {
             let err = match err {
                 FragmentError::IntegerOverflow { .. } => {
                     CodeError::IntegerOverflow

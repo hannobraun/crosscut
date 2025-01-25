@@ -1,7 +1,7 @@
 use std::collections::BTreeMap;
 
 use super::{
-    Body, CodeError, FragmentKind, Located, Location, Node, NodeId, Nodes,
+    Body, CodeError, Located, Location, Node, NodeId, NodeKind, Nodes,
     Replacements,
 };
 
@@ -31,7 +31,7 @@ impl Codebase {
         let mut nodes = Nodes::default();
 
         let root = nodes.insert(Node {
-            kind: FragmentKind::Root,
+            kind: NodeKind::Root,
             body: Body::default(),
         });
 
@@ -174,7 +174,7 @@ pub enum Literal {
 
 #[cfg(test)]
 mod tests {
-    use crate::lang::code::{Body, FragmentKind, Location, Node};
+    use crate::lang::code::{Body, Location, Node, NodeKind};
 
     use super::{Codebase, Expression, FunctionCallTarget};
 
@@ -206,7 +206,7 @@ mod tests {
 
     fn call(id: usize) -> Node {
         Node {
-            kind: FragmentKind::Expression {
+            kind: NodeKind::Expression {
                 expression: Expression::FunctionCall {
                     target: FunctionCallTarget::HostFunction { id },
                 },
