@@ -85,12 +85,9 @@ impl<'r> Located<'r> {
     ) -> impl Iterator<Item = Located<'r>> {
         self.node.body.ids().map(|id| {
             let location = self.location.clone().with_component(*id);
-            let fragment = fragments.get(id);
+            let node = fragments.get(id);
 
-            Located {
-                location,
-                node: fragment,
-            }
+            Located { location, node }
         })
     }
 }
