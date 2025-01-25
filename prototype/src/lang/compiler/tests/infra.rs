@@ -1,5 +1,5 @@
 use crate::lang::{
-    code::{Body, Codebase, Fragment, FragmentKind},
+    code::{Body, Codebase, FragmentKind, Node},
     compiler,
     host::Host,
 };
@@ -8,7 +8,7 @@ pub fn compile_all(input: &str, host: &Host, code: &mut Codebase) {
     for token in input.split_whitespace() {
         let to_replace = code.append_to(
             &code.find_innermost_fragment_with_valid_body(),
-            Fragment {
+            Node {
                 kind: FragmentKind::Empty,
                 body: Body::default(),
             },

@@ -1,8 +1,8 @@
 use std::collections::BTreeMap;
 
 use super::{
-    Body, CodeError, Fragment, FragmentId, FragmentKind, Fragments, Located,
-    Location, Replacements,
+    Body, CodeError, FragmentId, FragmentKind, Fragments, Located, Location,
+    Node, Replacements,
 };
 
 /// # The complete codebase of the program
@@ -30,7 +30,7 @@ impl Codebase {
     pub fn new() -> Self {
         let mut fragments = Fragments::default();
 
-        let root = fragments.insert(Fragment {
+        let root = fragments.insert(Node {
             kind: FragmentKind::Root,
             body: Body::default(),
         });
@@ -105,7 +105,7 @@ impl Codebase {
     pub fn append_to(
         &mut self,
         location: &Location,
-        to_append: Fragment,
+        to_append: Node,
     ) -> Location {
         // Append the new fragment where we're supposed to append it.
         let mut append_to = self.fragments.get(location.target()).clone();
@@ -121,7 +121,7 @@ impl Codebase {
     pub fn replace(
         &mut self,
         location: &Location,
-        replace_with: Fragment,
+        replace_with: Node,
     ) -> Location {
         let mut next_to_replace_with = replace_with;
         let mut location_components_of_new_fragment_reverse = Vec::new();
@@ -176,7 +176,7 @@ pub enum Literal {
 
 #[cfg(test)]
 mod tests {
-    use crate::lang::code::{Body, Fragment, FragmentKind, Location};
+    use crate::lang::code::{Body, FragmentKind, Location, Node};
 
     use super::{Codebase, Expression, FunctionCallTarget};
 
@@ -206,8 +206,8 @@ mod tests {
         );
     }
 
-    fn call(id: usize) -> Fragment {
-        Fragment {
+    fn call(id: usize) -> Node {
+        Node {
             kind: FragmentKind::Expression {
                 expression: Expression::FunctionCall {
                     target: FunctionCallTarget::HostFunction { id },

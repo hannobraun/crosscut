@@ -1,6 +1,6 @@
 use itertools::Itertools;
 
-use super::{Fragment, FragmentId, Fragments};
+use super::{FragmentId, Fragments, Node};
 
 /// # The unique location of a fragment
 ///
@@ -75,7 +75,7 @@ impl Location {
 
 pub struct Located<'r> {
     pub location: Location,
-    pub fragment: &'r Fragment,
+    pub fragment: &'r Node,
 }
 
 impl<'r> Located<'r> {

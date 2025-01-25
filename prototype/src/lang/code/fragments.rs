@@ -6,11 +6,11 @@ use super::{Body, Expression};
 
 #[derive(Clone, Debug, Default, Eq, PartialEq)]
 pub struct Fragments {
-    inner: BTreeMap<FragmentId, Fragment>,
+    inner: BTreeMap<FragmentId, Node>,
 }
 
 impl Fragments {
-    pub fn get(&self, id: &FragmentId) -> &Fragment {
+    pub fn get(&self, id: &FragmentId) -> &Node {
         let Some(fragment) = self.inner.get(id) else {
             panic!(
                 "Fragment with ID `{id:?}` not found. This should never \
@@ -21,7 +21,7 @@ impl Fragments {
         fragment
     }
 
-    pub fn insert(&mut self, fragment: Fragment) -> FragmentId {
+    pub fn insert(&mut self, fragment: Node) -> FragmentId {
         let id = FragmentId::generate_for(&fragment);
         self.inner.insert(id, fragment);
         id
@@ -54,7 +54,7 @@ pub struct FragmentId {
     hash: [u8; 32],
 }
 impl FragmentId {
-    pub fn generate_for(fragment: &Fragment) -> Self {
+    pub fn generate_for(fragment: &Node) -> Self {
         let hash = udigest::hash::<blake3::Hasher>(fragment).into();
         Self { hash }
     }
@@ -68,12 +68,12 @@ impl fmt::Debug for FragmentId {
 }
 
 #[derive(Clone, Debug, Eq, PartialEq, udigest::Digestable)]
-pub struct Fragment {
+pub struct Node {
     pub kind: FragmentKind,
     pub body: Body,
 }
 
-impl Fragment {
+impl Node {
     #[cfg(test)]
     pub fn id(&self) -> FragmentId {
         FragmentId::generate_for(self)

@@ -2,8 +2,8 @@ use std::num::IntErrorKind;
 
 use crate::lang::{
     code::{
-        Body, CodeError, Codebase, Expression, Fragment, FragmentError,
-        FragmentKind, FunctionCallTarget, Literal, Location,
+        Body, CodeError, Codebase, Expression, FragmentError, FragmentKind,
+        FunctionCallTarget, Literal, Location, Node,
     },
     host::Host,
 };
@@ -16,7 +16,7 @@ pub fn compile_and_replace(
 ) -> Location {
     let location_of_compiled_fragment = code.replace(
         to_replace,
-        Fragment {
+        Node {
             kind: parse_token(token, host),
             body: Body::default(),
         },

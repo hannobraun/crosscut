@@ -9,7 +9,7 @@ pub use self::{
     body::Body,
     codebase::{Codebase, Expression, FunctionCallTarget, Literal},
     errors::CodeError,
-    fragments::{Fragment, FragmentError, FragmentId, FragmentKind, Fragments},
+    fragments::{FragmentError, FragmentId, FragmentKind, Fragments, Node},
     location::{Located, Location},
     replacements::Replacements,
 };
