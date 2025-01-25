@@ -77,13 +77,13 @@ fn parse_token(token: &str, host: &Host) -> FragmentKind {
 }
 
 fn handle_errors(location: &Location, code: &mut Codebase) {
-    let fragment = code.nodes().get(location.target());
+    let node = code.nodes().get(location.target());
 
-    match &fragment.kind {
+    match &node.kind {
         FragmentKind::Expression {
             expression: Expression::FunctionCall { .. },
         } => {
-            if fragment.body.is_empty() {
+            if node.body.is_empty() {
                 code.errors
                     .insert(*location.target(), CodeError::MissingArgument);
             }
