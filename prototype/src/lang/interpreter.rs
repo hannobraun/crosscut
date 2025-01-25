@@ -32,8 +32,7 @@ impl Interpreter {
         }
 
         for active_call in &mut self.active_calls {
-            active_call.fragment =
-                code.latest_version_of(&active_call.fragment);
+            active_call.node = code.latest_version_of(&active_call.node);
         }
     }
 
@@ -78,7 +77,7 @@ impl Interpreter {
                     }
 
                     self.active_calls.push(ActiveCall {
-                        fragment,
+                        node: fragment,
                         output: None,
                         target: *target,
                     });
@@ -96,7 +95,7 @@ impl Interpreter {
 
     fn evaluate_value(&mut self, value: Value) -> StepResult {
         let Some(ActiveCall {
-            fragment,
+            node: fragment,
             output,
             target,
         }) = self.active_calls.last_mut()
@@ -144,7 +143,7 @@ impl Interpreter {
 
 #[derive(Debug)]
 struct ActiveCall {
-    fragment: NodeId,
+    node: NodeId,
     output: Option<Value>,
     target: FunctionCallTarget,
 }
