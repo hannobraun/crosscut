@@ -6,12 +6,8 @@ pub struct Body {
 }
 
 impl Body {
-    pub fn push_node(
-        &mut self,
-        node: Node,
-        fragments: &mut Nodes,
-    ) -> FragmentId {
-        let id = fragments.insert(node);
+    pub fn push_node(&mut self, node: Node, nodes: &mut Nodes) -> FragmentId {
+        let id = nodes.insert(node);
         self.push_id(id);
         id
     }
