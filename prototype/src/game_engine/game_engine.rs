@@ -6,13 +6,17 @@ pub struct GameEngine {
 
 impl GameEngine {
     pub fn with_editor_ui() -> anyhow::Result<Self> {
-        Ok(Self {
-            game_output: Vec::new(),
-        })
+        Ok(Self::new())
     }
 }
 
 impl GameEngine {
+    pub fn new() -> Self {
+        Self {
+            game_output: Vec::new(),
+        }
+    }
+
     pub fn render_editor(&mut self) -> anyhow::Result<()> {
         Ok(())
     }
