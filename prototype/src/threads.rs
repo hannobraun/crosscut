@@ -8,7 +8,7 @@ use std::{
 use crossbeam_channel::{select, SendError, TryRecvError};
 
 use crate::{
-    game_engine::{GameInput, GameOutput, TerminalInputEvent},
+    game_engine::{GameEngine, GameInput, GameOutput, TerminalInputEvent},
     io::editor::input::read_editor_event,
 };
 
@@ -20,6 +20,9 @@ pub fn start() -> anyhow::Result<Threads> {
         channel::<Option<TerminalInputEvent>>();
     let (game_input_tx, game_input_rx) = channel::<GameInput>();
     let (game_output_tx, game_output_rx) = channel();
+
+    let mut game_engine = GameEngine::with_editor_ui()?;
+    game_engine.render_editor()?;
 
     let editor_input = spawn(move || match read_editor_event() {
         Ok(ControlFlow::Continue(event)) => {
