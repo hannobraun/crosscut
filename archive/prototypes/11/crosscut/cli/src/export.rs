@@ -33,6 +33,13 @@ pub async fn export(
 }
 
 async fn prepare_directory(path: &Path) -> anyhow::Result<()> {
+    // This is a bit too dangerous as-is. A small bug somewhere else could cause
+    // this to delete the wrong directory.
+    //
+    // What should probably happen instead, is that when creating the directory,
+    // we should add some special file that marks it as a Caterpillar export
+    // directory. If that file isn't there, this code should refuse to do
+    // anything.
     if path.exists() {
         fs::remove_dir_all(path).await?;
     }
