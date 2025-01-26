@@ -77,6 +77,11 @@ where
             &self.host,
         );
 
+        // This is missing some kind of timeout, to prevent an endless loop in
+        // Crosscut code from blocking the whole process.
+        //
+        // As of this writing, it's not yet possible to express endless loops in
+        // Crosscut code though, so it's fine.
         loop {
             match self.lang.interpreter.step(&self.lang.code) {
                 StepResult::CallToHostFunction { id, input, output } => {
