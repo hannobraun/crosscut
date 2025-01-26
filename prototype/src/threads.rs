@@ -13,7 +13,7 @@ pub fn start() -> anyhow::Result<Threads> {
     let (game_input_tx, game_input_rx) = channel();
     let (game_output_tx, game_output_rx) = channel();
 
-    let game_engine = spawn(move || loop {
+    let game_engine = spawn(move || {
         let event = select! {
             recv(game_input_rx.inner) -> result => {
                 result.map(|input| GameEngineEvent::GameInput { input })
@@ -27,6 +27,8 @@ pub fn start() -> anyhow::Result<Threads> {
         dbg!(input);
 
         game_output_tx.send(GameOutput::SubmitColor { color: [1.; 4] })?;
+
+        Ok(ControlFlow::Continue(()))
     });
 
     Ok(Threads {
