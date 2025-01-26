@@ -7,14 +7,28 @@ use std::{
 
 use crossbeam_channel::{select, SendError, TryRecvError};
 
-use crate::game_engine::{GameInput, GameOutput};
+use crate::{
+    game_engine::{GameInput, GameOutput, TerminalInputEvent},
+    io::editor::input::read_editor_event,
+};
 
 pub fn start() -> anyhow::Result<Threads> {
+    let (editor_input_tx, editor_input_rx) =
+        channel::<Option<TerminalInputEvent>>();
     let (game_input_tx, game_input_rx) = channel::<GameInput>();
     let (game_output_tx, game_output_rx) = channel();
 
     let game_engine = spawn(move || {
         let event = select! {
+            recv(editor_input_rx.inner) -> result => {
+                result.map(|maybe_event|
+                    if let Some(event) = maybe_event {
+                        GameEngineEvent::EditorInput { event }}
+                    else {
+                        GameEngineEvent::Heartbeat
+                    }
+                )
+            }
             recv(game_input_rx.inner) -> result => {
                 result.map(|input| GameEngineEvent::GameInput { input })
             }
@@ -24,16 +38,33 @@ pub fn start() -> anyhow::Result<Threads> {
         };
 
         match event {
+            GameEngineEvent::EditorInput { event } => {
+                if let TerminalInputEvent::Character { ch } = event {
+                    dbg!(ch);
+                } else {
+                    dbg!(event);
+                }
+            }
             GameEngineEvent::GameInput {
                 input: GameInput::RenderingFrame,
             } => {
                 // This loop is coupled to the frame rate of the renderer.
             }
+            GameEngineEvent::Heartbeat => {}
         }
 
         game_output_tx.send(GameOutput::SubmitColor { color: [1.; 4] })?;
 
         Ok(ControlFlow::Continue(()))
+    });
+
+    spawn(move || match read_editor_event() {
+        Ok(ControlFlow::Continue(event)) => {
+            editor_input_tx.send(event)?;
+            Ok(ControlFlow::Continue(()))
+        }
+        Ok(ControlFlow::Break(())) => Ok(ControlFlow::Break(())),
+        Err(err) => Err(Error::Other { err }),
     });
 
     Ok(Threads {
@@ -167,5 +198,26 @@ where
 
 #[derive(Debug)]
 enum GameEngineEvent {
-    GameInput { input: GameInput },
+    EditorInput {
+        event: TerminalInputEvent,
+    },
+
+    GameInput {
+        input: GameInput,
+    },
+
+    /// # An event that has no effect when processed
+    ///
+    /// If a thread shuts down, either because of an error, or because the
+    /// application is supposed to shut down as a whole, that needs to propagate
+    /// to the other threads.
+    ///
+    /// For some threads, this is easily achieved, because they block on reading
+    /// from a channel from another thread, which will fail the moment that
+    /// other thread shuts down. Other threads block on something else, and
+    /// don't benefit from this mechanism.
+    ///
+    /// Those other threads need to instead _send_ to another thread from time
+    /// to time, to learn about the shutdown. This is what this event is for.
+    Heartbeat,
 }
