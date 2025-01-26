@@ -45,10 +45,9 @@ list:
 ## Design
 
 This section aims to document the decisions that have gone into the language
-design. Due to the current state of the project, this isn't (yet) a long list,
-nor is anything here going to be final.
+design. Nothing here going to be final.
 
-For more information on future design directions, please follow my
+For more information on future design directions, consider following my
 [daily thoughts].
 
 ### Developer experience is the priority, but not an absolute one
@@ -62,8 +61,8 @@ configurable, if practical. Where possible, designs are chosen that are good for
 both.
 
 And while a focus on developer experience might decrease _peak_ performance, it
-might improve performance in general. Simply because developers have the tools
-and spare resources to make their programs run fast.
+could improve performance in general, because developers have the tools and
+spare resources to make their programs run fast.
 
 The following daily thoughts provide more context:
 [2024-08-30](https://capi.hannobraun.com/daily/2024-08-30),
@@ -88,11 +87,11 @@ The following daily thoughts provide more context:
 
 ### Continued evolution over backwards compatibility
 
-I'm not targeting a 1.0 release after which the language is expected to have few
-or no breaking changes. Right now, everything is early-stage and experimental
-anyway. But even long-term, I don't want to commit to backwards compatibility.
-The continued evolution of the language and the costs of ongoing maintenance
-will be prioritized instead.
+I don't intend to ever release a "1.0" version, after which the language is
+expected to have few or no breaking changes. Right now, everything is
+experimental anyway. But even long-term, I don't want to commit to backwards
+compatibility. The continued evolution of the language and the costs of ongoing
+maintenance will be prioritized instead.
 
 As the language matures, there will be a growing focus on making any given
 upgrade easy. But each release might introduce changes that require updates to
@@ -188,7 +187,7 @@ The following daily thoughts provide more context:
 
 ### Postfix operators
 
-The language uses postfix operators, like `arg1 arg2 do_thing` or `1 2 +`, as
+The language uses postfix operators, like `arg1 arg2 do_thing` and `1 2 +`, as
 opposed to prefix (`do_thing(arg1, arg2)`, `(+ 1 2)`) or infix (`1 + 2`)
 operators.
 
