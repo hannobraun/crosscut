@@ -161,24 +161,6 @@ The following daily thoughts provide more context:
 [2024-08-21](https://capi.hannobraun.com/daily/2024-08-21), and
 [2024-08-22](https://capi.hannobraun.com/daily/2024-08-22).
 
-### Untyped now, statically typed later
-
-Crosscut is currently untyped. This means there is only a single data type,
-32-bit words, and all values are represented using those. The developer often
-has to choose a specific operation, depending on what specific type they expect
-(`add_s8` vs `add_s32`, for example).
-
-This isn't a final decision. It just was the easiest place to start in. The goal
-is to make the language statically typed. I expect this to be a gradual process,
-where the compiler understands more and more about types over time, until it can
-select the correct operation itself (and the developer can just call `add` or
-`+`).
-
-The following daily thoughts provide more context:
-[2024-07-16](https://capi.hannobraun.com/daily/2024-07-16),
-[2024-07-17](https://capi.hannobraun.com/daily/2024-07-17), and
-[2024-08-23](https://capi.hannobraun.com/daily/2024-08-23).
-
 ### Crosscut code is embedded into a host
 
 Crosscut code does not execute I/O operations directly. Whenever it needs to do
@@ -225,30 +207,6 @@ The following daily thoughts provide more context:
 [2024-05-09](https://capi.hannobraun.com/daily/2024-05-09),
 [2024-05-10](https://capi.hannobraun.com/daily/2024-05-10), and
 [2024-05-11](https://capi.hannobraun.com/daily/2024-05-11).
-
-### Stack-based evaluation, but not a stack-based language
-
-Crosscut, featuring postfix operators, has a stack-based evaluation model. But
-it is not a stack-based language. There is no single data stack that is used to
-pass arguments and return values between functions.
-
-Instead, Crosscut uses a much more conventional model, with a regular stack and
-explicit function arguments. Each operand stack is local to a (function) scope.
-
-This approach is less error-prone, but also less flexible and more verbose. It
-seems to make sense right now, but as the language grows other features that
-make it less error-prone (like static typing and better tooling), this decision
-can be revisited.
-
-The following daily thoughts provide more context:
-[2024-05-10](https://capi.hannobraun.com/daily/2024-05-10),
-[2024-05-11](https://capi.hannobraun.com/daily/2024-05-11),
-[2024-06-20](https://capi.hannobraun.com/daily/2024-06-20),
-[2024-06-21](https://capi.hannobraun.com/daily/2024-06-21),
-[2024-06-22](https://capi.hannobraun.com/daily/2024-06-22),
-[2024-06-23](https://capi.hannobraun.com/daily/2024-06-23),
-[2024-06-24](https://capi.hannobraun.com/daily/2024-06-24), and
-[2024-06-25](https://capi.hannobraun.com/daily/2024-06-25).
 
 ### Designed to be used with tooling
 
