@@ -84,32 +84,6 @@ pub struct Threads {
     pub game_output: Receiver<GameOutput>,
 }
 
-fn spawn<F>(mut f: F) -> ThreadHandle
-where
-    F: FnMut() -> Result<ControlFlow<()>, Error> + Send + 'static,
-{
-    let handle = thread::spawn(move || {
-        loop {
-            match f() {
-                Ok(ControlFlow::Continue(())) => {}
-                Ok(ControlFlow::Break(())) => {
-                    break;
-                }
-                Err(Error::ChannelDisconnected { .. }) => {
-                    break;
-                }
-                Err(Error::Other { err }) => {
-                    return Err(err);
-                }
-            }
-        }
-
-        Ok(())
-    });
-
-    ThreadHandle::new(handle)
-}
-
 fn channel<T>() -> (Sender<T>, Receiver<T>) {
     let (sender, receiver) = crossbeam_channel::unbounded();
 
@@ -198,6 +172,32 @@ impl ThreadHandle {
             }
         }
     }
+}
+
+fn spawn<F>(mut f: F) -> ThreadHandle
+where
+    F: FnMut() -> Result<ControlFlow<()>, Error> + Send + 'static,
+{
+    let handle = thread::spawn(move || {
+        loop {
+            match f() {
+                Ok(ControlFlow::Continue(())) => {}
+                Ok(ControlFlow::Break(())) => {
+                    break;
+                }
+                Err(Error::ChannelDisconnected { .. }) => {
+                    break;
+                }
+                Err(Error::Other { err }) => {
+                    return Err(err);
+                }
+            }
+        }
+
+        Ok(())
+    });
+
+    ThreadHandle::new(handle)
 }
 
 #[derive(Debug)]
