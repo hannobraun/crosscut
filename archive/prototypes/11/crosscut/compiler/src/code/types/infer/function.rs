@@ -82,6 +82,8 @@ mod tests {
         };
 
         for [mut a, mut b] in [[a.clone(), b.clone()], [b, a]] {
+            // This is sketchy. The first permutation is going to update
+            // `types`, which will then influence the second permutation.
             a.unify_with(&mut b, &mut types);
 
             for function in [a, b] {
@@ -114,6 +116,8 @@ mod tests {
         };
 
         for [mut a, mut b] in [[a.clone(), b.clone()], [b, a]] {
+            // This is sketchy. See comment on the equivalent code in the test
+            // above.
             a.unify_with(&mut b, &mut types);
 
             for function in [a, b] {
