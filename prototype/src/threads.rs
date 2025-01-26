@@ -16,14 +16,15 @@ pub fn start() -> anyhow::Result<Threads> {
     let game_engine = spawn(move || loop {
         let event = select! {
             recv(game_input_rx.inner) -> result => {
-                result
+                result.map(|input| GameEngineEvent::GameInput { input })
             }
         };
         let Ok(event) = event else {
             return Err(ChannelDisconnected.into());
         };
 
-        dbg!(event);
+        let GameEngineEvent::GameInput { input } = event;
+        dbg!(input);
 
         game_output_tx.send(GameOutput::SubmitColor { color: [1.; 4] })?;
     });
@@ -155,4 +156,9 @@ where
     });
 
     ThreadHandle::new(handle)
+}
+
+#[derive(Debug)]
+enum GameEngineEvent {
+    GameInput { input: GameInput },
 }
