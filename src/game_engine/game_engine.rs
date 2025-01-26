@@ -6,6 +6,7 @@ use crate::{
         self,
         host::Host,
         interpreter::{StepResult, Value},
+        Language,
     },
 };
 
@@ -16,7 +17,7 @@ use super::{
 
 pub struct GameEngine<A> {
     host: Host,
-    lang: lang::Language,
+    lang: Language,
     game_output: Vec<GameOutput>,
     editor_input: TerminalEditorInput,
     editor_output: EditorOutput<A>,
