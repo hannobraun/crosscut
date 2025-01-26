@@ -21,6 +21,15 @@ pub fn start() -> anyhow::Result<Threads> {
     let (game_input_tx, game_input_rx) = channel::<GameInput>();
     let (game_output_tx, game_output_rx) = channel();
 
+    let editor_input = spawn(move || match read_editor_event() {
+        Ok(ControlFlow::Continue(event)) => {
+            editor_input_tx.send(event)?;
+            Ok(ControlFlow::Continue(()))
+        }
+        Ok(ControlFlow::Break(())) => Ok(ControlFlow::Break(())),
+        Err(err) => Err(Error::Other { err }),
+    });
+
     let game_engine = spawn(move || {
         let event = select! {
             recv(editor_input_rx.inner) -> result => {
@@ -59,15 +68,6 @@ pub fn start() -> anyhow::Result<Threads> {
         game_output_tx.send(GameOutput::SubmitColor { color: [1.; 4] })?;
 
         Ok(ControlFlow::Continue(()))
-    });
-
-    let editor_input = spawn(move || match read_editor_event() {
-        Ok(ControlFlow::Continue(event)) => {
-            editor_input_tx.send(event)?;
-            Ok(ControlFlow::Continue(()))
-        }
-        Ok(ControlFlow::Break(())) => Ok(ControlFlow::Break(())),
-        Err(err) => Err(Error::Other { err }),
     });
 
     Ok(Threads {
