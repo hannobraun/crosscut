@@ -335,6 +335,7 @@ dependencies = [
  "anyhow",
  "crossbeam-channel",
  "pollster",
+ "thiserror 2.0.11",
  "wgpu",
  "winit",
 ]
