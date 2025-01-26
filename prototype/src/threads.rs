@@ -125,7 +125,7 @@ impl From<io::Error> for Error {
 #[error("Channel disconnected")]
 pub struct ChannelDisconnected;
 
-pub fn channel<T>() -> (Sender<T>, Receiver<T>) {
+fn channel<T>() -> (Sender<T>, Receiver<T>) {
     let (sender, receiver) = crossbeam_channel::unbounded();
 
     (Sender { inner: sender }, Receiver { inner: receiver })
