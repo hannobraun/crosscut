@@ -8,7 +8,7 @@ pub mod interpreter;
 
 mod instance;
 
-pub use self::instance::Instance;
+pub use self::instance::Language;
 
 #[cfg(test)]
 mod tests;

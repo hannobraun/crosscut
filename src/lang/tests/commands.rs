@@ -6,7 +6,7 @@ fn reset_interpreter_on_reset_command() {
     // the start.
 
     let host = Host::empty();
-    let mut lang = lang::Instance::new();
+    let mut lang = lang::Language::new();
 
     lang.on_input("1", &host);
     lang.run_until_finished();

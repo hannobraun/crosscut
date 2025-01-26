@@ -8,13 +8,13 @@ use super::{
 };
 
 #[derive(Debug)]
-pub struct Instance {
+pub struct Language {
     pub code: Codebase,
     pub editor: Editor,
     pub interpreter: Interpreter,
 }
 
-impl Instance {
+impl Language {
     pub fn new() -> Self {
         let mut code = Codebase::default();
         let editor = Editor::new(&mut code);

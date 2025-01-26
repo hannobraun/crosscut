@@ -16,7 +16,7 @@ use super::{
 
 pub struct GameEngine<A> {
     host: Host,
-    lang: lang::Instance,
+    lang: lang::Language,
     game_output: Vec<GameOutput>,
     editor_input: TerminalEditorInput,
     editor_output: EditorOutput<A>,
@@ -46,7 +46,7 @@ where
 
         Self {
             host: Host::from_functions(["dim"]),
-            lang: lang::Instance::new(),
+            lang: lang::Language::new(),
             game_output: Vec::new(),
             editor_input: TerminalEditorInput::new(),
             editor_output,

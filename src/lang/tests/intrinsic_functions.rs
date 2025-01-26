@@ -11,7 +11,7 @@ fn identity() {
     // actual behavior is not necessary or desired.
 
     let host = Host::empty();
-    let mut lang = lang::Instance::new();
+    let mut lang = lang::Language::new();
 
     lang.on_input("identity 1", &host);
 

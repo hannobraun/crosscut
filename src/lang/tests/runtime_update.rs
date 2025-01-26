@@ -10,7 +10,7 @@ fn reset_interpreter_on_code_update_if_finished() {
     // code should reset it, so it starts again from the top.
 
     let host = Host::empty();
-    let mut lang = lang::Instance::new();
+    let mut lang = lang::Language::new();
 
     lang.on_char('1', &host);
     lang.run_until_finished();
@@ -29,7 +29,7 @@ fn reset_interpreter_on_code_update_if_error() {
     // code should reset it, so it starts again from the top.
 
     let host = Host::empty();
-    let mut lang = lang::Instance::new();
+    let mut lang = lang::Language::new();
 
     lang.on_input("identity", &host);
     let step = lang.interpreter.step(&lang.code);
@@ -55,7 +55,7 @@ fn update_interpreter_on_code_update() {
     // it currently points to.
 
     let host = Host::empty();
-    let mut lang = lang::Instance::new();
+    let mut lang = lang::Language::new();
 
     lang.on_input("identity 1", &host);
     let output = lang.run_until_finished();
