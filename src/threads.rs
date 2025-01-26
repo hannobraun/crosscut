@@ -84,6 +84,26 @@ pub struct Threads {
     pub game_output: Receiver<GameOutput>,
 }
 
+#[derive(Debug)]
+pub struct ThreadHandle {
+    inner: JoinHandle<anyhow::Result<()>>,
+}
+
+impl ThreadHandle {
+    fn new(handle: JoinHandle<anyhow::Result<()>>) -> Self {
+        Self { inner: handle }
+    }
+
+    pub fn join(self) -> anyhow::Result<()> {
+        match self.inner.join() {
+            Ok(result) => result,
+            Err(payload) => {
+                panic::resume_unwind(payload);
+            }
+        }
+    }
+}
+
 pub struct Sender<T> {
     inner: crossbeam_channel::Sender<T>,
 }
@@ -147,26 +167,6 @@ impl From<io::Error> for Error {
 #[derive(Debug, thiserror::Error)]
 #[error("Channel disconnected")]
 pub struct ChannelDisconnected;
-
-#[derive(Debug)]
-pub struct ThreadHandle {
-    inner: JoinHandle<anyhow::Result<()>>,
-}
-
-impl ThreadHandle {
-    fn new(handle: JoinHandle<anyhow::Result<()>>) -> Self {
-        Self { inner: handle }
-    }
-
-    pub fn join(self) -> anyhow::Result<()> {
-        match self.inner.join() {
-            Ok(result) => result,
-            Err(payload) => {
-                panic::resume_unwind(payload);
-            }
-        }
-    }
-}
 
 fn channel<T>() -> (Sender<T>, Receiver<T>) {
     let (sender, receiver) = crossbeam_channel::unbounded();
