@@ -61,7 +61,7 @@ pub fn start() -> anyhow::Result<Threads> {
         Ok(ControlFlow::Continue(()))
     });
 
-    spawn(move || match read_editor_event() {
+    let editor_input = spawn(move || match read_editor_event() {
         Ok(ControlFlow::Continue(event)) => {
             editor_input_tx.send(event)?;
             Ok(ControlFlow::Continue(()))
@@ -71,14 +71,14 @@ pub fn start() -> anyhow::Result<Threads> {
     });
 
     Ok(Threads {
-        handles: [game_engine],
+        handles: [editor_input, game_engine],
         game_input: game_input_tx,
         game_output: game_output_rx,
     })
 }
 
 pub struct Threads {
-    pub handles: [ThreadHandle; 1],
+    pub handles: [ThreadHandle; 2],
     pub game_input: Sender<GameInput>,
     pub game_output: Receiver<GameOutput>,
 }
