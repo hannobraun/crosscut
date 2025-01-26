@@ -16,8 +16,5 @@
     },
     "[typescript]": {
         "editor.defaultFormatter": "denoland.vscode-deno"
-    },
-    "rust-analyzer.linkedProjects": [
-        "prototype/Cargo.toml"
-    ]
+    }
 }
