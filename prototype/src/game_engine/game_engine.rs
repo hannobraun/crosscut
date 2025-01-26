@@ -27,6 +27,8 @@ impl GameEngine {
     }
 
     pub fn game_output(&mut self) -> impl Iterator<Item = GameOutput> + '_ {
+        self.game_output
+            .push(GameOutput::SubmitColor { color: [1.; 4] });
         self.game_output.drain(..)
     }
 }

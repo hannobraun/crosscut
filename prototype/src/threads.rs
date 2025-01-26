@@ -68,8 +68,6 @@ pub fn start() -> anyhow::Result<Threads> {
             GameEngineEvent::Heartbeat => {}
         }
 
-        game_output_tx.send(GameOutput::SubmitColor { color: [1.; 4] })?;
-
         Ok(ControlFlow::Continue(()))
     });
 
