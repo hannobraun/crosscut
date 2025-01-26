@@ -7,6 +7,7 @@ edition = "2021"
 [dependencies]
 anyhow = "*"
 crossbeam-channel = "*"
+crossterm = "*"
 pollster = "*"
 thiserror = "*"
 wgpu = "*"
