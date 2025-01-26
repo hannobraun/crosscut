@@ -29,25 +29,9 @@ which include regular updates.
 
 ## Usage
 
-As per _Status_ above, not much thought has been given to using Crosscut outside
-of this repository. If you want to play around with it, playing around with this
-repository is the way to do it:
-
-1. Clone this repository.
-2. Run `cargo run` (requires [Rust](https://rust-lang.org/) to be installed).
-
-That second step will start a build tool that should compile everything in here,
-start a development server, and eventually output a link.
-
-Open that link in your browser. You should see the Snake game running, alongside
-the Crosscut debugger.
-
-You can modify the [code of the game][Snake] or any of the
-[Crosscut code](capi/) itself. The builder should automatically re-compile every
-change, and the web page should reload, if necessary.
-
-Please note that there currently is a
-[substantial number of bugs and other basic problems](https://github.com/hannobraun/crosscut/issues).
+Compile and start the development environment by executing `cargo run` in the
+root directory of this repository. This requires a working
+[Rust](https://rust-lang.org/) development setup.
 
 ## Inspiration
 
