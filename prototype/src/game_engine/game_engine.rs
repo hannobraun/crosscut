@@ -1,9 +1,13 @@
 use crate::io::editor::output::{EditorOutputAdapter, RawTerminalAdapter};
 
-use super::{terminal_editor::output::EditorOutput, TerminalInputEvent};
+use super::{
+    terminal_editor::{input::TerminalEditorInput, output::EditorOutput},
+    TerminalInputEvent,
+};
 
 pub struct GameEngine<A> {
     game_output: Vec<GameOutput>,
+    editor_input: TerminalEditorInput,
     editor_output: EditorOutput<A>,
 }
 
@@ -21,6 +25,7 @@ where
     pub fn new(adapter: A) -> Self {
         Self {
             game_output: Vec::new(),
+            editor_input: TerminalEditorInput::new(),
             editor_output: EditorOutput::new(adapter),
         }
     }
@@ -35,9 +40,7 @@ where
         &mut self,
         event: TerminalInputEvent,
     ) -> anyhow::Result<()> {
-        if let TerminalInputEvent::Character { ch } = event {
-            dbg!(ch);
-        }
+        self.editor_input.on_input(event);
 
         Ok(())
     }
