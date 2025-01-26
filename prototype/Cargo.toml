@@ -3,3 +3,6 @@
 [package]
 name = "crosscut"
 edition = "2021"
+
+[dependencies]
+anyhow = "*"
