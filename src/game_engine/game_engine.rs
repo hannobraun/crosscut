@@ -17,7 +17,7 @@ use super::{
 
 pub struct GameEngine<A> {
     host: Host,
-    lang: Language,
+    language: Language,
     game_output: Vec<GameOutput>,
     editor_input: TerminalEditorInput,
     editor_output: EditorOutput<A>,
@@ -47,7 +47,7 @@ where
 
         Self {
             host: Host::from_functions(["dim"]),
-            lang: lang::Language::new(),
+            language: lang::Language::new(),
             game_output: Vec::new(),
             editor_input: TerminalEditorInput::new(),
             editor_output,
@@ -57,9 +57,9 @@ where
     pub fn render_editor(&mut self) -> anyhow::Result<()> {
         self.editor_output.render(
             &self.editor_input,
-            &self.lang.editor,
-            &self.lang.code,
-            &self.lang.interpreter,
+            &self.language.editor,
+            &self.language.code,
+            &self.language.interpreter,
             &self.host,
         )?;
 
@@ -72,9 +72,9 @@ where
     ) -> anyhow::Result<()> {
         self.editor_input.on_input(
             event,
-            &mut self.lang.editor,
-            &mut self.lang.code,
-            &mut self.lang.interpreter,
+            &mut self.language.editor,
+            &mut self.language.code,
+            &mut self.language.interpreter,
             &self.host,
         );
 
@@ -84,7 +84,7 @@ where
         // As of this writing, it's not yet possible to express endless loops in
         // Crosscut code though, so it's fine.
         loop {
-            match self.lang.interpreter.step(&self.lang.code) {
+            match self.language.interpreter.step(&self.language.code) {
                 StepResult::CallToHostFunction { id, input, output } => {
                     match id {
                         0 => {
