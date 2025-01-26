@@ -1,23 +1,33 @@
-use super::TerminalInputEvent;
+use crate::io::editor::output::{EditorOutputAdapter, RawTerminalAdapter};
 
-pub struct GameEngine {
+use super::{terminal_editor::output::EditorOutput, TerminalInputEvent};
+
+pub struct GameEngine<A> {
     game_output: Vec<GameOutput>,
+    editor_output: EditorOutput<A>,
 }
 
-impl GameEngine {
+impl GameEngine<RawTerminalAdapter> {
     pub fn with_editor_ui() -> anyhow::Result<Self> {
-        Ok(Self::new())
+        let adapter = RawTerminalAdapter::new()?;
+        Ok(Self::new(adapter))
     }
 }
 
-impl GameEngine {
-    pub fn new() -> Self {
+impl<A> GameEngine<A>
+where
+    A: EditorOutputAdapter,
+{
+    pub fn new(adapter: A) -> Self {
         Self {
             game_output: Vec::new(),
+            editor_output: EditorOutput::new(adapter),
         }
     }
 
     pub fn render_editor(&mut self) -> anyhow::Result<()> {
+        self.editor_output.render()?;
+
         Ok(())
     }
 
