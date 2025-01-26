@@ -12,8 +12,6 @@ members = [
     "crosscut/watch",
 
     "tools/builder",
-    "tools/daily",
-    "tools/website",
 ]
 default-members = ["tools/builder"]
 
