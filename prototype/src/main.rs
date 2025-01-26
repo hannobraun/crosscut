@@ -1,5 +1,6 @@
 mod game_engine;
 mod io;
+mod lang;
 mod threads;
 
 fn main() -> anyhow::Result<()> {

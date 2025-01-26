@@ -1,4 +1,7 @@
-use crate::io::editor::output::{EditorOutputAdapter, RawTerminalAdapter};
+use crate::{
+    io::editor::output::{EditorOutputAdapter, RawTerminalAdapter},
+    lang::Language,
+};
 
 use super::{
     terminal_editor::{input::TerminalEditorInput, output::EditorOutput},
@@ -6,6 +9,7 @@ use super::{
 };
 
 pub struct GameEngine<A> {
+    language: Language,
     game_output: Vec<GameOutput>,
     editor_input: TerminalEditorInput,
     editor_output: EditorOutput<A>,
@@ -24,6 +28,7 @@ where
 {
     pub fn new(adapter: A) -> Self {
         Self {
+            language: Language::new(),
             game_output: Vec::new(),
             editor_input: TerminalEditorInput::new(),
             editor_output: EditorOutput::new(adapter),
@@ -41,6 +46,8 @@ where
         event: TerminalInputEvent,
     ) -> anyhow::Result<()> {
         self.editor_input.on_input(event);
+
+        dbg!(&self.language);
 
         Ok(())
     }
