@@ -27,7 +27,7 @@ pub fn start() -> anyhow::Result<Threads> {
 
     let game_engine = spawn(move || {
         let event = select! {
-            recv(editor_input_rx.inner()) -> result => {
+            recv(editor_input_rx.inner) -> result => {
                 result.map(|maybe_event|
                     if let Some(event) = maybe_event {
                         GameEngineEvent::EditorInput { event }}
@@ -36,7 +36,7 @@ pub fn start() -> anyhow::Result<Threads> {
                     }
                 )
             }
-            recv(game_input_rx.inner()) -> result => {
+            recv(game_input_rx.inner) -> result => {
                 result.map(|input| GameEngineEvent::GameInput { input })
             }
         };
@@ -174,10 +174,6 @@ impl<T> Receiver<T> {
             Err(TryRecvError::Empty) => Ok(None),
             Err(TryRecvError::Disconnected) => Err(ChannelDisconnected),
         }
-    }
-
-    fn inner(&self) -> &crossbeam_channel::Receiver<T> {
-        &self.inner
     }
 }
 
