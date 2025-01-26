@@ -1,18 +1,19 @@
 # Crosscut
 
-Crosscut (formerly known as Caterpillar) is a **programming language** with a
-dual goal:
+Crosscut (formerly known as Caterpillar) is a **programming language** and
+development environment with a dual goal:
 
-- Create an **immediate connection** between you and the code you're working on,
-  using **interactive programming**.
+- Reduce the feedback loop between making a change and seeing it run as much as
+  possible, creating an **immediate connection** between developer and code.
 - Bring this experience to many places: browsers, servers, desktops, phones,
   watches, microcontrollers; CPUs and GPUs.
 
-Interactive programming is the practice of directly manipulating your running
-program, instead of going through an extended loop of re-compiling, re-starting,
-then navigating to where you can test your change.
+We aim to achieve this using **interactive programming**: The practice of
+directly manipulating your running program, instead of going through an extended
+loop of re-compiling, re-starting, then navigating to where you can test your
+change.
 
-The core premise of the project is the hypothesis, that interactive programming
+The core premise of this project is the hypothesis, that interactive programming
 is underutilized. That using it as the central element that the language and its
 tooling are built around, can make development more fun, productive, and
 intuitive.
