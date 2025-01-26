@@ -84,12 +84,6 @@ pub struct Threads {
     pub game_output: Receiver<GameOutput>,
 }
 
-fn channel<T>() -> (Sender<T>, Receiver<T>) {
-    let (sender, receiver) = crossbeam_channel::unbounded();
-
-    (Sender { inner: sender }, Receiver { inner: receiver })
-}
-
 pub struct Sender<T> {
     inner: crossbeam_channel::Sender<T>,
 }
@@ -172,6 +166,12 @@ impl ThreadHandle {
             }
         }
     }
+}
+
+fn channel<T>() -> (Sender<T>, Receiver<T>) {
+    let (sender, receiver) = crossbeam_channel::unbounded();
+
+    (Sender { inner: sender }, Receiver { inner: receiver })
 }
 
 fn spawn<F>(mut f: F) -> ThreadHandle
