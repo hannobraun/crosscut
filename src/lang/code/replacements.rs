@@ -13,6 +13,25 @@ impl Replacements {
         original: NodeId,
         replacement: NodeId,
     ) {
+        // This check is not sufficient, as it only catches a special case of a
+        // larger problem: It is quite easy to construct replacement loops,
+        // which could then result in the panic below (in `latest_version_of`)
+        // triggering.
+        //
+        // Here's an example scenario for how to construct such a loop:
+        //
+        // 1. Create a new node and type '2'. We record `2` as replacing the
+        //    empty fragment.
+        // 2. Continue editing the node and type '5'. We record `25` as
+        //    replacing `2`.
+        // 3. Continue editing the node by pressing backspace. We record `2` as
+        //    replacing `25`, closing the loop.
+        //
+        // But while it's easy to construct a loop like this, it is not
+        // straight-forward, maybe impossible, to then trigger the panic below.
+        // Because `latest_version_of` will only get called, if the interpreter
+        // is running while any of that happens. And due to the limited nature
+        // of the current setup, that's generally not how it happens.
         if original == replacement {
             // It seems like this check should maybe be an assertion instead,
             // but it's actually quite easy to get into a situation where a
