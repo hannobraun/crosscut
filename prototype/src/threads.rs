@@ -54,11 +54,7 @@ pub fn start() -> anyhow::Result<Threads> {
 
         match event {
             GameEngineEvent::EditorInput { event } => {
-                if let TerminalInputEvent::Character { ch } = event {
-                    dbg!(ch);
-                } else {
-                    dbg!(event);
-                }
+                game_engine.on_editor_input(event)?;
             }
             GameEngineEvent::GameInput {
                 input: GameInput::RenderingFrame,

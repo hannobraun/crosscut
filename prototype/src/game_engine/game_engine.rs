@@ -1,3 +1,5 @@
+use super::TerminalInputEvent;
+
 pub struct GameEngine {}
 
 impl GameEngine {
@@ -6,6 +8,17 @@ impl GameEngine {
     }
 
     pub fn render_editor(&mut self) -> anyhow::Result<()> {
+        Ok(())
+    }
+
+    pub fn on_editor_input(
+        &mut self,
+        event: TerminalInputEvent,
+    ) -> anyhow::Result<()> {
+        if let TerminalInputEvent::Character { ch } = event {
+            dbg!(ch);
+        }
+
         Ok(())
     }
 }
