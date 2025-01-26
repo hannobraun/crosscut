@@ -13,6 +13,9 @@ use crate::{
 };
 
 pub fn start() -> anyhow::Result<Threads> {
+    // Need to specify the types of the channels explicitly, to work around this
+    // bug in rust-analyzer:
+    // https://github.com/rust-lang/rust-analyzer/issues/15984
     let (editor_input_tx, editor_input_rx) =
         channel::<Option<TerminalInputEvent>>();
     let (game_input_tx, game_input_rx) = channel::<GameInput>();
