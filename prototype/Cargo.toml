@@ -1,0 +1,5 @@
+[workspace]
+
+[package]
+name = "crosscut"
+edition = "2021"
