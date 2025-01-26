@@ -1,10 +1,14 @@
 use super::TerminalInputEvent;
 
-pub struct GameEngine {}
+pub struct GameEngine {
+    game_output: Vec<GameOutput>,
+}
 
 impl GameEngine {
     pub fn with_editor_ui() -> anyhow::Result<Self> {
-        Ok(Self {})
+        Ok(Self {
+            game_output: Vec::new(),
+        })
     }
 
     pub fn render_editor(&mut self) -> anyhow::Result<()> {
@@ -20,6 +24,10 @@ impl GameEngine {
         }
 
         Ok(())
+    }
+
+    pub fn game_output(&mut self) -> impl Iterator<Item = GameOutput> + '_ {
+        self.game_output.drain(..)
     }
 }
 

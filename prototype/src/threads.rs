@@ -55,6 +55,10 @@ pub fn start() -> anyhow::Result<Threads> {
         match event {
             GameEngineEvent::EditorInput { event } => {
                 game_engine.on_editor_input(event)?;
+
+                for event in game_engine.game_output() {
+                    game_output_tx.send(event)?;
+                }
             }
             GameEngineEvent::GameInput {
                 input: GameInput::RenderingFrame,
