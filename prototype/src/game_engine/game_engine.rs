@@ -10,7 +10,9 @@ impl GameEngine {
             game_output: Vec::new(),
         })
     }
+}
 
+impl GameEngine {
     pub fn render_editor(&mut self) -> anyhow::Result<()> {
         Ok(())
     }
