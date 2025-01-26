@@ -183,6 +183,8 @@ fn render_fragment<A: EditorOutputAdapter>(
                 // else for an empty fragment is only going to interfere with
                 // that.
             } else {
+                // Maybe it makes more sense to render this as an empty space
+                // character that's underlined?
                 write!(adapter, "empty fragment")?;
             }
         }
