@@ -10,7 +10,7 @@ use crossbeam_channel::{select, SendError, TryRecvError};
 use crate::game_engine::{GameInput, GameOutput};
 
 pub fn start() -> anyhow::Result<Threads> {
-    let (game_input_tx, game_input_rx) = channel();
+    let (game_input_tx, game_input_rx) = channel::<GameInput>();
     let (game_output_tx, game_output_rx) = channel();
 
     let game_engine = spawn(move || {
