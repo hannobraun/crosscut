@@ -72,7 +72,7 @@ pub fn start() -> anyhow::Result<Threads> {
     });
 
     Ok(Threads {
-        handles: [game_engine, editor_input],
+        handles: [editor_input, game_engine],
         game_input: game_input_tx,
         game_output: game_output_rx,
     })
