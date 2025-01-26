@@ -13,15 +13,6 @@ jobs:
     steps:
       - name: Clone repository
         uses: actions/checkout@v4
-
-      - name: Install `wasm32-unknown-unknown` target
-        run: rustup target add wasm32-unknown-unknown
-
-      - name: Install `wasm-opt`, so builder can optimize WASM output
-        run: sudo apt-get install binaryen
-
-      - name: Export games to prepare deployment to website
-        run: cargo run --package builder -- export
       
       - name: Run website builder
         run: cargo run --package website
