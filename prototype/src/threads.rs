@@ -23,8 +23,13 @@ pub fn start() -> anyhow::Result<Threads> {
             return Err(ChannelDisconnected.into());
         };
 
-        let GameEngineEvent::GameInput { input } = event;
-        dbg!(input);
+        match event {
+            GameEngineEvent::GameInput {
+                input: GameInput::RenderingFrame,
+            } => {
+                // This loop is coupled to the frame rate of the renderer.
+            }
+        }
 
         game_output_tx.send(GameOutput::SubmitColor { color: [1.; 4] })?;
 
