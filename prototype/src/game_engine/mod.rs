@@ -1,9 +1,3 @@
-#[derive(Debug)]
-pub enum GameInput {
-    RenderingFrame,
-}
+mod game_engine;
 
-#[derive(Debug)]
-pub enum GameOutput {
-    SubmitColor { color: [f64; 4] },
-}
+pub use self::game_engine::{GameInput, GameOutput};
