@@ -1,6 +1,6 @@
 use std::num::IntErrorKind;
 
-use crate::lang::{
+use crate::language::{
     code::{
         Body, CodeError, Codebase, Expression, FunctionCallTarget, Literal,
         Location, Node, NodeError, NodeKind,

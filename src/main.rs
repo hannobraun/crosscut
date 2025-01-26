@@ -5,7 +5,7 @@
 
 mod game_engine;
 mod io;
-mod lang;
+mod language;
 mod threads;
 
 fn main() -> anyhow::Result<()> {

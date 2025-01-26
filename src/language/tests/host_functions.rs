@@ -1,4 +1,4 @@
-use crate::lang::{
+use crate::language::{
     self,
     code::Codebase,
     host::Host,
@@ -25,7 +25,7 @@ fn nested_calls_to_host_function() {
 
 fn compile_and_run(input_code: &str) -> Value {
     let host = Host::from_functions(["half"]);
-    let mut lang = lang::Language::new();
+    let mut lang = language::Language::new();
 
     lang.on_input(input_code, &host);
     run(&lang.code, &mut lang.interpreter)

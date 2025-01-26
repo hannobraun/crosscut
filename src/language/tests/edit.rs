@@ -1,4 +1,4 @@
-use crate::lang::{
+use crate::language::{
     self,
     editor::EditorInputEvent,
     host::Host,
@@ -11,7 +11,7 @@ fn update_on_each_character() {
     // character it receives.
 
     let host = Host::empty();
-    let mut lang = lang::Language::new();
+    let mut lang = language::Language::new();
 
     lang.on_char('1', &host);
     assert_eq!(
@@ -36,7 +36,7 @@ fn update_on_backspace() {
     // and update the interpreter immediately.
 
     let host = Host::empty();
-    let mut lang = lang::Language::new();
+    let mut lang = language::Language::new();
 
     lang.on_char('1', &host);
     lang.on_char('2', &host);

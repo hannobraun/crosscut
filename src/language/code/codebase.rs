@@ -174,7 +174,7 @@ pub enum Literal {
 
 #[cfg(test)]
 mod tests {
-    use crate::lang::code::{Body, Location, Node, NodeKind};
+    use crate::language::code::{Body, Location, Node, NodeKind};
 
     use super::{Codebase, Expression, FunctionCallTarget};
 

@@ -3,7 +3,7 @@ use std::{
     iter,
 };
 
-use crate::lang::{
+use crate::language::{
     code::Codebase,
     editor::{Command, Editor, EditorInput, EditorInputEvent},
     host::Host,

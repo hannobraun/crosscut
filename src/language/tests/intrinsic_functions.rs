@@ -1,4 +1,4 @@
-use crate::lang::{
+use crate::language::{
     self,
     host::Host,
     interpreter::{StepResult, Value},
@@ -11,7 +11,7 @@ fn identity() {
     // actual behavior is not necessary or desired.
 
     let host = Host::empty();
-    let mut lang = lang::Language::new();
+    let mut lang = language::Language::new();
 
     lang.on_input("identity 1", &host);
 

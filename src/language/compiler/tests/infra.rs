@@ -1,4 +1,4 @@
-use crate::lang::{
+use crate::language::{
     code::{Body, Codebase, Node, NodeKind},
     compiler,
     host::Host,

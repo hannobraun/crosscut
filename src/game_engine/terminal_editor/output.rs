@@ -2,7 +2,7 @@ use crossterm::style::{Attribute, Color};
 
 use crate::{
     io::editor::output::EditorOutputAdapter,
-    lang::{
+    language::{
         code::{
             CodeError, Codebase, Expression, FunctionCallTarget, Literal,
             Located, NodeError, NodeKind,

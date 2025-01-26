@@ -1,6 +1,6 @@
 use pretty_assertions::assert_eq;
 
-use crate::lang::{
+use crate::language::{
     self,
     host::Host,
     interpreter::{StepResult, Value},
@@ -12,7 +12,7 @@ fn evaluate_single_expression() {
     // evaluated, and its value returned by the interpreter.
 
     let host = Host::empty();
-    let mut lang = lang::Language::new();
+    let mut lang = language::Language::new();
 
     lang.on_input("1", &host);
 
@@ -33,7 +33,7 @@ fn code_after_expression_is_an_error() {
     // is an error.
 
     let host = Host::empty();
-    let mut lang = lang::Language::new();
+    let mut lang = language::Language::new();
 
     lang.on_input("1 2", &host);
 

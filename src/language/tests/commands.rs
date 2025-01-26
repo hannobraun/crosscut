@@ -1,4 +1,4 @@
-use crate::lang::{self, editor::Command, host::Host};
+use crate::language::{self, editor::Command, host::Host};
 
 #[test]
 fn reset_interpreter_on_reset_command() {
@@ -6,7 +6,7 @@ fn reset_interpreter_on_reset_command() {
     // the start.
 
     let host = Host::empty();
-    let mut lang = lang::Language::new();
+    let mut lang = language::Language::new();
 
     lang.on_input("1", &host);
     lang.run_until_finished();

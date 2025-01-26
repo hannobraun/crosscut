@@ -2,7 +2,7 @@ use crate::{
     io::editor::output::{
         DebugOutputAdapter, EditorOutputAdapter, RawTerminalAdapter,
     },
-    lang::{
+    language::{
         self,
         host::Host,
         interpreter::{StepResult, Value},
@@ -47,7 +47,7 @@ where
 
         Self {
             host: Host::from_functions(["dim"]),
-            language: lang::Language::new(),
+            language: language::Language::new(),
             game_output: Vec::new(),
             editor_input: TerminalEditorInput::new(),
             editor_output,
