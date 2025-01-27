@@ -22,6 +22,11 @@ impl TerminalEditorInput {
         }
     }
 
+    #[cfg(test)]
+    pub fn mode(&self) -> &EditorMode {
+        &self.mode
+    }
+
     pub fn on_input(
         &mut self,
         event: TerminalInputEvent,
@@ -70,6 +75,18 @@ impl TerminalEditorInput {
 pub enum EditorMode {
     Command,
     Edit,
+}
+
+impl EditorMode {
+    #[cfg(test)]
+    pub fn is_command_mode(&self) -> bool {
+        matches!(self, Self::Command)
+    }
+
+    #[cfg(test)]
+    pub fn is_edit_mode(&self) -> bool {
+        matches!(self, Self::Edit)
+    }
 }
 
 #[derive(Debug)]
