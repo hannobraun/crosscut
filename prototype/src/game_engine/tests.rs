@@ -1,4 +1,4 @@
-use crate::game_engine::{GameEngine, GameOutput, TerminalInputEvent};
+use crate::game_engine::{GameEngine, GameOutput};
 
 #[test]
 fn enter_expression_and_expect_game_output() {
@@ -34,9 +34,7 @@ fn expect_clear_command_to_clear_codebase() {
 
     game_engine.enter_command_mode();
     game_engine.enter_command("clear");
-    game_engine
-        .on_editor_input(TerminalInputEvent::Enter)
-        .unwrap();
+    game_engine.execute_command();
 
     game_engine.enter_code("7");
 
