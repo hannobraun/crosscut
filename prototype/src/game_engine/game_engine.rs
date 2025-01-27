@@ -6,7 +6,9 @@ use crate::{
 };
 
 use super::{
-    terminal_editor::{input::TerminalEditorInput, output::EditorOutput},
+    terminal_editor::{
+        input::TerminalEditorInput, output::TerminalEditorOutput,
+    },
     TerminalInputEvent,
 };
 
@@ -14,7 +16,7 @@ pub struct GameEngine<A> {
     language: Language,
     game_output: Vec<GameOutput>,
     editor_input: TerminalEditorInput,
-    editor_output: EditorOutput<A>,
+    editor_output: TerminalEditorOutput<A>,
 }
 
 impl GameEngine<DebugOutputAdapter> {
@@ -41,7 +43,7 @@ where
             language: Language::new(),
             game_output: Vec::new(),
             editor_input: TerminalEditorInput::new(),
-            editor_output: EditorOutput::new(adapter),
+            editor_output: TerminalEditorOutput::new(adapter),
         }
     }
 

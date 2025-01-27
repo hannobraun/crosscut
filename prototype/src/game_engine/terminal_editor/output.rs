@@ -1,11 +1,11 @@
 use crate::io::editor::output::EditorOutputAdapter;
 
 #[derive(Debug)]
-pub struct EditorOutput<A> {
+pub struct TerminalEditorOutput<A> {
     adapter: A,
 }
 
-impl<A> EditorOutput<A>
+impl<A> TerminalEditorOutput<A>
 where
     A: EditorOutputAdapter,
 {
