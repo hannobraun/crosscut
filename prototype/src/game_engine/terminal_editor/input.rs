@@ -32,6 +32,7 @@ impl TerminalEditorInput {
             EditorMode::Command => {
                 if let TerminalInputEvent::Enter = event {
                     editor.on_command(EditorCommand::Clear, codebase);
+                    self.mode = EditorMode::Edit;
                 }
             }
             EditorMode::Edit => {
