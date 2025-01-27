@@ -1,7 +1,7 @@
 use crate::language::instance::Language;
 
 #[test]
-fn evaluate_integer() {
+fn number_literal() {
     // A number literal is a function that takes `None` and returns the number
     // it represents.
 
