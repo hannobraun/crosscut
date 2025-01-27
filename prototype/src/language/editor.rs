@@ -25,6 +25,12 @@ impl Editor {
             codebase.value = Some(value);
         }
     }
+
+    pub fn on_command(&mut self, command: EditorCommand, _: &mut Codebase) {
+        match command {
+            EditorCommand::Clear => {}
+        }
+    }
 }
 
 #[derive(Debug, Eq, PartialEq)]
@@ -48,4 +54,8 @@ pub enum EditorInputEvent {
     MoveCursorLeft,
     MoveCursorRight,
     RemoveCharacterLeft,
+}
+
+pub enum EditorCommand {
+    Clear,
 }

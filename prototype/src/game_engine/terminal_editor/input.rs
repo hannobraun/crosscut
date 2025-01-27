@@ -2,7 +2,7 @@ use std::collections::BTreeSet;
 
 use crate::language::{
     code::Codebase,
-    editor::{Editor, EditorInputEvent},
+    editor::{Editor, EditorCommand, EditorInputEvent},
 };
 
 #[derive(Debug)]
@@ -29,7 +29,11 @@ impl TerminalEditorInput {
         codebase: &mut Codebase,
     ) {
         match self.mode {
-            EditorMode::Command => {}
+            EditorMode::Command => {
+                if let TerminalInputEvent::Enter = event {
+                    editor.on_command(EditorCommand::Clear, codebase);
+                }
+            }
             EditorMode::Edit => {
                 let event = match event {
                     TerminalInputEvent::Character { ch } => {
