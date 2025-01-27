@@ -28,7 +28,9 @@ impl Editor {
 
     pub fn on_command(&mut self, command: EditorCommand, _: &mut Codebase) {
         match command {
-            EditorCommand::Clear => {}
+            EditorCommand::Clear => {
+                *self = Self::new();
+            }
         }
     }
 }
