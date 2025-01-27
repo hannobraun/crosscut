@@ -1,6 +1,6 @@
 use crate::{
     io::editor::output::{EditorOutputAdapter, RawTerminalAdapter},
-    language::{instance::Language, Editor},
+    language::{editor::Editor, instance::Language},
 };
 
 use super::{

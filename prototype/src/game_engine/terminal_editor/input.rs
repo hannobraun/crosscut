@@ -1,6 +1,6 @@
 use std::collections::BTreeSet;
 
-use crate::language::{editor::EditorInputEvent, Editor};
+use crate::language::editor::{Editor, EditorInputEvent};
 
 pub struct TerminalEditorInput {}
 
