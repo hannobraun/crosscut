@@ -25,7 +25,7 @@ fn enter_expression_and_expect_game_output() {
 }
 
 #[test]
-fn expect_clear_command_to_clear_codebase() {
+fn expect_clear_command_to_clear_previously_entered_code() {
     // If the `clear` command executes, previously entered code should have no
     // effect.
 
