@@ -1,5 +1,7 @@
 use std::collections::BTreeSet;
 
+use crate::language::EditorInputEvent;
+
 pub struct TerminalEditorInput {}
 
 impl TerminalEditorInput {
@@ -13,10 +15,27 @@ impl TerminalEditorInput {
     }
 
     pub fn on_input(&mut self, event: TerminalInputEvent) {
-        if let TerminalInputEvent::Character { ch } = event {
-            dbg!(ch);
-        } else {
-            dbg!(event);
+        let event = match event {
+            TerminalInputEvent::Character { ch } => {
+                Some(EditorInputEvent::Character { ch })
+            }
+            TerminalInputEvent::Backspace => {
+                Some(EditorInputEvent::RemoveCharacterLeft)
+            }
+            TerminalInputEvent::Enter => None,
+            TerminalInputEvent::Left => Some(EditorInputEvent::MoveCursorLeft),
+            TerminalInputEvent::Right => {
+                Some(EditorInputEvent::MoveCursorRight)
+            }
+            TerminalInputEvent::Escape => None,
+        };
+
+        if let Some(event) = event {
+            if let EditorInputEvent::Character { ch } = event {
+                dbg!(ch);
+            } else {
+                dbg!(event);
+            }
         }
     }
 }
