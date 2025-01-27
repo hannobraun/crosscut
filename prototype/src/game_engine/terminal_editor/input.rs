@@ -5,6 +5,7 @@ use crate::language::{
     editor::{Editor, EditorInputEvent},
 };
 
+#[derive(Debug)]
 pub struct TerminalEditorInput {
     mode: EditorMode,
 }
