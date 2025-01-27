@@ -34,12 +34,6 @@ impl TerminalEditorInput {
         codebase: &mut Codebase,
     ) {
         match self.mode {
-            EditorMode::Command => {
-                if let TerminalInputEvent::Enter = event {
-                    editor.on_command(EditorCommand::Clear, codebase);
-                    self.mode = EditorMode::Edit;
-                }
-            }
             EditorMode::Edit => {
                 let event = match event {
                     TerminalInputEvent::Character { ch } => {
@@ -65,6 +59,12 @@ impl TerminalEditorInput {
 
                 if let Some(event) = event {
                     editor.on_input(event, codebase)
+                }
+            }
+            EditorMode::Command => {
+                if let TerminalInputEvent::Enter = event {
+                    editor.on_command(EditorCommand::Clear, codebase);
+                    self.mode = EditorMode::Edit;
                 }
             }
         }
