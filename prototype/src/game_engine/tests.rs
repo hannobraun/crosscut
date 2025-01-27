@@ -32,9 +32,7 @@ fn expect_clear_command_to_clear_codebase() {
 
     game_engine.enter_code("12");
 
-    game_engine
-        .on_editor_input(TerminalInputEvent::Escape)
-        .unwrap();
+    game_engine.enter_command_mode();
     game_engine.enter_command("clear");
     game_engine
         .on_editor_input(TerminalInputEvent::Enter)
