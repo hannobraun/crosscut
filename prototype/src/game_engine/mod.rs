@@ -5,3 +5,6 @@ pub use self::{
     game_engine::{GameEngine, GameInput, GameOutput},
     terminal_editor::input::TerminalInputEvent,
 };
+
+#[cfg(test)]
+mod tests;

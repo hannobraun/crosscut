@@ -1,5 +1,7 @@
 use crate::{
-    io::editor::output::{EditorOutputAdapter, RawTerminalAdapter},
+    io::editor::output::{
+        DebugOutputAdapter, EditorOutputAdapter, RawTerminalAdapter,
+    },
     language::instance::Language,
 };
 
@@ -13,6 +15,14 @@ pub struct GameEngine<A> {
     game_output: Vec<GameOutput>,
     editor_input: TerminalEditorInput,
     editor_output: EditorOutput<A>,
+}
+
+impl GameEngine<DebugOutputAdapter> {
+    #[cfg(test)]
+    pub fn without_editor_ui() -> Self {
+        let adapter = DebugOutputAdapter;
+        Self::new(adapter)
+    }
 }
 
 impl GameEngine<RawTerminalAdapter> {
@@ -65,6 +75,16 @@ where
 
     pub fn game_output(&mut self) -> impl Iterator<Item = GameOutput> + '_ {
         self.game_output.drain(..)
+    }
+}
+
+#[cfg(test)]
+impl GameEngine<DebugOutputAdapter> {
+    pub fn enter_code(&mut self, code: &str) {
+        for ch in code.chars() {
+            self.on_editor_input(TerminalInputEvent::Character { ch })
+                .unwrap();
+        }
     }
 }
 
