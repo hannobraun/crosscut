@@ -51,10 +51,6 @@ where
             &mut self.language.codebase,
         );
 
-        Ok(())
-    }
-
-    pub fn game_output(&mut self) -> impl Iterator<Item = GameOutput> + '_ {
         if let Some(value) = self.language.codebase.value {
             let value: f64 = value.into();
             let value = value / 255.;
@@ -64,6 +60,10 @@ where
             });
         }
 
+        Ok(())
+    }
+
+    pub fn game_output(&mut self) -> impl Iterator<Item = GameOutput> + '_ {
         self.game_output.drain(..)
     }
 }
