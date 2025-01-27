@@ -1,4 +1,7 @@
 mod editor;
 mod instance;
 
-pub use self::{editor::EditorInputEvent, instance::Language};
+pub use self::{
+    editor::{Editor, EditorInputEvent},
+    instance::Language,
+};

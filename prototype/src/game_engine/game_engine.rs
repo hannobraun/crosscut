@@ -1,6 +1,6 @@
 use crate::{
     io::editor::output::{EditorOutputAdapter, RawTerminalAdapter},
-    language::Language,
+    language::{Editor, Language},
 };
 
 use super::{
@@ -45,7 +45,7 @@ where
         &mut self,
         event: TerminalInputEvent,
     ) -> anyhow::Result<()> {
-        self.editor_input.on_input(event);
+        self.editor_input.on_input(event, &mut Editor::new());
 
         dbg!(&self.language);
 
