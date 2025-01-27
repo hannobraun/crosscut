@@ -28,6 +28,7 @@ impl TerminalEditorInput {
         codebase: &mut Codebase,
     ) {
         match self.mode {
+            EditorMode::Command => {}
             EditorMode::Edit => {
                 let event = match event {
                     TerminalInputEvent::Character { ch } => {
@@ -45,7 +46,10 @@ impl TerminalEditorInput {
                     }
 
                     TerminalInputEvent::Enter => None,
-                    TerminalInputEvent::Escape => None,
+                    TerminalInputEvent::Escape => {
+                        self.mode = EditorMode::Command;
+                        None
+                    }
                 };
 
                 if let Some(event) = event {
@@ -58,6 +62,7 @@ impl TerminalEditorInput {
 
 #[derive(Debug, Eq, PartialEq)]
 pub enum EditorMode {
+    Command,
     Edit,
 }
 
