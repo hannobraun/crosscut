@@ -51,8 +51,6 @@ where
             &mut self.language.codebase,
         );
 
-        dbg!(&self.language);
-
         Ok(())
     }
 
