@@ -73,8 +73,8 @@ impl TerminalEditorInput {
 
 #[derive(Debug, Eq, PartialEq)]
 pub enum EditorMode {
-    Command,
     Edit,
+    Command,
 }
 
 impl EditorMode {
