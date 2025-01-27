@@ -1,5 +1,6 @@
 use crate::io::editor::output::EditorOutputAdapter;
 
+#[derive(Debug)]
 pub struct EditorOutput<A> {
     adapter: A,
 }

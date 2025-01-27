@@ -17,6 +17,7 @@ pub trait EditorOutputAdapter: fmt::Write {
     fn flush(&mut self) -> io::Result<()>;
 }
 
+#[derive(Debug)]
 pub struct DebugOutputAdapter;
 
 impl EditorOutputAdapter for DebugOutputAdapter {
