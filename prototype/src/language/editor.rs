@@ -15,8 +15,6 @@ impl Editor {
     pub fn on_input(&mut self, event: EditorInputEvent, _: &mut Codebase) {
         if let EditorInputEvent::Character { ch } = event {
             self.input.insert(ch);
-        } else {
-            dbg!(event);
         }
     }
 }
