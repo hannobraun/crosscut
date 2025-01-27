@@ -33,16 +33,18 @@ impl TerminalEditorInput {
                     TerminalInputEvent::Character { ch } => {
                         Some(EditorInputEvent::Character { ch })
                     }
+
                     TerminalInputEvent::Backspace => {
                         Some(EditorInputEvent::RemoveCharacterLeft)
                     }
-                    TerminalInputEvent::Enter => None,
                     TerminalInputEvent::Left => {
                         Some(EditorInputEvent::MoveCursorLeft)
                     }
                     TerminalInputEvent::Right => {
                         Some(EditorInputEvent::MoveCursorRight)
                     }
+
+                    TerminalInputEvent::Enter => None,
                     TerminalInputEvent::Escape => None,
                 };
 
