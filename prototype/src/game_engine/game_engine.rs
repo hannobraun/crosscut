@@ -12,6 +12,7 @@ use super::{
     TerminalInputEvent,
 };
 
+#[derive(Debug)]
 pub struct GameEngine<A> {
     language: Language,
     game_output: Vec<GameOutput>,
