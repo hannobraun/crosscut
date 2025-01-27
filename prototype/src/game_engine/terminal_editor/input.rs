@@ -5,7 +5,9 @@ use crate::language::{
     editor::{Editor, EditorInputEvent},
 };
 
-pub struct TerminalEditorInput {}
+pub struct TerminalEditorInput {
+    mode: EditorMode,
+}
 
 impl TerminalEditorInput {
     pub fn new() -> Self {
@@ -14,7 +16,9 @@ impl TerminalEditorInput {
         commands.insert("nop");
         commands.insert("reset");
 
-        Self {}
+        Self {
+            mode: EditorMode::Edit,
+        }
     }
 
     pub fn on_input(
@@ -23,25 +27,36 @@ impl TerminalEditorInput {
         editor: &mut Editor,
         codebase: &mut Codebase,
     ) {
-        let event = match event {
-            TerminalInputEvent::Character { ch } => {
-                Some(EditorInputEvent::Character { ch })
-            }
-            TerminalInputEvent::Backspace => {
-                Some(EditorInputEvent::RemoveCharacterLeft)
-            }
-            TerminalInputEvent::Enter => None,
-            TerminalInputEvent::Left => Some(EditorInputEvent::MoveCursorLeft),
-            TerminalInputEvent::Right => {
-                Some(EditorInputEvent::MoveCursorRight)
-            }
-            TerminalInputEvent::Escape => None,
-        };
+        match self.mode {
+            EditorMode::Edit => {
+                let event = match event {
+                    TerminalInputEvent::Character { ch } => {
+                        Some(EditorInputEvent::Character { ch })
+                    }
+                    TerminalInputEvent::Backspace => {
+                        Some(EditorInputEvent::RemoveCharacterLeft)
+                    }
+                    TerminalInputEvent::Enter => None,
+                    TerminalInputEvent::Left => {
+                        Some(EditorInputEvent::MoveCursorLeft)
+                    }
+                    TerminalInputEvent::Right => {
+                        Some(EditorInputEvent::MoveCursorRight)
+                    }
+                    TerminalInputEvent::Escape => None,
+                };
 
-        if let Some(event) = event {
-            editor.on_input(event, codebase)
+                if let Some(event) = event {
+                    editor.on_input(event, codebase)
+                }
+            }
         }
     }
+}
+
+#[derive(Debug, Eq, PartialEq)]
+pub enum EditorMode {
+    Edit,
 }
 
 #[derive(Debug)]
