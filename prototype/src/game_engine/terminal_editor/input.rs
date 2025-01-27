@@ -21,7 +21,7 @@ impl TerminalEditorInput {
         &mut self,
         event: TerminalInputEvent,
         editor: &mut Editor,
-        _: &mut Codebase,
+        codebase: &mut Codebase,
     ) {
         let event = match event {
             TerminalInputEvent::Character { ch } => {
@@ -39,7 +39,7 @@ impl TerminalEditorInput {
         };
 
         if let Some(event) = event {
-            editor.on_input(event)
+            editor.on_input(event, codebase)
         }
     }
 }
