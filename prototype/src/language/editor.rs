@@ -12,9 +12,17 @@ impl Editor {
         }
     }
 
-    pub fn on_input(&mut self, event: EditorInputEvent, _: &mut Codebase) {
+    pub fn on_input(
+        &mut self,
+        event: EditorInputEvent,
+        codebase: &mut Codebase,
+    ) {
         if let EditorInputEvent::Character { ch } = event {
             self.input.insert(ch);
+        }
+
+        if let Ok(value) = self.input.buffer.parse() {
+            codebase.value = Some(value);
         }
     }
 }

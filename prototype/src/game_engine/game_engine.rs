@@ -55,8 +55,15 @@ where
     }
 
     pub fn game_output(&mut self) -> impl Iterator<Item = GameOutput> + '_ {
-        self.game_output
-            .push(GameOutput::SubmitColor { color: [1.; 4] });
+        if let Some(value) = self.language.codebase.value {
+            let value: f64 = value.into();
+            let value = value / 255.;
+
+            self.game_output.push(GameOutput::SubmitColor {
+                color: [value, value, value, 1.],
+            });
+        }
+
         self.game_output.drain(..)
     }
 }
