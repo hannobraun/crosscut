@@ -45,6 +45,7 @@ where
         &mut self,
         event: TerminalInputEvent,
     ) -> anyhow::Result<()> {
+        dbg!(&self.language.codebase);
         self.editor_input.on_input(event, &mut self.language.editor);
 
         dbg!(&self.language);
