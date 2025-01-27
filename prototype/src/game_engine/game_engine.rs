@@ -92,7 +92,7 @@ impl GameEngine<DebugOutputAdapter> {
     }
 
     pub fn enter_command_mode(&mut self) {
-        self.on_editor_input(TerminalInputEvent::Escape).unwrap()
+        self.on_editor_input(TerminalInputEvent::Escape).unwrap();
     }
 
     pub fn enter_command(&mut self, command: &str) {
@@ -104,7 +104,7 @@ impl GameEngine<DebugOutputAdapter> {
     }
 
     pub fn execute_command(&mut self) {
-        self.on_editor_input(TerminalInputEvent::Enter).unwrap()
+        self.on_editor_input(TerminalInputEvent::Enter).unwrap();
     }
 
     pub fn on_char(&mut self, ch: char) {
