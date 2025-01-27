@@ -1,4 +1,4 @@
-use crate::io::editor::output::EditorOutputAdapter;
+use crate::io::terminal_editor::output::EditorOutputAdapter;
 
 #[derive(Debug)]
 pub struct TerminalEditorOutput<A> {

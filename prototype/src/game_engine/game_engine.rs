@@ -1,5 +1,5 @@
 use crate::{
-    io::editor::output::{
+    io::terminal_editor::output::{
         DebugOutputAdapter, EditorOutputAdapter, RawTerminalAdapter,
     },
     language::instance::Language,
