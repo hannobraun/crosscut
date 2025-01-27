@@ -1,4 +1,4 @@
-use crate::game_engine::{GameEngine, GameOutput};
+use crate::game_engine::{GameEngine, GameOutput, TerminalInputEvent};
 
 #[test]
 fn enter_expression_and_expect_game_output() {
@@ -22,4 +22,28 @@ fn enter_expression_and_expect_game_output() {
         .to_vec();
 
     assert_eq!(game_output, expected);
+}
+
+#[test]
+fn expect_clear_command_to_clear_codebase() {
+    // If the `clear` command is executed, the codebase should be cleared.
+
+    let mut game_engine = GameEngine::without_editor_ui();
+
+    game_engine.enter_code("12");
+
+    game_engine
+        .on_editor_input(TerminalInputEvent::Escape)
+        .unwrap();
+    game_engine.enter_command("clear");
+    game_engine
+        .on_editor_input(TerminalInputEvent::Enter)
+        .unwrap();
+
+    game_engine.enter_code("7");
+
+    let GameOutput::SubmitColor { color } =
+        game_engine.game_output().last().unwrap();
+    let c = 7. / 255.;
+    assert_eq!(color, [c, c, c, 1.0]);
 }

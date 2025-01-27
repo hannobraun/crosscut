@@ -89,6 +89,12 @@ impl GameEngine<DebugOutputAdapter> {
         }
     }
 
+    pub fn enter_command(&mut self, command: &str) {
+        for ch in command.chars() {
+            self.on_char(ch);
+        }
+    }
+
     pub fn on_char(&mut self, ch: char) {
         self.on_editor_input(TerminalInputEvent::Character { ch })
             .unwrap();
