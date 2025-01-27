@@ -26,7 +26,8 @@ fn enter_expression_and_expect_game_output() {
 
 #[test]
 fn expect_clear_command_to_clear_codebase() {
-    // If the `clear` command is executed, the codebase should be cleared.
+    // If the `clear` command executes, previously entered code should have no
+    // effect.
 
     let mut game_engine = GameEngine::without_editor_ui();
 
