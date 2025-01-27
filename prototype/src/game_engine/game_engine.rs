@@ -107,6 +107,10 @@ impl GameEngine<DebugOutputAdapter> {
         self.on_editor_input(TerminalInputEvent::Enter).unwrap();
     }
 
+    pub fn abort_command(&mut self) {
+        self.on_editor_input(TerminalInputEvent::Escape).unwrap();
+    }
+
     pub fn on_char(&mut self, ch: char) {
         self.on_editor_input(TerminalInputEvent::Character { ch })
             .unwrap();

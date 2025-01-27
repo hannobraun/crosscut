@@ -61,12 +61,16 @@ impl TerminalEditorInput {
                     editor.on_input(event, codebase)
                 }
             }
-            EditorMode::Command => {
-                if let TerminalInputEvent::Enter = event {
+            EditorMode::Command => match event {
+                TerminalInputEvent::Enter => {
                     editor.on_command(EditorCommand::Clear, codebase);
                     self.mode = EditorMode::Edit;
                 }
-            }
+                TerminalInputEvent::Escape => {
+                    self.mode = EditorMode::Edit;
+                }
+                _ => {}
+            },
         }
     }
 }

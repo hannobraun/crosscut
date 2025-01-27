@@ -44,3 +44,23 @@ fn expect_clear_command_to_clear_previously_entered_code() {
     let c = 7. / 255.;
     assert_eq!(color, [c, c, c, 1.0]);
 }
+
+#[test]
+fn expect_aborted_command_to_have_no_effect() {
+    // If a command aborts instead of executing, this should have no effect.
+
+    let mut game_engine = GameEngine::without_editor_ui();
+
+    game_engine.enter_code("12");
+
+    game_engine.enter_command_mode();
+    game_engine.enter_command("clear");
+    game_engine.abort_command();
+
+    game_engine.enter_code("7");
+
+    let GameOutput::SubmitColor { color } =
+        game_engine.game_output().last().unwrap();
+    let c = 127. / 255.;
+    assert_eq!(color, [c, c, c, 1.0]);
+}
