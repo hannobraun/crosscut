@@ -63,7 +63,7 @@ impl TerminalEditorInput {
                     language.on_input(event);
                 }
             }
-            EditorMode::Command => match event {
+            EditorMode::Command { .. } => match event {
                 TerminalInputEvent::Enter => {
                     language.editor.on_command(
                         EditorCommand::Clear,
