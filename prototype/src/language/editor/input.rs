@@ -44,16 +44,20 @@ impl EditorInput {
         self.move_cursor_right();
     }
 
-    fn move_cursor_left(&mut self) {
+    fn move_cursor_left(&mut self) -> Option<MoveBeyondLimit> {
         loop {
             if self.cursor > 0 {
                 self.cursor = self.cursor.saturating_sub(1);
+            } else {
+                return Some(MoveBeyondLimit);
             }
 
             if self.buffer.is_char_boundary(self.cursor) {
                 break;
             }
         }
+
+        None
     }
 
     fn move_cursor_right(&mut self) {
@@ -78,6 +82,8 @@ impl EditorInput {
         self.buffer.remove(self.cursor);
     }
 }
+
+struct MoveBeyondLimit;
 
 #[derive(Debug)]
 pub enum EditorInputEvent {
