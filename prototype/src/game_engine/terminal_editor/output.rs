@@ -1,5 +1,5 @@
 use crate::{
-    io::terminal_editor::output::EditorOutputAdapter,
+    io::terminal_editor::output::{Cursor, EditorOutputAdapter},
     language::{code::Codebase, editor::Editor, instance::Language},
 };
 
@@ -34,7 +34,7 @@ where
         render_code(&mut self.adapter, &mut context)?;
         render_prompt(&mut self.adapter, editor_input, &mut context)?;
 
-        if let Some([x, y]) = context.cursor {
+        if let Some(Cursor { inner: [x, y] }) = context.cursor {
             self.adapter.move_cursor_to(x, y)?;
         }
 
@@ -57,7 +57,7 @@ fn render_code<A: EditorOutputAdapter>(
             x
         };
 
-        Some([x, y])
+        Some(Cursor { inner: [x, y] })
     };
 
     if let Some(value) = context.codebase.value {
@@ -83,7 +83,7 @@ fn render_prompt<A: EditorOutputAdapter>(
         EditorMode::Command { input } => {
             write!(adapter, "> ")?;
 
-            context.cursor = Some(adapter.cursor().inner);
+            context.cursor = Some(adapter.cursor());
 
             writeln!(adapter, "{}", input.buffer())?;
             writeln!(
@@ -99,5 +99,5 @@ fn render_prompt<A: EditorOutputAdapter>(
 struct RenderContext<'r> {
     codebase: &'r Codebase,
     editor: &'r Editor,
-    cursor: Option<[u16; 2]>,
+    cursor: Option<Cursor>,
 }
