@@ -8,7 +8,7 @@ fn number_literal() {
     let mut language = Language::new();
 
     language.enter_code("127");
-    let output = language.step();
+    let output = language.step().unwrap();
 
     assert_eq!(output, 127);
 }
