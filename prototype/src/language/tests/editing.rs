@@ -31,3 +31,9 @@ fn update_after_removing_character() {
     language.on_input(EditorInputEvent::RemoveCharacterLeft);
     assert_eq!(language.step(), Some(1));
 }
+
+// There is lots of editing behavior that's not tested here, like cursor
+// movement and many, many edge cases. This test suite focuses on high-level
+// behavior that affects the whole `language` module.
+//
+// Please refer to the test suite of `EditorInput` for more detailed tests.
