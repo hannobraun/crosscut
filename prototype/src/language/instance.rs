@@ -13,6 +13,11 @@ impl Language {
             editor: Editor::new(),
         }
     }
+
+    #[cfg(test)]
+    pub fn step(&mut self) -> Option<i32> {
+        self.codebase.value
+    }
 }
 
 #[cfg(test)]
@@ -26,9 +31,5 @@ impl Language {
                 &mut self.codebase,
             );
         }
-    }
-
-    pub fn step(&mut self) -> Option<i32> {
-        self.codebase.value
     }
 }
