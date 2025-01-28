@@ -89,7 +89,7 @@ pub enum EditorMode {
 impl EditorMode {
     #[cfg(test)]
     pub fn is_command_mode(&self) -> bool {
-        matches!(self, Self::Command)
+        matches!(self, Self::Command { .. })
     }
 
     #[cfg(test)]
