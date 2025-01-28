@@ -32,12 +32,12 @@ impl EditorInput {
         }
     }
 
-    pub fn insert(&mut self, ch: char) {
+    fn insert(&mut self, ch: char) {
         self.buffer.insert(self.cursor, ch);
         self.move_cursor_right();
     }
 
-    pub fn move_cursor_left(&mut self) {
+    fn move_cursor_left(&mut self) {
         loop {
             self.cursor = self.cursor.saturating_sub(1);
 
