@@ -1,4 +1,7 @@
-use super::{code::Codebase, editor::Editor};
+use super::{
+    code::Codebase,
+    editor::{Editor, EditorInputEvent},
+};
 
 #[derive(Debug)]
 pub struct Language {
@@ -14,6 +17,10 @@ impl Language {
         }
     }
 
+    pub fn on_input(&mut self, event: EditorInputEvent) {
+        self.editor.on_input(event, &mut self.codebase);
+    }
+
     pub fn step(&mut self) -> Option<i32> {
         self.codebase.value
     }
@@ -25,10 +32,7 @@ impl Language {
         use super::editor::EditorInputEvent;
 
         for ch in code.chars() {
-            self.editor.on_input(
-                EditorInputEvent::Character { ch },
-                &mut self.codebase,
-            );
+            self.on_input(EditorInputEvent::Character { ch });
         }
     }
 }

@@ -57,7 +57,7 @@ impl TerminalEditorInput {
                 };
 
                 if let Some(event) = event {
-                    language.editor.on_input(event, &mut language.codebase)
+                    language.on_input(event)
                 }
             }
             EditorMode::Command => match event {
