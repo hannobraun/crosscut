@@ -63,16 +63,16 @@ impl EditorInput {
         self.move_cursor_right();
     }
 
-    pub fn remove_left(&mut self) {
-        self.buffer.pop();
-    }
-
     pub fn move_cursor_left(&mut self) {
         self.cursor = self.cursor.saturating_sub(1);
     }
 
     pub fn move_cursor_right(&mut self) {
         self.cursor = self.cursor.saturating_add(1);
+    }
+
+    pub fn remove_left(&mut self) {
+        self.buffer.pop();
     }
 }
 
