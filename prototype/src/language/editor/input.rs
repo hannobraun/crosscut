@@ -87,7 +87,9 @@ impl EditorInput {
     }
 
     fn remove_right(&mut self) {
-        self.buffer.remove(self.cursor);
+        if self.cursor < self.buffer.len() {
+            self.buffer.remove(self.cursor);
+        }
     }
 }
 
@@ -188,6 +190,17 @@ mod tests {
 
         input.update(RemoveRight);
         assert_eq!(input.buffer(), "");
+    }
+
+    #[test]
+    fn remove_right_while_already_at_rightmost_position() {
+        let mut input = EditorInput::empty();
+
+        input.update(Insert { ch: '1' });
+        assert_eq!(input.buffer(), "1");
+
+        input.update(RemoveRight);
+        assert_eq!(input.buffer(), "1");
     }
 
     #[test]
