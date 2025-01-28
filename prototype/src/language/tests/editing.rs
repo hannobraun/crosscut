@@ -34,6 +34,20 @@ fn update_after_removing_character() {
     assert_eq!(language.step(), Value::Integer { value: 1 });
 }
 
+#[test]
+fn update_after_removing_all_characters() {
+    // Removing all characters should have an immediate effect on the program,
+    // just like any other edits.
+
+    let mut language = Language::new();
+
+    language.enter_code("1");
+    assert_eq!(language.step(), Value::Integer { value: 1 });
+
+    language.on_input(EditorInputEvent::RemoveLeft);
+    assert_eq!(language.step(), Value::None);
+}
+
 // There is lots of editing behavior that's not tested here, like cursor
 // movement and many, many edge cases. This test suite focuses on high-level
 // behavior that affects the whole `language` module.

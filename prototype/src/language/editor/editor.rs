@@ -27,6 +27,8 @@ impl Editor {
 
         if let Ok(value) = self.input.buffer().parse() {
             codebase.value = Value::Integer { value };
+        } else {
+            codebase.value = Value::None;
         }
     }
 
