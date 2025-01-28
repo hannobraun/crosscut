@@ -22,7 +22,6 @@ impl TerminalEditorInput {
         }
     }
 
-    #[cfg(test)]
     pub fn mode(&self) -> &EditorMode {
         &self.mode
     }

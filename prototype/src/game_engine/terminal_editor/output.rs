@@ -3,7 +3,7 @@ use crate::{
     language::{code::Codebase, editor::Editor, instance::Language},
 };
 
-use super::input::TerminalEditorInput;
+use super::input::{EditorMode, TerminalEditorInput};
 
 #[derive(Debug)]
 pub struct TerminalEditorOutput<A> {
@@ -21,7 +21,7 @@ where
     pub fn render(
         &mut self,
         language: &Language,
-        _: &TerminalEditorInput,
+        editor_input: &TerminalEditorInput,
     ) -> anyhow::Result<()> {
         let mut context = RenderContext {
             codebase: &language.codebase,
@@ -32,6 +32,7 @@ where
         self.adapter.clear()?;
 
         render_code(&mut self.adapter, &mut context)?;
+        render_prompt(&mut self.adapter, editor_input)?;
 
         if let Some([x, y]) = context.cursor {
             self.adapter.move_cursor_to(x, y)?;
@@ -63,6 +64,29 @@ fn render_code<A: EditorOutputAdapter>(
         write!(adapter, "{value}")?;
     }
     writeln!(adapter)?;
+
+    Ok(())
+}
+
+fn render_prompt<A: EditorOutputAdapter>(
+    adapter: &mut A,
+    editor_input: &TerminalEditorInput,
+) -> anyhow::Result<()> {
+    match editor_input.mode() {
+        EditorMode::Edit => {
+            writeln!(
+                adapter,
+                "Currently editing. Press ESC to enter command mode."
+            )?;
+        }
+        EditorMode::Command => {
+            writeln!(adapter, "> ")?;
+            writeln!(
+                adapter,
+                "Enter command. Press ENTER to confirm, ESC to abort."
+            )?;
+        }
+    }
 
     Ok(())
 }
