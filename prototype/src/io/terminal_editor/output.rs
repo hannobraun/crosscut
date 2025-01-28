@@ -12,6 +12,8 @@ use crossterm::{
 pub trait EditorOutputAdapter: fmt::Write {
     fn clear(&mut self) -> io::Result<()>;
 
+    fn cursor(&self) -> [u16; 2];
+
     fn move_cursor_to(&mut self, x: u16, y: u16) -> io::Result<()>;
 
     fn flush(&mut self) -> io::Result<()>;
@@ -23,6 +25,10 @@ pub struct DebugOutputAdapter;
 impl EditorOutputAdapter for DebugOutputAdapter {
     fn clear(&mut self) -> io::Result<()> {
         Ok(())
+    }
+
+    fn cursor(&self) -> [u16; 2] {
+        [0; 2]
     }
 
     fn move_cursor_to(&mut self, _: u16, _: u16) -> io::Result<()> {
@@ -103,6 +109,10 @@ impl EditorOutputAdapter for RawTerminalAdapter {
         self.move_cursor_to(0, 0)?;
 
         Ok(())
+    }
+
+    fn cursor(&self) -> [u16; 2] {
+        self.cursor
     }
 
     fn move_cursor_to(&mut self, x: u16, y: u16) -> io::Result<()> {

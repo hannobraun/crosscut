@@ -20,6 +20,10 @@ impl EditorInput {
         &self.buffer
     }
 
+    pub fn cursor(&self) -> usize {
+        self.cursor
+    }
+
     pub fn update(&mut self, event: EditorInputEvent) {
         use EditorInputEvent::*;
 

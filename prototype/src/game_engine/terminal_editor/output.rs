@@ -1,6 +1,6 @@
 use crate::{
     io::terminal_editor::output::EditorOutputAdapter,
-    language::{code::Codebase, instance::Language},
+    language::{code::Codebase, editor::Editor, instance::Language},
 };
 
 #[derive(Debug)]
@@ -19,6 +19,7 @@ where
     pub fn render(&mut self, language: &Language) -> anyhow::Result<()> {
         let mut context = RenderContext {
             codebase: &language.codebase,
+            editor: &language.editor,
             cursor: None,
         };
 
@@ -40,6 +41,18 @@ fn render_code<A: EditorOutputAdapter>(
     adapter: &mut A,
     context: &mut RenderContext,
 ) -> anyhow::Result<()> {
+    context.cursor = {
+        let [x, y] = adapter.cursor();
+        let x = {
+            let x: usize = x.into();
+            let x = x.saturating_add(context.editor.input().cursor());
+            let x: u16 = x.try_into().unwrap_or(u16::MAX);
+            x
+        };
+
+        Some([x, y])
+    };
+
     if let Some(value) = context.codebase.value {
         write!(adapter, "{value}")?;
     }
@@ -49,5 +62,6 @@ fn render_code<A: EditorOutputAdapter>(
 
 struct RenderContext<'r> {
     codebase: &'r Codebase,
+    editor: &'r Editor,
     cursor: Option<[u16; 2]>,
 }

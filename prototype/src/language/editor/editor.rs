@@ -14,6 +14,10 @@ impl Editor {
         }
     }
 
+    pub fn input(&self) -> &EditorInput {
+        &self.input
+    }
+
     pub fn on_input(
         &mut self,
         event: EditorInputEvent,
