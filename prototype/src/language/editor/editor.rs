@@ -32,10 +32,15 @@ impl Editor {
         };
     }
 
-    pub fn on_command(&mut self, command: EditorCommand, _: &mut Codebase) {
+    pub fn on_command(
+        &mut self,
+        command: EditorCommand,
+        codebase: &mut Codebase,
+    ) {
         match command {
             EditorCommand::Clear => {
                 *self = Self::new();
+                *codebase = Codebase::new();
             }
         }
     }
