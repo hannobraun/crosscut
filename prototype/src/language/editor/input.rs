@@ -36,7 +36,9 @@ impl EditorInput {
             RemoveLeft => {
                 self.remove_left();
             }
-            RemoveRight => {}
+            RemoveRight => {
+                self.remove_right();
+            }
         }
     }
 
@@ -82,6 +84,10 @@ impl EditorInput {
         if self.move_cursor_left().is_none() {
             self.buffer.remove(self.cursor);
         }
+    }
+
+    fn remove_right(&mut self) {
+        self.buffer.remove(self.cursor);
     }
 }
 
@@ -153,6 +159,23 @@ mod tests {
         input.update(MoveCursorLeft);
         input.update(RemoveLeft);
         assert_eq!(input.buffer(), "2");
+    }
+
+    #[test]
+    fn remove_right() {
+        let mut input = EditorInput::empty();
+
+        input.update(Insert { ch: '1' });
+        input.update(Insert { ch: '2' });
+        assert_eq!(input.buffer(), "12");
+
+        input.update(MoveCursorLeft);
+        input.update(MoveCursorLeft);
+        input.update(RemoveRight);
+        assert_eq!(input.buffer(), "2");
+
+        input.update(RemoveRight);
+        assert_eq!(input.buffer(), "");
     }
 
     #[test]
