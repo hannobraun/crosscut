@@ -57,6 +57,13 @@ impl EditorInput {
             if self.buffer.is_char_boundary(self.cursor) {
                 break;
             }
+
+            assert!(
+                self.cursor < self.buffer.len(),
+                "Moved cursor right, and not at char boundary. This means \
+                cursor must still be in bounds, and we're not risking an \
+                endless loop.",
+            );
         }
     }
 
