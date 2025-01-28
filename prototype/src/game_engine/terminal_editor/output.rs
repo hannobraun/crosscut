@@ -48,17 +48,8 @@ fn render_code<A: EditorOutputAdapter>(
     adapter: &mut A,
     context: &mut RenderContext,
 ) -> anyhow::Result<()> {
-    context.cursor = {
-        let [x, y] = adapter.cursor().inner;
-        let x = {
-            let x: usize = x.into();
-            let x = x.saturating_add(context.editor.input().cursor());
-            let x: u16 = x.try_into().unwrap_or(u16::MAX);
-            x
-        };
-
-        Some(Cursor { inner: [x, y] })
-    };
+    context.cursor =
+        Some(adapter.cursor().move_right(context.editor.input().cursor()));
 
     if let Some(value) = context.codebase.value {
         write!(adapter, "{value}")?;

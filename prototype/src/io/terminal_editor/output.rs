@@ -142,3 +142,18 @@ impl Drop for RawTerminalAdapter {
 pub struct Cursor {
     pub inner: [u16; 2],
 }
+
+impl Cursor {
+    pub fn move_right(self, offset: usize) -> Self {
+        let [x, y] = self.inner;
+
+        let x = {
+            let x: usize = x.into();
+            let x = x.saturating_add(offset);
+            let x: u16 = x.try_into().unwrap_or(u16::MAX);
+            x
+        };
+
+        Cursor { inner: [x, y] }
+    }
+}
