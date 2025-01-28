@@ -26,6 +26,9 @@ impl EditorInput {
             EditorInputEvent::MoveCursorLeft => {
                 self.move_cursor_left();
             }
+            EditorInputEvent::MoveCursorRight => {
+                self.move_cursor_right();
+            }
             event => {
                 todo!("`{event:?}` is not supported yet.");
             }
@@ -95,6 +98,10 @@ mod tests {
         input.update(EditorInputEvent::MoveCursorLeft);
         input.update(EditorInputEvent::Insert { ch: '1' });
         assert_eq!(input.buffer(), "12");
+
+        input.update(EditorInputEvent::MoveCursorRight);
+        input.update(EditorInputEvent::Insert { ch: '7' });
+        assert_eq!(input.buffer(), "127");
     }
 
     #[test]
