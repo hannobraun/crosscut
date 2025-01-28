@@ -50,12 +50,16 @@ fn render_code<A: EditorOutputAdapter>(
     adapter: &mut A,
     context: &mut RenderContext,
 ) -> anyhow::Result<()> {
+    writeln!(adapter)?;
+
     context.cursor =
         Some(adapter.cursor().move_right(context.editor.input().cursor()));
 
     if let Value::Integer { value } = context.codebase.value {
         write!(adapter, "{value}")?;
     }
+    writeln!(adapter)?;
+
     writeln!(adapter)?;
 
     Ok(())
