@@ -1,3 +1,5 @@
+use std::cmp::min;
+
 #[derive(Debug, Eq, PartialEq)]
 pub struct EditorInput {
     buffer: String,
@@ -52,7 +54,7 @@ impl EditorInput {
 
     fn move_cursor_right(&mut self) {
         loop {
-            self.cursor = self.cursor.saturating_add(1);
+            self.cursor = min(self.cursor.saturating_add(1), self.buffer.len());
 
             if self.buffer.is_char_boundary(self.cursor) {
                 break;
@@ -116,6 +118,15 @@ mod tests {
         let mut input = EditorInput::empty();
 
         input.update(EditorInputEvent::MoveCursorLeft);
+        input.update(EditorInputEvent::Insert { ch: '1' });
+        assert_eq!(input.buffer(), "1");
+    }
+
+    #[test]
+    fn move_right_while_already_at_rightmost_position() {
+        let mut input = EditorInput::empty();
+
+        input.update(EditorInputEvent::MoveCursorRight);
         input.update(EditorInputEvent::Insert { ch: '1' });
         assert_eq!(input.buffer(), "1");
     }
