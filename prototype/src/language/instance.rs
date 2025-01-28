@@ -28,7 +28,7 @@ impl Language {
         }
     }
 
-    pub fn run_until_finished(&mut self) -> i32 {
+    pub fn step(&mut self) -> i32 {
         self.codebase.value.unwrap()
     }
 }
