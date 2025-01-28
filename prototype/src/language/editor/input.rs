@@ -23,6 +23,7 @@ impl EditorInput {
         match event {
             EditorInputEvent::Insert { ch } => {
                 self.buffer.insert(self.cursor, ch);
+                self.move_cursor_right();
             }
             EditorInputEvent::MoveCursorLeft => {
                 self.move_cursor_left();
@@ -69,6 +70,9 @@ mod tests {
 
         input.update(EditorInputEvent::Insert { ch: '1' });
         assert_eq!(input.buffer(), "1");
+
+        input.update(EditorInputEvent::Insert { ch: '2' });
+        assert_eq!(input.buffer(), "12");
     }
 
     #[test]
