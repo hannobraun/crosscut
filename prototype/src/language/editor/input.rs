@@ -18,6 +18,18 @@ impl EditorInput {
         &self.buffer
     }
 
+    #[cfg(test)]
+    pub fn update(&mut self, event: EditorInputEvent) {
+        match event {
+            EditorInputEvent::Insert { ch } => {
+                self.buffer.push(ch);
+            }
+            event => {
+                todo!("`{event:?}` is not supported yet.");
+            }
+        }
+    }
+
     pub fn insert(&mut self, ch: char) {
         self.buffer.insert(self.cursor, ch);
         self.move_cursor_right();
@@ -42,4 +54,17 @@ pub enum EditorInputEvent {
     MoveCursorLeft,
     MoveCursorRight,
     RemoveCharacterLeft,
+}
+
+#[cfg(test)]
+mod tests {
+    use super::{EditorInput, EditorInputEvent};
+
+    #[test]
+    fn insert() {
+        let mut input = EditorInput::empty();
+
+        input.update(EditorInputEvent::Insert { ch: '1' });
+        assert_eq!(input.buffer(), "1");
+    }
 }
