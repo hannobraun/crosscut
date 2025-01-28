@@ -17,8 +17,14 @@ impl Editor {
         event: EditorInputEvent,
         codebase: &mut Codebase,
     ) {
-        if let EditorInputEvent::Character { ch } = event {
-            self.input.insert(ch);
+        match event {
+            EditorInputEvent::Character { ch } => {
+                self.input.insert(ch);
+            }
+            EditorInputEvent::RemoveCharacterLeft => {
+                self.input.remove_left();
+            }
+            _ => {}
         }
 
         if let Ok(value) = self.input.buffer.parse() {
@@ -47,6 +53,10 @@ impl EditorInput {
 
     pub fn insert(&mut self, ch: char) {
         self.buffer.push(ch);
+    }
+
+    pub fn remove_left(&mut self) {
+        self.buffer.pop();
     }
 }
 

@@ -1,4 +1,4 @@
-use crate::language::instance::Language;
+use crate::language::{editor::EditorInputEvent, instance::Language};
 
 #[test]
 fn update_on_every_character() {
@@ -13,4 +13,18 @@ fn update_on_every_character() {
 
     language.enter_code("2");
     assert_eq!(language.step(), Some(12));
+}
+
+#[test]
+fn update_on_remove_character_left() {
+    // Removing a character should have the same effect on the program as adding
+    // one.
+
+    let mut language = Language::new();
+
+    language.enter_code("12");
+    assert_eq!(language.step(), Some(12));
+
+    language.on_input(EditorInputEvent::RemoveCharacterLeft);
+    assert_eq!(language.step(), Some(1));
 }
