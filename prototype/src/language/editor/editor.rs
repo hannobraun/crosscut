@@ -34,7 +34,7 @@ impl Editor {
             }
         }
 
-        if let Ok(value) = self.input.buffer.parse() {
+        if let Ok(value) = self.input.buffer().parse() {
             codebase.value = Some(value);
         }
     }

@@ -14,6 +14,10 @@ impl EditorInput {
         Self { buffer, cursor }
     }
 
+    pub fn buffer(&self) -> &String {
+        &self.buffer
+    }
+
     pub fn insert(&mut self, ch: char) {
         self.buffer.insert(self.cursor, ch);
         self.move_cursor_right();
