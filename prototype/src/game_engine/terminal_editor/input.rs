@@ -36,7 +36,7 @@ impl TerminalEditorInput {
             EditorMode::Edit => {
                 let event = match event {
                     TerminalInputEvent::Character { ch } => {
-                        Some(EditorInputEvent::Character { ch })
+                        Some(EditorInputEvent::Insert { ch })
                     }
 
                     TerminalInputEvent::Backspace => {

@@ -38,7 +38,7 @@ impl EditorInput {
 
 #[derive(Debug)]
 pub enum EditorInputEvent {
-    Character { ch: char },
+    Insert { ch: char },
     MoveCursorLeft,
     MoveCursorRight,
     RemoveCharacterLeft,

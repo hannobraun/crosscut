@@ -30,7 +30,7 @@ impl Language {
 impl Language {
     pub fn enter_code(&mut self, code: &str) {
         for ch in code.chars() {
-            self.on_input(EditorInputEvent::Character { ch });
+            self.on_input(EditorInputEvent::Insert { ch });
         }
     }
 }
