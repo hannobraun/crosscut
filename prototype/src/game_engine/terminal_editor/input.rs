@@ -57,7 +57,7 @@ impl TerminalEditorInput {
                 };
 
                 if let Some(event) = event {
-                    language.on_input(event)
+                    language.on_input(event);
                 }
             }
             EditorMode::Command => match event {
