@@ -80,12 +80,12 @@ fn render_prompt<A: EditorOutputAdapter>(
                 "Currently editing. Press ESC to enter command mode."
             )?;
         }
-        EditorMode::Command { .. } => {
+        EditorMode::Command { input } => {
             write!(adapter, "> ")?;
 
             context.cursor = Some(adapter.cursor());
 
-            writeln!(adapter)?;
+            writeln!(adapter, "{}", input.buffer())?;
             writeln!(
                 adapter,
                 "Enter command. Press ENTER to confirm, ESC to abort."
