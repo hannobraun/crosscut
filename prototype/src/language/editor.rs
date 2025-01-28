@@ -21,6 +21,9 @@ impl Editor {
             EditorInputEvent::Character { ch } => {
                 self.input.insert(ch);
             }
+            EditorInputEvent::MoveCursorLeft => {
+                self.input.move_cursor_left();
+            }
             EditorInputEvent::RemoveCharacterLeft => {
                 self.input.remove_left();
             }
@@ -60,6 +63,10 @@ impl EditorInput {
 
     pub fn remove_left(&mut self) {
         self.buffer.pop();
+    }
+
+    pub fn move_cursor_left(&mut self) {
+        self.cursor = self.cursor.saturating_sub(1);
     }
 
     pub fn move_cursor_right(&mut self) {

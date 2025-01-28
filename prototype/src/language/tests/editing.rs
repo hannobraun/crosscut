@@ -31,3 +31,17 @@ fn update_after_removing_character() {
     language.on_input(EditorInputEvent::RemoveCharacterLeft);
     assert_eq!(language.step(), Some(1));
 }
+
+#[test]
+fn edit_at_cursor_location() {
+    // The editor should edit the code wherever the cursor is currently located.
+
+    let mut language = Language::new();
+
+    language.enter_code("2");
+    assert_eq!(language.step(), Some(2));
+
+    language.on_input(EditorInputEvent::MoveCursorLeft);
+    language.enter_code("1");
+    assert_eq!(language.step(), Some(12));
+}
