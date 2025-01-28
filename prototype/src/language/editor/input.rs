@@ -33,8 +33,8 @@ impl EditorInput {
             MoveCursorRight => {
                 self.move_cursor_right();
             }
-            event => {
-                todo!("`{event:?}` is not supported yet.");
+            RemoveCharacterLeft => {
+                self.remove_left();
             }
         }
     }
@@ -113,6 +113,21 @@ mod tests {
         input.update(EditorInputEvent::MoveCursorRight);
         input.update(EditorInputEvent::Insert { ch: '7' });
         assert_eq!(input.buffer(), "127");
+    }
+
+    #[test]
+    fn remove_left() {
+        let mut input = EditorInput::empty();
+
+        input.update(EditorInputEvent::Insert { ch: '1' });
+        input.update(EditorInputEvent::Insert { ch: '2' });
+        assert_eq!(input.buffer(), "12");
+
+        input.update(EditorInputEvent::RemoveCharacterLeft);
+        assert_eq!(input.buffer(), "1");
+
+        input.update(EditorInputEvent::RemoveCharacterLeft);
+        assert_eq!(input.buffer(), "");
     }
 
     #[test]
