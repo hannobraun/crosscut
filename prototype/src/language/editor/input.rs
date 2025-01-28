@@ -36,6 +36,7 @@ impl EditorInput {
             RemoveLeft => {
                 self.remove_left();
             }
+            RemoveRight => {}
         }
     }
 
@@ -92,6 +93,7 @@ pub enum EditorInputEvent {
     MoveCursorLeft,
     MoveCursorRight,
     RemoveLeft,
+    RemoveRight,
 }
 
 #[cfg(test)]

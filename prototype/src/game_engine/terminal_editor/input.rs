@@ -42,7 +42,9 @@ impl TerminalEditorInput {
                     TerminalInputEvent::Backspace => {
                         Some(EditorInputEvent::RemoveLeft)
                     }
-                    TerminalInputEvent::Delete => None,
+                    TerminalInputEvent::Delete => {
+                        Some(EditorInputEvent::RemoveRight)
+                    }
 
                     TerminalInputEvent::Left => {
                         Some(EditorInputEvent::MoveCursorLeft)
