@@ -42,6 +42,7 @@ impl TerminalEditorInput {
                     TerminalInputEvent::Backspace => {
                         Some(EditorInputEvent::RemoveLeft)
                     }
+
                     TerminalInputEvent::Left => {
                         Some(EditorInputEvent::MoveCursorLeft)
                     }
@@ -100,6 +101,7 @@ pub enum TerminalInputEvent {
     Character { ch: char },
 
     Backspace,
+
     Left,
     Right,
 
