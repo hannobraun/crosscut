@@ -113,6 +113,13 @@ mod tests {
 
         // Inserting involves moving the cursor right. If that wasn't done
         // correctly for the previous insertion, this one will panic.
+        //
+        // It's a bit weird to only test `MoveCursorRight` implicitly like this,
+        // but if we rewrite this test to look more like the `insert_at_cursor`
+        // test above, we wouldn't actually test the correct behavior of
+        // `MoveCursorLeft`. There, its effect is undone, before inserting a new
+        // character would make sure that it actually moved to a character
+        // boundary.
         input.update(EditorInputEvent::Insert { ch: '码' });
         assert_eq!(input.buffer(), "横码");
 
