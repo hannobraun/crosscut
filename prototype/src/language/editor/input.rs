@@ -105,6 +105,15 @@ mod tests {
     }
 
     #[test]
+    fn move_left_while_already_at_leftmost_position() {
+        let mut input = EditorInput::empty();
+
+        input.update(EditorInputEvent::MoveCursorLeft);
+        input.update(EditorInputEvent::Insert { ch: '1' });
+        assert_eq!(input.buffer(), "1");
+    }
+
+    #[test]
     fn move_cursor_over_non_ascii_characters() {
         let mut input = EditorInput::empty();
 
