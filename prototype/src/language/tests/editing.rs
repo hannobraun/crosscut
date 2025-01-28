@@ -16,7 +16,7 @@ fn update_on_every_character() {
 }
 
 #[test]
-fn update_on_remove_character_left() {
+fn update_after_removing_character() {
     // Removing a character should have an immediate effect on the program, just
     // like adding one.
 
