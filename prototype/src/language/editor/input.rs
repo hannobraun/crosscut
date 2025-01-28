@@ -46,7 +46,9 @@ impl EditorInput {
 
     fn move_cursor_left(&mut self) {
         loop {
-            self.cursor = self.cursor.saturating_sub(1);
+            if self.cursor > 0 {
+                self.cursor = self.cursor.saturating_sub(1);
+            }
 
             if self.buffer.is_char_boundary(self.cursor) {
                 break;
