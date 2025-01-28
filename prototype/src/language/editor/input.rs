@@ -78,8 +78,9 @@ impl EditorInput {
     }
 
     fn remove_left(&mut self) {
-        self.move_cursor_left();
-        self.buffer.remove(self.cursor);
+        if self.move_cursor_left().is_none() {
+            self.buffer.remove(self.cursor);
+        }
     }
 }
 
@@ -150,6 +151,18 @@ mod tests {
         input.update(MoveCursorLeft);
         input.update(RemoveLeft);
         assert_eq!(input.buffer(), "2");
+    }
+
+    #[test]
+    fn remove_left_while_already_at_leftmost_position() {
+        let mut input = EditorInput::empty();
+
+        input.update(Insert { ch: '1' });
+        assert_eq!(input.buffer(), "1");
+
+        input.update(MoveCursorLeft);
+        input.update(RemoveLeft);
+        assert_eq!(input.buffer(), "1");
     }
 
     #[test]
