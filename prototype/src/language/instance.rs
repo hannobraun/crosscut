@@ -29,8 +29,6 @@ impl Language {
 #[cfg(test)]
 impl Language {
     pub fn enter_code(&mut self, code: &str) {
-        use super::editor::EditorInputEvent;
-
         for ch in code.chars() {
             self.on_input(EditorInputEvent::Character { ch });
         }
