@@ -48,7 +48,7 @@ impl TerminalEditorInput {
                     language.on_input(event);
                 }
             }
-            EditorMode::Command { .. } => match event {
+            EditorMode::Command { input } => match event {
                 TerminalInputEvent::Enter => {
                     language.editor.on_command(
                         EditorCommand::Clear,
@@ -59,7 +59,11 @@ impl TerminalEditorInput {
                 TerminalInputEvent::Escape => {
                     self.mode = EditorMode::Edit;
                 }
-                _ => {}
+                event => {
+                    if let Some(event) = event.into_editor_input_event() {
+                        input.update(event);
+                    }
+                }
             },
         }
     }
