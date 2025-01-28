@@ -19,11 +19,16 @@ where
     pub fn render(&mut self, language: &Language) -> anyhow::Result<()> {
         let mut context = RenderContext {
             codebase: &language.codebase,
+            cursor: None,
         };
 
         self.adapter.clear()?;
 
         render_code(&mut self.adapter, &mut context)?;
+
+        if let Some([x, y]) = context.cursor {
+            self.adapter.move_cursor_to(x, y)?;
+        }
 
         self.adapter.flush()?;
 
@@ -44,4 +49,5 @@ fn render_code<A: EditorOutputAdapter>(
 
 struct RenderContext<'r> {
     codebase: &'r Codebase,
+    cursor: Option<[u16; 2]>,
 }
