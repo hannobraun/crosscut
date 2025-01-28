@@ -27,4 +27,7 @@ fn update_after_removing_character() {
 
     language.on_input(EditorInputEvent::RemoveCharacterLeft);
     assert_eq!(language.step(), Some(12));
+
+    language.on_input(EditorInputEvent::RemoveCharacterLeft);
+    assert_eq!(language.step(), Some(1));
 }
