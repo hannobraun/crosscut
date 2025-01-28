@@ -73,6 +73,8 @@ where
             });
         }
 
+        self.render_editor()?;
+
         Ok(())
     }
 
