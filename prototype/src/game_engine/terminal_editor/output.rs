@@ -3,6 +3,8 @@ use crate::{
     language::{code::Codebase, editor::Editor, instance::Language},
 };
 
+use super::input::TerminalEditorInput;
+
 #[derive(Debug)]
 pub struct TerminalEditorOutput<A> {
     adapter: A,
@@ -16,7 +18,11 @@ where
         Self { adapter }
     }
 
-    pub fn render(&mut self, language: &Language) -> anyhow::Result<()> {
+    pub fn render(
+        &mut self,
+        language: &Language,
+        _: &TerminalEditorInput,
+    ) -> anyhow::Result<()> {
         let mut context = RenderContext {
             codebase: &language.codebase,
             editor: &language.editor,
