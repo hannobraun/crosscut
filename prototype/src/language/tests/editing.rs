@@ -17,8 +17,8 @@ fn update_on_every_character() {
 
 #[test]
 fn update_on_remove_character_left() {
-    // Removing a character should have the same effect on the program as adding
-    // one.
+    // Removing a character should have an immediate effect on the program, just
+    // like adding one.
 
     let mut language = Language::new();
 
