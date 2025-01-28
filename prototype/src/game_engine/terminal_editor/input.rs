@@ -1,7 +1,7 @@
 use std::collections::BTreeSet;
 
 use crate::language::{
-    editor::{EditorCommand, EditorInputEvent},
+    editor::{EditorCommand, EditorInput, EditorInputEvent},
     instance::Language,
 };
 
@@ -54,7 +54,9 @@ impl TerminalEditorInput {
 
                     TerminalInputEvent::Enter => None,
                     TerminalInputEvent::Escape => {
-                        self.mode = EditorMode::Command;
+                        self.mode = EditorMode::Command {
+                            input: EditorInput::empty(),
+                        };
                         None
                     }
                 };
@@ -83,7 +85,7 @@ impl TerminalEditorInput {
 #[derive(Debug, Eq, PartialEq)]
 pub enum EditorMode {
     Edit,
-    Command,
+    Command { input: EditorInput },
 }
 
 impl EditorMode {
