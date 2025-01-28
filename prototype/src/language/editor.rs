@@ -44,19 +44,26 @@ impl Editor {
 #[derive(Debug, Eq, PartialEq)]
 pub struct EditorInput {
     buffer: String,
+    cursor: usize,
 }
 
 impl EditorInput {
     pub fn new(buffer: String) -> Self {
-        Self { buffer }
+        let cursor = buffer.chars().count();
+        Self { buffer, cursor }
     }
 
     pub fn insert(&mut self, ch: char) {
-        self.buffer.push(ch);
+        self.buffer.insert(self.cursor, ch);
+        self.move_cursor_right();
     }
 
     pub fn remove_left(&mut self) {
         self.buffer.pop();
+    }
+
+    pub fn move_cursor_right(&mut self) {
+        self.cursor = self.cursor.saturating_add(1);
     }
 }
 
