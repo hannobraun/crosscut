@@ -74,7 +74,7 @@ fn render_prompt<A: EditorOutputAdapter>(
         EditorMode::Command { input } => {
             write!(adapter, "> ")?;
 
-            context.cursor = Some(adapter.cursor());
+            context.cursor = Some(adapter.cursor().move_right(input.cursor()));
 
             writeln!(adapter, "{}", input.buffer())?;
             writeln!(
