@@ -24,6 +24,9 @@ impl EditorInput {
             EditorInputEvent::Insert { ch } => {
                 self.buffer.insert(self.cursor, ch);
             }
+            EditorInputEvent::MoveCursorLeft => {
+                self.move_cursor_left();
+            }
             event => {
                 todo!("`{event:?}` is not supported yet.");
             }
@@ -66,5 +69,17 @@ mod tests {
 
         input.update(EditorInputEvent::Insert { ch: '1' });
         assert_eq!(input.buffer(), "1");
+    }
+
+    #[test]
+    fn insert_at_cursor() {
+        let mut input = EditorInput::empty();
+
+        input.update(EditorInputEvent::Insert { ch: '2' });
+        assert_eq!(input.buffer(), "2");
+
+        input.update(EditorInputEvent::MoveCursorLeft);
+        input.update(EditorInputEvent::Insert { ch: '1' });
+        assert_eq!(input.buffer(), "12");
     }
 }
