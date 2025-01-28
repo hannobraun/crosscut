@@ -19,14 +19,7 @@ impl Editor {
         event: EditorInputEvent,
         codebase: &mut Codebase,
     ) {
-        match event {
-            EditorInputEvent::RemoveCharacterLeft => {
-                self.input.remove_left();
-            }
-            event => {
-                self.input.update(event);
-            }
-        }
+        self.input.update(event);
 
         if let Ok(value) = self.input.buffer().parse() {
             codebase.value = Some(value);
