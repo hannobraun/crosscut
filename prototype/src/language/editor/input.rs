@@ -33,7 +33,7 @@ impl EditorInput {
             MoveCursorRight => {
                 self.move_cursor_right();
             }
-            RemoveCharacterLeft => {
+            RemoveLeft => {
                 self.remove_left();
             }
         }
@@ -81,7 +81,7 @@ pub enum EditorInputEvent {
     Insert { ch: char },
     MoveCursorLeft,
     MoveCursorRight,
-    RemoveCharacterLeft,
+    RemoveLeft,
 }
 
 #[cfg(test)]
@@ -123,10 +123,10 @@ mod tests {
         input.update(EditorInputEvent::Insert { ch: '2' });
         assert_eq!(input.buffer(), "12");
 
-        input.update(EditorInputEvent::RemoveCharacterLeft);
+        input.update(EditorInputEvent::RemoveLeft);
         assert_eq!(input.buffer(), "1");
 
-        input.update(EditorInputEvent::RemoveCharacterLeft);
+        input.update(EditorInputEvent::RemoveLeft);
         assert_eq!(input.buffer(), "");
     }
 

@@ -40,7 +40,7 @@ impl TerminalEditorInput {
                     }
 
                     TerminalInputEvent::Backspace => {
-                        Some(EditorInputEvent::RemoveCharacterLeft)
+                        Some(EditorInputEvent::RemoveLeft)
                     }
                     TerminalInputEvent::Left => {
                         Some(EditorInputEvent::MoveCursorLeft)

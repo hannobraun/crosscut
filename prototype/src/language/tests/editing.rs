@@ -25,10 +25,10 @@ fn update_after_removing_character() {
     language.enter_code("127");
     assert_eq!(language.step(), Some(127));
 
-    language.on_input(EditorInputEvent::RemoveCharacterLeft);
+    language.on_input(EditorInputEvent::RemoveLeft);
     assert_eq!(language.step(), Some(12));
 
-    language.on_input(EditorInputEvent::RemoveCharacterLeft);
+    language.on_input(EditorInputEvent::RemoveLeft);
     assert_eq!(language.step(), Some(1));
 }
 
