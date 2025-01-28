@@ -39,7 +39,13 @@ impl EditorInput {
     }
 
     pub fn move_cursor_left(&mut self) {
-        self.cursor = self.cursor.saturating_sub(1);
+        loop {
+            self.cursor = self.cursor.saturating_sub(1);
+
+            if self.buffer.is_char_boundary(self.cursor) {
+                break;
+            }
+        }
     }
 
     pub fn move_cursor_right(&mut self) {
@@ -103,4 +109,9 @@ mod tests {
         // correctly for the previous insertion, this one will panic.
         input.update(EditorInputEvent::Insert { ch: '码' });
         assert_eq!(input.buffer(), "横码");
+
+        input.update(EditorInputEvent::MoveCursorLeft);
+        input.update(EditorInputEvent::Insert { ch: '切' });
+        assert_eq!(input.buffer(), "横切码");
+    }
 }
