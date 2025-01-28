@@ -1,8 +1,8 @@
 use std::collections::BTreeSet;
 
 use crate::language::{
-    code::Codebase,
-    editor::{Editor, EditorCommand, EditorInputEvent},
+    editor::{EditorCommand, EditorInputEvent},
+    instance::Language,
 };
 
 #[derive(Debug)]
@@ -30,8 +30,7 @@ impl TerminalEditorInput {
     pub fn on_input(
         &mut self,
         event: TerminalInputEvent,
-        editor: &mut Editor,
-        codebase: &mut Codebase,
+        language: &mut Language,
     ) {
         match self.mode {
             EditorMode::Edit => {
@@ -58,12 +57,15 @@ impl TerminalEditorInput {
                 };
 
                 if let Some(event) = event {
-                    editor.on_input(event, codebase)
+                    language.editor.on_input(event, &mut language.codebase)
                 }
             }
             EditorMode::Command => match event {
                 TerminalInputEvent::Enter => {
-                    editor.on_command(EditorCommand::Clear, codebase);
+                    language.editor.on_command(
+                        EditorCommand::Clear,
+                        &mut language.codebase,
+                    );
                     self.mode = EditorMode::Edit;
                 }
                 TerminalInputEvent::Escape => {

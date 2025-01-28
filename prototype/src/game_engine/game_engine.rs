@@ -58,11 +58,7 @@ where
         &mut self,
         event: TerminalInputEvent,
     ) -> anyhow::Result<()> {
-        self.editor_input.on_input(
-            event,
-            &mut self.language.editor,
-            &mut self.language.codebase,
-        );
+        self.editor_input.on_input(event, &mut self.language);
 
         if let Some(value) = self.language.step() {
             let value: f64 = value.into();
