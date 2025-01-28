@@ -162,6 +162,18 @@ mod tests {
     }
 
     #[test]
+    fn remove_left_while_already_at_leftmost_position() {
+        let mut input = EditorInput::empty();
+
+        input.update(Insert { ch: '1' });
+        assert_eq!(input.buffer(), "1");
+
+        input.update(MoveCursorLeft);
+        input.update(RemoveLeft);
+        assert_eq!(input.buffer(), "1");
+    }
+
+    #[test]
     fn remove_right() {
         let mut input = EditorInput::empty();
 
@@ -176,18 +188,6 @@ mod tests {
 
         input.update(RemoveRight);
         assert_eq!(input.buffer(), "");
-    }
-
-    #[test]
-    fn remove_left_while_already_at_leftmost_position() {
-        let mut input = EditorInput::empty();
-
-        input.update(Insert { ch: '1' });
-        assert_eq!(input.buffer(), "1");
-
-        input.update(MoveCursorLeft);
-        input.update(RemoveLeft);
-        assert_eq!(input.buffer(), "1");
     }
 
     #[test]
