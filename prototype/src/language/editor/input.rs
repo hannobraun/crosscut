@@ -86,16 +86,16 @@ pub enum EditorInputEvent {
 
 #[cfg(test)]
 mod tests {
-    use super::{EditorInput, EditorInputEvent};
+    use super::{EditorInput, EditorInputEvent::*};
 
     #[test]
     fn insert() {
         let mut input = EditorInput::empty();
 
-        input.update(EditorInputEvent::Insert { ch: '1' });
+        input.update(Insert { ch: '1' });
         assert_eq!(input.buffer(), "1");
 
-        input.update(EditorInputEvent::Insert { ch: '2' });
+        input.update(Insert { ch: '2' });
         assert_eq!(input.buffer(), "12");
     }
 
@@ -103,15 +103,15 @@ mod tests {
     fn insert_at_cursor() {
         let mut input = EditorInput::empty();
 
-        input.update(EditorInputEvent::Insert { ch: '2' });
+        input.update(Insert { ch: '2' });
         assert_eq!(input.buffer(), "2");
 
-        input.update(EditorInputEvent::MoveCursorLeft);
-        input.update(EditorInputEvent::Insert { ch: '1' });
+        input.update(MoveCursorLeft);
+        input.update(Insert { ch: '1' });
         assert_eq!(input.buffer(), "12");
 
-        input.update(EditorInputEvent::MoveCursorRight);
-        input.update(EditorInputEvent::Insert { ch: '7' });
+        input.update(MoveCursorRight);
+        input.update(Insert { ch: '7' });
         assert_eq!(input.buffer(), "127");
     }
 
@@ -119,14 +119,14 @@ mod tests {
     fn remove_left() {
         let mut input = EditorInput::empty();
 
-        input.update(EditorInputEvent::Insert { ch: '1' });
-        input.update(EditorInputEvent::Insert { ch: '2' });
+        input.update(Insert { ch: '1' });
+        input.update(Insert { ch: '2' });
         assert_eq!(input.buffer(), "12");
 
-        input.update(EditorInputEvent::RemoveLeft);
+        input.update(RemoveLeft);
         assert_eq!(input.buffer(), "1");
 
-        input.update(EditorInputEvent::RemoveLeft);
+        input.update(RemoveLeft);
         assert_eq!(input.buffer(), "");
     }
 
@@ -134,8 +134,8 @@ mod tests {
     fn move_left_while_already_at_leftmost_position() {
         let mut input = EditorInput::empty();
 
-        input.update(EditorInputEvent::MoveCursorLeft);
-        input.update(EditorInputEvent::Insert { ch: '1' });
+        input.update(MoveCursorLeft);
+        input.update(Insert { ch: '1' });
         assert_eq!(input.buffer(), "1");
     }
 
@@ -143,8 +143,8 @@ mod tests {
     fn move_right_while_already_at_rightmost_position() {
         let mut input = EditorInput::empty();
 
-        input.update(EditorInputEvent::MoveCursorRight);
-        input.update(EditorInputEvent::Insert { ch: '1' });
+        input.update(MoveCursorRight);
+        input.update(Insert { ch: '1' });
         assert_eq!(input.buffer(), "1");
     }
 
@@ -152,7 +152,7 @@ mod tests {
     fn move_cursor_over_non_ascii_characters() {
         let mut input = EditorInput::empty();
 
-        input.update(EditorInputEvent::Insert { ch: '横' });
+        input.update(Insert { ch: '横' });
         assert_eq!(input.buffer(), "横");
 
         // Inserting involves moving the cursor right. If that wasn't done
@@ -164,11 +164,11 @@ mod tests {
         // `MoveCursorLeft`. There, its effect is undone, before inserting a new
         // character would make sure that it actually moved to a character
         // boundary.
-        input.update(EditorInputEvent::Insert { ch: '码' });
+        input.update(Insert { ch: '码' });
         assert_eq!(input.buffer(), "横码");
 
-        input.update(EditorInputEvent::MoveCursorLeft);
-        input.update(EditorInputEvent::Insert { ch: '切' });
+        input.update(MoveCursorLeft);
+        input.update(Insert { ch: '切' });
         assert_eq!(input.buffer(), "横切码");
     }
 }
