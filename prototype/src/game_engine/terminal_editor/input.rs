@@ -34,24 +34,6 @@ impl TerminalEditorInput {
         match self.mode {
             EditorMode::Edit => {
                 let event = match event {
-                    TerminalInputEvent::Character { ch } => {
-                        Some(EditorInputEvent::Insert { ch })
-                    }
-
-                    TerminalInputEvent::Backspace => {
-                        Some(EditorInputEvent::RemoveLeft)
-                    }
-                    TerminalInputEvent::Delete => {
-                        Some(EditorInputEvent::RemoveRight)
-                    }
-
-                    TerminalInputEvent::Left => {
-                        Some(EditorInputEvent::MoveCursorLeft)
-                    }
-                    TerminalInputEvent::Right => {
-                        Some(EditorInputEvent::MoveCursorRight)
-                    }
-
                     TerminalInputEvent::Enter => None,
                     TerminalInputEvent::Escape => {
                         self.mode = EditorMode::Command {
@@ -59,6 +41,7 @@ impl TerminalEditorInput {
                         };
                         None
                     }
+                    event => event.into_editor_input_event(),
                 };
 
                 if let Some(event) = event {
@@ -112,4 +95,20 @@ pub enum TerminalInputEvent {
 
     Enter,
     Escape,
+}
+
+impl TerminalInputEvent {
+    fn into_editor_input_event(self) -> Option<EditorInputEvent> {
+        match self {
+            Self::Character { ch } => Some(EditorInputEvent::Insert { ch }),
+
+            Self::Backspace => Some(EditorInputEvent::RemoveLeft),
+            Self::Delete => Some(EditorInputEvent::RemoveRight),
+
+            Self::Left => Some(EditorInputEvent::MoveCursorLeft),
+            Self::Right => Some(EditorInputEvent::MoveCursorRight),
+
+            _ => None,
+        }
+    }
 }
