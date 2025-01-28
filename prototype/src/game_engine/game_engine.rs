@@ -49,7 +49,7 @@ where
     }
 
     pub fn render_editor(&mut self) -> anyhow::Result<()> {
-        self.editor_output.render()?;
+        self.editor_output.render(&self.language)?;
 
         Ok(())
     }
