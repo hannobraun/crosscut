@@ -62,6 +62,7 @@ fn render_code<A: EditorOutputAdapter>(
     if let Some(value) = context.codebase.value {
         write!(adapter, "{value}")?;
     }
+    writeln!(adapter)?;
 
     Ok(())
 }
