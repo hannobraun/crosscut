@@ -25,11 +25,11 @@ impl Editor {
     ) {
         self.input.update(event);
 
-        if let Ok(value) = self.input.buffer().parse() {
-            codebase.value = Value::Integer { value };
+        codebase.value = if let Ok(value) = self.input.buffer().parse() {
+            Value::Integer { value }
         } else {
-            codebase.value = Value::None;
-        }
+            Value::None
+        };
     }
 
     pub fn on_command(&mut self, command: EditorCommand, _: &mut Codebase) {
