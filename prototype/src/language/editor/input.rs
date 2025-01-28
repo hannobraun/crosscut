@@ -43,7 +43,13 @@ impl EditorInput {
     }
 
     pub fn move_cursor_right(&mut self) {
-        self.cursor = self.cursor.saturating_add(1);
+        loop {
+            self.cursor = self.cursor.saturating_add(1);
+
+            if self.buffer.is_char_boundary(self.cursor) {
+                break;
+            }
+        }
     }
 
     pub fn remove_left(&mut self) {
@@ -85,4 +91,16 @@ mod tests {
         input.update(EditorInputEvent::Insert { ch: '1' });
         assert_eq!(input.buffer(), "12");
     }
+
+    #[test]
+    fn move_cursor_over_non_ascii_characters() {
+        let mut input = EditorInput::empty();
+
+        input.update(EditorInputEvent::Insert { ch: '横' });
+        assert_eq!(input.buffer(), "横");
+
+        // Inserting involves moving the cursor right. If that wasn't done
+        // correctly for the previous insertion, this one will panic.
+        input.update(EditorInputEvent::Insert { ch: '码' });
+        assert_eq!(input.buffer(), "横码");
 }
