@@ -32,7 +32,7 @@ where
         self.adapter.clear()?;
 
         render_code(&mut self.adapter, &mut context)?;
-        render_prompt(&mut self.adapter, editor_input)?;
+        render_prompt(&mut self.adapter, editor_input, &mut context)?;
 
         if let Some([x, y]) = context.cursor {
             self.adapter.move_cursor_to(x, y)?;
@@ -71,6 +71,7 @@ fn render_code<A: EditorOutputAdapter>(
 fn render_prompt<A: EditorOutputAdapter>(
     adapter: &mut A,
     editor_input: &TerminalEditorInput,
+    context: &mut RenderContext,
 ) -> anyhow::Result<()> {
     match editor_input.mode() {
         EditorMode::Edit => {
@@ -80,7 +81,11 @@ fn render_prompt<A: EditorOutputAdapter>(
             )?;
         }
         EditorMode::Command => {
-            writeln!(adapter, "> ")?;
+            write!(adapter, "> ")?;
+
+            context.cursor = Some(adapter.cursor());
+
+            writeln!(adapter)?;
             writeln!(
                 adapter,
                 "Enter command. Press ENTER to confirm, ESC to abort."
