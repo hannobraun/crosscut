@@ -49,7 +49,7 @@ fn render_code<A: EditorOutputAdapter>(
     context: &mut RenderContext,
 ) -> anyhow::Result<()> {
     context.cursor = {
-        let [x, y] = adapter.cursor();
+        let [x, y] = adapter.cursor().inner;
         let x = {
             let x: usize = x.into();
             let x = x.saturating_add(context.editor.input().cursor());
@@ -83,7 +83,7 @@ fn render_prompt<A: EditorOutputAdapter>(
         EditorMode::Command { input } => {
             write!(adapter, "> ")?;
 
-            context.cursor = Some(adapter.cursor());
+            context.cursor = Some(adapter.cursor().inner);
 
             writeln!(adapter, "{}", input.buffer())?;
             writeln!(

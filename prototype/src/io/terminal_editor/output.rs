@@ -12,7 +12,7 @@ use crossterm::{
 pub trait EditorOutputAdapter: fmt::Write {
     fn clear(&mut self) -> io::Result<()>;
 
-    fn cursor(&self) -> [u16; 2];
+    fn cursor(&self) -> Cursor;
 
     fn move_cursor_to(&mut self, x: u16, y: u16) -> io::Result<()>;
 
@@ -27,8 +27,8 @@ impl EditorOutputAdapter for DebugOutputAdapter {
         Ok(())
     }
 
-    fn cursor(&self) -> [u16; 2] {
-        [0; 2]
+    fn cursor(&self) -> Cursor {
+        Cursor { inner: [0; 2] }
     }
 
     fn move_cursor_to(&mut self, _: u16, _: u16) -> io::Result<()> {
@@ -111,8 +111,8 @@ impl EditorOutputAdapter for RawTerminalAdapter {
         Ok(())
     }
 
-    fn cursor(&self) -> [u16; 2] {
-        self.cursor
+    fn cursor(&self) -> Cursor {
+        Cursor { inner: self.cursor }
     }
 
     fn move_cursor_to(&mut self, x: u16, y: u16) -> io::Result<()> {
@@ -137,4 +137,8 @@ impl Drop for RawTerminalAdapter {
         // Nothing we can do about a potential error here.
         let _ = terminal::disable_raw_mode();
     }
+}
+
+pub struct Cursor {
+    pub inner: [u16; 2],
 }
