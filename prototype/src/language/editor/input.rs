@@ -22,7 +22,7 @@ impl EditorInput {
     pub fn update(&mut self, event: EditorInputEvent) {
         match event {
             EditorInputEvent::Insert { ch } => {
-                self.buffer.push(ch);
+                self.buffer.insert(self.cursor, ch);
             }
             event => {
                 todo!("`{event:?}` is not supported yet.");
