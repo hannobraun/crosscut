@@ -50,7 +50,7 @@ impl EditorInput {
         }
     }
 
-    pub fn move_cursor_right(&mut self) {
+    fn move_cursor_right(&mut self) {
         loop {
             self.cursor = self.cursor.saturating_add(1);
 
