@@ -18,7 +18,6 @@ impl EditorInput {
         &self.buffer
     }
 
-    #[cfg(test)]
     pub fn update(&mut self, event: EditorInputEvent) {
         match event {
             EditorInputEvent::Insert { ch } => {

@@ -20,17 +20,14 @@ impl Editor {
         codebase: &mut Codebase,
     ) {
         match event {
-            EditorInputEvent::Insert { ch } => {
-                self.input.insert(ch);
-            }
-            EditorInputEvent::MoveCursorLeft => {
-                self.input.move_cursor_left();
-            }
             EditorInputEvent::MoveCursorRight => {
                 self.input.move_cursor_right();
             }
             EditorInputEvent::RemoveCharacterLeft => {
                 self.input.remove_left();
+            }
+            event => {
+                self.input.update(event);
             }
         }
 
