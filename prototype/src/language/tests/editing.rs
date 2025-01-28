@@ -22,9 +22,9 @@ fn update_after_removing_character() {
 
     let mut language = Language::new();
 
-    language.enter_code("12");
-    assert_eq!(language.step(), Some(12));
+    language.enter_code("127");
+    assert_eq!(language.step(), Some(127));
 
     language.on_input(EditorInputEvent::RemoveCharacterLeft);
-    assert_eq!(language.step(), Some(1));
+    assert_eq!(language.step(), Some(12));
 }
