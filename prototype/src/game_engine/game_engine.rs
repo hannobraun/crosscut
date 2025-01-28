@@ -64,7 +64,7 @@ where
             &mut self.language.codebase,
         );
 
-        if let Some(value) = self.language.codebase.value {
+        if let Some(value) = self.language.step() {
             let value: f64 = value.into();
             let value = value / 255.;
 

@@ -14,7 +14,6 @@ impl Language {
         }
     }
 
-    #[cfg(test)]
     pub fn step(&mut self) -> Option<i32> {
         self.codebase.value
     }
