@@ -31,7 +31,7 @@ impl TerminalEditorInput {
         event: TerminalInputEvent,
         language: &mut Language,
     ) {
-        match self.mode {
+        match &mut self.mode {
             EditorMode::Edit => {
                 let event = match event {
                     TerminalInputEvent::Enter => None,
