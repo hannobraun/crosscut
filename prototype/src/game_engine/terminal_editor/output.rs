@@ -72,10 +72,8 @@ fn render_prompt<A: EditorOutputAdapter>(
 ) -> anyhow::Result<()> {
     match editor_input.mode() {
         EditorMode::Edit => {
-            writeln!(
-                adapter,
-                "Currently editing. Press ESC to enter command mode."
-            )?;
+            writeln!(adapter, "Currently editing.")?;
+            writeln!(adapter, "Press ESC to enter command mode.")?;
         }
         EditorMode::Command { input } => {
             write!(adapter, "> ")?;
