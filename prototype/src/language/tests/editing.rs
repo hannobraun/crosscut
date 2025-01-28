@@ -44,4 +44,8 @@ fn edit_at_cursor_location() {
     language.on_input(EditorInputEvent::MoveCursorLeft);
     language.enter_code("1");
     assert_eq!(language.step(), Some(12));
+
+    language.on_input(EditorInputEvent::MoveCursorRight);
+    language.enter_code("7");
+    assert_eq!(language.step(), Some(127));
 }

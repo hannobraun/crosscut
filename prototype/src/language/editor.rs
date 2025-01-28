@@ -24,10 +24,12 @@ impl Editor {
             EditorInputEvent::MoveCursorLeft => {
                 self.input.move_cursor_left();
             }
+            EditorInputEvent::MoveCursorRight => {
+                self.input.move_cursor_right();
+            }
             EditorInputEvent::RemoveCharacterLeft => {
                 self.input.remove_left();
             }
-            _ => {}
         }
 
         if let Ok(value) = self.input.buffer.parse() {
