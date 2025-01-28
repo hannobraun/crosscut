@@ -10,7 +10,7 @@ pub struct Editor {
 impl Editor {
     pub fn new() -> Self {
         Self {
-            input: EditorInput::new(String::new()),
+            input: EditorInput::empty(),
         }
     }
 

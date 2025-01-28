@@ -10,6 +10,10 @@ impl EditorInput {
         Self { buffer, cursor }
     }
 
+    pub fn empty() -> Self {
+        Self::new(String::new())
+    }
+
     pub fn buffer(&self) -> &String {
         &self.buffer
     }
