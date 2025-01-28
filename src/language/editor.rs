@@ -152,8 +152,10 @@ impl EditorInput {
     }
 
     pub fn move_cursor_right(&mut self) {
-        self.cursor =
-            usize::min(self.cursor.saturating_add(1), self.buffer.len());
+        self.cursor = usize::min(
+            self.cursor.saturating_add(1),
+            self.buffer.chars().count(),
+        );
     }
 
     pub fn clear(&mut self) {
