@@ -20,9 +20,6 @@ impl Editor {
         codebase: &mut Codebase,
     ) {
         match event {
-            EditorInputEvent::MoveCursorRight => {
-                self.input.move_cursor_right();
-            }
             EditorInputEvent::RemoveCharacterLeft => {
                 self.input.remove_left();
             }
