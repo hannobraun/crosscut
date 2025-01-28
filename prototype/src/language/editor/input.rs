@@ -71,7 +71,7 @@ impl EditorInput {
         }
     }
 
-    pub fn remove_left(&mut self) {
+    fn remove_left(&mut self) {
         self.buffer.pop();
     }
 }
