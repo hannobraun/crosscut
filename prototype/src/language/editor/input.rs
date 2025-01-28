@@ -22,8 +22,7 @@ impl EditorInput {
     pub fn update(&mut self, event: EditorInputEvent) {
         match event {
             EditorInputEvent::Insert { ch } => {
-                self.buffer.insert(self.cursor, ch);
-                self.move_cursor_right();
+                self.insert(ch);
             }
             EditorInputEvent::MoveCursorLeft => {
                 self.move_cursor_left();
