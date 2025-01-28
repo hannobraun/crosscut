@@ -1,6 +1,7 @@
 use super::{
     code::Codebase,
     editor::{Editor, EditorInputEvent},
+    interpreter::Value,
 };
 
 #[derive(Debug)]
@@ -21,7 +22,7 @@ impl Language {
         self.editor.on_input(event, &mut self.codebase);
     }
 
-    pub fn step(&mut self) -> Option<i32> {
+    pub fn step(&mut self) -> Value {
         self.codebase.value
     }
 }

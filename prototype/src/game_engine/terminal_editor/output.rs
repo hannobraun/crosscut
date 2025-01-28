@@ -1,6 +1,8 @@
 use crate::{
     io::terminal_editor::output::{Cursor, EditorOutputAdapter},
-    language::{code::Codebase, editor::Editor, instance::Language},
+    language::{
+        code::Codebase, editor::Editor, instance::Language, interpreter::Value,
+    },
 };
 
 use super::input::{EditorMode, TerminalEditorInput};
@@ -51,7 +53,7 @@ fn render_code<A: EditorOutputAdapter>(
     context.cursor =
         Some(adapter.cursor().move_right(context.editor.input().cursor()));
 
-    if let Some(value) = context.codebase.value {
+    if let Value::Integer { value } = context.codebase.value {
         write!(adapter, "{value}")?;
     }
     writeln!(adapter)?;

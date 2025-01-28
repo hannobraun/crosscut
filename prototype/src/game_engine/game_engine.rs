@@ -2,7 +2,7 @@ use crate::{
     io::terminal_editor::output::{
         DebugOutputAdapter, EditorOutputAdapter, RawTerminalAdapter,
     },
-    language::instance::Language,
+    language::{instance::Language, interpreter::Value},
 };
 
 use super::{
@@ -61,7 +61,7 @@ where
     ) -> anyhow::Result<()> {
         self.editor_input.on_input(event, &mut self.language);
 
-        if let Some(value) = self.language.step() {
+        if let Value::Integer { value } = self.language.step() {
             let value: f64 = value.into();
             let value = value / 255.;
 

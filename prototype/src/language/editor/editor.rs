@@ -1,4 +1,4 @@
-use crate::language::code::Codebase;
+use crate::language::{code::Codebase, interpreter::Value};
 
 use super::{EditorInput, EditorInputEvent};
 
@@ -26,7 +26,7 @@ impl Editor {
         self.input.update(event);
 
         if let Ok(value) = self.input.buffer().parse() {
-            codebase.value = Some(value);
+            codebase.value = Value::Integer { value };
         }
     }
 

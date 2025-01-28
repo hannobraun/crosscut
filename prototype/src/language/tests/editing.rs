@@ -1,4 +1,6 @@
-use crate::language::{editor::EditorInputEvent, instance::Language};
+use crate::language::{
+    editor::EditorInputEvent, instance::Language, interpreter::Value,
+};
 
 #[test]
 fn update_on_every_character() {
@@ -9,10 +11,10 @@ fn update_on_every_character() {
     let mut language = Language::new();
 
     language.enter_code("1");
-    assert_eq!(language.step(), Some(1));
+    assert_eq!(language.step(), Value::Integer { value: 1 });
 
     language.enter_code("2");
-    assert_eq!(language.step(), Some(12));
+    assert_eq!(language.step(), Value::Integer { value: 12 });
 }
 
 #[test]
@@ -23,13 +25,13 @@ fn update_after_removing_character() {
     let mut language = Language::new();
 
     language.enter_code("127");
-    assert_eq!(language.step(), Some(127));
+    assert_eq!(language.step(), Value::Integer { value: 127 });
 
     language.on_input(EditorInputEvent::RemoveLeft);
-    assert_eq!(language.step(), Some(12));
+    assert_eq!(language.step(), Value::Integer { value: 12 });
 
     language.on_input(EditorInputEvent::RemoveLeft);
-    assert_eq!(language.step(), Some(1));
+    assert_eq!(language.step(), Value::Integer { value: 1 });
 }
 
 // There is lots of editing behavior that's not tested here, like cursor
