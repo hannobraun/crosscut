@@ -53,8 +53,8 @@ impl Editor {
     ) {
         match command {
             EditorCommand::Clear => {
-                *self = Self::new();
                 *codebase = Codebase::new();
+                *self = Self::new();
             }
         }
     }
