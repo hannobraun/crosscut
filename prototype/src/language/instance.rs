@@ -6,7 +6,7 @@ use super::{
 
 #[derive(Debug)]
 pub struct Language {
-    pub codebase: Codebase,
+    codebase: Codebase,
     pub editor: Editor,
 }
 
