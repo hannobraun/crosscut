@@ -1,23 +1,28 @@
-use super::code::{Codebase, Expression, IntrinsicFunction, Node};
+use super::code::{Codebase, Expression, IntrinsicFunction, Location, Node};
 
 #[derive(Debug)]
 pub struct Interpreter {
     current_value: Value,
+    next_step: Option<Location>,
 }
 
 impl Interpreter {
-    pub fn new(_: &Codebase) -> Self {
+    pub fn new(codebase: &Codebase) -> Self {
         Self {
             current_value: Value::None,
+            next_step: codebase.entry(),
         }
     }
 
     pub fn step(&mut self, codebase: &Codebase) -> StepResult {
-        let Some(next) = codebase.nodes.first() else {
+        let Some(next_step) = &self.next_step else {
             return StepResult::Finished {
                 output: self.current_value,
             };
         };
+
+        let next = codebase.node_at(next_step);
+        self.next_step = codebase.location_after(next_step);
 
         let value = match next {
             Node::Empty => {
@@ -46,12 +51,13 @@ impl Interpreter {
 
         self.current_value = value;
 
-        StepResult::Finished { output: value }
+        StepResult::Application { output: value }
     }
 }
 
 #[derive(Debug, Eq, PartialEq)]
 pub enum StepResult {
+    Application { output: Value },
     Finished { output: Value },
     Error,
 }

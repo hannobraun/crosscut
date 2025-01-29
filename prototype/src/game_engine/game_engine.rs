@@ -64,23 +64,31 @@ where
     ) -> anyhow::Result<()> {
         self.editor_input.on_input(event, &mut self.language);
 
-        match self.language.step() {
-            StepResult::Finished {
-                output: Value::Integer { value },
-            } => {
-                let value: f64 = value.into();
-                let value = value / 255.;
+        loop {
+            match self.language.step() {
+                StepResult::Application { output: _ } => {
+                    // We're not interested in intermediate values here.
+                    continue;
+                }
+                StepResult::Finished {
+                    output: Value::Integer { value },
+                } => {
+                    let value: f64 = value.into();
+                    let value = value / 255.;
 
-                self.game_output.push(GameOutput::SubmitColor {
-                    color: [value, value, value, 1.],
-                });
+                    self.game_output.push(GameOutput::SubmitColor {
+                        color: [value, value, value, 1.],
+                    });
+                }
+                StepResult::Finished { output: _ } => {
+                    // The output is not a number. We can't render that.
+                }
+                StepResult::Error => {
+                    // Currently not handling errors.
+                }
             }
-            StepResult::Finished { output: _ } => {
-                // The output is not a number. We can't render that.
-            }
-            StepResult::Error => {
-                // Currently not handling errors.
-            }
+
+            break;
         }
 
         self.render_editor()?;

@@ -68,10 +68,17 @@ impl Language {
     }
 
     pub fn step_until_finished(&mut self) -> Value {
-        match self.step() {
-            StepResult::Finished { output } => output,
-            StepResult::Error => {
-                panic!("Unexpected runtime error.");
+        loop {
+            match self.step() {
+                StepResult::Application { output: _ } => {
+                    // We're not concerned with intermediate results here.
+                }
+                StepResult::Finished { output } => {
+                    break output;
+                }
+                StepResult::Error => {
+                    panic!("Unexpected runtime error.");
+                }
             }
         }
     }
