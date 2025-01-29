@@ -14,6 +14,11 @@ impl Interpreter {
 
     pub fn step(&mut self, codebase: &Codebase) -> StepResult {
         let output = match codebase.nodes.first() {
+            Some(Node::Empty) => {
+                // Empty nodes are ignored during execution. Those are only
+                // added by the editor as a placeholder.
+                self.current_value
+            }
             Some(Node::Expression {
                 expression: Expression::LiteralValue { value: output },
             }) => *output,

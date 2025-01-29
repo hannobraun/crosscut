@@ -60,6 +60,7 @@ fn render_code<A: EditorOutputAdapter>(
 
     for node in &context.codebase.nodes {
         match node {
+            Node::Empty => {}
             Node::Expression {
                 expression: Expression::LiteralValue { value },
             } => match value {

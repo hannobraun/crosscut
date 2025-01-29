@@ -17,6 +17,7 @@ impl Codebase {
 
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub enum Node {
+    Empty,
     Expression { expression: Expression },
 }
 
