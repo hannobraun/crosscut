@@ -50,7 +50,7 @@ impl EditorInput {
                 self.remove_right();
             }
             SubmitToken => {
-                return Some(UpdateAction::SubmitToken);
+                return Some(self.submit_token());
             }
         }
 
@@ -105,6 +105,10 @@ impl EditorInput {
         if self.cursor < self.buffer.len() {
             self.buffer.remove(self.cursor);
         }
+    }
+
+    fn submit_token(&mut self) -> UpdateAction {
+        UpdateAction::SubmitToken
     }
 }
 
