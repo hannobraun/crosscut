@@ -3,6 +3,7 @@ use crate::{
         DebugOutputAdapter, EditorOutputAdapter, RawTerminalAdapter,
     },
     language::{
+        host::Host,
         instance::Language,
         interpreter::{StepResult, Value},
     },
@@ -44,7 +45,7 @@ where
 {
     pub fn new(adapter: A) -> Self {
         Self {
-            language: Language::with_host(),
+            language: Language::with_host(Host::new()),
             game_output: Vec::new(),
             editor_input: TerminalEditorInput::new(),
             editor_output: TerminalEditorOutput::new(adapter),

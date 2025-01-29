@@ -14,7 +14,7 @@ pub struct Language {
 }
 
 impl Language {
-    pub fn with_host() -> Self {
+    pub fn with_host(host: Host) -> Self {
         let mut codebase = Codebase::new();
         let editor = Editor::new(&mut codebase);
         let interpreter = Interpreter::new(&codebase);
@@ -23,7 +23,7 @@ impl Language {
             codebase,
             editor,
             interpreter,
-            host: Host::new(),
+            host,
         }
     }
 
@@ -63,7 +63,7 @@ use super::interpreter::Value;
 #[cfg(test)]
 impl Language {
     pub fn without_host() -> Self {
-        Self::with_host()
+        Self::with_host(Host::new())
     }
 
     pub fn enter_code(&mut self, code: &str) {
