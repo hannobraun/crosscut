@@ -50,7 +50,6 @@ impl EditorInput {
                 self.remove_right();
             }
             SubmitToken => {
-
                 return Some(UpdateAction::SubmitToken);
             }
         }
