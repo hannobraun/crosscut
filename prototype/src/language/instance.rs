@@ -10,6 +10,7 @@ pub struct Language {
     codebase: Codebase,
     editor: Editor,
     interpreter: Interpreter,
+    host: Host,
 }
 
 impl Language {
@@ -22,6 +23,7 @@ impl Language {
             codebase,
             editor,
             interpreter,
+            host: Host::new(),
         }
     }
 
@@ -38,7 +40,7 @@ impl Language {
             event,
             &mut self.codebase,
             &mut self.interpreter,
-            &Host::new(),
+            &self.host,
         );
     }
 
