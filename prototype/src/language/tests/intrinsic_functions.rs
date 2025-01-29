@@ -12,10 +12,8 @@ fn number_literal() {
 
     language.enter_code("127");
     assert_eq!(
-        language.step(),
-        StepResult::Finished {
-            output: Value::Integer { value: 127 }
-        },
+        language.step_until_finished(),
+        Value::Integer { value: 127 },
     );
 }
 
