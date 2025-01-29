@@ -15,6 +15,6 @@ fn number_literal() {
         language.step(),
         StepResult::Finished {
             output: Value::Integer { value: 127 }
-        }
+        },
     );
 }
