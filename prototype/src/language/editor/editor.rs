@@ -1,5 +1,5 @@
 use crate::language::{
-    code::{Codebase, Expression, Node},
+    code::{Codebase, Expression, Location, Node},
     interpreter::Value,
 };
 
@@ -8,14 +8,16 @@ use super::{input::UpdateAction, EditorInput, EditorInputEvent};
 #[derive(Debug)]
 pub struct Editor {
     input: EditorInput,
+    editing: Location,
 }
 
 impl Editor {
     pub fn new(codebase: &mut Codebase) -> Self {
-        codebase.push(Node::Empty);
+        let editing = codebase.push(Node::Empty);
 
         Self {
             input: EditorInput::empty(),
+            editing,
         }
     }
 
@@ -45,7 +47,7 @@ impl Editor {
             Expression::LiteralValue { value: Value::None }
         };
 
-        codebase.replace(Node::Expression { expression: value });
+        codebase.replace(&self.editing, Node::Expression { expression: value });
     }
 
     pub fn on_command(

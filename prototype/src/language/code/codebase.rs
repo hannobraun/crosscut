@@ -10,12 +10,16 @@ impl Codebase {
         Self { nodes: Vec::new() }
     }
 
-    pub fn push(&mut self, node: Node) {
+    pub fn push(&mut self, node: Node) -> Location {
+        let location = Location {
+            index: self.nodes.len(),
+        };
         self.nodes.push(node);
+        location
     }
 
-    pub fn replace(&mut self, replacement: Node) {
-        self.nodes = vec![replacement];
+    pub fn replace(&mut self, to_replace: &Location, replacement: Node) {
+        self.nodes[to_replace.index] = replacement;
     }
 }
 
@@ -23,6 +27,11 @@ impl Codebase {
 pub enum Node {
     Empty,
     Expression { expression: Expression },
+}
+
+#[derive(Debug)]
+pub struct Location {
+    index: usize,
 }
 
 #[derive(Clone, Debug, Eq, PartialEq)]
