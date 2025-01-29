@@ -24,11 +24,6 @@ impl Language {
         }
     }
 
-    #[cfg(test)]
-    pub fn without_host() -> Self {
-        Self::with_host()
-    }
-
     pub fn codebase(&self) -> &Codebase {
         &self.codebase
     }
@@ -60,6 +55,10 @@ use super::interpreter::Value;
 
 #[cfg(test)]
 impl Language {
+    pub fn without_host() -> Self {
+        Self::with_host()
+    }
+
     pub fn enter_code(&mut self, code: &str) {
         for ch in code.chars() {
             let event = if ch.is_whitespace() {
