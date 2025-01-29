@@ -18,3 +18,20 @@ fn number_literal() {
         },
     );
 }
+
+#[test]
+fn identity_none() {
+    // The `identity` function takes any argument and returns it unchanged. The
+    // initial value is `None`, so an `identity` with nothing else around,
+    // should return that.
+
+    let mut language = Language::new();
+
+    language.enter_code("identity");
+    assert_eq!(
+        language.step(),
+        StepResult::Finished {
+            output: Value::None
+        },
+    );
+}
