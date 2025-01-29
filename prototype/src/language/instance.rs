@@ -45,13 +45,6 @@ impl Language {
     pub fn step(&mut self) -> StepResult {
         self.interpreter.step(&self.codebase)
     }
-
-    #[cfg(test)]
-    pub fn step_until_finished(&mut self) -> Value {
-        match self.step() {
-            StepResult::Finished { output } => output,
-        }
-    }
 }
 
 #[cfg(test)]
@@ -65,6 +58,12 @@ impl Language {
             };
 
             self.on_input(event);
+        }
+    }
+
+    pub fn step_until_finished(&mut self) -> Value {
+        match self.step() {
+            StepResult::Finished { output } => output,
         }
     }
 }
