@@ -4,9 +4,6 @@ use super::{
     interpreter::{Interpreter, StepResult},
 };
 
-#[cfg(test)]
-use super::interpreter::Value;
-
 #[derive(Debug)]
 pub struct Language {
     codebase: Codebase,
@@ -46,6 +43,9 @@ impl Language {
         self.interpreter.step(&self.codebase)
     }
 }
+
+#[cfg(test)]
+use super::interpreter::Value;
 
 #[cfg(test)]
 impl Language {
