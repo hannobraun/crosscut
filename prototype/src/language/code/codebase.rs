@@ -9,6 +9,10 @@ impl Codebase {
     pub fn new() -> Self {
         Self { nodes: Vec::new() }
     }
+
+    pub fn replace(&mut self, replacement: Node) {
+        self.nodes = vec![replacement];
+    }
 }
 
 #[derive(Clone, Debug, Eq, PartialEq)]

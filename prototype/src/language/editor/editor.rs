@@ -43,7 +43,7 @@ impl Editor {
             Expression::LiteralValue { value: Value::None }
         };
 
-        codebase.nodes = vec![Node::Expression { expression: value }];
+        codebase.replace(Node::Expression { expression: value });
     }
 
     pub fn on_command(
