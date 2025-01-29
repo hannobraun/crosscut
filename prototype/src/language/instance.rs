@@ -36,7 +36,11 @@ impl Language {
     }
 
     pub fn on_command(&mut self, command: EditorCommand) {
-        self.editor.on_command(command, &mut self.codebase);
+        self.editor.on_command(
+            command,
+            &mut self.codebase,
+            &mut self.interpreter,
+        );
     }
 
     pub fn step(&mut self) -> StepResult {

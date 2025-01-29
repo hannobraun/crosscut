@@ -1,6 +1,6 @@
 use crate::language::{
     code::{Codebase, Expression, Location, Node},
-    interpreter::Value,
+    interpreter::{Interpreter, Value},
 };
 
 use super::{input::UpdateAction, EditorInput, EditorInputEvent};
@@ -53,6 +53,7 @@ impl Editor {
         &mut self,
         command: EditorCommand,
         codebase: &mut Codebase,
+        _: &mut Interpreter,
     ) {
         match command {
             EditorCommand::Clear => {
