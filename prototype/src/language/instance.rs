@@ -1,13 +1,14 @@
 use super::{
-    code::{Codebase, Expression},
+    code::Codebase,
     editor::{Editor, EditorCommand, EditorInputEvent},
-    interpreter::{StepResult, Value},
+    interpreter::{Interpreter, StepResult},
 };
 
 #[derive(Debug)]
 pub struct Language {
     codebase: Codebase,
     editor: Editor,
+    interpreter: Interpreter,
 }
 
 impl Language {
@@ -15,6 +16,7 @@ impl Language {
         Self {
             codebase: Codebase::new(),
             editor: Editor::new(),
+            interpreter: Interpreter {},
         }
     }
 
@@ -35,13 +37,7 @@ impl Language {
     }
 
     pub fn step(&mut self) -> StepResult {
-        let Expression::LiteralValue { value: output } = self
-            .codebase
-            .expressions
-            .first()
-            .cloned()
-            .unwrap_or(Expression::LiteralValue { value: Value::None });
-        StepResult::Finished { output }
+        self.interpreter.step(&self.codebase)
     }
 }
 
