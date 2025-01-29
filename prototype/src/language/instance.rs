@@ -35,9 +35,8 @@ impl Language {
     }
 
     pub fn step(&mut self) -> StepResult {
-        StepResult::Finished {
-            output: self.codebase.value,
-        }
+        let output = self.codebase.value;
+        StepResult::Finished { output }
     }
 }
 
