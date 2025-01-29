@@ -35,13 +35,15 @@ impl Editor {
             }
         }
 
-        codebase.value = if let Ok(value) = self.input.buffer().parse() {
+        let value = if let Ok(value) = self.input.buffer().parse() {
             Expression::LiteralValue {
                 value: Value::Integer { value },
             }
         } else {
             Expression::LiteralValue { value: Value::None }
         };
+
+        codebase.value = value;
     }
 
     pub fn on_command(
