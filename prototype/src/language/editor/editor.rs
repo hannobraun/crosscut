@@ -29,7 +29,7 @@ impl Editor {
         &mut self,
         event: EditorInputEvent,
         codebase: &mut Codebase,
-        _: &mut Interpreter,
+        interpreter: &mut Interpreter,
     ) {
         if let Some(action) = self.input.update(event) {
             match action {
@@ -48,6 +48,14 @@ impl Editor {
         };
 
         codebase.replace(&self.editing, Node::Expression { expression: value });
+
+        // Unconditionally resetting the interpreter like this, is not going to
+        // work long-term. It should only be reset, if it's finished.
+        //
+        // Right now, this makes no difference though, as the interpreter's
+        // implementation is too primitive to distinguish between being finished
+        // or not.
+        *interpreter = Interpreter::new();
     }
 
     pub fn on_command(
