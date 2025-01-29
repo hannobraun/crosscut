@@ -62,13 +62,13 @@ fn render_code<A: EditorOutputAdapter>(
     for node in context.codebase.nodes() {
         match node {
             Node::Empty => {}
-            Node::Expression {
-                expression: Expression::IntrinsicFunction { function },
-            } => {
-                adapter.color(Color::DarkBlue, |adapter| {
-                    write!(adapter, "{function}")
-                })?;
-            }
+            Node::Expression { expression } => match expression {
+                Expression::IntrinsicFunction { function } => {
+                    adapter.color(Color::DarkBlue, |adapter| {
+                        write!(adapter, "{function}")
+                    })?;
+                }
+            },
         }
 
         writeln!(adapter)?;
