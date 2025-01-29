@@ -24,6 +24,7 @@ impl Language {
         }
     }
 
+    #[cfg(test)]
     pub fn without_host() -> Self {
         Self::with_host()
     }
