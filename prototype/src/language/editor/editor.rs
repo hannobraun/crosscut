@@ -47,7 +47,7 @@ impl Editor {
             }
         } else {
             Expression::IntrinsicFunction {
-                function: IntrinsicFunction::Literal { value: Value::None },
+                function: IntrinsicFunction::Identity,
             }
         };
 

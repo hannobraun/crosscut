@@ -29,6 +29,7 @@ impl Interpreter {
                 expression: Expression::IntrinsicFunction { function },
             } => {
                 match function {
+                    IntrinsicFunction::Identity => self.current_value,
                     IntrinsicFunction::Literal { value } => {
                         let Value::None = self.current_value else {
                             // A literal is a function that takes `None`. If
