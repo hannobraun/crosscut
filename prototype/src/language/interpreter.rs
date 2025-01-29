@@ -4,6 +4,10 @@ use super::code::{Codebase, Expression};
 pub struct Interpreter {}
 
 impl Interpreter {
+    pub fn new() -> Self {
+        Self {}
+    }
+
     pub fn step(&mut self, codebase: &Codebase) -> StepResult {
         let Expression::LiteralValue { value: output } = codebase
             .expressions

@@ -16,7 +16,7 @@ impl Language {
         Self {
             codebase: Codebase::new(),
             editor: Editor::new(),
-            interpreter: Interpreter {},
+            interpreter: Interpreter::new(),
         }
     }
 
