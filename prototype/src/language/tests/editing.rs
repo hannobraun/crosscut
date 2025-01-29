@@ -28,27 +28,15 @@ fn update_after_removing_character() {
 
     language.enter_code("127");
     assert_eq!(
-        language.step(),
-        StepResult::Finished {
-            output: Value::Integer { value: 127 }
-        }
+        language.step_until_finished(),
+        Value::Integer { value: 127 },
     );
 
     language.on_input(EditorInputEvent::RemoveLeft);
-    assert_eq!(
-        language.step(),
-        StepResult::Finished {
-            output: Value::Integer { value: 12 }
-        }
-    );
+    assert_eq!(language.step_until_finished(), Value::Integer { value: 12 });
 
     language.on_input(EditorInputEvent::RemoveLeft);
-    assert_eq!(
-        language.step(),
-        StepResult::Finished {
-            output: Value::Integer { value: 1 }
-        }
-    );
+    assert_eq!(language.step_until_finished(), Value::Integer { value: 1 });
 }
 
 #[test]
