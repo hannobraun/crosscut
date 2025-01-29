@@ -1,7 +1,7 @@
 use crate::{
     io::terminal_editor::output::{Cursor, EditorOutputAdapter},
     language::{
-        code::{Codebase, Expression, Node},
+        code::{Codebase, Expression, IntrinsicFunction, Node},
         editor::Editor,
         instance::Language,
         interpreter::Value,
@@ -62,7 +62,10 @@ fn render_code<A: EditorOutputAdapter>(
         match node {
             Node::Empty => {}
             Node::Expression {
-                expression: Expression::LiteralValue { value },
+                expression:
+                    Expression::IntrinsicFunction {
+                        function: IntrinsicFunction::LiteralValue { value },
+                    },
             } => match value {
                 Value::None => {}
                 Value::Integer { value } => {

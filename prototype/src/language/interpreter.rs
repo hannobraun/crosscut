@@ -1,4 +1,4 @@
-use super::code::{Codebase, Expression, Node};
+use super::code::{Codebase, Expression, IntrinsicFunction, Node};
 
 #[derive(Debug)]
 pub struct Interpreter {
@@ -26,7 +26,11 @@ impl Interpreter {
                 self.current_value
             }
             Node::Expression {
-                expression: Expression::LiteralValue { value: output },
+                expression:
+                    Expression::IntrinsicFunction {
+                        function:
+                            IntrinsicFunction::LiteralValue { value: output },
+                    },
             } => {
                 let Value::None = self.current_value else {
                     // A literal is a function that takes `None`. If that isn't

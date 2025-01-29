@@ -1,5 +1,5 @@
 use crate::language::{
-    code::{Codebase, Expression, Location, Node},
+    code::{Codebase, Expression, IntrinsicFunction, Location, Node},
     interpreter::{Interpreter, Value},
 };
 
@@ -40,11 +40,17 @@ impl Editor {
         }
 
         let value = if let Ok(value) = self.input.buffer().parse() {
-            Expression::LiteralValue {
-                value: Value::Integer { value },
+            Expression::IntrinsicFunction {
+                function: IntrinsicFunction::LiteralValue {
+                    value: Value::Integer { value },
+                },
             }
         } else {
-            Expression::LiteralValue { value: Value::None }
+            Expression::IntrinsicFunction {
+                function: IntrinsicFunction::LiteralValue {
+                    value: Value::None,
+                },
+            }
         };
 
         codebase.replace(&self.editing, Node::Expression { expression: value });

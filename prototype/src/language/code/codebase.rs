@@ -36,5 +36,10 @@ pub struct Location {
 
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub enum Expression {
+    IntrinsicFunction { function: IntrinsicFunction },
+}
+
+#[derive(Clone, Debug, Eq, PartialEq)]
+pub enum IntrinsicFunction {
     LiteralValue { value: Value },
 }
