@@ -41,5 +41,5 @@ pub enum Expression {
 
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub enum IntrinsicFunction {
-    LiteralValue { value: Value },
+    Literal { value: Value },
 }

@@ -64,7 +64,7 @@ fn render_code<A: EditorOutputAdapter>(
             Node::Expression {
                 expression:
                     Expression::IntrinsicFunction {
-                        function: IntrinsicFunction::LiteralValue { value },
+                        function: IntrinsicFunction::Literal { value },
                     },
             } => match value {
                 Value::None => {}

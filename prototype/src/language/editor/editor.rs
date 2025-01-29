@@ -41,15 +41,13 @@ impl Editor {
 
         let value = if let Ok(value) = self.input.buffer().parse() {
             Expression::IntrinsicFunction {
-                function: IntrinsicFunction::LiteralValue {
+                function: IntrinsicFunction::Literal {
                     value: Value::Integer { value },
                 },
             }
         } else {
             Expression::IntrinsicFunction {
-                function: IntrinsicFunction::LiteralValue {
-                    value: Value::None,
-                },
+                function: IntrinsicFunction::Literal { value: Value::None },
             }
         };
 

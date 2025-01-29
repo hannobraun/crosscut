@@ -29,7 +29,7 @@ impl Interpreter {
                 expression:
                     Expression::IntrinsicFunction {
                         function:
-                            IntrinsicFunction::LiteralValue { value: output },
+                            IntrinsicFunction::Literal { value: output },
                     },
             } => {
                 let Value::None = self.current_value else {
