@@ -1,7 +1,7 @@
 use super::{
     code::Codebase,
     editor::{Editor, EditorCommand, EditorInputEvent},
-    interpreter::Value,
+    interpreter::StepResult,
 };
 
 #[derive(Debug)]
@@ -34,8 +34,10 @@ impl Language {
         self.editor.on_command(command, &mut self.codebase);
     }
 
-    pub fn step(&mut self) -> Value {
-        self.codebase.value
+    pub fn step(&mut self) -> StepResult {
+        StepResult::Finished {
+            output: self.codebase.value,
+        }
     }
 }
 

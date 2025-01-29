@@ -1,4 +1,7 @@
-use crate::language::{instance::Language, interpreter::Value};
+use crate::language::{
+    instance::Language,
+    interpreter::{StepResult, Value},
+};
 
 #[test]
 fn number_literal() {
@@ -8,5 +11,10 @@ fn number_literal() {
     let mut language = Language::new();
 
     language.enter_code("127");
-    assert_eq!(language.step(), Value::Integer { value: 127 });
+    assert_eq!(
+        language.step(),
+        StepResult::Finished {
+            output: Value::Integer { value: 127 }
+        }
+    );
 }
