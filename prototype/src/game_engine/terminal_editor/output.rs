@@ -27,7 +27,7 @@ where
     ) -> anyhow::Result<()> {
         let mut context = RenderContext {
             codebase: language.codebase(),
-            editor: &language.editor,
+            editor: language.editor(),
             cursor: None,
         };
 

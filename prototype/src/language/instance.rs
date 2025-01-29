@@ -22,6 +22,10 @@ impl Language {
         &self.codebase
     }
 
+    pub fn editor(&self) -> &Editor {
+        &self.editor
+    }
+
     pub fn on_input(&mut self, event: EditorInputEvent) {
         self.editor.on_input(event, &mut self.codebase);
     }
