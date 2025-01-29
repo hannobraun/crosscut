@@ -15,11 +15,12 @@ impl Language {
     pub fn new() -> Self {
         let mut codebase = Codebase::new();
         let editor = Editor::new(&mut codebase);
+        let interpreter = Interpreter::new();
 
         Self {
             codebase,
             editor,
-            interpreter: Interpreter::new(),
+            interpreter,
         }
     }
 
