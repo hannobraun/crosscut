@@ -18,6 +18,10 @@ impl Language {
         }
     }
 
+    pub fn codebase(&self) -> &Codebase {
+        &self.codebase
+    }
+
     pub fn on_input(&mut self, event: EditorInputEvent) {
         self.editor.on_input(event, &mut self.codebase);
     }

@@ -26,7 +26,7 @@ where
         editor_input: &TerminalEditorInput,
     ) -> anyhow::Result<()> {
         let mut context = RenderContext {
-            codebase: &language.codebase,
+            codebase: language.codebase(),
             editor: &language.editor,
             cursor: None,
         };
