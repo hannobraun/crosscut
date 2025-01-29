@@ -25,6 +25,8 @@ impl Interpreter {
             None => self.current_value,
         };
 
+        self.current_value = value;
+
         StepResult::Finished { output: value }
     }
 }
