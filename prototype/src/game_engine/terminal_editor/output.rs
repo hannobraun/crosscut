@@ -58,11 +58,12 @@ fn render_code<A: EditorOutputAdapter>(
     context.cursor =
         Some(adapter.cursor().move_right(context.editor.input().cursor()));
 
-    if let Expression::LiteralValue {
-        value: Value::Integer { value },
-    } = context.codebase.value
-    {
-        write!(adapter, "{value}")?;
+    let Expression::LiteralValue { value } = context.codebase.value;
+    match value {
+        Value::None => {}
+        Value::Integer { value } => {
+            write!(adapter, "{value}")?;
+        }
     }
     writeln!(adapter)?;
 
