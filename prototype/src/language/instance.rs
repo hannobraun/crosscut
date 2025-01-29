@@ -48,8 +48,9 @@ impl Language {
 
     #[cfg(test)]
     pub fn step_until_finished(&mut self) -> Value {
-        let StepResult::Finished { output } = self.step();
-        output
+        match self.step() {
+            StepResult::Finished { output } => output,
+        }
     }
 }
 
