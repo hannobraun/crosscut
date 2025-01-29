@@ -108,6 +108,7 @@ impl EditorInput {
     }
 
     fn submit_token(&mut self) -> UpdateAction {
+        *self = Self::new(String::new());
         UpdateAction::SubmitToken
     }
 }
@@ -267,5 +268,16 @@ mod tests {
         input.update(MoveCursorLeft);
         input.update(Insert { ch: '切' });
         assert_eq!(input.buffer(), "横切码");
+    }
+
+    #[test]
+    fn submit_token() {
+        let mut input = EditorInput::empty();
+
+        input.update(Insert { ch: '1' });
+        assert_eq!(input.buffer(), "1");
+
+        input.update(SubmitToken);
+        assert_eq!(input.buffer(), "");
     }
 }
