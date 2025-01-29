@@ -10,6 +10,10 @@ impl Codebase {
         Self { nodes: Vec::new() }
     }
 
+    pub fn nodes(&self) -> impl Iterator<Item = &Node> {
+        self.nodes.iter()
+    }
+
     pub fn entry(&self) -> Location {
         assert!(
             !self.nodes.is_empty(),
@@ -20,10 +24,6 @@ impl Codebase {
         // This happens to work right now, because the editor happens to always
         // create an initial fragment, so `Codebase` is never empty.
         Location { index: 0 }
-    }
-
-    pub fn nodes(&self) -> impl Iterator<Item = &Node> {
-        self.nodes.iter()
     }
 
     pub fn location_after(&self, location: &Location) -> Option<Location> {
