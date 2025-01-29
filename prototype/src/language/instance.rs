@@ -68,6 +68,8 @@ impl Language {
     }
 
     pub fn step_until_finished(&mut self) -> Value {
+        let mut i = 0;
+
         loop {
             match self.step() {
                 StepResult::Application { output: _ } => {
@@ -79,6 +81,14 @@ impl Language {
                 StepResult::Error => {
                     panic!("Unexpected runtime error.");
                 }
+            }
+
+            i += 1;
+
+            if i > 1024 {
+                // This function is only used in tests. And those are not so
+                // complicated, as to require a large number of steps.
+                panic!("Test seemingly ran into an endless loop.");
             }
         }
     }
