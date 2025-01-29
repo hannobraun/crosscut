@@ -29,6 +29,7 @@ impl Editor {
         &mut self,
         event: EditorInputEvent,
         codebase: &mut Codebase,
+        _: &mut Interpreter,
     ) {
         if let Some(action) = self.input.update(event) {
             match action {
