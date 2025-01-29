@@ -26,19 +26,20 @@ impl Interpreter {
                 self.current_value
             }
             Node::Expression {
-                expression:
-                    Expression::IntrinsicFunction {
-                        function:
-                            IntrinsicFunction::Literal { value: output },
-                    },
+                expression: Expression::IntrinsicFunction { function },
             } => {
-                let Value::None = self.current_value else {
-                    // A literal is a function that takes `None`. If that isn't
-                    // what we currently have, that's an error.
-                    return StepResult::Error;
-                };
+                match function {
+                    IntrinsicFunction::Literal { value: output } => {
+                        let Value::None = self.current_value else {
+                            // A literal is a function that takes `None`. If
+                            // that isn't what we currently have, that's an
+                            // error.
+                            return StepResult::Error;
+                        };
 
-                *output
+                        *output
+                    }
+                }
             }
         };
 
