@@ -6,7 +6,7 @@ pub struct Interpreter {
 }
 
 impl Interpreter {
-    pub fn new() -> Self {
+    pub fn new(_: &Codebase) -> Self {
         Self {
             current_value: Value::None,
         }

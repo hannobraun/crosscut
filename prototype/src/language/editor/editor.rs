@@ -55,7 +55,7 @@ impl Editor {
         // Right now, this makes no difference though, as the interpreter's
         // implementation is too primitive to distinguish between being finished
         // or not.
-        *interpreter = Interpreter::new();
+        *interpreter = Interpreter::new(codebase);
     }
 
     pub fn on_command(
@@ -67,7 +67,7 @@ impl Editor {
         match command {
             EditorCommand::Clear => {
                 *codebase = Codebase::new();
-                *interpreter = Interpreter::new();
+                *interpreter = Interpreter::new(codebase);
                 *self = Self::new(codebase);
             }
         }

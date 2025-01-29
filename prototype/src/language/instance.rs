@@ -15,7 +15,7 @@ impl Language {
     pub fn new() -> Self {
         let mut codebase = Codebase::new();
         let editor = Editor::new(&mut codebase);
-        let interpreter = Interpreter::new();
+        let interpreter = Interpreter::new(&codebase);
 
         Self {
             codebase,
