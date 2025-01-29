@@ -1,4 +1,7 @@
-use crate::language::{code::Codebase, interpreter::Value};
+use crate::language::{
+    code::{Codebase, Expression},
+    interpreter::Value,
+};
 
 use super::{input::UpdateAction, EditorInput, EditorInputEvent};
 
@@ -33,9 +36,11 @@ impl Editor {
         }
 
         codebase.value = if let Ok(value) = self.input.buffer().parse() {
-            Value::Integer { value }
+            Expression::LiteralValue {
+                value: Value::Integer { value },
+            }
         } else {
-            Value::None
+            Expression::LiteralValue { value: Value::None }
         };
     }
 

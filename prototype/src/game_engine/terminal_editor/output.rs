@@ -1,7 +1,10 @@
 use crate::{
     io::terminal_editor::output::{Cursor, EditorOutputAdapter},
     language::{
-        code::Codebase, editor::Editor, instance::Language, interpreter::Value,
+        code::{Codebase, Expression},
+        editor::Editor,
+        instance::Language,
+        interpreter::Value,
     },
 };
 
@@ -55,7 +58,10 @@ fn render_code<A: EditorOutputAdapter>(
     context.cursor =
         Some(adapter.cursor().move_right(context.editor.input().cursor()));
 
-    if let Value::Integer { value } = context.codebase.value {
+    if let Expression::LiteralValue {
+        value: Value::Integer { value },
+    } = context.codebase.value
+    {
         write!(adapter, "{value}")?;
     }
     writeln!(adapter)?;

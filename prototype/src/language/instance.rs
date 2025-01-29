@@ -1,5 +1,5 @@
 use super::{
-    code::Codebase,
+    code::{Codebase, Expression},
     editor::{Editor, EditorCommand, EditorInputEvent},
     interpreter::StepResult,
 };
@@ -35,7 +35,7 @@ impl Language {
     }
 
     pub fn step(&mut self) -> StepResult {
-        let output = self.codebase.value;
+        let Expression::LiteralValue { value: output } = self.codebase.value;
         StepResult::Finished { output }
     }
 }
