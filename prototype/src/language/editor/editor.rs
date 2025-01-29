@@ -56,9 +56,9 @@ impl Editor {
         // Unconditionally resetting the interpreter like this, is not going to
         // work long-term. It should only be reset, if it's finished.
         //
-        // Right now, this makes no difference though, as the interpreter's
-        // implementation is too primitive to distinguish between being finished
-        // or not.
+        // Right now, it doesn't seem to be practical to construct a high-level
+        // test where this makes a difference though, and I don't want to fix
+        // this until the behavior is covered by such a test.
         *interpreter = Interpreter::new(codebase);
     }
 
