@@ -29,6 +29,12 @@ impl EditorInput {
 
         match event {
             Insert { ch } => {
+                assert!(
+                    !ch.is_whitespace(),
+                    "Expecting whitespace characters to be translated into \
+                    `SubmitToken`.",
+                );
+
                 self.insert(ch);
             }
             MoveCursorLeft => {
