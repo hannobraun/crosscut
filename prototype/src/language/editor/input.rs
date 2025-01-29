@@ -24,7 +24,7 @@ impl EditorInput {
         self.cursor
     }
 
-    pub fn update(&mut self, event: EditorInputEvent) {
+    pub fn update(&mut self, event: EditorInputEvent) -> Option<UpdateAction> {
         use EditorInputEvent::*;
 
         match event {
@@ -55,6 +55,8 @@ impl EditorInput {
                 // and we don't have to do anything here.
             }
         }
+
+        None
     }
 
     fn insert(&mut self, ch: char) {
@@ -107,6 +109,8 @@ impl EditorInput {
         }
     }
 }
+
+pub enum UpdateAction {}
 
 struct MoveBeyondLimit;
 
