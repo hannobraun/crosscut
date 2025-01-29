@@ -64,16 +64,23 @@ where
     ) -> anyhow::Result<()> {
         self.editor_input.on_input(event, &mut self.language);
 
-        if let StepResult::Finished {
-            output: Value::Integer { value },
-        } = self.language.step()
-        {
-            let value: f64 = value.into();
-            let value = value / 255.;
+        match self.language.step() {
+            StepResult::Finished {
+                output: Value::Integer { value },
+            } => {
+                let value: f64 = value.into();
+                let value = value / 255.;
 
-            self.game_output.push(GameOutput::SubmitColor {
-                color: [value, value, value, 1.],
-            });
+                self.game_output.push(GameOutput::SubmitColor {
+                    color: [value, value, value, 1.],
+                });
+            }
+            StepResult::Finished { output: _ } => {
+                // The output is not a number. We can't render that.
+            }
+            StepResult::Error => {
+                // Currently not handling errors.
+            }
         }
 
         self.render_editor()?;
