@@ -12,7 +12,7 @@ pub struct Language {
 }
 
 impl Language {
-    pub fn without_host() -> Self {
+    pub fn with_host() -> Self {
         let mut codebase = Codebase::new();
         let editor = Editor::new(&mut codebase);
         let interpreter = Interpreter::new(&codebase);
@@ -22,6 +22,10 @@ impl Language {
             editor,
             interpreter,
         }
+    }
+
+    pub fn without_host() -> Self {
+        Self::with_host()
     }
 
     pub fn codebase(&self) -> &Codebase {
