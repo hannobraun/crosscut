@@ -62,15 +62,14 @@ fn render_code<A: EditorOutputAdapter>(
         match node {
             Node::Empty => {}
             Node::Expression {
-                expression:
-                    Expression::IntrinsicFunction {
-                        function: IntrinsicFunction::Literal { value },
-                    },
-            } => match value {
-                Value::None => {}
-                Value::Integer { value } => {
-                    write!(adapter, "{value}")?;
-                }
+                expression: Expression::IntrinsicFunction { function },
+            } => match function {
+                IntrinsicFunction::Literal { value } => match value {
+                    Value::None => {}
+                    Value::Integer { value } => {
+                        write!(adapter, "{value}")?;
+                    }
+                },
             },
         }
 
