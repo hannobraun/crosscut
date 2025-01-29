@@ -71,8 +71,8 @@ impl Editor {
         match command {
             EditorCommand::Clear => {
                 *codebase = Codebase::new();
-                *interpreter = Interpreter::new(codebase);
                 *self = Self::new(codebase);
+                *interpreter = Interpreter::new(codebase);
             }
         }
     }
