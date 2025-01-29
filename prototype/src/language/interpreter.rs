@@ -13,13 +13,13 @@ impl Interpreter {
     }
 
     pub fn step(&mut self, codebase: &Codebase) -> StepResult {
-        let Node::Expression {
-            expression: Expression::LiteralValue { value: output },
-        } = codebase.nodes.first().cloned().unwrap_or(Node::Expression {
-            expression: Expression::LiteralValue {
-                value: self.current_value,
-            },
-        });
+        let output = match codebase.nodes.first() {
+            Some(Node::Expression {
+                expression: Expression::LiteralValue { value: output },
+            }) => *output,
+            None => self.current_value,
+        };
+
         StepResult::Finished { output }
     }
 }
