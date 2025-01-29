@@ -54,7 +54,7 @@ where
 fn render_code<A: EditorOutputAdapter>(
     adapter: &mut A,
     context: &mut RenderContext,
-    _: &Host,
+    host: &Host,
 ) -> anyhow::Result<()> {
     writeln!(adapter)?;
 
@@ -65,6 +65,12 @@ fn render_code<A: EditorOutputAdapter>(
         match node {
             Node::Empty => {}
             Node::Expression { expression } => match expression {
+                Expression::HostFunction { id } => {
+                    let name = host.function_name_by_id(id);
+                    adapter.color(Color::DarkMagenta, |adapter| {
+                        write!(adapter, "{name}")
+                    })?;
+                }
                 Expression::IntrinsicFunction { function } => {
                     adapter.color(Color::DarkBlue, |adapter| {
                         write!(adapter, "{function}")

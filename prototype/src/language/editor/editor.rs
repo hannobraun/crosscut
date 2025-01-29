@@ -31,7 +31,7 @@ impl Editor {
         event: EditorInputEvent,
         codebase: &mut Codebase,
         interpreter: &mut Interpreter,
-        _: &Host,
+        host: &Host,
     ) {
         if let Some(action) = self.input.update(event) {
             match action {
@@ -47,6 +47,8 @@ impl Editor {
                     value: Value::Integer { value },
                 },
             }
+        } else if let Some(id) = host.function_id_by_name(self.input.buffer()) {
+            Expression::HostFunction { id }
         } else {
             Expression::IntrinsicFunction {
                 function: IntrinsicFunction::Identity,

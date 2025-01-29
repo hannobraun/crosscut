@@ -32,6 +32,9 @@ impl Interpreter {
             }
             Node::Expression { expression } => {
                 match expression {
+                    Expression::HostFunction { id: _ } => {
+                        todo!("Host functions are not supported yet.");
+                    }
                     Expression::IntrinsicFunction { function } => {
                         match function {
                             IntrinsicFunction::Identity => self.current_value,
