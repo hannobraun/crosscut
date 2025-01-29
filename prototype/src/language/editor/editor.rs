@@ -1,6 +1,6 @@
 use crate::language::{code::Codebase, interpreter::Value};
 
-use super::{EditorInput, EditorInputEvent};
+use super::{input::UpdateAction, EditorInput, EditorInputEvent};
 
 #[derive(Debug)]
 pub struct Editor {
@@ -24,7 +24,12 @@ impl Editor {
         codebase: &mut Codebase,
     ) {
         if let Some(action) = self.input.update(event) {
-            match action {}
+            match action {
+                UpdateAction::SubmitToken => {
+                    // We need to create a new token here to edit that, but that
+                    // is not supported yet.
+                }
+            }
         }
 
         codebase.value = if let Ok(value) = self.input.buffer().parse() {

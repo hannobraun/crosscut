@@ -50,9 +50,8 @@ impl EditorInput {
                 self.remove_right();
             }
             SubmitToken => {
-                // As of this writing, there's only one token, ever, and that's
-                // always being edited. So "submitting" it is not a thing yet,
-                // and we don't have to do anything here.
+
+                return Some(UpdateAction::SubmitToken);
             }
         }
 
@@ -110,7 +109,9 @@ impl EditorInput {
     }
 }
 
-pub enum UpdateAction {}
+pub enum UpdateAction {
+    SubmitToken,
+}
 
 struct MoveBeyondLimit;
 
