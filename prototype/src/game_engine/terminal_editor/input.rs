@@ -109,6 +109,8 @@ impl TerminalInputEvent {
             Self::Left => Some(EditorInputEvent::MoveCursorLeft),
             Self::Right => Some(EditorInputEvent::MoveCursorRight),
 
+            Self::Enter => Some(EditorInputEvent::SubmitToken),
+
             _ => None,
         }
     }
