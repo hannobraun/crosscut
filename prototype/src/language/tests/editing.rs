@@ -1,7 +1,5 @@
 use crate::language::{
-    editor::EditorInputEvent,
-    instance::Language,
-    interpreter::{StepResult, Value},
+    editor::EditorInputEvent, instance::Language, interpreter::Value,
 };
 
 #[test]
@@ -47,20 +45,10 @@ fn update_after_removing_all_characters() {
     let mut language = Language::new();
 
     language.enter_code("1");
-    assert_eq!(
-        language.step(),
-        StepResult::Finished {
-            output: Value::Integer { value: 1 }
-        }
-    );
+    assert_eq!(language.step_until_finished(), Value::Integer { value: 1 });
 
     language.on_input(EditorInputEvent::RemoveLeft);
-    assert_eq!(
-        language.step(),
-        StepResult::Finished {
-            output: Value::None
-        }
-    );
+    assert_eq!(language.step_until_finished(), Value::None);
 }
 
 // There is lots of editing behavior that's not tested here, like cursor
