@@ -29,7 +29,7 @@ impl Interpreter {
                 expression: Expression::IntrinsicFunction { function },
             } => {
                 match function {
-                    IntrinsicFunction::Literal { value: output } => {
+                    IntrinsicFunction::Literal { value } => {
                         let Value::None = self.current_value else {
                             // A literal is a function that takes `None`. If
                             // that isn't what we currently have, that's an
@@ -37,7 +37,7 @@ impl Interpreter {
                             return StepResult::Error;
                         };
 
-                        *output
+                        *value
                     }
                 }
             }
