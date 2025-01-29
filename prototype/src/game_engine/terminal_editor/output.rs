@@ -58,15 +58,16 @@ fn render_code<A: EditorOutputAdapter>(
     context.cursor =
         Some(adapter.cursor().move_right(context.editor.input().cursor()));
 
-    for Node::Expression {
-        expression: Expression::LiteralValue { value },
-    } in &context.codebase.nodes
-    {
-        match value {
-            Value::None => {}
-            Value::Integer { value } => {
-                write!(adapter, "{value}")?;
-            }
+    for node in &context.codebase.nodes {
+        match node {
+            Node::Expression {
+                expression: Expression::LiteralValue { value },
+            } => match value {
+                Value::None => {}
+                Value::Integer { value } => {
+                    write!(adapter, "{value}")?;
+                }
+            },
         }
 
         writeln!(adapter)?;
