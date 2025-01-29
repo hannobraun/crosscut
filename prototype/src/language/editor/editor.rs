@@ -11,7 +11,7 @@ pub struct Editor {
 }
 
 impl Editor {
-    pub fn new() -> Self {
+    pub fn new(_: &mut Codebase) -> Self {
         Self {
             input: EditorInput::empty(),
         }
@@ -54,7 +54,7 @@ impl Editor {
         match command {
             EditorCommand::Clear => {
                 *codebase = Codebase::new();
-                *self = Self::new();
+                *self = Self::new(codebase);
             }
         }
     }

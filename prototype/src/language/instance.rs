@@ -13,8 +13,8 @@ pub struct Language {
 
 impl Language {
     pub fn new() -> Self {
-        let codebase = Codebase::new();
-        let editor = Editor::new();
+        let mut codebase = Codebase::new();
+        let editor = Editor::new(&mut codebase);
 
         Self {
             codebase,
