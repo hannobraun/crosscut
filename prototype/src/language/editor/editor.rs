@@ -33,8 +33,7 @@ impl Editor {
         if let Some(action) = self.input.update(event) {
             match action {
                 UpdateAction::SubmitToken => {
-                    // We need to create a new token here to edit that, but that
-                    // is not supported yet.
+                    self.editing = codebase.push(Node::Empty);
                 }
             }
         }
