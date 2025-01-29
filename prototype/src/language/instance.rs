@@ -1,7 +1,7 @@
 use super::{
     code::{Codebase, Expression},
     editor::{Editor, EditorCommand, EditorInputEvent},
-    interpreter::StepResult,
+    interpreter::{StepResult, Value},
 };
 
 #[derive(Debug)]
@@ -35,7 +35,12 @@ impl Language {
     }
 
     pub fn step(&mut self) -> StepResult {
-        let Expression::LiteralValue { value: output } = self.codebase.value;
+        let Expression::LiteralValue { value: output } = self
+            .codebase
+            .value
+            .first()
+            .cloned()
+            .unwrap_or(Expression::LiteralValue { value: Value::None });
         StepResult::Finished { output }
     }
 }
