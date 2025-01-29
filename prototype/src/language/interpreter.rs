@@ -13,15 +13,21 @@ impl Interpreter {
     }
 
     pub fn step(&mut self, codebase: &Codebase) -> StepResult {
-        let value = match codebase.nodes.first() {
-            Some(Node::Empty) => {
+        let Some(next) = codebase.nodes.first() else {
+            return StepResult::Finished {
+                output: self.current_value,
+            };
+        };
+
+        let value = match next {
+            Node::Empty => {
                 // Empty nodes are ignored during execution. Those are only
                 // added by the editor as a placeholder.
                 self.current_value
             }
-            Some(Node::Expression {
+            Node::Expression {
                 expression: Expression::LiteralValue { value: output },
-            }) => {
+            } => {
                 let Value::None = self.current_value else {
                     // A literal is a function that takes `None`. If that isn't
                     // what we currently have, that's an error.
@@ -30,7 +36,6 @@ impl Interpreter {
 
                 *output
             }
-            None => self.current_value,
         };
 
         self.current_value = value;
