@@ -43,7 +43,7 @@ impl Editor {
             Expression::LiteralValue { value: Value::None }
         };
 
-        codebase.value = vec![value];
+        codebase.expressions = vec![value];
     }
 
     pub fn on_command(

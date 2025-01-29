@@ -2,12 +2,14 @@ use crate::language::interpreter::Value;
 
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub struct Codebase {
-    pub value: Vec<Expression>,
+    pub expressions: Vec<Expression>,
 }
 
 impl Codebase {
     pub fn new() -> Self {
-        Self { value: Vec::new() }
+        Self {
+            expressions: Vec::new(),
+        }
     }
 }
 

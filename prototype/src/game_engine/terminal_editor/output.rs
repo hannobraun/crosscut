@@ -58,7 +58,7 @@ fn render_code<A: EditorOutputAdapter>(
     context.cursor =
         Some(adapter.cursor().move_right(context.editor.input().cursor()));
 
-    for Expression::LiteralValue { value } in &context.codebase.value {
+    for Expression::LiteralValue { value } in &context.codebase.expressions {
         match value {
             Value::None => {}
             Value::Integer { value } => {

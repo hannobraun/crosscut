@@ -37,7 +37,7 @@ impl Language {
     pub fn step(&mut self) -> StepResult {
         let Expression::LiteralValue { value: output } = self
             .codebase
-            .value
+            .expressions
             .first()
             .cloned()
             .unwrap_or(Expression::LiteralValue { value: Value::None });
