@@ -68,6 +68,7 @@ fn render_code<A: EditorOutputAdapter>(
                 write!(adapter, "{value}")?;
             }
         }
+
         writeln!(adapter)?;
     }
 
