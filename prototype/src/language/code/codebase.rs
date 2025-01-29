@@ -10,7 +10,7 @@ impl Codebase {
         Self { nodes: Vec::new() }
     }
 
-    pub fn entry(&self) -> Option<Location> {
+    pub fn entry(&self) -> Location {
         assert!(
             !self.nodes.is_empty(),
             "The editor always creates an empty fragment to edit, so \
@@ -19,7 +19,7 @@ impl Codebase {
 
         // This happens to work right now, because the editor happens to always
         // create an initial fragment, so `Codebase` is never empty.
-        Some(Location { index: 0 })
+        Location { index: 0 }
     }
 
     pub fn nodes(&self) -> impl Iterator<Item = &Node> {

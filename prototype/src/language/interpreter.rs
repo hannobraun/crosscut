@@ -10,7 +10,7 @@ impl Interpreter {
     pub fn new(codebase: &Codebase) -> Self {
         Self {
             current_value: Value::None,
-            next_step: codebase.entry(),
+            next_step: Some(codebase.entry()),
         }
     }
 
