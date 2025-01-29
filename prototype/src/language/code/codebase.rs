@@ -16,6 +16,10 @@ impl Codebase {
         Some(Location { index: 0 })
     }
 
+    pub fn nodes(&self) -> impl Iterator<Item = &Node> {
+        self.nodes.iter()
+    }
+
     pub fn location_after(&self, location: &Location) -> Option<Location> {
         let next_index = location.index + 1;
         assert!(
