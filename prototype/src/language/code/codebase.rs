@@ -11,6 +11,12 @@ impl Codebase {
     }
 
     pub fn entry(&self) -> Option<Location> {
+        assert!(
+            !self.nodes.is_empty(),
+            "The editor always creates an empty fragment to edit, so \
+            `Codebase` should never be empty.",
+        );
+
         // This happens to work right now, because the editor happens to always
         // create an initial fragment, so `Codebase` is never empty.
         Some(Location { index: 0 })
