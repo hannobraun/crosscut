@@ -1,5 +1,6 @@
 use crate::language::{
     code::{Codebase, Expression, IntrinsicFunction, Location, Node},
+    host::Host,
     interpreter::{Interpreter, Value},
 };
 
@@ -30,6 +31,7 @@ impl Editor {
         event: EditorInputEvent,
         codebase: &mut Codebase,
         interpreter: &mut Interpreter,
+        _: &Host,
     ) {
         if let Some(action) = self.input.update(event) {
             match action {

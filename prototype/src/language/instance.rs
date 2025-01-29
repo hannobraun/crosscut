@@ -1,6 +1,7 @@
 use super::{
     code::Codebase,
     editor::{Editor, EditorCommand, EditorInputEvent},
+    host::Host,
     interpreter::{Interpreter, StepResult},
 };
 
@@ -33,8 +34,12 @@ impl Language {
     }
 
     pub fn on_input(&mut self, event: EditorInputEvent) {
-        self.editor
-            .on_input(event, &mut self.codebase, &mut self.interpreter);
+        self.editor.on_input(
+            event,
+            &mut self.codebase,
+            &mut self.interpreter,
+            &Host {},
+        );
     }
 
     pub fn on_command(&mut self, command: EditorCommand) {
