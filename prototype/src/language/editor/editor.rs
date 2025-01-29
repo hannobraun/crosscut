@@ -53,11 +53,12 @@ impl Editor {
         &mut self,
         command: EditorCommand,
         codebase: &mut Codebase,
-        _: &mut Interpreter,
+        interpreter: &mut Interpreter,
     ) {
         match command {
             EditorCommand::Clear => {
                 *codebase = Codebase::new();
+                *interpreter = Interpreter::new();
                 *self = Self::new(codebase);
             }
         }
