@@ -10,6 +10,10 @@ impl Codebase {
         Self { nodes: Vec::new() }
     }
 
+    pub fn push(&mut self, node: Node) {
+        self.nodes.push(node);
+    }
+
     pub fn replace(&mut self, replacement: Node) {
         self.nodes = vec![replacement];
     }

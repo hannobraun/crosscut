@@ -12,7 +12,7 @@ pub struct Editor {
 
 impl Editor {
     pub fn new(codebase: &mut Codebase) -> Self {
-        codebase.nodes.push(Node::Empty);
+        codebase.push(Node::Empty);
 
         Self {
             input: EditorInput::empty(),
