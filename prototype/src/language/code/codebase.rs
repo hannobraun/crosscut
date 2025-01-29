@@ -2,7 +2,7 @@ use crate::language::interpreter::Value;
 
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub struct Codebase {
-    pub expressions: Vec<Expression>,
+    pub expressions: Vec<Node>,
 }
 
 impl Codebase {
@@ -11,6 +11,11 @@ impl Codebase {
             expressions: Vec::new(),
         }
     }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq)]
+pub enum Node {
+    Expression { expression: Expression },
 }
 
 #[derive(Clone, Debug, Eq, PartialEq)]

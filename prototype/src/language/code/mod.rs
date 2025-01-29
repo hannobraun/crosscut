@@ -1,3 +1,3 @@
 mod codebase;
 
-pub use self::codebase::{Codebase, Expression};
+pub use self::codebase::{Codebase, Expression, Node};

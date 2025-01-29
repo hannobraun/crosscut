@@ -1,7 +1,7 @@
 use crate::{
     io::terminal_editor::output::{Cursor, EditorOutputAdapter},
     language::{
-        code::{Codebase, Expression},
+        code::{Codebase, Expression, Node},
         editor::Editor,
         instance::Language,
         interpreter::Value,
@@ -58,7 +58,10 @@ fn render_code<A: EditorOutputAdapter>(
     context.cursor =
         Some(adapter.cursor().move_right(context.editor.input().cursor()));
 
-    for Expression::LiteralValue { value } in &context.codebase.expressions {
+    for Node::Expression {
+        expression: Expression::LiteralValue { value },
+    } in &context.codebase.expressions
+    {
         match value {
             Value::None => {}
             Value::Integer { value } => {

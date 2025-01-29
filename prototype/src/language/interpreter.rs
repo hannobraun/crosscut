@@ -1,4 +1,4 @@
-use super::code::{Codebase, Expression};
+use super::code::{Codebase, Expression, Node};
 
 #[derive(Debug)]
 pub struct Interpreter {}
@@ -9,11 +9,15 @@ impl Interpreter {
     }
 
     pub fn step(&mut self, codebase: &Codebase) -> StepResult {
-        let Expression::LiteralValue { value: output } = codebase
+        let Node::Expression {
+            expression: Expression::LiteralValue { value: output },
+        } = codebase
             .expressions
             .first()
             .cloned()
-            .unwrap_or(Expression::LiteralValue { value: Value::None });
+            .unwrap_or(Node::Expression {
+                expression: Expression::LiteralValue { value: Value::None },
+            });
         StepResult::Finished { output }
     }
 }
