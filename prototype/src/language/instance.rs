@@ -45,11 +45,13 @@ impl Language {
 impl Language {
     pub fn enter_code(&mut self, code: &str) {
         for ch in code.chars() {
-            if ch.is_whitespace() {
-                self.on_input(EditorInputEvent::SubmitToken);
+            let event = if ch.is_whitespace() {
+                EditorInputEvent::SubmitToken
             } else {
-                self.on_input(EditorInputEvent::Insert { ch });
-            }
+                EditorInputEvent::Insert { ch }
+            };
+
+            self.on_input(event);
         }
     }
 }
