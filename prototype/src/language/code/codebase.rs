@@ -2,7 +2,7 @@ use crate::language::interpreter::Value;
 
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub struct Codebase {
-    pub nodes: Vec<Node>,
+    nodes: Vec<Node>,
 }
 
 impl Codebase {
