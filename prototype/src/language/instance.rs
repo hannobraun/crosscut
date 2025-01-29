@@ -4,6 +4,9 @@ use super::{
     interpreter::{Interpreter, StepResult},
 };
 
+#[cfg(test)]
+use super::interpreter::Value;
+
 #[derive(Debug)]
 pub struct Language {
     codebase: Codebase,
@@ -41,6 +44,12 @@ impl Language {
 
     pub fn step(&mut self) -> StepResult {
         self.interpreter.step(&self.codebase)
+    }
+
+    #[cfg(test)]
+    pub fn step_until_finished(&mut self) -> Value {
+        let StepResult::Finished { output } = self.step();
+        output
     }
 }
 

@@ -35,3 +35,17 @@ fn identity_none() {
         },
     );
 }
+
+#[test]
+fn identity_integer() {
+    // The `identity` function takes any argument and returns it unchanged. This
+    // works with integers, as it does with any other value.
+
+    let mut language = Language::new();
+
+    language.enter_code("127 identity");
+    assert_eq!(
+        language.step_until_finished(),
+        Value::Integer { value: 127 },
+    );
+}
