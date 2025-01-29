@@ -13,7 +13,7 @@ impl Interpreter {
     }
 
     pub fn step(&mut self, codebase: &Codebase) -> StepResult {
-        let output = match codebase.nodes.first() {
+        let value = match codebase.nodes.first() {
             Some(Node::Empty) => {
                 // Empty nodes are ignored during execution. Those are only
                 // added by the editor as a placeholder.
@@ -25,7 +25,7 @@ impl Interpreter {
             None => self.current_value,
         };
 
-        StepResult::Finished { output }
+        StepResult::Finished { output: value }
     }
 }
 
