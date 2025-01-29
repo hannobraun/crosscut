@@ -21,7 +21,15 @@ impl Interpreter {
             }
             Some(Node::Expression {
                 expression: Expression::LiteralValue { value: output },
-            }) => *output,
+            }) => {
+                let Value::None = self.current_value else {
+                    // A literal is a function that takes `None`. If that isn't
+                    // what we currently have, that's an error.
+                    return StepResult::Error;
+                };
+
+                *output
+            }
             None => self.current_value,
         };
 
@@ -34,6 +42,7 @@ impl Interpreter {
 #[derive(Debug, Eq, PartialEq)]
 pub enum StepResult {
     Finished { output: Value },
+    Error,
 }
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
