@@ -13,20 +13,10 @@ fn update_on_every_character() {
     let mut language = Language::new();
 
     language.enter_code("1");
-    assert_eq!(
-        language.step(),
-        StepResult::Finished {
-            output: Value::Integer { value: 1 }
-        }
-    );
+    assert_eq!(language.step_until_finished(), Value::Integer { value: 1 });
 
     language.enter_code("2");
-    assert_eq!(
-        language.step(),
-        StepResult::Finished {
-            output: Value::Integer { value: 12 }
-        }
-    );
+    assert_eq!(language.step_until_finished(), Value::Integer { value: 12 });
 }
 
 #[test]
