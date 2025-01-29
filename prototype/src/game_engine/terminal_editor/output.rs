@@ -5,6 +5,7 @@ use crate::{
     language::{
         code::{Codebase, Expression, Node},
         editor::Editor,
+        host::Host,
         instance::Language,
     },
 };
@@ -37,7 +38,7 @@ where
 
         self.adapter.clear()?;
 
-        render_code(&mut self.adapter, &mut context)?;
+        render_code(&mut self.adapter, &mut context, language.host())?;
         render_prompt(&mut self.adapter, editor_input, &mut context)?;
 
         if let Some(Cursor { inner: [x, y] }) = context.cursor {
@@ -53,6 +54,7 @@ where
 fn render_code<A: EditorOutputAdapter>(
     adapter: &mut A,
     context: &mut RenderContext,
+    _: &Host,
 ) -> anyhow::Result<()> {
     writeln!(adapter)?;
 

@@ -35,6 +35,10 @@ impl Language {
         &self.editor
     }
 
+    pub fn host(&self) -> &Host {
+        &self.host
+    }
+
     pub fn on_input(&mut self, event: EditorInputEvent) {
         self.editor.on_input(
             event,
