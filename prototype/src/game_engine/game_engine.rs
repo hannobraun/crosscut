@@ -44,7 +44,7 @@ where
 {
     pub fn new(adapter: A) -> Self {
         Self {
-            language: Language::new(),
+            language: Language::without_host(),
             game_output: Vec::new(),
             editor_input: TerminalEditorInput::new(),
             editor_output: TerminalEditorOutput::new(adapter),

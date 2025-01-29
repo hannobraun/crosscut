@@ -10,7 +10,7 @@ fn number_literal_wrong_input() {
     // So having two in a row means, that the second one does not get the
     // expected input.
 
-    let mut language = Language::new();
+    let mut language = Language::without_host();
 
     language.enter_code("127");
     language.on_input(EditorInputEvent::SubmitToken);

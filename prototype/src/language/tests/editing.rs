@@ -8,7 +8,7 @@ fn update_on_every_character() {
     // has finished running, as is the case here, it should also reset the
     // interpreter, so the next step will run the new code.
 
-    let mut language = Language::new();
+    let mut language = Language::without_host();
 
     language.enter_code("1");
     assert_eq!(language.step_until_finished(), Value::Integer { value: 1 });
@@ -22,7 +22,7 @@ fn update_after_removing_character() {
     // Removing a character should have an immediate effect on the program, just
     // like adding one.
 
-    let mut language = Language::new();
+    let mut language = Language::without_host();
 
     language.enter_code("127");
     assert_eq!(
@@ -42,7 +42,7 @@ fn update_after_removing_all_characters() {
     // Removing all characters should have an immediate effect on the program,
     // just like any other edits.
 
-    let mut language = Language::new();
+    let mut language = Language::without_host();
 
     language.enter_code("1");
     assert_eq!(language.step_until_finished(), Value::Integer { value: 1 });
