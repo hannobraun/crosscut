@@ -38,7 +38,7 @@ impl Language {
             event,
             &mut self.codebase,
             &mut self.interpreter,
-            &Host {},
+            &Host::new(),
         );
     }
 
