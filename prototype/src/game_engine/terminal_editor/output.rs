@@ -1,3 +1,5 @@
+use crossterm::style::Color;
+
 use crate::{
     io::terminal_editor::output::{Cursor, EditorOutputAdapter},
     language::{
@@ -63,7 +65,9 @@ fn render_code<A: EditorOutputAdapter>(
             Node::Expression {
                 expression: Expression::IntrinsicFunction { function },
             } => {
-                write!(adapter, "{function}")?;
+                adapter.color(Color::DarkBlue, |adapter| {
+                    write!(adapter, "{function}")
+                })?;
             }
         }
 

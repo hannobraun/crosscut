@@ -5,6 +5,7 @@ use std::{
 
 use crossterm::{
     cursor::{self, MoveToNextLine},
+    style::{Color, ResetColor, SetForegroundColor},
     terminal::{self, ClearType},
     QueueableCommand,
 };
@@ -15,6 +16,12 @@ pub trait EditorOutputAdapter: fmt::Write {
     fn cursor(&self) -> Cursor;
 
     fn move_cursor_to(&mut self, x: u16, y: u16) -> io::Result<()>;
+
+    fn color(
+        &mut self,
+        color: Color,
+        f: impl FnOnce(&mut Self) -> fmt::Result,
+    ) -> anyhow::Result<()>;
 
     fn flush(&mut self) -> io::Result<()>;
 }
@@ -32,6 +39,15 @@ impl EditorOutputAdapter for DebugOutputAdapter {
     }
 
     fn move_cursor_to(&mut self, _: u16, _: u16) -> io::Result<()> {
+        Ok(())
+    }
+
+    fn color(
+        &mut self,
+        _: Color,
+        f: impl FnOnce(&mut Self) -> fmt::Result,
+    ) -> anyhow::Result<()> {
+        f(self)?;
         Ok(())
     }
 
@@ -118,6 +134,18 @@ impl EditorOutputAdapter for RawTerminalAdapter {
     fn move_cursor_to(&mut self, x: u16, y: u16) -> io::Result<()> {
         self.w.queue(cursor::MoveTo(x, y))?;
         self.cursor = [x, y];
+        Ok(())
+    }
+
+    fn color(
+        &mut self,
+        color: Color,
+        f: impl FnOnce(&mut Self) -> fmt::Result,
+    ) -> anyhow::Result<()> {
+        self.w.queue(SetForegroundColor(color))?;
+        f(self)?;
+        self.w.queue(ResetColor)?;
+
         Ok(())
     }
 
