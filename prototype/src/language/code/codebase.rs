@@ -21,8 +21,6 @@ impl Codebase {
             `Codebase` should never be empty.",
         );
 
-        // This happens to work right now, because the editor happens to always
-        // create an initial fragment, so `Codebase` is never empty.
         Location { index: 0 }
     }
 
