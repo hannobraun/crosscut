@@ -23,7 +23,9 @@ impl Editor {
         event: EditorInputEvent,
         codebase: &mut Codebase,
     ) {
-        self.input.update(event);
+        if let Some(action) = self.input.update(event) {
+            match action {}
+        }
 
         codebase.value = if let Ok(value) = self.input.buffer().parse() {
             Value::Integer { value }
