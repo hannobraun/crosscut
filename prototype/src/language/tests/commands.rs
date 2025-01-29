@@ -1,7 +1,5 @@
 use crate::language::{
-    editor::EditorCommand,
-    instance::Language,
-    interpreter::{StepResult, Value},
+    editor::EditorCommand, instance::Language, interpreter::Value,
 };
 
 #[test]
@@ -14,26 +12,11 @@ fn clear() {
     let mut language = Language::new();
 
     language.enter_code("12");
-    assert_eq!(
-        language.step(),
-        StepResult::Finished {
-            output: Value::Integer { value: 12 }
-        }
-    );
+    assert_eq!(language.step_until_finished(), Value::Integer { value: 12 });
 
     language.on_command(EditorCommand::Clear);
-    assert_eq!(
-        language.step(),
-        StepResult::Finished {
-            output: Value::None
-        }
-    );
+    assert_eq!(language.step_until_finished(), Value::None);
 
     language.enter_code("7");
-    assert_eq!(
-        language.step(),
-        StepResult::Finished {
-            output: Value::Integer { value: 7 }
-        }
-    );
+    assert_eq!(language.step_until_finished(), Value::Integer { value: 7 });
 }
