@@ -175,5 +175,5 @@ pub enum StepResult {
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
 pub enum Effect {
     ApplyHostFunction { id: u32, input: Value },
-    UnexpectedInput { expected: Type },
+    UnexpectedInput { expected: Type, actual: Value },
 }

@@ -48,6 +48,7 @@ fn host_functions_can_trigger_effects() {
 
     let effect = Effect::UnexpectedInput {
         expected: Type::Integer,
+        actual: Value::None,
     };
     let output =
         language.step_until_finished_and_handle_host_functions(|id, input| {

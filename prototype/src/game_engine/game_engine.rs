@@ -124,9 +124,10 @@ where
                             Value::Integer { value: value / 2 },
                         );
                     }
-                    Value::None => {
+                    value => {
                         self.language.trigger_effect(Effect::UnexpectedInput {
                             expected: Type::Integer,
+                            actual: value,
                         });
                     }
                 }
