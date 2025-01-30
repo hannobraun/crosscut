@@ -70,6 +70,10 @@ impl Language {
         Self::with_host(Host::new())
     }
 
+    pub fn set_current_value(&mut self, value: Value) {
+        self.interpreter.set_current_value(value);
+    }
+
     pub fn enter_code(&mut self, code: &str) {
         for ch in code.chars() {
             let event = if ch.is_whitespace() {

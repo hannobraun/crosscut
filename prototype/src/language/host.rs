@@ -14,6 +14,14 @@ impl Host {
         }
     }
 
+    #[cfg(test)]
+    pub fn function(&mut self, id: u32, name: impl Into<String>) {
+        let name = name.into();
+
+        self.function_ids_by_name.insert(name.clone(), id);
+        self.function_names_by_id.insert(id, name);
+    }
+
     pub fn function_id_by_name(&self, name: &str) -> Option<u32> {
         self.function_ids_by_name.get(name).copied()
     }

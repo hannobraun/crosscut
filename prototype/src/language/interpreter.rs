@@ -14,6 +14,11 @@ impl Interpreter {
         }
     }
 
+    #[cfg(test)]
+    pub fn set_current_value(&mut self, value: Value) {
+        self.current_value = value;
+    }
+
     pub fn step(&mut self, codebase: &Codebase) -> StepResult {
         let Some(next_step) = &self.next_step else {
             return StepResult::Finished {
