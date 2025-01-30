@@ -7,6 +7,7 @@ use crate::{
         editor::Editor,
         host::Host,
         instance::Language,
+        interpreter::Interpreter,
     },
 };
 
@@ -33,6 +34,7 @@ where
         let mut context = RenderContext {
             codebase: language.codebase(),
             editor: language.editor(),
+            interpreter: language.interpreter(),
             host: language.host(),
             cursor: None,
         };
@@ -73,7 +75,14 @@ fn render_possibly_active_node<A: EditorOutputAdapter>(
     adapter: &mut A,
     context: &mut RenderContext,
 ) -> anyhow::Result<()> {
-    render_node(location, node, adapter, context)?;
+    if context.interpreter.next_step() == Some(location) {
+        // Special formatting for the active node is currently being
+        // implemented.
+        render_node(location, node, adapter, context)?;
+    } else {
+        render_node(location, node, adapter, context)?;
+    }
+
     Ok(())
 }
 
@@ -140,6 +149,7 @@ fn render_prompt<A: EditorOutputAdapter>(
 struct RenderContext<'r> {
     codebase: &'r Codebase,
     editor: &'r Editor,
+    interpreter: &'r Interpreter,
     host: &'r Host,
     cursor: Option<Cursor>,
 }

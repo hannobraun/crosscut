@@ -14,6 +14,10 @@ impl Interpreter {
         }
     }
 
+    pub fn next_step(&self) -> Option<&Location> {
+        self.next_step.as_ref()
+    }
+
     #[cfg(test)]
     pub fn provide_host_function_output(
         &mut self,

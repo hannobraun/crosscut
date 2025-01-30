@@ -35,6 +35,10 @@ impl Language {
         &self.editor
     }
 
+    pub fn interpreter(&self) -> &Interpreter {
+        &self.interpreter
+    }
+
     pub fn host(&self) -> &Host {
         &self.host
     }
