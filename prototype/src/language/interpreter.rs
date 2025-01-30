@@ -30,7 +30,7 @@ impl Interpreter {
         self.next = self
             .next
             .as_ref()
-            .and_then(|next_step| codebase.location_after(next_step));
+            .and_then(|next| codebase.location_after(next));
     }
 
     pub fn step(&mut self, codebase: &Codebase) -> StepResult {
