@@ -44,7 +44,8 @@ impl Interpreter {
                     output: self.current_value,
                 };
             }
-            State::Error => {
+            State::Error { location } => {
+                let _ = location;
                 return StepResult::Error;
             }
         };
@@ -97,7 +98,7 @@ impl Interpreter {
                     };
                 }
                 Node::UnresolvedIdentifier { name: _ } => {
-                    return State::Error;
+                    return State::Error { location };
                 }
             }
         }
@@ -116,7 +117,9 @@ pub enum State<'r> {
         expression: &'r Expression,
         location: Location,
     },
-    Error,
+    Error {
+        location: Location,
+    },
     Finished,
 }
 
