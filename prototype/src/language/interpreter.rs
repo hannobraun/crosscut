@@ -3,19 +3,19 @@ use super::code::{Codebase, Expression, IntrinsicFunction, Location, Node};
 #[derive(Debug)]
 pub struct Interpreter {
     current_value: Value,
-    next_step: Option<Location>,
+    next: Option<Location>,
 }
 
 impl Interpreter {
     pub fn new(codebase: &Codebase) -> Self {
         Self {
             current_value: Value::None,
-            next_step: Some(codebase.entry()),
+            next: Some(codebase.entry()),
         }
     }
 
     pub fn next_step(&self) -> Option<&Location> {
-        self.next_step.as_ref()
+        self.next.as_ref()
     }
 
     #[cfg(test)]
@@ -27,14 +27,14 @@ impl Interpreter {
         // It would be nice to assert here, that a host function is actually
         // being applied. But we don't track that information currently.
         self.current_value = value;
-        self.next_step = self
-            .next_step
+        self.next = self
+            .next
             .as_ref()
             .and_then(|next_step| codebase.location_after(next_step));
     }
 
     pub fn step(&mut self, codebase: &Codebase) -> StepResult {
-        let Some(next_step) = &self.next_step else {
+        let Some(next_step) = &self.next else {
             return StepResult::Finished {
                 output: self.current_value,
             };
@@ -79,7 +79,7 @@ impl Interpreter {
         };
 
         self.current_value = value;
-        self.next_step = codebase.location_after(next_step);
+        self.next = codebase.location_after(next_step);
 
         StepResult::FunctionApplied { output: value }
     }
