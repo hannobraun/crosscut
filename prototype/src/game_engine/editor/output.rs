@@ -7,7 +7,7 @@ use crate::{
         editor::Editor,
         host::Host,
         instance::Language,
-        interpreter::{Interpreter, InterpreterState},
+        interpreter::{Effect, Interpreter, InterpreterState},
     },
 };
 
@@ -67,10 +67,22 @@ fn render_interpreter_state<A: EditorOutputAdapter>(
                     writeln!(adapter, "Running")
                 })?;
             }
-            InterpreterState::Effect { effect: _, .. } => {
+            InterpreterState::Effect { effect, .. } => {
                 adapter.color(Color::DarkCyan, |adapter| {
-                    write!(adapter, "Effect")?;
-                    writeln!(adapter)?;
+                    write!(adapter, "Effect: ")?;
+
+                    match effect {
+                        Effect::ApplyHostFunction { id, input } => {
+                            writeln!(
+                                adapter,
+                                "apply host function `{id}` (input: {input:?}",
+                            )?;
+                        }
+                        Effect::UnexpectedInput => {
+                            writeln!(adapter, "unexpected input")?;
+                        }
+                    }
+
                     Ok(())
                 })?;
             }
