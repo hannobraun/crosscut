@@ -10,9 +10,7 @@ use crate::{
 };
 
 use super::{
-    terminal_editor::{
-        input::TerminalEditorInput, output::TerminalEditorOutput,
-    },
+    editor::{input::TerminalEditorInput, output::TerminalEditorOutput},
     TerminalInputEvent,
 };
 
