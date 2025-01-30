@@ -99,7 +99,7 @@ impl Language {
 
     pub fn step_until_finished_and_handle_host_functions(
         &mut self,
-        mut handler: impl FnMut(u32, Value) -> Value,
+        mut handler: impl FnMut(u32, Value) -> Result<Value, Effect>,
     ) -> Value {
         let mut i = 0;
 
@@ -111,8 +111,18 @@ impl Language {
                 StepResult::EffectTriggered {
                     effect: Effect::ApplyHostFunction { id, input },
                 } => {
-                    let output = handler(id, input);
-                    self.provide_host_function_output(output);
+                    match handler(id, input) {
+                        Ok(output) => {
+                            self.provide_host_function_output(output);
+                        }
+                        Err(_) => {
+                            // Effect handling is still being implemented.
+                            todo!(
+                                "Host functions triggering effects is not \
+                                supported yet."
+                            );
+                        }
+                    }
                 }
                 StepResult::Finished { output } => {
                     break output;

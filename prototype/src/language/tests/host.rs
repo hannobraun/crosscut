@@ -15,7 +15,7 @@ fn host_functions() {
             match id {
                 0 => match input {
                     Value::Integer { value } => {
-                        Value::Integer { value: value / 2 }
+                        Ok(Value::Integer { value: value / 2 })
                     }
                     input => {
                         panic!("Expected integer. Got instead: {input:?}");
