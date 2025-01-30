@@ -14,8 +14,8 @@ impl Host {
         }
     }
 
-    pub fn function_id_by_name(&self, _name: &str) -> Option<u32> {
-        self.function_ids_by_name.get(_name).copied()
+    pub fn function_id_by_name(&self, name: &str) -> Option<u32> {
+        self.function_ids_by_name.get(name).copied()
     }
 
     pub fn function_name_by_id(&self, _id: &u32) -> &str {
