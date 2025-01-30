@@ -3,6 +3,7 @@ use crate::{
         DebugOutputAdapter, EditorOutputAdapter, RawTerminalAdapter,
     },
     language::{
+        code::Type,
         host::Host,
         instance::Language,
         interpreter::{Effect, StepResult, Value},
@@ -124,7 +125,9 @@ where
                         );
                     }
                     Value::None => {
-                        self.language.trigger_effect(Effect::UnexpectedInput);
+                        self.language.trigger_effect(Effect::UnexpectedInput {
+                            expected: Type::Integer,
+                        });
                     }
                 }
             }

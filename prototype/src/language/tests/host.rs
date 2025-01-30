@@ -1,4 +1,5 @@
 use crate::language::{
+    code::Type,
     host::Host,
     instance::Language,
     interpreter::{Effect, StepResult, Value},
@@ -45,7 +46,9 @@ fn host_functions_can_trigger_effects() {
     let mut language = Language::with_host(host);
     language.enter_code("halve");
 
-    let effect = Effect::UnexpectedInput;
+    let effect = Effect::UnexpectedInput {
+        expected: Type::Integer,
+    };
     let output =
         language.step_until_finished_and_handle_host_functions(|id, input| {
             match id {

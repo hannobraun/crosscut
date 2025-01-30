@@ -1,4 +1,6 @@
-use super::code::{Codebase, Expression, IntrinsicFunction, Location, Node};
+use super::code::{
+    Codebase, Expression, IntrinsicFunction, Location, Node, Type,
+};
 
 #[derive(Debug)]
 pub struct Interpreter {
@@ -171,7 +173,7 @@ pub enum StepResult {
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
 pub enum Effect {
     ApplyHostFunction { id: u32, input: Value },
-    UnexpectedInput,
+    UnexpectedInput { expected: Type },
 }
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
