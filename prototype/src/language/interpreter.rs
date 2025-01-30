@@ -14,10 +14,7 @@ impl Interpreter {
         }
     }
 
-    pub fn next_step<'r>(
-        &self,
-        codebase: &'r Codebase,
-    ) -> InterpreterState<'r> {
+    pub fn state<'r>(&self, codebase: &'r Codebase) -> InterpreterState<'r> {
         self.next(codebase)
     }
 
