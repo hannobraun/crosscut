@@ -45,9 +45,11 @@ impl Editor {
             }
         }
 
-        let node = if self.input.buffer().is_empty() {
+        let token = self.input.buffer();
+
+        let node = if token.is_empty() {
             Node::Empty
-        } else if let Ok(value) = self.input.buffer().parse() {
+        } else if let Ok(value) = token.parse() {
             Node::Expression {
                 expression: Expression::IntrinsicFunction {
                     function: IntrinsicFunction::Literal {
@@ -55,11 +57,11 @@ impl Editor {
                     },
                 },
             }
-        } else if let Some(id) = host.function_id_by_name(self.input.buffer()) {
+        } else if let Some(id) = host.function_id_by_name(token) {
             Node::Expression {
                 expression: Expression::HostFunction { id },
             }
-        } else if self.input.buffer() == "identity" {
+        } else if token == "identity" {
             Node::Expression {
                 expression: Expression::IntrinsicFunction {
                     function: IntrinsicFunction::Identity,
@@ -67,7 +69,7 @@ impl Editor {
             }
         } else {
             Node::UnresolvedIdentifier {
-                name: self.input.buffer().clone(),
+                name: token.clone(),
             }
         };
 
