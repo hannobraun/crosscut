@@ -2,14 +2,14 @@ use super::code::{Codebase, Expression, IntrinsicFunction, Location, Node};
 
 #[derive(Debug)]
 pub struct Interpreter {
-    current_value: Value,
+    value: Value,
     next: Option<Location>,
 }
 
 impl Interpreter {
     pub fn new(codebase: &Codebase) -> Self {
         Self {
-            current_value: Value::None,
+            value: Value::None,
             next: Some(codebase.entry()),
         }
     }
@@ -25,7 +25,7 @@ impl Interpreter {
     ) {
         // It would be nice to assert here, that a host function is actually
         // being applied. But we don't track that information currently.
-        self.current_value = value;
+        self.value = value;
         self.advance(codebase);
     }
 
@@ -43,9 +43,7 @@ impl Interpreter {
                     continue;
                 }
                 InterpreterState::Finished => {
-                    return StepResult::Finished {
-                        output: self.current_value,
-                    };
+                    return StepResult::Finished { output: self.value };
                 }
                 InterpreterState::Error { location: _ } => {
                     return StepResult::Error;
@@ -58,15 +56,15 @@ impl Interpreter {
                 return StepResult::EffectTriggered {
                     effect: Effect::ApplyHostFunction {
                         id: *id,
-                        input: self.current_value,
+                        input: self.value,
                     },
                 };
             }
             Expression::IntrinsicFunction { function } => {
                 match function {
-                    IntrinsicFunction::Identity => self.current_value,
+                    IntrinsicFunction::Identity => self.value,
                     IntrinsicFunction::Literal { value } => {
-                        let Value::None = self.current_value else {
+                        let Value::None = self.value else {
                             // A literal is a function that takes
                             // `None`. If that isn't what we currently
                             // have, that's an error.
@@ -79,7 +77,7 @@ impl Interpreter {
             }
         };
 
-        self.current_value = value;
+        self.value = value;
         self.advance(codebase);
 
         StepResult::FunctionApplied { output: value }
