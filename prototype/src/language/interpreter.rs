@@ -39,7 +39,7 @@ impl Interpreter {
                 let _ = location;
                 expression
             }
-            State::NoMoreNodes => {
+            State::Finished => {
                 return StepResult::Finished {
                     output: self.current_value,
                 };
@@ -82,7 +82,7 @@ impl Interpreter {
     fn next<'r>(&mut self, codebase: &'r Codebase) -> State<'r> {
         loop {
             let Some(location) = self.next else {
-                return State::NoMoreNodes;
+                return State::Finished;
             };
 
             match codebase.node_at(&location) {
@@ -117,7 +117,7 @@ enum State<'r> {
         location: Location,
     },
     Error,
-    NoMoreNodes,
+    Finished,
 }
 
 #[derive(Debug, Eq, PartialEq)]
