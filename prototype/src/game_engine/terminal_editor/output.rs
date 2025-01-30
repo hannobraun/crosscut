@@ -58,11 +58,8 @@ fn render_code<A: EditorOutputAdapter>(
 ) -> anyhow::Result<()> {
     writeln!(adapter)?;
 
-    context.cursor =
-        Some(adapter.cursor().move_right(context.editor.input().cursor()));
-
     for (location, node) in context.codebase.nodes() {
-        render_node(location, node, adapter, context)?;
+        render_node(&location, node, adapter, context)?;
     }
 
     writeln!(adapter)?;
@@ -71,11 +68,16 @@ fn render_code<A: EditorOutputAdapter>(
 }
 
 fn render_node<A: EditorOutputAdapter>(
-    _: Location,
+    location: &Location,
     node: &Node,
     adapter: &mut A,
     context: &mut RenderContext,
 ) -> anyhow::Result<()> {
+    if context.editor.editing() == location {
+        context.cursor =
+            Some(adapter.cursor().move_right(context.editor.input().cursor()));
+    }
+
     match node {
         Node::Empty => {
             writeln!(adapter)?;

@@ -26,6 +26,10 @@ impl Editor {
         &self.input
     }
 
+    pub fn editing(&self) -> &Location {
+        &self.editing
+    }
+
     pub fn on_input(
         &mut self,
         event: EditorInputEvent,
