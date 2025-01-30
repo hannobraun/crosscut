@@ -4,6 +4,7 @@ use super::code::{Codebase, Expression, IntrinsicFunction, Location, Node};
 pub struct Interpreter {
     next: Option<Location>,
     value: Value,
+    effect: Option<Effect>,
 }
 
 impl Interpreter {
@@ -11,6 +12,7 @@ impl Interpreter {
         Self {
             next: Some(codebase.entry()),
             value: Value::None,
+            effect: None,
         }
     }
 
@@ -29,7 +31,16 @@ impl Interpreter {
         self.advance(codebase);
     }
 
+    #[cfg(test)]
+    pub fn trigger_effect(&mut self, effect: Effect) {
+        self.effect = Some(effect);
+    }
+
     pub fn step(&mut self, codebase: &Codebase) -> StepResult {
+        if let Some(effect) = self.effect {
+            return StepResult::EffectTriggered { effect };
+        }
+
         let next = loop {
             match self.next(codebase) {
                 InterpreterState::Running {
@@ -144,9 +155,15 @@ pub enum StepResult {
     Error,
 }
 
-#[derive(Debug, Eq, PartialEq)]
+#[derive(Clone, Copy, Debug, Eq, PartialEq)]
 pub enum Effect {
-    ApplyHostFunction { id: u32, input: Value },
+    ApplyHostFunction {
+        id: u32,
+        input: Value,
+    },
+
+    #[cfg(test)]
+    UnexpectedInput,
 }
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]

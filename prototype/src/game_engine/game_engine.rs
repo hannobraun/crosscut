@@ -77,6 +77,11 @@ where
                         self.apply_host_function(id, input);
                         continue;
                     }
+                    #[cfg(test)]
+                    _ => {
+                        // We can't handle any other effect.
+                        break;
+                    }
                 },
                 StepResult::Finished {
                     output: Value::Integer { value },
