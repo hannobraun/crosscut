@@ -108,19 +108,22 @@ impl Language {
                 StepResult::FunctionApplied { output: _ } => {
                     // We're not concerned with intermediate results here.
                 }
-                StepResult::EffectTriggered {
-                    effect: Effect::ApplyHostFunction { id, input },
-                } => {
-                    match handler(id, input) {
-                        Ok(output) => {
-                            self.provide_host_function_output(output);
-                        }
-                        Err(_) => {
-                            // Effect handling is still being implemented.
-                            todo!(
-                                "Host functions triggering effects is not \
-                                supported yet."
-                            );
+                StepResult::EffectTriggered { effect } => {
+                    match effect {
+                        Effect::ApplyHostFunction { id, input } => {
+                            match handler(id, input) {
+                                Ok(output) => {
+                                    self.provide_host_function_output(output);
+                                }
+                                Err(_) => {
+                                    // Effect handling is still being
+                                    // implemented.
+                                    todo!(
+                                        "Host functions triggering effects is \
+                                        not supported yet."
+                                    );
+                                }
+                            }
                         }
                     }
                 }
