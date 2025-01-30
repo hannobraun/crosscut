@@ -74,7 +74,7 @@ impl Interpreter {
     }
 
     fn next<'r>(&mut self, codebase: &'r Codebase) -> Next<'r> {
-        let node = loop {
+        let expression = loop {
             let Some(next) = self.next else {
                 return Next::NoMoreNodes;
             };
@@ -93,7 +93,7 @@ impl Interpreter {
             }
         };
 
-        Next::Node { expression: node }
+        Next::Node { expression }
     }
 
     fn advance(&mut self, codebase: &Codebase) {
