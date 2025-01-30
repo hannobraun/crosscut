@@ -76,27 +76,27 @@ fn render_node<A: EditorOutputAdapter>(
     context: &mut RenderContext,
 ) -> anyhow::Result<()> {
     match node {
-        Node::Empty => {}
+        Node::Empty => {
+            writeln!(adapter)?;
+        }
         Node::Expression { expression } => match expression {
             Expression::HostFunction { id } => {
                 let name = context.host.function_name_by_id(id);
                 adapter.color(Color::DarkMagenta, |adapter| {
-                    write!(adapter, "{name}")
+                    writeln!(adapter, "{name}")
                 })?;
             }
             Expression::IntrinsicFunction { function } => {
                 adapter.color(Color::DarkBlue, |adapter| {
-                    write!(adapter, "{function}")
+                    writeln!(adapter, "{function}")
                 })?;
             }
         },
         Node::UnresolvedIdentifier { name } => {
             adapter
-                .color(Color::DarkRed, |adapter| write!(adapter, "{name}"))?;
+                .color(Color::DarkRed, |adapter| writeln!(adapter, "{name}"))?;
         }
     }
-
-    writeln!(adapter)?;
 
     Ok(())
 }
