@@ -2,6 +2,8 @@ use crate::language::code::{
     Codebase, Expression, IntrinsicFunction, Location, Node, Type,
 };
 
+use super::Value;
+
 #[derive(Debug)]
 pub struct Interpreter {
     next: Option<Location>,
@@ -174,10 +176,4 @@ pub enum StepResult {
 pub enum Effect {
     ApplyHostFunction { id: u32, input: Value },
     UnexpectedInput { expected: Type },
-}
-
-#[derive(Clone, Copy, Debug, Eq, PartialEq)]
-pub enum Value {
-    None,
-    Integer { value: i32 },
 }
