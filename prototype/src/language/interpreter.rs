@@ -85,7 +85,11 @@ impl Interpreter {
     }
 
     fn next(&self) -> Option<Location> {
-        self.next
+        let Some(next) = &self.next else {
+            return None;
+        };
+
+        Some(*next)
     }
 }
 
