@@ -11,10 +11,16 @@ fn update_on_every_character() {
     let mut language = Language::without_host();
 
     language.enter_code("1");
-    assert_eq!(language.step_until_finished(), Value::Integer { value: 1 });
+    assert_eq!(
+        language.step_until_finished(),
+        Ok(Value::Integer { value: 1 }),
+    );
 
     language.enter_code("2");
-    assert_eq!(language.step_until_finished(), Value::Integer { value: 12 });
+    assert_eq!(
+        language.step_until_finished(),
+        Ok(Value::Integer { value: 12 }),
+    );
 }
 
 #[test]
@@ -27,14 +33,20 @@ fn update_after_removing_character() {
     language.enter_code("127");
     assert_eq!(
         language.step_until_finished(),
-        Value::Integer { value: 127 },
+        Ok(Value::Integer { value: 127 }),
     );
 
     language.on_input(EditorInputEvent::RemoveLeft);
-    assert_eq!(language.step_until_finished(), Value::Integer { value: 12 });
+    assert_eq!(
+        language.step_until_finished(),
+        Ok(Value::Integer { value: 12 }),
+    );
 
     language.on_input(EditorInputEvent::RemoveLeft);
-    assert_eq!(language.step_until_finished(), Value::Integer { value: 1 });
+    assert_eq!(
+        language.step_until_finished(),
+        Ok(Value::Integer { value: 1 }),
+    );
 }
 
 #[test]
@@ -45,10 +57,13 @@ fn update_after_removing_all_characters() {
     let mut language = Language::without_host();
 
     language.enter_code("1");
-    assert_eq!(language.step_until_finished(), Value::Integer { value: 1 });
+    assert_eq!(
+        language.step_until_finished(),
+        Ok(Value::Integer { value: 1 }),
+    );
 
     language.on_input(EditorInputEvent::RemoveLeft);
-    assert_eq!(language.step_until_finished(), Value::None);
+    assert_eq!(language.step_until_finished(), Ok(Value::None));
 }
 
 // There is lots of editing behavior that's not tested here, like cursor

@@ -12,11 +12,17 @@ fn clear() {
     let mut language = Language::without_host();
 
     language.enter_code("12");
-    assert_eq!(language.step_until_finished(), Value::Integer { value: 12 });
+    assert_eq!(
+        language.step_until_finished(),
+        Ok(Value::Integer { value: 12 }),
+    );
 
     language.on_command(EditorCommand::Clear);
-    assert_eq!(language.step_until_finished(), Value::None);
+    assert_eq!(language.step_until_finished(), Ok(Value::None));
 
     language.enter_code("7");
-    assert_eq!(language.step_until_finished(), Value::Integer { value: 7 });
+    assert_eq!(
+        language.step_until_finished(),
+        Ok(Value::Integer { value: 7 }),
+    );
 }

@@ -91,10 +91,13 @@ impl Language {
         }
     }
 
-    pub fn step_until_finished(&mut self) -> Value {
-        self.step_until_finished_and_handle_host_functions(|id, _| {
-            unreachable!("Unexpected host function with ID `{id}`.")
-        })
+    pub fn step_until_finished(&mut self) -> Result<Value, Effect> {
+        let value =
+            self.step_until_finished_and_handle_host_functions(|id, _| {
+                unreachable!("Unexpected host function with ID `{id}`.")
+            });
+
+        Ok(value)
     }
 
     pub fn step_until_finished_and_handle_host_functions(
