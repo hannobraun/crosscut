@@ -106,8 +106,8 @@ impl Interpreter {
 
 enum Next<'r> {
     Expression { expression: &'r Expression },
-    NoMoreNodes,
     Error,
+    NoMoreNodes,
 }
 
 #[derive(Debug, Eq, PartialEq)]
