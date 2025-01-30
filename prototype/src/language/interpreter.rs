@@ -31,22 +31,29 @@ impl Interpreter {
     }
 
     pub fn step(&mut self, codebase: &Codebase) -> StepResult {
-        let next = match self.next(codebase) {
-            InterpreterState::Running {
-                expression,
-                location,
-            } => {
-                let _ = location;
-                expression
-            }
-            InterpreterState::Finished => {
-                return StepResult::Finished {
-                    output: self.current_value,
-                };
-            }
-            InterpreterState::Error { location } => {
-                let _ = location;
-                return StepResult::Error;
+        let next = loop {
+            match self.next(codebase) {
+                InterpreterState::Running {
+                    expression,
+                    location,
+                } => {
+                    let _ = location;
+                    break expression;
+                }
+                InterpreterState::IgnoringEmptyFragment { location } => {
+                    let _ = location;
+                    self.advance(codebase);
+                    continue;
+                }
+                InterpreterState::Finished => {
+                    return StepResult::Finished {
+                        output: self.current_value,
+                    };
+                }
+                InterpreterState::Error { location } => {
+                    let _ = location;
+                    return StepResult::Error;
+                }
             }
         };
 
@@ -81,25 +88,18 @@ impl Interpreter {
     }
 
     fn next<'r>(&mut self, codebase: &'r Codebase) -> InterpreterState<'r> {
-        loop {
-            let Some(location) = self.next else {
-                return InterpreterState::Finished;
-            };
+        let Some(location) = self.next else {
+            return InterpreterState::Finished;
+        };
 
-            match codebase.node_at(&location) {
-                Node::Empty => {
-                    self.advance(codebase);
-                    continue;
-                }
-                Node::Expression { expression } => {
-                    return InterpreterState::Running {
-                        expression,
-                        location,
-                    };
-                }
-                Node::UnresolvedIdentifier { name: _ } => {
-                    return InterpreterState::Error { location };
-                }
+        match codebase.node_at(&location) {
+            Node::Empty => InterpreterState::IgnoringEmptyFragment { location },
+            Node::Expression { expression } => InterpreterState::Running {
+                expression,
+                location,
+            },
+            Node::UnresolvedIdentifier { name: _ } => {
+                InterpreterState::Error { location }
             }
         }
     }
@@ -115,6 +115,9 @@ impl Interpreter {
 pub enum InterpreterState<'r> {
     Running {
         expression: &'r Expression,
+        location: Location,
+    },
+    IgnoringEmptyFragment {
         location: Location,
     },
     Error {
