@@ -77,6 +77,11 @@ fn render_code<A: EditorOutputAdapter>(
                     })?;
                 }
             },
+            Node::UnresolvedIdentifier { name } => {
+                adapter.color(Color::DarkRed, |adapter| {
+                    write!(adapter, "{name}")
+                })?;
+            }
         }
 
         writeln!(adapter)?;

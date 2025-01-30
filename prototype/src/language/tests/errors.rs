@@ -21,3 +21,15 @@ fn number_literal_wrong_input() {
     );
     assert_eq!(language.step(), StepResult::Error);
 }
+
+#[test]
+fn unresolved_identifier() {
+    // If an identifier does not refer to a known function, that should result
+    // in an error.
+
+    let mut language = Language::without_host();
+
+    language.enter_code("unknown");
+
+    assert_eq!(language.step(), StepResult::Error);
+}

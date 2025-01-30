@@ -76,6 +76,7 @@ impl Codebase {
 pub enum Node {
     Empty,
     Expression { expression: Expression },
+    UnresolvedIdentifier { name: String },
 }
 
 #[derive(Clone, Debug, Eq, PartialEq)]

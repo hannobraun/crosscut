@@ -60,6 +60,9 @@ impl Interpreter {
                     }
                 }
             }
+            Node::UnresolvedIdentifier { name: _ } => {
+                return StepResult::Error;
+            }
         };
 
         self.current_value = value;

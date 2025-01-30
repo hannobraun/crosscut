@@ -55,11 +55,15 @@ impl Editor {
             Node::Expression {
                 expression: Expression::HostFunction { id },
             }
-        } else {
+        } else if self.input.buffer() == "identity" {
             Node::Expression {
                 expression: Expression::IntrinsicFunction {
                     function: IntrinsicFunction::Identity,
                 },
+            }
+        } else {
+            Node::UnresolvedIdentifier {
+                name: self.input.buffer().clone(),
             }
         };
 
