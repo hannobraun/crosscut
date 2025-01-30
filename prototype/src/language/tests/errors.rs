@@ -1,5 +1,4 @@
 use crate::language::{
-    editor::EditorInputEvent,
     instance::Language,
     interpreter::{StepResult, Value},
 };
@@ -12,9 +11,7 @@ fn number_literal_wrong_input() {
 
     let mut language = Language::without_host();
 
-    language.enter_code("127");
-    language.on_input(EditorInputEvent::SubmitToken);
-    language.enter_code("255");
+    language.enter_code("127 255");
 
     assert_eq!(
         language.step(),
