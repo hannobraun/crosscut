@@ -9,7 +9,7 @@ use crossbeam_channel::{select, SendError, TryRecvError};
 
 use crate::{
     game_engine::{GameEngine, GameInput, GameOutput, TerminalInputEvent},
-    io::terminal_editor::input::read_editor_event,
+    io::editor::input::read_editor_event,
 };
 
 pub fn start() -> anyhow::Result<Threads> {

@@ -1,7 +1,7 @@
 use crossterm::style::{Attribute, Color};
 
 use crate::{
-    io::terminal_editor::output::{Cursor, EditorOutputAdapter},
+    io::editor::output::{Cursor, EditorOutputAdapter},
     language::{
         code::{Codebase, Expression, Location, Node},
         editor::Editor,
