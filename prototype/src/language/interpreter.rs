@@ -31,13 +31,13 @@ impl Interpreter {
     }
 
     pub fn step(&mut self, codebase: &Codebase) -> StepResult {
-        let Some(next_step) = self.next() else {
+        let Some(next) = self.next() else {
             return StepResult::Finished {
                 output: self.current_value,
             };
         };
 
-        let next = codebase.node_at(&next_step);
+        let next = codebase.node_at(&next);
 
         let value = match next {
             Node::Empty => {
