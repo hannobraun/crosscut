@@ -32,19 +32,19 @@ impl Interpreter {
 
     pub fn step(&mut self, codebase: &Codebase) -> StepResult {
         let next = match self.next(codebase) {
-            State::Running {
+            InterpreterState::Running {
                 expression,
                 location,
             } => {
                 let _ = location;
                 expression
             }
-            State::Finished => {
+            InterpreterState::Finished => {
                 return StepResult::Finished {
                     output: self.current_value,
                 };
             }
-            State::Error { location } => {
+            InterpreterState::Error { location } => {
                 let _ = location;
                 return StepResult::Error;
             }
@@ -80,10 +80,10 @@ impl Interpreter {
         StepResult::FunctionApplied { output: value }
     }
 
-    fn next<'r>(&mut self, codebase: &'r Codebase) -> State<'r> {
+    fn next<'r>(&mut self, codebase: &'r Codebase) -> InterpreterState<'r> {
         loop {
             let Some(location) = self.next else {
-                return State::Finished;
+                return InterpreterState::Finished;
             };
 
             match codebase.node_at(&location) {
@@ -92,13 +92,13 @@ impl Interpreter {
                     continue;
                 }
                 Node::Expression { expression } => {
-                    return State::Running {
+                    return InterpreterState::Running {
                         expression,
                         location,
                     };
                 }
                 Node::UnresolvedIdentifier { name: _ } => {
-                    return State::Error { location };
+                    return InterpreterState::Error { location };
                 }
             }
         }
@@ -112,7 +112,7 @@ impl Interpreter {
     }
 }
 
-pub enum State<'r> {
+pub enum InterpreterState<'r> {
     Running {
         expression: &'r Expression,
         location: Location,
