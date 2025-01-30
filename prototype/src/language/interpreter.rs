@@ -32,7 +32,7 @@ impl Interpreter {
 
     pub fn step(&mut self, codebase: &Codebase) -> StepResult {
         let next = match self.next(codebase) {
-            Next::Expression { expression: node } => node,
+            Next::Expression { expression } => expression,
             Next::NoMoreNodes => {
                 return StepResult::Finished {
                     output: self.current_value,
