@@ -59,17 +59,17 @@ fn render_interpreter_state<A: EditorOutputAdapter>(
     adapter: &mut A,
     context: &RenderContext,
 ) -> anyhow::Result<()> {
-    let (color, text) = match context.interpreter.state(context.codebase) {
-        InterpreterState::Running { .. }
-        | InterpreterState::IgnoringEmptyFragment { .. } => {
-            (Color::DarkGreen, "Running")
-        }
-        InterpreterState::Effect { .. } => (Color::DarkCyan, "Effect"),
-        InterpreterState::Error { .. } => (ERROR, "Error"),
-        InterpreterState::Finished => (Color::DarkYellow, "Finished"),
-    };
-
     adapter.attribute(Attribute::Bold, |adapter| {
+        let (color, text) = match context.interpreter.state(context.codebase) {
+            InterpreterState::Running { .. }
+            | InterpreterState::IgnoringEmptyFragment { .. } => {
+                (Color::DarkGreen, "Running")
+            }
+            InterpreterState::Effect { .. } => (Color::DarkCyan, "Effect"),
+            InterpreterState::Error { .. } => (ERROR, "Error"),
+            InterpreterState::Finished => (Color::DarkYellow, "Finished"),
+        };
+
         adapter.color(color, |adapter| writeln!(adapter, "{text}"))
     })?;
 
