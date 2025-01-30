@@ -32,7 +32,13 @@ impl Interpreter {
 
     pub fn step(&mut self, codebase: &Codebase) -> StepResult {
         let next = match self.next(codebase) {
-            Next::Expression { expression } => expression,
+            Next::Expression {
+                expression,
+                location,
+            } => {
+                let _ = location;
+                expression
+            }
             Next::NoMoreNodes => {
                 return StepResult::Finished {
                     output: self.current_value,
@@ -85,7 +91,10 @@ impl Interpreter {
                     continue;
                 }
                 Node::Expression { expression } => {
-                    return Next::Expression { expression };
+                    return Next::Expression {
+                        expression,
+                        location,
+                    };
                 }
                 Node::UnresolvedIdentifier { name: _ } => {
                     return Next::Error;
@@ -103,7 +112,10 @@ impl Interpreter {
 }
 
 enum Next<'r> {
-    Expression { expression: &'r Expression },
+    Expression {
+        expression: &'r Expression,
+        location: Location,
+    },
     Error,
     NoMoreNodes,
 }
