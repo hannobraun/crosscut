@@ -61,7 +61,7 @@ fn render_code<A: EditorOutputAdapter>(
     context.cursor =
         Some(adapter.cursor().move_right(context.editor.input().cursor()));
 
-    for node in context.codebase.nodes() {
+    for (_, node) in context.codebase.nodes() {
         match node {
             Node::Empty => {}
             Node::Expression { expression } => match expression {

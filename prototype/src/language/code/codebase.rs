@@ -10,8 +10,11 @@ impl Codebase {
         Self { nodes: Vec::new() }
     }
 
-    pub fn nodes(&self) -> impl Iterator<Item = &Node> {
-        self.nodes.iter()
+    pub fn nodes(&self) -> impl Iterator<Item = (Location, &Node)> {
+        self.nodes
+            .iter()
+            .enumerate()
+            .map(|(index, node)| (Location { index }, node))
     }
 
     pub fn entry(&self) -> Location {
