@@ -67,7 +67,7 @@ fn render_interpreter_state<A: EditorOutputAdapter>(
                     writeln!(adapter, "Running")
                 })?;
             }
-            InterpreterState::Effect { .. } => {
+            InterpreterState::Effect { effect: _, .. } => {
                 adapter.color(Color::DarkCyan, |adapter| {
                     writeln!(adapter, "Effect")
                 })?;
