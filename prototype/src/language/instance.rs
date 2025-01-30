@@ -101,7 +101,7 @@ impl Language {
                 }
                 StepResult::ApplyHostFunction { id, input } => {
                     let output = handler(id, input);
-                    self.interpreter.set_current_value(output);
+                    self.interpreter.provide_host_function_output(output);
                 }
                 StepResult::Finished { output } => {
                     break output;

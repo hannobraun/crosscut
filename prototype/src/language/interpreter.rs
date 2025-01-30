@@ -15,7 +15,7 @@ impl Interpreter {
     }
 
     #[cfg(test)]
-    pub fn set_current_value(&mut self, value: Value) {
+    pub fn provide_host_function_output(&mut self, value: Value) {
         self.current_value = value;
     }
 
