@@ -34,7 +34,6 @@ impl TerminalEditorInput {
         match &mut self.mode {
             EditorMode::Edit => {
                 let event = match event {
-                    TerminalInputEvent::Enter => None,
                     TerminalInputEvent::Escape => {
                         self.mode = EditorMode::Command {
                             input: EditorInput::empty(),
