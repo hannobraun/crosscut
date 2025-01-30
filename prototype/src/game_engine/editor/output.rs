@@ -64,6 +64,7 @@ fn render_interpreter_state<A: EditorOutputAdapter>(
         | InterpreterState::IgnoringEmptyFragment { .. } => {
             (Color::DarkGreen, "Running")
         }
+        InterpreterState::Effect { .. } => (Color::DarkCyan, "Effect"),
         InterpreterState::Error { .. } => (ERROR, "Error"),
         InterpreterState::Finished => (Color::DarkYellow, "Finished"),
     };

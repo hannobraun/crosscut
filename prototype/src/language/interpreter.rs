@@ -36,10 +36,6 @@ impl Interpreter {
     }
 
     pub fn step(&mut self, codebase: &Codebase) -> StepResult {
-        if let Some(effect) = self.effect {
-            return StepResult::EffectTriggered { effect };
-        }
-
         let next = loop {
             match self.next(codebase) {
                 InterpreterState::Running {
@@ -51,6 +47,12 @@ impl Interpreter {
                 InterpreterState::IgnoringEmptyFragment { location: _ } => {
                     self.advance(codebase);
                     continue;
+                }
+                InterpreterState::Effect {
+                    effect,
+                    location: _,
+                } => {
+                    return StepResult::EffectTriggered { effect };
                 }
                 InterpreterState::Error { location: _ } => {
                     return StepResult::Error;
@@ -98,6 +100,10 @@ impl Interpreter {
             return InterpreterState::Finished;
         };
 
+        if let Some(effect) = self.effect {
+            return InterpreterState::Effect { effect, location };
+        }
+
         match codebase.node_at(&location) {
             Node::Empty => InterpreterState::IgnoringEmptyFragment { location },
             Node::Expression { expression } => InterpreterState::Running {
@@ -126,6 +132,10 @@ pub enum InterpreterState<'r> {
     IgnoringEmptyFragment {
         location: Location,
     },
+    Effect {
+        effect: Effect,
+        location: Location,
+    },
     Error {
         location: Location,
     },
@@ -140,6 +150,10 @@ impl InterpreterState<'_> {
                 location,
             } => Some(location),
             Self::IgnoringEmptyFragment { location } => Some(location),
+            Self::Effect {
+                effect: _,
+                location,
+            } => Some(location),
             Self::Error { location } => Some(location),
             Self::Finished => None,
         }
