@@ -32,8 +32,8 @@ impl Interpreter {
 
     pub fn step(&mut self, codebase: &Codebase) -> StepResult {
         let next = match self.next(codebase) {
-            Some(next) => next,
-            None => {
+            Next::Node { node } => node,
+            Next::NoMoreNodes => {
                 return StepResult::Finished {
                     output: self.current_value,
                 };
@@ -82,12 +82,14 @@ impl Interpreter {
         StepResult::FunctionApplied { output: value }
     }
 
-    fn next<'r>(&self, codebase: &'r Codebase) -> Option<&'r Node> {
+    fn next<'r>(&self, codebase: &'r Codebase) -> Next<'r> {
         let Some(next) = &self.next else {
-            return None;
+            return Next::NoMoreNodes;
         };
 
-        Some(codebase.node_at(next))
+        Next::Node {
+            node: codebase.node_at(next),
+        }
     }
 
     fn advance(&mut self, codebase: &Codebase) {
@@ -96,6 +98,11 @@ impl Interpreter {
             .as_ref()
             .and_then(|next| codebase.location_after(next));
     }
+}
+
+enum Next<'r> {
+    Node { node: &'r Node },
+    NoMoreNodes,
 }
 
 #[derive(Debug, Eq, PartialEq)]
