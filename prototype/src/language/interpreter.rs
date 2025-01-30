@@ -87,7 +87,7 @@ impl Interpreter {
         StepResult::FunctionApplied { output: value }
     }
 
-    fn next<'r>(&mut self, codebase: &'r Codebase) -> InterpreterState<'r> {
+    fn next<'r>(&self, codebase: &'r Codebase) -> InterpreterState<'r> {
         let Some(location) = self.next else {
             return InterpreterState::Finished;
         };
