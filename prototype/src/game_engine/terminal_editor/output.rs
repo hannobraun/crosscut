@@ -75,7 +75,7 @@ fn render_possibly_active_node<A: EditorOutputAdapter>(
     adapter: &mut A,
     context: &mut RenderContext,
 ) -> anyhow::Result<()> {
-    if context.interpreter.next_step() == Some(location) {
+    if context.interpreter.next_step(context.codebase) == Some(location) {
         adapter.attribute(Attribute::Bold, |adapter| {
             render_node(location, node, adapter, context)
         })?;

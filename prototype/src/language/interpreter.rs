@@ -14,7 +14,7 @@ impl Interpreter {
         }
     }
 
-    pub fn next_step(&self) -> Option<&Location> {
+    pub fn next_step(&self, _: &Codebase) -> Option<&Location> {
         self.next.as_ref()
     }
 
