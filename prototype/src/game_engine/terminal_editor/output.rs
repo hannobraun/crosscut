@@ -7,7 +7,7 @@ use crate::{
         editor::Editor,
         host::Host,
         instance::Language,
-        interpreter::Interpreter,
+        interpreter::{Interpreter, InterpreterState},
     },
 };
 
@@ -41,6 +41,7 @@ where
 
         self.adapter.clear()?;
 
+        render_interpreter_state(&mut self.adapter, &context)?;
         render_code(&mut self.adapter, &mut context)?;
         render_prompt(&mut self.adapter, editor_input, &mut context)?;
 
@@ -52,6 +53,26 @@ where
 
         Ok(())
     }
+}
+
+fn render_interpreter_state<A: EditorOutputAdapter>(
+    adapter: &mut A,
+    context: &RenderContext,
+) -> anyhow::Result<()> {
+    let (color, text) = match context.interpreter.state(context.codebase) {
+        InterpreterState::Running { .. }
+        | InterpreterState::IgnoringEmptyFragment { .. } => {
+            (Color::DarkGreen, "Running")
+        }
+        InterpreterState::Error { .. } => (ERROR, "Error"),
+        InterpreterState::Finished => (Color::DarkYellow, "Finished"),
+    };
+
+    adapter.attribute(Attribute::Bold, |adapter| {
+        adapter.color(color, |adapter| writeln!(adapter, "{text}"))
+    })?;
+
+    Ok(())
 }
 
 fn render_code<A: EditorOutputAdapter>(
