@@ -3,7 +3,7 @@ use crossterm::style::Color;
 use crate::{
     io::terminal_editor::output::{Cursor, EditorOutputAdapter},
     language::{
-        code::{Codebase, Expression, Node},
+        code::{Codebase, Expression, Location, Node},
         editor::Editor,
         host::Host,
         instance::Language,
@@ -61,8 +61,8 @@ fn render_code<A: EditorOutputAdapter>(
     context.cursor =
         Some(adapter.cursor().move_right(context.editor.input().cursor()));
 
-    for (_, node) in context.codebase.nodes() {
-        render_node(node, adapter, context)?;
+    for (location, node) in context.codebase.nodes() {
+        render_node(location, node, adapter, context)?;
     }
 
     writeln!(adapter)?;
@@ -71,6 +71,7 @@ fn render_code<A: EditorOutputAdapter>(
 }
 
 fn render_node<A: EditorOutputAdapter>(
+    _: Location,
     node: &Node,
     adapter: &mut A,
     context: &mut RenderContext,
