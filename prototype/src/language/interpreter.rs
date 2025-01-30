@@ -35,9 +35,8 @@ impl Interpreter {
             match self.next(codebase) {
                 InterpreterState::Running {
                     expression,
-                    location,
+                    location: _,
                 } => {
-                    let _ = location;
                     break expression;
                 }
                 InterpreterState::IgnoringEmptyFragment { location } => {
