@@ -87,8 +87,3 @@ pub enum Expression {
     HostFunction { id: u32 },
     IntrinsicFunction { function: IntrinsicFunction },
 }
-
-#[derive(Clone, Copy, Debug, Eq, PartialEq)]
-pub enum Type {
-    Integer,
-}
