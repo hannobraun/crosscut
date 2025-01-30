@@ -83,11 +83,11 @@ impl Interpreter {
     }
 
     fn next<'r>(&mut self, codebase: &'r Codebase) -> Next<'r> {
-        let Some(next) = &self.next else {
+        let Some(next) = self.next else {
             return Next::NoMoreNodes;
         };
 
-        let node = codebase.node_at(next);
+        let node = codebase.node_at(&next);
 
         Next::Node { node }
     }
