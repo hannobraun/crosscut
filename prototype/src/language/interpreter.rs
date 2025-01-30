@@ -75,11 +75,11 @@ impl Interpreter {
 
     fn next<'r>(&mut self, codebase: &'r Codebase) -> Next<'r> {
         let expression = loop {
-            let Some(next) = self.next else {
+            let Some(location) = self.next else {
                 return Next::NoMoreNodes;
             };
 
-            match codebase.node_at(&next) {
+            match codebase.node_at(&location) {
                 Node::Empty => {
                     self.advance(codebase);
                     continue;
