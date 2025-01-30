@@ -116,8 +116,7 @@ fn render_node<A: EditorOutputAdapter>(
             }
         },
         Node::UnresolvedIdentifier { name } => {
-            adapter
-                .color(Color::DarkRed, |adapter| writeln!(adapter, "{name}"))?;
+            adapter.color(ERROR, |adapter| writeln!(adapter, "{name}"))?;
         }
     }
 
@@ -154,3 +153,5 @@ struct RenderContext<'r> {
     host: &'r Host,
     cursor: Option<Cursor>,
 }
+
+const ERROR: Color = Color::DarkRed;
