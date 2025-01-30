@@ -87,9 +87,9 @@ impl Interpreter {
             return Next::NoMoreNodes;
         };
 
-        Next::Node {
-            node: codebase.node_at(next),
-        }
+        let node = codebase.node_at(next);
+
+        Next::Node { node }
     }
 
     fn advance(&mut self, codebase: &Codebase) {
