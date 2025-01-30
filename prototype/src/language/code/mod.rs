@@ -1,7 +1,9 @@
 mod codebase;
 mod intrinsics;
+mod location;
 
 pub use self::{
-    codebase::{Codebase, Expression, Location, Node},
+    codebase::{Codebase, Expression, Node},
     intrinsics::IntrinsicFunction,
+    location::Location,
 };

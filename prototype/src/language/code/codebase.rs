@@ -1,4 +1,4 @@
-use super::IntrinsicFunction;
+use super::{IntrinsicFunction, Location};
 
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub struct Codebase {
@@ -73,11 +73,6 @@ impl Codebase {
 pub enum Node {
     Empty,
     Expression { expression: Expression },
-}
-
-#[derive(Debug)]
-pub struct Location {
-    pub(super) index: usize,
 }
 
 #[derive(Clone, Debug, Eq, PartialEq)]
