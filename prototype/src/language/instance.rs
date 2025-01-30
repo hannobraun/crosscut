@@ -87,6 +87,15 @@ impl Language {
     }
 
     pub fn step_until_finished(&mut self) -> Value {
+        self.step_until_finished_and_handle_host_functions(|id, _| {
+            unreachable!("Unexpected host function with ID `{id}`.")
+        })
+    }
+
+    pub fn step_until_finished_and_handle_host_functions(
+        &mut self,
+        mut handler: impl FnMut(u32, Value) -> Value,
+    ) -> Value {
         let mut i = 0;
 
         loop {
@@ -94,8 +103,9 @@ impl Language {
                 StepResult::FunctionApplied { output: _ } => {
                     // We're not concerned with intermediate results here.
                 }
-                StepResult::ApplyHostFunction { id, input: _ } => {
-                    unreachable!("Unexpected host function with ID `{id}`.");
+                StepResult::ApplyHostFunction { id, input } => {
+                    let output = handler(id, input);
+                    self.set_current_value(output);
                 }
                 StepResult::Finished { output } => {
                     break output;
