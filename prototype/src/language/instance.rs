@@ -68,6 +68,11 @@ impl Language {
         self.interpreter
             .provide_host_function_output(output, &self.codebase);
     }
+
+    #[cfg(test)]
+    pub fn trigger_effect(&mut self, effect: Effect) {
+        self.interpreter.trigger_effect(effect);
+    }
 }
 
 #[cfg(test)]
@@ -115,7 +120,7 @@ impl Language {
                                 self.provide_host_function_output(output);
                             }
                             Err(effect) => {
-                                self.interpreter.trigger_effect(effect);
+                                self.trigger_effect(effect);
                             }
                         }
                     }
