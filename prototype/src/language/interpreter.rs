@@ -31,7 +31,6 @@ impl Interpreter {
         self.advance(codebase);
     }
 
-    #[cfg(test)]
     pub fn trigger_effect(&mut self, effect: Effect) {
         self.effect = Some(effect);
     }
@@ -157,12 +156,7 @@ pub enum StepResult {
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
 pub enum Effect {
-    ApplyHostFunction {
-        id: u32,
-        input: Value,
-    },
-
-    #[cfg(test)]
+    ApplyHostFunction { id: u32, input: Value },
     UnexpectedInput,
 }
 

@@ -2,7 +2,7 @@ use super::{
     code::Codebase,
     editor::{Editor, EditorCommand, EditorInputEvent},
     host::Host,
-    interpreter::{Interpreter, StepResult, Value},
+    interpreter::{Effect, Interpreter, StepResult, Value},
 };
 
 #[derive(Debug)]
@@ -69,14 +69,10 @@ impl Language {
             .provide_host_function_output(output, &self.codebase);
     }
 
-    #[cfg(test)]
     pub fn trigger_effect(&mut self, effect: Effect) {
         self.interpreter.trigger_effect(effect);
     }
 }
-
-#[cfg(test)]
-use super::interpreter::Effect;
 
 #[cfg(test)]
 impl Language {

@@ -77,7 +77,6 @@ where
                         self.apply_host_function(id, input);
                         continue;
                     }
-                    #[cfg(test)]
                     _ => {
                         // We can't handle any other effect.
                         break;
@@ -125,9 +124,7 @@ where
                         );
                     }
                     Value::None => {
-                        // It's not possible for a host function to produce a
-                        // regular error yet.
-                        panic!("Unexpected input value `{input:?}`");
+                        self.language.trigger_effect(Effect::UnexpectedInput);
                     }
                 }
             }
