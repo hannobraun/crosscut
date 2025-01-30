@@ -39,8 +39,7 @@ impl Interpreter {
                 } => {
                     break expression;
                 }
-                InterpreterState::IgnoringEmptyFragment { location } => {
-                    let _ = location;
+                InterpreterState::IgnoringEmptyFragment { location: _ } => {
                     self.advance(codebase);
                     continue;
                 }
