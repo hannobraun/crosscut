@@ -72,34 +72,42 @@ where
                     // We're not interested in intermediate values here.
                     continue;
                 }
-                StepResult::EffectTriggered {
-                    effect: Effect::ApplyHostFunction { id, input },
-                } => {
-                    match id {
-                        0 => {
-                            // `dim`
+                StepResult::EffectTriggered { effect } => {
+                    match effect {
+                        Effect::ApplyHostFunction { id, input } => {
+                            match id {
+                                0 => {
+                                    // `dim`
 
-                            match input {
-                                Value::Integer { value } => {
-                                    self.language.provide_host_function_output(
-                                        Value::Integer { value: value / 2 },
-                                    );
+                                    match input {
+                                        Value::Integer { value } => {
+                                            self.language
+                                                .provide_host_function_output(
+                                                    Value::Integer {
+                                                        value: value / 2,
+                                                    },
+                                                );
+                                        }
+                                        Value::None => {
+                                            // It's not possible for a host
+                                            // function to produce a regular
+                                            // error yet.
+                                            panic!(
+                                                "Unexpected input value `{input:?}`"
+                                            );
+                                        }
+                                    }
                                 }
-                                Value::None => {
-                                    // It's not possible for a host function to
-                                    // produce a regular error yet.
-                                    panic!(
-                                        "Unexpected input value `{input:?}`"
+                                _ => {
+                                    unreachable!(
+                                        "Unexpected host function ID `{id}`"
                                     );
                                 }
                             }
-                        }
-                        _ => {
-                            unreachable!("Unexpected host function ID `{id}`");
+
+                            continue;
                         }
                     }
-
-                    continue;
                 }
                 StepResult::Finished {
                     output: Value::Integer { value },
