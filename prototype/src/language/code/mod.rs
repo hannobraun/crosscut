@@ -5,5 +5,5 @@ mod location;
 pub use self::{
     codebase::{Codebase, Expression, Node},
     intrinsics::IntrinsicFunction,
-    location::Location,
+    location::{LocatedNode, Location},
 };

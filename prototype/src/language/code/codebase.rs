@@ -1,4 +1,4 @@
-use super::{location::LocatedNode, IntrinsicFunction, Location};
+use super::{IntrinsicFunction, LocatedNode, Location};
 
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub struct Codebase {
