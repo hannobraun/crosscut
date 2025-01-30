@@ -69,7 +69,8 @@ fn render_interpreter_state<A: EditorOutputAdapter>(
             }
             InterpreterState::Effect { effect: _, .. } => {
                 adapter.color(Color::DarkCyan, |adapter| {
-                    writeln!(adapter, "Effect")
+                    writeln!(adapter, "Effect")?;
+                    Ok(())
                 })?;
             }
             InterpreterState::Error { .. } => {
