@@ -42,8 +42,10 @@ where
     A: EditorOutputAdapter,
 {
     pub fn new(adapter: A) -> Self {
+        let host = Host::new();
+
         Self {
-            language: Language::with_host(Host::new()),
+            language: Language::with_host(host),
             game_output: Vec::new(),
             editor_input: TerminalEditorInput::new(),
             editor_output: TerminalEditorOutput::new(adapter),
