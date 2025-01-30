@@ -31,7 +31,7 @@ impl Interpreter {
     }
 
     pub fn step(&mut self, codebase: &Codebase) -> StepResult {
-        let Some(next) = self.next() else {
+        let Some(next) = self.next(codebase) else {
             return StepResult::Finished {
                 output: self.current_value,
             };
@@ -81,7 +81,7 @@ impl Interpreter {
         StepResult::FunctionApplied { output: value }
     }
 
-    fn next(&self) -> Option<Location> {
+    fn next(&self, _: &Codebase) -> Option<Location> {
         let Some(next) = &self.next else {
             return None;
         };
