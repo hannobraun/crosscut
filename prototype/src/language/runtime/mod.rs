@@ -1,4 +1,4 @@
-use super::code::{
+use crate::language::code::{
     Codebase, Expression, IntrinsicFunction, Location, Node, Type,
 };
 
