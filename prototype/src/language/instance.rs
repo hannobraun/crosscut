@@ -63,6 +63,12 @@ impl Language {
     pub fn step(&mut self) -> StepResult {
         self.interpreter.step(&self.codebase)
     }
+
+    #[cfg(test)]
+    pub fn provide_host_function_output(&mut self, output: Value) {
+        self.interpreter
+            .provide_host_function_output(output, &self.codebase);
+    }
 }
 
 #[cfg(test)]
@@ -105,8 +111,7 @@ impl Language {
                 }
                 StepResult::ApplyHostFunction { id, input } => {
                     let output = handler(id, input);
-                    self.interpreter
-                        .provide_host_function_output(output, &self.codebase);
+                    self.provide_host_function_output(output);
                 }
                 StepResult::Finished { output } => {
                     break output;
