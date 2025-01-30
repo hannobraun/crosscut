@@ -5,7 +5,7 @@ use crate::{
     language::{
         host::Host,
         instance::Language,
-        interpreter::{StepResult, Value},
+        interpreter::{Effect, StepResult, Value},
     },
 };
 
@@ -72,7 +72,9 @@ where
                     // We're not interested in intermediate values here.
                     continue;
                 }
-                StepResult::ApplyHostFunction { id, input } => {
+                StepResult::EffectTriggered {
+                    effect: Effect::ApplyHostFunction { id, input },
+                } => {
                     match id {
                         0 => {
                             // `dim`

@@ -71,6 +71,9 @@ impl Language {
 }
 
 #[cfg(test)]
+use super::interpreter::Effect;
+
+#[cfg(test)]
 impl Language {
     pub fn without_host() -> Self {
         Self::with_host(Host::new())
@@ -105,7 +108,9 @@ impl Language {
                 StepResult::FunctionApplied { output: _ } => {
                     // We're not concerned with intermediate results here.
                 }
-                StepResult::ApplyHostFunction { id, input } => {
+                StepResult::EffectTriggered {
+                    effect: Effect::ApplyHostFunction { id, input },
+                } => {
                     let output = handler(id, input);
                     self.provide_host_function_output(output);
                 }

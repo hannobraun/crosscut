@@ -55,9 +55,11 @@ impl Interpreter {
 
         let value = match next {
             Expression::HostFunction { id } => {
-                return StepResult::ApplyHostFunction {
-                    id: *id,
-                    input: self.current_value,
+                return StepResult::EffectTriggered {
+                    effect: Effect::ApplyHostFunction {
+                        id: *id,
+                        input: self.current_value,
+                    },
                 };
             }
             Expression::IntrinsicFunction { function } => {
@@ -139,9 +141,14 @@ impl InterpreterState<'_> {
 #[derive(Debug, Eq, PartialEq)]
 pub enum StepResult {
     FunctionApplied { output: Value },
-    ApplyHostFunction { id: u32, input: Value },
+    EffectTriggered { effect: Effect },
     Finished { output: Value },
     Error,
+}
+
+#[derive(Debug, Eq, PartialEq)]
+pub enum Effect {
+    ApplyHostFunction { id: u32, input: Value },
 }
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
