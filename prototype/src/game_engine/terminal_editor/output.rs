@@ -96,10 +96,12 @@ fn render_possibly_active_node<A: EditorOutputAdapter>(
     adapter: &mut A,
     context: &mut RenderContext,
 ) -> anyhow::Result<()> {
+    let is_active_node = context.interpreter.state(context.codebase).location()
+        == Some(location);
+
     write!(adapter, "    ")?;
 
-    if context.interpreter.state(context.codebase).location() == Some(location)
-    {
+    if is_active_node {
         adapter.attribute(Attribute::Bold, |adapter| {
             render_node(location, node, adapter, context)
         })?;
