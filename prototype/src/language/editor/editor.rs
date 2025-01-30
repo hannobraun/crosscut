@@ -41,7 +41,7 @@ impl Editor {
             }
         }
 
-        let value = if let Ok(value) = self.input.buffer().parse() {
+        let node = if let Ok(value) = self.input.buffer().parse() {
             Node::Expression {
                 expression: Expression::IntrinsicFunction {
                     function: IntrinsicFunction::Literal {
@@ -61,7 +61,7 @@ impl Editor {
             }
         };
 
-        codebase.replace(&self.editing, value);
+        codebase.replace(&self.editing, node);
 
         // Unconditionally resetting the interpreter like this, is not going to
         // work long-term. It should only be reset, if it's finished.
