@@ -2,7 +2,7 @@ use super::{
     code::Codebase,
     editor::{Editor, EditorCommand, EditorInputEvent},
     host::Host,
-    interpreter::{Effect, Interpreter, StepResult, Value},
+    runtime::{Effect, Interpreter, StepResult, Value},
 };
 
 #[derive(Debug)]

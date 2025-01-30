@@ -1,4 +1,4 @@
-use crate::language::{instance::Language, interpreter::Value};
+use crate::language::{instance::Language, runtime::Value};
 
 #[test]
 fn number_literal() {

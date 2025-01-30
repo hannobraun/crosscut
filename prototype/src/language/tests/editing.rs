@@ -1,5 +1,5 @@
 use crate::language::{
-    editor::EditorInputEvent, instance::Language, interpreter::Value,
+    editor::EditorInputEvent, instance::Language, runtime::Value,
 };
 
 #[test]

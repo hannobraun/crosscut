@@ -1,7 +1,7 @@
 use crate::language::{
     code::{Codebase, Expression, IntrinsicFunction, Location, Node},
     host::Host,
-    interpreter::{Interpreter, Value},
+    runtime::{Interpreter, Value},
 };
 
 use super::{input::UpdateAction, EditorInput, EditorInputEvent};

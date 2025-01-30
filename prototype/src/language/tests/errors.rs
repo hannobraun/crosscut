@@ -1,6 +1,6 @@
 use crate::language::{
     instance::Language,
-    interpreter::{StepResult, Value},
+    runtime::{StepResult, Value},
 };
 
 #[test]

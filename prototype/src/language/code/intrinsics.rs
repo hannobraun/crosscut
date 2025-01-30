@@ -1,6 +1,6 @@
 use std::fmt;
 
-use crate::language::interpreter::Value;
+use crate::language::runtime::Value;
 
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub enum IntrinsicFunction {

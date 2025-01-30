@@ -6,7 +6,7 @@ use crate::{
         code::Type,
         host::Host,
         instance::Language,
-        interpreter::{Effect, StepResult, Value},
+        runtime::{Effect, StepResult, Value},
     },
 };
 

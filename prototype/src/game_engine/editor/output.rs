@@ -7,7 +7,7 @@ use crate::{
         editor::Editor,
         host::Host,
         instance::Language,
-        interpreter::{Effect, Interpreter, InterpreterState},
+        runtime::{Effect, Interpreter, InterpreterState},
     },
 };
 
