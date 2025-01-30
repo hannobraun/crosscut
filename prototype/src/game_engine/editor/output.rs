@@ -75,7 +75,7 @@ fn render_interpreter_state<A: EditorOutputAdapter>(
                         Effect::ApplyHostFunction { id, input } => {
                             writeln!(
                                 adapter,
-                                "apply host function `{id}` (input: {input}",
+                                "apply host function `{id}` (input: {input})",
                             )?;
                         }
                         Effect::UnexpectedInput { expected: _ } => {
