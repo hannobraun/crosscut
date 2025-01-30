@@ -62,29 +62,38 @@ fn render_code<A: EditorOutputAdapter>(
         Some(adapter.cursor().move_right(context.editor.input().cursor()));
 
     for (_, node) in context.codebase.nodes() {
-        match node {
-            Node::Empty => {}
-            Node::Expression { expression } => match expression {
-                Expression::HostFunction { id } => {
-                    let name = context.host.function_name_by_id(id);
-                    adapter.color(Color::DarkMagenta, |adapter| {
-                        write!(adapter, "{name}")
-                    })?;
-                }
-                Expression::IntrinsicFunction { function } => {
-                    adapter.color(Color::DarkBlue, |adapter| {
-                        write!(adapter, "{function}")
-                    })?;
-                }
-            },
-            Node::UnresolvedIdentifier { name } => {
-                adapter.color(Color::DarkRed, |adapter| {
+        render_node(node, adapter, context)?;
+    }
+
+    writeln!(adapter)?;
+
+    Ok(())
+}
+
+fn render_node<A: EditorOutputAdapter>(
+    node: &Node,
+    adapter: &mut A,
+    context: &mut RenderContext,
+) -> anyhow::Result<()> {
+    match node {
+        Node::Empty => {}
+        Node::Expression { expression } => match expression {
+            Expression::HostFunction { id } => {
+                let name = context.host.function_name_by_id(id);
+                adapter.color(Color::DarkMagenta, |adapter| {
                     write!(adapter, "{name}")
                 })?;
             }
+            Expression::IntrinsicFunction { function } => {
+                adapter.color(Color::DarkBlue, |adapter| {
+                    write!(adapter, "{function}")
+                })?;
+            }
+        },
+        Node::UnresolvedIdentifier { name } => {
+            adapter
+                .color(Color::DarkRed, |adapter| write!(adapter, "{name}"))?;
         }
-
-        writeln!(adapter)?;
     }
 
     writeln!(adapter)?;
