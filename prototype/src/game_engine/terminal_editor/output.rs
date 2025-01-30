@@ -1,4 +1,4 @@
-use crossterm::style::Color;
+use crossterm::style::{Attribute, Color};
 
 use crate::{
     io::terminal_editor::output::{Cursor, EditorOutputAdapter},
@@ -76,9 +76,9 @@ fn render_possibly_active_node<A: EditorOutputAdapter>(
     context: &mut RenderContext,
 ) -> anyhow::Result<()> {
     if context.interpreter.next_step() == Some(location) {
-        // Special formatting for the active node is currently being
-        // implemented.
-        render_node(location, node, adapter, context)?;
+        adapter.attribute(Attribute::Bold, |adapter| {
+            render_node(location, node, adapter, context)
+        })?;
     } else {
         render_node(location, node, adapter, context)?;
     }

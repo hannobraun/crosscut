@@ -5,7 +5,7 @@ use std::{
 
 use crossterm::{
     cursor::{self, MoveToNextLine},
-    style::{Color, ResetColor, SetForegroundColor},
+    style::{Attribute, Color, ResetColor, SetAttribute, SetForegroundColor},
     terminal::{self, ClearType},
     QueueableCommand,
 };
@@ -21,6 +21,12 @@ pub trait EditorOutputAdapter: fmt::Write {
         &mut self,
         color: Color,
         f: impl FnOnce(&mut Self) -> fmt::Result,
+    ) -> anyhow::Result<()>;
+
+    fn attribute(
+        &mut self,
+        attribute: Attribute,
+        f: impl FnOnce(&mut Self) -> anyhow::Result<()>,
     ) -> anyhow::Result<()>;
 
     fn flush(&mut self) -> io::Result<()>;
@@ -46,6 +52,15 @@ impl EditorOutputAdapter for DebugOutputAdapter {
         &mut self,
         _: Color,
         f: impl FnOnce(&mut Self) -> fmt::Result,
+    ) -> anyhow::Result<()> {
+        f(self)?;
+        Ok(())
+    }
+
+    fn attribute(
+        &mut self,
+        _: Attribute,
+        f: impl FnOnce(&mut Self) -> anyhow::Result<()>,
     ) -> anyhow::Result<()> {
         f(self)?;
         Ok(())
@@ -145,6 +160,18 @@ impl EditorOutputAdapter for RawTerminalAdapter {
         self.w.queue(SetForegroundColor(color))?;
         f(self)?;
         self.w.queue(ResetColor)?;
+
+        Ok(())
+    }
+
+    fn attribute(
+        &mut self,
+        attribute: Attribute,
+        f: impl FnOnce(&mut Self) -> anyhow::Result<()>,
+    ) -> anyhow::Result<()> {
+        self.w.queue(SetAttribute(attribute))?;
+        f(self)?;
+        self.w.queue(SetAttribute(Attribute::Reset))?;
 
         Ok(())
     }
