@@ -14,8 +14,11 @@ impl Interpreter {
         }
     }
 
-    pub fn next_step(&self, _: &Codebase) -> Option<&Location> {
-        self.next.as_ref()
+    pub fn next_step<'r>(
+        &self,
+        codebase: &'r Codebase,
+    ) -> InterpreterState<'r> {
+        self.next(codebase)
     }
 
     #[cfg(test)]
@@ -124,6 +127,20 @@ pub enum InterpreterState<'r> {
         location: Location,
     },
     Finished,
+}
+
+impl InterpreterState<'_> {
+    pub fn location(&self) -> Option<&Location> {
+        match self {
+            Self::Running {
+                expression: _,
+                location,
+            } => Some(location),
+            Self::IgnoringEmptyFragment { location } => Some(location),
+            Self::Error { location } => Some(location),
+            Self::Finished => None,
+        }
+    }
 }
 
 #[derive(Debug, Eq, PartialEq)]
