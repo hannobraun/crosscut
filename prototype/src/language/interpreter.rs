@@ -32,7 +32,7 @@ impl Interpreter {
 
     pub fn step(&mut self, codebase: &Codebase) -> StepResult {
         let next = match self.next(codebase) {
-            State::Expression {
+            State::Running {
                 expression,
                 location,
             } => {
@@ -91,7 +91,7 @@ impl Interpreter {
                     continue;
                 }
                 Node::Expression { expression } => {
-                    return State::Expression {
+                    return State::Running {
                         expression,
                         location,
                     };
@@ -112,7 +112,7 @@ impl Interpreter {
 }
 
 enum State<'r> {
-    Expression {
+    Running {
         expression: &'r Expression,
         location: Location,
     },
