@@ -15,10 +15,18 @@ impl Interpreter {
     }
 
     #[cfg(test)]
-    pub fn provide_host_function_output(&mut self, value: Value, _: &Codebase) {
+    pub fn provide_host_function_output(
+        &mut self,
+        value: Value,
+        codebase: &Codebase,
+    ) {
         // It would be nice to assert here, that a host function is actually
         // being applied. But we don't track that information currently.
         self.current_value = value;
+        self.next_step = self
+            .next_step
+            .as_ref()
+            .and_then(|next_step| codebase.location_after(next_step));
     }
 
     pub fn step(&mut self, codebase: &Codebase) -> StepResult {
@@ -29,7 +37,6 @@ impl Interpreter {
         };
 
         let next = codebase.node_at(next_step);
-        self.next_step = codebase.location_after(next_step);
 
         let value = match next {
             Node::Empty => {
@@ -68,6 +75,7 @@ impl Interpreter {
         };
 
         self.current_value = value;
+        self.next_step = codebase.location_after(next_step);
 
         StepResult::FunctionApplied { output: value }
     }

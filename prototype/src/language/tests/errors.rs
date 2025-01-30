@@ -33,3 +33,16 @@ fn unresolved_identifier() {
 
     assert_eq!(language.step(), StepResult::Error);
 }
+
+#[test]
+fn do_not_step_beyond_errors() {
+    // If there's an error in the code, the interpreter should never step beyond
+    // that, if it encounters it.
+
+    let mut language = Language::without_host();
+
+    language.enter_code("error");
+
+    assert_eq!(language.step(), StepResult::Error);
+    assert_eq!(language.step(), StepResult::Error);
+}
