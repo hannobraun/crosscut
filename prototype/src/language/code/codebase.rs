@@ -1,4 +1,4 @@
-use super::{IntrinsicFunction, Location};
+use super::{location::LocatedNode, IntrinsicFunction, Location};
 
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub struct Codebase {
@@ -10,11 +10,14 @@ impl Codebase {
         Self { nodes: Vec::new() }
     }
 
-    pub fn nodes(&self) -> impl Iterator<Item = (Location, &Node)> {
+    pub fn nodes(&self) -> impl Iterator<Item = LocatedNode> {
         self.nodes
             .iter()
             .enumerate()
-            .map(|(index, node)| (Location { index }, node))
+            .map(|(index, node)| LocatedNode {
+                node,
+                location: Location { index },
+            })
     }
 
     pub fn entry(&self) -> Location {

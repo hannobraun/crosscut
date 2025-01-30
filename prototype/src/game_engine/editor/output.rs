@@ -81,8 +81,13 @@ fn render_code<A: EditorOutputAdapter>(
 ) -> anyhow::Result<()> {
     writeln!(adapter)?;
 
-    for (location, node) in context.codebase.nodes() {
-        render_possibly_active_node(&location, node, adapter, context)?;
+    for located_node in context.codebase.nodes() {
+        render_possibly_active_node(
+            &located_node.location,
+            located_node.node,
+            adapter,
+            context,
+        )?;
     }
 
     writeln!(adapter)?;
