@@ -42,20 +42,26 @@ impl Editor {
         }
 
         let value = if let Ok(value) = self.input.buffer().parse() {
-            Expression::IntrinsicFunction {
-                function: IntrinsicFunction::Literal {
-                    value: Value::Integer { value },
+            Node::Expression {
+                expression: Expression::IntrinsicFunction {
+                    function: IntrinsicFunction::Literal {
+                        value: Value::Integer { value },
+                    },
                 },
             }
         } else if let Some(id) = host.function_id_by_name(self.input.buffer()) {
-            Expression::HostFunction { id }
+            Node::Expression {
+                expression: Expression::HostFunction { id },
+            }
         } else {
-            Expression::IntrinsicFunction {
-                function: IntrinsicFunction::Identity,
+            Node::Expression {
+                expression: Expression::IntrinsicFunction {
+                    function: IntrinsicFunction::Identity,
+                },
             }
         };
 
-        codebase.replace(&self.editing, Node::Expression { expression: value });
+        codebase.replace(&self.editing, value);
 
         // Unconditionally resetting the interpreter like this, is not going to
         // work long-term. It should only be reset, if it's finished.
