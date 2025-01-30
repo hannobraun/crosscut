@@ -73,7 +73,8 @@ fn render_interpreter_state<A: EditorOutputAdapter>(
                 })?;
             }
             InterpreterState::Error { .. } => {
-                adapter.color(ERROR, |adapter| writeln!(adapter, "Error"))?;
+                adapter
+                    .color(ERROR_COLOR, |adapter| writeln!(adapter, "Error"))?;
             }
             InterpreterState::Finished => {
                 adapter.color(Color::DarkYellow, |adapter| {
@@ -152,7 +153,7 @@ fn render_node<A: EditorOutputAdapter>(
             }
         },
         Node::UnresolvedIdentifier { name } => {
-            adapter.color(ERROR, |adapter| write!(adapter, "{name}"))?;
+            adapter.color(ERROR_COLOR, |adapter| write!(adapter, "{name}"))?;
         }
     }
 
@@ -190,4 +191,4 @@ struct RenderContext<'r> {
     cursor: Option<Cursor>,
 }
 
-const ERROR: Color = Color::DarkRed;
+const ERROR_COLOR: Color = Color::DarkRed;
