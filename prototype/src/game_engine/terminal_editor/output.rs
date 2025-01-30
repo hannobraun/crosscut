@@ -59,11 +59,21 @@ fn render_code<A: EditorOutputAdapter>(
     writeln!(adapter)?;
 
     for (location, node) in context.codebase.nodes() {
-        render_node(&location, node, adapter, context)?;
+        render_possibly_active_node(&location, node, adapter, context)?;
     }
 
     writeln!(adapter)?;
 
+    Ok(())
+}
+
+fn render_possibly_active_node<A: EditorOutputAdapter>(
+    location: &Location,
+    node: &Node,
+    adapter: &mut A,
+    context: &mut RenderContext,
+) -> anyhow::Result<()> {
+    render_node(location, node, adapter, context)?;
     Ok(())
 }
 
