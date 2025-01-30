@@ -52,11 +52,11 @@ impl Interpreter {
                     self.advance(codebase);
                     continue;
                 }
-                InterpreterState::Finished => {
-                    return StepResult::Finished { output: self.value };
-                }
                 InterpreterState::Error { location: _ } => {
                     return StepResult::Error;
+                }
+                InterpreterState::Finished => {
+                    return StepResult::Finished { output: self.value };
                 }
             }
         };
