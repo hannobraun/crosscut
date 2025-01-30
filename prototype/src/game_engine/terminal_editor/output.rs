@@ -105,6 +105,8 @@ fn render_possibly_active_node<A: EditorOutputAdapter>(
         render_node(location, node, adapter, context)?;
     }
 
+    writeln!(adapter)?;
+
     Ok(())
 }
 
@@ -120,24 +122,22 @@ fn render_node<A: EditorOutputAdapter>(
     }
 
     match node {
-        Node::Empty => {
-            writeln!(adapter)?;
-        }
+        Node::Empty => {}
         Node::Expression { expression } => match expression {
             Expression::HostFunction { id } => {
                 let name = context.host.function_name_by_id(id);
                 adapter.color(Color::DarkMagenta, |adapter| {
-                    writeln!(adapter, "{name}")
+                    write!(adapter, "{name}")
                 })?;
             }
             Expression::IntrinsicFunction { function } => {
                 adapter.color(Color::DarkBlue, |adapter| {
-                    writeln!(adapter, "{function}")
+                    write!(adapter, "{function}")
                 })?;
             }
         },
         Node::UnresolvedIdentifier { name } => {
-            adapter.color(ERROR, |adapter| writeln!(adapter, "{name}"))?;
+            adapter.color(ERROR, |adapter| write!(adapter, "{name}"))?;
         }
     }
 
