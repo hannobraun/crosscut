@@ -82,7 +82,7 @@ impl Interpreter {
         StepResult::FunctionApplied { output: value }
     }
 
-    fn next<'r>(&self, codebase: &'r Codebase) -> Next<'r> {
+    fn next<'r>(&mut self, codebase: &'r Codebase) -> Next<'r> {
         let Some(next) = &self.next else {
             return Next::NoMoreNodes;
         };
