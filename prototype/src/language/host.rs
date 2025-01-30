@@ -18,9 +18,9 @@ impl Host {
         self.function_ids_by_name.get(name).copied()
     }
 
-    pub fn function_name_by_id(&self, _id: &u32) -> &str {
-        let Some(name) = self.function_names_by_id.get(_id) else {
-            panic!("Expected function ID `{_id}` to be valid.");
+    pub fn function_name_by_id(&self, id: &u32) -> &str {
+        let Some(name) = self.function_names_by_id.get(id) else {
+            panic!("Expected function ID `{id}` to be valid.");
         };
 
         name
