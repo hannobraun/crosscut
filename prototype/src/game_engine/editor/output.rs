@@ -3,7 +3,7 @@ use crossterm::style::{Attribute, Color};
 use crate::{
     io::editor::output::{Cursor, EditorOutputAdapter},
     language::{
-        code::{Codebase, Expression, Location, Node},
+        code::{Codebase, Expression, LocatedNode, Location, Node},
         editor::Editor,
         host::Host,
         instance::Language,
@@ -82,12 +82,7 @@ fn render_code<A: EditorOutputAdapter>(
     writeln!(adapter)?;
 
     for located_node in context.codebase.nodes() {
-        render_possibly_active_node(
-            &located_node.location,
-            located_node.node,
-            adapter,
-            context,
-        )?;
+        render_possibly_active_node(located_node, adapter, context)?;
     }
 
     writeln!(adapter)?;
@@ -96,22 +91,31 @@ fn render_code<A: EditorOutputAdapter>(
 }
 
 fn render_possibly_active_node<A: EditorOutputAdapter>(
-    location: &Location,
-    node: &Node,
+    located_node: LocatedNode,
     adapter: &mut A,
     context: &mut RenderContext,
 ) -> anyhow::Result<()> {
     let is_active_node = context.interpreter.state(context.codebase).location()
-        == Some(location);
+        == Some(&located_node.location);
 
     if is_active_node {
         adapter.attribute(Attribute::Bold, |adapter| {
             write!(adapter, " => ")?;
-            render_node(location, node, adapter, context)
+            render_node(
+                &located_node.location,
+                located_node.node,
+                adapter,
+                context,
+            )
         })?;
     } else {
         write!(adapter, "    ")?;
-        render_node(location, node, adapter, context)?;
+        render_node(
+            &located_node.location,
+            located_node.node,
+            adapter,
+            context,
+        )?;
     }
 
     writeln!(adapter)?;
