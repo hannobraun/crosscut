@@ -27,5 +27,5 @@ fn host_functions() {
             }
         });
 
-    assert_eq!(output, Value::Integer { value: 32 });
+    assert_eq!(output, Ok(Value::Integer { value: 32 }));
 }

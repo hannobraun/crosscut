@@ -95,7 +95,7 @@ impl Language {
         let value =
             self.step_until_finished_and_handle_host_functions(|id, _| {
                 unreachable!("Unexpected host function with ID `{id}`.")
-            });
+            })?;
 
         Ok(value)
     }
@@ -103,7 +103,7 @@ impl Language {
     pub fn step_until_finished_and_handle_host_functions(
         &mut self,
         mut handler: impl FnMut(u32, Value) -> Result<Value, Effect>,
-    ) -> Value {
+    ) -> Result<Value, Effect> {
         let mut i = 0;
 
         loop {
@@ -131,7 +131,7 @@ impl Language {
                     }
                 }
                 StepResult::Finished { output } => {
-                    break output;
+                    break Ok(output);
                 }
                 StepResult::Error => {
                     panic!("Unexpected runtime error.");
