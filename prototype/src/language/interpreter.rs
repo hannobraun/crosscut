@@ -18,7 +18,6 @@ impl Interpreter {
         self.next(codebase)
     }
 
-    #[cfg(test)]
     pub fn provide_host_function_output(
         &mut self,
         value: Value,

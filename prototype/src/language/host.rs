@@ -14,7 +14,6 @@ impl Host {
         }
     }
 
-    #[cfg(test)]
     pub fn function(&mut self, id: u32, name: impl Into<String>) {
         let name = name.into();
 

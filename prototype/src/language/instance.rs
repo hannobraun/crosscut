@@ -2,7 +2,7 @@ use super::{
     code::Codebase,
     editor::{Editor, EditorCommand, EditorInputEvent},
     host::Host,
-    interpreter::{Interpreter, StepResult},
+    interpreter::{Interpreter, StepResult, Value},
 };
 
 #[derive(Debug)]
@@ -64,15 +64,11 @@ impl Language {
         self.interpreter.step(&self.codebase)
     }
 
-    #[cfg(test)]
     pub fn provide_host_function_output(&mut self, output: Value) {
         self.interpreter
             .provide_host_function_output(output, &self.codebase);
     }
 }
-
-#[cfg(test)]
-use super::interpreter::Value;
 
 #[cfg(test)]
 impl Language {

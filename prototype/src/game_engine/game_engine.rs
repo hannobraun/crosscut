@@ -42,7 +42,8 @@ where
     A: EditorOutputAdapter,
 {
     pub fn new(adapter: A) -> Self {
-        let host = Host::new();
+        let mut host = Host::new();
+        host.function(0, "dim");
 
         Self {
             language: Language::with_host(host),
@@ -71,8 +72,32 @@ where
                     // We're not interested in intermediate values here.
                     continue;
                 }
-                StepResult::ApplyHostFunction { id, input: _ } => {
-                    unreachable!("Unexpected host function with ID `{id}`.");
+                StepResult::ApplyHostFunction { id, input } => {
+                    match id {
+                        0 => {
+                            // `dim`
+
+                            match input {
+                                Value::Integer { value } => {
+                                    self.language.provide_host_function_output(
+                                        Value::Integer { value: value / 2 },
+                                    );
+                                }
+                                Value::None => {
+                                    // It's not possible for a host function to
+                                    // produce a regular error yet.
+                                    panic!(
+                                        "Unexpected input value `{input:?}`"
+                                    );
+                                }
+                            }
+                        }
+                        _ => {
+                            unreachable!("Unexpected host function ID `{id}`");
+                        }
+                    }
+
+                    continue;
                 }
                 StepResult::Finished {
                     output: Value::Integer { value },
