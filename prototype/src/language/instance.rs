@@ -90,6 +90,9 @@ impl Language {
                 StepResult::Application { output: _ } => {
                     // We're not concerned with intermediate results here.
                 }
+                StepResult::ApplyHostFunction { id, input: _ } => {
+                    unreachable!("Unexpected host function with ID `{id}`.");
+                }
                 StepResult::Finished { output } => {
                     break output;
                 }

@@ -32,8 +32,11 @@ impl Interpreter {
             }
             Node::Expression { expression } => {
                 match expression {
-                    Expression::HostFunction { id: _ } => {
-                        todo!("Host functions are not supported yet.");
+                    Expression::HostFunction { id } => {
+                        return StepResult::ApplyHostFunction {
+                            id: *id,
+                            input: self.current_value,
+                        };
                     }
                     Expression::IntrinsicFunction { function } => {
                         match function {
@@ -63,6 +66,7 @@ impl Interpreter {
 #[derive(Debug, Eq, PartialEq)]
 pub enum StepResult {
     Application { output: Value },
+    ApplyHostFunction { id: u32, input: Value },
     Finished { output: Value },
     Error,
 }

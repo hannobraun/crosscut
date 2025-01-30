@@ -71,6 +71,9 @@ where
                     // We're not interested in intermediate values here.
                     continue;
                 }
+                StepResult::ApplyHostFunction { id, input: _ } => {
+                    unreachable!("Unexpected host function with ID `{id}`.");
+                }
                 StepResult::Finished {
                     output: Value::Integer { value },
                 } => {
