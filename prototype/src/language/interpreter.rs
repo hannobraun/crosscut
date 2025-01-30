@@ -111,7 +111,7 @@ impl Interpreter {
     }
 }
 
-enum State<'r> {
+pub enum State<'r> {
     Running {
         expression: &'r Expression,
         location: Location,
