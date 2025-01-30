@@ -18,7 +18,7 @@ fn number_literal_wrong_input() {
 
     assert_eq!(
         language.step(),
-        StepResult::Application {
+        StepResult::FunctionApplied {
             output: Value::Integer { value: 127 }
         }
     );

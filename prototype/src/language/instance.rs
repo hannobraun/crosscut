@@ -91,7 +91,7 @@ impl Language {
 
         loop {
             match self.step() {
-                StepResult::Application { output: _ } => {
+                StepResult::FunctionApplied { output: _ } => {
                     // We're not concerned with intermediate results here.
                 }
                 StepResult::ApplyHostFunction { id, input: _ } => {

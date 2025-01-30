@@ -16,7 +16,7 @@ fn host_functions() {
 
     let output = loop {
         match language.step() {
-            StepResult::Application { output: _ } => {
+            StepResult::FunctionApplied { output: _ } => {
                 // We're not interested in intermediate results here.
             }
             StepResult::ApplyHostFunction { id, input } => match id {

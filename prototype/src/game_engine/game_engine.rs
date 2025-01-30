@@ -67,7 +67,7 @@ where
 
         loop {
             match self.language.step() {
-                StepResult::Application { output: _ } => {
+                StepResult::FunctionApplied { output: _ } => {
                     // We're not interested in intermediate values here.
                     continue;
                 }

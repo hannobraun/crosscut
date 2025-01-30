@@ -64,13 +64,13 @@ impl Interpreter {
 
         self.current_value = value;
 
-        StepResult::Application { output: value }
+        StepResult::FunctionApplied { output: value }
     }
 }
 
 #[derive(Debug, Eq, PartialEq)]
 pub enum StepResult {
-    Application { output: Value },
+    FunctionApplied { output: Value },
     ApplyHostFunction { id: u32, input: Value },
     Finished { output: Value },
     Error,
