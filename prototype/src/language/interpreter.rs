@@ -38,41 +38,32 @@ impl Interpreter {
                     output: self.current_value,
                 };
             }
+            Next::Error => {
+                return StepResult::Error;
+            }
         };
 
         let value = match next {
-            Node::Empty => {
-                // Empty nodes are ignored during execution. Those are only
-                // added by the editor as a placeholder.
-                self.current_value
+            Expression::HostFunction { id } => {
+                return StepResult::ApplyHostFunction {
+                    id: *id,
+                    input: self.current_value,
+                };
             }
-            Node::Expression { expression } => {
-                match expression {
-                    Expression::HostFunction { id } => {
-                        return StepResult::ApplyHostFunction {
-                            id: *id,
-                            input: self.current_value,
+            Expression::IntrinsicFunction { function } => {
+                match function {
+                    IntrinsicFunction::Identity => self.current_value,
+                    IntrinsicFunction::Literal { value } => {
+                        let Value::None = self.current_value else {
+                            // A literal is a function that takes
+                            // `None`. If that isn't what we currently
+                            // have, that's an error.
+                            return StepResult::Error;
                         };
-                    }
-                    Expression::IntrinsicFunction { function } => {
-                        match function {
-                            IntrinsicFunction::Identity => self.current_value,
-                            IntrinsicFunction::Literal { value } => {
-                                let Value::None = self.current_value else {
-                                    // A literal is a function that takes
-                                    // `None`. If that isn't what we currently
-                                    // have, that's an error.
-                                    return StepResult::Error;
-                                };
 
-                                *value
-                            }
-                        }
+                        *value
                     }
                 }
-            }
-            Node::UnresolvedIdentifier { name: _ } => {
-                return StepResult::Error;
             }
         };
 
@@ -83,11 +74,24 @@ impl Interpreter {
     }
 
     fn next<'r>(&mut self, codebase: &'r Codebase) -> Next<'r> {
-        let Some(next) = self.next else {
-            return Next::NoMoreNodes;
-        };
+        let node = loop {
+            let Some(next) = self.next else {
+                return Next::NoMoreNodes;
+            };
 
-        let node = codebase.node_at(&next);
+            match codebase.node_at(&next) {
+                Node::Empty => {
+                    self.advance(codebase);
+                    continue;
+                }
+                Node::Expression { expression } => {
+                    break expression;
+                }
+                Node::UnresolvedIdentifier { name: _ } => {
+                    return Next::Error;
+                }
+            }
+        };
 
         Next::Node { node }
     }
@@ -101,8 +105,9 @@ impl Interpreter {
 }
 
 enum Next<'r> {
-    Node { node: &'r Node },
+    Node { node: &'r Expression },
     NoMoreNodes,
+    Error,
 }
 
 #[derive(Debug, Eq, PartialEq)]
