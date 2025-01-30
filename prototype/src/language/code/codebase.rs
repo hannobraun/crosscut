@@ -77,7 +77,7 @@ pub enum Node {
 
 #[derive(Debug)]
 pub struct Location {
-    index: usize,
+    pub(super) index: usize,
 }
 
 #[derive(Clone, Debug, Eq, PartialEq)]
