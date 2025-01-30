@@ -2,15 +2,15 @@ use super::code::{Codebase, Expression, IntrinsicFunction, Location, Node};
 
 #[derive(Debug)]
 pub struct Interpreter {
-    value: Value,
     next: Option<Location>,
+    value: Value,
 }
 
 impl Interpreter {
     pub fn new(codebase: &Codebase) -> Self {
         Self {
-            value: Value::None,
             next: Some(codebase.entry()),
+            value: Value::None,
         }
     }
 
