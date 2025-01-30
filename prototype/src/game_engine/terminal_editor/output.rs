@@ -33,6 +33,7 @@ where
         let mut context = RenderContext {
             codebase: language.codebase(),
             editor: language.editor(),
+            host: language.host(),
             cursor: None,
         };
 
@@ -54,7 +55,7 @@ where
 fn render_code<A: EditorOutputAdapter>(
     adapter: &mut A,
     context: &mut RenderContext,
-    host: &Host,
+    _: &Host,
 ) -> anyhow::Result<()> {
     writeln!(adapter)?;
 
@@ -66,7 +67,7 @@ fn render_code<A: EditorOutputAdapter>(
             Node::Empty => {}
             Node::Expression { expression } => match expression {
                 Expression::HostFunction { id } => {
-                    let name = host.function_name_by_id(id);
+                    let name = context.host.function_name_by_id(id);
                     adapter.color(Color::DarkMagenta, |adapter| {
                         write!(adapter, "{name}")
                     })?;
@@ -113,5 +114,6 @@ fn render_prompt<A: EditorOutputAdapter>(
 struct RenderContext<'r> {
     codebase: &'r Codebase,
     editor: &'r Editor,
+    host: &'r Host,
     cursor: Option<Cursor>,
 }
