@@ -16,6 +16,8 @@ impl Interpreter {
 
     #[cfg(test)]
     pub fn provide_host_function_output(&mut self, value: Value) {
+        // It would be nice to assert here, that a host function is actually
+        // being applied. But we don't track that information currently.
         self.current_value = value;
     }
 
