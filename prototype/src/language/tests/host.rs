@@ -45,11 +45,12 @@ fn host_functions_can_trigger_effects() {
     let mut language = Language::with_host(host);
     language.enter_code("halve");
 
+    let effect = Effect::UnexpectedInput;
     let output =
         language.step_until_finished_and_handle_host_functions(|id, input| {
             match id {
                 0 => match input {
-                    Value::None => Err(Effect::UnexpectedInput),
+                    Value::None => Err(effect),
                     input => {
                         unreachable!("Unexpected input: `{input:?}`");
                     }
@@ -60,11 +61,6 @@ fn host_functions_can_trigger_effects() {
             }
         });
 
-    assert_eq!(output, Err(Effect::UnexpectedInput));
-    assert_eq!(
-        language.step(),
-        StepResult::EffectTriggered {
-            effect: Effect::UnexpectedInput
-        },
-    );
+    assert_eq!(output, Err(effect));
+    assert_eq!(language.step(), StepResult::EffectTriggered { effect });
 }
