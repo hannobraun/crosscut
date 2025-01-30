@@ -99,13 +99,13 @@ fn render_possibly_active_node<A: EditorOutputAdapter>(
     let is_active_node = context.interpreter.state(context.codebase).location()
         == Some(location);
 
-    write!(adapter, "    ")?;
-
     if is_active_node {
         adapter.attribute(Attribute::Bold, |adapter| {
+            write!(adapter, "    ")?;
             render_node(location, node, adapter, context)
         })?;
     } else {
+        write!(adapter, "    ")?;
         render_node(location, node, adapter, context)?;
     }
 
