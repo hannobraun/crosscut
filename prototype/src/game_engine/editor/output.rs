@@ -3,7 +3,7 @@ use crossterm::style::{Attribute, Color};
 use crate::{
     io::editor::output::{Cursor, EditorOutputAdapter},
     language::{
-        code::{Codebase, Expression, LocatedNode, Location, Node},
+        code::{Codebase, Expression, LocatedNode, Node},
         editor::Editor,
         host::Host,
         instance::Language,
@@ -101,21 +101,11 @@ fn render_possibly_active_node<A: EditorOutputAdapter>(
     if is_active_node {
         adapter.attribute(Attribute::Bold, |adapter| {
             write!(adapter, " => ")?;
-            render_node(
-                &located_node.location,
-                located_node.node,
-                adapter,
-                context,
-            )
+            render_node(located_node, adapter, context)
         })?;
     } else {
         write!(adapter, "    ")?;
-        render_node(
-            &located_node.location,
-            located_node.node,
-            adapter,
-            context,
-        )?;
+        render_node(located_node, adapter, context)?;
     }
 
     writeln!(adapter)?;
@@ -124,17 +114,16 @@ fn render_possibly_active_node<A: EditorOutputAdapter>(
 }
 
 fn render_node<A: EditorOutputAdapter>(
-    location: &Location,
-    node: &Node,
+    located_node: LocatedNode,
     adapter: &mut A,
     context: &mut RenderContext,
 ) -> anyhow::Result<()> {
-    if context.editor.editing() == location {
+    if context.editor.editing() == &located_node.location {
         context.cursor =
             Some(adapter.cursor().move_right(context.editor.input().cursor()));
     }
 
-    match node {
+    match located_node.node {
         Node::Empty => {}
         Node::Expression { expression } => match expression {
             Expression::HostFunction { id } => {
