@@ -27,10 +27,7 @@ impl Interpreter {
         // It would be nice to assert here, that a host function is actually
         // being applied. But we don't track that information currently.
         self.current_value = value;
-        self.next = self
-            .next
-            .as_ref()
-            .and_then(|next| codebase.location_after(next));
+        self.advance(codebase);
     }
 
     pub fn step(&mut self, codebase: &Codebase) -> StepResult {
@@ -79,7 +76,7 @@ impl Interpreter {
         };
 
         self.current_value = value;
-        self.next = codebase.location_after(&next_step);
+        self.advance(codebase);
 
         StepResult::FunctionApplied { output: value }
     }
@@ -90,6 +87,13 @@ impl Interpreter {
         };
 
         Some(*next)
+    }
+
+    fn advance(&mut self, codebase: &Codebase) {
+        self.next = self
+            .next
+            .as_ref()
+            .and_then(|next| codebase.location_after(next));
     }
 }
 
