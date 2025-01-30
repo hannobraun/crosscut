@@ -41,7 +41,9 @@ impl Editor {
             }
         }
 
-        let node = if let Ok(value) = self.input.buffer().parse() {
+        let node = if self.input.buffer().is_empty() {
+            Node::Empty
+        } else if let Ok(value) = self.input.buffer().parse() {
             Node::Expression {
                 expression: Expression::IntrinsicFunction {
                     function: IntrinsicFunction::Literal {
