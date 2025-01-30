@@ -37,8 +37,6 @@ impl Interpreter {
             };
         };
 
-        let next = codebase.node_at(&next);
-
         let value = match next {
             Node::Empty => {
                 // Empty nodes are ignored during execution. Those are only
@@ -81,12 +79,12 @@ impl Interpreter {
         StepResult::FunctionApplied { output: value }
     }
 
-    fn next(&self, _: &Codebase) -> Option<Location> {
+    fn next<'r>(&self, codebase: &'r Codebase) -> Option<&'r Node> {
         let Some(next) = &self.next else {
             return None;
         };
 
-        Some(*next)
+        Some(codebase.node_at(next))
     }
 
     fn advance(&mut self, codebase: &Codebase) {
