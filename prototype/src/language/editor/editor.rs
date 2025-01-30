@@ -69,7 +69,7 @@ impl Editor {
             }
         } else {
             Node::UnresolvedIdentifier {
-                name: token.clone(),
+                name: token.to_string(),
             }
         };
 
