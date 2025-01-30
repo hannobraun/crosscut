@@ -48,8 +48,7 @@ impl Interpreter {
                         output: self.current_value,
                     };
                 }
-                InterpreterState::Error { location } => {
-                    let _ = location;
+                InterpreterState::Error { location: _ } => {
                     return StepResult::Error;
                 }
             }
