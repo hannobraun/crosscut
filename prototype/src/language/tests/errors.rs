@@ -33,9 +33,9 @@ fn unresolved_identifier() {
     language.enter_code("unknown");
 
     // The error should be registered in `Codebase`.
-    let unknown = language.codebase().nodes().next().unwrap().location;
+    let unresolved = language.codebase().nodes().next().unwrap().location;
     assert_eq!(
-        language.codebase().error_at(&unknown),
+        language.codebase().error_at(&unresolved),
         Some(&CodeError::UnresolvedIdentifier),
     );
 
