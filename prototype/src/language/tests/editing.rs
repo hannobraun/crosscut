@@ -86,7 +86,7 @@ fn split_node_if_submitting_while_cursor_is_in_the_middle() {
 }
 
 #[test]
-fn navigate_to_previous_node() {
+fn moving_cursor_up_should_navigate_to_previous_node() {
     // It is possible to navigate to the previous or next node in the editor.
 
     let mut language = Language::without_host();
