@@ -49,7 +49,7 @@ impl EditorInputBuffer {
             RemoveRight => {
                 self.remove_right();
             }
-            SubmitToken => {
+            SubmitNode => {
                 return Some(self.submit_token());
             }
         }
@@ -132,7 +132,7 @@ pub enum EditorInputEvent {
     MoveCursorRight,
     RemoveLeft,
     RemoveRight,
-    SubmitToken,
+    SubmitNode,
 }
 
 #[cfg(test)]
@@ -283,7 +283,7 @@ mod tests {
         input.update(Insert { ch: '1' });
         assert_eq!(input.buffer(), "1");
 
-        input.update(SubmitToken);
+        input.update(SubmitNode);
         assert_eq!(input.buffer(), "");
     }
 
@@ -296,7 +296,7 @@ mod tests {
         assert_eq!(input.buffer(), "12");
 
         input.update(MoveCursorLeft);
-        input.update(SubmitToken);
+        input.update(SubmitNode);
         assert_eq!(input.buffer(), "2");
     }
 }

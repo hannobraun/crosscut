@@ -77,7 +77,7 @@ fn split_node_if_submitting_while_cursor_is_in_the_middle() {
     for _ in "identity".chars() {
         language.on_input(EditorInputEvent::MoveCursorLeft);
     }
-    language.on_input(EditorInputEvent::SubmitToken);
+    language.on_input(EditorInputEvent::SubmitNode);
 
     assert_eq!(
         language.step_until_finished(),

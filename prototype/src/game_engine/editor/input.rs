@@ -101,7 +101,7 @@ impl TerminalInputEvent {
     fn into_editor_input_event(self) -> Option<EditorInputEvent> {
         match self {
             Self::Character { ch } if ch.is_whitespace() => {
-                Some(EditorInputEvent::SubmitToken)
+                Some(EditorInputEvent::SubmitNode)
             }
             Self::Character { ch } => Some(EditorInputEvent::Insert { ch }),
 
@@ -111,7 +111,7 @@ impl TerminalInputEvent {
             Self::Left => Some(EditorInputEvent::MoveCursorLeft),
             Self::Right => Some(EditorInputEvent::MoveCursorRight),
 
-            Self::Enter => Some(EditorInputEvent::SubmitToken),
+            Self::Enter => Some(EditorInputEvent::SubmitNode),
 
             _ => None,
         }
