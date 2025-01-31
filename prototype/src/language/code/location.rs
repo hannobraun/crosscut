@@ -1,6 +1,6 @@
 use super::Node;
 
-#[derive(Clone, Copy, Debug, Eq, PartialEq)]
+#[derive(Clone, Copy, Debug, Eq, Ord, PartialEq, PartialOrd)]
 pub struct Location {
     pub(super) index: usize,
 }
