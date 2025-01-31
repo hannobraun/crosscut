@@ -1,10 +1,15 @@
 use super::{
-    code::{Codebase, Expression, IntrinsicFunction, Node},
+    code::{Codebase, Expression, IntrinsicFunction, Location, Node},
     host::Host,
     runtime::Value,
 };
 
-pub fn compile(token: &str, host: &Host, _: &mut Codebase) -> Node {
+pub fn compile(
+    token: &str,
+    _: &Location,
+    host: &Host,
+    _: &mut Codebase,
+) -> Node {
     if token.is_empty() {
         Node::Empty
     } else if let Ok(value) = token.parse() {

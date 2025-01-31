@@ -41,7 +41,8 @@ impl Editor {
         if let Some(action) = self.input.update(event) {
             match action {
                 UpdateAction::SubmitToken { submitted } => {
-                    let node = compile(&submitted, host, codebase);
+                    let node =
+                        compile(&submitted, &self.editing, host, codebase);
                     codebase.replace_node(&self.editing, node);
 
                     self.editing = codebase.push_node(Node::Empty);
@@ -49,7 +50,7 @@ impl Editor {
             }
         }
 
-        let node = compile(self.input.buffer(), host, codebase);
+        let node = compile(self.input.buffer(), &self.editing, host, codebase);
         codebase.replace_node(&self.editing, node);
 
         // Unconditionally resetting the interpreter like this, is not going to
