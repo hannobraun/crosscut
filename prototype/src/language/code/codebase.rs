@@ -80,7 +80,11 @@ impl Codebase {
         node
     }
 
-    pub fn push_node(&mut self, after: Location, node: Node) -> Location {
+    pub fn insert_node_after(
+        &mut self,
+        after: Location,
+        node: Node,
+    ) -> Location {
         let at = Location {
             index: after.index + 1,
         };
