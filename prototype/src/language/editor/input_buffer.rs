@@ -46,6 +46,9 @@ impl EditorInputBuffer {
             MoveCursorUp => {
                 // not supported yet
             }
+            MoveCursorDown => {
+                // not supported yet
+            }
             RemoveLeft => {
                 self.remove_left();
             }
@@ -134,6 +137,7 @@ pub enum EditorInputEvent {
     MoveCursorLeft,
     MoveCursorRight,
     MoveCursorUp,
+    MoveCursorDown,
     RemoveLeft,
     RemoveRight,
     SubmitNode,
