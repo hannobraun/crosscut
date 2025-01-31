@@ -109,7 +109,9 @@ impl EditorInputBuffer {
 
     fn submit_token(&mut self) -> UpdateAction {
         let old_buffer = mem::take(&mut self.buffer);
+
         *self = Self::new(String::new());
+
         UpdateAction::SubmitToken {
             submitted: old_buffer,
         }
