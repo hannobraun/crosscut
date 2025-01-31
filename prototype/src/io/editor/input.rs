@@ -50,6 +50,7 @@ pub fn read_editor_event(
         KeyCode::Enter => Some(TerminalInputEvent::Enter),
         KeyCode::Left => Some(TerminalInputEvent::Left),
         KeyCode::Right => Some(TerminalInputEvent::Right),
+        KeyCode::Up => Some(TerminalInputEvent::Up),
         KeyCode::Delete => Some(TerminalInputEvent::Delete),
         KeyCode::Esc => Some(TerminalInputEvent::Escape),
         _ => None,

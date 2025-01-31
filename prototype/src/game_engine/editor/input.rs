@@ -92,6 +92,7 @@ pub enum TerminalInputEvent {
 
     Left,
     Right,
+    Up,
 
     Enter,
     Escape,
