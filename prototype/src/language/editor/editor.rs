@@ -5,7 +5,7 @@ use crate::language::{
     runtime::Interpreter,
 };
 
-use super::{input::UpdateAction, EditorInputBuffer, EditorInputEvent};
+use super::{input_buffer::UpdateAction, EditorInputBuffer, EditorInputEvent};
 
 #[derive(Debug)]
 pub struct Editor {

@@ -1,7 +1,7 @@
 mod editor;
-mod input;
+mod input_buffer;
 
 pub use self::{
     editor::{Editor, EditorCommand},
-    input::{EditorInputBuffer, EditorInputEvent},
+    input_buffer::{EditorInputBuffer, EditorInputEvent},
 };
