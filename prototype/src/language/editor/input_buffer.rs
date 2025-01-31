@@ -108,9 +108,10 @@ impl EditorInputBuffer {
     }
 
     fn submit_token(&mut self) -> UpdateAction {
-        let old_buffer = mem::take(&mut self.buffer);
+        let mut old_buffer = mem::take(&mut self.buffer);
+        let new_buffer = old_buffer.split_off(self.cursor);
 
-        *self = Self::new(String::new());
+        *self = Self::new(new_buffer);
 
         UpdateAction::SubmitToken {
             submitted: old_buffer,
@@ -284,5 +285,18 @@ mod tests {
 
         input.update(SubmitToken);
         assert_eq!(input.buffer(), "");
+    }
+
+    #[test]
+    fn submit_token_at_cursor() {
+        let mut input = EditorInputBuffer::empty();
+
+        input.update(Insert { ch: '1' });
+        input.update(Insert { ch: '2' });
+        assert_eq!(input.buffer(), "12");
+
+        input.update(MoveCursorLeft);
+        input.update(SubmitToken);
+        assert_eq!(input.buffer(), "2");
     }
 }
