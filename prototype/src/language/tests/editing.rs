@@ -88,4 +88,5 @@ fn split_token_if_submitting_while_cursor_is_in_the_middle() {
 // There is lots of editing behavior that's not tested here, as this test suite
 // focuses on high-level behavior that affects the whole `language` module.
 //
-// Please refer to the test suite of `EditorInput` for more detailed tests.
+// Please refer to the test suite of `EditorInputBuffer` for more detailed
+// tests.
