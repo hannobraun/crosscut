@@ -40,7 +40,7 @@ impl Editor {
     ) {
         if let Some(action) = self.input.update(event) {
             match action {
-                UpdateAction::NavigateToPreviousNode => {
+                UpdateAction::NavigateToPrevious => {
                     if let Some(location) =
                         codebase.location_before(&self.editing)
                     {
