@@ -85,6 +85,22 @@ fn split_node_if_submitting_while_cursor_is_in_the_middle() {
     );
 }
 
+#[test]
+fn navigate_to_previous_node() {
+    // It is possible to navigate to the previous or next node in the editor.
+
+    let mut language = Language::without_host();
+
+    language.enter_code("12 identity");
+    language.on_input(EditorInputEvent::MoveCursorUp);
+    language.enter_code("7");
+
+    assert_eq!(
+        language.step_until_finished(),
+        Ok(Value::Integer { value: 127 })
+    );
+}
+
 // There is lots of editing behavior that's not tested here, as this test suite
 // focuses on high-level behavior that affects the whole `language` module.
 //

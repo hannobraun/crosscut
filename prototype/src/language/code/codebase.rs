@@ -36,6 +36,20 @@ impl Codebase {
         Location { index: 0 }
     }
 
+    pub fn location_before(&self, location: &Location) -> Option<Location> {
+        if location.index == 0 {
+            todo!(
+                "Querying location before first location is not supported yet."
+            );
+        }
+
+        let previous_index = location.index - 1;
+
+        Some(Location {
+            index: previous_index,
+        })
+    }
+
     pub fn location_after(&self, location: &Location) -> Option<Location> {
         let next_index = location.index + 1;
         assert!(

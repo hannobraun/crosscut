@@ -41,7 +41,16 @@ impl Editor {
         if let Some(action) = self.input.update(event) {
             match action {
                 UpdateAction::NavigateToPreviousNode => {
-                    // not supported yet
+                    if let Some(location) =
+                        codebase.location_before(&self.editing)
+                    {
+                        self.editing = location;
+
+                        let node = codebase.node_at(&location);
+                        self.input = EditorInputBuffer::new(
+                            node.display(host).to_string(),
+                        );
+                    }
                 }
                 UpdateAction::SubmitNode { submitted } => {
                     compile(&submitted, &self.editing, host, codebase);
