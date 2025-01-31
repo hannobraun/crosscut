@@ -4,7 +4,7 @@ mod location;
 mod types;
 
 pub use self::{
-    codebase::{Codebase, Expression, Node},
+    codebase::{CodeError, Codebase, Expression, Node},
     intrinsics::IntrinsicFunction,
     location::{LocatedNode, Location},
     types::Type,

@@ -1,5 +1,7 @@
 use super::{
-    code::{Codebase, Expression, IntrinsicFunction, Location, Node},
+    code::{
+        CodeError, Codebase, Expression, IntrinsicFunction, Location, Node,
+    },
     host::Host,
     runtime::Value,
 };
@@ -31,6 +33,8 @@ pub fn compile(
             },
         }
     } else {
+        codebase.insert_error(*location, CodeError::UnresolvedIdentifier);
+
         Node::UnresolvedIdentifier {
             name: token.to_string(),
         }

@@ -1,4 +1,5 @@
 use crate::language::{
+    code::CodeError,
     instance::Language,
     runtime::{StepResult, Value},
 };
@@ -30,6 +31,12 @@ fn unresolved_identifier() {
     let mut language = Language::without_host();
 
     language.enter_code("unknown");
+
+    let unknown = language.codebase().nodes().next().unwrap().location;
+    assert_eq!(
+        language.codebase().error_at(&unknown),
+        Some(&CodeError::UnresolvedIdentifier),
+    );
 
     assert_eq!(language.step(), StepResult::Error);
 }

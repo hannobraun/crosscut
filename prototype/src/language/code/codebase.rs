@@ -79,6 +79,15 @@ impl Codebase {
     pub fn replace_node(&mut self, to_replace: &Location, replacement: Node) {
         self.nodes[to_replace.index] = replacement;
     }
+
+    #[cfg(test)]
+    pub fn error_at(&self, location: &Location) -> Option<&CodeError> {
+        self.errors.get(location)
+    }
+
+    pub fn insert_error(&mut self, location: Location, error: CodeError) {
+        self.errors.insert(location, error);
+    }
 }
 
 #[derive(Clone, Debug, Eq, PartialEq)]
@@ -95,4 +104,6 @@ pub enum Expression {
 }
 
 #[derive(Clone, Debug, Eq, PartialEq)]
-pub enum CodeError {}
+pub enum CodeError {
+    UnresolvedIdentifier,
+}
