@@ -27,7 +27,9 @@ pub fn compile(
     } else {
         // The token is an identifier.
 
-        if let Some(id) = host.function_id_by_name(token) {
+        let host_function = host.function_id_by_name(token);
+
+        if let Some(id) = host_function {
             Node::Expression {
                 expression: Expression::HostFunction { id },
             }
