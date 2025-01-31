@@ -61,8 +61,8 @@ impl Interpreter {
                 InterpreterState::Error { location: _ } => {
                     return StepResult::Error;
                 }
-                InterpreterState::Finished => {
-                    return StepResult::Finished { output: self.value };
+                InterpreterState::Finished { output } => {
+                    return StepResult::Finished { output };
                 }
             }
         };
@@ -101,7 +101,7 @@ impl Interpreter {
 
     fn next<'r>(&self, codebase: &'r Codebase) -> InterpreterState<'r> {
         let Some(location) = self.next else {
-            return InterpreterState::Finished;
+            return InterpreterState::Finished { output: self.value };
         };
 
         if let Some(effect) = self.effect {
@@ -143,7 +143,9 @@ pub enum InterpreterState<'r> {
     Error {
         location: Location,
     },
-    Finished,
+    Finished {
+        output: Value,
+    },
 }
 
 impl InterpreterState<'_> {
@@ -159,7 +161,7 @@ impl InterpreterState<'_> {
                 location,
             } => Some(location),
             Self::Error { location } => Some(location),
-            Self::Finished => None,
+            Self::Finished { output: _ } => None,
         }
     }
 }

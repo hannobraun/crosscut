@@ -94,7 +94,7 @@ fn render_interpreter_state<A: EditorOutputAdapter>(
                 adapter
                     .color(ERROR_COLOR, |adapter| writeln!(adapter, "Error"))?;
             }
-            InterpreterState::Finished => {
+            InterpreterState::Finished { output: _ } => {
                 adapter.color(Color::DarkYellow, |adapter| {
                     writeln!(adapter, "Finished")
                 })?;
