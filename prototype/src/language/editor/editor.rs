@@ -47,7 +47,6 @@ impl Editor {
         }
 
         let node = compile(self.input.buffer(), host);
-
         codebase.replace(&self.editing, node);
 
         // Unconditionally resetting the interpreter like this, is not going to
