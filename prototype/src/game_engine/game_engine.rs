@@ -67,6 +67,18 @@ where
     ) -> anyhow::Result<()> {
         self.editor_input.on_input(event, &mut self.language);
 
+        self.run_program_until_finished();
+
+        self.render_editor()?;
+
+        Ok(())
+    }
+
+    pub fn game_output(&mut self) -> impl Iterator<Item = GameOutput> + '_ {
+        self.game_output.drain(..)
+    }
+
+    fn run_program_until_finished(&mut self) {
         loop {
             match self.language.step() {
                 StepResult::FunctionApplied { output: _ } => {
@@ -103,14 +115,6 @@ where
 
             break;
         }
-
-        self.render_editor()?;
-
-        Ok(())
-    }
-
-    pub fn game_output(&mut self) -> impl Iterator<Item = GameOutput> + '_ {
-        self.game_output.drain(..)
     }
 
     fn apply_host_function(&mut self, id: u32, input: Value) {
