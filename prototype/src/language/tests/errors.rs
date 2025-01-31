@@ -30,7 +30,7 @@ fn unresolved_identifier() {
 
     let mut language = Language::without_host();
 
-    language.enter_code("unknown");
+    language.enter_code("identit");
 
     // The error should be registered in `Codebase`.
     let unresolved = language.codebase().nodes().next().unwrap().location;
