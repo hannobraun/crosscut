@@ -28,16 +28,18 @@ pub fn compile(
         // The token is an identifier.
 
         let host_function = host.function_id_by_name(token);
+        let intrinsic_function = match token {
+            "identity" => Some(IntrinsicFunction::Identity),
+            _ => None,
+        };
 
         if let Some(id) = host_function {
             Node::Expression {
                 expression: Expression::HostFunction { id },
             }
-        } else if token == "identity" {
+        } else if let Some(function) = intrinsic_function {
             Node::Expression {
-                expression: Expression::IntrinsicFunction {
-                    function: IntrinsicFunction::Identity,
-                },
+                expression: Expression::IntrinsicFunction { function },
             }
         } else {
             codebase.insert_error(*location, CodeError::UnresolvedIdentifier);
