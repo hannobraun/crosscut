@@ -12,7 +12,6 @@ pub enum Node {
 }
 
 impl Node {
-    #[allow(unused)] // code using this is being worked on
     pub fn display<'r>(&'r self, host: &'r Host) -> NodeDisplay<'r> {
         NodeDisplay { node: self, host }
     }
