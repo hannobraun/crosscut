@@ -6,11 +6,11 @@ use super::{
 
 pub fn compile(
     token: &str,
-    _: &Location,
+    location: &Location,
     host: &Host,
-    _: &mut Codebase,
-) -> Node {
-    if token.is_empty() {
+    codebase: &mut Codebase,
+) {
+    let node = if token.is_empty() {
         Node::Empty
     } else if let Ok(value) = token.parse() {
         Node::Expression {
@@ -34,5 +34,7 @@ pub fn compile(
         Node::UnresolvedIdentifier {
             name: token.to_string(),
         }
-    }
+    };
+
+    codebase.replace_node(location, node);
 }
