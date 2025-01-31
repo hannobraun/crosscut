@@ -97,7 +97,7 @@ fn moving_cursor_up_should_navigate_to_previous_node() {
 
     assert_eq!(
         language.step_until_finished(),
-        Ok(Value::Integer { value: 127 })
+        Ok(Value::Integer { value: 127 }),
     );
 }
 
@@ -115,7 +115,7 @@ fn moving_cursor_up_at_first_node_should_do_nothing() {
 
     assert_eq!(
         language.step_until_finished(),
-        Ok(Value::Integer { value: 127 })
+        Ok(Value::Integer { value: 127 }),
     );
 }
 
