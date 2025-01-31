@@ -101,6 +101,24 @@ fn moving_cursor_up_should_navigate_to_previous_node() {
     );
 }
 
+#[test]
+fn moving_cursor_up_at_first_node_should_do_nothing() {
+    // If already at the first node, moving to the previous one should do
+    // nothing.
+
+    let mut language = Language::without_host();
+
+    language.enter_code("17");
+    language.on_input(EditorInputEvent::MoveCursorLeft);
+    language.on_input(EditorInputEvent::MoveCursorUp);
+    language.enter_code("2");
+
+    assert_eq!(
+        language.step_until_finished(),
+        Ok(Value::Integer { value: 127 })
+    );
+}
+
 // There is lots of editing behavior that's not tested here, as this test suite
 // focuses on high-level behavior that affects the whole `language` module.
 //
