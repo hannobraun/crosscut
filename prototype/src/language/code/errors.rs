@@ -10,8 +10,31 @@ pub enum CodeError {
 impl fmt::Display for CodeError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match self {
-            CodeError::UnresolvedIdentifier { candidates: _ } => {
+            CodeError::UnresolvedIdentifier { candidates } => {
                 write!(f, "unresolved identifier")?;
+
+                if !candidates.is_empty() {
+                    write!(f, " (could resolve to")?;
+
+                    for (i, candidate) in candidates.iter().enumerate() {
+                        if i == 0 {
+                            write!(f, " ")?;
+                        } else {
+                            write!(f, ", ")?;
+                        }
+
+                        match candidate {
+                            Expression::HostFunction { .. } => {
+                                write!(f, "host function")?;
+                            }
+                            Expression::IntrinsicFunction { .. } => {
+                                write!(f, "intrinsic function")?;
+                            }
+                        }
+                    }
+
+                    write!(f, ")")?;
+                }
             }
         }
 
