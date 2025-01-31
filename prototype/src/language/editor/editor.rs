@@ -46,8 +46,7 @@ impl Editor {
             }
         }
 
-        let token = self.input.buffer();
-        let node = compile(token, host);
+        let node = compile(self.input.buffer(), host);
 
         codebase.replace(&self.editing, node);
 
