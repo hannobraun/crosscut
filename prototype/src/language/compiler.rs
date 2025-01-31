@@ -33,19 +33,20 @@ pub fn compile(
             _ => None,
         };
 
-        if let Some(id) = host_function {
-            Node::Expression {
+        match (host_function, intrinsic_function) {
+            (Some(id), None) => Node::Expression {
                 expression: Expression::HostFunction { id },
-            }
-        } else if let Some(function) = intrinsic_function {
-            Node::Expression {
+            },
+            (None, Some(function)) => Node::Expression {
                 expression: Expression::IntrinsicFunction { function },
-            }
-        } else {
-            codebase.insert_error(*location, CodeError::UnresolvedIdentifier);
+            },
+            _ => {
+                codebase
+                    .insert_error(*location, CodeError::UnresolvedIdentifier);
 
-            Node::UnresolvedIdentifier {
-                name: token.to_string(),
+                Node::UnresolvedIdentifier {
+                    name: token.to_string(),
+                }
             }
         }
     };

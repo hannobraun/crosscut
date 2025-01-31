@@ -1,5 +1,6 @@
 use crate::language::{
     code::CodeError,
+    host::Host,
     instance::Language,
     runtime::{StepResult, Value},
 };
@@ -48,6 +49,25 @@ fn unresolved_identifier() {
     let resolved = language.codebase().nodes().next().unwrap().location;
     assert_eq!(language.codebase().error_at(&resolved), None);
     assert_eq!(language.step_until_finished(), Ok(Value::None));
+}
+
+#[test]
+fn identifier_that_could_resolve_to_multiple_functions_is_unresolved() {
+    // If an identifier could resolve to multiple functions, it should remain
+    // unresolved, and an error should be shown.
+
+    let mut host = Host::new();
+    host.function(0, "identity");
+
+    let mut language = Language::with_host(host);
+
+    language.enter_code("identity");
+
+    let unresolved = language.codebase().nodes().next().unwrap().location;
+    assert_eq!(
+        language.codebase().error_at(&unresolved),
+        Some(&CodeError::UnresolvedIdentifier),
+    );
 }
 
 #[test]
