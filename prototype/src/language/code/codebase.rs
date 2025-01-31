@@ -80,7 +80,6 @@ impl Codebase {
         self.nodes[to_replace.index] = replacement;
     }
 
-    #[cfg(test)]
     pub fn error_at(&self, location: &Location) -> Option<&CodeError> {
         self.errors.get(location)
     }
