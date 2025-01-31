@@ -42,6 +42,7 @@ fn unresolved_identifier() {
     // And it should also result in a runtime error when stepping.
     assert_eq!(language.step(), StepResult::Error);
 
+    // Once we resolve the error, it should no longer be there.
     language.enter_code("y");
 
     let resolved = language.codebase().nodes().next().unwrap().location;
