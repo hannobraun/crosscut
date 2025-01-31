@@ -1,4 +1,4 @@
-use std::cmp::min;
+use std::{cmp::min, mem};
 
 #[derive(Debug, Eq, PartialEq)]
 pub struct EditorInputBuffer {
@@ -108,13 +108,16 @@ impl EditorInputBuffer {
     }
 
     fn submit_token(&mut self) -> UpdateAction {
+        let old_buffer = mem::take(&mut self.buffer);
         *self = Self::new(String::new());
-        UpdateAction::SubmitToken
+        UpdateAction::SubmitToken {
+            submitted: old_buffer,
+        }
     }
 }
 
 pub enum UpdateAction {
-    SubmitToken,
+    SubmitToken { submitted: String },
 }
 
 struct MoveBeyondLimit;
