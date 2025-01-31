@@ -15,7 +15,7 @@ pub struct Editor {
 
 impl Editor {
     pub fn new(codebase: &mut Codebase) -> Self {
-        let editing = codebase.push(Node::Empty);
+        let editing = codebase.push_node(Node::Empty);
 
         Self {
             input: EditorInputBuffer::empty(),
@@ -44,7 +44,7 @@ impl Editor {
                     let node = compile(&submitted, host, codebase);
                     codebase.replace(&self.editing, node);
 
-                    self.editing = codebase.push(Node::Empty);
+                    self.editing = codebase.push_node(Node::Empty);
                 }
             }
         }

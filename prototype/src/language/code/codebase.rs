@@ -68,7 +68,7 @@ impl Codebase {
         node
     }
 
-    pub fn push(&mut self, node: Node) -> Location {
+    pub fn push_node(&mut self, node: Node) -> Location {
         let location = Location {
             index: self.nodes.len(),
         };
