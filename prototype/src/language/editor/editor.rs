@@ -64,7 +64,8 @@ impl Editor {
                 }
                 UpdateAction::Submit { submitted } => {
                     compile(&submitted, self.editing, host, codebase);
-                    self.editing = codebase.push_node(Node::Empty);
+                    self.editing =
+                        codebase.push_node(self.editing, Node::Empty);
                 }
             }
         }

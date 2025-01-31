@@ -1,5 +1,5 @@
 use crate::language::{
-    editor::EditorInputEvent, instance::Language, runtime::Value,
+    editor::EditorInputEvent, host::Host, instance::Language, runtime::Value,
 };
 
 #[test]
@@ -64,6 +64,47 @@ fn update_after_removing_all_characters() {
 
     language.on_input(EditorInputEvent::RemoveLeft);
     assert_eq!(language.step_until_finished(), Ok(Value::None));
+}
+
+#[test]
+fn submitting_the_node_should_insert_a_new_one_after_the_current_one() {
+    // When submitting a node, a new one should be inserted after the one we
+    // just submitted.
+
+    let mut host = Host::new();
+    host.function(0, "zero");
+    host.function(1, "127_if_zero");
+
+    let mut language = Language::with_host(host);
+
+    language.enter_code("255 127_if_zero");
+    language.on_input(EditorInputEvent::MoveCursorUp);
+    language.on_input(EditorInputEvent::SubmitNode);
+    language.enter_code("zero");
+
+    let output =
+        language.step_until_finished_and_handle_host_functions(|id, input| {
+            match id {
+                0 => {
+                    // `zero`
+                    Ok(Value::Integer { value: 0 })
+                }
+                1 => {
+                    // `127_if_zero`
+
+                    if let Value::Integer { value: 0 } = input {
+                        Ok(Value::Integer { value: 127 })
+                    } else {
+                        Ok(input)
+                    }
+                }
+                id => {
+                    unreachable!("Unknown host function: {id}");
+                }
+            }
+        });
+
+    assert_eq!(output, Ok(Value::Integer { value: 127 }));
 }
 
 #[test]
