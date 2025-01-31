@@ -14,7 +14,7 @@ pub struct Editor {
 }
 
 impl Editor {
-    pub fn new(codebase: &mut Codebase) -> Self {
+    pub fn new(codebase: &Codebase) -> Self {
         Self {
             input: EditorInputBuffer::empty(),
             editing: codebase.entry(),

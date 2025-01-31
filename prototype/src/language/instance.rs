@@ -15,8 +15,8 @@ pub struct Language {
 
 impl Language {
     pub fn with_host(host: Host) -> Self {
-        let mut codebase = Codebase::new();
-        let editor = Editor::new(&mut codebase);
+        let codebase = Codebase::new();
+        let editor = Editor::new(&codebase);
         let interpreter = Interpreter::new(&codebase);
 
         Self {
