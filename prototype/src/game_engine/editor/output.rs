@@ -90,7 +90,7 @@ fn render_interpreter_state<A: EditorOutputAdapter>(
                     Ok(())
                 })?;
             }
-            InterpreterState::Error { .. } => {
+            InterpreterState::Error { location: _ } => {
                 adapter
                     .color(ERROR_COLOR, |adapter| writeln!(adapter, "Error"))?;
             }
