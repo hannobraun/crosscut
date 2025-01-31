@@ -12,6 +12,8 @@ pub fn compile(
     host: &Host,
     codebase: &mut Codebase,
 ) {
+    codebase.clear_error(location);
+
     let node = if token.is_empty() {
         Node::Empty
     } else if let Ok(value) = token.parse() {

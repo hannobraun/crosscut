@@ -87,6 +87,10 @@ impl Codebase {
     pub fn insert_error(&mut self, location: Location, error: CodeError) {
         self.errors.insert(location, error);
     }
+
+    pub fn clear_error(&mut self, location: &Location) {
+        self.errors.remove(location);
+    }
 }
 
 #[derive(Clone, Debug, Eq, PartialEq)]
