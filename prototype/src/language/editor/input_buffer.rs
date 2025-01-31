@@ -286,7 +286,7 @@ mod tests {
     }
 
     #[test]
-    fn submit_node() {
+    fn submit() {
         let mut input = EditorInputBuffer::empty();
 
         input.update(Insert { ch: '1' });
