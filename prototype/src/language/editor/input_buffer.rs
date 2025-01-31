@@ -56,7 +56,7 @@ impl EditorInputBuffer {
                 self.remove_right();
             }
             SubmitNode => {
-                return Some(self.submit_node());
+                return Some(self.submit());
             }
         }
 
@@ -113,7 +113,7 @@ impl EditorInputBuffer {
         }
     }
 
-    fn submit_node(&mut self) -> UpdateAction {
+    fn submit(&mut self) -> UpdateAction {
         let mut old_buffer = mem::take(&mut self.buffer);
         let new_buffer = old_buffer.split_off(self.cursor);
 
