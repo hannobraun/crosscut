@@ -37,12 +37,12 @@ pub fn compile(
             (None, Some(function)) => Node::Expression {
                 expression: Expression::IntrinsicFunction { function },
             },
-            _ => emit_unresolved_identifier_error(
-                token,
-                *location,
-                vec![],
-                codebase,
-            ),
+            _ => {
+                let candidates = vec![];
+                emit_unresolved_identifier_error(
+                    token, *location, candidates, codebase,
+                )
+            }
         }
     };
 
