@@ -42,7 +42,6 @@ impl Editor {
             match action {
                 UpdateAction::SubmitToken { submitted } => {
                     compile(&submitted, &self.editing, host, codebase);
-
                     self.editing = codebase.push_node(Node::Empty);
                 }
             }
