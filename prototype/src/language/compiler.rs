@@ -38,8 +38,10 @@ pub fn compile(
                 expression: Expression::IntrinsicFunction { function },
             },
             _ => {
-                codebase
-                    .insert_error(*location, CodeError::UnresolvedIdentifier);
+                codebase.insert_error(
+                    *location,
+                    CodeError::UnresolvedIdentifier { candidates: vec![] },
+                );
 
                 Node::UnresolvedIdentifier {
                     name: token.to_string(),

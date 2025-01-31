@@ -37,7 +37,7 @@ fn unresolved_identifier() {
     let unresolved = language.codebase().nodes().next().unwrap().location;
     assert_eq!(
         language.codebase().error_at(&unresolved),
-        Some(&CodeError::UnresolvedIdentifier),
+        Some(&CodeError::UnresolvedIdentifier { candidates: vec![] }),
     );
 
     // And it should also result in a runtime error when stepping.
@@ -66,7 +66,7 @@ fn identifier_that_could_resolve_to_multiple_functions_is_unresolved() {
     let unresolved = language.codebase().nodes().next().unwrap().location;
     assert_eq!(
         language.codebase().error_at(&unresolved),
-        Some(&CodeError::UnresolvedIdentifier),
+        Some(&CodeError::UnresolvedIdentifier { candidates: vec![] }),
     );
 }
 
