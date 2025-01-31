@@ -277,7 +277,7 @@ mod tests {
     }
 
     #[test]
-    fn submit_token() {
+    fn submit_node() {
         let mut input = EditorInputBuffer::empty();
 
         input.update(Insert { ch: '1' });
