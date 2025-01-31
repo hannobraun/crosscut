@@ -34,7 +34,10 @@ impl GameEngine<DebugOutputAdapter> {
 impl GameEngine<RawTerminalAdapter> {
     pub fn with_editor_ui() -> anyhow::Result<Self> {
         let adapter = RawTerminalAdapter::new()?;
-        let game_engine = Self::new(adapter);
+
+        let mut game_engine = Self::new(adapter);
+        game_engine.render_editor()?;
+
         Ok(game_engine)
     }
 }
