@@ -24,21 +24,25 @@ pub fn compile(
                 },
             },
         }
-    } else if let Some(id) = host.function_id_by_name(token) {
-        Node::Expression {
-            expression: Expression::HostFunction { id },
-        }
-    } else if token == "identity" {
-        Node::Expression {
-            expression: Expression::IntrinsicFunction {
-                function: IntrinsicFunction::Identity,
-            },
-        }
     } else {
-        codebase.insert_error(*location, CodeError::UnresolvedIdentifier);
+        // The token is an identifier.
 
-        Node::UnresolvedIdentifier {
-            name: token.to_string(),
+        if let Some(id) = host.function_id_by_name(token) {
+            Node::Expression {
+                expression: Expression::HostFunction { id },
+            }
+        } else if token == "identity" {
+            Node::Expression {
+                expression: Expression::IntrinsicFunction {
+                    function: IntrinsicFunction::Identity,
+                },
+            }
+        } else {
+            codebase.insert_error(*location, CodeError::UnresolvedIdentifier);
+
+            Node::UnresolvedIdentifier {
+                name: token.to_string(),
+            }
         }
     };
 
