@@ -8,11 +8,11 @@ use super::{
 
 pub fn compile(
     token: &str,
-    location: &Location,
+    location: Location,
     host: &Host,
     codebase: &mut Codebase,
 ) {
-    codebase.clear_error(location);
+    codebase.clear_error(&location);
 
     let node = if token.is_empty() {
         Node::Empty
@@ -40,7 +40,7 @@ pub fn compile(
             (None, None) => {
                 let candidates = Vec::new();
                 emit_unresolved_identifier_error(
-                    token, *location, candidates, codebase,
+                    token, location, candidates, codebase,
                 )
             }
             (Some(id), Some(function)) => {
@@ -49,13 +49,13 @@ pub fn compile(
                     Expression::IntrinsicFunction { function },
                 ];
                 emit_unresolved_identifier_error(
-                    token, *location, candidates, codebase,
+                    token, location, candidates, codebase,
                 )
             }
         }
     };
 
-    codebase.replace_node(location, node);
+    codebase.replace_node(&location, node);
 }
 
 fn emit_unresolved_identifier_error(

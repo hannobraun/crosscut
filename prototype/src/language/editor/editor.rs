@@ -63,13 +63,13 @@ impl Editor {
                     }
                 }
                 UpdateAction::Submit { submitted } => {
-                    compile(&submitted, &self.editing, host, codebase);
+                    compile(&submitted, self.editing, host, codebase);
                     self.editing = codebase.push_node(Node::Empty);
                 }
             }
         }
 
-        compile(self.input.buffer(), &self.editing, host, codebase);
+        compile(self.input.buffer(), self.editing, host, codebase);
 
         // Unconditionally resetting the interpreter like this, is not going to
         // work long-term. It should only be reset, if it's finished.
