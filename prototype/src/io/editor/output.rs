@@ -189,7 +189,7 @@ impl fmt::Write for RawTerminalAdapter {
 
 impl Drop for RawTerminalAdapter {
     fn drop(&mut self) {
-        // Nothing we can do about a potential error here.
+        // Nothing we can do about potential errors here.
         let _ = terminal::disable_raw_mode();
     }
 }
