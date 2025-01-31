@@ -11,7 +11,6 @@ pub enum Expression {
 }
 
 impl Expression {
-    #[allow(unused)] // code using this is being worked on
     pub fn display<'r>(&'r self, host: &'r Host) -> ExpressionDisplay<'r> {
         ExpressionDisplay {
             expression: self,
