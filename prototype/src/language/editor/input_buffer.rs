@@ -113,14 +113,14 @@ impl EditorInputBuffer {
 
         *self = Self::new(new_buffer);
 
-        UpdateAction::SubmitToken {
+        UpdateAction::SubmitNode {
             submitted: old_buffer,
         }
     }
 }
 
 pub enum UpdateAction {
-    SubmitToken { submitted: String },
+    SubmitNode { submitted: String },
 }
 
 struct MoveBeyondLimit;

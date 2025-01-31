@@ -40,7 +40,7 @@ impl Editor {
     ) {
         if let Some(action) = self.input.update(event) {
             match action {
-                UpdateAction::SubmitToken { submitted } => {
+                UpdateAction::SubmitNode { submitted } => {
                     compile(&submitted, &self.editing, host, codebase);
                     self.editing = codebase.push_node(Node::Empty);
                 }
