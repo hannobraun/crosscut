@@ -68,8 +68,8 @@ fn update_after_removing_all_characters() {
 
 #[test]
 fn split_node_if_submitting_while_cursor_is_in_the_middle() {
-    // If we submit the token we currently edit, while the cursor is in the
-    // middle of it, we should split the token right there.
+    // If we submit the node we're currently editing, while the cursor is in the
+    // middle of it, we should split the node right there.
 
     let mut language = Language::without_host();
 
