@@ -37,18 +37,24 @@ pub fn compile(
             (None, Some(function)) => Node::Expression {
                 expression: Expression::IntrinsicFunction { function },
             },
-            _ => {
-                codebase.insert_error(
-                    *location,
-                    CodeError::UnresolvedIdentifier { candidates: vec![] },
-                );
-
-                Node::UnresolvedIdentifier {
-                    name: token.to_string(),
-                }
-            }
+            _ => emit_unresolved_identifier_error(token, location, codebase),
         }
     };
 
     codebase.replace_node(location, node);
+}
+
+fn emit_unresolved_identifier_error(
+    token: &str,
+    location: &Location,
+    codebase: &mut Codebase,
+) -> Node {
+    codebase.insert_error(
+        *location,
+        CodeError::UnresolvedIdentifier { candidates: vec![] },
+    );
+
+    Node::UnresolvedIdentifier {
+        name: token.to_string(),
+    }
 }
