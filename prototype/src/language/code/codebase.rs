@@ -76,7 +76,7 @@ impl Codebase {
         location
     }
 
-    pub fn replace(&mut self, to_replace: &Location, replacement: Node) {
+    pub fn replace_node(&mut self, to_replace: &Location, replacement: Node) {
         self.nodes[to_replace.index] = replacement;
     }
 }
