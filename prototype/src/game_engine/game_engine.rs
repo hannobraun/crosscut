@@ -66,9 +66,7 @@ where
         event: TerminalInputEvent,
     ) -> anyhow::Result<()> {
         self.editor_input.on_input(event, &mut self.language);
-
         self.run_program_until_finished();
-
         self.render_editor()?;
 
         Ok(())
