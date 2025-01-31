@@ -3,7 +3,7 @@ use crossterm::style::{Attribute, Color};
 use crate::{
     io::editor::output::{Cursor, EditorOutputAdapter},
     language::{
-        code::{CodeError, Codebase, Expression, LocatedNode, Node},
+        code::{Codebase, Expression, LocatedNode, Node},
         editor::Editor,
         host::Host,
         instance::Language,
@@ -179,12 +179,8 @@ fn render_node<A: EditorOutputAdapter>(
     }
 
     if let Some(error) = context.codebase.error_at(&located_node.location) {
-        let message = match error {
-            CodeError::UnresolvedIdentifier => "unresolved identifier",
-        };
-
         adapter.color(ERROR_COLOR, |adapter| {
-            write!(adapter, "    error: {message}")
+            write!(adapter, "    error: {error}")
         })?;
     }
 
