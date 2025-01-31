@@ -1,6 +1,6 @@
 use std::collections::BTreeMap;
 
-use super::{CodeError, Expression, LocatedNode, Location};
+use super::{CodeError, LocatedNode, Location, Node};
 
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub struct Codebase {
@@ -91,11 +91,4 @@ impl Codebase {
     pub fn clear_error(&mut self, location: &Location) {
         self.errors.remove(location);
     }
-}
-
-#[derive(Clone, Debug, Eq, PartialEq)]
-pub enum Node {
-    Empty,
-    Expression { expression: Expression },
-    UnresolvedIdentifier { name: String },
 }
