@@ -38,7 +38,7 @@ pub fn compile(
                 expression: Expression::IntrinsicFunction { function },
             },
             _ => {
-                let candidates = vec![];
+                let candidates = Vec::new();
                 emit_unresolved_identifier_error(
                     token, *location, candidates, codebase,
                 )
