@@ -44,7 +44,7 @@ impl EditorInputBuffer {
                 self.move_cursor_right();
             }
             MoveCursorUp => {
-                // not supported yet
+                return Some(UpdateAction::NavigateToPreviousNode);
             }
             MoveCursorDown => {
                 // not supported yet
@@ -126,6 +126,7 @@ impl EditorInputBuffer {
 }
 
 pub enum UpdateAction {
+    NavigateToPreviousNode,
     SubmitNode { submitted: String },
 }
 
