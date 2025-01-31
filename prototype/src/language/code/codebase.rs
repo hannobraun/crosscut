@@ -1,13 +1,19 @@
+use std::collections::BTreeMap;
+
 use super::{IntrinsicFunction, LocatedNode, Location};
 
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub struct Codebase {
     nodes: Vec<Node>,
+    errors: BTreeMap<Location, CodeError>,
 }
 
 impl Codebase {
     pub fn new() -> Self {
-        Self { nodes: Vec::new() }
+        Self {
+            nodes: Vec::new(),
+            errors: BTreeMap::new(),
+        }
     }
 
     pub fn nodes(&self) -> impl Iterator<Item = LocatedNode> {
@@ -87,3 +93,6 @@ pub enum Expression {
     HostFunction { id: u32 },
     IntrinsicFunction { function: IntrinsicFunction },
 }
+
+#[derive(Clone, Debug, Eq, PartialEq)]
+pub enum CodeError {}
