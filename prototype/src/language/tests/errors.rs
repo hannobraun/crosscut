@@ -1,5 +1,5 @@
 use crate::language::{
-    code::CodeError,
+    code::{CodeError, Expression, IntrinsicFunction},
     host::Host,
     instance::Language,
     runtime::{StepResult, Value},
@@ -66,7 +66,14 @@ fn identifier_that_could_resolve_to_multiple_functions_is_unresolved() {
     let unresolved = language.codebase().nodes().next().unwrap().location;
     assert_eq!(
         language.codebase().error_at(&unresolved),
-        Some(&CodeError::UnresolvedIdentifier { candidates: vec![] }),
+        Some(&CodeError::UnresolvedIdentifier {
+            candidates: vec![
+                Expression::HostFunction { id: 0 },
+                Expression::IntrinsicFunction {
+                    function: IntrinsicFunction::Identity
+                }
+            ]
+        }),
     );
 }
 

@@ -37,8 +37,17 @@ pub fn compile(
             (None, Some(function)) => Node::Expression {
                 expression: Expression::IntrinsicFunction { function },
             },
-            _ => {
+            (None, None) => {
                 let candidates = Vec::new();
+                emit_unresolved_identifier_error(
+                    token, *location, candidates, codebase,
+                )
+            }
+            (Some(id), Some(function)) => {
+                let candidates = vec![
+                    Expression::HostFunction { id },
+                    Expression::IntrinsicFunction { function },
+                ];
                 emit_unresolved_identifier_error(
                     token, *location, candidates, codebase,
                 )
