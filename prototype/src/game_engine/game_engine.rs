@@ -50,12 +50,15 @@ where
         let mut host = Host::new();
         host.function(0, "dim");
 
-        Self {
+        let mut game_engine = Self {
             language: Language::with_host(host),
             game_output: Vec::new(),
             editor_input: TerminalEditorInput::new(),
             editor_output: TerminalEditorOutput::new(adapter),
-        }
+        };
+        game_engine.run_program_until_finished();
+
+        game_engine
     }
 
     pub fn render_editor(&mut self) -> anyhow::Result<()> {
