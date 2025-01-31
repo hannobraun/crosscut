@@ -119,6 +119,20 @@ fn moving_cursor_up_at_first_node_should_do_nothing() {
     );
 }
 
+#[test]
+fn moving_cursor_down_should_navigate_to_next_node() {
+    // It is possible to navigate to the next node in the editor.
+
+    let mut language = Language::without_host();
+
+    language.enter_code("identity identit");
+    language.on_input(EditorInputEvent::MoveCursorUp);
+    language.on_input(EditorInputEvent::MoveCursorDown);
+    language.enter_code("y");
+
+    assert_eq!(language.step_until_finished(), Ok(Value::None));
+}
+
 // There is lots of editing behavior that's not tested here, as this test suite
 // focuses on high-level behavior that affects the whole `language` module.
 //

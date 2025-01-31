@@ -53,7 +53,16 @@ impl Editor {
                     }
                 }
                 UpdateAction::NavigateToNextNode => {
-                    // not supported yet
+                    if let Some(location) =
+                        codebase.location_after(&self.editing)
+                    {
+                        self.editing = location;
+
+                        let node = codebase.node_at(&location);
+                        self.input = EditorInputBuffer::new(
+                            node.display(host).to_string(),
+                        );
+                    }
                 }
                 UpdateAction::Submit { submitted } => {
                     compile(&submitted, &self.editing, host, codebase);
