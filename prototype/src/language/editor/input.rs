@@ -1,12 +1,12 @@
 use std::cmp::min;
 
 #[derive(Debug, Eq, PartialEq)]
-pub struct EditorInput {
+pub struct EditorInputBuffer {
     buffer: String,
     cursor: usize,
 }
 
-impl EditorInput {
+impl EditorInputBuffer {
     pub fn new(buffer: String) -> Self {
         let cursor = buffer.chars().count();
         Self { buffer, cursor }
@@ -131,11 +131,11 @@ pub enum EditorInputEvent {
 
 #[cfg(test)]
 mod tests {
-    use super::{EditorInput, EditorInputEvent::*};
+    use super::{EditorInputBuffer, EditorInputEvent::*};
 
     #[test]
     fn insert() {
-        let mut input = EditorInput::empty();
+        let mut input = EditorInputBuffer::empty();
 
         input.update(Insert { ch: '1' });
         assert_eq!(input.buffer(), "1");
@@ -146,7 +146,7 @@ mod tests {
 
     #[test]
     fn insert_at_cursor() {
-        let mut input = EditorInput::empty();
+        let mut input = EditorInputBuffer::empty();
 
         input.update(Insert { ch: '2' });
         assert_eq!(input.buffer(), "2");
@@ -162,7 +162,7 @@ mod tests {
 
     #[test]
     fn remove_left() {
-        let mut input = EditorInput::empty();
+        let mut input = EditorInputBuffer::empty();
 
         input.update(Insert { ch: '1' });
         input.update(Insert { ch: '2' });
@@ -177,7 +177,7 @@ mod tests {
 
     #[test]
     fn remove_left_at_cursor() {
-        let mut input = EditorInput::empty();
+        let mut input = EditorInputBuffer::empty();
 
         input.update(Insert { ch: '1' });
         input.update(Insert { ch: '2' });
@@ -190,7 +190,7 @@ mod tests {
 
     #[test]
     fn remove_left_while_already_at_leftmost_position() {
-        let mut input = EditorInput::empty();
+        let mut input = EditorInputBuffer::empty();
 
         input.update(Insert { ch: '1' });
         assert_eq!(input.buffer(), "1");
@@ -202,7 +202,7 @@ mod tests {
 
     #[test]
     fn remove_right() {
-        let mut input = EditorInput::empty();
+        let mut input = EditorInputBuffer::empty();
 
         input.update(Insert { ch: '1' });
         input.update(Insert { ch: '2' });
@@ -219,7 +219,7 @@ mod tests {
 
     #[test]
     fn remove_right_while_already_at_rightmost_position() {
-        let mut input = EditorInput::empty();
+        let mut input = EditorInputBuffer::empty();
 
         input.update(Insert { ch: '1' });
         assert_eq!(input.buffer(), "1");
@@ -230,7 +230,7 @@ mod tests {
 
     #[test]
     fn move_left_while_already_at_leftmost_position() {
-        let mut input = EditorInput::empty();
+        let mut input = EditorInputBuffer::empty();
 
         input.update(MoveCursorLeft);
         input.update(Insert { ch: '1' });
@@ -239,7 +239,7 @@ mod tests {
 
     #[test]
     fn move_right_while_already_at_rightmost_position() {
-        let mut input = EditorInput::empty();
+        let mut input = EditorInputBuffer::empty();
 
         input.update(MoveCursorRight);
         input.update(Insert { ch: '1' });
@@ -248,7 +248,7 @@ mod tests {
 
     #[test]
     fn move_cursor_over_non_ascii_characters() {
-        let mut input = EditorInput::empty();
+        let mut input = EditorInputBuffer::empty();
 
         input.update(Insert { ch: '横' });
         assert_eq!(input.buffer(), "横");
@@ -272,7 +272,7 @@ mod tests {
 
     #[test]
     fn submit_token() {
-        let mut input = EditorInput::empty();
+        let mut input = EditorInputBuffer::empty();
 
         input.update(Insert { ch: '1' });
         assert_eq!(input.buffer(), "1");

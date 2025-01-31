@@ -5,11 +5,11 @@ use crate::language::{
     runtime::Interpreter,
 };
 
-use super::{input::UpdateAction, EditorInput, EditorInputEvent};
+use super::{input::UpdateAction, EditorInputBuffer, EditorInputEvent};
 
 #[derive(Debug)]
 pub struct Editor {
-    input: EditorInput,
+    input: EditorInputBuffer,
     editing: Location,
 }
 
@@ -18,12 +18,12 @@ impl Editor {
         let editing = codebase.push(Node::Empty);
 
         Self {
-            input: EditorInput::empty(),
+            input: EditorInputBuffer::empty(),
             editing,
         }
     }
 
-    pub fn input(&self) -> &EditorInput {
+    pub fn input(&self) -> &EditorInputBuffer {
         &self.input
     }
 
