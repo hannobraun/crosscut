@@ -37,7 +37,12 @@ pub fn compile(
             (None, Some(function)) => Node::Expression {
                 expression: Expression::IntrinsicFunction { function },
             },
-            _ => emit_unresolved_identifier_error(token, *location, codebase),
+            _ => emit_unresolved_identifier_error(
+                token,
+                *location,
+                vec![],
+                codebase,
+            ),
         }
     };
 
@@ -47,12 +52,11 @@ pub fn compile(
 fn emit_unresolved_identifier_error(
     token: &str,
     location: Location,
+    candidates: Vec<Expression>,
     codebase: &mut Codebase,
 ) -> Node {
-    codebase.insert_error(
-        location,
-        CodeError::UnresolvedIdentifier { candidates: vec![] },
-    );
+    codebase
+        .insert_error(location, CodeError::UnresolvedIdentifier { candidates });
 
     Node::UnresolvedIdentifier {
         name: token.to_string(),
