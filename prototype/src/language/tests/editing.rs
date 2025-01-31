@@ -133,6 +133,22 @@ fn moving_cursor_down_should_navigate_to_next_node() {
     assert_eq!(language.step_until_finished(), Ok(Value::None));
 }
 
+#[test]
+fn moving_cursor_down_at_last_node_should_do_nothing() {
+    // If already at the last node, moving to the next one should do nothing.
+
+    let mut language = Language::without_host();
+
+    language.enter_code("12");
+    language.on_input(EditorInputEvent::MoveCursorDown);
+    language.enter_code("7");
+
+    assert_eq!(
+        language.step_until_finished(),
+        Ok(Value::Integer { value: 127 }),
+    );
+}
+
 // There is lots of editing behavior that's not tested here, as this test suite
 // focuses on high-level behavior that affects the whole `language` module.
 //
