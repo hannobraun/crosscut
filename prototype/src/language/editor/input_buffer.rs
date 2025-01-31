@@ -119,7 +119,7 @@ impl EditorInputBuffer {
 
         *self = Self::new(new_buffer);
 
-        UpdateAction::SubmitNode {
+        UpdateAction::Submit {
             submitted: old_buffer,
         }
     }
@@ -127,7 +127,7 @@ impl EditorInputBuffer {
 
 pub enum UpdateAction {
     NavigateToPrevious,
-    SubmitNode { submitted: String },
+    Submit { submitted: String },
 }
 
 struct MoveBeyondLimit;
