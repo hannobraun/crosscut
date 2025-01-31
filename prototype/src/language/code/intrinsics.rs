@@ -8,6 +8,15 @@ pub enum IntrinsicFunction {
     Literal { value: Value },
 }
 
+impl IntrinsicFunction {
+    pub fn resolve(name: &str) -> Option<Self> {
+        match name {
+            "identity" => Some(Self::Identity),
+            _ => None,
+        }
+    }
+}
+
 impl fmt::Display for IntrinsicFunction {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match self {

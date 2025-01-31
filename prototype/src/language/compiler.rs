@@ -28,10 +28,7 @@ pub fn compile(
         // The token is an identifier.
 
         let host_function = host.function_id_by_name(token);
-        let intrinsic_function = match token {
-            "identity" => Some(IntrinsicFunction::Identity),
-            _ => None,
-        };
+        let intrinsic_function = IntrinsicFunction::resolve(token);
 
         match (host_function, intrinsic_function) {
             (Some(id), None) => Node::Expression {
