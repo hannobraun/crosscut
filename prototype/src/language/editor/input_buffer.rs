@@ -288,7 +288,7 @@ mod tests {
     }
 
     #[test]
-    fn submit_token_at_cursor() {
+    fn submit_node_at_cursor() {
         let mut input = EditorInputBuffer::empty();
 
         input.update(Insert { ch: '1' });
