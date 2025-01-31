@@ -1,6 +1,6 @@
 use std::collections::BTreeMap;
 
-use super::{IntrinsicFunction, LocatedNode, Location};
+use super::{CodeError, IntrinsicFunction, LocatedNode, Location};
 
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub struct Codebase {
@@ -104,9 +104,4 @@ pub enum Node {
 pub enum Expression {
     HostFunction { id: u32 },
     IntrinsicFunction { function: IntrinsicFunction },
-}
-
-#[derive(Clone, Debug, Eq, PartialEq)]
-pub enum CodeError {
-    UnresolvedIdentifier,
 }
