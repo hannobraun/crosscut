@@ -91,8 +91,10 @@ fn render_interpreter_state<A: EditorOutputAdapter>(
                 })?;
             }
             InterpreterState::Error { location: _ } => {
-                adapter
-                    .color(ERROR_COLOR, |adapter| writeln!(adapter, "Error"))?;
+                adapter.color(ERROR_COLOR, |adapter| {
+                    writeln!(adapter, "Error")?;
+                    Ok(())
+                })?;
             }
             InterpreterState::Finished { output } => {
                 adapter.color(Color::DarkYellow, |adapter| {
