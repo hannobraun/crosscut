@@ -42,24 +42,14 @@ impl Editor {
                     if let Some(location) =
                         codebase.location_before(&self.editing)
                     {
-                        self.editing = location;
-
-                        let node = codebase.node_at(&location);
-                        self.input = EditorInputBuffer::new(
-                            node.display(host).to_string(),
-                        );
+                        self.navigate_to(location, codebase, host);
                     }
                 }
                 UpdateAction::NavigateToNextNode => {
                     if let Some(location) =
                         codebase.location_after(&self.editing)
                     {
-                        self.editing = location;
-
-                        let node = codebase.node_at(&location);
-                        self.input = EditorInputBuffer::new(
-                            node.display(host).to_string(),
-                        );
+                        self.navigate_to(location, codebase, host);
                     }
                 }
                 UpdateAction::Submit { submitted } => {
@@ -94,6 +84,18 @@ impl Editor {
                 *interpreter = Interpreter::new(codebase);
             }
         }
+    }
+
+    fn navigate_to(
+        &mut self,
+        location: Location,
+        codebase: &Codebase,
+        host: &Host,
+    ) {
+        self.editing = location;
+
+        let node = codebase.node_at(&location);
+        self.input = EditorInputBuffer::new(node.display(host).to_string());
     }
 }
 
