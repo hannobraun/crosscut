@@ -32,7 +32,7 @@ impl EditorInputBuffer {
                 assert!(
                     !ch.is_whitespace(),
                     "Expecting whitespace characters to be translated into \
-                    `SubmitToken`.",
+                    `SubmitNode`.",
                 );
 
                 self.insert(ch);
