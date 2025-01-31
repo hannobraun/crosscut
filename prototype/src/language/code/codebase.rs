@@ -11,7 +11,7 @@ pub struct Codebase {
 impl Codebase {
     pub fn new() -> Self {
         Self {
-            nodes: Vec::new(),
+            nodes: vec![],
             errors: BTreeMap::new(),
         }
     }
