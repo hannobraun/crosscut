@@ -112,6 +112,7 @@ impl TerminalInputEvent {
 
             Self::Left => Some(EditorInputEvent::MoveCursorLeft),
             Self::Right => Some(EditorInputEvent::MoveCursorRight),
+            Self::Up => Some(EditorInputEvent::MoveCursorUp),
 
             Self::Enter => Some(EditorInputEvent::SubmitNode),
 
