@@ -198,7 +198,9 @@ impl Drop for RawTerminalAdapter {
             println!("Failed to clear screen on shutdown: {err}");
         }
 
-        let _ = terminal::disable_raw_mode();
+        if let Err(err) = terminal::disable_raw_mode() {
+            println!("Failed to disable terminal raw mode on shutdown: {err}");
+        }
     }
 }
 
