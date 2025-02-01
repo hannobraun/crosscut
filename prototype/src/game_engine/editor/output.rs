@@ -3,11 +3,11 @@ use crossterm::style::{Attribute, Color};
 use crate::{
     io::editor::output::{Cursor, EditorOutputAdapter},
     language::{
-        code::{Codebase, Expression, LocatedNode, Node},
+        code::{Codebase, Expression, IntrinsicFunction, LocatedNode, Node},
         editor::Editor,
         host::Host,
         instance::Language,
-        runtime::{Effect, Interpreter, InterpreterState},
+        runtime::{Effect, Interpreter, InterpreterState, Value},
     },
 };
 
@@ -44,6 +44,7 @@ where
         render_interpreter_state(&mut self.adapter, &context)?;
         render_code(&mut self.adapter, &mut context)?;
         render_prompt(&mut self.adapter, editor_input, &mut context)?;
+        render_help(&mut self.adapter, &context)?;
 
         if let Some(Cursor { inner: [x, y] }) = context.cursor {
             self.adapter.move_cursor_to(x, y)?;
@@ -215,6 +216,106 @@ fn render_prompt<A: EditorOutputAdapter>(
 
             writeln!(adapter, "{}", input.buffer())?;
             writeln!(adapter, "Press ENTER to confirm, ESC to abort.")?;
+        }
+    }
+
+    Ok(())
+}
+
+fn render_help<A: EditorOutputAdapter>(
+    adapter: &mut A,
+    context: &RenderContext,
+) -> anyhow::Result<()> {
+    writeln!(adapter)?;
+
+    match context.codebase.node_at(context.editor.editing()) {
+        Node::Empty => {
+            writeln!(
+                adapter,
+                "You are editing an empty syntax node. Those get completely \
+                ignored at runtime. They exist as placeholders, while you're \
+                making up your mind about what you want to type."
+            )?;
+        }
+        Node::Expression { expression } => {
+            write!(adapter, "You are editing an expression. ")?;
+
+            match expression {
+                Expression::HostFunction { id: _ } => {
+                    writeln!(
+                        adapter,
+                        "This expression is the application of a host \
+                        function. Those are defined outside of Crosscut, by \
+                        the host. They allow your program to interact with the \
+                        outside world (in whatever way the host allows you to \
+                        do so).",
+                    )?;
+                }
+                Expression::IntrinsicFunction { function } => {
+                    writeln!(
+                        adapter,
+                        "This expression is the application of an intrinsic \
+                        function. Intrinsic functions are built into Crosscut, \
+                        and are available to every Crosscut program.",
+                    )?;
+                    writeln!(adapter)?;
+                    writeln!(
+                        adapter,
+                        "Intrinsic functions never allow interaction with the \
+                        outside world though (except maybe in some limited \
+                        ways with the development environment, to help with \
+                        debugging). To do that, you need to call a host \
+                        function.",
+                    )?;
+
+                    writeln!(adapter)?;
+
+                    match function {
+                        IntrinsicFunction::Identity => {
+                            writeln!(
+                                adapter,
+                                "The `{function}` function just returns its \
+                                input unchanged.",
+                            )?;
+                        }
+                        IntrinsicFunction::Literal { value } => {
+                            writeln!(
+                                adapter,
+                                "This is a special kind of intrinsic function, \
+                                a literal. Literals are functions that take \
+                                `{}` and return the value they represent.",
+                                Value::None,
+                            )?;
+
+                            writeln!(adapter)?;
+
+                            match value {
+                                Value::None => {
+                                    writeln!(
+                                        adapter,
+                                        "This literal returns the `{value}` \
+                                        value.",
+                                    )?;
+                                }
+                                Value::Integer { value } => {
+                                    writeln!(
+                                        adapter,
+                                        "This literal returns the integer \
+                                        `{value}`.",
+                                    )?;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        Node::Unresolved { name: _ } => {
+            writeln!(
+                adapter,
+                "You are editing an unresolved syntax node. This means that \
+                Crosscut doesn't know what it's referring to.",
+            )?;
         }
     }
 
