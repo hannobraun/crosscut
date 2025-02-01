@@ -11,7 +11,7 @@ impl fmt::Display for CodeError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match self {
             CodeError::UnresolvedIdentifier { candidates } => {
-                write!(f, "unresolved identifier")?;
+                write!(f, "unresolved syntax node")?;
 
                 if !candidates.is_empty() {
                     write!(f, " (could resolve to")?;
