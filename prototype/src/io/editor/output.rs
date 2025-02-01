@@ -194,8 +194,9 @@ impl Drop for RawTerminalAdapter {
         // If we don't clear the screen, the terminal is going to draw the
         // prompt over our remaining output, depending on where the cursor
         // happened to be.
-        let _ = self.clear();
-        let _ = self.flush();
+        if let Err(err) = self.clear().and_then(|()| self.flush()) {
+            println!("Failed to clear screen on shutdown: {err}");
+        }
 
         let _ = terminal::disable_raw_mode();
     }
