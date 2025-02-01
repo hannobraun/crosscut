@@ -189,8 +189,6 @@ impl fmt::Write for RawTerminalAdapter {
 
 impl Drop for RawTerminalAdapter {
     fn drop(&mut self) {
-        // Nothing we can do about potential errors here.
-
         // If we don't clear the screen, the terminal is going to draw the
         // prompt over our remaining output, depending on where the cursor
         // happened to be.
