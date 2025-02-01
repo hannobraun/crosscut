@@ -184,7 +184,7 @@ fn render_node<A: EditorOutputAdapter>(
                 })?;
             }
         },
-        Node::UnresolvedIdentifier { name } => {
+        Node::Unresolved { name } => {
             adapter.color(ERROR_COLOR, |adapter| write!(adapter, "{name}"))?;
         }
     }

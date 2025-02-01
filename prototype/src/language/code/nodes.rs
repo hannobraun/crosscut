@@ -8,7 +8,7 @@ use super::Expression;
 pub enum Node {
     Empty,
     Expression { expression: Expression },
-    UnresolvedIdentifier { name: String },
+    Unresolved { name: String },
 }
 
 impl Node {
@@ -31,7 +31,7 @@ impl fmt::Display for NodeDisplay<'_> {
             Node::Expression { expression } => {
                 write!(f, "{}", expression.display(self.host))
             }
-            Node::UnresolvedIdentifier { name } => {
+            Node::Unresolved { name } => {
                 write!(f, "{name}")
             }
         }

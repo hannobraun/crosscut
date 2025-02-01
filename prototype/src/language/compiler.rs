@@ -67,7 +67,7 @@ fn emit_unresolved_identifier_error(
     codebase
         .insert_error(location, CodeError::UnresolvedIdentifier { candidates });
 
-    Node::UnresolvedIdentifier {
+    Node::Unresolved {
         name: token.to_string(),
     }
 }

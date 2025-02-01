@@ -114,7 +114,7 @@ impl Interpreter {
                 expression,
                 location,
             },
-            Node::UnresolvedIdentifier { name: _ } => {
+            Node::Unresolved { name: _ } => {
                 InterpreterState::Error { location }
             }
         }
