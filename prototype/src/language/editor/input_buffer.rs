@@ -8,7 +8,7 @@ pub struct EditorInputBuffer {
 
 impl EditorInputBuffer {
     pub fn new(buffer: String) -> Self {
-        let cursor = buffer.chars().count();
+        let cursor = buffer.len();
         Self { buffer, cursor }
     }
 
