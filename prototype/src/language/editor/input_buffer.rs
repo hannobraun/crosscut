@@ -46,7 +46,7 @@ impl EditorInputBuffer {
                 return self.move_cursor_left();
             }
             MoveCursorRight => {
-                self.move_cursor_right();
+                return self.move_cursor_right();
             }
             MoveCursorUp => {
                 return Some(UpdateAction::NavigateToPrevious);
