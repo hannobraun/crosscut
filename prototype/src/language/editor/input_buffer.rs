@@ -8,8 +8,7 @@ pub struct EditorInputBuffer {
 
 impl EditorInputBuffer {
     pub fn new(buffer: String) -> Self {
-        let cursor = 0;
-        Self { buffer, cursor }
+        Self { buffer, cursor: 0 }
     }
 
     pub fn move_cursor_to_end(&mut self) {
