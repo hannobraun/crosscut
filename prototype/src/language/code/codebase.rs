@@ -81,7 +81,7 @@ impl Codebase {
     }
 
     pub fn node_at(&self, location: &Location) -> &Node {
-        let Some(node) = self.context.get(location.index) else {
+        let Some(id) = self.context.get(location.index) else {
             unreachable!(
                 "This is an append-only data structure. Every existing \
                 `Location` must be valid, or it wouldn't have been created in \
@@ -89,7 +89,7 @@ impl Codebase {
             );
         };
 
-        self.nodes.get(node).unwrap()
+        self.nodes.get(id).unwrap()
     }
 
     pub fn insert_node_after(
