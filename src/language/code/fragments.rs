@@ -44,6 +44,7 @@ impl Nodes {
 pub struct NodeId {
     hash: [u8; 32],
 }
+
 impl NodeId {
     pub fn generate_for(node: &Node) -> Self {
         let hash = udigest::hash::<blake3::Hasher>(node).into();
