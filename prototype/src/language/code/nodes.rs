@@ -37,3 +37,15 @@ impl fmt::Display for NodeDisplay<'_> {
         }
     }
 }
+
+#[derive(Clone, Copy, Debug, Eq, Ord, PartialEq, PartialOrd)]
+pub struct NodeId {
+    hash: [u8; 32],
+}
+
+impl NodeId {
+    pub fn generate_for(node: &Node) -> Self {
+        let hash = udigest::hash::<blake3::Hasher>(node).into();
+        Self { hash }
+    }
+}

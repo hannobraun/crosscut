@@ -1,18 +1,28 @@
 use std::collections::BTreeMap;
 
-use super::{CodeError, LocatedNode, Location, Node};
+use super::{nodes::NodeId, CodeError, LocatedNode, Location, Node};
 
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub struct Codebase {
-    context: Vec<Node>,
+    nodes: BTreeMap<NodeId, Node>,
+    context: Vec<NodeId>,
     errors: BTreeMap<Location, CodeError>,
 }
 
 impl Codebase {
     pub fn new() -> Self {
-        let initial = Node::Empty;
+        let mut nodes = BTreeMap::new();
+        let initial = {
+            let node = Node::Empty;
+            let id = NodeId::generate_for(&node);
+
+            nodes.insert(id, node);
+
+            id
+        };
 
         Self {
+            nodes,
             context: vec![initial],
             errors: BTreeMap::new(),
         }
@@ -23,7 +33,7 @@ impl Codebase {
             .iter()
             .enumerate()
             .map(|(index, node)| LocatedNode {
-                node,
+                node: self.nodes.get(node).unwrap(),
                 location: Location { index },
             })
     }
@@ -79,7 +89,7 @@ impl Codebase {
             );
         };
 
-        node
+        self.nodes.get(node).unwrap()
     }
 
     pub fn insert_node_after(
@@ -90,12 +100,16 @@ impl Codebase {
         let at = Location {
             index: after.index + 1,
         };
-        self.context.insert(at.index, node);
+        let id = NodeId::generate_for(&node);
+        self.nodes.insert(id, node);
+        self.context.insert(at.index, id);
         at
     }
 
     pub fn replace_node(&mut self, to_replace: &Location, replacement: Node) {
-        self.context[to_replace.index] = replacement;
+        let id = NodeId::generate_for(&replacement);
+        self.nodes.insert(id, replacement);
+        self.context[to_replace.index] = id;
     }
 
     pub fn error_at(&self, location: &Location) -> Option<&CodeError> {
