@@ -1,5 +1,7 @@
 use std::fmt;
 
+use base64::{prelude::BASE64_STANDARD_NO_PAD, Engine};
+
 use crate::language::host::Host;
 
 use super::Expression;
@@ -38,7 +40,7 @@ impl fmt::Display for NodeDisplay<'_> {
     }
 }
 
-#[derive(Clone, Copy, Debug, Eq, Ord, PartialEq, PartialOrd)]
+#[derive(Clone, Copy, Eq, Ord, PartialEq, PartialOrd)]
 pub struct NodeId {
     hash: [u8; 32],
 }
@@ -47,5 +49,12 @@ impl NodeId {
     pub fn generate_for(node: &Node) -> Self {
         let hash = udigest::hash::<blake3::Hasher>(node).into();
         Self { hash }
+    }
+}
+
+impl fmt::Debug for NodeId {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", BASE64_STANDARD_NO_PAD.encode(self.hash))?;
+        Ok(())
     }
 }
