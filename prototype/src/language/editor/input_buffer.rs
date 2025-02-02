@@ -84,7 +84,7 @@ impl EditorInputBuffer {
         None
     }
 
-    fn move_cursor_right(&mut self) {
+    fn move_cursor_right(&mut self) -> Option<UpdateAction> {
         loop {
             self.cursor = self.cursor.saturating_add(1);
             self.cursor = min(self.cursor, self.buffer.len());
@@ -100,6 +100,8 @@ impl EditorInputBuffer {
                 endless loop.",
             );
         }
+
+        None
     }
 
     fn remove_left(&mut self) {
