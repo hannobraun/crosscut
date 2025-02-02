@@ -98,10 +98,10 @@ impl Codebase {
         after: Location,
         node: Node,
     ) -> Location {
+        let id = NodeId::generate_for(&node);
         let at = Location {
             index: after.index + 1,
         };
-        let id = NodeId::generate_for(&node);
         self.nodes.insert(id, node);
         self.context.insert(at.index, id);
         at
