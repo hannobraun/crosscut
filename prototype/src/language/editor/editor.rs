@@ -96,6 +96,7 @@ impl Editor {
 
         let node = codebase.node_at(&location);
         self.input = EditorInputBuffer::new(node.display(host).to_string());
+        self.input.move_cursor_to_end();
     }
 }
 
