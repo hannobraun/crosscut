@@ -37,6 +37,31 @@ impl Editor {
         host: &Host,
     ) {
         if let Some(action) = self.input.update(event) {
+            // This code places the cursor at the start, if moving to the next
+            // syntax node, or at the end, if moving to the previous one.
+            // Regardless of whether the movement was caused via up/down or via
+            // left/right.
+            //
+            // This doesn't feel right when moving up or down, as it seems like
+            // the cursor should stay where it already is, horizontally. And
+            // fixing that here wouldn't actually be too hard.
+            //
+            // However, as I'm writing this, all syntax nodes are at the same
+            // level of indentation. (Or rather, there is no indentation.) That
+            // is going to change, and then it's no longer clear what an
+            // implementation should look like. Editor output is handled
+            // elsewhere.
+            //
+            // Maybe this means, that editor output (at least not all of it)
+            // actually shouldn't be separate from the input logic here. Maybe
+            // this code shouldn't operate on the code database directly, but
+            // rather on some intermediate layer, that takes things like levels
+            // of indentation into account.
+            //
+            // Whatever it'll end up being, I think it's better to leave this as
+            // it is, for now, until we do have formatting with levels of
+            // indentation. Then, it'll be easier to judge what works and what
+            // doesn't.
             match action {
                 UpdateAction::NavigateToPrevious => {
                     if let Some(location) =
