@@ -38,7 +38,7 @@ impl EditorInputBuffer {
                 self.insert(ch);
             }
             MoveCursorLeft => {
-                self.move_cursor_left();
+                return self.move_cursor_left();
             }
             MoveCursorRight => {
                 self.move_cursor_right();

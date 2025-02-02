@@ -190,6 +190,27 @@ fn moving_cursor_down_at_last_node_should_do_nothing() {
     );
 }
 
+#[test]
+fn moving_cursor_left_at_start_of_node_should_move_to_previous_node() {
+    // If the cursor is at the start of a node, then pressing left should move
+    // it the end of the previous node.
+
+    let mut language = Language::without_host();
+
+    language.enter_code("12 identity");
+    for _ in "identity".chars() {
+        language.on_input(EditorInputEvent::MoveCursorLeft);
+    }
+
+    language.on_input(EditorInputEvent::MoveCursorLeft);
+    language.enter_code("7");
+
+    assert_eq!(
+        language.step_until_finished(),
+        Ok(Value::Integer { value: 127 }),
+    );
+}
+
 // There is lots of editing behavior that's not tested here, as this test suite
 // focuses on high-level behavior that affects the whole `language` module.
 //
