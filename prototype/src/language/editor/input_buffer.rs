@@ -55,7 +55,7 @@ impl EditorInputBuffer {
                 return Some(UpdateAction::NavigateToNextNode);
             }
             RemoveLeft => {
-                self.remove_left();
+                return self.remove_left();
             }
             RemoveRight => {
                 self.remove_right();
