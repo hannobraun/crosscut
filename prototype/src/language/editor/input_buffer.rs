@@ -92,6 +92,10 @@ impl EditorInputBuffer {
     fn move_cursor_right(&mut self) -> Option<UpdateAction> {
         loop {
             self.cursor = self.cursor.saturating_add(1);
+            if self.cursor > self.buffer.len() {
+                self.cursor = self.buffer.len();
+                return Some(UpdateAction::NavigateToNextNode);
+            }
             self.cursor = min(self.cursor, self.buffer.len());
 
             if self.buffer.is_char_boundary(self.cursor) {
