@@ -12,6 +12,8 @@ impl EditorInputBuffer {
     }
 
     pub fn move_cursor_to_end(&mut self) {
+        // The cursor counts bytes, not characters. So the use of `len` here is
+        // correct.
         self.cursor = self.buffer.len();
     }
 
