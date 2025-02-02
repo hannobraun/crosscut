@@ -28,7 +28,6 @@ impl Nodes {
     }
 }
 
-// TASK: Update documentation.
 /// # The ID of a node
 ///
 /// Node IDs are based on hashes. This means that nodes that are different from
