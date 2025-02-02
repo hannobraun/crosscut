@@ -4,20 +4,20 @@ use super::{CodeError, LocatedNode, Location, Node};
 
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub struct Codebase {
-    nodes: Vec<Node>,
+    context: Vec<Node>,
     errors: BTreeMap<Location, CodeError>,
 }
 
 impl Codebase {
     pub fn new() -> Self {
         Self {
-            nodes: vec![Node::Empty],
+            context: vec![Node::Empty],
             errors: BTreeMap::new(),
         }
     }
 
     pub fn nodes(&self) -> impl Iterator<Item = LocatedNode> {
-        self.nodes
+        self.context
             .iter()
             .enumerate()
             .map(|(index, node)| LocatedNode {
@@ -28,7 +28,7 @@ impl Codebase {
 
     pub fn entry(&self) -> Location {
         assert!(
-            !self.nodes.is_empty(),
+            !self.context.is_empty(),
             "The editor always creates an empty fragment to edit, so \
             `Codebase` should never be empty.",
         );
@@ -51,7 +51,7 @@ impl Codebase {
     pub fn location_after(&self, location: &Location) -> Option<Location> {
         let next_index = location.index + 1;
         assert!(
-            next_index <= self.nodes.len(),
+            next_index <= self.context.len(),
             "This is an append-only data structure. Every existing `Location` \
             must be valid, or it wouldn't have been created in the first \
             place.\n\
@@ -61,7 +61,7 @@ impl Codebase {
             valid range.",
         );
 
-        if next_index < self.nodes.len() {
+        if next_index < self.context.len() {
             Some(Location { index: next_index })
         } else {
             None
@@ -69,7 +69,7 @@ impl Codebase {
     }
 
     pub fn node_at(&self, location: &Location) -> &Node {
-        let Some(node) = self.nodes.get(location.index) else {
+        let Some(node) = self.context.get(location.index) else {
             unreachable!(
                 "This is an append-only data structure. Every existing \
                 `Location` must be valid, or it wouldn't have been created in \
@@ -88,12 +88,12 @@ impl Codebase {
         let at = Location {
             index: after.index + 1,
         };
-        self.nodes.insert(at.index, node);
+        self.context.insert(at.index, node);
         at
     }
 
     pub fn replace_node(&mut self, to_replace: &Location, replacement: Node) {
-        self.nodes[to_replace.index] = replacement;
+        self.context[to_replace.index] = replacement;
     }
 
     pub fn error_at(&self, location: &Location) -> Option<&CodeError> {
