@@ -10,8 +10,10 @@ pub struct Codebase {
 
 impl Codebase {
     pub fn new() -> Self {
+        let initial = Node::Empty;
+
         Self {
-            context: vec![Node::Empty],
+            context: vec![initial],
             errors: BTreeMap::new(),
         }
     }
