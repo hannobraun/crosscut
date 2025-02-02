@@ -43,6 +43,7 @@ impl Editor {
                         codebase.location_before(&self.editing)
                     {
                         self.navigate_to(location, codebase, host);
+                        self.input.move_cursor_to_end();
                     }
                 }
                 UpdateAction::NavigateToNextNode => {
@@ -50,6 +51,7 @@ impl Editor {
                         codebase.location_after(&self.editing)
                     {
                         self.navigate_to(location, codebase, host);
+                        self.input.move_cursor_to_end();
                     }
                 }
                 UpdateAction::Submit { submitted } => {
@@ -96,7 +98,6 @@ impl Editor {
 
         let node = codebase.node_at(&location);
         self.input = EditorInputBuffer::new(node.display(host).to_string());
-        self.input.move_cursor_to_end();
     }
 }
 
