@@ -51,7 +51,6 @@ impl Editor {
                         codebase.location_after(&self.editing)
                     {
                         self.navigate_to(location, codebase, host);
-                        self.input.move_cursor_to_end();
                     }
                 }
                 UpdateAction::Submit { submitted } => {

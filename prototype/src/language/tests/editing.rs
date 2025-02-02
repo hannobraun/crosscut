@@ -166,10 +166,10 @@ fn moving_cursor_down_should_navigate_to_next_node() {
 
     let mut language = Language::without_host();
 
-    language.enter_code("identity identit");
+    language.enter_code("identity dentity");
     language.on_input(EditorInputEvent::MoveCursorUp);
     language.on_input(EditorInputEvent::MoveCursorDown);
-    language.enter_code("y");
+    language.enter_code("i");
 
     assert_eq!(language.step_until_finished(), Ok(Value::None));
 }
