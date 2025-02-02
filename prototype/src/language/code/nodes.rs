@@ -4,7 +4,7 @@ use crate::language::host::Host;
 
 use super::Expression;
 
-#[derive(Clone, Debug, Eq, PartialEq)]
+#[derive(Clone, Debug, Eq, PartialEq, udigest::Digestable)]
 pub enum Node {
     Empty,
     Expression { expression: Expression },

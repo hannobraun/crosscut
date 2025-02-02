@@ -4,7 +4,7 @@ use crate::language::host::Host;
 
 use super::IntrinsicFunction;
 
-#[derive(Clone, Debug, Eq, PartialEq)]
+#[derive(Clone, Debug, Eq, PartialEq, udigest::Digestable)]
 pub enum Expression {
     HostFunction { id: u32 },
     IntrinsicFunction { function: IntrinsicFunction },

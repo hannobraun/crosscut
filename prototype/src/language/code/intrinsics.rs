@@ -2,7 +2,7 @@ use std::fmt;
 
 use crate::language::runtime::Value;
 
-#[derive(Clone, Debug, Eq, PartialEq)]
+#[derive(Clone, Debug, Eq, PartialEq, udigest::Digestable)]
 pub enum IntrinsicFunction {
     Identity,
     Literal { value: Value },
