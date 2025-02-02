@@ -12,3 +12,7 @@ pollster = "*"
 thiserror = "*"
 wgpu = "*"
 winit = "*"
+
+[dependencies.udigest]
+version = "*"
+features = ["derive"]
