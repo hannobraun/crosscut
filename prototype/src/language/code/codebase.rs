@@ -39,13 +39,14 @@ impl Codebase {
     }
 
     pub fn entry(&self) -> Location {
-        assert!(
-            !self.context.is_empty(),
-            "The editor always creates an empty fragment to edit, so \
-            `Codebase` should never be empty.",
-        );
-
-        Location { index: 0 }
+        if !self.context.is_empty() {
+            Location { index: 0 }
+        } else {
+            unreachable!(
+                "The editor always creates an empty fragment to edit, so \
+               `Codebase` should never be empty."
+            );
+        }
     }
 
     pub fn location_before(&self, location: &Location) -> Option<Location> {
