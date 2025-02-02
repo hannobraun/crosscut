@@ -43,8 +43,8 @@ impl Codebase {
             Location { index: 0 }
         } else {
             unreachable!(
-                "The editor always creates an empty fragment to edit, so \
-               `Codebase` should never be empty."
+                "`Codebase` is construction with an initial empty fragment, so \
+                it should never be empty."
             );
         }
     }
