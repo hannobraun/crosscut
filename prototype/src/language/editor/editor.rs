@@ -78,6 +78,10 @@ impl Editor {
                         self.navigate_to(location, codebase, host);
                     }
                 }
+                UpdateAction::RemoveToPrevious => {
+                    // Removing to the previous syntax node is not supported
+                    // yet.
+                }
                 UpdateAction::Submit { submitted } => {
                     compile(&submitted, self.editing, host, codebase);
                     self.editing =

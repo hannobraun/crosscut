@@ -119,7 +119,7 @@ impl EditorInputBuffer {
 
             None
         } else {
-            None
+            Some(UpdateAction::RemoveToPrevious)
         }
     }
 
@@ -144,6 +144,7 @@ impl EditorInputBuffer {
 pub enum UpdateAction {
     NavigateToPrevious,
     NavigateToNextNode,
+    RemoveToPrevious,
     Submit { submitted: String },
 }
 
