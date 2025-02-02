@@ -68,12 +68,12 @@ impl EditorInputBuffer {
         self.move_cursor_right();
     }
 
-    fn move_cursor_left(&mut self) -> Option<MoveBeyondLimit> {
+    fn move_cursor_left(&mut self) -> Option<UpdateAction> {
         loop {
             if self.cursor > 0 {
                 self.cursor = self.cursor.saturating_sub(1);
             } else {
-                return Some(MoveBeyondLimit);
+                return Some(UpdateAction::NavigateToPrevious);
             }
 
             if self.buffer.is_char_boundary(self.cursor) {
@@ -130,8 +130,6 @@ pub enum UpdateAction {
     NavigateToNextNode,
     Submit { submitted: String },
 }
-
-struct MoveBeyondLimit;
 
 #[derive(Debug)]
 pub enum EditorInputEvent {
