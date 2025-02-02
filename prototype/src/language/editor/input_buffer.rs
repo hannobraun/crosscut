@@ -71,7 +71,7 @@ impl EditorInputBuffer {
     fn move_cursor_left(&mut self) -> Option<UpdateAction> {
         loop {
             if self.cursor > 0 {
-                self.cursor = self.cursor.saturating_sub(1);
+                self.cursor -= 1;
             } else {
                 return Some(UpdateAction::NavigateToPrevious);
             }
