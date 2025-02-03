@@ -11,7 +11,7 @@ pub use self::{
     errors::CodeError,
     expressions::Expression,
     intrinsics::IntrinsicFunction,
-    location::{LocatedNode, Location},
-    nodes::{Node, NodeKind},
+    location::LocatedNode,
+    nodes::{Location, Node, NodeKind},
     types::Type,
 };

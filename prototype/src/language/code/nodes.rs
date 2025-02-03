@@ -107,3 +107,8 @@ impl fmt::Debug for NodeHash {
         Ok(())
     }
 }
+
+#[derive(Clone, Copy, Debug, Eq, Ord, PartialEq, PartialOrd)]
+pub struct Location {
+    pub(super) index: usize,
+}
