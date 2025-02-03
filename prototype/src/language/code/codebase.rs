@@ -13,7 +13,8 @@ impl Codebase {
     pub fn new() -> Self {
         let mut nodes = BTreeMap::new();
         let initial = {
-            let node = Node::empty();
+            let input = None;
+            let node = Node::empty(input);
             let id = NodeId::generate_for(&node);
 
             nodes.insert(id, node);

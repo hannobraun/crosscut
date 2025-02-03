@@ -22,11 +22,9 @@ pub struct Node {
 }
 
 impl Node {
-    pub fn empty() -> Self {
+    pub fn empty(input: Option<NodeId>) -> Self {
         Self {
-            // This is placeholder code, while support for syntax nodes having
-            // inputs is still being added.
-            input: None,
+            input,
             kind: NodeKind::Empty,
         }
     }

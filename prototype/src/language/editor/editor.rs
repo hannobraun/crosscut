@@ -84,8 +84,11 @@ impl Editor {
                 }
                 UpdateAction::Submit { submitted } => {
                     compile(&submitted, self.editing, host, codebase);
-                    self.editing =
-                        codebase.insert_node_after(self.editing, Node::empty());
+                    // This is placeholder code, while support for syntax nodes
+                    // having inputs is still being added.
+                    let input = None;
+                    self.editing = codebase
+                        .insert_node_after(self.editing, Node::empty(input));
                 }
             }
         }
