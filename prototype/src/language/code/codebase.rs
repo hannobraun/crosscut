@@ -15,6 +15,7 @@ impl Codebase {
         let initial = {
             let input = None;
             let node = Node::empty(input);
+
             let id = NodeHash::generate_for(&node);
 
             nodes.insert(id, node);
