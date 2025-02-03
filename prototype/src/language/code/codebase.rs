@@ -14,20 +14,22 @@ pub struct Codebase {
 
 impl Codebase {
     pub fn new() -> Self {
-        let mut nodes = BTreeMap::new();
+        let mut nodes = Nodes {
+            inner: BTreeMap::new(),
+        };
         let initial = {
             let input = None;
             let node = Node::empty(input);
 
             let hash = NodeHash::generate_for(&node);
 
-            nodes.insert(hash, node);
+            nodes.inner.insert(hash, node);
 
             hash
         };
 
         Self {
-            nodes: Nodes { inner: nodes },
+            nodes,
             context: vec![initial],
             errors: BTreeMap::new(),
         }
