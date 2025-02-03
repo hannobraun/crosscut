@@ -51,11 +51,11 @@ impl Codebase {
         }
     }
 
-    pub fn path_before(&self, location: &NodePath) -> Option<NodePath> {
-        if location.index == 0 {
+    pub fn path_before(&self, path: &NodePath) -> Option<NodePath> {
+        if path.index == 0 {
             None
         } else {
-            let previous_index = location.index - 1;
+            let previous_index = path.index - 1;
 
             Some(NodePath {
                 index: previous_index,
