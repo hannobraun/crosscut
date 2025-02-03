@@ -121,7 +121,7 @@ impl Codebase {
         self.errors.insert(path, error);
     }
 
-    pub fn clear_error(&mut self, location: &NodePath) {
-        self.errors.remove(location);
+    pub fn clear_error(&mut self, path: &NodePath) {
+        self.errors.remove(path);
     }
 }
