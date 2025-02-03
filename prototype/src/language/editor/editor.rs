@@ -64,8 +64,7 @@ impl Editor {
             // doesn't.
             match action {
                 UpdateAction::NavigateToPrevious => {
-                    if let Some(location) = codebase.path_before(&self.editing)
-                    {
+                    if let Some(location) = codebase.child_of(&self.editing) {
                         self.navigate_to(location, codebase, host);
                         self.input.move_cursor_to_end();
                     }

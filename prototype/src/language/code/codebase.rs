@@ -51,7 +51,7 @@ impl Codebase {
         }
     }
 
-    pub fn path_before(&self, path: &NodePath) -> Option<NodePath> {
+    pub fn child_of(&self, path: &NodePath) -> Option<NodePath> {
         if path.index == 0 {
             None
         } else {
