@@ -18,9 +18,16 @@ pub fn compile(
     } else {
         match resolve_function(token, host) {
             Ok(expression) => Node::Expression { expression },
-            Err(candidates) => emit_unresolved_identifier_error(
-                token, location, candidates, codebase,
-            ),
+            Err(candidates) => {
+                codebase.insert_error(
+                    location,
+                    CodeError::UnresolvedIdentifier { candidates },
+                );
+
+                Node::Unresolved {
+                    name: token.to_string(),
+                }
+            }
         }
     };
 
@@ -50,19 +57,5 @@ fn resolve_function(
             ];
             Err(candidates)
         }
-    }
-}
-
-fn emit_unresolved_identifier_error(
-    token: &str,
-    location: Location,
-    candidates: Vec<Expression>,
-    codebase: &mut Codebase,
-) -> Node {
-    codebase
-        .insert_error(location, CodeError::UnresolvedIdentifier { candidates });
-
-    Node::Unresolved {
-        name: token.to_string(),
     }
 }
