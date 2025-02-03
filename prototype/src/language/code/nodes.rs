@@ -40,7 +40,7 @@ impl fmt::Display for NodeDisplay<'_> {
     }
 }
 
-#[derive(Clone, Copy, Eq, Ord, PartialEq, PartialOrd)]
+#[derive(Clone, Copy, Eq, Ord, PartialEq, PartialOrd, udigest::Digestable)]
 pub struct NodeId {
     hash: [u8; 32],
 }
