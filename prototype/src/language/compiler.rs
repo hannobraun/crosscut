@@ -16,7 +16,7 @@ pub fn compile(
     let node = if token.is_empty() {
         Node::Empty
     } else {
-        match resolve_function(token, location, host, codebase) {
+        match resolve_function(token, location, host) {
             Ok(expression) => Node::Expression { expression },
             Err(candidates) => emit_unresolved_identifier_error(
                 token, location, candidates, codebase,
@@ -31,7 +31,6 @@ fn resolve_function(
     name: &str,
     _: Location,
     host: &Host,
-    _: &mut Codebase,
 ) -> Result<Expression, Vec<Expression>> {
     let host_function = host.function_id_by_name(name);
     let intrinsic_function = IntrinsicFunction::resolve(name);
