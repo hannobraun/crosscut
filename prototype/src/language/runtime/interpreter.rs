@@ -1,5 +1,5 @@
 use crate::language::code::{
-    Codebase, Expression, IntrinsicFunction, Location, Node, Type,
+    Codebase, Expression, IntrinsicFunction, Location, NodeKind, Type,
 };
 
 use super::Value;
@@ -108,13 +108,15 @@ impl Interpreter {
             return InterpreterState::Effect { effect, location };
         }
 
-        match codebase.node_at(&location) {
-            Node::Empty => InterpreterState::IgnoringEmptyFragment { location },
-            Node::Expression { expression } => InterpreterState::Running {
+        match &codebase.node_at(&location).kind {
+            NodeKind::Empty => {
+                InterpreterState::IgnoringEmptyFragment { location }
+            }
+            NodeKind::Expression { expression } => InterpreterState::Running {
                 expression,
                 location,
             },
-            Node::Unresolved { name: _ } => {
+            NodeKind::Unresolved { name: _ } => {
                 InterpreterState::Error { location }
             }
         }

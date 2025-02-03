@@ -1,6 +1,7 @@
 use super::{
     code::{
         CodeError, Codebase, Expression, IntrinsicFunction, Location, Node,
+        NodeKind,
     },
     host::Host,
 };
@@ -14,22 +15,24 @@ pub fn compile(
     codebase.clear_error(&location);
 
     let node = if token.is_empty() {
-        Node::Empty
+        NodeKind::Empty
     } else {
         match resolve_function(token, host) {
-            Ok(expression) => Node::Expression { expression },
+            Ok(expression) => NodeKind::Expression { expression },
             Err(candidates) => {
                 codebase.insert_error(
                     location,
                     CodeError::UnresolvedIdentifier { candidates },
                 );
 
-                Node::Unresolved {
+                NodeKind::Unresolved {
                     name: token.to_string(),
                 }
             }
         }
     };
+
+    let node = Node { kind: node };
 
     codebase.replace_node(&location, node);
 }

@@ -7,16 +7,21 @@ use crate::language::host::Host;
 use super::Expression;
 
 #[derive(Clone, Debug, Eq, PartialEq, udigest::Digestable)]
-pub enum Node {
-    Empty,
-    Expression { expression: Expression },
-    Unresolved { name: String },
+pub struct Node {
+    pub kind: NodeKind,
 }
 
 impl Node {
     pub fn display<'r>(&'r self, host: &'r Host) -> NodeDisplay<'r> {
         NodeDisplay { node: self, host }
     }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, udigest::Digestable)]
+pub enum NodeKind {
+    Empty,
+    Expression { expression: Expression },
+    Unresolved { name: String },
 }
 
 pub struct NodeDisplay<'r> {
@@ -26,14 +31,14 @@ pub struct NodeDisplay<'r> {
 
 impl fmt::Display for NodeDisplay<'_> {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        match self.node {
-            Node::Empty => {
+        match &self.node.kind {
+            NodeKind::Empty => {
                 write!(f, "")
             }
-            Node::Expression { expression } => {
+            NodeKind::Expression { expression } => {
                 write!(f, "{}", expression.display(self.host))
             }
-            Node::Unresolved { name } => {
+            NodeKind::Unresolved { name } => {
                 write!(f, "{name}")
             }
         }

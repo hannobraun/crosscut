@@ -3,7 +3,9 @@ use crossterm::style::{Attribute, Color};
 use crate::{
     io::editor::output::{Cursor, EditorOutputAdapter},
     language::{
-        code::{Codebase, Expression, IntrinsicFunction, LocatedNode, Node},
+        code::{
+            Codebase, Expression, IntrinsicFunction, LocatedNode, NodeKind,
+        },
         editor::Editor,
         host::Host,
         instance::Language,
@@ -170,9 +172,9 @@ fn render_node<A: EditorOutputAdapter>(
             Some(adapter.cursor().move_right(context.editor.input().cursor()));
     }
 
-    match located_node.node {
-        Node::Empty => {}
-        Node::Expression { expression } => match expression {
+    match &located_node.node.kind {
+        NodeKind::Empty => {}
+        NodeKind::Expression { expression } => match expression {
             Expression::HostFunction { id } => {
                 let name = context.host.function_name_by_id(id);
                 adapter.color(Color::DarkMagenta, |adapter| {
@@ -185,7 +187,7 @@ fn render_node<A: EditorOutputAdapter>(
                 })?;
             }
         },
-        Node::Unresolved { name } => {
+        NodeKind::Unresolved { name } => {
             adapter.color(ERROR_COLOR, |adapter| write!(adapter, "{name}"))?;
         }
     }
@@ -228,8 +230,8 @@ fn render_help<A: EditorOutputAdapter>(
 ) -> anyhow::Result<()> {
     writeln!(adapter)?;
 
-    match context.codebase.node_at(context.editor.editing()) {
-        Node::Empty => {
+    match &context.codebase.node_at(context.editor.editing()).kind {
+        NodeKind::Empty => {
             writeln!(
                 adapter,
                 "You are editing an empty syntax node. Those get completely \
@@ -237,7 +239,7 @@ fn render_help<A: EditorOutputAdapter>(
                 making up your mind about what you want to type."
             )?;
         }
-        Node::Expression { expression } => {
+        NodeKind::Expression { expression } => {
             write!(adapter, "You are editing an expression. ")?;
 
             match expression {
@@ -310,7 +312,7 @@ fn render_help<A: EditorOutputAdapter>(
                 }
             }
         }
-        Node::Unresolved { name: _ } => {
+        NodeKind::Unresolved { name: _ } => {
             writeln!(
                 adapter,
                 "You are editing an unresolved syntax node. This means that \

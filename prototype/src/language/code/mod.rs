@@ -12,6 +12,6 @@ pub use self::{
     expressions::Expression,
     intrinsics::IntrinsicFunction,
     location::{LocatedNode, Location},
-    nodes::Node,
+    nodes::{Node, NodeKind},
     types::Type,
 };

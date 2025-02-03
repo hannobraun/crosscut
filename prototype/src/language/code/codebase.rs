@@ -1,5 +1,7 @@
 use std::collections::BTreeMap;
 
+use crate::language::code::NodeKind;
+
 use super::{nodes::NodeId, CodeError, LocatedNode, Location, Node};
 
 #[derive(Clone, Debug, Eq, PartialEq)]
@@ -13,7 +15,9 @@ impl Codebase {
     pub fn new() -> Self {
         let mut nodes = BTreeMap::new();
         let initial = {
-            let node = Node::Empty;
+            let node = Node {
+                kind: NodeKind::Empty,
+            };
             let id = NodeId::generate_for(&node);
 
             nodes.insert(id, node);
