@@ -56,9 +56,9 @@ pub struct Node {
 }
 
 impl Node {
-    pub fn empty(input: Option<NodeHash>) -> Self {
+    pub fn empty(child: Option<NodeHash>) -> Self {
         Self {
-            child: input,
+            child,
             kind: NodeKind::Empty,
         }
     }
