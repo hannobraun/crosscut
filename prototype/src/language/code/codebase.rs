@@ -83,8 +83,8 @@ impl Codebase {
         }
     }
 
-    pub fn node_at(&self, location: &NodePath) -> &Node {
-        let Some(id) = self.context.get(location.index) else {
+    pub fn node_at(&self, path: &NodePath) -> &Node {
+        let Some(id) = self.context.get(path.index) else {
             unreachable!(
                 "This is an append-only data structure. Every existing \
                 `Location` must be valid, or it wouldn't have been created in \
