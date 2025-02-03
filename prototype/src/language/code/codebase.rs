@@ -51,7 +51,7 @@ impl Codebase {
         }
     }
 
-    pub fn location_before(&self, location: &NodePath) -> Option<NodePath> {
+    pub fn path_before(&self, location: &NodePath) -> Option<NodePath> {
         if location.index == 0 {
             None
         } else {
