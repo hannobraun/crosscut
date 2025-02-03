@@ -19,11 +19,7 @@ impl Codebase {
             let input = None;
             let node = Node::empty(input);
 
-            let hash = NodeHash::generate_for(&node);
-
-            nodes.insert(hash, node);
-
-            hash
+            nodes.insert(node)
         };
 
         Self {
@@ -103,8 +99,7 @@ impl Codebase {
         after: Location,
         node: Node,
     ) -> Location {
-        let hash = NodeHash::generate_for(&node);
-        self.nodes.insert(hash, node);
+        let hash = self.nodes.insert(node);
         let at = Location {
             index: after.index + 1,
         };
@@ -113,8 +108,7 @@ impl Codebase {
     }
 
     pub fn replace_node(&mut self, to_replace: &Location, replacement: Node) {
-        let hash = NodeHash::generate_for(&replacement);
-        self.nodes.insert(hash, replacement);
+        let hash = self.nodes.insert(replacement);
         self.context[to_replace.index] = hash;
     }
 

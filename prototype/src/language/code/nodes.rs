@@ -29,8 +29,10 @@ impl Nodes {
         node
     }
 
-    pub fn insert(&mut self, hash: NodeHash, node: Node) {
+    pub fn insert(&mut self, node: Node) -> NodeHash {
+        let hash = NodeHash::generate_for(&node);
         self.inner.insert(hash, node);
+        hash
     }
 }
 
