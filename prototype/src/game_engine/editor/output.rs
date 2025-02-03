@@ -93,11 +93,11 @@ fn render_interpreter_state<A: EditorOutputAdapter>(
                     Ok(())
                 })?;
             }
-            InterpreterState::Error { path: location } => {
+            InterpreterState::Error { path } => {
                 // While we have a dynamic type system, it's possible that an
                 // error is only known at runtime. In that case, we'll get
                 // `None` here.
-                let maybe_error = context.codebase.error_at(&location);
+                let maybe_error = context.codebase.error_at(&path);
 
                 adapter.color(ERROR_COLOR, |adapter| {
                     write!(adapter, "Error")?;
