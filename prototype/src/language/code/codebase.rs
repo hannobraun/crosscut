@@ -14,9 +14,7 @@ pub struct Codebase {
 
 impl Codebase {
     pub fn new() -> Self {
-        let mut nodes = Nodes {
-            inner: BTreeMap::new(),
-        };
+        let mut nodes = Nodes::new();
         let initial = {
             let input = None;
             let node = Node::empty(input);

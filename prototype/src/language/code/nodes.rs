@@ -12,6 +12,12 @@ pub struct Nodes {
 }
 
 impl Nodes {
+    pub fn new() -> Self {
+        Self {
+            inner: BTreeMap::new(),
+        }
+    }
+
     pub fn insert(&mut self, hash: NodeHash, node: Node) {
         self.inner.insert(hash, node);
     }
