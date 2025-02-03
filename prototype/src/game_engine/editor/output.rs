@@ -93,7 +93,7 @@ fn render_interpreter_state<A: EditorOutputAdapter>(
                     Ok(())
                 })?;
             }
-            InterpreterState::Error { location } => {
+            InterpreterState::Error { path: location } => {
                 // While we have a dynamic type system, it's possible that an
                 // error is only known at runtime. In that case, we'll get
                 // `None` here.

@@ -55,7 +55,7 @@ impl Interpreter {
                 InterpreterState::Effect { effect, path: _ } => {
                     return StepResult::EffectTriggered { effect };
                 }
-                InterpreterState::Error { location: _ } => {
+                InterpreterState::Error { path: _ } => {
                     return StepResult::Error;
                 }
                 InterpreterState::Finished { output } => {
@@ -111,7 +111,7 @@ impl Interpreter {
                 InterpreterState::Running { expression, path }
             }
             NodeKind::Unresolved { name: _ } => {
-                InterpreterState::Error { location: path }
+                InterpreterState::Error { path }
             }
         }
     }
@@ -137,7 +137,7 @@ pub enum InterpreterState<'r> {
         path: NodePath,
     },
     Error {
-        location: NodePath,
+        path: NodePath,
     },
     Finished {
         output: Value,
@@ -153,7 +153,7 @@ impl InterpreterState<'_> {
             } => Some(path),
             Self::IgnoringEmptyFragment { path } => Some(path),
             Self::Effect { effect: _, path } => Some(path),
-            Self::Error { location } => Some(location),
+            Self::Error { path: location } => Some(location),
             Self::Finished { output: _ } => None,
         }
     }
