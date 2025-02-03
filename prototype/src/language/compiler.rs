@@ -14,7 +14,7 @@ pub fn compile(
 ) {
     codebase.clear_error(&location);
 
-    let node = if token.is_empty() {
+    let kind = if token.is_empty() {
         NodeKind::Empty
     } else {
         match resolve_function(token, host) {
@@ -32,7 +32,7 @@ pub fn compile(
         }
     };
 
-    let node = Node { kind: node };
+    let node = Node { kind };
 
     codebase.replace_node(&location, node);
 }
