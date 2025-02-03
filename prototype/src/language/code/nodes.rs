@@ -6,7 +6,10 @@ use crate::language::host::Host;
 
 use super::Expression;
 
-pub type Nodes = BTreeMap<NodeHash, Node>;
+#[derive(Clone, Debug, Eq, PartialEq)]
+pub struct Nodes {
+    pub inner: BTreeMap<NodeHash, Node>,
+}
 
 #[derive(Clone, Debug, Eq, PartialEq, udigest::Digestable)]
 pub struct Node {

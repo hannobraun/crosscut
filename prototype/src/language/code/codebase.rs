@@ -27,7 +27,7 @@ impl Codebase {
         };
 
         Self {
-            nodes,
+            nodes: Nodes { inner: nodes },
             context: vec![initial],
             errors: BTreeMap::new(),
         }
@@ -38,7 +38,7 @@ impl Codebase {
             .iter()
             .enumerate()
             .map(|(index, id)| LocatedNode {
-                node: self.nodes.get(id).unwrap(),
+                node: self.nodes.inner.get(id).unwrap(),
                 location: Location { index },
             })
     }
@@ -95,7 +95,7 @@ impl Codebase {
             );
         };
 
-        self.nodes.get(id).unwrap()
+        self.nodes.inner.get(id).unwrap()
     }
 
     pub fn insert_node_after(
@@ -107,14 +107,14 @@ impl Codebase {
         let at = Location {
             index: after.index + 1,
         };
-        self.nodes.insert(hash, node);
+        self.nodes.inner.insert(hash, node);
         self.context.insert(at.index, hash);
         at
     }
 
     pub fn replace_node(&mut self, to_replace: &Location, replacement: Node) {
         let hash = NodeHash::generate_for(&replacement);
-        self.nodes.insert(hash, replacement);
+        self.nodes.inner.insert(hash, replacement);
         self.context[to_replace.index] = hash;
     }
 
