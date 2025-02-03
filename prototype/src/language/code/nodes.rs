@@ -14,10 +14,12 @@ pub struct Node {
     ///
     /// Can be `None`, if this is the first syntax node in its context.
     ///
-    /// Including this field ensures, that the ID of an expression is computed
-    /// correctly, including the full expression (which is a tree that includes
-    /// sub-expressions), and not only the name of a given function, for
-    /// example.
+    /// Including this field ensures, that [`NodeId`] is computed for the whole
+    /// syntax sub-tree, for which this syntax node is the root. Otherwise,
+    /// syntax nodes could share the same ID with other nodes.
+    ///
+    /// For example, all applications of a given function would have the same
+    /// ID, despite differing arguments.
     pub input: Option<NodeId>,
 }
 
