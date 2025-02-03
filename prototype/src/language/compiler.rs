@@ -17,7 +17,7 @@ pub fn compile(
         Node::Empty
     } else {
         match resolve_function(token, location, host, codebase) {
-            Ok(node) => node,
+            Ok(node) => Node::Expression { expression: node },
             Err(node) => node,
         }
     };
@@ -30,17 +30,15 @@ fn resolve_function(
     location: Location,
     host: &Host,
     codebase: &mut Codebase,
-) -> Result<Node, Node> {
+) -> Result<Expression, Node> {
     let host_function = host.function_id_by_name(name);
     let intrinsic_function = IntrinsicFunction::resolve(name);
 
     match (host_function, intrinsic_function) {
-        (Some(id), None) => Ok(Node::Expression {
-            expression: Expression::HostFunction { id },
-        }),
-        (None, Some(function)) => Ok(Node::Expression {
-            expression: Expression::IntrinsicFunction { function },
-        }),
+        (Some(id), None) => Ok(Expression::HostFunction { id }),
+        (None, Some(function)) => {
+            Ok(Expression::IntrinsicFunction { function })
+        }
         (None, None) => {
             let candidates = Vec::new();
             Err(emit_unresolved_identifier_error(
