@@ -100,12 +100,12 @@ impl Codebase {
         after: Location,
         node: Node,
     ) -> Location {
-        let id = NodeHash::generate_for(&node);
+        let hash = NodeHash::generate_for(&node);
         let at = Location {
             index: after.index + 1,
         };
-        self.nodes.insert(id, node);
-        self.context.insert(at.index, id);
+        self.nodes.insert(hash, node);
+        self.context.insert(at.index, hash);
         at
     }
 
