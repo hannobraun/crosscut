@@ -16,8 +16,6 @@ pub fn compile(
     let node = if token.is_empty() {
         Node::Empty
     } else {
-        // The token is an identifier.
-
         let host_function = host.function_id_by_name(token);
         let intrinsic_function = IntrinsicFunction::resolve(token);
 
