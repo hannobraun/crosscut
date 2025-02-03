@@ -48,7 +48,7 @@ impl Interpreter {
                 } => {
                     break expression;
                 }
-                InterpreterState::IgnoringEmptyFragment { location: _ } => {
+                InterpreterState::IgnoringEmptyFragment { path: _ } => {
                     self.advance(codebase);
                     continue;
                 }
@@ -112,9 +112,7 @@ impl Interpreter {
         }
 
         match &codebase.node_at(&path).kind {
-            NodeKind::Empty => {
-                InterpreterState::IgnoringEmptyFragment { location: path }
-            }
+            NodeKind::Empty => InterpreterState::IgnoringEmptyFragment { path },
             NodeKind::Expression { expression } => {
                 InterpreterState::Running { expression, path }
             }
@@ -138,7 +136,7 @@ pub enum InterpreterState<'r> {
         path: NodePath,
     },
     IgnoringEmptyFragment {
-        location: NodePath,
+        path: NodePath,
     },
     Effect {
         effect: Effect,
@@ -159,7 +157,7 @@ impl InterpreterState<'_> {
                 expression: _,
                 path,
             } => Some(path),
-            Self::IgnoringEmptyFragment { location } => Some(location),
+            Self::IgnoringEmptyFragment { path: location } => Some(location),
             Self::Effect {
                 effect: _,
                 location,
