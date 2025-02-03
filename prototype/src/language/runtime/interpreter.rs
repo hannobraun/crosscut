@@ -155,8 +155,8 @@ impl InterpreterState<'_> {
         match self {
             Self::Running {
                 expression: _,
-                path: location,
-            } => Some(location),
+                path,
+            } => Some(path),
             Self::IgnoringEmptyFragment { location } => Some(location),
             Self::Effect {
                 effect: _,
