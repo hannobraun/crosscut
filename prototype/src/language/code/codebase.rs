@@ -104,10 +104,10 @@ impl Codebase {
         node: Node,
     ) -> Location {
         let hash = NodeHash::generate_for(&node);
+        self.nodes.insert(hash, node);
         let at = Location {
             index: after.index + 1,
         };
-        self.nodes.insert(hash, node);
         self.context.insert(at.index, hash);
         at
     }
