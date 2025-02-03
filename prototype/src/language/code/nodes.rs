@@ -19,7 +19,14 @@ impl Nodes {
     }
 
     pub fn get(&self, hash: &NodeHash) -> &Node {
-        self.inner.get(hash).unwrap()
+        let Some(node) = self.inner.get(hash) else {
+            unreachable!(
+                "This is an append-only data structure. All hashes that were \
+                ever created must be valid."
+            );
+        };
+
+        node
     }
 
     pub fn insert(&mut self, hash: NodeHash, node: Node) {
