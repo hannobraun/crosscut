@@ -2,7 +2,6 @@ mod codebase;
 mod errors;
 mod expressions;
 mod intrinsics;
-mod location;
 mod nodes;
 mod types;
 
