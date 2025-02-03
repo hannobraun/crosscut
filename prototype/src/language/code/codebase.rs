@@ -16,11 +16,11 @@ impl Codebase {
             let input = None;
             let node = Node::empty(input);
 
-            let id = NodeHash::generate_for(&node);
+            let hash = NodeHash::generate_for(&node);
 
-            nodes.insert(id, node);
+            nodes.insert(hash, node);
 
-            id
+            hash
         };
 
         Self {
