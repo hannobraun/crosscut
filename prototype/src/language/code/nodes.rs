@@ -30,7 +30,9 @@ impl Nodes {
     }
 
     pub fn insert(&mut self, node: Node) -> NodeHash {
-        let hash = NodeHash::generate_for(&node);
+        let hash = NodeHash {
+            hash: udigest::hash::<blake3::Hasher>(&node).into(),
+        };
         self.inner.insert(hash, node);
         hash
     }
@@ -97,13 +99,6 @@ impl fmt::Display for NodeDisplay<'_> {
 #[derive(Clone, Copy, Eq, Ord, PartialEq, PartialOrd, udigest::Digestable)]
 pub struct NodeHash {
     hash: [u8; 32],
-}
-
-impl NodeHash {
-    pub fn generate_for(node: &Node) -> Self {
-        let hash = udigest::hash::<blake3::Hasher>(node).into();
-        Self { hash }
-    }
 }
 
 impl fmt::Debug for NodeHash {
