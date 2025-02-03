@@ -117,8 +117,8 @@ impl Codebase {
         self.errors.get(path)
     }
 
-    pub fn insert_error(&mut self, location: NodePath, error: CodeError) {
-        self.errors.insert(location, error);
+    pub fn insert_error(&mut self, path: NodePath, error: CodeError) {
+        self.errors.insert(path, error);
     }
 
     pub fn clear_error(&mut self, location: &NodePath) {
