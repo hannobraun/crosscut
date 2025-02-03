@@ -18,8 +18,8 @@ impl Nodes {
         }
     }
 
-    pub fn get(&self, hash: &NodeHash) -> Option<&Node> {
-        self.inner.get(hash)
+    pub fn get(&self, hash: &NodeHash) -> &Node {
+        self.inner.get(hash).unwrap()
     }
 
     pub fn insert(&mut self, hash: NodeHash, node: Node) {
