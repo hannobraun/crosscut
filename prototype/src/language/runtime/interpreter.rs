@@ -117,10 +117,8 @@ impl Interpreter {
     }
 
     fn advance(&mut self, codebase: &Codebase) {
-        self.next = self
-            .next
-            .as_ref()
-            .and_then(|next| codebase.path_after(next));
+        self.next =
+            self.next.as_ref().and_then(|next| codebase.parent_of(next));
     }
 }
 

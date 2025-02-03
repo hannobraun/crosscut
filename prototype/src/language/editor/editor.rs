@@ -70,7 +70,7 @@ impl Editor {
                     }
                 }
                 UpdateAction::NavigateToNextNode => {
-                    if let Some(location) = codebase.path_after(&self.editing) {
+                    if let Some(location) = codebase.parent_of(&self.editing) {
                         self.navigate_to(location, codebase, host);
                     }
                 }

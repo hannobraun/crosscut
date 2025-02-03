@@ -63,7 +63,7 @@ impl Codebase {
         }
     }
 
-    pub fn path_after(&self, path: &NodePath) -> Option<NodePath> {
+    pub fn parent_of(&self, path: &NodePath) -> Option<NodePath> {
         let next_index = path.index + 1;
         assert!(
             next_index <= self.context.len(),
