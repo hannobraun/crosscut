@@ -17,7 +17,7 @@ pub fn compile(
         Node::Empty
     } else {
         match resolve_function(token, location, host, codebase) {
-            Ok(node) => Node::Expression { expression: node },
+            Ok(expression) => Node::Expression { expression },
             Err(node) => node,
         }
     };
