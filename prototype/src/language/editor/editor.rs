@@ -1,5 +1,5 @@
 use crate::language::{
-    code::{Codebase, Location, Node, NodeKind},
+    code::{Codebase, Location, Node},
     compiler::compile,
     host::Host,
     runtime::Interpreter,
@@ -84,12 +84,8 @@ impl Editor {
                 }
                 UpdateAction::Submit { submitted } => {
                     compile(&submitted, self.editing, host, codebase);
-                    self.editing = codebase.insert_node_after(
-                        self.editing,
-                        Node {
-                            kind: NodeKind::Empty,
-                        },
-                    );
+                    self.editing =
+                        codebase.insert_node_after(self.editing, Node::empty());
                 }
             }
         }

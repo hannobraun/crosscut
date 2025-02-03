@@ -12,6 +12,12 @@ pub struct Node {
 }
 
 impl Node {
+    pub fn empty() -> Self {
+        Self {
+            kind: NodeKind::Empty,
+        }
+    }
+
     pub fn display<'r>(&'r self, host: &'r Host) -> NodeDisplay<'r> {
         NodeDisplay { node: self, host }
     }
