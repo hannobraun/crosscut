@@ -52,13 +52,13 @@ pub struct Node {
     ///
     /// For example, all applications of a given function would have the same
     /// ID, despite differing arguments.
-    pub input: Option<NodeHash>,
+    pub child: Option<NodeHash>,
 }
 
 impl Node {
     pub fn empty(input: Option<NodeHash>) -> Self {
         Self {
-            input,
+            child: input,
             kind: NodeKind::Empty,
         }
     }
