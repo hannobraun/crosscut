@@ -8,7 +8,7 @@ use super::Expression;
 
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub struct Nodes {
-    pub inner: BTreeMap<NodeHash, Node>,
+    inner: BTreeMap<NodeHash, Node>,
 }
 
 impl Nodes {
