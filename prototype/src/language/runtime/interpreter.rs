@@ -52,10 +52,7 @@ impl Interpreter {
                     self.advance(codebase);
                     continue;
                 }
-                InterpreterState::Effect {
-                    effect,
-                    location: _,
-                } => {
+                InterpreterState::Effect { effect, path: _ } => {
                     return StepResult::EffectTriggered { effect };
                 }
                 InterpreterState::Error { location: _ } => {
@@ -105,10 +102,7 @@ impl Interpreter {
         };
 
         if let Some(effect) = self.effect {
-            return InterpreterState::Effect {
-                effect,
-                location: path,
-            };
+            return InterpreterState::Effect { effect, path };
         }
 
         match &codebase.node_at(&path).kind {
@@ -140,7 +134,7 @@ pub enum InterpreterState<'r> {
     },
     Effect {
         effect: Effect,
-        location: NodePath,
+        path: NodePath,
     },
     Error {
         location: NodePath,
@@ -160,7 +154,7 @@ impl InterpreterState<'_> {
             Self::IgnoringEmptyFragment { path } => Some(path),
             Self::Effect {
                 effect: _,
-                location,
+                path: location,
             } => Some(location),
             Self::Error { location } => Some(location),
             Self::Finished { output: _ } => None,
