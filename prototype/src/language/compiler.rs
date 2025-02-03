@@ -8,11 +8,11 @@ use super::{
 
 pub fn compile(
     token: &str,
-    location: NodePath,
+    path: NodePath,
     host: &Host,
     codebase: &mut Codebase,
 ) {
-    codebase.clear_error(&location);
+    codebase.clear_error(&path);
 
     let kind = if token.is_empty() {
         NodeKind::Empty
@@ -21,7 +21,7 @@ pub fn compile(
             Ok(expression) => NodeKind::Expression { expression },
             Err(candidates) => {
                 codebase.insert_error(
-                    location,
+                    path,
                     CodeError::UnresolvedIdentifier { candidates },
                 );
 
@@ -39,7 +39,7 @@ pub fn compile(
         kind,
     };
 
-    codebase.replace_node(&location, node);
+    codebase.replace_node(&path, node);
 }
 
 fn resolve_function(
