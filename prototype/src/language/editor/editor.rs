@@ -82,9 +82,9 @@ impl Editor {
                     compile(&submitted, self.editing, host, codebase);
                     // This is placeholder code, while support for syntax nodes
                     // having inputs is still being added.
-                    let input = None;
+                    let child = None;
                     self.editing = codebase
-                        .insert_node_after(self.editing, Node::empty(input));
+                        .insert_node_after(self.editing, Node::empty(child));
                 }
             }
         }
