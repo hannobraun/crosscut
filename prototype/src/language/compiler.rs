@@ -3,7 +3,6 @@ use super::{
         CodeError, Codebase, Expression, IntrinsicFunction, Location, Node,
     },
     host::Host,
-    runtime::Value,
 };
 
 pub fn compile(
@@ -16,14 +15,6 @@ pub fn compile(
 
     let node = if token.is_empty() {
         Node::Empty
-    } else if let Ok(value) = token.parse() {
-        Node::Expression {
-            expression: Expression::IntrinsicFunction {
-                function: IntrinsicFunction::Literal {
-                    value: Value::Integer { value },
-                },
-            },
-        }
     } else {
         // The token is an identifier.
 

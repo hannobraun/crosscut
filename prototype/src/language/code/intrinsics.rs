@@ -10,9 +10,15 @@ pub enum IntrinsicFunction {
 
 impl IntrinsicFunction {
     pub fn resolve(name: &str) -> Option<Self> {
-        match name {
-            "identity" => Some(Self::Identity),
-            _ => None,
+        if let Ok(value) = name.parse() {
+            Some(IntrinsicFunction::Literal {
+                value: Value::Integer { value },
+            })
+        } else {
+            match name {
+                "identity" => Some(Self::Identity),
+                _ => None,
+            }
         }
     }
 }
