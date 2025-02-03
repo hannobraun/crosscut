@@ -63,8 +63,8 @@ impl Codebase {
         }
     }
 
-    pub fn path_after(&self, location: &NodePath) -> Option<NodePath> {
-        let next_index = location.index + 1;
+    pub fn path_after(&self, path: &NodePath) -> Option<NodePath> {
+        let next_index = path.index + 1;
         assert!(
             next_index <= self.context.len(),
             "This is an append-only data structure. Every existing `Location` \
