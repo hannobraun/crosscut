@@ -1,10 +1,12 @@
-use std::fmt;
+use std::{collections::BTreeMap, fmt};
 
 use base64::{prelude::BASE64_STANDARD_NO_PAD, Engine};
 
 use crate::language::host::Host;
 
 use super::Expression;
+
+pub type Nodes = BTreeMap<NodeHash, Node>;
 
 #[derive(Clone, Debug, Eq, PartialEq, udigest::Digestable)]
 pub struct Node {

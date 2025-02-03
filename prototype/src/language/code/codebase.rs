@@ -1,10 +1,13 @@
 use std::collections::BTreeMap;
 
-use super::{nodes::NodeHash, CodeError, LocatedNode, Location, Node};
+use super::{
+    nodes::{NodeHash, Nodes},
+    CodeError, LocatedNode, Location, Node,
+};
 
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub struct Codebase {
-    nodes: BTreeMap<NodeHash, Node>,
+    nodes: Nodes,
     context: Vec<NodeHash>,
     errors: BTreeMap<Location, CodeError>,
 }
