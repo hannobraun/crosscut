@@ -38,7 +38,7 @@ impl Codebase {
             .iter()
             .enumerate()
             .map(|(index, id)| LocatedNode {
-                node: self.nodes.inner.get(id).unwrap(),
+                node: self.nodes.get(id).unwrap(),
                 location: Location { index },
             })
     }
@@ -95,7 +95,7 @@ impl Codebase {
             );
         };
 
-        self.nodes.inner.get(id).unwrap()
+        self.nodes.get(id).unwrap()
     }
 
     pub fn insert_node_after(
