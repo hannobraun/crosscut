@@ -44,7 +44,7 @@ impl Interpreter {
             match self.next(codebase) {
                 InterpreterState::Running {
                     expression,
-                    location: _,
+                    path: _,
                 } => {
                     break expression;
                 }
@@ -114,7 +114,7 @@ impl Interpreter {
             }
             NodeKind::Expression { expression } => InterpreterState::Running {
                 expression,
-                location,
+                path: location,
             },
             NodeKind::Unresolved { name: _ } => {
                 InterpreterState::Error { location }
@@ -133,7 +133,7 @@ impl Interpreter {
 pub enum InterpreterState<'r> {
     Running {
         expression: &'r Expression,
-        location: NodePath,
+        path: NodePath,
     },
     IgnoringEmptyFragment {
         location: NodePath,
@@ -155,7 +155,7 @@ impl InterpreterState<'_> {
         match self {
             Self::Running {
                 expression: _,
-                location,
+                path: location,
             } => Some(location),
             Self::IgnoringEmptyFragment { location } => Some(location),
             Self::Effect {
