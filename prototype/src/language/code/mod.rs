@@ -10,6 +10,6 @@ pub use self::{
     errors::CodeError,
     expressions::Expression,
     intrinsics::IntrinsicFunction,
-    nodes::{LocatedNode, Location, Node, NodeKind},
+    nodes::{LocatedNode, Node, NodeKind, NodePath},
     types::Type,
 };

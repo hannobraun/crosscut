@@ -2,14 +2,14 @@ use std::collections::BTreeMap;
 
 use super::{
     nodes::{NodeHash, Nodes},
-    CodeError, LocatedNode, Location, Node,
+    CodeError, LocatedNode, Node, NodePath,
 };
 
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub struct Codebase {
     nodes: Nodes,
     context: Vec<NodeHash>,
-    errors: BTreeMap<Location, CodeError>,
+    errors: BTreeMap<NodePath, CodeError>,
 }
 
 impl Codebase {
@@ -36,13 +36,13 @@ impl Codebase {
             .enumerate()
             .map(|(index, id)| LocatedNode {
                 node: self.nodes.get(id),
-                location: Location { index },
+                location: NodePath { index },
             })
     }
 
-    pub fn entry(&self) -> Location {
+    pub fn entry(&self) -> NodePath {
         if !self.context.is_empty() {
-            Location { index: 0 }
+            NodePath { index: 0 }
         } else {
             unreachable!(
                 "`Codebase` is construction with an initial empty fragment, so \
@@ -51,19 +51,19 @@ impl Codebase {
         }
     }
 
-    pub fn location_before(&self, location: &Location) -> Option<Location> {
+    pub fn location_before(&self, location: &NodePath) -> Option<NodePath> {
         if location.index == 0 {
             None
         } else {
             let previous_index = location.index - 1;
 
-            Some(Location {
+            Some(NodePath {
                 index: previous_index,
             })
         }
     }
 
-    pub fn location_after(&self, location: &Location) -> Option<Location> {
+    pub fn location_after(&self, location: &NodePath) -> Option<NodePath> {
         let next_index = location.index + 1;
         assert!(
             next_index <= self.context.len(),
@@ -77,13 +77,13 @@ impl Codebase {
         );
 
         if next_index < self.context.len() {
-            Some(Location { index: next_index })
+            Some(NodePath { index: next_index })
         } else {
             None
         }
     }
 
-    pub fn node_at(&self, location: &Location) -> &Node {
+    pub fn node_at(&self, location: &NodePath) -> &Node {
         let Some(id) = self.context.get(location.index) else {
             unreachable!(
                 "This is an append-only data structure. Every existing \
@@ -97,31 +97,31 @@ impl Codebase {
 
     pub fn insert_node_after(
         &mut self,
-        after: Location,
+        after: NodePath,
         node: Node,
-    ) -> Location {
+    ) -> NodePath {
         let hash = self.nodes.insert(node);
-        let at = Location {
+        let at = NodePath {
             index: after.index + 1,
         };
         self.context.insert(at.index, hash);
         at
     }
 
-    pub fn replace_node(&mut self, to_replace: &Location, replacement: Node) {
+    pub fn replace_node(&mut self, to_replace: &NodePath, replacement: Node) {
         let hash = self.nodes.insert(replacement);
         self.context[to_replace.index] = hash;
     }
 
-    pub fn error_at(&self, location: &Location) -> Option<&CodeError> {
+    pub fn error_at(&self, location: &NodePath) -> Option<&CodeError> {
         self.errors.get(location)
     }
 
-    pub fn insert_error(&mut self, location: Location, error: CodeError) {
+    pub fn insert_error(&mut self, location: NodePath, error: CodeError) {
         self.errors.insert(location, error);
     }
 
-    pub fn clear_error(&mut self, location: &Location) {
+    pub fn clear_error(&mut self, location: &NodePath) {
         self.errors.remove(location);
     }
 }

@@ -1,14 +1,14 @@
 use super::{
     code::{
-        CodeError, Codebase, Expression, IntrinsicFunction, Location, Node,
-        NodeKind,
+        CodeError, Codebase, Expression, IntrinsicFunction, Node, NodeKind,
+        NodePath,
     },
     host::Host,
 };
 
 pub fn compile(
     token: &str,
-    location: Location,
+    location: NodePath,
     host: &Host,
     codebase: &mut Codebase,
 ) {

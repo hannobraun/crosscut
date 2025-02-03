@@ -109,12 +109,12 @@ impl fmt::Debug for NodeHash {
 }
 
 #[derive(Clone, Copy, Debug, Eq, Ord, PartialEq, PartialOrd)]
-pub struct Location {
+pub struct NodePath {
     pub(super) index: usize,
 }
 
 #[derive(Debug, Eq, PartialEq)]
 pub struct LocatedNode<'r> {
     pub node: &'r Node,
-    pub location: Location,
+    pub location: NodePath,
 }

@@ -1,5 +1,5 @@
 use crate::language::{
-    code::{Codebase, Location, Node},
+    code::{Codebase, Node, NodePath},
     compiler::compile,
     host::Host,
     runtime::Interpreter,
@@ -10,7 +10,7 @@ use super::{input_buffer::UpdateAction, EditorInputBuffer, EditorInputEvent};
 #[derive(Debug)]
 pub struct Editor {
     input: EditorInputBuffer,
-    editing: Location,
+    editing: NodePath,
 }
 
 impl Editor {
@@ -25,7 +25,7 @@ impl Editor {
         &self.input
     }
 
-    pub fn editing(&self) -> &Location {
+    pub fn editing(&self) -> &NodePath {
         &self.editing
     }
 
@@ -121,7 +121,7 @@ impl Editor {
 
     fn navigate_to(
         &mut self,
-        location: Location,
+        location: NodePath,
         codebase: &Codebase,
         host: &Host,
     ) {

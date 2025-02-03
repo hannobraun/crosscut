@@ -1,12 +1,12 @@
 use crate::language::code::{
-    Codebase, Expression, IntrinsicFunction, Location, NodeKind, Type,
+    Codebase, Expression, IntrinsicFunction, NodeKind, NodePath, Type,
 };
 
 use super::Value;
 
 #[derive(Debug)]
 pub struct Interpreter {
-    next: Option<Location>,
+    next: Option<NodePath>,
     value: Value,
     effect: Option<Effect>,
 }
@@ -133,17 +133,17 @@ impl Interpreter {
 pub enum InterpreterState<'r> {
     Running {
         expression: &'r Expression,
-        location: Location,
+        location: NodePath,
     },
     IgnoringEmptyFragment {
-        location: Location,
+        location: NodePath,
     },
     Effect {
         effect: Effect,
-        location: Location,
+        location: NodePath,
     },
     Error {
-        location: Location,
+        location: NodePath,
     },
     Finished {
         output: Value,
@@ -151,7 +151,7 @@ pub enum InterpreterState<'r> {
 }
 
 impl InterpreterState<'_> {
-    pub fn location(&self) -> Option<&Location> {
+    pub fn location(&self) -> Option<&NodePath> {
         match self {
             Self::Running {
                 expression: _,
