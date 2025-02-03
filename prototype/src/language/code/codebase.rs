@@ -17,8 +17,8 @@ impl Codebase {
         let mut nodes = Nodes::new();
 
         let initial = {
-            let input = None;
-            let node = Node::empty(input);
+            let child = None;
+            let node = Node::empty(child);
 
             nodes.insert(node)
         };
