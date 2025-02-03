@@ -20,11 +20,11 @@ pub struct Node {
     ///
     /// For example, all applications of a given function would have the same
     /// ID, despite differing arguments.
-    pub input: Option<NodeId>,
+    pub input: Option<NodeHash>,
 }
 
 impl Node {
-    pub fn empty(input: Option<NodeId>) -> Self {
+    pub fn empty(input: Option<NodeHash>) -> Self {
         Self {
             input,
             kind: NodeKind::Empty,
@@ -65,18 +65,18 @@ impl fmt::Display for NodeDisplay<'_> {
 }
 
 #[derive(Clone, Copy, Eq, Ord, PartialEq, PartialOrd, udigest::Digestable)]
-pub struct NodeId {
+pub struct NodeHash {
     hash: [u8; 32],
 }
 
-impl NodeId {
+impl NodeHash {
     pub fn generate_for(node: &Node) -> Self {
         let hash = udigest::hash::<blake3::Hasher>(node).into();
         Self { hash }
     }
 }
 
-impl fmt::Debug for NodeId {
+impl fmt::Debug for NodeHash {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", BASE64_STANDARD_NO_PAD.encode(self.hash))?;
         Ok(())

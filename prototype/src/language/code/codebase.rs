@@ -1,11 +1,11 @@
 use std::collections::BTreeMap;
 
-use super::{nodes::NodeId, CodeError, LocatedNode, Location, Node};
+use super::{nodes::NodeHash, CodeError, LocatedNode, Location, Node};
 
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub struct Codebase {
-    nodes: BTreeMap<NodeId, Node>,
-    context: Vec<NodeId>,
+    nodes: BTreeMap<NodeHash, Node>,
+    context: Vec<NodeHash>,
     errors: BTreeMap<Location, CodeError>,
 }
 
@@ -15,7 +15,7 @@ impl Codebase {
         let initial = {
             let input = None;
             let node = Node::empty(input);
-            let id = NodeId::generate_for(&node);
+            let id = NodeHash::generate_for(&node);
 
             nodes.insert(id, node);
 
@@ -99,7 +99,7 @@ impl Codebase {
         after: Location,
         node: Node,
     ) -> Location {
-        let id = NodeId::generate_for(&node);
+        let id = NodeHash::generate_for(&node);
         let at = Location {
             index: after.index + 1,
         };
@@ -109,7 +109,7 @@ impl Codebase {
     }
 
     pub fn replace_node(&mut self, to_replace: &Location, replacement: Node) {
-        let id = NodeId::generate_for(&replacement);
+        let id = NodeHash::generate_for(&replacement);
         self.nodes.insert(id, replacement);
         self.context[to_replace.index] = id;
     }
