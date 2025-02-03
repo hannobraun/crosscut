@@ -11,6 +11,12 @@ pub struct Nodes {
     pub inner: BTreeMap<NodeHash, Node>,
 }
 
+impl Nodes {
+    pub fn insert(&mut self, hash: NodeHash, node: Node) {
+        self.inner.insert(hash, node);
+    }
+}
+
 #[derive(Clone, Debug, Eq, PartialEq, udigest::Digestable)]
 pub struct Node {
     pub kind: NodeKind,
