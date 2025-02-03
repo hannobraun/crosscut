@@ -100,24 +100,26 @@ impl Interpreter {
     }
 
     fn next<'r>(&self, codebase: &'r Codebase) -> InterpreterState<'r> {
-        let Some(location) = self.next else {
+        let Some(path) = self.next else {
             return InterpreterState::Finished { output: self.value };
         };
 
         if let Some(effect) = self.effect {
-            return InterpreterState::Effect { effect, location };
+            return InterpreterState::Effect {
+                effect,
+                location: path,
+            };
         }
 
-        match &codebase.node_at(&location).kind {
+        match &codebase.node_at(&path).kind {
             NodeKind::Empty => {
-                InterpreterState::IgnoringEmptyFragment { location }
+                InterpreterState::IgnoringEmptyFragment { location: path }
             }
-            NodeKind::Expression { expression } => InterpreterState::Running {
-                expression,
-                path: location,
-            },
+            NodeKind::Expression { expression } => {
+                InterpreterState::Running { expression, path }
+            }
             NodeKind::Unresolved { name: _ } => {
-                InterpreterState::Error { location }
+                InterpreterState::Error { location: path }
             }
         }
     }
