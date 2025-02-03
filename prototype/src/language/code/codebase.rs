@@ -34,8 +34,8 @@ impl Codebase {
         self.context
             .iter()
             .enumerate()
-            .map(|(index, id)| LocatedNode {
-                node: self.nodes.get(id),
+            .map(|(index, hash)| LocatedNode {
+                node: self.nodes.get(hash),
                 path: NodePath { index },
             })
     }
