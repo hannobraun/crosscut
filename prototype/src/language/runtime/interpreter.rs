@@ -157,7 +157,7 @@ impl InterpreterState<'_> {
                 expression: _,
                 path,
             } => Some(path),
-            Self::IgnoringEmptyFragment { path: location } => Some(location),
+            Self::IgnoringEmptyFragment { path } => Some(path),
             Self::Effect {
                 effect: _,
                 location,
