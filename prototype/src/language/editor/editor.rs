@@ -80,6 +80,7 @@ impl Editor {
                 }
                 UpdateAction::Submit { submitted } => {
                     compile(&submitted, self.editing, host, codebase);
+
                     // This is placeholder code, while support for syntax nodes
                     // having inputs is still being added.
                     let child = None;
