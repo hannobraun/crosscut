@@ -63,7 +63,7 @@ impl Codebase {
         }
     }
 
-    pub fn location_after(&self, location: &NodePath) -> Option<NodePath> {
+    pub fn path_after(&self, location: &NodePath) -> Option<NodePath> {
         let next_index = location.index + 1;
         assert!(
             next_index <= self.context.len(),

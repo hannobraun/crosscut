@@ -126,7 +126,7 @@ impl Interpreter {
         self.next = self
             .next
             .as_ref()
-            .and_then(|next| codebase.location_after(next));
+            .and_then(|next| codebase.path_after(next));
     }
 }
 
