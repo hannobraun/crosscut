@@ -116,5 +116,5 @@ pub struct NodePath {
 #[derive(Debug, Eq, PartialEq)]
 pub struct LocatedNode<'r> {
     pub node: &'r Node,
-    pub location: NodePath,
+    pub path: NodePath,
 }

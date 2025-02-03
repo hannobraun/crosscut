@@ -145,7 +145,7 @@ fn render_possibly_active_node<A: EditorOutputAdapter>(
     context: &mut RenderContext,
 ) -> anyhow::Result<()> {
     let is_active_node = context.interpreter.state(context.codebase).location()
-        == Some(&located_node.location);
+        == Some(&located_node.path);
 
     if is_active_node {
         adapter.attribute(Attribute::Bold, |adapter| {
@@ -167,7 +167,7 @@ fn render_node<A: EditorOutputAdapter>(
     adapter: &mut A,
     context: &mut RenderContext,
 ) -> anyhow::Result<()> {
-    if context.editor.editing() == &located_node.location {
+    if context.editor.editing() == &located_node.path {
         context.cursor =
             Some(adapter.cursor().move_right(context.editor.input().cursor()));
     }
@@ -192,7 +192,7 @@ fn render_node<A: EditorOutputAdapter>(
         }
     }
 
-    if let Some(error) = context.codebase.error_at(&located_node.location) {
+    if let Some(error) = context.codebase.error_at(&located_node.path) {
         adapter.color(ERROR_COLOR, |adapter| {
             write!(adapter, "    error: {error}")
         })?;

@@ -36,7 +36,7 @@ impl Codebase {
             .enumerate()
             .map(|(index, id)| LocatedNode {
                 node: self.nodes.get(id),
-                location: NodePath { index },
+                path: NodePath { index },
             })
     }
 
