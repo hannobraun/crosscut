@@ -110,9 +110,9 @@ impl Codebase {
     }
 
     pub fn replace_node(&mut self, to_replace: &Location, replacement: Node) {
-        let id = NodeHash::generate_for(&replacement);
-        self.nodes.insert(id, replacement);
-        self.context[to_replace.index] = id;
+        let hash = NodeHash::generate_for(&replacement);
+        self.nodes.insert(hash, replacement);
+        self.context[to_replace.index] = hash;
     }
 
     pub fn error_at(&self, location: &Location) -> Option<&CodeError> {
