@@ -153,7 +153,7 @@ impl InterpreterState<'_> {
             } => Some(path),
             Self::IgnoringEmptyFragment { path } => Some(path),
             Self::Effect { effect: _, path } => Some(path),
-            Self::Error { path: location } => Some(location),
+            Self::Error { path } => Some(path),
             Self::Finished { output: _ } => None,
         }
     }
