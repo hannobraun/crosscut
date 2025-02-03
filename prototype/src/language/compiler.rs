@@ -32,7 +32,12 @@ pub fn compile(
         }
     };
 
-    let node = Node { kind };
+    let node = Node {
+        // This is placeholder code, while support for syntax nodes having
+        // inputs is still being added.
+        input: None,
+        kind,
+    };
 
     codebase.replace_node(&location, node);
 }

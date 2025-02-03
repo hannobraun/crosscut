@@ -9,11 +9,24 @@ use super::Expression;
 #[derive(Clone, Debug, Eq, PartialEq, udigest::Digestable)]
 pub struct Node {
     pub kind: NodeKind,
+
+    /// The syntax node that provides the input for this one
+    ///
+    /// Can be `None`, if this is the first syntax node in its context.
+    ///
+    /// Including this field ensures, that the ID of an expression is computed
+    /// correctly, including the full expression (which is a tree that includes
+    /// sub-expressions), and not only the name of a given function, for
+    /// example.
+    pub input: Option<NodeId>,
 }
 
 impl Node {
     pub fn empty() -> Self {
         Self {
+            // This is placeholder code, while support for syntax nodes having
+            // inputs is still being added.
+            input: None,
             kind: NodeKind::Empty,
         }
     }
