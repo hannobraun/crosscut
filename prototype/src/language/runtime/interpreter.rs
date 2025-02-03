@@ -145,7 +145,7 @@ pub enum InterpreterState<'r> {
 }
 
 impl InterpreterState<'_> {
-    pub fn location(&self) -> Option<&NodePath> {
+    pub fn path(&self) -> Option<&NodePath> {
         match self {
             Self::Running {
                 expression: _,

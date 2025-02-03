@@ -144,7 +144,7 @@ fn render_possibly_active_node<A: EditorOutputAdapter>(
     adapter: &mut A,
     context: &mut RenderContext,
 ) -> anyhow::Result<()> {
-    let is_active_node = context.interpreter.state(context.codebase).location()
+    let is_active_node = context.interpreter.state(context.codebase).path()
         == Some(&located_node.path);
 
     if is_active_node {
