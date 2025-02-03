@@ -113,8 +113,8 @@ impl Codebase {
         self.context[to_replace.index] = hash;
     }
 
-    pub fn error_at(&self, location: &NodePath) -> Option<&CodeError> {
-        self.errors.get(location)
+    pub fn error_at(&self, path: &NodePath) -> Option<&CodeError> {
+        self.errors.get(path)
     }
 
     pub fn insert_error(&mut self, location: NodePath, error: CodeError) {
