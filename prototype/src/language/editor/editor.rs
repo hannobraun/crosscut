@@ -118,13 +118,13 @@ impl Editor {
 
     fn navigate_to(
         &mut self,
-        location: NodePath,
+        path: NodePath,
         codebase: &Codebase,
         host: &Host,
     ) {
-        self.editing = location;
+        self.editing = path;
 
-        let node = codebase.node_at(&location);
+        let node = codebase.node_at(&path);
         self.input = EditorInputBuffer::new(node.display(host).to_string());
     }
 }
