@@ -81,7 +81,7 @@ impl Editor {
                 UpdateAction::Submit { submitted } => {
                     compile(&submitted, &mut self.editing, host, codebase);
 
-                    let child = Some(self.editing.hash());
+                    let child = Some(*self.editing.hash());
                     self.editing = codebase
                         .insert_node_after(self.editing, Node::empty(child));
                 }

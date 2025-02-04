@@ -41,7 +41,7 @@ fn compile_token(
     };
 
     let node = Node {
-        child: codebase.child_of(path).map(|path| path.hash()),
+        child: codebase.child_of(path).map(|path| *path.hash()),
         kind,
     };
 

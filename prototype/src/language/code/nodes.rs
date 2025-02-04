@@ -149,8 +149,8 @@ pub struct NodePath {
 }
 
 impl NodePath {
-    pub fn hash(&self) -> NodeHash {
-        self.hash
+    pub fn hash(&self) -> &NodeHash {
+        &self.hash
     }
 }
 
