@@ -111,12 +111,7 @@ impl Codebase {
 
             self.replace_node(&parent, replacement);
         } else {
-            // In principle, we have to set `self.root = hash` here, but we can
-            // currently get away with not doing that, due to the usage pattern
-            // of this API. Whenever this method is called, `replace_node` is
-            // called later.
-            //
-            // I'm going to fix this, but I want to write a test for that first.
+            self.root = hash;
         }
 
         let path = NodePath {
@@ -165,5 +160,28 @@ impl Codebase {
 
     pub fn insert_error(&mut self, path: NodePath, error: CodeError) {
         self.errors.insert(path, error);
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use crate::language::code::Node;
+
+    use super::Codebase;
+
+    #[test]
+    fn insert_node_after_update_root() {
+        let mut codebase = Codebase::new();
+
+        let a = codebase.entry();
+        let b = codebase.insert_node_after(a, Node::empty(Some(*a.hash())));
+
+        assert_eq!(
+            codebase
+                .nodes()
+                .map(|located_node| located_node.path)
+                .collect::<Vec<_>>(),
+            vec![a, b],
+        );
     }
 }
