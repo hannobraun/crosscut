@@ -117,6 +117,17 @@ impl Codebase {
         node: Node,
     ) -> NodePath {
         let hash = self.nodes.insert(node);
+
+        // In principle, we would have to update all the parent nodes here, as
+        // we do in `replace_node`. We can currently get away without that
+        // though, due to the way this method is used in conjunction with
+        // `replace_node`.
+        //
+        // I think it's fine for now. I expect to simplify how code is stored
+        // soon enough, and I expect this function to be based on `replace_node`
+        // then. Which would mean it would benefit from the updating that
+        // `replace_node` already does.
+
         let at = NodePath {
             hash,
             index: after.index + 1,
