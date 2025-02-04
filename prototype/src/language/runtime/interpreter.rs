@@ -78,9 +78,9 @@ impl Interpreter {
                     IntrinsicFunction::Identity => self.value,
                     IntrinsicFunction::Literal { value } => {
                         let Value::None = self.value else {
-                            // A literal is a function that takes
-                            // `None`. If that isn't what we currently
-                            // have, that's an error.
+                            // A literal is a function that takes `None`. If
+                            // that isn't what we currently have, that's an
+                            // error.
                             return StepResult::Error;
                         };
 
