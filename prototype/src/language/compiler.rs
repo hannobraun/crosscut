@@ -8,17 +8,17 @@ use super::{
 
 pub fn compile(
     token: &str,
-    path: NodePath,
+    path: &mut NodePath,
     host: &Host,
     codebase: &mut Codebase,
 ) {
-    codebase.clear_error(&path);
+    codebase.clear_error(path);
 
     let (node, maybe_error) = compile_token(token, host);
 
-    codebase.replace_node(&path, node);
+    codebase.replace_node(path, node);
     if let Some(error) = maybe_error {
-        codebase.insert_error(path, error);
+        codebase.insert_error(*path, error);
     }
 }
 

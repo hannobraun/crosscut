@@ -79,7 +79,7 @@ impl Editor {
                     // yet.
                 }
                 UpdateAction::Submit { submitted } => {
-                    compile(&submitted, self.editing, host, codebase);
+                    compile(&submitted, &mut self.editing, host, codebase);
 
                     // This is placeholder code, while support for syntax nodes
                     // having inputs is still being added.
@@ -90,7 +90,7 @@ impl Editor {
             }
         }
 
-        compile(self.input.buffer(), self.editing, host, codebase);
+        compile(self.input.buffer(), &mut self.editing, host, codebase);
 
         // Unconditionally resetting the interpreter like this, is not going to
         // work long-term. It should only be reset, if it's finished.
