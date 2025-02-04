@@ -45,14 +45,10 @@ impl Codebase {
             }
         }
 
-        hashes
-            .into_iter()
-            .rev()
-            .enumerate()
-            .map(|(index, hash)| LocatedNode {
-                node: self.nodes.get(&hash),
-                path: NodePath { hash, index },
-            })
+        hashes.into_iter().rev().map(|hash| LocatedNode {
+            node: self.nodes.get(&hash),
+            path: NodePath { hash },
+        })
     }
 
     pub fn entry(&self) -> NodePath {
@@ -64,25 +60,12 @@ impl Codebase {
 
         NodePath {
             hash: possible_entry,
-            index: 0,
         }
     }
 
     pub fn child_of(&self, path: &NodePath) -> Option<NodePath> {
         let hash = self.node_at(path).child?;
-
-        assert!(
-            path.index > 0,
-            "A child for the node at this path exists. We just found its hash. \
-            Therefore, it can't be the first node, which means it must have an \
-            index that's not zero."
-        );
-        let previous_index = path.index - 1;
-
-        Some(NodePath {
-            hash,
-            index: previous_index,
-        })
+        Some(NodePath { hash })
     }
 
     pub fn parent_of(&self, path: &NodePath) -> Option<NodePath> {
@@ -112,10 +95,7 @@ impl Codebase {
             self.root = hash;
         }
 
-        NodePath {
-            hash,
-            index: after.index + 1,
-        }
+        NodePath { hash }
     }
 
     pub fn replace_node(
@@ -126,10 +106,7 @@ impl Codebase {
         let mut to_replace = *to_replace;
         let mut replacement = self.nodes.insert(replacement);
 
-        let path = NodePath {
-            hash: replacement,
-            index: to_replace.index,
-        };
+        let path = NodePath { hash: replacement };
 
         while let Some(parent) = self.parent_of(&to_replace) {
             to_replace = parent;

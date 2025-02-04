@@ -145,7 +145,6 @@ impl fmt::Display for NodeDisplay<'_> {
 #[derive(Clone, Copy, Debug, Eq, Ord, PartialEq, PartialOrd)]
 pub struct NodePath {
     pub(super) hash: NodeHash,
-    pub(super) index: usize,
 }
 
 impl NodePath {
