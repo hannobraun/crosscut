@@ -115,12 +115,12 @@ impl Codebase {
         // then. Which would mean it would benefit from the updating that
         // `replace_node` already does.
 
-        let at = NodePath {
+        let path = NodePath {
             hash,
             index: after.index + 1,
         };
-        self.context.insert(at.index, hash);
-        at
+        self.context.insert(path.index, hash);
+        path
     }
 
     pub fn replace_node(
