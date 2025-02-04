@@ -66,12 +66,12 @@ impl Interpreter {
 
         self.value = match next {
             Expression::HostFunction { id } => {
-                return StepResult::EffectTriggered {
-                    effect: Effect::ApplyHostFunction {
-                        id: *id,
-                        input: self.value,
-                    },
+                let effect = Effect::ApplyHostFunction {
+                    id: *id,
+                    input: self.value,
                 };
+
+                return StepResult::EffectTriggered { effect };
             }
             Expression::IntrinsicFunction { function } => {
                 match function {
