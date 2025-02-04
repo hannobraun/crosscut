@@ -141,8 +141,8 @@ impl Codebase {
         for hash in &mut self.context[to_replace.index + 1..] {
             let mut parent = self.nodes.get(hash).clone();
             parent.child = Some(replacement);
-            *hash = self.nodes.insert(parent);
-            replacement = *hash;
+            replacement = self.nodes.insert(parent);
+            *hash = replacement;
         }
 
         self.root = replacement;
