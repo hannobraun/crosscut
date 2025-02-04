@@ -56,6 +56,13 @@ impl Codebase {
 
     pub fn child_of(&self, path: &NodePath) -> Option<NodePath> {
         let hash = self.node_at(path).child?;
+
+        assert!(
+            path.index > 0,
+            "A child for the node at this path exists. We just found its hash. \
+            Therefore, it can't be the first node, which means it must have an \
+            index that's not zero."
+        );
         let previous_index = path.index - 1;
 
         Some(NodePath {
