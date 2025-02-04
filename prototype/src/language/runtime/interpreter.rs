@@ -93,7 +93,7 @@ impl Interpreter {
         self.value = value;
         self.advance(codebase);
 
-        StepResult::FunctionApplied { output: value }
+        StepResult::FunctionApplied { output: self.value }
     }
 
     fn next<'r>(&self, codebase: &'r Codebase) -> InterpreterState<'r> {
