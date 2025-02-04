@@ -9,7 +9,6 @@ use super::{
 pub struct Codebase {
     root: NodeHash,
     nodes: Nodes,
-    context: Vec<NodeHash>,
     errors: BTreeMap<NodePath, CodeError>,
 }
 
@@ -27,7 +26,6 @@ impl Codebase {
         Self {
             root,
             nodes,
-            context: vec![root],
             errors: BTreeMap::new(),
         }
     }
@@ -114,12 +112,10 @@ impl Codebase {
             self.root = hash;
         }
 
-        let path = NodePath {
+        NodePath {
             hash,
             index: after.index + 1,
-        };
-        self.context.insert(path.index, hash);
-        path
+        }
     }
 
     pub fn replace_node(
@@ -129,7 +125,6 @@ impl Codebase {
     ) -> NodePath {
         let mut to_replace = *to_replace;
         let mut replacement = self.nodes.insert(replacement);
-        let mut index = to_replace.index;
 
         let path = NodePath {
             hash: replacement,
@@ -142,14 +137,10 @@ impl Codebase {
             let mut parent = self.nodes.get(parent.hash()).clone();
             parent.child = Some(replacement);
 
-            self.context[index] = replacement;
-            index += 1;
-
             replacement = self.nodes.insert(parent);
         }
 
         self.root = replacement;
-        self.context[index] = replacement;
 
         path
     }
