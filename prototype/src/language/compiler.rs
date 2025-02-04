@@ -14,6 +14,17 @@ pub fn compile(
 ) {
     codebase.clear_error(&path);
 
+    let node = compile_token(token, path, host, codebase);
+
+    codebase.replace_node(&path, node);
+}
+
+fn compile_token(
+    token: &str,
+    path: NodePath,
+    host: &Host,
+    codebase: &mut Codebase,
+) -> Node {
     let kind = if token.is_empty() {
         NodeKind::Empty
     } else {
@@ -32,14 +43,12 @@ pub fn compile(
         }
     };
 
-    let node = Node {
+    Node {
         // This is placeholder code, while support for syntax nodes having
         // inputs is still being added.
         child: None,
         kind,
-    };
-
-    codebase.replace_node(&path, node);
+    }
 }
 
 fn resolve_function(
