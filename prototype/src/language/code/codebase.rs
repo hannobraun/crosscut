@@ -155,6 +155,8 @@ impl Codebase {
             child_hash = *hash;
         }
 
+        self.root = child_hash;
+
         NodePath {
             hash,
             index: to_replace.index,
