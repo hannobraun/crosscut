@@ -14,7 +14,7 @@ pub fn compile(
 ) {
     codebase.clear_error(&path);
 
-    let (node, maybe_error) = compile_token(token, path, host, codebase);
+    let (node, maybe_error) = compile_token(token, host);
 
     if let Some(error) = maybe_error {
         codebase.insert_error(path, error);
@@ -23,12 +23,7 @@ pub fn compile(
     codebase.replace_node(&path, node);
 }
 
-fn compile_token(
-    token: &str,
-    _: NodePath,
-    host: &Host,
-    _: &mut Codebase,
-) -> (Node, Option<CodeError>) {
+fn compile_token(token: &str, host: &Host) -> (Node, Option<CodeError>) {
     let (kind, maybe_error) = if token.is_empty() {
         (NodeKind::Empty, None)
     } else {
