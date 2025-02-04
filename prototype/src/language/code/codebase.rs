@@ -105,15 +105,19 @@ impl Codebase {
     ) -> NodePath {
         let hash = self.nodes.insert(node);
 
-        // In principle, we would have to update all the parent nodes here, as
-        // we do in `replace_node`. We can currently get away without that
-        // though, due to the way this method is used in conjunction with
-        // `replace_node`.
-        //
-        // I think it's fine for now. I expect to simplify how code is stored
-        // soon enough, and I expect this function to be based on `replace_node`
-        // then. Which would mean it would benefit from the updating that
-        // `replace_node` already does.
+        if let Some(parent) = self.parent_of(&after) {
+            let mut replacement = self.nodes.get(parent.hash()).clone();
+            replacement.child = Some(hash);
+
+            self.replace_node(&parent, replacement);
+        } else {
+            // In principle, we have to set `self.root = hash` here, but we can
+            // currently get away with not doing that, due to the usage pattern
+            // of this API. Whenever this method is called, `replace_node` is
+            // called later.
+            //
+            // I'm going to fix this, but I want to write a test for that first.
+        }
 
         let path = NodePath {
             hash,
@@ -128,25 +132,29 @@ impl Codebase {
         to_replace: &NodePath,
         replacement: Node,
     ) -> NodePath {
+        let mut to_replace = *to_replace;
         let mut replacement = self.nodes.insert(replacement);
-        self.context[to_replace.index] = replacement;
+        let mut index = to_replace.index;
 
         let path = NodePath {
             hash: replacement,
             index: to_replace.index,
         };
 
-        // All parent still point to the replaced node. Update them.
+        while let Some(parent) = self.parent_of(&to_replace) {
+            to_replace = parent;
 
-        for hash in &mut self.context[to_replace.index + 1..] {
-            let mut parent = self.nodes.get(hash).clone();
+            let mut parent = self.nodes.get(parent.hash()).clone();
             parent.child = Some(replacement);
 
+            self.context[index] = replacement;
+            index += 1;
+
             replacement = self.nodes.insert(parent);
-            *hash = replacement;
         }
 
         self.root = replacement;
+        self.context[index] = replacement;
 
         path
     }
