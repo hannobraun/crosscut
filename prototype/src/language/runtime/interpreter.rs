@@ -122,6 +122,7 @@ impl Interpreter {
     }
 }
 
+#[derive(Debug)]
 pub enum InterpreterState<'r> {
     Running {
         expression: &'r Expression,
