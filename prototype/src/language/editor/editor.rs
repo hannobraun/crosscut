@@ -81,8 +81,6 @@ impl Editor {
                 UpdateAction::Submit { submitted } => {
                     compile(&submitted, &mut self.editing, host, codebase);
 
-                    // This is placeholder code, while support for syntax nodes
-                    // having inputs is still being added.
                     let child = Some(self.editing.hash());
                     self.editing = codebase
                         .insert_node_after(self.editing, Node::empty(child));
