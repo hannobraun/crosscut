@@ -55,17 +55,13 @@ impl Codebase {
     }
 
     pub fn child_of(&self, path: &NodePath) -> Option<NodePath> {
-        if path.index == 0 {
-            None
-        } else {
-            let hash = self.node_at(path).child?;
-            let previous_index = path.index - 1;
+        let hash = self.node_at(path).child?;
+        let previous_index = path.index - 1;
 
-            Some(NodePath {
-                hash,
-                index: previous_index,
-            })
-        }
+        Some(NodePath {
+            hash,
+            index: previous_index,
+        })
     }
 
     pub fn parent_of(&self, path: &NodePath) -> Option<NodePath> {
