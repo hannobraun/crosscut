@@ -43,16 +43,15 @@ impl Codebase {
     }
 
     pub fn entry(&self) -> NodePath {
-        if let Some(hash) = self.context.first() {
-            NodePath {
-                hash: *hash,
-                index: 0,
-            }
-        } else {
-            unreachable!(
-                "`Codebase` is construction with an initial empty fragment, so \
-                it should never be empty."
-            );
+        let mut possible_entry = self.root;
+
+        while let Some(child) = self.nodes.get(&possible_entry).child {
+            possible_entry = child;
+        }
+
+        NodePath {
+            hash: possible_entry,
+            index: 0,
         }
     }
 
