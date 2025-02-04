@@ -131,6 +131,11 @@ impl Codebase {
         let replacement = self.nodes.insert(replacement);
         self.context[to_replace.index] = replacement;
 
+        let path = NodePath {
+            hash: replacement,
+            index: to_replace.index,
+        };
+
         // All parent still point to the replaced node. Update them.
 
         let mut child_hash = replacement;
@@ -144,10 +149,7 @@ impl Codebase {
 
         self.root = child_hash;
 
-        NodePath {
-            hash: replacement,
-            index: to_replace.index,
-        }
+        path
     }
 
     pub fn error_at(&self, path: &NodePath) -> Option<&CodeError> {
