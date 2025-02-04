@@ -36,8 +36,6 @@ impl Interpreter {
             );
         };
 
-        // It would be nice to assert here, that a host function is actually
-        // being applied. But we don't track that information currently.
         self.effect = None;
         self.value = value;
         self.advance(codebase);
