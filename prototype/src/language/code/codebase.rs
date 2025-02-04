@@ -88,31 +88,10 @@ impl Codebase {
     }
 
     pub fn parent_of(&self, path: &NodePath) -> Option<NodePath> {
-        let hash = self
-            .context
-            .iter()
-            .find(|hash| self.nodes.get(hash).child == Some(path.hash))?;
-
-        let next_index = path.index + 1;
-        assert!(
-            next_index <= self.context.len(),
-            "This is an append-only data structure. Every existing `Location` \
-            must be valid, or it wouldn't have been created in the first \
-            place.\n\
-            \n\
-            As a result, incrementing the index of an existing location must \
-            result in an index that is either valid, or right next to the \
-            valid range.",
-        );
-
-        if next_index < self.context.len() {
-            Some(NodePath {
-                hash: *hash,
-                index: next_index,
-            })
-        } else {
-            None
-        }
+        self.nodes().find_map(|located_node| {
+            (located_node.node.child == Some(path.hash))
+                .then_some(located_node.path)
+        })
     }
 
     pub fn node_at(&self, path: &NodePath) -> &Node {
