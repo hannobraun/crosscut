@@ -128,12 +128,12 @@ impl Codebase {
         to_replace: &NodePath,
         replacement: Node,
     ) -> NodePath {
-        let hash = self.nodes.insert(replacement);
-        self.context[to_replace.index] = hash;
+        let replacement = self.nodes.insert(replacement);
+        self.context[to_replace.index] = replacement;
 
         // All parent still point to the replaced node. Update them.
 
-        let mut child_hash = hash;
+        let mut child_hash = replacement;
 
         for hash in &mut self.context[to_replace.index + 1..] {
             let mut node = self.nodes.get(hash).clone();
@@ -145,7 +145,7 @@ impl Codebase {
         self.root = child_hash;
 
         NodePath {
-            hash,
+            hash: replacement,
             index: to_replace.index,
         }
     }
