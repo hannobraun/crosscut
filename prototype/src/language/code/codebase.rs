@@ -33,12 +33,27 @@ impl Codebase {
     }
 
     pub fn nodes(&self) -> impl Iterator<Item = LocatedNode> {
-        self.context
-            .iter()
+        let mut hashes = Vec::new();
+        let mut current_node = self.root;
+
+        loop {
+            let child = self.nodes.get(&current_node).child;
+            hashes.push(current_node);
+
+            if let Some(child) = child {
+                current_node = child;
+            } else {
+                break;
+            }
+        }
+
+        hashes
+            .into_iter()
+            .rev()
             .enumerate()
             .map(|(index, hash)| LocatedNode {
-                node: self.nodes.get(hash),
-                path: NodePath { hash: *hash, index },
+                node: self.nodes.get(&hash),
+                path: NodePath { hash, index },
             })
     }
 
