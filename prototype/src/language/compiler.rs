@@ -14,41 +14,43 @@ pub fn compile(
 ) {
     codebase.clear_error(&path);
 
-    let node = compile_token(token, path, host, codebase);
+    let (node, maybe_error) = compile_token(token, path, host, codebase);
+
+    if let Some(error) = maybe_error {
+        codebase.insert_error(path, error);
+    }
 
     codebase.replace_node(&path, node);
 }
 
 fn compile_token(
     token: &str,
-    path: NodePath,
+    _: NodePath,
     host: &Host,
-    codebase: &mut Codebase,
-) -> Node {
-    let kind = if token.is_empty() {
-        NodeKind::Empty
+    _: &mut Codebase,
+) -> (Node, Option<CodeError>) {
+    let (kind, maybe_error) = if token.is_empty() {
+        (NodeKind::Empty, None)
     } else {
         match resolve_function(token, host) {
-            Ok(expression) => NodeKind::Expression { expression },
-            Err(candidates) => {
-                codebase.insert_error(
-                    path,
-                    CodeError::UnresolvedIdentifier { candidates },
-                );
-
+            Ok(expression) => (NodeKind::Expression { expression }, None),
+            Err(candidates) => (
                 NodeKind::Unresolved {
                     name: token.to_string(),
-                }
-            }
+                },
+                Some(CodeError::UnresolvedIdentifier { candidates }),
+            ),
         }
     };
 
-    Node {
+    let node = Node {
         // This is placeholder code, while support for syntax nodes having
         // inputs is still being added.
         child: None,
         kind,
-    }
+    };
+
+    (node, maybe_error)
 }
 
 fn resolve_function(
