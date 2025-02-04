@@ -16,7 +16,7 @@ impl Codebase {
     pub fn new() -> Self {
         let mut nodes = Nodes::new();
 
-        let initial = {
+        let root = {
             let child = None;
             let node = Node::empty(child);
 
@@ -25,7 +25,7 @@ impl Codebase {
 
         Self {
             nodes,
-            context: vec![initial],
+            context: vec![root],
             errors: BTreeMap::new(),
         }
     }
