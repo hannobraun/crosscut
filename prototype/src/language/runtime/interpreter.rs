@@ -64,7 +64,7 @@ impl Interpreter {
             }
         };
 
-        let value = match next {
+        self.value = match next {
             Expression::HostFunction { id } => {
                 return StepResult::EffectTriggered {
                     effect: Effect::ApplyHostFunction {
@@ -90,7 +90,6 @@ impl Interpreter {
             }
         };
 
-        self.value = value;
         self.advance(codebase);
 
         StepResult::FunctionApplied { output: self.value }
