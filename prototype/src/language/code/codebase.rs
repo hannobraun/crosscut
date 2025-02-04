@@ -36,13 +36,16 @@ impl Codebase {
             .enumerate()
             .map(|(index, hash)| LocatedNode {
                 node: self.nodes.get(hash),
-                path: NodePath { index },
+                path: NodePath { hash: *hash, index },
             })
     }
 
     pub fn entry(&self) -> NodePath {
-        if !self.context.is_empty() {
-            NodePath { index: 0 }
+        if let Some(hash) = self.context.first() {
+            NodePath {
+                hash: *hash,
+                index: 0,
+            }
         } else {
             unreachable!(
                 "`Codebase` is construction with an initial empty fragment, so \
@@ -55,15 +58,22 @@ impl Codebase {
         if path.index == 0 {
             None
         } else {
+            let hash = self.node_at(path).child?;
             let previous_index = path.index - 1;
 
             Some(NodePath {
+                hash,
                 index: previous_index,
             })
         }
     }
 
     pub fn parent_of(&self, path: &NodePath) -> Option<NodePath> {
+        let hash = self
+            .context
+            .iter()
+            .find(|hash| self.nodes.get(hash).child == Some(path.hash))?;
+
         let next_index = path.index + 1;
         assert!(
             next_index <= self.context.len(),
@@ -77,7 +87,10 @@ impl Codebase {
         );
 
         if next_index < self.context.len() {
-            Some(NodePath { index: next_index })
+            Some(NodePath {
+                hash: *hash,
+                index: next_index,
+            })
         } else {
             None
         }
@@ -102,6 +115,7 @@ impl Codebase {
     ) -> NodePath {
         let hash = self.nodes.insert(node);
         let at = NodePath {
+            hash,
             index: after.index + 1,
         };
         self.context.insert(at.index, hash);
@@ -126,6 +140,7 @@ impl Codebase {
         }
 
         NodePath {
+            hash,
             index: to_replace.index,
         }
     }

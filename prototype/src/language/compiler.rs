@@ -24,9 +24,9 @@ pub fn compile(
 
 fn compile_token(
     token: &str,
-    _: &NodePath,
+    path: &NodePath,
     host: &Host,
-    _: &Codebase,
+    codebase: &Codebase,
 ) -> (Node, Option<CodeError>) {
     let (kind, maybe_error) = if token.is_empty() {
         (NodeKind::Empty, None)
@@ -43,9 +43,7 @@ fn compile_token(
     };
 
     let node = Node {
-        // This is placeholder code, while support for syntax nodes having
-        // inputs is still being added.
-        child: None,
+        child: codebase.child_of(path).map(|path| path.hash()),
         kind,
     };
 
