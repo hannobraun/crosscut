@@ -152,8 +152,4 @@ impl Codebase {
     pub fn insert_error(&mut self, path: NodePath, error: CodeError) {
         self.errors.insert(path, error);
     }
-
-    pub fn clear_error(&mut self, path: &NodePath) {
-        self.errors.remove(path);
-    }
 }

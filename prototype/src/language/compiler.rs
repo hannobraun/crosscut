@@ -12,8 +12,6 @@ pub fn compile(
     host: &Host,
     codebase: &mut Codebase,
 ) {
-    codebase.clear_error(path);
-
     let (node, maybe_error) = compile_token(token, path, host, codebase);
 
     *path = codebase.replace_node(path, node);
