@@ -29,6 +29,13 @@ impl Interpreter {
         value: Value,
         codebase: &Codebase,
     ) {
+        let Some(Effect::ApplyHostFunction { .. }) = self.effect else {
+            panic!(
+                "Trying to provide host function output, but no host function \
+                is currently being applied."
+            );
+        };
+
         // It would be nice to assert here, that a host function is actually
         // being applied. But we don't track that information currently.
         self.effect = None;
