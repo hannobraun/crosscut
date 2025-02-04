@@ -132,7 +132,9 @@ impl Codebase {
         self.context[to_replace.index] = hash;
 
         // All parent still point to the replaced node. Update them.
+
         let mut child_hash = hash;
+
         for hash in &mut self.context[to_replace.index + 1..] {
             let mut node = self.nodes.get(hash).clone();
             node.child = Some(child_hash);
