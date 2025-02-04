@@ -108,9 +108,17 @@ impl Codebase {
         at
     }
 
-    pub fn replace_node(&mut self, to_replace: &NodePath, replacement: Node) {
+    pub fn replace_node(
+        &mut self,
+        to_replace: &NodePath,
+        replacement: Node,
+    ) -> NodePath {
         let hash = self.nodes.insert(replacement);
         self.context[to_replace.index] = hash;
+
+        NodePath {
+            index: to_replace.index,
+        }
     }
 
     pub fn error_at(&self, path: &NodePath) -> Option<&CodeError> {
