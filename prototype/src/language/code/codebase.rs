@@ -7,6 +7,7 @@ use super::{
 
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub struct Codebase {
+    root: NodeHash,
     nodes: Nodes,
     context: Vec<NodeHash>,
     errors: BTreeMap<NodePath, CodeError>,
@@ -24,6 +25,7 @@ impl Codebase {
         };
 
         Self {
+            root,
             nodes,
             context: vec![root],
             errors: BTreeMap::new(),
