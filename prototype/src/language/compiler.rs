@@ -16,7 +16,7 @@ pub fn compile(
 
     let (node, maybe_error) = compile_token(token, host);
 
-    codebase.replace_node(path, node);
+    *path = codebase.replace_node(path, node);
     if let Some(error) = maybe_error {
         codebase.insert_error(*path, error);
     }
