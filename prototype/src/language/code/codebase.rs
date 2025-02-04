@@ -138,16 +138,16 @@ impl Codebase {
 
         // All parent still point to the replaced node. Update them.
 
-        let mut child_hash = replacement;
+        let mut replacement = replacement;
 
         for hash in &mut self.context[to_replace.index + 1..] {
             let mut node = self.nodes.get(hash).clone();
-            node.child = Some(child_hash);
+            node.child = Some(replacement);
             *hash = self.nodes.insert(node);
-            child_hash = *hash;
+            replacement = *hash;
         }
 
-        self.root = child_hash;
+        self.root = replacement;
 
         path
     }
