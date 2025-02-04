@@ -139,9 +139,9 @@ impl Codebase {
         // All parent still point to the replaced node. Update them.
 
         for hash in &mut self.context[to_replace.index + 1..] {
-            let mut node = self.nodes.get(hash).clone();
-            node.child = Some(replacement);
-            *hash = self.nodes.insert(node);
+            let mut parent = self.nodes.get(hash).clone();
+            parent.child = Some(replacement);
+            *hash = self.nodes.insert(parent);
             replacement = *hash;
         }
 
