@@ -134,6 +134,14 @@ impl fmt::Display for NodeDisplay<'_> {
     }
 }
 
+/// A unique and versioned path to a [`Node`]
+///
+/// Builds on top of [`NodeHash`] to provide a uniquely identity any syntax
+/// node.
+///
+/// [`NodePath`] is versioned, meaning that it will always point to the exact
+/// same syntax node. If a newer version of that node exists, the same instance
+/// of [`NodePath`] will still point to the original version.
 #[derive(Clone, Copy, Debug, Eq, Ord, PartialEq, PartialOrd)]
 pub struct NodePath {
     pub(super) hash: NodeHash,
