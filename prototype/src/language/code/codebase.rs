@@ -1,4 +1,4 @@
-use std::collections::{BTreeMap, BTreeSet};
+use std::collections::BTreeMap;
 
 use super::{
     nodes::{NodeHash, Nodes},
@@ -93,22 +93,7 @@ impl Codebase {
     }
 
     pub fn latest_version_of(&self, path: NodePath) -> NodePath {
-        let mut already_seen = BTreeSet::new();
-        let mut latest_known = path;
-
-        while let Some(later) = self.changes.inner.get(&latest_known) {
-            already_seen.insert(latest_known);
-
-            if already_seen.contains(later) {
-                panic!(
-                    "Detected endless loop while searching for latest version."
-                );
-            } else {
-                latest_known = *later;
-            }
-        }
-
-        latest_known
+        self.changes.latest_version_of(path)
     }
 
     /// # Insert a node as the parent of another
