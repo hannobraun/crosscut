@@ -176,7 +176,10 @@ impl Codebase {
         if let Some(hash) = initial_replacement {
             NodePath { hash }
         } else {
-            unreachable!("`path` is set above.");
+            unreachable!(
+                "The loop above is executed at least once. The variable must \
+                have been set."
+            );
         }
     }
 
