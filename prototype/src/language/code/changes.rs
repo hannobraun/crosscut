@@ -6,3 +6,11 @@ use super::NodePath;
 pub struct Changes {
     pub inner: BTreeMap<NodePath, NodePath>,
 }
+
+impl Changes {
+    pub fn new() -> Self {
+        Self {
+            inner: BTreeMap::new(),
+        }
+    }
+}

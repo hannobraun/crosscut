@@ -29,9 +29,7 @@ impl Codebase {
             root,
             empty: root,
             nodes,
-            changes: Changes {
-                inner: BTreeMap::new(),
-            },
+            changes: Changes::new(),
             errors: BTreeMap::new(),
         }
     }
