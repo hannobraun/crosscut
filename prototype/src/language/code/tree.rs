@@ -47,9 +47,11 @@ impl SyntaxTree {
 
         let mut leaf_to_root = self.leaf_to_root(nodes);
 
-        leaf_to_root
+        let maybe_parent = leaf_to_root
             .by_ref()
             .find(has_node_as_child)
-            .map(|located_node| located_node.path)
+            .map(|located_node| located_node.path);
+
+        maybe_parent
     }
 }
