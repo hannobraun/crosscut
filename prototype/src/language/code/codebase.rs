@@ -30,6 +30,7 @@ impl Codebase {
         }
     }
 
+    /// # Iterate over notes in the current version, from entry to root
     pub fn nodes_to_root(&self) -> impl Iterator<Item = LocatedNode> {
         let mut hashes = Vec::new();
         let mut current_node = self.root;
