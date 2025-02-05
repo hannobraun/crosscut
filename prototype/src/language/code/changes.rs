@@ -21,7 +21,24 @@ impl Changes {
     }
 
     pub fn latest_version_of(&self, path: NodePath) -> NodePath {
-        self.change_sets[0].latest_version_of(path)
+        let Some(i) = self.change_sets.iter().enumerate().rev().find_map(
+            |(i, change_set)| {
+                change_set
+                    .changes_by_old_version
+                    .contains_key(&path)
+                    .then_some(i)
+            },
+        ) else {
+            return path;
+        };
+
+        let mut latest_known = path;
+
+        for change_set in &self.change_sets[i..] {
+            latest_known = change_set.latest_version_of(latest_known);
+        }
+
+        latest_known
     }
 }
 
