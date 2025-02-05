@@ -31,7 +31,7 @@ impl Codebase {
     }
 
     /// # Iterate over notes in the current version, from entry to root
-    pub fn nodes_to_root(&self) -> impl Iterator<Item = LocatedNode> {
+    pub fn entry_to_root(&self) -> impl Iterator<Item = LocatedNode> {
         let mut hashes = Vec::new();
         let mut current_node = self.root;
 
@@ -70,7 +70,7 @@ impl Codebase {
     }
 
     pub fn parent_of(&self, path: &NodePath) -> Option<NodePath> {
-        self.nodes_to_root().find_map(|located_node| {
+        self.entry_to_root().find_map(|located_node| {
             (located_node.node.child == Some(path.hash))
                 .then_some(located_node.path)
         })
@@ -147,7 +147,7 @@ mod tests {
 
         assert_eq!(
             codebase
-                .nodes_to_root()
+                .entry_to_root()
                 .map(|located_node| located_node.path)
                 .collect::<Vec<_>>(),
             vec![a, b],
