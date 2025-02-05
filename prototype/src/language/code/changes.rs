@@ -4,13 +4,13 @@ use super::NodePath;
 
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub struct Changes {
-    change_set: Vec<ChangeSet>,
+    change_sets: Vec<ChangeSet>,
 }
 
 impl Changes {
     pub fn new() -> Self {
         Self {
-            change_set: vec![ChangeSet {
+            change_sets: vec![ChangeSet {
                 changes_by_old_version: BTreeMap::new(),
             }],
         }
@@ -20,8 +20,9 @@ impl Changes {
         let mut already_seen = BTreeSet::new();
         let mut latest_known = path;
 
-        while let Some(later) =
-            self.change_set[0].changes_by_old_version.get(&latest_known)
+        while let Some(later) = self.change_sets[0]
+            .changes_by_old_version
+            .get(&latest_known)
         {
             already_seen.insert(latest_known);
 
@@ -38,7 +39,7 @@ impl Changes {
     }
 
     pub fn new_change_set(&mut self) -> &mut ChangeSet {
-        &mut self.change_set[0]
+        &mut self.change_sets[0]
     }
 }
 
