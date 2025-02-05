@@ -155,7 +155,10 @@ impl Codebase {
 
         let path = NodePath { hash: replacement };
 
-        while let Some(parent) = self.parent_of(&to_replace) {
+        loop {
+            let Some(parent) = self.parent_of(&to_replace) else {
+                break;
+            };
             to_replace = parent;
 
             let mut parent = self.nodes.get(parent.hash()).clone();
