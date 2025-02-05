@@ -165,8 +165,10 @@ impl Codebase {
             parent.child = Some(replacement);
 
             let new_replacement = self.nodes.insert(parent);
+            path = path.or(Some(NodePath {
+                hash: new_replacement,
+            }));
             replacement = new_replacement;
-            path = path.or(Some(NodePath { hash: replacement }));
         }
 
         self.root = replacement;
