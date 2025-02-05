@@ -173,11 +173,11 @@ impl Codebase {
 
         self.root = previous_replacement;
 
-        let Some(path) = initial_replacement else {
+        let Some(hash) = initial_replacement else {
             unreachable!("`path` is set above.");
         };
 
-        NodePath { hash: path }
+        NodePath { hash }
     }
 
     pub fn error_at(&self, path: &NodePath) -> Option<&CodeError> {
