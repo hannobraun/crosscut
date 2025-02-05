@@ -126,6 +126,25 @@ impl Codebase {
         NodePath { hash }
     }
 
+    #[allow(unused)] // code using this function is being worked on
+    pub fn remove_node(&mut self, to_remove: &NodePath) {
+        let node_to_remove = self.nodes.get(to_remove.hash());
+
+        if let Some(parent) = self.parent_of(to_remove) {
+            let mut updated_parent = self.nodes.get(parent.hash()).clone();
+            updated_parent.child = node_to_remove.child;
+
+            self.replace_node(&parent, updated_parent);
+        } else {
+            // In principle, we'd have to update the root here. We can currently
+            // get away with not doing that, as this function is never used on
+            // the root node.
+            //
+            // I'll fix this, but I want to add a test for that first.
+            todo!("Removing the root node is not supported yet.");
+        }
+    }
+
     pub fn replace_node(
         &mut self,
         to_replace: &NodePath,
