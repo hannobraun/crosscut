@@ -8,6 +8,10 @@ pub struct SyntaxTree {
 }
 
 impl SyntaxTree {
+    pub fn from_root(root: NodeHash) -> Self {
+        Self { root }
+    }
+
     pub fn leaf_to_root(
         self,
         nodes: &Nodes,

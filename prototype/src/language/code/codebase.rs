@@ -46,7 +46,7 @@ impl Codebase {
 
     /// # Iterate over notes in the current version, from entry to root
     pub fn entry_to_root(&self) -> impl Iterator<Item = LocatedNode> {
-        SyntaxTree { root: self.root }.leaf_to_root(&self.nodes)
+        SyntaxTree::from_root(self.root).leaf_to_root(&self.nodes)
     }
 
     pub fn entry(&self) -> NodePath {
