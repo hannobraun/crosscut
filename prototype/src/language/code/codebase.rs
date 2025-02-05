@@ -154,11 +154,12 @@ impl Codebase {
         let mut next_replacement = replacement;
 
         let mut previous_replacement;
-        let mut path = None;
+        let mut initial_replacement = None;
 
         loop {
             let hash = self.nodes.insert(next_replacement);
-            path = path.or(Some(NodePath { hash }));
+            initial_replacement =
+                initial_replacement.or(Some(NodePath { hash }));
 
             previous_replacement = hash;
 
@@ -173,7 +174,7 @@ impl Codebase {
 
         self.root = previous_replacement;
 
-        let Some(path) = path else {
+        let Some(path) = initial_replacement else {
             unreachable!("`path` is set above.");
         };
 
