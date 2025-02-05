@@ -25,7 +25,7 @@ fn number_literal_wrong_input() {
 }
 
 #[test]
-fn unresolved_identifier() {
+fn unresolved_syntax_node() {
     // If an identifier does not refer to a known function, that should result
     // in an error.
 
