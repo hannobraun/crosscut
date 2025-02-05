@@ -8,6 +8,7 @@ use super::{
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub struct Codebase {
     root: NodeHash,
+    empty: NodeHash,
     nodes: Nodes,
     changes: BTreeMap<NodePath, NodePath>,
     errors: BTreeMap<NodePath, CodeError>,
@@ -26,6 +27,7 @@ impl Codebase {
 
         Self {
             root,
+            empty: root,
             nodes,
             changes: BTreeMap::new(),
             errors: BTreeMap::new(),
