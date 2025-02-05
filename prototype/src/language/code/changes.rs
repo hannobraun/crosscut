@@ -17,25 +17,7 @@ impl Changes {
     }
 
     pub fn latest_version_of(&self, path: NodePath) -> NodePath {
-        let mut already_seen = BTreeSet::new();
-        let mut latest_known = path;
-
-        while let Some(later) = self.change_sets[0]
-            .changes_by_old_version
-            .get(&latest_known)
-        {
-            already_seen.insert(latest_known);
-
-            if already_seen.contains(later) {
-                panic!(
-                    "Detected endless loop while searching for latest version."
-                );
-            } else {
-                latest_known = *later;
-            }
-        }
-
-        latest_known
+        self.change_sets[0].latest_version_of(path)
     }
 
     pub fn new_change_set(&mut self) -> &mut ChangeSet {
@@ -52,5 +34,24 @@ impl ChangeSet {
     pub fn add(&mut self, old: NodePath, new: NodePath) -> &mut Self {
         self.changes_by_old_version.insert(old, new);
         self
+    }
+
+    pub fn latest_version_of(&self, path: NodePath) -> NodePath {
+        let mut already_seen = BTreeSet::new();
+        let mut latest_known = path;
+
+        while let Some(later) = self.changes_by_old_version.get(&latest_known) {
+            already_seen.insert(latest_known);
+
+            if already_seen.contains(later) {
+                panic!(
+                    "Detected endless loop while searching for latest version."
+                );
+            } else {
+                latest_known = *later;
+            }
+        }
+
+        latest_known
     }
 }
