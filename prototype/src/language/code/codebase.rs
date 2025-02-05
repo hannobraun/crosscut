@@ -160,7 +160,7 @@ impl Codebase {
             let hash = self.nodes.insert(next_replacement);
             path = path.or(Some(NodePath { hash }));
 
-            previous_replacement = Some(hash);
+            previous_replacement = hash;
 
             let Some(parent) = self.parent_of(&next_to_replace) else {
                 break;
@@ -168,13 +168,10 @@ impl Codebase {
             next_to_replace = parent;
 
             next_replacement = self.nodes.get(next_to_replace.hash()).clone();
-            next_replacement.child = previous_replacement;
+            next_replacement.child = Some(previous_replacement);
         }
 
-        let Some(root) = previous_replacement else {
-            unreachable!("`previous_replacement` is set above.");
-        };
-        self.root = root;
+        self.root = previous_replacement;
 
         let Some(path) = path else {
             unreachable!("`path` is set above.");
