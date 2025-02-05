@@ -35,4 +35,15 @@ impl SyntaxTree {
             path: NodePath { hash },
         })
     }
+
+    pub fn find_parent_of(
+        self,
+        node: &NodeHash,
+        nodes: &Nodes,
+    ) -> Option<NodePath> {
+        self.leaf_to_root(nodes).find_map(|located_node| {
+            (located_node.node.child.as_ref() == Some(node))
+                .then_some(located_node.path)
+        })
+    }
 }

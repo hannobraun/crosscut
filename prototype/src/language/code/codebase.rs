@@ -67,10 +67,7 @@ impl Codebase {
     }
 
     pub fn parent_of(&self, path: &NodePath) -> Option<NodePath> {
-        self.entry_to_root().find_map(|located_node| {
-            (located_node.node.child == Some(path.hash))
-                .then_some(located_node.path)
-        })
+        SyntaxTree::from_root(self.root).find_parent_of(&path.hash, &self.nodes)
     }
 
     pub fn node_at(&self, path: &NodePath) -> &Node {
