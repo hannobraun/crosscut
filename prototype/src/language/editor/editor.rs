@@ -83,7 +83,7 @@ impl Editor {
 
                     let child = Some(*self.editing.hash());
                     self.editing = codebase
-                        .insert_node_after(self.editing, Node::empty(child));
+                        .insert_as_parent_of(self.editing, Node::empty(child));
                 }
             }
         }

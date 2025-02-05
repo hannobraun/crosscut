@@ -80,7 +80,7 @@ impl Codebase {
         self.nodes.get(path.hash())
     }
 
-    pub fn insert_node_after(
+    pub fn insert_as_parent_of(
         &mut self,
         after: NodePath,
         node: Node,
@@ -143,7 +143,7 @@ mod tests {
         let mut codebase = Codebase::new();
 
         let a = codebase.entry();
-        let b = codebase.insert_node_after(a, Node::empty(Some(*a.hash())));
+        let b = codebase.insert_as_parent_of(a, Node::empty(Some(*a.hash())));
 
         assert_eq!(
             codebase
