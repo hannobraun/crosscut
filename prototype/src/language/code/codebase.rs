@@ -82,7 +82,6 @@ impl Codebase {
         self.nodes.get(path.hash())
     }
 
-    #[allow(unused)] // code using this is being worked on
     pub fn latest_version_of(&self, path: NodePath) -> NodePath {
         let mut latest_known = path;
 
@@ -139,7 +138,6 @@ impl Codebase {
         NodePath { hash }
     }
 
-    #[allow(unused)] // code using this function is being worked on
     pub fn remove_node(&mut self, to_remove: &NodePath) {
         let node_to_remove = self.nodes.get(to_remove.hash());
 
