@@ -168,6 +168,8 @@ impl Codebase {
                 next_replacement =
                     self.nodes.get(next_to_replace.hash()).clone();
                 next_replacement.child = Some(previous_replacement);
+
+                continue;
             } else {
                 break;
             };
