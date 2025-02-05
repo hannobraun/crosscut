@@ -52,7 +52,7 @@ fn unresolved_syntax_node() {
 }
 
 #[test]
-fn identifier_that_could_resolve_to_multiple_functions_is_unresolved() {
+fn syntax_node_that_could_resolve_to_multiple_functions_is_unresolved() {
     // If an identifier could resolve to multiple functions, it should remain
     // unresolved, and an error should be shown.
 
