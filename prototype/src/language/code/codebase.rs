@@ -85,6 +85,13 @@ impl Codebase {
         after: NodePath,
         node: Node,
     ) -> NodePath {
+        assert_eq!(
+            node.child.as_ref(),
+            Some(after.hash()),
+            "Inserting a node as the parent of another, but other node is not \
+            the new parent's child.",
+        );
+
         let hash = self.nodes.insert(node);
 
         if let Some(parent) = self.parent_of(&after) {
