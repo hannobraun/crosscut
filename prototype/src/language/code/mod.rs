@@ -4,6 +4,7 @@ mod errors;
 mod expressions;
 mod intrinsics;
 mod nodes;
+mod tree;
 mod types;
 
 pub use self::{

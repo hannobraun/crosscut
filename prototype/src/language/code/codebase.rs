@@ -1,5 +1,7 @@
 use std::collections::BTreeMap;
 
+use crate::language::code::tree::SyntaxTree;
+
 use super::{
     nodes::{NodeHash, Nodes},
     Changes, CodeError, LocatedNode, Node, NodePath,
@@ -44,24 +46,7 @@ impl Codebase {
 
     /// # Iterate over notes in the current version, from entry to root
     pub fn entry_to_root(&self) -> impl Iterator<Item = LocatedNode> {
-        let mut hashes = Vec::new();
-        let mut current_node = self.root;
-
-        loop {
-            let child = self.nodes.get(&current_node).child;
-            hashes.push(current_node);
-
-            if let Some(child) = child {
-                current_node = child;
-            } else {
-                break;
-            }
-        }
-
-        hashes.into_iter().rev().map(|hash| LocatedNode {
-            node: self.nodes.get(&hash),
-            path: NodePath { hash },
-        })
+        SyntaxTree { root: self.root }.leaf_to_root(&self.nodes)
     }
 
     pub fn entry(&self) -> NodePath {
