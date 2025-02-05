@@ -59,7 +59,7 @@ impl ChangeSet {
         self
     }
 
-    pub fn latest_version_of(&self, path: NodePath) -> NodePath {
+    fn latest_version_of(&self, path: NodePath) -> NodePath {
         let mut already_seen = BTreeSet::new();
         let mut latest_known = path;
 
