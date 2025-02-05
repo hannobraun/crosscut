@@ -29,7 +29,9 @@ impl Codebase {
             root,
             empty: root,
             nodes,
-            changes: BTreeMap::new(),
+            changes: Changes {
+                inner: BTreeMap::new(),
+            },
             errors: BTreeMap::new(),
         }
     }
@@ -96,7 +98,7 @@ impl Codebase {
         let mut already_seen = BTreeSet::new();
         let mut latest_known = path;
 
-        while let Some(later) = self.changes.get(&latest_known) {
+        while let Some(later) = self.changes.inner.get(&latest_known) {
             already_seen.insert(latest_known);
 
             if already_seen.contains(later) {
@@ -183,7 +185,9 @@ impl Codebase {
 
         loop {
             let hash = self.nodes.insert(next_replacement);
-            self.changes.insert(next_to_replace, NodePath { hash });
+            self.changes
+                .inner
+                .insert(next_to_replace, NodePath { hash });
 
             initial_replacement = initial_replacement.or(Some(hash));
             previous_replacement = hash;
