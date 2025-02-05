@@ -67,8 +67,14 @@ impl ChangeSet {
             already_seen.insert(latest_known);
 
             if already_seen.contains(later) {
-                panic!(
-                    "Detected endless loop while searching for latest version."
+                unreachable!(
+                    "Detected endless loop while searching for latest version
+                    of node within change set.\n\
+                    \n\
+                    This should never happen, unless a caller puts a circular \
+                    change graph into a single change set. Since `Codebase` \
+                    not expose change sets to its callers, this is a bug \
+                    inside of `Codebase`."
                 );
             } else {
                 latest_known = *later;
