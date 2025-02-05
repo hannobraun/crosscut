@@ -164,7 +164,8 @@ impl Codebase {
             let mut parent = self.nodes.get(next_to_replace.hash()).clone();
             parent.child = Some(replacement);
 
-            replacement = self.nodes.insert(parent);
+            let new_replacement = self.nodes.insert(parent);
+            replacement = new_replacement;
             path = path.or(Some(NodePath { hash: replacement }));
         }
 
