@@ -30,9 +30,7 @@ impl Nodes {
     }
 
     pub fn insert(&mut self, node: Node) -> NodeHash {
-        let hash = NodeHash {
-            hash: udigest::hash::<blake3::Hasher>(&node).into(),
-        };
+        let hash = NodeHash::new(&node);
         self.inner.insert(hash, node);
         hash
     }
@@ -66,6 +64,14 @@ impl Nodes {
 #[derive(Clone, Copy, Eq, Ord, PartialEq, PartialOrd, udigest::Digestable)]
 pub struct NodeHash {
     hash: [u8; 32],
+}
+
+impl NodeHash {
+    pub fn new(node: &Node) -> Self {
+        Self {
+            hash: udigest::hash::<blake3::Hasher>(&node).into(),
+        }
+    }
 }
 
 impl fmt::Debug for NodeHash {
