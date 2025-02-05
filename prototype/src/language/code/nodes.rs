@@ -161,6 +161,14 @@ impl fmt::Display for NodeDisplay<'_> {
 /// - The index of the child node, within the parent node's children.
 #[derive(Clone, Copy, Debug, Eq, Ord, PartialEq, PartialOrd)]
 pub struct NodePath {
+    /// # The hash of the node that this path uniquely identifies
+    ///
+    /// This hash isn't actually required to identify a node's position. The
+    /// path to its parent and the index of the node within the parent's
+    /// children, is actually enough to do that.
+    ///
+    /// But this hash actually is required to identify to identify the node
+    /// _uniquely_, which includes the node's version.
     pub(super) hash: NodeHash,
 }
 
