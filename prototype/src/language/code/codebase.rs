@@ -162,13 +162,15 @@ impl Codebase {
             initial_replacement = initial_replacement.or(Some(hash));
             previous_replacement = hash;
 
-            let Some(parent) = self.parent_of(&next_to_replace) else {
+            if let Some(parent) = self.parent_of(&next_to_replace) {
+                next_to_replace = parent;
+
+                next_replacement =
+                    self.nodes.get(next_to_replace.hash()).clone();
+                next_replacement.child = Some(previous_replacement);
+            } else {
                 break;
             };
-            next_to_replace = parent;
-
-            next_replacement = self.nodes.get(next_to_replace.hash()).clone();
-            next_replacement.child = Some(previous_replacement);
         }
 
         self.root = previous_replacement;
