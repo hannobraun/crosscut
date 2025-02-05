@@ -49,6 +49,10 @@ impl SyntaxTree {
         let mut leaf_to_root = self.leaf_to_root(nodes);
 
         let maybe_parent = leaf_to_root.by_ref().find_map(parent_of_node);
+        assert!(
+            leaf_to_root.find_map(parent_of_node).is_none(),
+            "A node should never have multiple parents within a syntax tree.",
+        );
 
         maybe_parent
     }
