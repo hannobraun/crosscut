@@ -67,7 +67,7 @@ pub struct NodeHash {
 }
 
 impl NodeHash {
-    pub fn new(node: &Node) -> Self {
+    fn new(node: &Node) -> Self {
         let hash = udigest::hash::<blake3::Hasher>(&node).into();
         Self { hash }
     }
