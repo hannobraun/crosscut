@@ -2,7 +2,7 @@ use std::collections::{BTreeMap, BTreeSet};
 
 use super::{
     nodes::{NodeHash, Nodes},
-    CodeError, LocatedNode, Node, NodePath,
+    Changes, CodeError, LocatedNode, Node, NodePath,
 };
 
 #[derive(Clone, Debug, Eq, PartialEq)]
@@ -10,7 +10,7 @@ pub struct Codebase {
     root: NodeHash,
     empty: NodeHash,
     nodes: Nodes,
-    changes: BTreeMap<NodePath, NodePath>,
+    changes: Changes,
     errors: BTreeMap<NodePath, CodeError>,
 }
 

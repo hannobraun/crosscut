@@ -1,3 +1,4 @@
+mod changes;
 mod codebase;
 mod errors;
 mod expressions;
@@ -6,6 +7,7 @@ mod nodes;
 mod types;
 
 pub use self::{
+    changes::Changes,
     codebase::Codebase,
     errors::CodeError,
     expressions::Expression,
