@@ -53,7 +53,7 @@ fn unresolved_syntax_node() {
 
 #[test]
 fn syntax_node_that_could_resolve_to_multiple_functions_is_unresolved() {
-    // If an identifier could resolve to multiple functions, it should remain
+    // If a syntax node could resolve to multiple functions, it should remain
     // unresolved, and an error should be shown.
 
     let mut host = Host::new();
