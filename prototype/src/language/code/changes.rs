@@ -38,11 +38,17 @@ impl Changes {
     }
 
     pub fn add(&mut self, old: NodePath, new: NodePath) {
-        self.change_set.changes_by_old_version.insert(old, new);
+        self.change_set.add(old, new);
     }
 }
 
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub struct ChangeSet {
     changes_by_old_version: BTreeMap<NodePath, NodePath>,
+}
+
+impl ChangeSet {
+    pub fn add(&mut self, old: NodePath, new: NodePath) {
+        self.changes_by_old_version.insert(old, new);
+    }
 }
