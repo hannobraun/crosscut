@@ -34,6 +34,14 @@ impl Codebase {
         }
     }
 
+    #[cfg(test)]
+    pub fn root(&self) -> LocatedNode {
+        LocatedNode {
+            node: self.nodes.get(&self.root),
+            path: NodePath { hash: self.root },
+        }
+    }
+
     /// # Iterate over notes in the current version, from entry to root
     pub fn entry_to_root(&self) -> impl Iterator<Item = LocatedNode> {
         let mut hashes = Vec::new();
@@ -158,12 +166,7 @@ impl Codebase {
 
             self.replace_node(&parent, updated_parent);
         } else {
-            // In principle, we'd have to update the root here. We can currently
-            // get away with not doing that, as this function is never used on
-            // the root node.
-            //
-            // I'll fix this, but I want to add a test for that first.
-            todo!("Removing the root node is not supported yet.");
+            self.root = node_to_remove.child.unwrap_or(self.empty);
         }
     }
 
@@ -221,7 +224,7 @@ impl Codebase {
 
 #[cfg(test)]
 mod tests {
-    use crate::language::code::Node;
+    use crate::language::code::{Node, NodeKind};
 
     use super::Codebase;
 
@@ -239,5 +242,37 @@ mod tests {
                 .collect::<Vec<_>>(),
             vec![a, b],
         );
+    }
+
+    #[test]
+    fn remove_node_should_update_root_node() {
+        let mut codebase = Codebase::new();
+
+        let a = codebase.replace_node(
+            &codebase.entry(),
+            Node {
+                kind: NodeKind::Unresolved {
+                    name: String::from("a"),
+                },
+                child: None,
+            },
+        );
+        let b = codebase.insert_as_parent_of(
+            a,
+            Node {
+                kind: NodeKind::Unresolved {
+                    name: String::from("b"),
+                },
+                child: Some(*a.hash()),
+            },
+        );
+
+        assert_eq!(codebase.root().path, b);
+
+        codebase.remove_node(&b);
+        assert_eq!(codebase.root().path, a);
+
+        codebase.remove_node(&a);
+        assert_eq!(codebase.root().node, &Node::empty(None));
     }
 }
