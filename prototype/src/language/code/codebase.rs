@@ -151,9 +151,11 @@ impl Codebase {
         replacement: Node,
     ) -> NodePath {
         let mut next_to_replace = *to_replace;
-        let mut replacement = self.nodes.insert(replacement);
+        let mut previous_replacement = self.nodes.insert(replacement);
 
-        let mut path = Some(NodePath { hash: replacement });
+        let mut path = Some(NodePath {
+            hash: previous_replacement,
+        });
 
         loop {
             let Some(parent) = self.parent_of(&next_to_replace) else {
@@ -162,17 +164,17 @@ impl Codebase {
             next_to_replace = parent;
 
             let mut parent = self.nodes.get(next_to_replace.hash()).clone();
-            parent.child = Some(replacement);
+            parent.child = Some(previous_replacement);
 
             let new_replacement = self.nodes.insert(parent);
             path = path.or(Some(NodePath {
                 hash: new_replacement,
             }));
 
-            replacement = new_replacement;
+            previous_replacement = new_replacement;
         }
 
-        self.root = replacement;
+        self.root = previous_replacement;
 
         let Some(path) = path else {
             unreachable!("`path` is set above.");
