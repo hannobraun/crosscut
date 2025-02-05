@@ -142,6 +142,8 @@ impl Codebase {
         to_replace: &NodePath,
         replacement: Node,
     ) -> NodePath {
+        let change_set = self.changes.new_change_set();
+
         let mut next_to_replace = *to_replace;
         let mut next_replacement = replacement;
 
@@ -150,9 +152,7 @@ impl Codebase {
 
         loop {
             let hash = self.nodes.insert(next_replacement);
-            self.changes
-                .new_change_set()
-                .add(next_to_replace, NodePath { hash });
+            change_set.add(next_to_replace, NodePath { hash });
 
             initial_replacement = initial_replacement.or(Some(hash));
             previous_replacement = hash;
