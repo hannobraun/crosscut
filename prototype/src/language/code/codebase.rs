@@ -151,7 +151,9 @@ impl Codebase {
         replacement: Node,
     ) -> NodePath {
         let mut next_to_replace = *to_replace;
-        let mut previous_replacement = Some(self.nodes.insert(replacement));
+        let mut next_replacement = replacement;
+        let mut previous_replacement =
+            Some(self.nodes.insert(next_replacement));
 
         let mut path = previous_replacement.map(|hash| NodePath { hash });
 
@@ -161,8 +163,7 @@ impl Codebase {
             };
             next_to_replace = parent;
 
-            let mut next_replacement =
-                self.nodes.get(next_to_replace.hash()).clone();
+            next_replacement = self.nodes.get(next_to_replace.hash()).clone();
             next_replacement.child = previous_replacement;
 
             let new_replacement = self.nodes.insert(next_replacement);
