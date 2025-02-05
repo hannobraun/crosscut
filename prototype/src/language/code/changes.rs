@@ -16,12 +16,12 @@ impl Changes {
         }
     }
 
-    pub fn latest_version_of(&self, path: NodePath) -> NodePath {
-        self.change_sets[0].latest_version_of(path)
-    }
-
     pub fn new_change_set(&mut self) -> &mut ChangeSet {
         &mut self.change_sets[0]
+    }
+
+    pub fn latest_version_of(&self, path: NodePath) -> NodePath {
+        self.change_sets[0].latest_version_of(path)
     }
 }
 
