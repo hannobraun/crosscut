@@ -153,8 +153,8 @@ impl Codebase {
         let mut next_to_replace = *to_replace;
         let mut next_replacement = replacement;
 
-        let mut previous_replacement = None;
-        let mut path = previous_replacement.map(|hash| NodePath { hash });
+        let mut previous_replacement;
+        let mut path = None;
 
         loop {
             let new_replacement = self.nodes.insert(next_replacement);
