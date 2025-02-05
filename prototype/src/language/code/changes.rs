@@ -10,14 +10,20 @@ pub struct Changes {
 impl Changes {
     pub fn new() -> Self {
         Self {
-            change_sets: vec![ChangeSet {
-                changes_by_old_version: BTreeMap::new(),
-            }],
+            change_sets: Vec::new(),
         }
     }
 
     pub fn new_change_set(&mut self) -> &mut ChangeSet {
-        &mut self.change_sets[0]
+        self.change_sets.push(ChangeSet {
+            changes_by_old_version: BTreeMap::new(),
+        });
+
+        let Some(change_set) = self.change_sets.last_mut() else {
+            unreachable!("Just pushed a change set. One _must_ be available.");
+        };
+
+        change_set
     }
 
     pub fn latest_version_of(&self, path: NodePath) -> NodePath {
@@ -70,5 +76,35 @@ impl ChangeSet {
         }
 
         latest_known
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use crate::language::code::{nodes::Nodes, Node, NodeKind, NodePath};
+
+    use super::Changes;
+
+    #[test]
+    fn circular_changes_should_work_correctly() {
+        let mut changes = Changes::new();
+        let mut nodes = Nodes::new();
+
+        let [a, b] = ["a", "b"].map(|name| {
+            let node = Node {
+                kind: NodeKind::Unresolved {
+                    name: String::from(name),
+                },
+                child: None,
+            };
+            let hash = nodes.insert(node);
+            NodePath { hash }
+        });
+
+        changes.new_change_set().add(a, b);
+        changes.new_change_set().add(b, a);
+
+        assert_eq!(changes.latest_version_of(a), a);
+        assert_eq!(changes.latest_version_of(b), a);
     }
 }
