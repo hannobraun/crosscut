@@ -38,7 +38,7 @@ impl Nodes {
     }
 }
 
-/// The hash of a syntax node
+/// # The hash of a syntax node
 ///
 /// The purpose of this type is to serve as a building block for identifying
 /// syntax nodes in a unique and versioned manner. But it's important to
@@ -79,7 +79,7 @@ impl fmt::Debug for NodeHash {
 pub struct Node {
     pub kind: NodeKind,
 
-    /// The syntax node that provides the input for this one
+    /// # The syntax node that provides the input for this one
     ///
     /// Can be `None`, if this is a leaf node that has no children.
     ///
@@ -134,7 +134,7 @@ impl fmt::Display for NodeDisplay<'_> {
     }
 }
 
-/// A unique and versioned path to a [`Node`]
+/// # A unique and versioned path to a [`Node`]
 ///
 /// Builds on top of [`NodeHash`] to uniquely identify any syntax node.
 ///
