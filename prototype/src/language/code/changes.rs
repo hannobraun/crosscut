@@ -48,7 +48,8 @@ pub struct ChangeSet {
 }
 
 impl ChangeSet {
-    pub fn add(&mut self, old: NodePath, new: NodePath) {
+    pub fn add(&mut self, old: NodePath, new: NodePath) -> &mut Self {
         self.changes_by_old_version.insert(old, new);
+        self
     }
 }
