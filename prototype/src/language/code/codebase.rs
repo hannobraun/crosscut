@@ -150,18 +150,18 @@ impl Codebase {
         to_replace: &NodePath,
         replacement: Node,
     ) -> NodePath {
-        let mut to_replace = *to_replace;
+        let mut next_to_replace = *to_replace;
         let mut replacement = self.nodes.insert(replacement);
 
         let mut path = Some(NodePath { hash: replacement });
 
         loop {
-            let Some(parent) = self.parent_of(&to_replace) else {
+            let Some(parent) = self.parent_of(&next_to_replace) else {
                 break;
             };
-            to_replace = parent;
+            next_to_replace = parent;
 
-            let mut parent = self.nodes.get(to_replace.hash()).clone();
+            let mut parent = self.nodes.get(next_to_replace.hash()).clone();
             parent.child = Some(replacement);
 
             replacement = self.nodes.insert(parent);
