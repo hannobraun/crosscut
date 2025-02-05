@@ -157,12 +157,10 @@ impl Codebase {
         let mut path = None;
 
         loop {
-            let new_replacement = self.nodes.insert(next_replacement);
-            path = path.or(Some(NodePath {
-                hash: new_replacement,
-            }));
+            let hash = self.nodes.insert(next_replacement);
+            path = path.or(Some(NodePath { hash }));
 
-            previous_replacement = Some(new_replacement);
+            previous_replacement = Some(hash);
 
             let Some(parent) = self.parent_of(&next_to_replace) else {
                 break;
