@@ -115,10 +115,10 @@ impl Codebase {
         let hash = self.nodes.insert(node);
 
         if let Some(parent) = self.parent_of(&child) {
-            let mut replacement = self.nodes.get(parent.hash()).clone();
-            replacement.child = Some(hash);
+            let mut updated_parent = self.nodes.get(parent.hash()).clone();
+            updated_parent.child = Some(hash);
 
-            self.replace_node(&parent, replacement);
+            self.replace_node(&parent, updated_parent);
         } else {
             self.root = hash;
         }
