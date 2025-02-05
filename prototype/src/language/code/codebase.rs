@@ -9,6 +9,7 @@ use super::{
 pub struct Codebase {
     root: NodeHash,
     nodes: Nodes,
+    changes: BTreeMap<NodePath, NodePath>,
     errors: BTreeMap<NodePath, CodeError>,
 }
 
@@ -26,6 +27,7 @@ impl Codebase {
         Self {
             root,
             nodes,
+            changes: BTreeMap::new(),
             errors: BTreeMap::new(),
         }
     }
@@ -158,6 +160,7 @@ impl Codebase {
 
         loop {
             let hash = self.nodes.insert(next_replacement);
+            self.changes.insert(next_to_replace, NodePath { hash });
 
             initial_replacement = initial_replacement.or(Some(hash));
             previous_replacement = hash;
