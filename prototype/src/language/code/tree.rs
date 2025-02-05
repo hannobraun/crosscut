@@ -41,7 +41,9 @@ impl SyntaxTree {
         node: &NodeHash,
         nodes: &Nodes,
     ) -> Option<NodePath> {
-        self.leaf_to_root(nodes).find_map(|located_node| {
+        let mut leaf_to_root = self.leaf_to_root(nodes);
+
+        leaf_to_root.find_map(|located_node| {
             (located_node.node.child.as_ref() == Some(node))
                 .then_some(located_node.path)
         })
