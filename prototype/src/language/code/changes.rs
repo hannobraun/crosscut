@@ -32,4 +32,8 @@ impl Changes {
 
         latest_known
     }
+
+    pub fn add(&mut self, old: NodePath, new: NodePath) {
+        self.inner.insert(old, new);
+    }
 }

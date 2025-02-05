@@ -168,9 +168,7 @@ impl Codebase {
 
         loop {
             let hash = self.nodes.insert(next_replacement);
-            self.changes
-                .inner
-                .insert(next_to_replace, NodePath { hash });
+            self.changes.add(next_to_replace, NodePath { hash });
 
             initial_replacement = initial_replacement.or(Some(hash));
             previous_replacement = hash;
