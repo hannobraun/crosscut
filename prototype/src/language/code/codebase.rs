@@ -82,6 +82,17 @@ impl Codebase {
         self.nodes.get(path.hash())
     }
 
+    #[allow(unused)] // code using this is being worked on
+    pub fn latest_version_of(&self, path: NodePath) -> NodePath {
+        let mut latest_known = path;
+
+        while let Some(later) = self.changes.get(&latest_known) {
+            latest_known = *later;
+        }
+
+        latest_known
+    }
+
     /// # Insert a node as the parent of another
     ///
     /// The new node takes the place of the other node in the syntax tree. The
