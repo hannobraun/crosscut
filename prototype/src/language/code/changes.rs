@@ -37,8 +37,8 @@ impl Changes {
         latest_known
     }
 
-    pub fn add(&mut self, old: NodePath, new: NodePath) {
-        self.change_set.add(old, new);
+    pub fn new_change_set(&mut self) -> &mut ChangeSet {
+        &mut self.change_set
     }
 }
 
