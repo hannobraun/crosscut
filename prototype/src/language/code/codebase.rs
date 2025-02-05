@@ -168,6 +168,7 @@ impl Codebase {
             path = path.or(Some(NodePath {
                 hash: new_replacement,
             }));
+
             replacement = new_replacement;
         }
 
