@@ -161,7 +161,7 @@ impl Codebase {
             };
             to_replace = parent;
 
-            let mut parent = self.nodes.get(parent.hash()).clone();
+            let mut parent = self.nodes.get(to_replace.hash()).clone();
             parent.child = Some(replacement);
 
             replacement = self.nodes.insert(parent);
