@@ -157,7 +157,9 @@ impl Codebase {
             initial_replacement = initial_replacement.or(Some(hash));
             previous_replacement = hash;
 
-            if let Some(parent) = self.parent_of(&next_to_replace) {
+            if let Some(parent) = SyntaxTree::from_root(self.root)
+                .find_parent_of(&next_to_replace.hash, &self.nodes)
+            {
                 next_to_replace = parent;
 
                 next_replacement =
