@@ -153,7 +153,7 @@ impl Codebase {
         let mut to_replace = *to_replace;
         let mut replacement = self.nodes.insert(replacement);
 
-        let path = NodePath { hash: replacement };
+        let path = Some(NodePath { hash: replacement });
 
         loop {
             let Some(parent) = self.parent_of(&to_replace) else {
@@ -168,6 +168,10 @@ impl Codebase {
         }
 
         self.root = replacement;
+
+        let Some(path) = path else {
+            unreachable!("`path` is set above.");
+        };
 
         path
     }
