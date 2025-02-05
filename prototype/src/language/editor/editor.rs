@@ -75,8 +75,10 @@ impl Editor {
                     }
                 }
                 UpdateAction::RemoveToPrevious => {
-                    // Removing to the previous syntax node is not supported
-                    // yet.
+                    if let Some(to_remove) = codebase.child_of(&self.editing) {
+                        codebase.remove_node(&to_remove);
+                        self.editing = codebase.latest_version_of(self.editing);
+                    }
                 }
                 UpdateAction::Submit { submitted } => {
                     compile(&submitted, &mut self.editing, host, codebase);

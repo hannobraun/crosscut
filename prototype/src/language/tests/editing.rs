@@ -1,5 +1,11 @@
+use itertools::Itertools;
+
 use crate::language::{
-    editor::EditorInputEvent, host::Host, instance::Language, runtime::Value,
+    code::{Expression, IntrinsicFunction, NodeKind},
+    editor::EditorInputEvent,
+    host::Host,
+    instance::Language,
+    runtime::Value,
 };
 
 #[test]
@@ -227,6 +233,33 @@ fn moving_cursor_right_at_end_of_node_should_move_to_next_node() {
     assert_eq!(
         language.step_until_finished(),
         Ok(Value::Integer { value: 127 }),
+    );
+}
+
+#[test]
+fn remove_left_removes_previous_syntax_node_if_empty() {
+    // Removing left removes the previous syntax node, if that is empty.
+
+    let mut language = Language::without_host();
+
+    language.enter_code(" 127");
+    for _ in "127".chars() {
+        language.on_input(EditorInputEvent::MoveCursorLeft);
+    }
+
+    language.on_input(EditorInputEvent::RemoveLeft);
+
+    let (literal,) =
+        language.codebase().entry_to_root().collect_tuple().unwrap();
+    assert_eq!(
+        literal.node.kind,
+        NodeKind::Expression {
+            expression: Expression::IntrinsicFunction {
+                function: IntrinsicFunction::Literal {
+                    value: Value::Integer { value: 127 }
+                }
+            }
+        },
     );
 }
 
