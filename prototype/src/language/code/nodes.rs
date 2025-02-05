@@ -141,6 +141,24 @@ impl fmt::Display for NodeDisplay<'_> {
 /// [`NodePath`] is versioned, meaning that it will always point to the exact
 /// same syntax node. If a newer version of that node exists, the same instance
 /// of [`NodePath`] will still point to the original version.
+///
+/// ## Implementation Note
+///
+/// Right now, this struct only contains a [`NodeHash`], and is thus redundant.
+/// But at some point, it will become possible to build identical expressions in
+/// different parts of the syntax tree. That's when we're going to need this
+/// struct.
+///
+/// And I want to already distinguish between this and [`NodeHash`] right now,
+/// to make the API more clear, and to not require an eventual transition.
+///
+/// The specific change that will make this struct necessary, is supporting
+/// syntax nodes with multiple children. (Thus turning the syntax tree into an
+/// actual tree.) Once that is possible, we'll need two additional pieces of
+/// data here, to uniquely identity a syntax node:
+///
+/// - The location of the parent node.
+/// - The index of the child node, within the parent node's children.
 #[derive(Clone, Copy, Debug, Eq, Ord, PartialEq, PartialOrd)]
 pub struct NodePath {
     pub(super) hash: NodeHash,
