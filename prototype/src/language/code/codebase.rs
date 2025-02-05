@@ -153,7 +153,7 @@ impl Codebase {
         let mut to_replace = *to_replace;
         let mut replacement = self.nodes.insert(replacement);
 
-        let path = Some(NodePath { hash: replacement });
+        let mut path = Some(NodePath { hash: replacement });
 
         loop {
             let Some(parent) = self.parent_of(&to_replace) else {
@@ -165,6 +165,7 @@ impl Codebase {
             parent.child = Some(replacement);
 
             replacement = self.nodes.insert(parent);
+            path = path.or(Some(NodePath { hash: replacement }));
         }
 
         self.root = replacement;
