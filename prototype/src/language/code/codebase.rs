@@ -158,8 +158,8 @@ impl Codebase {
 
         loop {
             let hash = self.nodes.insert(next_replacement);
-            initial_replacement = initial_replacement.or(Some(hash));
 
+            initial_replacement = initial_replacement.or(Some(hash));
             previous_replacement = hash;
 
             let Some(parent) = self.parent_of(&next_to_replace) else {
