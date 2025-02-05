@@ -158,8 +158,7 @@ impl Codebase {
 
         loop {
             let hash = self.nodes.insert(next_replacement);
-            initial_replacement =
-                initial_replacement.or(Some(NodePath { hash }));
+            initial_replacement = initial_replacement.or(Some(hash));
 
             previous_replacement = hash;
 
@@ -178,7 +177,7 @@ impl Codebase {
             unreachable!("`path` is set above.");
         };
 
-        path
+        NodePath { hash: path }
     }
 
     pub fn error_at(&self, path: &NodePath) -> Option<&CodeError> {
