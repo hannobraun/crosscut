@@ -102,19 +102,19 @@ impl Codebase {
     /// the syntax tree takes something akin to its final form.
     pub fn insert_as_parent_of(
         &mut self,
-        after: NodePath,
+        child: NodePath,
         node: Node,
     ) -> NodePath {
         assert_eq!(
             node.child.as_ref(),
-            Some(after.hash()),
+            Some(child.hash()),
             "Inserting a node as the parent of another, but other node is not \
             the new parent's child.",
         );
 
         let hash = self.nodes.insert(node);
 
-        if let Some(parent) = self.parent_of(&after) {
+        if let Some(parent) = self.parent_of(&child) {
             let mut replacement = self.nodes.get(parent.hash()).clone();
             replacement.child = Some(hash);
 
