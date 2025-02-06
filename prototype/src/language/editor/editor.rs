@@ -89,6 +89,13 @@ impl Editor {
                 }
                 UpdateAction::RemoveNext => {
                     if let Some(to_remove) = codebase.parent_of(&self.editing) {
+                        let merged = [&self.editing, &to_remove]
+                            .map(|path| {
+                                codebase.node_at(path).display(host).to_string()
+                            })
+                            .join("");
+                        self.input = EditorInputBuffer::new(merged);
+
                         codebase.remove_node(&to_remove);
                     }
                 }
