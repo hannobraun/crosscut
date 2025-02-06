@@ -1,8 +1,5 @@
 # Cargo
 /target
 
-# Crosscut
-/export
-
 # Vim
 .*.swp
