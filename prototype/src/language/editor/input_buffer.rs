@@ -122,9 +122,12 @@ impl EditorInputBuffer {
         }
     }
 
-    fn remove_right(&mut self) {
+    fn remove_right(&mut self) -> Option<UpdateAction> {
         if self.cursor < self.buffer.len() {
             self.buffer.remove(self.cursor);
+            None
+        } else {
+            None
         }
     }
 
