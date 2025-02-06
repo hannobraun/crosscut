@@ -238,7 +238,8 @@ fn moving_cursor_right_at_end_of_node_should_move_to_next_node() {
 
 #[test]
 fn remove_left_removes_previous_syntax_node_if_empty() {
-    // Removing left removes the previous syntax node, if that is empty.
+    // Removing left while cursor is in the leftmost position within the current
+    // syntax node, removes the previous syntax node, if that is empty.
 
     let mut language = Language::without_host();
 
