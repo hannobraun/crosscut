@@ -116,7 +116,6 @@ impl EditorInputBuffer {
     fn remove_left(&mut self) -> Option<UpdateAction> {
         if self.move_cursor_left().is_none() {
             self.buffer.remove(self.cursor);
-
             None
         } else {
             Some(UpdateAction::RemoveToPrevious)
