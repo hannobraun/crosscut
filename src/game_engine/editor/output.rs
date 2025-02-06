@@ -228,24 +228,8 @@ fn render_prompt<A: EditorOutputAdapter>(
 // serve as the foundation of a more full-featured help browser, which both
 // serves as a kind of tutorial, but also provides reference material.
 //
-// Here's my idea:
-//
-// - There's a concept of pages, and pages can link to each other.
-// - The pieces context-aware help text shown below, would become pages.
-// - This function selects a page to display, based on context.
-// - Links in pages are highlighted, maybe by being bold and bright white.
-// - By pressing "F1", you can jump into the help page and select links with the
-//   cursor keys.
-// - Maybe we highlight the currently selected link using black text on a white
-//   background.
-// - Pressing enter jumps to the linked page.
-// - Backspace jumps to the previous page.
-// - Escape gets you out of the help browser completely, back to editing.
-// - We probably need a way to open help pages permanently, so you can reference
-//   it while you edit code.
-//
-// The goal here would be to replace the need for any other documentation.
-// Everything the developer needs should be right here, at their fingertips.
+// This is tracked in this issue:
+// https://github.com/hannobraun/crosscut/issues/67
 fn render_help<A: EditorOutputAdapter>(
     adapter: &mut A,
     context: &RenderContext,
