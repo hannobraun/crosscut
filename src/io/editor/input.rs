@@ -35,13 +35,9 @@ pub fn read_editor_event(
             return Ok(ControlFlow::Break(()));
         }
         KeyCode::Char(ch) if ch.is_ascii() => {
-            // We have code that needs to keep track of the cursor. That
-            // code won't work with most Unicode characters, and I don't
-            // know how to fix that. It's a complicated topic.
-            //
-            // Long-term, the terminal-based interface can only be a
-            // placeholder anyway. So I think restricting input to ASCII
-            // characters is a reasonable compromise.
+            // Only ASCII characters are currently accepted. This limitation is
+            // tracked here:
+            // https://github.com/hannobraun/crosscut/issues/70
 
             Some(TerminalInputEvent::Character { ch })
         }
