@@ -1,5 +1,4 @@
 [workspace]
-members = ["tools/daily", "tools/website"]
 
 [package]
 name = "crosscut"
