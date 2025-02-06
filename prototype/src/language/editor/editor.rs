@@ -87,6 +87,9 @@ impl Editor {
                         self.editing = codebase.latest_version_of(self.editing);
                     }
                 }
+                UpdateAction::RemoveNext => {
+                    // Removing the next syntax node is not supported yet.
+                }
                 UpdateAction::Submit { submitted } => {
                     compile(&submitted, &mut self.editing, host, codebase);
 

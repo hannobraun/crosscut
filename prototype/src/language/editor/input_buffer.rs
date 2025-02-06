@@ -127,7 +127,7 @@ impl EditorInputBuffer {
             self.buffer.remove(self.cursor);
             None
         } else {
-            None
+            Some(UpdateAction::RemoveNext)
         }
     }
 
@@ -147,6 +147,7 @@ pub enum UpdateAction {
     NavigateToPrevious,
     NavigateToNextNode,
     RemoveToPrevious,
+    RemoveNext,
     Submit { submitted: String },
 }
 
