@@ -6,7 +6,7 @@ use super::{
     host::Host,
 };
 
-pub fn compile(
+pub fn compile_and_replace(
     token: &str,
     path: &mut NodePath,
     host: &Host,

@@ -1,6 +1,6 @@
 use crate::language::{
     code::{Codebase, Node, NodePath},
-    compiler::compile,
+    compiler::compile_and_replace,
     host::Host,
     runtime::Interpreter,
 };
@@ -100,7 +100,12 @@ impl Editor {
                     }
                 }
                 UpdateAction::Submit { submitted } => {
-                    compile(&submitted, &mut self.editing, host, codebase);
+                    compile_and_replace(
+                        &submitted,
+                        &mut self.editing,
+                        host,
+                        codebase,
+                    );
 
                     let child = Some(*self.editing.hash());
                     self.editing = codebase
@@ -109,7 +114,12 @@ impl Editor {
             }
         }
 
-        compile(self.input.buffer(), &mut self.editing, host, codebase);
+        compile_and_replace(
+            self.input.buffer(),
+            &mut self.editing,
+            host,
+            codebase,
+        );
 
         // Unconditionally resetting the interpreter like this, is not going to
         // work long-term. It should only be reset, if it's finished.
