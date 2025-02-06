@@ -58,7 +58,7 @@ impl EditorInputBuffer {
                 return self.remove_left();
             }
             RemoveRight => {
-                self.remove_right();
+                return self.remove_right();
             }
             SubmitNode => {
                 return Some(self.submit());
