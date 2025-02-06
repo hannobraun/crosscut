@@ -248,6 +248,22 @@ fn remove_left_removes_previous_syntax_node_if_empty() {
         language.on_input(EditorInputEvent::MoveCursorLeft);
     }
 
+    // Make sure the test setup worked as expected.
+    let (empty, literal) =
+        language.codebase().entry_to_root().collect_tuple().unwrap();
+    assert_eq!(empty.node.kind, NodeKind::Empty);
+    assert_eq!(
+        literal.node.kind,
+        NodeKind::Expression {
+            expression: Expression::IntrinsicFunction {
+                function: IntrinsicFunction::Literal {
+                    value: Value::Integer { value: 127 }
+                }
+            }
+        },
+    );
+
+    // Actual testing starts here.
     language.on_input(EditorInputEvent::RemoveLeft);
 
     let (literal,) =
