@@ -1,10 +1,7 @@
 use itertools::Itertools;
 
 use crate::language::{
-    code::{Expression, IntrinsicFunction, NodeKind},
-    editor::EditorInputEvent,
-    host::Host,
-    instance::Language,
+    code::NodeKind, editor::EditorInputEvent, host::Host, instance::Language,
     runtime::Value,
 };
 
@@ -252,32 +249,14 @@ fn remove_left_removes_previous_syntax_node_if_empty() {
     let (empty, literal) =
         language.codebase().entry_to_root().collect_tuple().unwrap();
     assert_eq!(empty.node.kind, NodeKind::Empty);
-    assert_eq!(
-        literal.node.kind,
-        NodeKind::Expression {
-            expression: Expression::IntrinsicFunction {
-                function: IntrinsicFunction::Literal {
-                    value: Value::Integer { value: 127 }
-                }
-            }
-        },
-    );
+    assert_eq!(literal.node.kind, NodeKind::integer_literal(127));
 
     // Actual testing starts here.
     language.on_input(EditorInputEvent::RemoveLeft);
 
     let (literal,) =
         language.codebase().entry_to_root().collect_tuple().unwrap();
-    assert_eq!(
-        literal.node.kind,
-        NodeKind::Expression {
-            expression: Expression::IntrinsicFunction {
-                function: IntrinsicFunction::Literal {
-                    value: Value::Integer { value: 127 }
-                }
-            }
-        },
-    );
+    assert_eq!(literal.node.kind, NodeKind::integer_literal(127));
 }
 
 #[test]

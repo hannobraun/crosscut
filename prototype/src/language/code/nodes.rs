@@ -118,6 +118,23 @@ pub enum NodeKind {
     Unresolved { name: String },
 }
 
+impl NodeKind {
+    #[cfg(test)]
+    pub fn integer_literal(value: i32) -> Self {
+        use crate::language::runtime::Value;
+
+        use super::IntrinsicFunction;
+
+        Self::Expression {
+            expression: Expression::IntrinsicFunction {
+                function: IntrinsicFunction::Literal {
+                    value: Value::Integer { value },
+                },
+            },
+        }
+    }
+}
+
 pub struct NodeDisplay<'r> {
     node: &'r Node,
     host: &'r Host,
