@@ -1,6 +1,6 @@
 # Crosscut - Prototype 12
 
-## About
+## Context
 
 This is one of many prototypes of the Crosscut programming language and
 development environment. Check out the top-level README in this repository for
@@ -14,6 +14,8 @@ Crosscut's premise.
 Some of the other problems were rooted in unnecessary complexity, so I decided
 to go for a from-scratch restart with this new prototype, enabling a radical
 simplification in many areas.
+
+## Outcome
 
 One of those simplifications was switching to a tried and true syntax and
 evaluation model, going from postfix operators and stack-based evaluation, to
