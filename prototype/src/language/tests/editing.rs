@@ -264,6 +264,26 @@ fn remove_left_removes_previous_syntax_node_if_empty() {
     );
 }
 
+#[test]
+fn remove_left_merges_with_previous_syntax_node() {
+    // Removing left while cursor is in the leftmost position within the current
+    // syntax node, merges the current and the previous syntax node.
+
+    let mut language = Language::without_host();
+
+    language.enter_code("1 27");
+    for _ in "27".chars() {
+        language.on_input(EditorInputEvent::MoveCursorLeft);
+    }
+
+    language.on_input(EditorInputEvent::RemoveLeft);
+
+    assert_eq!(
+        language.step_until_finished(),
+        Ok(Value::Integer { value: 127 }),
+    );
+}
+
 // There is lots of editing behavior that's not tested here, as this test suite
 // focuses on high-level behavior that affects the whole `language` module.
 //
