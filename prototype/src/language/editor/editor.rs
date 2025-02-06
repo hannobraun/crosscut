@@ -74,7 +74,7 @@ impl Editor {
                         self.navigate_to(location, codebase, host);
                     }
                 }
-                UpdateAction::RemoveToPrevious => {
+                UpdateAction::RemovePrevious => {
                     if let Some(to_remove) = codebase.child_of(&self.editing) {
                         let merged = [&to_remove, &self.editing]
                             .map(|path| {
