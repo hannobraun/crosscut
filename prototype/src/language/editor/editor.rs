@@ -88,7 +88,9 @@ impl Editor {
                     }
                 }
                 UpdateAction::RemoveNext => {
-                    // Removing the next syntax node is not supported yet.
+                    if let Some(to_remove) = codebase.parent_of(&self.editing) {
+                        codebase.remove_node(&to_remove);
+                    }
                 }
                 UpdateAction::Submit { submitted } => {
                     compile(&submitted, &mut self.editing, host, codebase);

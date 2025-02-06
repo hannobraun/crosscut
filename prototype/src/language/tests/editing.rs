@@ -279,6 +279,30 @@ fn remove_left_merges_with_previous_syntax_node() {
     );
 }
 
+#[test]
+fn remove_right_removes_next_syntax_node_if_empty() {
+    // Removing right while cursor is in the rightmost position within the
+    // current syntax node, removes the next syntax node, if that is empty.
+
+    let mut language = Language::without_host();
+
+    language.enter_code("127 ");
+    language.on_input(EditorInputEvent::MoveCursorLeft);
+
+    // Make sure the test setup worked as expected.
+    let (literal, empty) =
+        language.codebase().entry_to_root().collect_tuple().unwrap();
+    assert_eq!(literal.node.kind, NodeKind::integer_literal(127));
+    assert_eq!(empty.node.kind, NodeKind::Empty);
+
+    // Actual testing starts here.
+    language.on_input(EditorInputEvent::RemoveRight);
+
+    let (literal,) =
+        language.codebase().entry_to_root().collect_tuple().unwrap();
+    assert_eq!(literal.node.kind, NodeKind::integer_literal(127));
+}
+
 // There is lots of editing behavior that's not tested here, as this test suite
 // focuses on high-level behavior that affects the whole `language` module.
 //
