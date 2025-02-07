@@ -39,7 +39,7 @@ impl Language {
         &self.interpreter
     }
 
-    pub fn host(&self) -> &Package {
+    pub fn package(&self) -> &Package {
         &self.package
     }
 
