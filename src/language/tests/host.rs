@@ -66,18 +66,18 @@ fn host_functions_can_trigger_effects() {
 struct Halve;
 
 impl Function for Halve {
+    fn from_id(FunctionId { id }: FunctionId) -> Option<Self> {
+        match id {
+            0 => Some(Self),
+            _ => None,
+        }
+    }
+
     fn id(&self) -> FunctionId {
         FunctionId { id: 0 }
     }
 
     fn name(&self) -> &str {
         "halve"
-    }
-
-    fn from_id(FunctionId { id }: FunctionId) -> Option<Self> {
-        match id {
-            0 => Some(Self),
-            _ => None,
-        }
     }
 }
