@@ -14,11 +14,11 @@ impl Package {
         }
     }
 
-    pub fn function(&mut self, id: FunctionId, name: impl Into<String>) {
+    pub fn function(&mut self, id: impl Function, name: impl Into<String>) {
         let name = name.into();
 
-        self.function_ids_by_name.insert(name.clone(), id);
-        self.function_names_by_id.insert(id, name);
+        self.function_ids_by_name.insert(name.clone(), id.id());
+        self.function_names_by_id.insert(id.id(), name);
     }
 
     pub fn resolve_function(&self, name: &str) -> Option<FunctionId> {
@@ -32,6 +32,10 @@ impl Package {
 
         name
     }
+}
+
+pub trait Function {
+    fn id(&self) -> FunctionId;
 }
 
 #[derive(

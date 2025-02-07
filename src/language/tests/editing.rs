@@ -4,7 +4,7 @@ use crate::language::{
     code::NodeKind,
     editor::EditorInputEvent,
     instance::Language,
-    packages::{FunctionId, Package},
+    packages::{Function, FunctionId, Package},
     runtime::Value,
 };
 
@@ -77,9 +77,24 @@ fn submitting_the_node_should_insert_a_new_one_after_the_current_one() {
     // When submitting a node, a new one should be inserted after the one we
     // just submitted.
 
+    enum TestFunction {
+        Zero,
+        IfZeroThen127,
+    }
+    impl Function for TestFunction {
+        fn id(&self) -> FunctionId {
+            let id = match self {
+                Self::Zero => 0,
+                Self::IfZeroThen127 => 1,
+            };
+
+            FunctionId { id }
+        }
+    }
+
     let mut package = Package::new();
-    package.function(FunctionId { id: 0 }, "zero");
-    package.function(FunctionId { id: 1 }, "if_zero_then_127");
+    package.function(TestFunction::Zero, "zero");
+    package.function(TestFunction::IfZeroThen127, "if_zero_then_127");
 
     let mut language = Language::with_package(package);
 

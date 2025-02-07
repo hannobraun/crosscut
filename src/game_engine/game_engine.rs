@@ -5,7 +5,7 @@ use crate::{
     language::{
         code::Type,
         instance::Language,
-        packages::{FunctionId, Package},
+        packages::{Function, FunctionId, Package},
         runtime::{Effect, StepResult, Value},
     },
 };
@@ -48,7 +48,7 @@ where
 {
     pub fn new(adapter: A) -> Self {
         let mut package = Package::new();
-        package.function(FunctionId { id: 0 }, "dim");
+        package.function(GameEngineFunction::Dim, "dim");
 
         let mut game_engine = Self {
             language: Language::with_package(package),
@@ -192,4 +192,18 @@ pub enum GameInput {
 #[derive(Debug)]
 pub enum GameOutput {
     SubmitColor { color: [f64; 4] },
+}
+
+pub enum GameEngineFunction {
+    Dim,
+}
+
+impl Function for GameEngineFunction {
+    fn id(&self) -> FunctionId {
+        let id = match self {
+            Self::Dim => 0,
+        };
+
+        FunctionId { id }
+    }
 }

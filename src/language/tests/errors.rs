@@ -1,7 +1,7 @@
 use crate::language::{
     code::{CodeError, Expression, IntrinsicFunction},
     instance::Language,
-    packages::{FunctionId, Package},
+    packages::{Function, FunctionId, Package},
     runtime::{StepResult, Value},
 };
 
@@ -56,8 +56,15 @@ fn syntax_node_that_could_resolve_to_multiple_functions_is_unresolved() {
     // If a syntax node could resolve to multiple functions, it should remain
     // unresolved, and an error should be shown.
 
+    struct Identity;
+    impl Function for Identity {
+        fn id(&self) -> FunctionId {
+            FunctionId { id: 0 }
+        }
+    }
+
     let mut package = Package::new();
-    package.function(FunctionId { id: 0 }, "identity");
+    package.function(Identity, "identity");
 
     let mut language = Language::with_package(package);
 
