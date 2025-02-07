@@ -11,10 +11,13 @@ pub enum Expression {
 }
 
 impl Expression {
-    pub fn display<'r>(&'r self, host: &'r Package) -> ExpressionDisplay<'r> {
+    pub fn display<'r>(
+        &'r self,
+        package: &'r Package,
+    ) -> ExpressionDisplay<'r> {
         ExpressionDisplay {
             expression: self,
-            host,
+            host: package,
         }
     }
 }
