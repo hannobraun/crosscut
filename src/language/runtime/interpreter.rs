@@ -72,9 +72,7 @@ impl Interpreter {
         };
 
         self.value = match next {
-            Expression::HostFunction {
-                id: FunctionId { id },
-            } => {
+            Expression::HostFunction { id } => {
                 let effect = Effect::ApplyHostFunction {
                     id: *id,
                     input: self.value,
@@ -177,6 +175,6 @@ pub enum StepResult {
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
 pub enum Effect {
-    ApplyHostFunction { id: u32, input: Value },
+    ApplyHostFunction { id: FunctionId, input: Value },
     UnexpectedInput { expected: Type, actual: Value },
 }

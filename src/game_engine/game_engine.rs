@@ -91,7 +91,10 @@ where
                     continue;
                 }
                 StepResult::EffectTriggered { effect } => match effect {
-                    Effect::ApplyHostFunction { id, input } => {
+                    Effect::ApplyHostFunction {
+                        id: FunctionId { id },
+                        input,
+                    } => {
                         self.apply_host_function(id, input);
                         continue;
                     }

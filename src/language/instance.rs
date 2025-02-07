@@ -75,6 +75,9 @@ impl Language {
 }
 
 #[cfg(test)]
+use super::packages::FunctionId;
+
+#[cfg(test)]
 impl Language {
     pub fn without_package() -> Self {
         Self::with_package(Package::new())
@@ -110,16 +113,17 @@ impl Language {
                     // We're not concerned with intermediate results here.
                 }
                 StepResult::EffectTriggered { effect } => match effect {
-                    Effect::ApplyHostFunction { id, input } => {
-                        match handler(id, input) {
-                            Ok(output) => {
-                                self.provide_host_function_output(output);
-                            }
-                            Err(effect) => {
-                                self.trigger_effect(effect);
-                            }
+                    Effect::ApplyHostFunction {
+                        id: FunctionId { id },
+                        input,
+                    } => match handler(id, input) {
+                        Ok(output) => {
+                            self.provide_host_function_output(output);
                         }
-                    }
+                        Err(effect) => {
+                            self.trigger_effect(effect);
+                        }
+                    },
                     effect => {
                         break Err(effect);
                     }
