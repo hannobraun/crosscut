@@ -145,7 +145,7 @@ where
                 }
             }
             _ => {
-                unreachable!("Unexpected host function ID `{id}`");
+                unreachable!("Unexpected host function ID `{id:?}`");
             }
         }
     }
