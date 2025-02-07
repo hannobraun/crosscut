@@ -17,8 +17,8 @@ fn host_functions() {
 
     let output =
         language.step_until_finished_and_handle_host_functions(|id, input| {
-            match id.id {
-                0 => match input {
+            match Function::from_verified_id(id) {
+                Halve => match input {
                     Value::Integer { value } => {
                         Ok(Value::Integer { value: value / 2 })
                     }
@@ -26,9 +26,6 @@ fn host_functions() {
                         panic!("Expected integer. Got instead: {input:?}");
                     }
                 },
-                id => {
-                    unreachable!("Unexpected host function with ID `{id}`.");
-                }
             }
         });
 
