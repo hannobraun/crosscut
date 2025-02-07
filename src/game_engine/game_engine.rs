@@ -124,23 +124,19 @@ where
 
     fn apply_host_function(&mut self, id: FunctionId, input: Value) {
         match Function::from_verified_id(id) {
-            GameEngineFunction::Dim => {
-                // `dim`
-
-                match input {
-                    Value::Integer { value } => {
-                        self.language.provide_host_function_output(
-                            Value::Integer { value: value / 2 },
-                        );
-                    }
-                    value => {
-                        self.language.trigger_effect(Effect::UnexpectedInput {
-                            expected: Type::Integer,
-                            actual: value,
-                        });
-                    }
+            GameEngineFunction::Dim => match input {
+                Value::Integer { value } => {
+                    self.language.provide_host_function_output(
+                        Value::Integer { value: value / 2 },
+                    );
                 }
-            }
+                value => {
+                    self.language.trigger_effect(Effect::UnexpectedInput {
+                        expected: Type::Integer,
+                        actual: value,
+                    });
+                }
+            },
         }
     }
 }
