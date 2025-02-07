@@ -15,6 +15,13 @@ impl Package {
     }
 
     pub fn function<T: Function>(&mut self, function: T) {
+        assert_eq!(
+            Some(function.id()),
+            T::from_id(function.id()).map(|function| function.id()),
+            "Function must return an ID that converts back into the same \
+            function.",
+        );
+
         self.function_ids_by_name
             .insert(function.name().to_string(), function.id());
         self.function_names_by_id
@@ -35,6 +42,9 @@ impl Package {
 }
 
 pub trait Function {
+    fn from_id(id: FunctionId) -> Option<Self>
+    where
+        Self: Sized;
     fn id(&self) -> FunctionId;
     fn name(&self) -> &str;
 }

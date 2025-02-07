@@ -96,6 +96,13 @@ fn submitting_the_node_should_insert_a_new_one_after_the_current_one() {
                 Self::IfZeroThen127 => "if_zero_then_127",
             }
         }
+        fn from_id(FunctionId { id }: FunctionId) -> Option<Self> {
+            match id {
+                0 => Some(Self::Zero),
+                1 => Some(Self::IfZeroThen127),
+                _ => None,
+            }
+        }
     }
 
     let mut package = Package::new();

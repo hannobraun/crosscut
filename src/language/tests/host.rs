@@ -79,4 +79,11 @@ impl Function for Halve {
     fn name(&self) -> &str {
         "halve"
     }
+
+    fn from_id(FunctionId { id }: FunctionId) -> Option<Self> {
+        match id {
+            0 => Some(Self),
+            _ => None,
+        }
+    }
 }

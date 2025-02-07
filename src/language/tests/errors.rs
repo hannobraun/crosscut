@@ -64,6 +64,12 @@ fn syntax_node_that_could_resolve_to_multiple_functions_is_unresolved() {
         fn name(&self) -> &str {
             "identity"
         }
+        fn from_id(FunctionId { id }: FunctionId) -> Option<Self> {
+            match id {
+                0 => Some(Self),
+                _ => None,
+            }
+        }
     }
 
     let mut package = Package::new();

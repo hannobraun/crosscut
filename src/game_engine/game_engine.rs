@@ -212,4 +212,11 @@ impl Function for GameEngineFunction {
             Self::Dim => "dim",
         }
     }
+
+    fn from_id(FunctionId { id }: FunctionId) -> Option<Self> {
+        match id {
+            0 => Some(Self::Dim),
+            _ => None,
+        }
+    }
 }
