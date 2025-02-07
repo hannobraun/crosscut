@@ -14,7 +14,7 @@ impl Package {
         }
     }
 
-    pub fn function(&mut self, function: impl Function) {
+    pub fn function<T: Function>(&mut self, function: T) {
         self.function_ids_by_name
             .insert(function.name().to_string(), function.id());
         self.function_names_by_id
