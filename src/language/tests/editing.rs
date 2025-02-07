@@ -79,11 +79,11 @@ fn submitting_the_node_should_insert_a_new_one_after_the_current_one() {
 
     let mut package = Package::new();
     package.function(FunctionId { id: 0 }, "zero");
-    package.function(FunctionId { id: 1 }, "127_if_zero");
+    package.function(FunctionId { id: 1 }, "if_zero_then_127");
 
     let mut language = Language::with_package(package);
 
-    language.enter_code("255 127_if_zero");
+    language.enter_code("255 if_zero_then_127");
     language.on_input(EditorInputEvent::MoveCursorUp);
     language.on_input(EditorInputEvent::SubmitNode);
     language.enter_code("zero");
@@ -96,7 +96,7 @@ fn submitting_the_node_should_insert_a_new_one_after_the_current_one() {
                     Ok(Value::Integer { value: 0 })
                 }
                 1 => {
-                    // `127_if_zero`
+                    // `if_zero_then_127`
 
                     if let Value::Integer { value: 0 } = input {
                         Ok(Value::Integer { value: 127 })
