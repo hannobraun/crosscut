@@ -123,8 +123,8 @@ where
     }
 
     fn apply_host_function(&mut self, id: FunctionId, input: Value) {
-        match id.id {
-            0 => {
+        match Function::from_verified_id(id) {
+            GameEngineFunction::Dim => {
                 // `dim`
 
                 match input {
@@ -140,9 +140,6 @@ where
                         });
                     }
                 }
-            }
-            _ => {
-                unreachable!("Unexpected host function ID `{id:?}`");
             }
         }
     }

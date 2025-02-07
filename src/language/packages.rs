@@ -46,6 +46,20 @@ pub trait Function {
     where
         Self: Sized;
 
+    fn from_verified_id(id: FunctionId) -> Self
+    where
+        Self: Sized,
+    {
+        let Some(function) = Self::from_id(id) else {
+            panic!(
+                "This function must already receive pre-verified function IDs \
+                that result in a valid function."
+            );
+        };
+
+        function
+    }
+
     fn id(&self) -> FunctionId;
     fn name(&self) -> &str;
 }
