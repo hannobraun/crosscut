@@ -9,10 +9,10 @@ use crate::language::{
 fn host_functions() {
     // The host can define functions that Crosscut code can call.
 
-    let mut host = Package::new();
-    host.function(0, "halve");
+    let mut package = Package::new();
+    package.function(0, "halve");
 
-    let mut language = Language::with_host(host);
+    let mut language = Language::with_host(package);
     language.enter_code("64 halve");
 
     let output =
