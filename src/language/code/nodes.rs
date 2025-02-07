@@ -106,8 +106,11 @@ impl Node {
         }
     }
 
-    pub fn display<'r>(&'r self, host: &'r Package) -> NodeDisplay<'r> {
-        NodeDisplay { node: self, host }
+    pub fn display<'r>(&'r self, package: &'r Package) -> NodeDisplay<'r> {
+        NodeDisplay {
+            node: self,
+            host: package,
+        }
     }
 }
 
