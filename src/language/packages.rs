@@ -2,7 +2,7 @@ use std::collections::BTreeMap;
 
 #[derive(Debug)]
 pub struct Package {
-    function_ids_by_name: BTreeMap<String, u32>,
+    function_ids_by_name: BTreeMap<String, FunctionId>,
     function_names_by_id: BTreeMap<u32, String>,
 }
 
@@ -17,12 +17,16 @@ impl Package {
     pub fn function(&mut self, id: u32, name: impl Into<String>) {
         let name = name.into();
 
-        self.function_ids_by_name.insert(name.clone(), id);
+        self.function_ids_by_name
+            .insert(name.clone(), FunctionId { id });
         self.function_names_by_id.insert(id, name);
     }
 
     pub fn resolve_function(&self, name: &str) -> Option<u32> {
-        self.function_ids_by_name.get(name).copied()
+        self.function_ids_by_name
+            .get(name)
+            .map(|id| &id.id)
+            .copied()
     }
 
     pub fn function_name_by_id(&self, id: &u32) -> &str {
@@ -32,4 +36,9 @@ impl Package {
 
         name
     }
+}
+
+#[derive(Debug)]
+pub struct FunctionId {
+    pub id: u32,
 }
