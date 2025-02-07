@@ -23,13 +23,13 @@ pub fn compile_and_replace(
 fn compile_token(
     token: &str,
     path: &NodePath,
-    host: &Package,
+    package: &Package,
     codebase: &Codebase,
 ) -> (Node, Option<CodeError>) {
     let (kind, maybe_error) = if token.is_empty() {
         (NodeKind::Empty, None)
     } else {
-        match resolve_function(token, host) {
+        match resolve_function(token, package) {
             Ok(expression) => (NodeKind::Expression { expression }, None),
             Err(candidates) => (
                 NodeKind::Unresolved {
