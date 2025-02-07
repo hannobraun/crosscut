@@ -47,11 +47,11 @@ where
     A: EditorOutputAdapter,
 {
     pub fn new(adapter: A) -> Self {
-        let mut host = Package::new();
-        host.function(0, "dim");
+        let mut package = Package::new();
+        package.function(0, "dim");
 
         let mut game_engine = Self {
-            language: Language::with_host(host),
+            language: Language::with_host(package),
             game_output: Vec::new(),
             editor_input: TerminalEditorInput::new(),
             editor_output: TerminalEditorOutput::new(adapter),
