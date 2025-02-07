@@ -121,8 +121,6 @@ fn submitting_the_node_should_insert_a_new_one_after_the_current_one() {
             match TestFunction::from_verified_id(id) {
                 TestFunction::Zero => Ok(Value::Integer { value: 0 }),
                 TestFunction::IfZeroThen127 => {
-                    // `if_zero_then_127`
-
                     if let Value::Integer { value: 0 } = input {
                         Ok(Value::Integer { value: 127 })
                     } else {
