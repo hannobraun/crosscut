@@ -133,12 +133,12 @@ impl Editor {
         &mut self,
         path: NodePath,
         codebase: &Codebase,
-        host: &Package,
+        package: &Package,
     ) {
         self.editing = path;
 
         let node = codebase.node_at(&path);
-        self.input = EditorInputBuffer::new(node.display(host).to_string());
+        self.input = EditorInputBuffer::new(node.display(package).to_string());
     }
 }
 
