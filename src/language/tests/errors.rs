@@ -1,7 +1,7 @@
 use crate::language::{
     code::{CodeError, Expression, IntrinsicFunction},
     instance::Language,
-    packages::Package,
+    packages::{FunctionId, Package},
     runtime::{StepResult, Value},
 };
 
@@ -57,7 +57,7 @@ fn syntax_node_that_could_resolve_to_multiple_functions_is_unresolved() {
     // unresolved, and an error should be shown.
 
     let mut package = Package::new();
-    package.function(0, "identity");
+    package.function(FunctionId { id: 0 }, "identity");
 
     let mut language = Language::with_package(package);
 

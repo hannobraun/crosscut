@@ -1,8 +1,11 @@
 use itertools::Itertools;
 
 use crate::language::{
-    code::NodeKind, editor::EditorInputEvent, instance::Language,
-    packages::Package, runtime::Value,
+    code::NodeKind,
+    editor::EditorInputEvent,
+    instance::Language,
+    packages::{FunctionId, Package},
+    runtime::Value,
 };
 
 #[test]
@@ -75,8 +78,8 @@ fn submitting_the_node_should_insert_a_new_one_after_the_current_one() {
     // just submitted.
 
     let mut package = Package::new();
-    package.function(0, "zero");
-    package.function(1, "127_if_zero");
+    package.function(FunctionId { id: 0 }, "zero");
+    package.function(FunctionId { id: 1 }, "127_if_zero");
 
     let mut language = Language::with_package(package);
 

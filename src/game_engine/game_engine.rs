@@ -5,7 +5,7 @@ use crate::{
     language::{
         code::Type,
         instance::Language,
-        packages::Package,
+        packages::{FunctionId, Package},
         runtime::{Effect, StepResult, Value},
     },
 };
@@ -48,7 +48,7 @@ where
 {
     pub fn new(adapter: A) -> Self {
         let mut package = Package::new();
-        package.function(0, "dim");
+        package.function(FunctionId { id: 0 }, "dim");
 
         let mut game_engine = Self {
             language: Language::with_package(package),

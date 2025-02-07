@@ -14,12 +14,11 @@ impl Package {
         }
     }
 
-    pub fn function(&mut self, id: u32, name: impl Into<String>) {
+    pub fn function(&mut self, id: FunctionId, name: impl Into<String>) {
         let name = name.into();
 
-        self.function_ids_by_name
-            .insert(name.clone(), FunctionId { id });
-        self.function_names_by_id.insert(FunctionId { id }, name);
+        self.function_ids_by_name.insert(name.clone(), id);
+        self.function_names_by_id.insert(id, name);
     }
 
     pub fn resolve_function(&self, name: &str) -> Option<u32> {
