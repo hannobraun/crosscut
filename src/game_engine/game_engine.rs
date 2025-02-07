@@ -48,7 +48,7 @@ where
 {
     pub fn new(adapter: A) -> Self {
         let mut package = Package::new();
-        package.function(GameEngineFunction::Dim, "dim");
+        package.function(GameEngineFunction::Dim);
 
         let mut game_engine = Self {
             language: Language::with_package(package),
@@ -205,5 +205,11 @@ impl Function for GameEngineFunction {
         };
 
         FunctionId { id }
+    }
+
+    fn name(&self) -> &str {
+        match self {
+            Self::Dim => "dim",
+        }
     }
 }

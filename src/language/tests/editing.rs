@@ -90,11 +90,18 @@ fn submitting_the_node_should_insert_a_new_one_after_the_current_one() {
 
             FunctionId { id }
         }
+
+        fn name(&self) -> &str {
+            match self {
+                Self::Zero => "zero",
+                Self::IfZeroThen127 => "if_zero_then_127",
+            }
+        }
     }
 
     let mut package = Package::new();
-    package.function(TestFunction::Zero, "zero");
-    package.function(TestFunction::IfZeroThen127, "if_zero_then_127");
+    package.function(TestFunction::Zero);
+    package.function(TestFunction::IfZeroThen127);
 
     let mut language = Language::with_package(package);
 

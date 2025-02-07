@@ -61,10 +61,13 @@ fn syntax_node_that_could_resolve_to_multiple_functions_is_unresolved() {
         fn id(&self) -> FunctionId {
             FunctionId { id: 0 }
         }
+        fn name(&self) -> &str {
+            "identity"
+        }
     }
 
     let mut package = Package::new();
-    package.function(Identity, "identity");
+    package.function(Identity);
 
     let mut language = Language::with_package(package);
 
