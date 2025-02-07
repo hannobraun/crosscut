@@ -34,7 +34,7 @@ impl Editor {
         event: EditorInputEvent,
         codebase: &mut Codebase,
         interpreter: &mut Interpreter,
-        host: &Package,
+        package: &Package,
     ) {
         if let Some(action) = self.input.update(event) {
             // This code results in non-intuitive cursor movement, if using the
@@ -43,20 +43,23 @@ impl Editor {
             match action {
                 UpdateAction::NavigateToPrevious => {
                     if let Some(location) = codebase.child_of(&self.editing) {
-                        self.navigate_to(location, codebase, host);
+                        self.navigate_to(location, codebase, package);
                         self.input.move_cursor_to_end();
                     }
                 }
                 UpdateAction::NavigateToNextNode => {
                     if let Some(location) = codebase.parent_of(&self.editing) {
-                        self.navigate_to(location, codebase, host);
+                        self.navigate_to(location, codebase, package);
                     }
                 }
                 UpdateAction::RemovePrevious => {
                     if let Some(to_remove) = codebase.child_of(&self.editing) {
                         let merged = [&to_remove, &self.editing]
                             .map(|path| {
-                                codebase.node_at(path).display(host).to_string()
+                                codebase
+                                    .node_at(path)
+                                    .display(package)
+                                    .to_string()
                             })
                             .join("");
                         self.input = EditorInputBuffer::new(merged);
@@ -69,7 +72,10 @@ impl Editor {
                     if let Some(to_remove) = codebase.parent_of(&self.editing) {
                         let merged = [&self.editing, &to_remove]
                             .map(|path| {
-                                codebase.node_at(path).display(host).to_string()
+                                codebase
+                                    .node_at(path)
+                                    .display(package)
+                                    .to_string()
                             })
                             .join("");
                         self.input = EditorInputBuffer::new(merged);
@@ -81,7 +87,7 @@ impl Editor {
                     compile_and_replace(
                         &submitted,
                         &mut self.editing,
-                        host,
+                        package,
                         codebase,
                     );
 
@@ -95,7 +101,7 @@ impl Editor {
         compile_and_replace(
             self.input.buffer(),
             &mut self.editing,
-            host,
+            package,
             codebase,
         );
 
