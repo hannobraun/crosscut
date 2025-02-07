@@ -3,7 +3,7 @@ use std::collections::BTreeMap;
 #[derive(Debug)]
 pub struct Package {
     function_ids_by_name: BTreeMap<String, FunctionId>,
-    function_names_by_id: BTreeMap<u32, String>,
+    function_names_by_id: BTreeMap<FunctionId, String>,
 }
 
 impl Package {
@@ -19,7 +19,7 @@ impl Package {
 
         self.function_ids_by_name
             .insert(name.clone(), FunctionId { id });
-        self.function_names_by_id.insert(id, name);
+        self.function_names_by_id.insert(FunctionId { id }, name);
     }
 
     pub fn resolve_function(&self, name: &str) -> Option<u32> {
@@ -30,7 +30,8 @@ impl Package {
     }
 
     pub fn function_name_by_id(&self, id: &u32) -> &str {
-        let Some(name) = self.function_names_by_id.get(id) else {
+        let Some(name) = self.function_names_by_id.get(&FunctionId { id: *id })
+        else {
             panic!("Expected function ID `{id}` to be valid.");
         };
 
