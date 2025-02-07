@@ -17,7 +17,7 @@ fn host_functions() {
 
     let output =
         language.step_until_finished_and_handle_host_functions(|id, input| {
-            match id {
+            match id.id {
                 0 => match input {
                     Value::Integer { value } => {
                         Ok(Value::Integer { value: value / 2 })
@@ -52,7 +52,7 @@ fn host_functions_can_trigger_effects() {
     };
     let output =
         language.step_until_finished_and_handle_host_functions(|id, input| {
-            match id {
+            match id.id {
                 0 => match input {
                     Value::None => Err(effect),
                     input => {

@@ -103,7 +103,7 @@ impl Language {
 
     pub fn step_until_finished_and_handle_host_functions(
         &mut self,
-        mut handler: impl FnMut(u32, Value) -> Result<Value, Effect>,
+        mut handler: impl FnMut(FunctionId, Value) -> Result<Value, Effect>,
     ) -> Result<Value, Effect> {
         let mut i = 0;
 
@@ -113,17 +113,16 @@ impl Language {
                     // We're not concerned with intermediate results here.
                 }
                 StepResult::EffectTriggered { effect } => match effect {
-                    Effect::ApplyHostFunction {
-                        id: FunctionId { id },
-                        input,
-                    } => match handler(id, input) {
-                        Ok(output) => {
-                            self.provide_host_function_output(output);
+                    Effect::ApplyHostFunction { id, input } => {
+                        match handler(id, input) {
+                            Ok(output) => {
+                                self.provide_host_function_output(output);
+                            }
+                            Err(effect) => {
+                                self.trigger_effect(effect);
+                            }
                         }
-                        Err(effect) => {
-                            self.trigger_effect(effect);
-                        }
-                    },
+                    }
                     effect => {
                         break Err(effect);
                     }
