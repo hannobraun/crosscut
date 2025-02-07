@@ -10,7 +10,7 @@ pub struct Language {
     codebase: Codebase,
     editor: Editor,
     interpreter: Interpreter,
-    host: Package,
+    package: Package,
 }
 
 impl Language {
@@ -23,7 +23,7 @@ impl Language {
             codebase,
             editor,
             interpreter,
-            host: package,
+            package,
         }
     }
 
@@ -40,7 +40,7 @@ impl Language {
     }
 
     pub fn host(&self) -> &Package {
-        &self.host
+        &self.package
     }
 
     pub fn on_input(&mut self, event: EditorInputEvent) {
@@ -48,7 +48,7 @@ impl Language {
             event,
             &mut self.codebase,
             &mut self.interpreter,
-            &self.host,
+            &self.package,
         );
     }
 
