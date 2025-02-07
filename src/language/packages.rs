@@ -38,7 +38,7 @@ impl Package {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Eq, Ord, PartialEq, PartialOrd)]
 pub struct FunctionId {
     pub id: u32,
 }
