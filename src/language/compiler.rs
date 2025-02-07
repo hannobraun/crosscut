@@ -50,9 +50,9 @@ fn compile_token(
 
 fn resolve_function(
     name: &str,
-    host: &Package,
+    package: &Package,
 ) -> Result<Expression, Vec<Expression>> {
-    let host_function = host.function_id_by_name(name);
+    let host_function = package.function_id_by_name(name);
     let intrinsic_function = IntrinsicFunction::resolve(name);
 
     match (host_function, intrinsic_function) {
