@@ -97,7 +97,7 @@ impl Language {
 
     pub fn step_until_finished(&mut self) -> Result<Value, Effect> {
         self.step_until_finished_and_handle_host_functions(|id, _| {
-            unreachable!("Unexpected host function with ID `{id}`.")
+            unreachable!("Unexpected host function with ID `{id:?}`.")
         })
     }
 
