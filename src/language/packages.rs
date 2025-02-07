@@ -45,6 +45,7 @@ pub trait Function {
     fn from_id(id: FunctionId) -> Option<Self>
     where
         Self: Sized;
+
     fn id(&self) -> FunctionId;
     fn name(&self) -> &str;
 }
