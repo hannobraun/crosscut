@@ -118,12 +118,12 @@ fn submitting_the_node_should_insert_a_new_one_after_the_current_one() {
 
     let output =
         language.step_until_finished_and_handle_host_functions(|id, input| {
-            match id.id {
-                0 => {
+            match TestFunction::from_verified_id(id) {
+                TestFunction::Zero => {
                     // `zero`
                     Ok(Value::Integer { value: 0 })
                 }
-                1 => {
+                TestFunction::IfZeroThen127 => {
                     // `if_zero_then_127`
 
                     if let Value::Integer { value: 0 } = input {
@@ -131,9 +131,6 @@ fn submitting_the_node_should_insert_a_new_one_after_the_current_one() {
                     } else {
                         Ok(input)
                     }
-                }
-                id => {
-                    unreachable!("Unknown host function: {id}");
                 }
             }
         });
