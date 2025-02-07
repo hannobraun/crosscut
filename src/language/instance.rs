@@ -14,7 +14,7 @@ pub struct Language {
 }
 
 impl Language {
-    pub fn with_host(host: Package) -> Self {
+    pub fn with_host(package: Package) -> Self {
         let codebase = Codebase::new();
         let editor = Editor::new(&codebase);
         let interpreter = Interpreter::new(&codebase);
@@ -23,7 +23,7 @@ impl Language {
             codebase,
             editor,
             interpreter,
-            host,
+            host: package,
         }
     }
 
