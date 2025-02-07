@@ -8,7 +8,7 @@ use crate::{
         },
         editor::Editor,
         instance::Language,
-        packages::{FunctionId, Package},
+        packages::Package,
         runtime::{Effect, Interpreter, InterpreterState, Value},
     },
 };
@@ -175,9 +175,7 @@ fn render_node<A: EditorOutputAdapter>(
     match &located_node.node.kind {
         NodeKind::Empty => {}
         NodeKind::Expression { expression } => match expression {
-            Expression::HostFunction {
-                id: FunctionId { id },
-            } => {
+            Expression::HostFunction { id } => {
                 let name = context.package.function_name_by_id(id);
                 adapter.color(Color::DarkMagenta, |adapter| {
                     write!(adapter, "{name}")
