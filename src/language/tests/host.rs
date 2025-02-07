@@ -49,16 +49,13 @@ fn host_functions_can_trigger_effects() {
     };
     let output =
         language.step_until_finished_and_handle_host_functions(|id, input| {
-            match id.id {
-                0 => match input {
+            match Function::from_verified_id(id) {
+                Halve => match input {
                     Value::None => Err(effect),
                     input => {
                         unreachable!("Unexpected input: `{input:?}`");
                     }
                 },
-                id => {
-                    unreachable!("Unexpected host function with ID `{id}`.");
-                }
             }
         });
 
