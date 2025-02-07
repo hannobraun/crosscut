@@ -28,7 +28,7 @@ impl Package {
     pub fn function_name_by_id(&self, id: &u32) -> &str {
         let Some(name) = self.function_names_by_id.get(&FunctionId { id: *id })
         else {
-            panic!("Expected function ID `{id}` to be valid.");
+            panic!("Expected function ID `{id:?}` to be valid.");
         };
 
         name
