@@ -1,7 +1,7 @@
 use super::{
     code::Codebase,
     editor::{Editor, EditorCommand, EditorInputEvent},
-    host::Package,
+    packages::Package,
     runtime::{Effect, Interpreter, StepResult, Value},
 };
 

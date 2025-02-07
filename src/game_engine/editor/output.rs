@@ -7,8 +7,8 @@ use crate::{
             Codebase, Expression, IntrinsicFunction, LocatedNode, NodeKind,
         },
         editor::Editor,
-        host::Package,
         instance::Language,
+        packages::Package,
         runtime::{Effect, Interpreter, InterpreterState, Value},
     },
 };

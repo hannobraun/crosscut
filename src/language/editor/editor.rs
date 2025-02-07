@@ -1,7 +1,7 @@
 use crate::language::{
     code::{Codebase, Node, NodePath},
     compiler::compile_and_replace,
-    host::Package,
+    packages::Package,
     runtime::Interpreter,
 };
 

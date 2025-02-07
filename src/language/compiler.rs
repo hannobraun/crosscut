@@ -3,7 +3,7 @@ use super::{
         CodeError, Codebase, Expression, IntrinsicFunction, Node, NodeKind,
         NodePath,
     },
-    host::Package,
+    packages::Package,
 };
 
 pub fn compile_and_replace(

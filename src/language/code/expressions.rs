@@ -1,6 +1,6 @@
 use std::fmt;
 
-use crate::language::host::Package;
+use crate::language::packages::Package;
 
 use super::IntrinsicFunction;
 

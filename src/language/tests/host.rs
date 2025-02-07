@@ -1,7 +1,7 @@
 use crate::language::{
     code::Type,
-    host::Package,
     instance::Language,
+    packages::Package,
     runtime::{Effect, StepResult, Value},
 };
 

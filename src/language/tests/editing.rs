@@ -1,8 +1,8 @@
 use itertools::Itertools;
 
 use crate::language::{
-    code::NodeKind, editor::EditorInputEvent, host::Package,
-    instance::Language, runtime::Value,
+    code::NodeKind, editor::EditorInputEvent, instance::Language,
+    packages::Package, runtime::Value,
 };
 
 #[test]
