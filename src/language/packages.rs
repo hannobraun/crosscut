@@ -21,7 +21,7 @@ impl Package {
         self.function_names_by_id.insert(id, name);
     }
 
-    pub fn function_id_by_name(&self, name: &str) -> Option<u32> {
+    pub fn resolve_function(&self, name: &str) -> Option<u32> {
         self.function_ids_by_name.get(name).copied()
     }
 
