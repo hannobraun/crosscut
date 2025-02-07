@@ -37,7 +37,7 @@ where
             codebase: language.codebase(),
             editor: language.editor(),
             interpreter: language.interpreter(),
-            host: language.host(),
+            package: language.host(),
             cursor: None,
         };
 
@@ -176,7 +176,7 @@ fn render_node<A: EditorOutputAdapter>(
         NodeKind::Empty => {}
         NodeKind::Expression { expression } => match expression {
             Expression::HostFunction { id } => {
-                let name = context.host.function_name_by_id(id);
+                let name = context.package.function_name_by_id(id);
                 adapter.color(Color::DarkMagenta, |adapter| {
                     write!(adapter, "{name}")
                 })?;
@@ -334,7 +334,7 @@ struct RenderContext<'r> {
     codebase: &'r Codebase,
     editor: &'r Editor,
     interpreter: &'r Interpreter,
-    host: &'r Package,
+    package: &'r Package,
     cursor: Option<Cursor>,
 }
 
