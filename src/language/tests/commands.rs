@@ -9,7 +9,7 @@ fn clear() {
     // This is too dangerous of a capability to keep around long-term, but for
     // right now, it's a useful capability to have during development.
 
-    let mut language = Language::without_host();
+    let mut language = Language::without_package();
 
     language.enter_code("12");
     assert_eq!(

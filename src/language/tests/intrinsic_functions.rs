@@ -5,7 +5,7 @@ fn number_literal() {
     // A number literal is a function that takes `None` and returns the number
     // it represents.
 
-    let mut language = Language::without_host();
+    let mut language = Language::without_package();
 
     language.enter_code("127");
     assert_eq!(
@@ -20,7 +20,7 @@ fn identity_none() {
     // initial value is `None`, so an `identity` with nothing else around,
     // should return that.
 
-    let mut language = Language::without_host();
+    let mut language = Language::without_package();
 
     language.enter_code("identity");
     assert_eq!(language.step_until_finished(), Ok(Value::None));
@@ -31,7 +31,7 @@ fn identity_integer() {
     // The `identity` function takes any argument and returns it unchanged. This
     // works with integers, as it does with any other value.
 
-    let mut language = Language::without_host();
+    let mut language = Language::without_package();
 
     language.enter_code("127 identity");
     assert_eq!(

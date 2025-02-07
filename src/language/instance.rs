@@ -76,7 +76,7 @@ impl Language {
 
 #[cfg(test)]
 impl Language {
-    pub fn without_host() -> Self {
+    pub fn without_package() -> Self {
         Self::with_package(Package::new())
     }
 
