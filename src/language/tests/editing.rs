@@ -90,7 +90,6 @@ fn submitting_the_node_should_insert_a_new_one_after_the_current_one() {
 
             FunctionId { id }
         }
-
         fn name(&self) -> &str {
             match self {
                 Self::Zero => "zero",
