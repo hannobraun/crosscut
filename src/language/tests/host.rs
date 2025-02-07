@@ -40,10 +40,10 @@ fn host_functions_can_trigger_effects() {
     // A host function, instead of returning a value, can trigger an effect. For
     // example to indicate an error.
 
-    let mut host = Package::new();
-    host.function(0, "halve");
+    let mut package = Package::new();
+    package.function(0, "halve");
 
-    let mut language = Language::with_host(host);
+    let mut language = Language::with_host(package);
     language.enter_code("halve");
 
     let effect = Effect::UnexpectedInput {
