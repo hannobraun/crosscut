@@ -3,13 +3,13 @@ use super::{
         CodeError, Codebase, Expression, IntrinsicFunction, Node, NodeKind,
         NodePath,
     },
-    host::Host,
+    host::Package,
 };
 
 pub fn compile_and_replace(
     token: &str,
     path: &mut NodePath,
-    host: &Host,
+    host: &Package,
     codebase: &mut Codebase,
 ) {
     let (node, maybe_error) = compile_token(token, path, host, codebase);
@@ -23,7 +23,7 @@ pub fn compile_and_replace(
 fn compile_token(
     token: &str,
     path: &NodePath,
-    host: &Host,
+    host: &Package,
     codebase: &Codebase,
 ) -> (Node, Option<CodeError>) {
     let (kind, maybe_error) = if token.is_empty() {
@@ -50,7 +50,7 @@ fn compile_token(
 
 fn resolve_function(
     name: &str,
-    host: &Host,
+    host: &Package,
 ) -> Result<Expression, Vec<Expression>> {
     let host_function = host.function_id_by_name(name);
     let intrinsic_function = IntrinsicFunction::resolve(name);

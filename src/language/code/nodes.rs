@@ -2,7 +2,7 @@ use std::{collections::BTreeMap, fmt};
 
 use base64::{prelude::BASE64_STANDARD_NO_PAD, Engine};
 
-use crate::language::host::Host;
+use crate::language::host::Package;
 
 use super::Expression;
 
@@ -106,7 +106,7 @@ impl Node {
         }
     }
 
-    pub fn display<'r>(&'r self, host: &'r Host) -> NodeDisplay<'r> {
+    pub fn display<'r>(&'r self, host: &'r Package) -> NodeDisplay<'r> {
         NodeDisplay { node: self, host }
     }
 }
@@ -137,7 +137,7 @@ impl NodeKind {
 
 pub struct NodeDisplay<'r> {
     node: &'r Node,
-    host: &'r Host,
+    host: &'r Package,
 }
 
 impl fmt::Display for NodeDisplay<'_> {

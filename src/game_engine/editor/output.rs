@@ -7,7 +7,7 @@ use crate::{
             Codebase, Expression, IntrinsicFunction, LocatedNode, NodeKind,
         },
         editor::Editor,
-        host::Host,
+        host::Package,
         instance::Language,
         runtime::{Effect, Interpreter, InterpreterState, Value},
     },
@@ -334,7 +334,7 @@ struct RenderContext<'r> {
     codebase: &'r Codebase,
     editor: &'r Editor,
     interpreter: &'r Interpreter,
-    host: &'r Host,
+    host: &'r Package,
     cursor: Option<Cursor>,
 }
 

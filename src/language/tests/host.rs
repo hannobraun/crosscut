@@ -1,6 +1,6 @@
 use crate::language::{
     code::Type,
-    host::Host,
+    host::Package,
     instance::Language,
     runtime::{Effect, StepResult, Value},
 };
@@ -9,7 +9,7 @@ use crate::language::{
 fn host_functions() {
     // The host can define functions that Crosscut code can call.
 
-    let mut host = Host::new();
+    let mut host = Package::new();
     host.function(0, "halve");
 
     let mut language = Language::with_host(host);
@@ -40,7 +40,7 @@ fn host_functions_can_trigger_effects() {
     // A host function, instead of returning a value, can trigger an effect. For
     // example to indicate an error.
 
-    let mut host = Host::new();
+    let mut host = Package::new();
     host.function(0, "halve");
 
     let mut language = Language::with_host(host);

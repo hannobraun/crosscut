@@ -1,6 +1,6 @@
 use std::fmt;
 
-use crate::language::host::Host;
+use crate::language::host::Package;
 
 use super::IntrinsicFunction;
 
@@ -11,7 +11,7 @@ pub enum Expression {
 }
 
 impl Expression {
-    pub fn display<'r>(&'r self, host: &'r Host) -> ExpressionDisplay<'r> {
+    pub fn display<'r>(&'r self, host: &'r Package) -> ExpressionDisplay<'r> {
         ExpressionDisplay {
             expression: self,
             host,
@@ -21,7 +21,7 @@ impl Expression {
 
 pub struct ExpressionDisplay<'r> {
     expression: &'r Expression,
-    host: &'r Host,
+    host: &'r Package,
 }
 
 impl fmt::Display for ExpressionDisplay<'_> {

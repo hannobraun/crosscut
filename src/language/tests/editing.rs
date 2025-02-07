@@ -1,8 +1,8 @@
 use itertools::Itertools;
 
 use crate::language::{
-    code::NodeKind, editor::EditorInputEvent, host::Host, instance::Language,
-    runtime::Value,
+    code::NodeKind, editor::EditorInputEvent, host::Package,
+    instance::Language, runtime::Value,
 };
 
 #[test]
@@ -74,7 +74,7 @@ fn submitting_the_node_should_insert_a_new_one_after_the_current_one() {
     // When submitting a node, a new one should be inserted after the one we
     // just submitted.
 
-    let mut host = Host::new();
+    let mut host = Package::new();
     host.function(0, "zero");
     host.function(1, "127_if_zero");
 

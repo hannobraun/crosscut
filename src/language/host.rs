@@ -1,12 +1,12 @@
 use std::collections::BTreeMap;
 
 #[derive(Debug)]
-pub struct Host {
+pub struct Package {
     function_ids_by_name: BTreeMap<String, u32>,
     function_names_by_id: BTreeMap<u32, String>,
 }
 
-impl Host {
+impl Package {
     pub fn new() -> Self {
         Self {
             function_ids_by_name: BTreeMap::new(),

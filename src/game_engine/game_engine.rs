@@ -4,7 +4,7 @@ use crate::{
     },
     language::{
         code::Type,
-        host::Host,
+        host::Package,
         instance::Language,
         runtime::{Effect, StepResult, Value},
     },
@@ -47,7 +47,7 @@ where
     A: EditorOutputAdapter,
 {
     pub fn new(adapter: A) -> Self {
-        let mut host = Host::new();
+        let mut host = Package::new();
         host.function(0, "dim");
 
         let mut game_engine = Self {

@@ -1,7 +1,7 @@
 use crate::language::{
     code::{Codebase, Node, NodePath},
     compiler::compile_and_replace,
-    host::Host,
+    host::Package,
     runtime::Interpreter,
 };
 
@@ -34,7 +34,7 @@ impl Editor {
         event: EditorInputEvent,
         codebase: &mut Codebase,
         interpreter: &mut Interpreter,
-        host: &Host,
+        host: &Package,
     ) {
         if let Some(action) = self.input.update(event) {
             // This code results in non-intuitive cursor movement, if using the
@@ -127,7 +127,7 @@ impl Editor {
         &mut self,
         path: NodePath,
         codebase: &Codebase,
-        host: &Host,
+        host: &Package,
     ) {
         self.editing = path;
 

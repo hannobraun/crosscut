@@ -1,7 +1,7 @@
 use super::{
     code::Codebase,
     editor::{Editor, EditorCommand, EditorInputEvent},
-    host::Host,
+    host::Package,
     runtime::{Effect, Interpreter, StepResult, Value},
 };
 
@@ -10,11 +10,11 @@ pub struct Language {
     codebase: Codebase,
     editor: Editor,
     interpreter: Interpreter,
-    host: Host,
+    host: Package,
 }
 
 impl Language {
-    pub fn with_host(host: Host) -> Self {
+    pub fn with_host(host: Package) -> Self {
         let codebase = Codebase::new();
         let editor = Editor::new(&codebase);
         let interpreter = Interpreter::new(&codebase);
@@ -39,7 +39,7 @@ impl Language {
         &self.interpreter
     }
 
-    pub fn host(&self) -> &Host {
+    pub fn host(&self) -> &Package {
         &self.host
     }
 
@@ -77,7 +77,7 @@ impl Language {
 #[cfg(test)]
 impl Language {
     pub fn without_host() -> Self {
-        Self::with_host(Host::new())
+        Self::with_host(Package::new())
     }
 
     pub fn enter_code(&mut self, code: &str) {
