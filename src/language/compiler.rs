@@ -56,7 +56,7 @@ fn resolve_function(
     let intrinsic_function = IntrinsicFunction::resolve(name);
 
     match (host_function, intrinsic_function) {
-        (Some(id), None) => Ok(Expression::HostFunction { id: id.id }),
+        (Some(id), None) => Ok(Expression::HostFunction { id }),
         (None, Some(function)) => {
             Ok(Expression::IntrinsicFunction { function })
         }
@@ -66,7 +66,7 @@ fn resolve_function(
         }
         (Some(id), Some(function)) => {
             let candidates = vec![
-                Expression::HostFunction { id: id.id },
+                Expression::HostFunction { id },
                 Expression::IntrinsicFunction { function },
             ];
             Err(candidates)

@@ -1,5 +1,6 @@
-use crate::language::code::{
-    Codebase, Expression, IntrinsicFunction, NodeKind, NodePath, Type,
+use crate::language::{
+    code::{Codebase, Expression, IntrinsicFunction, NodeKind, NodePath, Type},
+    packages::FunctionId,
 };
 
 use super::Value;
@@ -71,7 +72,9 @@ impl Interpreter {
         };
 
         self.value = match next {
-            Expression::HostFunction { id } => {
+            Expression::HostFunction {
+                id: FunctionId { id },
+            } => {
                 let effect = Effect::ApplyHostFunction {
                     id: *id,
                     input: self.value,

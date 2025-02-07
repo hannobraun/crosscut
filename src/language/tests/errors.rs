@@ -68,7 +68,9 @@ fn syntax_node_that_could_resolve_to_multiple_functions_is_unresolved() {
         language.codebase().error_at(&unresolved),
         Some(&CodeError::UnresolvedIdentifier {
             candidates: vec![
-                Expression::HostFunction { id: 0 },
+                Expression::HostFunction {
+                    id: FunctionId { id: 0 }
+                },
                 Expression::IntrinsicFunction {
                     function: IntrinsicFunction::Identity
                 }
