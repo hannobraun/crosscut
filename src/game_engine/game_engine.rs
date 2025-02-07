@@ -91,10 +91,7 @@ where
                     continue;
                 }
                 StepResult::EffectTriggered { effect } => match effect {
-                    Effect::ApplyHostFunction {
-                        id: FunctionId { id },
-                        input,
-                    } => {
+                    Effect::ApplyHostFunction { id, input } => {
                         self.apply_host_function(id, input);
                         continue;
                     }
@@ -125,8 +122,8 @@ where
         }
     }
 
-    fn apply_host_function(&mut self, id: u32, input: Value) {
-        match id {
+    fn apply_host_function(&mut self, id: FunctionId, input: Value) {
+        match id.id {
             0 => {
                 // `dim`
 
