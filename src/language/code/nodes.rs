@@ -109,7 +109,7 @@ impl Node {
     pub fn display<'r>(&'r self, package: &'r Package) -> NodeDisplay<'r> {
         NodeDisplay {
             node: self,
-            host: package,
+            package,
         }
     }
 }
@@ -140,7 +140,7 @@ impl NodeKind {
 
 pub struct NodeDisplay<'r> {
     node: &'r Node,
-    host: &'r Package,
+    package: &'r Package,
 }
 
 impl fmt::Display for NodeDisplay<'_> {
@@ -150,7 +150,7 @@ impl fmt::Display for NodeDisplay<'_> {
                 write!(f, "")
             }
             NodeKind::Expression { expression } => {
-                write!(f, "{}", expression.display(self.host))
+                write!(f, "{}", expression.display(self.package))
             }
             NodeKind::Unresolved { name } => {
                 write!(f, "{name}")
