@@ -56,10 +56,10 @@ fn syntax_node_that_could_resolve_to_multiple_functions_is_unresolved() {
     // If a syntax node could resolve to multiple functions, it should remain
     // unresolved, and an error should be shown.
 
-    let mut host = Package::new();
-    host.function(0, "identity");
+    let mut package = Package::new();
+    package.function(0, "identity");
 
-    let mut language = Language::with_host(host);
+    let mut language = Language::with_host(package);
 
     language.enter_code("identity");
 
