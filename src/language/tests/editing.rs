@@ -78,7 +78,7 @@ fn submitting_the_node_should_insert_a_new_one_after_the_current_one() {
     package.function(0, "zero");
     package.function(1, "127_if_zero");
 
-    let mut language = Language::with_host(package);
+    let mut language = Language::with_package(package);
 
     language.enter_code("255 127_if_zero");
     language.on_input(EditorInputEvent::MoveCursorUp);

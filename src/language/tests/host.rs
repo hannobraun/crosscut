@@ -12,7 +12,7 @@ fn host_functions() {
     let mut package = Package::new();
     package.function(0, "halve");
 
-    let mut language = Language::with_host(package);
+    let mut language = Language::with_package(package);
     language.enter_code("64 halve");
 
     let output =
@@ -43,7 +43,7 @@ fn host_functions_can_trigger_effects() {
     let mut package = Package::new();
     package.function(0, "halve");
 
-    let mut language = Language::with_host(package);
+    let mut language = Language::with_package(package);
     language.enter_code("halve");
 
     let effect = Effect::UnexpectedInput {

@@ -14,7 +14,7 @@ pub struct Language {
 }
 
 impl Language {
-    pub fn with_host(package: Package) -> Self {
+    pub fn with_package(package: Package) -> Self {
         let codebase = Codebase::new();
         let editor = Editor::new(&codebase);
         let interpreter = Interpreter::new(&codebase);
@@ -77,7 +77,7 @@ impl Language {
 #[cfg(test)]
 impl Language {
     pub fn without_host() -> Self {
-        Self::with_host(Package::new())
+        Self::with_package(Package::new())
     }
 
     pub fn enter_code(&mut self, code: &str) {

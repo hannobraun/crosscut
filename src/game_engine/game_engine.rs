@@ -51,7 +51,7 @@ where
         package.function(0, "dim");
 
         let mut game_engine = Self {
-            language: Language::with_host(package),
+            language: Language::with_package(package),
             game_output: Vec::new(),
             editor_input: TerminalEditorInput::new(),
             editor_output: TerminalEditorOutput::new(adapter),
