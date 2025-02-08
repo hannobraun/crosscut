@@ -17,10 +17,8 @@ pub struct Evaluator {
 
 impl Evaluator {
     pub fn new(_: &Codebase) -> Self {
-        let next = None;
-
         Self {
-            next,
+            next: None,
             value: Value::None,
             effect: None,
         }
