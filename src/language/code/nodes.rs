@@ -194,7 +194,7 @@ pub struct NodePath {
     ///
     /// But this hash actually is required to identify to identify the node
     /// _uniquely_, which includes the node's version.
-    pub(super) hash: NodeHash,
+    pub hash: NodeHash,
 }
 
 impl NodePath {
