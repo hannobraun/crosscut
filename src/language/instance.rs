@@ -17,12 +17,12 @@ impl Language {
     pub fn with_package(package: Package) -> Self {
         let codebase = Codebase::new();
         let editor = Editor::new(&codebase);
-        let interpreter = Evaluator::new(&codebase);
+        let evaluator = Evaluator::new(&codebase);
 
         Self {
             codebase,
             editor,
-            evaluator: interpreter,
+            evaluator,
             package,
         }
     }
