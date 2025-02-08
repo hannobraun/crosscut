@@ -84,8 +84,8 @@ fn render_interpreter_state<A: EditorOutputAdapter>(
                         Effect::UnexpectedInput { expected, actual } => {
                             writeln!(
                                 adapter,
-                                "unexpected input (expected `{expected}`, \
-                                actually got `{actual}`)"
+                                "unexpected input (expected `{expected}`, got \
+                                `{actual}`)"
                             )?;
                         }
                     }
