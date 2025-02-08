@@ -32,9 +32,8 @@ impl Evaluator {
         loop {
             self.next.push(path);
 
-            path = if let Some(child) = codebase.nodes().get(path.hash()).child
-            {
-                NodePath { hash: child }
+            path = if let Some(child) = codebase.child_of(&path) {
+                child
             } else {
                 break;
             };
