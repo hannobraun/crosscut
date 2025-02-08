@@ -46,11 +46,13 @@ impl Codebase {
 
     /// # Iterate over notes in the current version, from entry to root
     pub fn entry_to_root(&self) -> impl Iterator<Item = LocatedNode> {
-        SyntaxTree::from_root(self.root).leaf_to_root(&self.nodes)
+        SyntaxTree::from_root(NodePath { hash: self.root })
+            .leaf_to_root(&self.nodes)
     }
 
     pub fn entry(&self) -> NodePath {
-        SyntaxTree::from_root(self.root).find_leaf(&self.nodes)
+        SyntaxTree::from_root(NodePath { hash: self.root })
+            .find_leaf(&self.nodes)
     }
 
     pub fn child_of(&self, path: &NodePath) -> Option<NodePath> {
@@ -59,7 +61,8 @@ impl Codebase {
     }
 
     pub fn parent_of(&self, path: &NodePath) -> Option<NodePath> {
-        SyntaxTree::from_root(self.root).find_parent_of(&path.hash, &self.nodes)
+        SyntaxTree::from_root(NodePath { hash: self.root })
+            .find_parent_of(&path.hash, &self.nodes)
     }
 
     pub fn node_at(&self, path: &NodePath) -> &Node {
@@ -149,8 +152,9 @@ impl Codebase {
             initial_replacement = initial_replacement.or(Some(hash));
             previous_replacement = hash;
 
-            if let Some(parent) = SyntaxTree::from_root(self.root)
-                .find_parent_of(&next_to_replace.hash, &self.nodes)
+            if let Some(parent) =
+                SyntaxTree::from_root(NodePath { hash: self.root })
+                    .find_parent_of(&next_to_replace.hash, &self.nodes)
             {
                 next_to_replace = parent;
 
