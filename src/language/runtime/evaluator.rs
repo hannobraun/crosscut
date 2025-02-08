@@ -16,7 +16,7 @@ pub struct Evaluator {
 }
 
 impl Evaluator {
-    pub fn new(_: &Codebase) -> Self {
+    pub fn new() -> Self {
         Self {
             next: None,
             value: Value::None,
@@ -25,7 +25,7 @@ impl Evaluator {
     }
 
     pub fn reset(&mut self, codebase: &Codebase) {
-        *self = Self::new(codebase);
+        *self = Self::new();
         self.evaluate(codebase);
     }
 
