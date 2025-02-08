@@ -36,7 +36,7 @@ where
         let mut context = RenderContext {
             codebase: language.codebase(),
             editor: language.editor(),
-            interpreter: language.interpreter(),
+            evaluator: language.interpreter(),
             package: language.package(),
             cursor: None,
         };
@@ -63,7 +63,7 @@ fn render_interpreter_state<A: EditorOutputAdapter>(
     context: &RenderContext,
 ) -> anyhow::Result<()> {
     adapter.attribute(Attribute::Bold, |adapter| {
-        match context.interpreter.state(context.codebase) {
+        match context.evaluator.state(context.codebase) {
             InterpreterState::Running { .. }
             | InterpreterState::IgnoringEmptyFragment { .. } => {
                 adapter.color(Color::DarkGreen, |adapter| {
@@ -144,7 +144,7 @@ fn render_possibly_active_node<A: EditorOutputAdapter>(
     adapter: &mut A,
     context: &mut RenderContext,
 ) -> anyhow::Result<()> {
-    let is_active_node = context.interpreter.state(context.codebase).path()
+    let is_active_node = context.evaluator.state(context.codebase).path()
         == Some(&located_node.path);
 
     if is_active_node {
@@ -333,7 +333,7 @@ fn render_help<A: EditorOutputAdapter>(
 struct RenderContext<'r> {
     codebase: &'r Codebase,
     editor: &'r Editor,
-    interpreter: &'r Evaluator,
+    evaluator: &'r Evaluator,
     package: &'r Package,
     cursor: Option<Cursor>,
 }
