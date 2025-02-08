@@ -13,14 +13,14 @@ impl SyntaxTree {
     }
 
     pub fn find_leaf(self, nodes: &Nodes) -> NodePath {
-        let mut possible_entry = self.root;
+        let mut possible_leaf = self.root;
 
-        while let Some(child) = nodes.get(&possible_entry).child {
-            possible_entry = child;
+        while let Some(child) = nodes.get(&possible_leaf).child {
+            possible_leaf = child;
         }
 
         NodePath {
-            hash: possible_entry,
+            hash: possible_leaf,
         }
     }
 
