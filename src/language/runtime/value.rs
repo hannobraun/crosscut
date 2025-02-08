@@ -9,8 +9,8 @@ pub enum Value {
 impl fmt::Display for Value {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match self {
-            Value::None => write!(f, "none"),
-            Value::Integer { value } => write!(f, "{value}"),
+            Self::None => write!(f, "none"),
+            Self::Integer { value } => write!(f, "{value}"),
         }
     }
 }
