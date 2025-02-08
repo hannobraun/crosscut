@@ -110,7 +110,7 @@ const subscribe = () => {
                     "Hey%20Hanno%2C%20please%20send%20me%20email%20every%20single%20day.",
             })}{" "}
             (maybe include a nice message, if you're up for it), and I'll send
-            you an email whenever I post a new one.
+            you an email every time I post a new one.
         </p>,
         { highlight: true },
     );
