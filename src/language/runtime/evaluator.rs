@@ -34,6 +34,7 @@ impl Evaluator {
 
             if let Some(child) = codebase.child_of(&path) {
                 path = child;
+                continue;
             } else {
                 break;
             }
