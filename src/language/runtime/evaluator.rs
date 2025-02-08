@@ -48,7 +48,7 @@ impl Evaluator {
         self.next(codebase)
     }
 
-    pub fn provide_host_function_output(&mut self, value: Value, _: &Codebase) {
+    pub fn provide_host_function_output(&mut self, value: Value) {
         let Some(Effect::ApplyHostFunction { .. }) = self.effect else {
             panic!(
                 "Trying to provide host function output, but no host function \

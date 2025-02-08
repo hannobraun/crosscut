@@ -67,8 +67,7 @@ impl Language {
     }
 
     pub fn provide_host_function_output(&mut self, output: Value) {
-        self.evaluator
-            .provide_host_function_output(output, &self.codebase);
+        self.evaluator.provide_host_function_output(output);
     }
 
     pub fn trigger_effect(&mut self, effect: Effect) {
