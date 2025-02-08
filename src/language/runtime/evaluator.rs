@@ -36,7 +36,7 @@ impl Evaluator {
                 path = child;
             } else {
                 break;
-            };
+            }
         }
     }
 
