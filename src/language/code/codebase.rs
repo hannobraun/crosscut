@@ -1,8 +1,9 @@
 use std::collections::BTreeMap;
 
-use crate::language::code::tree::SyntaxTree;
-
-use super::{Changes, CodeError, LocatedNode, Node, NodeHash, NodePath, Nodes};
+use super::{
+    Changes, CodeError, LocatedNode, Node, NodeHash, NodePath, Nodes,
+    SyntaxTree,
+};
 
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub struct Codebase {
