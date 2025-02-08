@@ -30,7 +30,7 @@ impl Evaluator {
     }
 
     pub fn evaluate(&mut self, path: NodePath, nodes: &Nodes) {
-        self.next = Some(SyntaxTree::from_root(path).find_leaf(nodes));
+        self.next = Some(SyntaxTree::from_root(*path.hash()).find_leaf(nodes));
     }
 
     pub fn state<'r>(&self, codebase: &'r Codebase) -> EvaluatorState<'r> {
