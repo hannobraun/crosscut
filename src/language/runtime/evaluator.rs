@@ -29,6 +29,10 @@ impl Evaluator {
         }
     }
 
+    pub fn reset(&mut self, codebase: &Codebase) {
+        *self = Self::new(codebase);
+    }
+
     pub fn state<'r>(&self, codebase: &'r Codebase) -> EvaluatorState<'r> {
         self.next(codebase)
     }

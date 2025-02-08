@@ -111,7 +111,7 @@ impl Editor {
         // Right now, it doesn't seem to be practical to construct a high-level
         // test where this makes a difference though, and I don't want to fix
         // this until the behavior is covered by such a test.
-        *evaluator = Evaluator::new(codebase);
+        evaluator.reset(codebase);
     }
 
     pub fn on_command(
@@ -124,7 +124,7 @@ impl Editor {
             EditorCommand::Clear => {
                 *codebase = Codebase::new();
                 *self = Self::new(codebase);
-                *evaluator = Evaluator::new(codebase);
+                evaluator.reset(codebase);
             }
         }
     }
