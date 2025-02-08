@@ -1,7 +1,7 @@
 use crate::language::{
     code::{
-        Codebase, Expression, IntrinsicFunction, NodeKind, NodePath, Nodes,
-        SyntaxTree, Type,
+        Codebase, Expression, IntrinsicFunction, NodeHash, NodeKind, NodePath,
+        Nodes, SyntaxTree, Type,
     },
     packages::FunctionId,
 };
@@ -26,11 +26,11 @@ impl Evaluator {
 
     pub fn reset(&mut self, codebase: &Codebase) {
         *self = Self::new();
-        self.evaluate(codebase.root().path, codebase.nodes());
+        self.evaluate(*codebase.root().path.hash(), codebase.nodes());
     }
 
-    pub fn evaluate(&mut self, path: NodePath, nodes: &Nodes) {
-        self.next = Some(SyntaxTree::from_root(*path.hash()).find_leaf(nodes));
+    pub fn evaluate(&mut self, path: NodeHash, nodes: &Nodes) {
+        self.next = Some(SyntaxTree::from_root(path).find_leaf(nodes));
     }
 
     pub fn state<'r>(&self, codebase: &'r Codebase) -> EvaluatorState<'r> {
