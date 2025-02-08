@@ -33,7 +33,7 @@ impl Editor {
         &mut self,
         event: EditorInputEvent,
         codebase: &mut Codebase,
-        interpreter: &mut Evaluator,
+        evaluator: &mut Evaluator,
         package: &Package,
     ) {
         if let Some(action) = self.input.update(event) {
@@ -111,7 +111,7 @@ impl Editor {
         // Right now, it doesn't seem to be practical to construct a high-level
         // test where this makes a difference though, and I don't want to fix
         // this until the behavior is covered by such a test.
-        *interpreter = Evaluator::new(codebase);
+        *evaluator = Evaluator::new(codebase);
     }
 
     pub fn on_command(
