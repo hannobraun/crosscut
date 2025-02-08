@@ -4,16 +4,16 @@ use super::{
 };
 
 pub struct SyntaxTree {
-    pub root: NodeHash,
+    pub root: NodePath,
 }
 
 impl SyntaxTree {
     pub fn from_root(root: NodePath) -> Self {
-        Self { root: *root.hash() }
+        Self { root }
     }
 
     pub fn find_leaf(self, nodes: &Nodes) -> NodePath {
-        let mut possible_leaf = self.root;
+        let mut possible_leaf = *self.root.hash();
 
         while let Some(child) = nodes.get(&possible_leaf).child {
             possible_leaf = child;
@@ -50,7 +50,7 @@ impl SyntaxTree {
         nodes: &Nodes,
     ) -> impl Iterator<Item = LocatedNode> {
         let mut hashes = Vec::new();
-        let mut current_node = self.root;
+        let mut current_node = *self.root.hash();
 
         loop {
             let child = nodes.get(&current_node).child;
