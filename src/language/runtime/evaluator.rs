@@ -29,9 +29,9 @@ impl Evaluator {
         self.evaluate(*codebase.root().path.hash(), codebase.nodes());
     }
 
-    pub fn evaluate(&mut self, hash: NodeHash, nodes: &Nodes) {
+    pub fn evaluate(&mut self, root: NodeHash, nodes: &Nodes) {
         let path = NodePath {
-            hash: SyntaxTree::from_root(hash).find_leaf(nodes),
+            hash: SyntaxTree::from_root(root).find_leaf(nodes),
         };
         self.next = Some(path);
     }
