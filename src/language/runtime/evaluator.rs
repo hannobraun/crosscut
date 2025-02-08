@@ -30,12 +30,12 @@ impl Evaluator {
     }
 
     pub fn evaluate(&mut self, root: NodePath, nodes: &Nodes) {
-        let mut node = root;
+        let mut path = root;
 
         loop {
-            self.next.push(node);
+            self.next.push(path);
 
-            node = if let Some(child) = nodes.get(node.hash()).child {
+            path = if let Some(child) = nodes.get(path.hash()).child {
                 NodePath { hash: child }
             } else {
                 break;
