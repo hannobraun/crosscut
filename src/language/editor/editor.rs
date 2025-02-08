@@ -2,7 +2,7 @@ use crate::language::{
     code::{Codebase, Node, NodePath},
     compiler::compile_and_replace,
     packages::Package,
-    runtime::Interpreter,
+    runtime::Evaluator,
 };
 
 use super::{input_buffer::UpdateAction, EditorInputBuffer, EditorInputEvent};
@@ -33,7 +33,7 @@ impl Editor {
         &mut self,
         event: EditorInputEvent,
         codebase: &mut Codebase,
-        interpreter: &mut Interpreter,
+        interpreter: &mut Evaluator,
         package: &Package,
     ) {
         if let Some(action) = self.input.update(event) {
@@ -111,20 +111,20 @@ impl Editor {
         // Right now, it doesn't seem to be practical to construct a high-level
         // test where this makes a difference though, and I don't want to fix
         // this until the behavior is covered by such a test.
-        *interpreter = Interpreter::new(codebase);
+        *interpreter = Evaluator::new(codebase);
     }
 
     pub fn on_command(
         &mut self,
         command: EditorCommand,
         codebase: &mut Codebase,
-        interpreter: &mut Interpreter,
+        interpreter: &mut Evaluator,
     ) {
         match command {
             EditorCommand::Clear => {
                 *codebase = Codebase::new();
                 *self = Self::new(codebase);
-                *interpreter = Interpreter::new(codebase);
+                *interpreter = Evaluator::new(codebase);
             }
         }
     }

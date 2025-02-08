@@ -9,7 +9,7 @@ use crate::{
         editor::Editor,
         instance::Language,
         packages::Package,
-        runtime::{Effect, Interpreter, InterpreterState, Value},
+        runtime::{Effect, Evaluator, InterpreterState, Value},
     },
 };
 
@@ -333,7 +333,7 @@ fn render_help<A: EditorOutputAdapter>(
 struct RenderContext<'r> {
     codebase: &'r Codebase,
     editor: &'r Editor,
-    interpreter: &'r Interpreter,
+    interpreter: &'r Evaluator,
     package: &'r Package,
     cursor: Option<Cursor>,
 }

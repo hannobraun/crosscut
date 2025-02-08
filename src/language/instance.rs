@@ -2,14 +2,14 @@ use super::{
     code::Codebase,
     editor::{Editor, EditorCommand, EditorInputEvent},
     packages::Package,
-    runtime::{Effect, Interpreter, StepResult, Value},
+    runtime::{Effect, Evaluator, StepResult, Value},
 };
 
 #[derive(Debug)]
 pub struct Language {
     codebase: Codebase,
     editor: Editor,
-    interpreter: Interpreter,
+    interpreter: Evaluator,
     package: Package,
 }
 
@@ -17,7 +17,7 @@ impl Language {
     pub fn with_package(package: Package) -> Self {
         let codebase = Codebase::new();
         let editor = Editor::new(&codebase);
-        let interpreter = Interpreter::new(&codebase);
+        let interpreter = Evaluator::new(&codebase);
 
         Self {
             codebase,
@@ -35,7 +35,7 @@ impl Language {
         &self.editor
     }
 
-    pub fn interpreter(&self) -> &Interpreter {
+    pub fn interpreter(&self) -> &Evaluator {
         &self.interpreter
     }
 

@@ -6,13 +6,13 @@ use crate::language::{
 use super::Value;
 
 #[derive(Debug)]
-pub struct Interpreter {
+pub struct Evaluator {
     next: Option<NodePath>,
     value: Value,
     effect: Option<Effect>,
 }
 
-impl Interpreter {
+impl Evaluator {
     pub fn new(codebase: &Codebase) -> Self {
         Self {
             next: Some(codebase.entry()),
