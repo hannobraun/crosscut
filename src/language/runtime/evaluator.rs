@@ -14,8 +14,10 @@ pub struct Evaluator {
 
 impl Evaluator {
     pub fn new(codebase: &Codebase) -> Self {
+        let next = Some(codebase.entry());
+
         Self {
-            next: Some(codebase.entry()),
+            next,
             value: Value::None,
             effect: None,
         }
