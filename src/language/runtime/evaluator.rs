@@ -48,11 +48,7 @@ impl Evaluator {
         self.next(codebase)
     }
 
-    pub fn provide_host_function_output(
-        &mut self,
-        value: Value,
-        codebase: &Codebase,
-    ) {
+    pub fn provide_host_function_output(&mut self, value: Value, _: &Codebase) {
         let Some(Effect::ApplyHostFunction { .. }) = self.effect else {
             panic!(
                 "Trying to provide host function output, but no host function \
@@ -62,7 +58,7 @@ impl Evaluator {
 
         self.effect = None;
         self.value = value;
-        self.advance(codebase);
+        self.advance();
     }
 
     pub fn trigger_effect(&mut self, effect: Effect) {
@@ -79,7 +75,7 @@ impl Evaluator {
                     break expression;
                 }
                 EvaluatorState::IgnoringEmptyFragment { path: _ } => {
-                    self.advance(codebase);
+                    self.advance();
                     continue;
                 }
                 EvaluatorState::Effect { effect, path: _ } => {
@@ -121,7 +117,7 @@ impl Evaluator {
             }
         };
 
-        self.advance(codebase);
+        self.advance();
 
         StepResult::FunctionApplied { output: self.value }
     }
@@ -144,7 +140,7 @@ impl Evaluator {
         }
     }
 
-    fn advance(&mut self, _: &Codebase) {
+    fn advance(&mut self) {
         self.next.pop();
     }
 }
