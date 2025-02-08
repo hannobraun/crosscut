@@ -87,7 +87,7 @@ impl ChangeSet {
 
 #[cfg(test)]
 mod tests {
-    use crate::language::code::{nodes::Nodes, Node, NodeKind, NodePath};
+    use crate::language::code::{Node, NodeKind, NodePath, Nodes};
 
     use super::Changes;
 

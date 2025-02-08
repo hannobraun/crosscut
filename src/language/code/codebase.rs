@@ -3,8 +3,7 @@ use std::collections::BTreeMap;
 use crate::language::code::tree::SyntaxTree;
 
 use super::{
-    nodes::{NodeHash, Nodes},
-    Changes, CodeError, LocatedNode, Node, NodePath,
+    nodes::NodeHash, Changes, CodeError, LocatedNode, Node, NodePath, Nodes,
 };
 
 #[derive(Clone, Debug, Eq, PartialEq)]
