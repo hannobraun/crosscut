@@ -36,7 +36,7 @@ where
         let mut context = RenderContext {
             codebase: language.codebase(),
             editor: language.editor(),
-            evaluator: language.interpreter(),
+            evaluator: language.evaluator(),
             package: language.package(),
             cursor: None,
         };

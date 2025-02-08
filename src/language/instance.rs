@@ -35,7 +35,7 @@ impl Language {
         &self.editor
     }
 
-    pub fn interpreter(&self) -> &Evaluator {
+    pub fn evaluator(&self) -> &Evaluator {
         &self.evaluator
     }
 
