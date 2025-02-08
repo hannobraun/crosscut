@@ -50,7 +50,8 @@ impl Codebase {
     }
 
     pub fn entry(&self) -> NodePath {
-        SyntaxTree::from_root(self.root).find_leaf(&self.nodes)
+        let hash = SyntaxTree::from_root(self.root).find_leaf(&self.nodes);
+        NodePath { hash }
     }
 
     pub fn child_of(&self, path: &NodePath) -> Option<NodePath> {

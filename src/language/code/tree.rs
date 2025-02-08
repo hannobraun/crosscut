@@ -9,16 +9,14 @@ impl SyntaxTree {
         Self { root }
     }
 
-    pub fn find_leaf(self, nodes: &Nodes) -> NodePath {
+    pub fn find_leaf(self, nodes: &Nodes) -> NodeHash {
         let mut possible_leaf = self.root;
 
         while let Some(child) = nodes.get(&possible_leaf).child {
             possible_leaf = child;
         }
 
-        NodePath {
-            hash: possible_leaf,
-        }
+        possible_leaf
     }
 
     pub fn find_parent_of(
