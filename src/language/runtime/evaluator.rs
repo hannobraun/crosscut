@@ -33,8 +33,7 @@ impl Evaluator {
         let mut node = root;
 
         loop {
-            let path = node;
-            self.next.push(path);
+            self.next.push(node);
 
             node = if let Some(child) = nodes.get(node.hash()).child {
                 NodePath { hash: child }
