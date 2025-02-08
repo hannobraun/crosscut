@@ -21,7 +21,7 @@ impl Evaluator {
         }
     }
 
-    pub fn state<'r>(&self, codebase: &'r Codebase) -> InterpreterState<'r> {
+    pub fn state<'r>(&self, codebase: &'r Codebase) -> EvaluatorState<'r> {
         self.next(codebase)
     }
 
@@ -49,23 +49,23 @@ impl Evaluator {
     pub fn step(&mut self, codebase: &Codebase) -> StepResult {
         let next = loop {
             match self.next(codebase) {
-                InterpreterState::Running {
+                EvaluatorState::Running {
                     expression,
                     path: _,
                 } => {
                     break expression;
                 }
-                InterpreterState::IgnoringEmptyFragment { path: _ } => {
+                EvaluatorState::IgnoringEmptyFragment { path: _ } => {
                     self.advance(codebase);
                     continue;
                 }
-                InterpreterState::Effect { effect, path: _ } => {
+                EvaluatorState::Effect { effect, path: _ } => {
                     return StepResult::EffectTriggered { effect };
                 }
-                InterpreterState::Error { path: _ } => {
+                EvaluatorState::Error { path: _ } => {
                     return StepResult::Error;
                 }
-                InterpreterState::Finished { output } => {
+                EvaluatorState::Finished { output } => {
                     return StepResult::Finished { output };
                 }
             }
@@ -103,23 +103,21 @@ impl Evaluator {
         StepResult::FunctionApplied { output: self.value }
     }
 
-    fn next<'r>(&self, codebase: &'r Codebase) -> InterpreterState<'r> {
+    fn next<'r>(&self, codebase: &'r Codebase) -> EvaluatorState<'r> {
         let Some(path) = self.next else {
-            return InterpreterState::Finished { output: self.value };
+            return EvaluatorState::Finished { output: self.value };
         };
 
         if let Some(effect) = self.effect {
-            return InterpreterState::Effect { effect, path };
+            return EvaluatorState::Effect { effect, path };
         }
 
         match &codebase.node_at(&path).kind {
-            NodeKind::Empty => InterpreterState::IgnoringEmptyFragment { path },
+            NodeKind::Empty => EvaluatorState::IgnoringEmptyFragment { path },
             NodeKind::Expression { expression } => {
-                InterpreterState::Running { expression, path }
+                EvaluatorState::Running { expression, path }
             }
-            NodeKind::Unresolved { name: _ } => {
-                InterpreterState::Error { path }
-            }
+            NodeKind::Unresolved { name: _ } => EvaluatorState::Error { path },
         }
     }
 
@@ -130,7 +128,7 @@ impl Evaluator {
 }
 
 #[derive(Debug)]
-pub enum InterpreterState<'r> {
+pub enum EvaluatorState<'r> {
     Running {
         expression: &'r Expression,
         path: NodePath,
@@ -150,7 +148,7 @@ pub enum InterpreterState<'r> {
     },
 }
 
-impl InterpreterState<'_> {
+impl EvaluatorState<'_> {
     pub fn path(&self) -> Option<&NodePath> {
         match self {
             Self::Running {
