@@ -1,7 +1,7 @@
 use crate::language::{
     code::{
         Codebase, Expression, IntrinsicFunction, NodeHash, NodeKind, NodePath,
-        Nodes, SyntaxTree, Type,
+        Nodes, Type,
     },
     packages::FunctionId,
 };
@@ -10,7 +10,7 @@ use super::Value;
 
 #[derive(Debug)]
 pub struct Evaluator {
-    next: Option<NodePath>,
+    next: Vec<NodePath>,
     value: Value,
     effect: Option<Effect>,
 }
@@ -18,7 +18,7 @@ pub struct Evaluator {
 impl Evaluator {
     pub fn new() -> Self {
         Self {
-            next: None,
+            next: Vec::new(),
             value: Value::None,
             effect: None,
         }
@@ -30,10 +30,18 @@ impl Evaluator {
     }
 
     pub fn evaluate(&mut self, root: NodeHash, nodes: &Nodes) {
-        let path = NodePath {
-            hash: SyntaxTree::from_root(root).find_leaf(nodes),
-        };
-        self.next = Some(path);
+        let mut node = root;
+
+        loop {
+            let path = NodePath { hash: node };
+            self.next.push(path);
+
+            node = if let Some(child) = nodes.get(&node).child {
+                child
+            } else {
+                break;
+            };
+        }
     }
 
     pub fn state<'r>(&self, codebase: &'r Codebase) -> EvaluatorState<'r> {
@@ -119,7 +127,7 @@ impl Evaluator {
     }
 
     fn next<'r>(&self, codebase: &'r Codebase) -> EvaluatorState<'r> {
-        let Some(path) = self.next else {
+        let Some(path) = self.next.last().copied() else {
             return EvaluatorState::Finished { output: self.value };
         };
 
@@ -136,9 +144,8 @@ impl Evaluator {
         }
     }
 
-    fn advance(&mut self, codebase: &Codebase) {
-        self.next =
-            self.next.as_ref().and_then(|next| codebase.parent_of(next));
+    fn advance(&mut self, _: &Codebase) {
+        self.next.pop();
     }
 }
 
