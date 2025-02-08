@@ -1,8 +1,5 @@
 use crate::language::{
-    code::{
-        Codebase, Expression, IntrinsicFunction, NodeKind, NodePath, Nodes,
-        Type,
-    },
+    code::{Codebase, Expression, IntrinsicFunction, NodeKind, NodePath, Type},
     packages::FunctionId,
 };
 
@@ -26,16 +23,17 @@ impl Evaluator {
 
     pub fn reset(&mut self, codebase: &Codebase) {
         *self = Self::new();
-        self.evaluate(codebase.root().path, codebase.nodes());
+        self.evaluate(codebase.root().path, codebase);
     }
 
-    pub fn evaluate(&mut self, root: NodePath, nodes: &Nodes) {
+    pub fn evaluate(&mut self, root: NodePath, codebase: &Codebase) {
         let mut path = root;
 
         loop {
             self.next.push(path);
 
-            path = if let Some(child) = nodes.get(path.hash()).child {
+            path = if let Some(child) = codebase.nodes().get(path.hash()).child
+            {
                 NodePath { hash: child }
             } else {
                 break;
