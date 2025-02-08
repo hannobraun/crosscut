@@ -118,13 +118,13 @@ impl Editor {
         &mut self,
         command: EditorCommand,
         codebase: &mut Codebase,
-        interpreter: &mut Evaluator,
+        evaluator: &mut Evaluator,
     ) {
         match command {
             EditorCommand::Clear => {
                 *codebase = Codebase::new();
                 *self = Self::new(codebase);
-                *interpreter = Evaluator::new(codebase);
+                *evaluator = Evaluator::new(codebase);
             }
         }
     }
