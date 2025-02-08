@@ -1,7 +1,7 @@
-mod interpreter;
+mod evaluator;
 mod value;
 
 pub use self::{
-    interpreter::{Effect, Evaluator, InterpreterState, StepResult},
+    evaluator::{Effect, Evaluator, InterpreterState, StepResult},
     value::Value,
 };
