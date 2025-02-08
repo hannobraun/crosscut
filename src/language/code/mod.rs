@@ -13,7 +13,7 @@ pub use self::{
     errors::CodeError,
     expressions::Expression,
     intrinsics::IntrinsicFunction,
-    nodes::{LocatedNode, Node, NodeKind, NodePath, Nodes},
+    nodes::{LocatedNode, Node, NodeHash, NodeKind, NodePath, Nodes},
     tree::SyntaxTree,
     types::Type,
 };

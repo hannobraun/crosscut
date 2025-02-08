@@ -1,4 +1,4 @@
-use super::{nodes::NodeHash, LocatedNode, NodePath, Nodes};
+use super::{LocatedNode, NodeHash, NodePath, Nodes};
 
 pub struct SyntaxTree {
     pub root: NodePath,
