@@ -1,5 +1,8 @@
 use crate::language::{
-    code::{Codebase, Expression, IntrinsicFunction, NodeKind, NodePath, Type},
+    code::{
+        Codebase, Expression, IntrinsicFunction, NodeKind, NodePath,
+        SyntaxTree, Type,
+    },
     packages::FunctionId,
 };
 
@@ -14,7 +17,10 @@ pub struct Evaluator {
 
 impl Evaluator {
     pub fn new(codebase: &Codebase) -> Self {
-        let next = Some(codebase.entry());
+        let next = Some(
+            SyntaxTree::from_root(codebase.root().path)
+                .find_leaf(codebase.nodes()),
+        );
 
         Self {
             next,

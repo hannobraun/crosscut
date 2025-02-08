@@ -14,5 +14,6 @@ pub use self::{
     expressions::Expression,
     intrinsics::IntrinsicFunction,
     nodes::{LocatedNode, Node, NodeKind, NodePath},
+    tree::SyntaxTree,
     types::Type,
 };
