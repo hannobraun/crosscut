@@ -9,7 +9,7 @@ use super::{
 pub struct Language {
     codebase: Codebase,
     editor: Editor,
-    interpreter: Evaluator,
+    evaluator: Evaluator,
     package: Package,
 }
 
@@ -22,7 +22,7 @@ impl Language {
         Self {
             codebase,
             editor,
-            interpreter,
+            evaluator: interpreter,
             package,
         }
     }
@@ -36,7 +36,7 @@ impl Language {
     }
 
     pub fn interpreter(&self) -> &Evaluator {
-        &self.interpreter
+        &self.evaluator
     }
 
     pub fn package(&self) -> &Package {
@@ -47,7 +47,7 @@ impl Language {
         self.editor.on_input(
             event,
             &mut self.codebase,
-            &mut self.interpreter,
+            &mut self.evaluator,
             &self.package,
         );
     }
@@ -56,21 +56,21 @@ impl Language {
         self.editor.on_command(
             command,
             &mut self.codebase,
-            &mut self.interpreter,
+            &mut self.evaluator,
         );
     }
 
     pub fn step(&mut self) -> StepResult {
-        self.interpreter.step(&self.codebase)
+        self.evaluator.step(&self.codebase)
     }
 
     pub fn provide_host_function_output(&mut self, output: Value) {
-        self.interpreter
+        self.evaluator
             .provide_host_function_output(output, &self.codebase);
     }
 
     pub fn trigger_effect(&mut self, effect: Effect) {
-        self.interpreter.trigger_effect(effect);
+        self.evaluator.trigger_effect(effect);
     }
 }
 
