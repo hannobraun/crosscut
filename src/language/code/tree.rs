@@ -12,6 +12,27 @@ impl SyntaxTree {
         Self { root }
     }
 
+    pub fn find_parent_of(
+        self,
+        node: &NodeHash,
+        nodes: &Nodes,
+    ) -> Option<NodePath> {
+        let parent_of_node = |located_node: LocatedNode| {
+            (located_node.node.child.as_ref() == Some(node))
+                .then_some(located_node.path)
+        };
+
+        let mut leaf_to_root = self.leaf_to_root(nodes);
+
+        let maybe_parent = leaf_to_root.by_ref().find_map(parent_of_node);
+        assert!(
+            leaf_to_root.find_map(parent_of_node).is_none(),
+            "A node should never have multiple parents within a syntax tree.",
+        );
+
+        maybe_parent
+    }
+
     pub fn leaf_to_root(
         self,
         nodes: &Nodes,
@@ -34,26 +55,5 @@ impl SyntaxTree {
             node: nodes.get(&hash),
             path: NodePath { hash },
         })
-    }
-
-    pub fn find_parent_of(
-        self,
-        node: &NodeHash,
-        nodes: &Nodes,
-    ) -> Option<NodePath> {
-        let parent_of_node = |located_node: LocatedNode| {
-            (located_node.node.child.as_ref() == Some(node))
-                .then_some(located_node.path)
-        };
-
-        let mut leaf_to_root = self.leaf_to_root(nodes);
-
-        let maybe_parent = leaf_to_root.by_ref().find_map(parent_of_node);
-        assert!(
-            leaf_to_root.find_map(parent_of_node).is_none(),
-            "A node should never have multiple parents within a syntax tree.",
-        );
-
-        maybe_parent
     }
 }
