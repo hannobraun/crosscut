@@ -16,11 +16,8 @@ pub struct Evaluator {
 }
 
 impl Evaluator {
-    pub fn new(codebase: &Codebase) -> Self {
-        let next = Some(
-            SyntaxTree::from_root(codebase.root().path)
-                .find_leaf(codebase.nodes()),
-        );
+    pub fn new(_: &Codebase) -> Self {
+        let next = None;
 
         Self {
             next,
@@ -31,6 +28,14 @@ impl Evaluator {
 
     pub fn reset(&mut self, codebase: &Codebase) {
         *self = Self::new(codebase);
+        self.evaluate(codebase);
+    }
+
+    pub fn evaluate(&mut self, codebase: &Codebase) {
+        self.next = Some(
+            SyntaxTree::from_root(codebase.root().path)
+                .find_leaf(codebase.nodes()),
+        );
     }
 
     pub fn state<'r>(&self, codebase: &'r Codebase) -> EvaluatorState<'r> {
