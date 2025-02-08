@@ -19,7 +19,7 @@ impl Language {
         let editor = Editor::new(&codebase);
 
         let mut evaluator = Evaluator::new();
-        evaluator.evaluate(codebase.root().path, &codebase);
+        evaluator.reset(&codebase);
 
         Self {
             codebase,
