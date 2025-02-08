@@ -32,8 +32,8 @@ impl Evaluator {
         loop {
             self.next.push(path);
 
-            path = if let Some(child) = codebase.child_of(&path) {
-                child
+            if let Some(child) = codebase.child_of(&path) {
+                path = child;
             } else {
                 break;
             };
