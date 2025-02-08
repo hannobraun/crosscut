@@ -50,15 +50,7 @@ impl Codebase {
     }
 
     pub fn entry(&self) -> NodePath {
-        let mut possible_entry = self.root;
-
-        while let Some(child) = self.nodes.get(&possible_entry).child {
-            possible_entry = child;
-        }
-
-        NodePath {
-            hash: possible_entry,
-        }
+        SyntaxTree::from_root(self.root).find_leaf(&self.nodes)
     }
 
     pub fn child_of(&self, path: &NodePath) -> Option<NodePath> {

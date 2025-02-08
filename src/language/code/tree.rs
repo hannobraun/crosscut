@@ -12,6 +12,18 @@ impl SyntaxTree {
         Self { root }
     }
 
+    pub fn find_leaf(self, nodes: &Nodes) -> NodePath {
+        let mut possible_entry = self.root;
+
+        while let Some(child) = nodes.get(&possible_entry).child {
+            possible_entry = child;
+        }
+
+        NodePath {
+            hash: possible_entry,
+        }
+    }
+
     pub fn find_parent_of(
         self,
         node: &NodeHash,
