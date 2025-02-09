@@ -1,7 +1,7 @@
 use crate::language::{
-    code::CodeError,
+    code::{CodeError, NodePath},
     instance::Language,
-    runtime::{StepResult, Value},
+    runtime::{Effect, StepResult, Value, ValueWithSource},
 };
 
 #[test]
@@ -12,14 +12,7 @@ fn define_and_evaluate_function() {
     let mut language = Language::without_package();
 
     language.enter_code("127 fn");
-    let path = match language
-        .step_until_finished()
-        .map_err(|effect| (Some(effect), None))
-        .and_then(|value| {
-            value
-                .into_function_body()
-                .map_err(|value| (None, Some(value)))
-        }) {
+    let path = match language.step_until_finished().into_function_body() {
         Ok(path) => path,
         output => {
             panic!("Unexpected output: {output:?}");
@@ -49,4 +42,17 @@ fn function_without_body() {
     );
 
     assert_eq!(language.step(), StepResult::Error);
+}
+
+pub trait IntoFunctionBody {
+    fn into_function_body(self) -> Result<NodePath, Self>
+    where
+        Self: Sized;
+}
+
+impl IntoFunctionBody for Result<ValueWithSource, Effect> {
+    fn into_function_body(self) -> Result<NodePath, Self> {
+        self.map_err(Err)
+            .and_then(|value| value.into_function_body().map_err(Ok))
+    }
 }
