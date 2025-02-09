@@ -62,6 +62,11 @@ impl Language {
         );
     }
 
+    #[cfg(test)]
+    pub fn evaluate(&mut self, expression: NodePath) {
+        self.evaluator.evaluate(expression, &self.codebase);
+    }
+
     pub fn step(&mut self) -> StepResult {
         self.evaluator.step(&self.codebase)
     }
@@ -76,7 +81,7 @@ impl Language {
 }
 
 #[cfg(test)]
-use super::packages::FunctionId;
+use super::{code::NodePath, packages::FunctionId};
 
 #[cfg(test)]
 impl Language {
