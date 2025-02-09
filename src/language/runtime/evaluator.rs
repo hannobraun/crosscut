@@ -70,7 +70,7 @@ impl Evaluator {
 
     pub fn provide_host_function_output(&mut self, value: Value) {
         let (Some(Effect::ApplyHostFunction { .. }), Some(_)) =
-            (self.effect, self.next.last())
+            (self.effect, self.next.last().copied())
         else {
             panic!(
                 "Trying to provide host function output, but no host function \
