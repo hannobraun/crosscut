@@ -24,3 +24,13 @@ pub struct ValueWithSource {
     pub inner: Value,
     pub source: Option<NodePath>,
 }
+
+impl ValueWithSource {
+    #[cfg(test)]
+    pub fn into_function_body(self) -> Result<NodePath, Self> {
+        match self.inner {
+            Value::Function { hash } => Ok(NodePath { hash }),
+            _ => Err(self),
+        }
+    }
+}

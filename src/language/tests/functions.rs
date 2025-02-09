@@ -1,7 +1,7 @@
 use crate::language::{
-    code::{CodeError, NodePath},
+    code::CodeError,
     instance::Language,
-    runtime::{StepResult, Value, ValueWithSource},
+    runtime::{StepResult, Value},
 };
 
 #[test]
@@ -12,11 +12,15 @@ fn define_and_evaluate_function() {
     let mut language = Language::without_package();
 
     language.enter_code("127 fn");
-    let path = match language.step_until_finished() {
-        Ok(ValueWithSource {
-            inner: Value::Function { hash },
-            source: _,
-        }) => NodePath { hash },
+    let path = match language
+        .step_until_finished()
+        .map_err(|effect| (Some(effect), None))
+        .and_then(|value| {
+            value
+                .into_function_body()
+                .map_err(|value| (None, Some(value)))
+        }) {
+        Ok(path) => path,
         output => {
             panic!("Unexpected output: {output:?}");
         }
