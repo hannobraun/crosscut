@@ -82,13 +82,10 @@ impl Evaluator {
     }
 
     pub fn step(&mut self, codebase: &Codebase) -> StepResult {
-        let next = loop {
+        let (next, _) = loop {
             match self.next(codebase) {
-                EvaluatorState::Running {
-                    expression,
-                    path: _,
-                } => {
-                    break expression;
+                EvaluatorState::Running { expression, path } => {
+                    break (expression, path);
                 }
                 EvaluatorState::IgnoringEmptyFragment { path: _ } => {
                     self.advance();
