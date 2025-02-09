@@ -12,7 +12,7 @@ fn define_and_evaluate_function() {
     let mut language = Language::without_package();
 
     language.enter_code("127 fn");
-    let hash = match language.step_until_finished() {
+    let path = match language.step_until_finished() {
         Ok(ValueWithSource {
             inner: Value::Function { hash },
             source: _,
@@ -34,7 +34,7 @@ fn define_and_evaluate_function() {
     // If it did, and all the intermediate layers passed on this information, we
     // have all we need to construct the `NodePath` for the function body here,
     // now and going forward.
-    language.evaluate(hash);
+    language.evaluate(path);
     assert_eq!(
         language.step_until_finished().map(|value| value.inner),
         Ok(Value::Integer { value: 127 }),
