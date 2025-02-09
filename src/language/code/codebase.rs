@@ -213,7 +213,7 @@ mod tests {
             &codebase.entry(),
             Node {
                 kind: NodeKind::Error {
-                    name: String::from("a"),
+                    node: String::from("a"),
                 },
                 child: None,
             },
@@ -222,7 +222,7 @@ mod tests {
             a,
             Node {
                 kind: NodeKind::Error {
-                    name: String::from("b"),
+                    node: String::from("b"),
                 },
                 child: Some(*a.hash()),
             },

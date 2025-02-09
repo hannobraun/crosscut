@@ -187,7 +187,7 @@ fn render_node<A: EditorOutputAdapter>(
                 })?;
             }
         },
-        NodeKind::Error { name } => {
+        NodeKind::Error { node: name } => {
             adapter.color(ERROR_COLOR, |adapter| write!(adapter, "{name}"))?;
         }
     }
@@ -324,7 +324,7 @@ fn render_help<A: EditorOutputAdapter>(
                 }
             }
         }
-        NodeKind::Error { name: _ } => {
+        NodeKind::Error { node: _ } => {
             writeln!(
                 adapter,
                 "You are editing an unresolved syntax node. This means that \

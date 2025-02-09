@@ -53,7 +53,7 @@ fn compile_token(
             Ok(expression) => (NodeKind::Expression { expression }, None),
             Err(candidates) => (
                 NodeKind::Error {
-                    name: token.to_string(),
+                    node: token.to_string(),
                 },
                 Some(CodeError::UnresolvedIdentifier { candidates }),
             ),

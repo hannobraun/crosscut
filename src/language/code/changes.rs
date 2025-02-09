@@ -99,7 +99,7 @@ mod tests {
         let [a, b] = ["a", "b"].map(|name| {
             let node = Node {
                 kind: NodeKind::Error {
-                    name: String::from(name),
+                    node: String::from(name),
                 },
                 child: None,
             };

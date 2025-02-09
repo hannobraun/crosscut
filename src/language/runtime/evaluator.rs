@@ -150,7 +150,7 @@ impl Evaluator {
             NodeKind::Expression { expression } => {
                 EvaluatorState::Running { expression, path }
             }
-            NodeKind::Error { name: _ } => EvaluatorState::Error { path },
+            NodeKind::Error { node: _ } => EvaluatorState::Error { path },
         }
     }
 
