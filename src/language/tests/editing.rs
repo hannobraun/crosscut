@@ -18,13 +18,13 @@ fn update_on_every_character() {
 
     language.enter_code("1");
     assert_eq!(
-        language.step_until_finished(),
+        language.step_until_finished().map(|value| value.inner),
         Ok(Value::Integer { value: 1 }),
     );
 
     language.enter_code("2");
     assert_eq!(
-        language.step_until_finished(),
+        language.step_until_finished().map(|value| value.inner),
         Ok(Value::Integer { value: 12 }),
     );
 }
@@ -38,19 +38,19 @@ fn update_after_removing_character() {
 
     language.enter_code("127");
     assert_eq!(
-        language.step_until_finished(),
+        language.step_until_finished().map(|value| value.inner),
         Ok(Value::Integer { value: 127 }),
     );
 
     language.on_input(EditorInputEvent::RemoveLeft);
     assert_eq!(
-        language.step_until_finished(),
+        language.step_until_finished().map(|value| value.inner),
         Ok(Value::Integer { value: 12 }),
     );
 
     language.on_input(EditorInputEvent::RemoveLeft);
     assert_eq!(
-        language.step_until_finished(),
+        language.step_until_finished().map(|value| value.inner),
         Ok(Value::Integer { value: 1 }),
     );
 }
@@ -64,12 +64,15 @@ fn update_after_removing_all_characters() {
 
     language.enter_code("1");
     assert_eq!(
-        language.step_until_finished(),
+        language.step_until_finished().map(|value| value.inner),
         Ok(Value::Integer { value: 1 }),
     );
 
     language.on_input(EditorInputEvent::RemoveLeft);
-    assert_eq!(language.step_until_finished(), Ok(Value::None));
+    assert_eq!(
+        language.step_until_finished().map(|value| value.inner),
+        Ok(Value::None),
+    );
 }
 
 #[test]
@@ -130,7 +133,10 @@ fn submitting_the_node_should_insert_a_new_one_after_the_current_one() {
             }
         });
 
-    assert_eq!(output, Ok(Value::Integer { value: 127 }));
+    assert_eq!(
+        output.map(|value| value.inner),
+        Ok(Value::Integer { value: 127 }),
+    );
 }
 
 #[test]
@@ -147,7 +153,7 @@ fn split_node_if_submitting_while_cursor_is_in_the_middle() {
     language.on_input(EditorInputEvent::SubmitNode);
 
     assert_eq!(
-        language.step_until_finished(),
+        language.step_until_finished().map(|value| value.inner),
         Ok(Value::Integer { value: 127 }),
     );
 }
@@ -163,7 +169,7 @@ fn moving_cursor_up_should_navigate_to_previous_node() {
     language.enter_code("7");
 
     assert_eq!(
-        language.step_until_finished(),
+        language.step_until_finished().map(|value| value.inner),
         Ok(Value::Integer { value: 127 }),
     );
 }
@@ -181,7 +187,7 @@ fn moving_cursor_up_at_first_node_should_do_nothing() {
     language.enter_code("2");
 
     assert_eq!(
-        language.step_until_finished(),
+        language.step_until_finished().map(|value| value.inner),
         Ok(Value::Integer { value: 127 }),
     );
 }
@@ -197,7 +203,10 @@ fn moving_cursor_down_should_navigate_to_next_node() {
     language.on_input(EditorInputEvent::MoveCursorDown);
     language.enter_code("i");
 
-    assert_eq!(language.step_until_finished(), Ok(Value::None));
+    assert_eq!(
+        language.step_until_finished().map(|value| value.inner),
+        Ok(Value::None),
+    );
 }
 
 #[test]
@@ -211,7 +220,7 @@ fn moving_cursor_down_at_last_node_should_do_nothing() {
     language.enter_code("7");
 
     assert_eq!(
-        language.step_until_finished(),
+        language.step_until_finished().map(|value| value.inner),
         Ok(Value::Integer { value: 127 }),
     );
 }
@@ -232,7 +241,7 @@ fn moving_cursor_left_at_start_of_node_should_move_to_previous_node() {
     language.enter_code("7");
 
     assert_eq!(
-        language.step_until_finished(),
+        language.step_until_finished().map(|value| value.inner),
         Ok(Value::Integer { value: 127 }),
     );
 }
@@ -251,7 +260,7 @@ fn moving_cursor_right_at_end_of_node_should_move_to_next_node() {
     language.enter_code("i");
 
     assert_eq!(
-        language.step_until_finished(),
+        language.step_until_finished().map(|value| value.inner),
         Ok(Value::Integer { value: 127 }),
     );
 }
@@ -297,7 +306,7 @@ fn remove_left_merges_with_previous_syntax_node() {
     language.on_input(EditorInputEvent::RemoveLeft);
 
     assert_eq!(
-        language.step_until_finished(),
+        language.step_until_finished().map(|value| value.inner),
         Ok(Value::Integer { value: 127 }),
     );
 }
@@ -342,7 +351,7 @@ fn remove_right_merges_with_next_syntax_node() {
     language.on_input(EditorInputEvent::RemoveRight);
 
     assert_eq!(
-        language.step_until_finished(),
+        language.step_until_finished().map(|value| value.inner),
         Ok(Value::Integer { value: 127 }),
     );
 }

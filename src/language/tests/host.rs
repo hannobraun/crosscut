@@ -29,7 +29,10 @@ fn host_functions() {
             }
         });
 
-    assert_eq!(output, Ok(Value::Integer { value: 32 }));
+    assert_eq!(
+        output.map(|value| value.inner),
+        Ok(Value::Integer { value: 32 }),
+    );
 }
 
 #[test]

@@ -13,16 +13,19 @@ fn clear() {
 
     language.enter_code("12");
     assert_eq!(
-        language.step_until_finished(),
+        language.step_until_finished().map(|value| value.inner),
         Ok(Value::Integer { value: 12 }),
     );
 
     language.on_command(EditorCommand::Clear);
-    assert_eq!(language.step_until_finished(), Ok(Value::None));
+    assert_eq!(
+        language.step_until_finished().map(|value| value.inner),
+        Ok(Value::None),
+    );
 
     language.enter_code("7");
     assert_eq!(
-        language.step_until_finished(),
+        language.step_until_finished().map(|value| value.inner),
         Ok(Value::Integer { value: 7 }),
     );
 }

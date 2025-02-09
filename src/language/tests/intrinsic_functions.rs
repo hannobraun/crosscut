@@ -9,7 +9,7 @@ fn number_literal() {
 
     language.enter_code("127");
     assert_eq!(
-        language.step_until_finished(),
+        language.step_until_finished().map(|value| value.inner),
         Ok(Value::Integer { value: 127 }),
     );
 }
@@ -23,7 +23,10 @@ fn identity_none() {
     let mut language = Language::without_package();
 
     language.enter_code("identity");
-    assert_eq!(language.step_until_finished(), Ok(Value::None));
+    assert_eq!(
+        language.step_until_finished().map(|value| value.inner),
+        Ok(Value::None),
+    );
 }
 
 #[test]
@@ -35,7 +38,7 @@ fn identity_integer() {
 
     language.enter_code("127 identity");
     assert_eq!(
-        language.step_until_finished(),
+        language.step_until_finished().map(|value| value.inner),
         Ok(Value::Integer { value: 127 }),
     );
 }
