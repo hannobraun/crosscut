@@ -187,8 +187,8 @@ fn render_node<A: EditorOutputAdapter>(
                 })?;
             }
         },
-        NodeKind::Error { node: name } => {
-            adapter.color(ERROR_COLOR, |adapter| write!(adapter, "{name}"))?;
+        NodeKind::Error { node } => {
+            adapter.color(ERROR_COLOR, |adapter| write!(adapter, "{node}"))?;
         }
     }
 
