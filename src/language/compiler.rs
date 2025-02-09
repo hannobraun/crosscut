@@ -42,11 +42,12 @@ fn compile_token(
                 },
                 None,
             ),
-            None => {
-                // A function keyword without a child is an error, as a function
-                // needs a body. Emitting that error is not supported yet.
-                todo!("Functions without a body are not supported.")
-            }
+            None => (
+                NodeKind::Error {
+                    node: token.to_string(),
+                },
+                Some(CodeError::FunctionWithoutBody),
+            ),
         }
     } else {
         match resolve_function(token, package) {

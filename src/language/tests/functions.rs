@@ -1,4 +1,8 @@
-use crate::language::{code::NodePath, instance::Language, runtime::Value};
+use crate::language::{
+    code::{CodeError, NodePath},
+    instance::Language,
+    runtime::{StepResult, Value},
+};
 
 #[test]
 fn define_and_evaluate_function() {
@@ -32,4 +36,22 @@ fn define_and_evaluate_function() {
         language.step_until_finished(),
         Ok(Value::Integer { value: 127 }),
     );
+}
+
+#[test]
+fn function_without_body() {
+    // An `fn` token that doesn't follow an expression would create a function
+    // without a body. This is an error.
+
+    let mut language = Language::without_package();
+
+    language.enter_code("fn");
+
+    let bare_fn = language.codebase().root().path;
+    assert_eq!(
+        language.codebase().error_at(&bare_fn),
+        Some(&CodeError::FunctionWithoutBody),
+    );
+
+    assert_eq!(language.step(), StepResult::Error);
 }
