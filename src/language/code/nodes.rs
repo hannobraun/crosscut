@@ -1,6 +1,6 @@
 use std::{collections::BTreeMap, fmt};
 
-use base64::{prelude::BASE64_STANDARD_NO_PAD, Engine};
+use base64::{prelude::BASE64_URL_SAFE_NO_PAD, Engine};
 
 use crate::language::packages::Package;
 
@@ -75,7 +75,7 @@ impl NodeHash {
 
 impl fmt::Debug for NodeHash {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", BASE64_STANDARD_NO_PAD.encode(self.hash))?;
+        write!(f, "{}", BASE64_URL_SAFE_NO_PAD.encode(self.hash))?;
         Ok(())
     }
 }
