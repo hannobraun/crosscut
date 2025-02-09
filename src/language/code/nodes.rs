@@ -75,8 +75,9 @@ impl NodeHash {
 
 impl fmt::Debug for NodeHash {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", BASE64_URL_SAFE_NO_PAD.encode(self.hash))?;
-        Ok(())
+        f.debug_struct("NodeHash")
+            .field("hash", &BASE64_URL_SAFE_NO_PAD.encode(self.hash))
+            .finish()
     }
 }
 
