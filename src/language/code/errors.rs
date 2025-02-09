@@ -10,7 +10,7 @@ pub enum CodeError {
 impl fmt::Display for CodeError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match self {
-            CodeError::UnresolvedIdentifier { candidates } => {
+            Self::UnresolvedIdentifier { candidates } => {
                 write!(f, "unresolved syntax node")?;
 
                 if !candidates.is_empty() {
