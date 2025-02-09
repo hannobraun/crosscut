@@ -160,8 +160,8 @@ impl fmt::Display for NodeDisplay<'_> {
             NodeKind::Expression { expression } => {
                 write!(f, "{}", expression.display(self.package))
             }
-            NodeKind::Error { node: name } => {
-                write!(f, "{name}")
+            NodeKind::Error { node } => {
+                write!(f, "{node}")
             }
         }
     }
