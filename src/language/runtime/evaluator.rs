@@ -91,7 +91,7 @@ impl Evaluator {
     }
 
     pub fn step(&mut self, codebase: &Codebase) -> StepResult {
-        let (next, _) = loop {
+        let (next, path) = loop {
             match self.next(codebase) {
                 EvaluatorState::Running { expression, path } => {
                     break (expression, path);
@@ -135,7 +135,7 @@ impl Evaluator {
 
                         ValueWithSource {
                             inner: *value,
-                            source: None,
+                            source: Some(path),
                         }
                     }
                 }
