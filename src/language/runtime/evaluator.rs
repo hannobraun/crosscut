@@ -99,9 +99,7 @@ impl Evaluator {
                     return StepResult::Error;
                 }
                 EvaluatorState::Finished { output } => {
-                    return StepResult::Finished {
-                        output: output.inner,
-                    };
+                    return StepResult::Finished { output };
                 }
             }
         };
@@ -203,7 +201,7 @@ impl EvaluatorState<'_> {
 pub enum StepResult {
     FunctionApplied { output: Value },
     EffectTriggered { effect: Effect },
-    Finished { output: Value },
+    Finished { output: ValueWithSource },
     Error,
 }
 

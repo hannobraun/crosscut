@@ -6,7 +6,7 @@ use crate::{
         code::Type,
         instance::Language,
         packages::{Function, FunctionId, Package},
-        runtime::{Effect, StepResult, Value},
+        runtime::{Effect, StepResult, Value, ValueWithSource},
     },
 };
 
@@ -101,7 +101,10 @@ where
                     }
                 },
                 StepResult::Finished {
-                    output: Value::Integer { value },
+                    output:
+                        ValueWithSource {
+                            inner: Value::Integer { value },
+                        },
                 } => {
                     let value: f64 = value.into();
                     let value = value / 255.;
