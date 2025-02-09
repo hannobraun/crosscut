@@ -5,13 +5,8 @@ use crate::language::code::NodeHash;
 #[derive(Clone, Copy, Debug, Eq, PartialEq, udigest::Digestable)]
 pub enum Value {
     None,
-    #[allow(unused)] // code using this is being worked on
-    Function {
-        hash: NodeHash,
-    },
-    Integer {
-        value: i32,
-    },
+    Function { hash: NodeHash },
+    Integer { value: i32 },
 }
 
 impl fmt::Display for Value {
