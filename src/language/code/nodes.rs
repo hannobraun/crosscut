@@ -80,6 +80,13 @@ impl fmt::Debug for NodeHash {
     }
 }
 
+impl fmt::Display for NodeHash {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", BASE64_URL_SAFE_NO_PAD.encode(self.hash))?;
+        Ok(())
+    }
+}
+
 #[derive(Clone, Debug, Eq, PartialEq, udigest::Digestable)]
 pub struct Node {
     pub kind: NodeKind,
