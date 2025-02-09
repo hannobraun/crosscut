@@ -3,7 +3,7 @@ use crate::language::{
     packages::FunctionId,
 };
 
-use super::Value;
+use super::{Value, ValueWithSource};
 
 #[derive(Debug)]
 pub struct Evaluator {
@@ -99,7 +99,9 @@ impl Evaluator {
                     return StepResult::Error;
                 }
                 EvaluatorState::Finished { output } => {
-                    return StepResult::Finished { output };
+                    return StepResult::Finished {
+                        output: output.inner,
+                    };
                 }
             }
         };
@@ -138,7 +140,9 @@ impl Evaluator {
 
     fn next<'r>(&self, codebase: &'r Codebase) -> EvaluatorState<'r> {
         let Some(path) = self.next.last().copied() else {
-            return EvaluatorState::Finished { output: self.value };
+            return EvaluatorState::Finished {
+                output: ValueWithSource { inner: self.value },
+            };
         };
 
         if let Some(effect) = self.effect {
@@ -176,7 +180,7 @@ pub enum EvaluatorState<'r> {
         path: NodePath,
     },
     Finished {
-        output: Value,
+        output: ValueWithSource,
     },
 }
 

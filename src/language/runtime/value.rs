@@ -18,3 +18,8 @@ impl fmt::Display for Value {
         }
     }
 }
+
+#[derive(Debug, Eq, PartialEq)]
+pub struct ValueWithSource {
+    pub inner: Value,
+}
