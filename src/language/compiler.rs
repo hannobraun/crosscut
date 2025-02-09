@@ -1,3 +1,5 @@
+use crate::language::runtime::Value;
+
 use super::{
     code::{
         CodeError, Codebase, Expression, IntrinsicFunction, Node, NodeKind,
@@ -28,6 +30,24 @@ fn compile_token(
 ) -> (Node, Option<CodeError>) {
     let (kind, maybe_error) = if token.is_empty() {
         (NodeKind::Empty, None)
+    } else if token == "fn" {
+        match codebase.node_at(path).child {
+            Some(child) => (
+                NodeKind::Expression {
+                    expression: Expression::IntrinsicFunction {
+                        function: IntrinsicFunction::Literal {
+                            value: Value::Function { hash: child },
+                        },
+                    },
+                },
+                None,
+            ),
+            None => {
+                // A function keyword without a child is an error, as a function
+                // needs a body. Emitting that error is not supported yet.
+                todo!("Functions without a body are not supported.")
+            }
+        }
     } else {
         match resolve_function(token, package) {
             Ok(expression) => (NodeKind::Expression { expression }, None),
