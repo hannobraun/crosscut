@@ -27,10 +27,27 @@ impl Evaluator {
     }
 
     pub fn evaluate(&mut self, root: NodePath, codebase: &Codebase) {
+        self.value = Value::None;
         let mut path = root;
 
         loop {
             self.next.push(path);
+
+            if let NodeKind::Expression {
+                expression:
+                    Expression::IntrinsicFunction {
+                        function:
+                            IntrinsicFunction::Literal {
+                                value: Value::Function { .. },
+                            },
+                    },
+            } = codebase.node_at(&path).kind
+            {
+                // We have already pushed it, which means we're going to
+                // evaluate it. But we need to stop here, since we don't want to
+                // evaluate its body too, at least right here.
+                break;
+            }
 
             if let Some(child) = codebase.child_of(&path) {
                 path = child;
