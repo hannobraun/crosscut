@@ -16,7 +16,7 @@ fn define_and_evaluate_function() {
         Ok(ValueWithSource {
             inner: Value::Function { hash },
             source: _,
-        }) => hash,
+        }) => NodePath { hash },
         output => {
             panic!("Unexpected output: {output:?}");
         }
@@ -34,7 +34,7 @@ fn define_and_evaluate_function() {
     // If it did, and all the intermediate layers passed on this information, we
     // have all we need to construct the `NodePath` for the function body here,
     // now and going forward.
-    language.evaluate(NodePath { hash });
+    language.evaluate(hash);
     assert_eq!(
         language.step_until_finished().map(|value| value.inner),
         Ok(Value::Integer { value: 127 }),
