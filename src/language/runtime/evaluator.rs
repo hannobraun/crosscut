@@ -8,7 +8,7 @@ use super::{Value, ValueWithSource};
 #[derive(Debug)]
 pub struct Evaluator {
     next: Vec<NodePath>,
-    value: Value,
+    value: ValueWithSource,
     effect: Option<Effect>,
 }
 
@@ -16,7 +16,7 @@ impl Evaluator {
     pub fn new() -> Self {
         Self {
             next: Vec::new(),
-            value: Value::None,
+            value: ValueWithSource { inner: Value::None },
             effect: None,
         }
     }
@@ -27,7 +27,7 @@ impl Evaluator {
     }
 
     pub fn evaluate(&mut self, root: NodePath, codebase: &Codebase) {
-        self.value = Value::None;
+        self.value = ValueWithSource { inner: Value::None };
         let mut path = root;
 
         loop {
@@ -73,7 +73,7 @@ impl Evaluator {
         };
 
         self.effect = None;
-        self.value = value;
+        self.value = ValueWithSource { inner: value };
         self.advance();
     }
 
@@ -107,7 +107,7 @@ impl Evaluator {
             Expression::HostFunction { id } => {
                 let effect = Effect::ApplyHostFunction {
                     id: *id,
-                    input: self.value,
+                    input: self.value.inner,
                 };
                 self.effect = Some(effect);
 
@@ -117,14 +117,14 @@ impl Evaluator {
                 match function {
                     IntrinsicFunction::Identity => self.value,
                     IntrinsicFunction::Literal { value } => {
-                        let Value::None = self.value else {
+                        let Value::None = self.value.inner else {
                             // A literal is a function that takes `None`. If
                             // that isn't what we currently have, that's an
                             // error.
                             return StepResult::Error;
                         };
 
-                        *value
+                        ValueWithSource { inner: *value }
                     }
                 }
             }
@@ -132,14 +132,14 @@ impl Evaluator {
 
         self.advance();
 
-        StepResult::FunctionApplied { output: self.value }
+        StepResult::FunctionApplied {
+            output: self.value.inner,
+        }
     }
 
     fn next<'r>(&self, codebase: &'r Codebase) -> EvaluatorState<'r> {
         let Some(path) = self.next.last().copied() else {
-            return EvaluatorState::Finished {
-                output: ValueWithSource { inner: self.value },
-            };
+            return EvaluatorState::Finished { output: self.value };
         };
 
         if let Some(effect) = self.effect {
