@@ -96,10 +96,10 @@ mod tests {
         let mut changes = Changes::new();
         let mut nodes = Nodes::new();
 
-        let [a, b] = ["a", "b"].map(|name| {
+        let [a, b] = ["a", "b"].map(|node| {
             let node = Node {
                 kind: NodeKind::Error {
-                    node: String::from(name),
+                    node: String::from(node),
                 },
                 child: None,
             };
