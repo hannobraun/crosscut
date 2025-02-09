@@ -15,6 +15,7 @@ fn define_and_evaluate_function() {
     let hash = match language.step_until_finished() {
         Ok(ValueWithSource {
             inner: Value::Function { hash },
+            source: _,
         }) => hash,
         output => {
             panic!("Unexpected output: {output:?}");

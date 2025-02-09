@@ -16,7 +16,10 @@ impl Evaluator {
     pub fn new() -> Self {
         Self {
             next: Vec::new(),
-            value: ValueWithSource { inner: Value::None },
+            value: ValueWithSource {
+                inner: Value::None,
+                source: None,
+            },
             effect: None,
         }
     }
@@ -27,7 +30,10 @@ impl Evaluator {
     }
 
     pub fn evaluate(&mut self, root: NodePath, codebase: &Codebase) {
-        self.value = ValueWithSource { inner: Value::None };
+        self.value = ValueWithSource {
+            inner: Value::None,
+            source: None,
+        };
         let mut path = root;
 
         loop {
@@ -73,7 +79,10 @@ impl Evaluator {
         };
 
         self.effect = None;
-        self.value = ValueWithSource { inner: value };
+        self.value = ValueWithSource {
+            inner: value,
+            source: None,
+        };
         self.advance();
     }
 
@@ -124,7 +133,10 @@ impl Evaluator {
                             return StepResult::Error;
                         };
 
-                        ValueWithSource { inner: *value }
+                        ValueWithSource {
+                            inner: *value,
+                            source: None,
+                        }
                     }
                 }
             }

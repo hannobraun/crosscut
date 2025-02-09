@@ -104,6 +104,7 @@ where
                     output:
                         ValueWithSource {
                             inner: Value::Integer { value },
+                            ..
                         },
                 } => {
                     let value: f64 = value.into();

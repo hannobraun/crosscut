@@ -1,6 +1,6 @@
 use std::fmt;
 
-use crate::language::code::NodeHash;
+use crate::language::code::{NodeHash, NodePath};
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq, udigest::Digestable)]
 pub enum Value {
@@ -22,4 +22,5 @@ impl fmt::Display for Value {
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
 pub struct ValueWithSource {
     pub inner: Value,
+    pub source: Option<NodePath>,
 }
