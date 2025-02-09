@@ -52,7 +52,7 @@ fn compile_token(
         match resolve_function(token, package) {
             Ok(expression) => (NodeKind::Expression { expression }, None),
             Err(candidates) => (
-                NodeKind::Unresolved {
+                NodeKind::Error {
                     name: token.to_string(),
                 },
                 Some(CodeError::UnresolvedIdentifier { candidates }),

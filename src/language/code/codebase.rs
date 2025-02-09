@@ -212,7 +212,7 @@ mod tests {
         let a = codebase.replace_node(
             &codebase.entry(),
             Node {
-                kind: NodeKind::Unresolved {
+                kind: NodeKind::Error {
                     name: String::from("a"),
                 },
                 child: None,
@@ -221,7 +221,7 @@ mod tests {
         let b = codebase.insert_as_parent_of(
             a,
             Node {
-                kind: NodeKind::Unresolved {
+                kind: NodeKind::Error {
                     name: String::from("b"),
                 },
                 child: Some(*a.hash()),

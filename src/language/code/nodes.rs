@@ -126,7 +126,7 @@ impl Node {
 pub enum NodeKind {
     Empty,
     Expression { expression: Expression },
-    Unresolved { name: String },
+    Error { name: String },
 }
 
 impl NodeKind {
@@ -160,7 +160,7 @@ impl fmt::Display for NodeDisplay<'_> {
             NodeKind::Expression { expression } => {
                 write!(f, "{}", expression.display(self.package))
             }
-            NodeKind::Unresolved { name } => {
+            NodeKind::Error { name } => {
                 write!(f, "{name}")
             }
         }
