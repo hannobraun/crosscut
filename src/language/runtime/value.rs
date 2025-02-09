@@ -1,15 +1,24 @@
 use std::fmt;
 
+use crate::language::code::NodeHash;
+
 #[derive(Clone, Copy, Debug, Eq, PartialEq, udigest::Digestable)]
 pub enum Value {
     None,
-    Integer { value: i32 },
+    #[allow(unused)] // code using this is being worked on
+    Function {
+        hash: NodeHash,
+    },
+    Integer {
+        value: i32,
+    },
 }
 
 impl fmt::Display for Value {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match self {
             Self::None => write!(f, "none"),
+            Self::Function { hash } => write!(f, "fn {}", hash),
             Self::Integer { value } => write!(f, "{value}"),
         }
     }

@@ -31,6 +31,9 @@ impl fmt::Display for IntrinsicFunction {
             }
             Self::Literal { value } => match value {
                 Value::None => {}
+                Value::Function { hash: _ } => {
+                    writeln!(f, "fn")?;
+                }
                 Value::Integer { value } => {
                     write!(f, "{value}")?;
                 }
