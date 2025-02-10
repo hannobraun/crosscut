@@ -230,9 +230,11 @@ fn render_help<A: EditorOutputAdapter>(
     adapter: &mut A,
     context: &RenderContext,
 ) -> anyhow::Result<()> {
+    let node = context.codebase.node_at(context.editor.editing());
+
     writeln!(adapter)?;
 
-    match &context.codebase.node_at(context.editor.editing()).kind {
+    match &node.kind {
         NodeKind::Empty => {
             writeln!(
                 adapter,
