@@ -27,6 +27,29 @@ fn define_and_evaluate_function() {
 }
 
 #[test]
+fn self_recursion() {
+    // A function can recurse using the `self` keyword.
+
+    let mut language = Language::without_package();
+
+    language.enter_code("127 self fn");
+    let path = match language.step_until_finished().into_function_body() {
+        Ok(path) => path,
+        output => {
+            panic!("Unexpected output: {output:?}");
+        }
+    };
+
+    language.evaluate(path);
+
+    let expected = StepResult::FunctionApplied {
+        output: Value::Integer { value: 127 },
+    };
+    assert_eq!(language.step(), expected);
+    assert_eq!(language.step(), expected);
+}
+
+#[test]
 fn function_without_body() {
     // An `fn` token that doesn't follow an expression would create a function
     // without a body. This is an error.

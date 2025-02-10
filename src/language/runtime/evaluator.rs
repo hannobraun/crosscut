@@ -7,6 +7,7 @@ use super::{Value, ValueWithSource};
 
 #[derive(Debug)]
 pub struct Evaluator {
+    root: NodePath,
     next: Vec<NodePath>,
     active_value: ValueWithSource,
     effect: Option<Effect>,
@@ -15,6 +16,7 @@ pub struct Evaluator {
 impl Evaluator {
     pub fn new(root: NodePath, codebase: &Codebase) -> Self {
         let mut evaluator = Self {
+            root,
             next: Vec::new(),
             active_value: ValueWithSource {
                 inner: Value::None,
@@ -33,6 +35,7 @@ impl Evaluator {
     }
 
     pub fn evaluate(&mut self, root: NodePath, codebase: &Codebase) {
+        self.root = root;
         self.active_value = ValueWithSource {
             inner: Value::None,
             source: None,
@@ -103,6 +106,10 @@ impl Evaluator {
                     self.advance();
                     continue;
                 }
+                EvaluatorState::Recursing => {
+                    self.evaluate(self.root, codebase);
+                    continue;
+                }
                 EvaluatorState::Effect { effect, path: _ } => {
                     return StepResult::EffectTriggered { effect };
                 }
@@ -168,9 +175,7 @@ impl Evaluator {
             NodeKind::Expression { expression } => {
                 EvaluatorState::Running { expression, path }
             }
-            NodeKind::Recursion => {
-                todo!("Evaluating `self` is not supported yet.")
-            }
+            NodeKind::Recursion => EvaluatorState::Recursing,
             NodeKind::Error { node: _ } => EvaluatorState::Error { path },
         }
     }
@@ -187,6 +192,7 @@ pub enum EvaluatorState<'r> {
         path: NodePath,
     },
     IgnoringEmptyFragment,
+    Recursing,
     Effect {
         effect: Effect,
         path: NodePath,
@@ -207,6 +213,7 @@ impl EvaluatorState<'_> {
                 path,
             } => Some(path),
             Self::IgnoringEmptyFragment => None,
+            Self::Recursing => None,
             Self::Effect { effect: _, path } => Some(path),
             Self::Error { path } => Some(path),
             Self::Finished { output: _ } => None,
