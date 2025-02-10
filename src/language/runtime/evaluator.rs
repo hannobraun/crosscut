@@ -13,7 +13,7 @@ pub struct Evaluator {
 }
 
 impl Evaluator {
-    pub fn new(_: &Codebase) -> Self {
+    pub fn new(_: NodePath, _: &Codebase) -> Self {
         Self {
             next: Vec::new(),
             active_value: ValueWithSource {
@@ -25,7 +25,7 @@ impl Evaluator {
     }
 
     pub fn reset(&mut self, codebase: &Codebase) {
-        *self = Self::new(codebase);
+        *self = Self::new(codebase.root().path, codebase);
         self.evaluate(codebase.root().path, codebase);
     }
 

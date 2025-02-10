@@ -18,7 +18,7 @@ impl Language {
         let codebase = Codebase::new();
         let editor = Editor::new(&codebase);
 
-        let mut evaluator = Evaluator::new(&codebase);
+        let mut evaluator = Evaluator::new(codebase.root().path, &codebase);
         evaluator.reset(&codebase);
 
         Self {
