@@ -59,8 +59,8 @@ fn resolve_keyword(
     path: &NodePath,
     codebase: &Codebase,
 ) -> Option<(NodeKind, Option<CodeError>)> {
-    if name == "fn" {
-        match codebase.node_at(path).child {
+    match name {
+        "fn" => match codebase.node_at(path).child {
             Some(child) => Some((
                 NodeKind::Expression {
                     expression: Expression::IntrinsicFunction {
@@ -77,9 +77,8 @@ fn resolve_keyword(
                 },
                 Some(CodeError::FunctionWithoutBody),
             )),
-        }
-    } else {
-        None
+        },
+        _ => None,
     }
 }
 
