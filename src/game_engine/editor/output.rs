@@ -173,12 +173,12 @@ fn render_node<A: EditorOutputAdapter>(
     }
 
     let color = match &located_node.node.kind {
-        NodeKind::Empty => None,
         NodeKind::Expression { expression } => match expression {
             Expression::HostFunction { .. } => Some(Color::DarkMagenta),
             Expression::IntrinsicFunction { .. } => Some(Color::DarkBlue),
         },
         NodeKind::Error { .. } => Some(ERROR_COLOR),
+        _ => None,
     };
 
     let node_display = located_node.node.display(context.package);
