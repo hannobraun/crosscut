@@ -84,7 +84,14 @@ where
     }
 
     fn run_game_until_finished(&mut self) {
+        let mut num_steps = 0;
+
         loop {
+            num_steps += 1;
+            if num_steps > 1024 {
+                break;
+            }
+
             match self.language.step() {
                 StepResult::FunctionApplied { output: _ } => {
                     // We're not interested in intermediate values here.
