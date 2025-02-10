@@ -25,7 +25,7 @@ fn identity_none() {
     language.enter_code("identity");
     assert_eq!(
         language.step_until_finished().map(|value| value.inner),
-        Ok(Value::None),
+        Ok(Value::Nothing),
     );
 }
 

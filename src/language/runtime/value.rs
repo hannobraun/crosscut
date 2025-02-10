@@ -4,7 +4,7 @@ use crate::language::code::{NodeHash, NodePath};
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq, udigest::Digestable)]
 pub enum Value {
-    None,
+    Nothing,
     Function { hash: NodeHash },
     Integer { value: i32 },
 }
@@ -12,7 +12,7 @@ pub enum Value {
 impl fmt::Display for Value {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match self {
-            Self::None => write!(f, "nothing"),
+            Self::Nothing => write!(f, "nothing"),
             Self::Function { hash } => write!(f, "fn {}", hash),
             Self::Integer { value } => write!(f, "{value}"),
         }

@@ -19,7 +19,7 @@ impl Evaluator {
             root,
             next: Vec::new(),
             active_value: ValueWithSource {
-                inner: Value::None,
+                inner: Value::Nothing,
                 source: None,
             },
             effect: None,
@@ -37,7 +37,7 @@ impl Evaluator {
     pub fn evaluate(&mut self, root: NodePath, codebase: &Codebase) {
         self.root = root;
         self.active_value = ValueWithSource {
-            inner: Value::None,
+            inner: Value::Nothing,
             source: None,
         };
         let mut path = root;
@@ -154,7 +154,7 @@ impl Evaluator {
                 match function {
                     IntrinsicFunction::Identity => self.active_value,
                     IntrinsicFunction::Literal { value } => {
-                        let Value::None = self.active_value.inner else {
+                        let Value::Nothing = self.active_value.inner else {
                             // A literal is a function that takes `None`. If
                             // that isn't what we currently have, that's an
                             // error.

@@ -48,13 +48,13 @@ fn host_functions_can_trigger_effects() {
 
     let effect = Effect::UnexpectedInput {
         expected: Type::Integer,
-        actual: Value::None,
+        actual: Value::Nothing,
     };
     let output =
         language.step_until_finished_and_handle_host_functions(|id, input| {
             match Function::from_verified_id(id) {
                 Halve => match input {
-                    Value::None => Err(effect),
+                    Value::Nothing => Err(effect),
                     input => {
                         unreachable!("Unexpected input: `{input:?}`");
                     }

@@ -291,13 +291,13 @@ fn render_help<A: EditorOutputAdapter>(
                                 "This is a special kind of intrinsic function, \
                                 a literal. Literals are functions that take \
                                 `{}` and return the value they represent.",
-                                Value::None,
+                                Value::Nothing,
                             )?;
 
                             writeln!(adapter)?;
 
                             match value {
-                                Value::None => {
+                                Value::Nothing => {
                                     writeln!(
                                         adapter,
                                         "This literal returns the `{value}` \

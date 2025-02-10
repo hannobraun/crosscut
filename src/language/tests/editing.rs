@@ -71,7 +71,7 @@ fn update_after_removing_all_characters() {
     language.on_input(EditorInputEvent::RemoveLeft);
     assert_eq!(
         language.step_until_finished().map(|value| value.inner),
-        Ok(Value::None),
+        Ok(Value::Nothing),
     );
 }
 
@@ -205,7 +205,7 @@ fn moving_cursor_down_should_navigate_to_next_node() {
 
     assert_eq!(
         language.step_until_finished().map(|value| value.inner),
-        Ok(Value::None),
+        Ok(Value::Nothing),
     );
 }
 
