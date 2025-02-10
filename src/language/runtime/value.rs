@@ -26,7 +26,6 @@ pub struct ValueWithSource {
 }
 
 impl ValueWithSource {
-    #[cfg(test)]
     pub fn into_function_body(self) -> Result<NodePath, Self> {
         match self.inner {
             Value::Function { hash } => Ok(NodePath { hash }),

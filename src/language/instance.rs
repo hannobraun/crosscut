@@ -1,5 +1,5 @@
 use super::{
-    code::Codebase,
+    code::{Codebase, NodePath},
     editor::{Editor, EditorCommand, EditorInputEvent},
     packages::Package,
     runtime::{Effect, Evaluator, StepResult, Value},
@@ -60,7 +60,6 @@ impl Language {
         );
     }
 
-    #[cfg(test)]
     pub fn evaluate(&mut self, root: NodePath) {
         self.evaluator.evaluate(root, &self.codebase);
     }
@@ -79,7 +78,7 @@ impl Language {
 }
 
 #[cfg(test)]
-use super::{code::NodePath, packages::FunctionId, runtime::ValueWithSource};
+use super::{packages::FunctionId, runtime::ValueWithSource};
 
 #[cfg(test)]
 impl Language {

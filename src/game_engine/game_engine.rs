@@ -125,8 +125,17 @@ where
                             color: [value, value, value, 1.],
                         });
                     }
-                    _ => {
-                        // The output is not a number. We can't render that.
+                    value => {
+                        match value.into_function_body() {
+                            Ok(path) => {
+                                self.language.evaluate(path);
+                                continue;
+                            }
+                            Err(_) => {
+                                // The output is neither a number we can use for
+                                // the color, nor a function we can call.
+                            }
+                        }
                     }
                 },
                 StepResult::Error => {
