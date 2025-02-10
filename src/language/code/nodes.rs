@@ -126,6 +126,7 @@ impl Node {
 pub enum NodeKind {
     Empty,
     Expression { expression: Expression },
+    Recursion,
     Error { node: String },
 }
 
@@ -159,6 +160,9 @@ impl fmt::Display for NodeDisplay<'_> {
             }
             NodeKind::Expression { expression } => {
                 write!(f, "{}", expression.display(self.package))
+            }
+            NodeKind::Recursion => {
+                write!(f, "self")
             }
             NodeKind::Error { node } => {
                 write!(f, "{node}")

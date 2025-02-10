@@ -165,6 +165,9 @@ impl Evaluator {
             NodeKind::Expression { expression } => {
                 EvaluatorState::Running { expression, path }
             }
+            NodeKind::Recursion => {
+                todo!("Evaluating `self` is not supported yet.")
+            }
             NodeKind::Error { node: _ } => EvaluatorState::Error { path },
         }
     }

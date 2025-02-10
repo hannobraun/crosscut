@@ -322,6 +322,14 @@ fn render_help<A: EditorOutputAdapter>(
                 }
             }
         }
+        NodeKind::Recursion => {
+            writeln!(
+                adapter,
+                "You are editing the `{}` keyword, which calls the current \
+                function recursively.",
+                node.display(context.package),
+            )?;
+        }
         NodeKind::Error { node: _ } => {
             writeln!(
                 adapter,

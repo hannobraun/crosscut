@@ -78,6 +78,7 @@ fn resolve_keyword(
                 Some(CodeError::FunctionWithoutBody),
             )),
         },
+        "self" => Some((NodeKind::Recursion, None)),
         _ => None,
     }
 }
