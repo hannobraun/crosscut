@@ -111,22 +111,20 @@ where
                     }
                 },
                 StepResult::Finished {
-                    output:
-                        ValueWithSource {
-                            inner: Value::Integer { value },
-                            ..
-                        },
-                } => {
-                    let value: f64 = value.into();
-                    let value = value / 255.;
+                    output: ValueWithSource { inner, .. },
+                } => match inner {
+                    Value::Integer { value } => {
+                        let value: f64 = value.into();
+                        let value = value / 255.;
 
-                    self.game_output.push(GameOutput::SubmitColor {
-                        color: [value, value, value, 1.],
-                    });
-                }
-                StepResult::Finished { output: _ } => {
-                    // The output is not a number. We can't render that.
-                }
+                        self.game_output.push(GameOutput::SubmitColor {
+                            color: [value, value, value, 1.],
+                        });
+                    }
+                    _ => {
+                        // The output is not a number. We can't render that.
+                    }
+                },
                 StepResult::Error => {
                     // Currently not handling errors.
                 }
