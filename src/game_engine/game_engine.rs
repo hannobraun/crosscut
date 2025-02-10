@@ -114,6 +114,9 @@ where
                     output: ValueWithSource { inner, .. },
                 } => match inner {
                     Value::Integer { value } => {
+                        // If the program returns an integer, we use that to set
+                        // the color.
+
                         let value: f64 = value.into();
                         let value = value / 255.;
 
