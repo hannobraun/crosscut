@@ -17,7 +17,6 @@ impl Language {
     pub fn with_package(package: Package) -> Self {
         let codebase = Codebase::new();
         let editor = Editor::new(&codebase);
-
         let evaluator = Evaluator::new(codebase.root().path, &codebase);
 
         Self {
