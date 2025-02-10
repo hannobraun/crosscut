@@ -55,11 +55,11 @@ fn compile_token(
 }
 
 fn resolve_keyword(
-    token: &str,
+    name: &str,
     path: &NodePath,
     codebase: &Codebase,
 ) -> Option<(NodeKind, Option<CodeError>)> {
-    if token == "fn" {
+    if name == "fn" {
         match codebase.node_at(path).child {
             Some(child) => Some((
                 NodeKind::Expression {
@@ -73,7 +73,7 @@ fn resolve_keyword(
             )),
             None => Some((
                 NodeKind::Error {
-                    node: token.to_string(),
+                    node: name.to_string(),
                 },
                 Some(CodeError::FunctionWithoutBody),
             )),
