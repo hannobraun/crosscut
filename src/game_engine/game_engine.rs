@@ -90,6 +90,9 @@ where
                     // We're not interested in intermediate values here.
                     continue;
                 }
+                StepResult::Recursing => {
+                    continue;
+                }
                 StepResult::EffectTriggered { effect } => match effect {
                     Effect::ApplyHostFunction { id, input } => {
                         self.apply_host_function(id, input);

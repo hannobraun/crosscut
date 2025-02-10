@@ -108,7 +108,25 @@ impl Evaluator {
                 }
                 EvaluatorState::Recursing => {
                     self.evaluate(self.root, codebase);
-                    continue;
+
+                    // We could `continue` here. Then the following call to
+                    // `Self::next` above would return the next expression we
+                    // need to evaluate, and we could immediately do that.
+                    // Without bothering the caller about this recursion, which
+                    // would become an internal implementation detail.
+                    //
+                    // But that won't work, because of one very important edge
+                    // case: If `self.root` points to nothing except a bare
+                    // `self` without any children, then we would immediately
+                    // land back here, producing an endless loop and hanging the
+                    // caller.
+                    //
+                    // And endless loop that does nothing is likely a problem
+                    // either way, but it's not our responsibility to address
+                    // that. All we're doing here is evaluate Crosscut code, so
+                    // let's do that, and let the caller decide what to do about
+                    // endless loops in that.
+                    return StepResult::Recursing;
                 }
                 EvaluatorState::Effect { effect, path: _ } => {
                     return StepResult::EffectTriggered { effect };
@@ -224,6 +242,7 @@ impl EvaluatorState<'_> {
 #[derive(Debug, Eq, PartialEq)]
 pub enum StepResult {
     FunctionApplied { output: Value },
+    Recursing,
     EffectTriggered { effect: Effect },
     Finished { output: ValueWithSource },
     Error,
@@ -233,4 +252,33 @@ pub enum StepResult {
 pub enum Effect {
     ApplyHostFunction { id: FunctionId, input: Value },
     UnexpectedInput { expected: Type, actual: Value },
+}
+
+#[cfg(test)]
+mod tests {
+    use crate::language::{
+        code::{Codebase, Node, NodeKind},
+        runtime::{Evaluator, StepResult},
+    };
+
+    #[test]
+    fn handle_bare_recursion() {
+        // Recursion can quite naturally be implemented in a way that results in
+        // an endless loop within `step`, if the evaluated expression consists
+        // of nothing but a `self`. And in fact, that's what the first draft
+        // did.
+
+        let mut codebase = Codebase::new();
+        codebase.insert_as_parent_of(
+            codebase.root().path,
+            Node {
+                kind: NodeKind::Recursion,
+                child: Some(*codebase.root().path.hash()),
+            },
+        );
+
+        let mut evaluator = Evaluator::new(codebase.root().path, &codebase);
+
+        assert_eq!(evaluator.step(&codebase), StepResult::Recursing);
+    }
 }
