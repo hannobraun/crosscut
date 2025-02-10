@@ -99,7 +99,7 @@ impl Evaluator {
                 EvaluatorState::Running { expression, path } => {
                     break (expression, path);
                 }
-                EvaluatorState::IgnoringEmptyFragment { path: _ } => {
+                EvaluatorState::IgnoringEmptyFragment => {
                     self.advance();
                     continue;
                 }
@@ -164,7 +164,7 @@ impl Evaluator {
         }
 
         match &codebase.node_at(&path).kind {
-            NodeKind::Empty => EvaluatorState::IgnoringEmptyFragment { path },
+            NodeKind::Empty => EvaluatorState::IgnoringEmptyFragment,
             NodeKind::Expression { expression } => {
                 EvaluatorState::Running { expression, path }
             }
@@ -186,9 +186,7 @@ pub enum EvaluatorState<'r> {
         expression: &'r Expression,
         path: NodePath,
     },
-    IgnoringEmptyFragment {
-        path: NodePath,
-    },
+    IgnoringEmptyFragment,
     Effect {
         effect: Effect,
         path: NodePath,
@@ -208,7 +206,7 @@ impl EvaluatorState<'_> {
                 expression: _,
                 path,
             } => Some(path),
-            Self::IgnoringEmptyFragment { path } => Some(path),
+            Self::IgnoringEmptyFragment => None,
             Self::Effect { effect: _, path } => Some(path),
             Self::Error { path } => Some(path),
             Self::Finished { output: _ } => None,
