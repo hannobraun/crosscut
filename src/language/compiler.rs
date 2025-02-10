@@ -30,25 +30,10 @@ fn compile_token(
 ) -> (Node, Option<CodeError>) {
     let (kind, maybe_error) = if token.is_empty() {
         (NodeKind::Empty, None)
-    } else if token == "fn" {
-        match codebase.node_at(path).child {
-            Some(child) => (
-                NodeKind::Expression {
-                    expression: Expression::IntrinsicFunction {
-                        function: IntrinsicFunction::Literal {
-                            value: Value::Function { hash: child },
-                        },
-                    },
-                },
-                None,
-            ),
-            None => (
-                NodeKind::Error {
-                    node: token.to_string(),
-                },
-                Some(CodeError::FunctionWithoutBody),
-            ),
-        }
+    } else if let Some((node, maybe_err)) =
+        resolve_keyword(token, path, codebase)
+    {
+        (node, maybe_err)
     } else {
         match resolve_function(token, package) {
             Ok(expression) => (NodeKind::Expression { expression }, None),
@@ -67,6 +52,35 @@ fn compile_token(
     };
 
     (node, maybe_error)
+}
+
+fn resolve_keyword(
+    token: &str,
+    path: &NodePath,
+    codebase: &Codebase,
+) -> Option<(NodeKind, Option<CodeError>)> {
+    if token == "fn" {
+        match codebase.node_at(path).child {
+            Some(child) => Some((
+                NodeKind::Expression {
+                    expression: Expression::IntrinsicFunction {
+                        function: IntrinsicFunction::Literal {
+                            value: Value::Function { hash: child },
+                        },
+                    },
+                },
+                None,
+            )),
+            None => Some((
+                NodeKind::Error {
+                    node: token.to_string(),
+                },
+                Some(CodeError::FunctionWithoutBody),
+            )),
+        }
+    } else {
+        None
+    }
 }
 
 fn resolve_function(
