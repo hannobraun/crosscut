@@ -8,7 +8,7 @@ use super::{Value, ValueWithSource};
 #[derive(Debug)]
 pub struct Evaluator {
     next: Vec<NodePath>,
-    value: ValueWithSource,
+    active_value: ValueWithSource,
     effect: Option<Effect>,
 }
 
@@ -16,7 +16,7 @@ impl Evaluator {
     pub fn new() -> Self {
         Self {
             next: Vec::new(),
-            value: ValueWithSource {
+            active_value: ValueWithSource {
                 inner: Value::None,
                 source: None,
             },
@@ -30,7 +30,7 @@ impl Evaluator {
     }
 
     pub fn evaluate(&mut self, root: NodePath, codebase: &Codebase) {
-        self.value = ValueWithSource {
+        self.active_value = ValueWithSource {
             inner: Value::None,
             source: None,
         };
@@ -79,7 +79,7 @@ impl Evaluator {
         };
 
         self.effect = None;
-        self.value = ValueWithSource {
+        self.active_value = ValueWithSource {
             inner: value,
             source: Some(source),
         };
@@ -112,11 +112,11 @@ impl Evaluator {
             }
         };
 
-        self.value = match next {
+        self.active_value = match next {
             Expression::HostFunction { id } => {
                 let effect = Effect::ApplyHostFunction {
                     id: *id,
-                    input: self.value.inner,
+                    input: self.active_value.inner,
                 };
                 self.effect = Some(effect);
 
@@ -124,9 +124,9 @@ impl Evaluator {
             }
             Expression::IntrinsicFunction { function } => {
                 match function {
-                    IntrinsicFunction::Identity => self.value,
+                    IntrinsicFunction::Identity => self.active_value,
                     IntrinsicFunction::Literal { value } => {
-                        let Value::None = self.value.inner else {
+                        let Value::None = self.active_value.inner else {
                             // A literal is a function that takes `None`. If
                             // that isn't what we currently have, that's an
                             // error.
@@ -145,13 +145,15 @@ impl Evaluator {
         self.advance();
 
         StepResult::FunctionApplied {
-            output: self.value.inner,
+            output: self.active_value.inner,
         }
     }
 
     fn next<'r>(&self, codebase: &'r Codebase) -> EvaluatorState<'r> {
         let Some(path) = self.next.last().copied() else {
-            return EvaluatorState::Finished { output: self.value };
+            return EvaluatorState::Finished {
+                output: self.active_value,
+            };
         };
 
         if let Some(effect) = self.effect {
