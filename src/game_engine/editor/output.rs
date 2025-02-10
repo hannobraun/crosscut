@@ -172,24 +172,20 @@ fn render_node<A: EditorOutputAdapter>(
             Some(adapter.cursor().move_right(context.editor.input().cursor()));
     }
 
-    match &located_node.node.kind {
-        NodeKind::Empty => {}
+    let color = match &located_node.node.kind {
+        NodeKind::Empty => None,
         NodeKind::Expression { expression } => match expression {
-            Expression::HostFunction { id } => {
-                let name = context.package.function_name_by_id(id);
-                adapter.color(Color::DarkMagenta, |adapter| {
-                    write!(adapter, "{name}")
-                })?;
-            }
-            Expression::IntrinsicFunction { function } => {
-                adapter.color(Color::DarkBlue, |adapter| {
-                    write!(adapter, "{function}")
-                })?;
-            }
+            Expression::HostFunction { .. } => Some(Color::DarkMagenta),
+            Expression::IntrinsicFunction { .. } => Some(Color::DarkBlue),
         },
-        NodeKind::Error { node } => {
-            adapter.color(ERROR_COLOR, |adapter| write!(adapter, "{node}"))?;
-        }
+        NodeKind::Error { .. } => Some(ERROR_COLOR),
+    };
+
+    let node_display = located_node.node.display(context.package);
+    if let Some(color) = color {
+        adapter.color(color, |adapter| write!(adapter, "{node_display}"))?;
+    } else {
+        write!(adapter, "{node_display}")?;
     }
 
     if let Some(error) = context.codebase.error_at(&located_node.path) {
