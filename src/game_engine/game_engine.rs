@@ -110,10 +110,11 @@ where
                         break;
                     }
                 },
-                StepResult::Finished {
-                    output: ValueWithSource { inner, .. },
-                } => match inner {
-                    Value::Integer { value } => {
+                StepResult::Finished { output } => match output {
+                    ValueWithSource {
+                        inner: Value::Integer { value },
+                        ..
+                    } => {
                         // If the program returns an integer, we use that to set
                         // the color.
 
