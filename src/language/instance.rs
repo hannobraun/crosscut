@@ -61,8 +61,8 @@ impl Language {
     }
 
     #[cfg(test)]
-    pub fn evaluate(&mut self, expression: NodePath) {
-        self.evaluator.evaluate(expression, &self.codebase);
+    pub fn evaluate(&mut self, root: NodePath) {
+        self.evaluator.evaluate(root, &self.codebase);
     }
 
     pub fn step(&mut self) -> StepResult {
