@@ -52,7 +52,7 @@ impl Editor {
                         self.navigate_to(location, codebase, package);
                     }
                 }
-                UpdateAction::RemovePrevious => {
+                UpdateAction::MergeWithPrevious => {
                     if let Some(to_remove) = codebase.child_of(&self.editing) {
                         let merged = [&to_remove, &self.editing]
                             .map(|path| {
