@@ -33,7 +33,7 @@ impl fmt::Display for IntrinsicFunction {
             }
             Self::Literal { literal } => match literal {
                 Literal::Function => {
-                    writeln!(f, "fn")?;
+                    write!(f, "fn")?;
                 }
                 Literal::Integer { value } => {
                     write!(f, "{value}")?;
