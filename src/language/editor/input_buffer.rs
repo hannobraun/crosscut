@@ -56,6 +56,7 @@ impl EditorInputBuffer {
             }
             RemoveLeft { whole_node } => {
                 if whole_node {
+                    self.remove_left_whole_node();
                 } else {
                     return self.remove_left();
                 }
@@ -123,6 +124,12 @@ impl EditorInputBuffer {
             None
         } else {
             Some(UpdateAction::MergeWithPrevious)
+        }
+    }
+
+    fn remove_left_whole_node(&mut self) {
+        while self.move_cursor_left().is_none() {
+            self.buffer.remove(self.cursor);
         }
     }
 
@@ -236,6 +243,20 @@ mod tests {
         input.update(MoveCursorLeft);
         input.update(RemoveLeft { whole_node: false });
         assert_eq!(input.buffer(), "1");
+    }
+
+    #[test]
+    fn remove_left_whole_node() {
+        let mut input = EditorInputBuffer::empty();
+
+        input.update(Insert { ch: '1' });
+        input.update(Insert { ch: '2' });
+        input.update(Insert { ch: '7' });
+        input.update(MoveCursorLeft);
+        assert_eq!(input.buffer(), "127");
+
+        input.update(RemoveLeft { whole_node: true });
+        assert_eq!(input.buffer(), "7");
     }
 
     #[test]
