@@ -52,9 +52,20 @@ pub enum Literal {
 }
 
 impl Literal {
-    pub fn to_value(&self, _: &NodePath, _: &Codebase) -> Value {
+    pub fn to_value(&self, path: &NodePath, codebase: &Codebase) -> Value {
         match *self {
-            Self::Function { hash } => Value::Function { hash },
+            Self::Function { hash: _ } => {
+                let Some(child) = codebase.child_of(path) else {
+                    unreachable!(
+                        "Function literal must have a child, or it wouldn't \
+                        have been resolved as a function literal."
+                    );
+                };
+
+                Value::Function {
+                    hash: *child.hash(),
+                }
+            }
             Self::Integer { value } => Value::Integer { value },
         }
     }
