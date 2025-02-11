@@ -61,9 +61,9 @@ impl Evaluator {
                     },
             } = codebase.node_at(&path).kind
             {
-                // We have already pushed it, which means we're going to
-                // evaluate it. But we need to stop here, since we don't want to
-                // evaluate its body too, at least right here.
+                // We have already pushed the function literal, which means
+                // we're going to evaluate it. But we need to stop here, since
+                // we don't want to evaluate the function itself right now.
                 break;
             }
 
