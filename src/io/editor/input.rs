@@ -23,10 +23,10 @@ pub fn read_editor_event(
         return Ok(ControlFlow::Continue(None));
     };
 
+    let ctrl_pressed = key_event.modifiers.contains(KeyModifiers::CONTROL);
+
     let event = match key_event.code {
-        KeyCode::Char('c')
-            if key_event.modifiers.contains(KeyModifiers::CONTROL) =>
-        {
+        KeyCode::Char('c') if ctrl_pressed => {
             // The terminal is in raw mode, so we have to handle CTRL+C
             // manually.
             //
