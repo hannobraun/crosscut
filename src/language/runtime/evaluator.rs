@@ -105,7 +105,7 @@ impl Evaluator {
                 EvaluatorState::Running { expression, path } => {
                     break (expression, path);
                 }
-                EvaluatorState::IgnoringEmptyFragment => {
+                EvaluatorState::IgnoringSyntaxNode => {
                     self.advance();
                     continue;
                 }
@@ -192,7 +192,7 @@ impl Evaluator {
         }
 
         match &codebase.node_at(&path).kind {
-            NodeKind::Empty => EvaluatorState::IgnoringEmptyFragment,
+            NodeKind::Empty => EvaluatorState::IgnoringSyntaxNode,
             NodeKind::Expression { expression } => {
                 EvaluatorState::Running { expression, path }
             }
@@ -212,7 +212,7 @@ pub enum EvaluatorState<'r> {
         expression: &'r Expression,
         path: NodePath,
     },
-    IgnoringEmptyFragment,
+    IgnoringSyntaxNode,
     Recursing,
     Effect {
         effect: Effect,
@@ -233,7 +233,7 @@ impl EvaluatorState<'_> {
                 expression: _,
                 path,
             } => Some(path),
-            Self::IgnoringEmptyFragment => None,
+            Self::IgnoringSyntaxNode => None,
             Self::Recursing => None,
             Self::Effect { effect: _, path } => Some(path),
             Self::Error { path } => Some(path),
