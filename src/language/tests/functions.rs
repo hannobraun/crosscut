@@ -19,7 +19,7 @@ fn define_and_evaluate_function() {
         }
     };
 
-    language.evaluate(path);
+    language.evaluate(path, Value::Nothing);
     assert_eq!(
         language.step_until_finished().map(|value| value.inner),
         Ok(Value::Integer { value: 127 }),
@@ -40,7 +40,7 @@ fn self_recursion() {
         }
     };
 
-    language.evaluate(path);
+    language.evaluate(path, Value::Nothing);
 
     let expected = StepResult::FunctionApplied {
         output: Value::Integer { value: 127 },

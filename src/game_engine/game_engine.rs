@@ -128,7 +128,7 @@ where
                     value => {
                         match value.into_function_body() {
                             Ok(path) => {
-                                self.language.evaluate(path);
+                                self.language.evaluate(path, Value::Nothing);
                                 continue;
                             }
                             Err(_) => {
