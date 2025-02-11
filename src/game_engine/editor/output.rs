@@ -332,11 +332,7 @@ fn render_help<A: EditorOutputAdapter>(
             )?;
         }
         NodeKind::Error { node: _ } => {
-            writeln!(
-                adapter,
-                "You are editing an unresolved syntax node. This means that \
-                Crosscut doesn't know what it's referring to.",
-            )?;
+            writeln!(adapter, "You are editing an erroneous syntax node.",)?;
         }
     }
 
