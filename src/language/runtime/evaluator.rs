@@ -159,7 +159,7 @@ impl Evaluator {
             Expression::IntrinsicFunction { function } => {
                 match function {
                     IntrinsicFunction::Identity => self.active_value,
-                    IntrinsicFunction::Literal { literal: value } => {
+                    IntrinsicFunction::Literal { literal } => {
                         let Value::Nothing = self.active_value.inner else {
                             // A literal is a function that takes `None`. If
                             // that isn't what we currently have, that's an
@@ -168,7 +168,7 @@ impl Evaluator {
                         };
 
                         ValueWithSource {
-                            inner: value.value,
+                            inner: literal.value,
                             source: Some(path),
                         }
                     }
