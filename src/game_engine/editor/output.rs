@@ -331,7 +331,7 @@ fn render_help<A: EditorOutputAdapter>(
                 node.display(context.package),
             )?;
         }
-        NodeKind::Error { node: _ } => {
+        NodeKind::Error { .. } => {
             writeln!(adapter, "You are editing an erroneous syntax node.",)?;
         }
     }
