@@ -58,24 +58,27 @@ fn resolve_keyword(
     codebase: &Codebase,
 ) -> Option<(NodeKind, Option<CodeError>)> {
     match name {
-        "fn" => match codebase.node_at(path).child {
-            Some(_) => Some((
-                NodeKind::Expression {
-                    expression: Expression::IntrinsicFunction {
-                        function: IntrinsicFunction::Literal {
-                            literal: Literal::Function,
+        "fn" => {
+            if codebase.node_at(path).child.is_some() {
+                Some((
+                    NodeKind::Expression {
+                        expression: Expression::IntrinsicFunction {
+                            function: IntrinsicFunction::Literal {
+                                literal: Literal::Function,
+                            },
                         },
                     },
-                },
-                None,
-            )),
-            None => Some((
-                NodeKind::Error {
-                    node: name.to_string(),
-                },
-                Some(CodeError::FunctionWithoutBody),
-            )),
-        },
+                    None,
+                ))
+            } else {
+                Some((
+                    NodeKind::Error {
+                        node: name.to_string(),
+                    },
+                    Some(CodeError::FunctionWithoutBody),
+                ))
+            }
+        }
         "self" => Some((NodeKind::Recursion, None)),
         _ => None,
     }
