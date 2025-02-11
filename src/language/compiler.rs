@@ -65,7 +65,7 @@ fn resolve_keyword(
                 NodeKind::Expression {
                     expression: Expression::IntrinsicFunction {
                         function: IntrinsicFunction::Literal {
-                            value: Literal {
+                            literal: Literal {
                                 value: Value::Function { hash: child },
                             },
                         },

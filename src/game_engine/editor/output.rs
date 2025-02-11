@@ -285,7 +285,7 @@ fn render_help<A: EditorOutputAdapter>(
                                 input unchanged.",
                             )?;
                         }
-                        IntrinsicFunction::Literal { value } => {
+                        IntrinsicFunction::Literal { literal: value } => {
                             writeln!(
                                 adapter,
                                 "This is a special kind of intrinsic function, \

@@ -53,7 +53,7 @@ impl Evaluator {
                     Expression::IntrinsicFunction {
                         function:
                             IntrinsicFunction::Literal {
-                                value:
+                                literal:
                                     Literal {
                                         value: Value::Function { .. },
                                     },
@@ -159,7 +159,7 @@ impl Evaluator {
             Expression::IntrinsicFunction { function } => {
                 match function {
                     IntrinsicFunction::Identity => self.active_value,
-                    IntrinsicFunction::Literal { value } => {
+                    IntrinsicFunction::Literal { literal: value } => {
                         let Value::Nothing = self.active_value.inner else {
                             // A literal is a function that takes `None`. If
                             // that isn't what we currently have, that's an
