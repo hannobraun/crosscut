@@ -28,7 +28,7 @@ impl Evaluator {
             effect: None,
         };
 
-        evaluator.evaluate(root, codebase);
+        evaluator.evaluate(evaluator.root, codebase);
 
         evaluator
     }
