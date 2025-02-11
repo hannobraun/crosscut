@@ -279,7 +279,7 @@ fn remove_left_removes_previous_syntax_node_if_empty() {
 
     // Make sure the test setup worked as expected.
     let (empty, literal) =
-        language.codebase().entry_to_root().collect_tuple().unwrap();
+        language.codebase().leaf_to_root().collect_tuple().unwrap();
     assert_eq!(empty.node.kind, NodeKind::Empty);
     assert_eq!(literal.node.kind, NodeKind::integer_literal(127));
 
@@ -287,7 +287,7 @@ fn remove_left_removes_previous_syntax_node_if_empty() {
     language.on_input(EditorInputEvent::RemoveLeft);
 
     let (literal,) =
-        language.codebase().entry_to_root().collect_tuple().unwrap();
+        language.codebase().leaf_to_root().collect_tuple().unwrap();
     assert_eq!(literal.node.kind, NodeKind::integer_literal(127));
 }
 
@@ -323,7 +323,7 @@ fn remove_right_removes_next_syntax_node_if_empty() {
 
     // Make sure the test setup worked as expected.
     let (literal, empty) =
-        language.codebase().entry_to_root().collect_tuple().unwrap();
+        language.codebase().leaf_to_root().collect_tuple().unwrap();
     assert_eq!(literal.node.kind, NodeKind::integer_literal(127));
     assert_eq!(empty.node.kind, NodeKind::Empty);
 
@@ -331,7 +331,7 @@ fn remove_right_removes_next_syntax_node_if_empty() {
     language.on_input(EditorInputEvent::RemoveRight);
 
     let (literal,) =
-        language.codebase().entry_to_root().collect_tuple().unwrap();
+        language.codebase().leaf_to_root().collect_tuple().unwrap();
     assert_eq!(literal.node.kind, NodeKind::integer_literal(127));
 }
 

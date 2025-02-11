@@ -131,7 +131,7 @@ fn render_code<A: EditorOutputAdapter>(
 ) -> anyhow::Result<()> {
     writeln!(adapter)?;
 
-    for located_node in context.codebase.entry_to_root() {
+    for located_node in context.codebase.leaf_to_root() {
         render_possibly_active_node(located_node, adapter, context)?;
     }
 

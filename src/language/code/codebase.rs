@@ -42,7 +42,7 @@ impl Codebase {
     }
 
     /// # Iterate over notes in the current version, from entry to root
-    pub fn entry_to_root(&self) -> impl Iterator<Item = LocatedNode> {
+    pub fn leaf_to_root(&self) -> impl Iterator<Item = LocatedNode> {
         SyntaxTree::from_root(self.root).leaf_to_root(&self.nodes)
     }
 
@@ -198,7 +198,7 @@ mod tests {
 
         assert_eq!(
             codebase
-                .entry_to_root()
+                .leaf_to_root()
                 .map(|located_node| located_node.path)
                 .collect::<Vec<_>>(),
             vec![a, b],
