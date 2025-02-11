@@ -88,7 +88,7 @@ pub enum TerminalInputEvent {
     Character { ch: char },
 
     Backspace { ctrl_pressed: bool },
-    Delete,
+    Delete { ctrl_pressed: bool },
 
     Left,
     Right,
@@ -111,7 +111,10 @@ impl TerminalInputEvent {
                 let _ = ctrl_pressed;
                 Some(EditorInputEvent::RemoveLeft)
             }
-            Self::Delete => Some(EditorInputEvent::RemoveRight),
+            Self::Delete { ctrl_pressed } => {
+                let _ = ctrl_pressed;
+                Some(EditorInputEvent::RemoveRight)
+            }
 
             Self::Left => Some(EditorInputEvent::MoveCursorLeft),
             Self::Right => Some(EditorInputEvent::MoveCursorRight),
