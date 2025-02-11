@@ -55,8 +55,10 @@ impl EditorInputBuffer {
                 return Some(UpdateAction::NavigateToNextNode);
             }
             RemoveLeft { whole_node } => {
-                let _ = whole_node;
-                return self.remove_left();
+                if whole_node {
+                } else {
+                    return self.remove_left();
+                }
             }
             RemoveRight { whole_node } => {
                 let _ = whole_node;
