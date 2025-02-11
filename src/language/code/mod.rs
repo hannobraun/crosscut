@@ -12,7 +12,7 @@ pub use self::{
     codebase::Codebase,
     errors::CodeError,
     expressions::Expression,
-    intrinsics::IntrinsicFunction,
+    intrinsics::{IntrinsicFunction, Literal},
     nodes::{LocatedNode, Node, NodeHash, NodeKind, NodePath, Nodes},
     tree::SyntaxTree,
     types::Type,

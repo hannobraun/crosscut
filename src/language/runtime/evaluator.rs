@@ -1,5 +1,8 @@
 use crate::language::{
-    code::{Codebase, Expression, IntrinsicFunction, NodeKind, NodePath, Type},
+    code::{
+        Codebase, Expression, IntrinsicFunction, Literal, NodeKind, NodePath,
+        Type,
+    },
     packages::FunctionId,
 };
 
@@ -50,7 +53,10 @@ impl Evaluator {
                     Expression::IntrinsicFunction {
                         function:
                             IntrinsicFunction::Literal {
-                                value: Value::Function { .. },
+                                value:
+                                    Literal {
+                                        value: Value::Function { .. },
+                                    },
                             },
                     },
             } = codebase.node_at(&path).kind
@@ -162,7 +168,7 @@ impl Evaluator {
                         };
 
                         ValueWithSource {
-                            inner: *value,
+                            inner: value.value,
                             source: Some(path),
                         }
                     }

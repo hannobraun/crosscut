@@ -133,14 +133,16 @@ pub enum NodeKind {
 impl NodeKind {
     #[cfg(test)]
     pub fn integer_literal(value: i32) -> Self {
-        use crate::language::runtime::Value;
+        use crate::language::{code::Literal, runtime::Value};
 
         use super::IntrinsicFunction;
 
         Self::Expression {
             expression: Expression::IntrinsicFunction {
                 function: IntrinsicFunction::Literal {
-                    value: Value::Integer { value },
+                    value: Literal {
+                        value: Value::Integer { value },
+                    },
                 },
             },
         }
