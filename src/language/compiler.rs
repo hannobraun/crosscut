@@ -1,5 +1,3 @@
-use crate::language::runtime::Value;
-
 use super::{
     code::{
         CodeError, Codebase, Expression, IntrinsicFunction, Literal, Node,
@@ -65,9 +63,7 @@ fn resolve_keyword(
                 NodeKind::Expression {
                     expression: Expression::IntrinsicFunction {
                         function: IntrinsicFunction::Literal {
-                            literal: Literal {
-                                value: Value::Function { hash: child },
-                            },
+                            literal: Literal::Function { hash: child },
                         },
                     },
                 },

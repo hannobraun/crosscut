@@ -2,6 +2,8 @@ use std::fmt;
 
 use crate::language::runtime::Value;
 
+use super::NodeHash;
+
 #[derive(Clone, Debug, Eq, PartialEq, udigest::Digestable)]
 pub enum IntrinsicFunction {
     Identity,
@@ -12,9 +14,7 @@ impl IntrinsicFunction {
     pub fn resolve(name: &str) -> Option<Self> {
         if let Ok(value) = name.parse() {
             Some(IntrinsicFunction::Literal {
-                literal: Literal {
-                    value: Value::Integer { value },
-                },
+                literal: Literal::Integer { value },
             })
         } else {
             match name {
@@ -31,12 +31,11 @@ impl fmt::Display for IntrinsicFunction {
             Self::Identity => {
                 write!(f, "identity")?;
             }
-            Self::Literal { literal } => match literal.value {
-                Value::Nothing => {}
-                Value::Function { hash: _ } => {
+            Self::Literal { literal } => match literal {
+                Literal::Function { hash: _ } => {
                     writeln!(f, "fn")?;
                 }
-                Value::Integer { value } => {
+                Literal::Integer { value } => {
                     write!(f, "{value}")?;
                 }
             },
@@ -47,12 +46,16 @@ impl fmt::Display for IntrinsicFunction {
 }
 
 #[derive(Clone, Debug, Eq, PartialEq, udigest::Digestable)]
-pub struct Literal {
-    pub value: Value,
+pub enum Literal {
+    Function { hash: NodeHash },
+    Integer { value: i32 },
 }
 
 impl Literal {
     pub fn to_value(&self) -> Value {
-        self.value
+        match *self {
+            Self::Function { hash } => Value::Function { hash },
+            Self::Integer { value } => Value::Integer { value },
+        }
     }
 }
