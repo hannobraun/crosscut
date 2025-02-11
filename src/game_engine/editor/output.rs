@@ -231,7 +231,8 @@ fn render_help<A: EditorOutputAdapter>(
     adapter: &mut A,
     context: &RenderContext,
 ) -> anyhow::Result<()> {
-    let node = context.codebase.node_at(context.editor.editing());
+    let path = context.editor.editing();
+    let node = context.codebase.node_at(path);
 
     writeln!(adapter)?;
 
