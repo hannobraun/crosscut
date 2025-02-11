@@ -2,7 +2,7 @@ use std::fmt;
 
 use crate::language::runtime::Value;
 
-use super::{Codebase, NodeHash, NodePath};
+use super::{Codebase, NodePath};
 
 #[derive(Clone, Debug, Eq, PartialEq, udigest::Digestable)]
 pub enum IntrinsicFunction {
@@ -32,7 +32,7 @@ impl fmt::Display for IntrinsicFunction {
                 write!(f, "identity")?;
             }
             Self::Literal { literal } => match literal {
-                Literal::Function { hash: _ } => {
+                Literal::Function => {
                     writeln!(f, "fn")?;
                 }
                 Literal::Integer { value } => {
@@ -47,14 +47,14 @@ impl fmt::Display for IntrinsicFunction {
 
 #[derive(Clone, Debug, Eq, PartialEq, udigest::Digestable)]
 pub enum Literal {
-    Function { hash: NodeHash },
+    Function,
     Integer { value: i32 },
 }
 
 impl Literal {
     pub fn to_value(&self, path: &NodePath, codebase: &Codebase) -> Value {
         match *self {
-            Self::Function { hash: _ } => {
+            Self::Function => {
                 let Some(child) = codebase.child_of(path) else {
                     unreachable!(
                         "Function literal must have a child, or it wouldn't \

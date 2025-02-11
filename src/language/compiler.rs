@@ -59,11 +59,11 @@ fn resolve_keyword(
 ) -> Option<(NodeKind, Option<CodeError>)> {
     match name {
         "fn" => match codebase.node_at(path).child {
-            Some(child) => Some((
+            Some(_) => Some((
                 NodeKind::Expression {
                     expression: Expression::IntrinsicFunction {
                         function: IntrinsicFunction::Literal {
-                            literal: Literal::Function { hash: child },
+                            literal: Literal::Function,
                         },
                     },
                 },
