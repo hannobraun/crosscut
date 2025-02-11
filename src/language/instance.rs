@@ -61,7 +61,8 @@ impl Language {
     }
 
     pub fn evaluate(&mut self, root: NodePath) {
-        self.evaluator.evaluate(root, &self.codebase);
+        self.evaluator
+            .evaluate(root, Value::Nothing, &self.codebase);
     }
 
     pub fn step(&mut self) -> StepResult {

@@ -28,7 +28,11 @@ impl Evaluator {
             effect: None,
         };
 
-        evaluator.evaluate(evaluator.root, codebase);
+        evaluator.evaluate(
+            evaluator.root,
+            evaluator.active_value.inner,
+            codebase,
+        );
 
         evaluator
     }
@@ -37,10 +41,15 @@ impl Evaluator {
         *self = Self::new(codebase.root().path, codebase);
     }
 
-    pub fn evaluate(&mut self, root: NodePath, codebase: &Codebase) {
+    pub fn evaluate(
+        &mut self,
+        root: NodePath,
+        active_value: Value,
+        codebase: &Codebase,
+    ) {
         self.root = root;
         self.active_value = ValueWithSource {
-            inner: Value::Nothing,
+            inner: active_value,
             source: None,
         };
         let mut path = root;
@@ -110,7 +119,7 @@ impl Evaluator {
                     continue;
                 }
                 EvaluatorState::Recursing => {
-                    self.evaluate(self.root, codebase);
+                    self.evaluate(self.root, Value::Nothing, codebase);
 
                     // We could `continue` here. Then the following call to
                     // `Self::next` above would return the next expression we
