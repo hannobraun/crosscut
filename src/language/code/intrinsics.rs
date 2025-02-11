@@ -50,3 +50,9 @@ impl fmt::Display for IntrinsicFunction {
 pub struct Literal {
     pub value: Value,
 }
+
+impl Literal {
+    pub fn to_value(&self) -> Value {
+        self.value
+    }
+}

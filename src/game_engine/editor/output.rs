@@ -296,7 +296,7 @@ fn render_help<A: EditorOutputAdapter>(
 
                             writeln!(adapter)?;
 
-                            let value = literal.value;
+                            let value = literal.to_value();
                             match value {
                                 Value::Nothing => {
                                     writeln!(
