@@ -42,13 +42,13 @@ fn update_after_removing_character() {
         Ok(Value::Integer { value: 127 }),
     );
 
-    language.on_input(EditorInputEvent::RemoveLeft);
+    language.on_input(EditorInputEvent::RemoveLeft { whole_node: false });
     assert_eq!(
         language.step_until_finished().map(|value| value.inner),
         Ok(Value::Integer { value: 12 }),
     );
 
-    language.on_input(EditorInputEvent::RemoveLeft);
+    language.on_input(EditorInputEvent::RemoveLeft { whole_node: false });
     assert_eq!(
         language.step_until_finished().map(|value| value.inner),
         Ok(Value::Integer { value: 1 }),
@@ -68,7 +68,7 @@ fn update_after_removing_all_characters() {
         Ok(Value::Integer { value: 1 }),
     );
 
-    language.on_input(EditorInputEvent::RemoveLeft);
+    language.on_input(EditorInputEvent::RemoveLeft { whole_node: false });
     assert_eq!(
         language.step_until_finished().map(|value| value.inner),
         Ok(Value::Nothing),
@@ -284,7 +284,7 @@ fn remove_left_removes_previous_syntax_node_if_empty() {
     assert_eq!(literal.node.kind, NodeKind::integer_literal(127));
 
     // Actual testing starts here.
-    language.on_input(EditorInputEvent::RemoveLeft);
+    language.on_input(EditorInputEvent::RemoveLeft { whole_node: false });
 
     let (literal,) =
         language.codebase().leaf_to_root().collect_tuple().unwrap();
@@ -303,7 +303,7 @@ fn remove_left_merges_with_previous_syntax_node() {
         language.on_input(EditorInputEvent::MoveCursorLeft);
     }
 
-    language.on_input(EditorInputEvent::RemoveLeft);
+    language.on_input(EditorInputEvent::RemoveLeft { whole_node: false });
 
     assert_eq!(
         language.step_until_finished().map(|value| value.inner),

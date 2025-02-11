@@ -108,8 +108,9 @@ impl TerminalInputEvent {
             Self::Character { ch } => Some(EditorInputEvent::Insert { ch }),
 
             Self::Backspace { ctrl_pressed } => {
-                let _ = ctrl_pressed;
-                Some(EditorInputEvent::RemoveLeft)
+                Some(EditorInputEvent::RemoveLeft {
+                    whole_node: ctrl_pressed,
+                })
             }
             Self::Delete { ctrl_pressed } => {
                 let _ = ctrl_pressed;
