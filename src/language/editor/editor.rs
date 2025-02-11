@@ -68,7 +68,7 @@ impl Editor {
                         self.editing = codebase.latest_version_of(self.editing);
                     }
                 }
-                UpdateAction::RemoveNext => {
+                UpdateAction::MergeWithNext => {
                     if let Some(to_remove) = codebase.parent_of(&self.editing) {
                         let merged = [&self.editing, &to_remove]
                             .map(|path| {
