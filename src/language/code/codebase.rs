@@ -46,7 +46,7 @@ impl Codebase {
         SyntaxTree::from_root(self.root).leaf_to_root(&self.nodes)
     }
 
-    pub fn entry(&self) -> NodePath {
+    pub fn leaf(&self) -> NodePath {
         let hash = SyntaxTree::from_root(self.root).find_leaf(&self.nodes);
         NodePath { hash }
     }
@@ -193,7 +193,7 @@ mod tests {
     fn insert_node_after_update_root() {
         let mut codebase = Codebase::new();
 
-        let a = codebase.entry();
+        let a = codebase.leaf();
         let b = codebase.insert_as_parent_of(a, Node::empty(Some(*a.hash())));
 
         assert_eq!(
@@ -210,7 +210,7 @@ mod tests {
         let mut codebase = Codebase::new();
 
         let a = codebase.replace_node(
-            &codebase.entry(),
+            &codebase.leaf(),
             Node {
                 kind: NodeKind::Error {
                     node: String::from("a"),
