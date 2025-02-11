@@ -42,7 +42,9 @@ pub fn read_editor_event(
             Some(TerminalInputEvent::Character { ch })
         }
 
-        KeyCode::Backspace => Some(TerminalInputEvent::Backspace),
+        KeyCode::Backspace => {
+            Some(TerminalInputEvent::Backspace { ctrl_pressed })
+        }
         KeyCode::Enter => Some(TerminalInputEvent::Enter),
         KeyCode::Left => Some(TerminalInputEvent::Left),
         KeyCode::Right => Some(TerminalInputEvent::Right),

@@ -87,7 +87,7 @@ impl EditorMode {
 pub enum TerminalInputEvent {
     Character { ch: char },
 
-    Backspace,
+    Backspace { ctrl_pressed: bool },
     Delete,
 
     Left,
@@ -107,7 +107,10 @@ impl TerminalInputEvent {
             }
             Self::Character { ch } => Some(EditorInputEvent::Insert { ch }),
 
-            Self::Backspace => Some(EditorInputEvent::RemoveLeft),
+            Self::Backspace { ctrl_pressed } => {
+                let _ = ctrl_pressed;
+                Some(EditorInputEvent::RemoveLeft)
+            }
             Self::Delete => Some(EditorInputEvent::RemoveRight),
 
             Self::Left => Some(EditorInputEvent::MoveCursorLeft),
