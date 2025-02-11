@@ -328,7 +328,7 @@ fn remove_right_removes_next_syntax_node_if_empty() {
     assert_eq!(empty.node.kind, NodeKind::Empty);
 
     // Actual testing starts here.
-    language.on_input(EditorInputEvent::RemoveRight);
+    language.on_input(EditorInputEvent::RemoveRight { whole_node: false });
 
     let (literal,) =
         language.codebase().leaf_to_root().collect_tuple().unwrap();
@@ -348,7 +348,7 @@ fn remove_right_merges_with_next_syntax_node() {
     }
     language.on_input(EditorInputEvent::MoveCursorLeft);
 
-    language.on_input(EditorInputEvent::RemoveRight);
+    language.on_input(EditorInputEvent::RemoveRight { whole_node: false });
 
     assert_eq!(
         language.step_until_finished().map(|value| value.inner),

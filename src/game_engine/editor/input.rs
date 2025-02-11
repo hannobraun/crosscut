@@ -113,8 +113,9 @@ impl TerminalInputEvent {
                 })
             }
             Self::Delete { ctrl_pressed } => {
-                let _ = ctrl_pressed;
-                Some(EditorInputEvent::RemoveRight)
+                Some(EditorInputEvent::RemoveRight {
+                    whole_node: ctrl_pressed,
+                })
             }
 
             Self::Left => Some(EditorInputEvent::MoveCursorLeft),

@@ -58,7 +58,8 @@ impl EditorInputBuffer {
                 let _ = whole_node;
                 return self.remove_left();
             }
-            RemoveRight => {
+            RemoveRight { whole_node } => {
+                let _ = whole_node;
                 return self.remove_right();
             }
             SubmitNode => {
@@ -160,7 +161,7 @@ pub enum EditorInputEvent {
     MoveCursorUp,
     MoveCursorDown,
     RemoveLeft { whole_node: bool },
-    RemoveRight,
+    RemoveRight { whole_node: bool },
     SubmitNode,
 }
 
@@ -245,10 +246,10 @@ mod tests {
 
         input.update(MoveCursorLeft);
         input.update(MoveCursorLeft);
-        input.update(RemoveRight);
+        input.update(RemoveRight { whole_node: false });
         assert_eq!(input.buffer(), "2");
 
-        input.update(RemoveRight);
+        input.update(RemoveRight { whole_node: false });
         assert_eq!(input.buffer(), "");
     }
 
@@ -259,7 +260,7 @@ mod tests {
         input.update(Insert { ch: '1' });
         assert_eq!(input.buffer(), "1");
 
-        input.update(RemoveRight);
+        input.update(RemoveRight { whole_node: false });
         assert_eq!(input.buffer(), "1");
     }
 
