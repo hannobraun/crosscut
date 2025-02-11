@@ -2,7 +2,7 @@ use std::fmt;
 
 use crate::language::runtime::Value;
 
-use super::{NodeHash, NodePath};
+use super::{Codebase, NodeHash, NodePath};
 
 #[derive(Clone, Debug, Eq, PartialEq, udigest::Digestable)]
 pub enum IntrinsicFunction {
@@ -52,7 +52,7 @@ pub enum Literal {
 }
 
 impl Literal {
-    pub fn to_value(&self, _: &NodePath) -> Value {
+    pub fn to_value(&self, _: &NodePath, _: &Codebase) -> Value {
         match *self {
             Self::Function { hash } => Value::Function { hash },
             Self::Integer { value } => Value::Integer { value },

@@ -165,7 +165,7 @@ impl Evaluator {
                         };
 
                         ValueWithSource {
-                            inner: literal.to_value(&path),
+                            inner: literal.to_value(&path, codebase),
                             source: Some(path),
                         }
                     }
