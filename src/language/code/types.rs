@@ -8,7 +8,7 @@ pub enum Type {
 impl fmt::Display for Type {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         let text = match self {
-            Type::Integer => "Integer",
+            Self::Integer => "Integer",
         };
 
         write!(f, "{text}")
