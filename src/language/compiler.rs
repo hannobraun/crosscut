@@ -100,12 +100,10 @@ fn resolve_function(
             let candidates = Vec::new();
             Err(candidates)
         }
-        (Some(id), Some(function)) => {
+        (Some(id), Some(intrinsic)) => {
             let candidates = vec![
                 Expression::HostFunction { id },
-                Expression::IntrinsicFunction {
-                    intrinsic: function,
-                },
+                Expression::IntrinsicFunction { intrinsic },
             ];
             Err(candidates)
         }
