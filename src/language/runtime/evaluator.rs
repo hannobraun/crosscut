@@ -88,7 +88,7 @@ impl Evaluator {
 
     pub fn provide_host_function_output(&mut self, value: Value) {
         let (Some(Effect::ApplyHostFunction { .. }), Some(source)) =
-            (self.effect, self.next.last().copied())
+            (self.effect.clone(), self.next.last().copied())
         else {
             panic!(
                 "Trying to provide host function output, but no host function \
@@ -158,7 +158,7 @@ impl Evaluator {
                     id: *id,
                     input: self.active_value.inner,
                 };
-                self.effect = Some(effect);
+                self.effect = Some(effect.clone());
 
                 return StepResult::EffectTriggered { effect };
             }
@@ -207,7 +207,7 @@ impl Evaluator {
             };
         };
 
-        if let Some(effect) = self.effect {
+        if let Some(effect) = self.effect.clone() {
             return EvaluatorState::Effect { effect, path };
         }
 
@@ -271,7 +271,7 @@ pub enum StepResult {
     Error,
 }
 
-#[derive(Clone, Copy, Debug, Eq, PartialEq)]
+#[derive(Clone, Debug, Eq, PartialEq)]
 pub enum Effect {
     ApplyHostFunction { id: FunctionId, input: Value },
     UnexpectedInput { expected: Type, actual: Value },
