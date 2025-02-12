@@ -5,9 +5,20 @@ use crate::language::code::{NodeHash, NodePath};
 #[derive(Clone, Debug, Eq, PartialEq, udigest::Digestable)]
 pub enum Value {
     Nothing,
-    Function { body: NodeHash },
-    Integer { value: i32 },
-    Opaque { id: u32, display: &'static str },
+    Function {
+        body: NodeHash,
+    },
+    Integer {
+        value: i32,
+    },
+    Opaque {
+        id: u32,
+        display: &'static str,
+    },
+    #[allow(unused)] // code using this is being worked on
+    Tuple {
+        elements: Vec<Value>,
+    },
 }
 
 impl fmt::Display for Value {
@@ -25,6 +36,12 @@ impl fmt::Display for Value {
             }
             Self::Opaque { id: _, display } => {
                 write!(f, "{display}")?;
+            }
+            Self::Tuple { elements } => {
+                for element in elements {
+                    write!(f, "{element} ")?;
+                }
+                write!(f, "tuple")?;
             }
         }
 
