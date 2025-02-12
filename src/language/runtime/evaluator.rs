@@ -152,7 +152,7 @@ impl Evaluator {
             }
         };
 
-        self.active_value = match next {
+        match next {
             Expression::HostFunction { id } => {
                 let effect = Effect::ApplyHostFunction {
                     id: *id,
@@ -164,7 +164,9 @@ impl Evaluator {
             }
             Expression::IntrinsicFunction { function } => {
                 match function {
-                    IntrinsicFunction::Identity => self.active_value,
+                    IntrinsicFunction::Identity => {
+                        // Active value stays the same.
+                    }
                     IntrinsicFunction::Literal { literal } => {
                         let Value::Nothing = self.active_value.inner else {
                             // A literal is a function that takes `None`. If
@@ -182,10 +184,10 @@ impl Evaluator {
                             return StepResult::Error;
                         };
 
-                        ValueWithSource {
+                        self.active_value = ValueWithSource {
                             inner: literal.to_value(&path, codebase),
                             source: Some(path),
-                        }
+                        };
                     }
                 }
             }
