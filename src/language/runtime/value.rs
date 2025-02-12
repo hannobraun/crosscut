@@ -15,9 +15,9 @@ impl fmt::Display for Value {
             Self::Nothing => {
                 write!(f, "nothing")?;
             }
-            Self::Function { body: hash } => {
+            Self::Function { body } => {
                 write!(f, "fn ")?;
-                write!(f, "{}", hash)?;
+                write!(f, "{}", body)?;
             }
             Self::Integer { value } => {
                 write!(f, "{value}")?;
