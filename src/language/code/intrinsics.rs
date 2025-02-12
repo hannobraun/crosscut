@@ -63,7 +63,7 @@ impl Literal {
                 };
 
                 Value::Function {
-                    hash: *child.hash(),
+                    body: *child.hash(),
                 }
             }
             Self::Integer { value } => Value::Integer { value },

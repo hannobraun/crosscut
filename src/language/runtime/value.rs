@@ -5,7 +5,7 @@ use crate::language::code::{NodeHash, NodePath};
 #[derive(Clone, Copy, Debug, Eq, PartialEq, udigest::Digestable)]
 pub enum Value {
     Nothing,
-    Function { hash: NodeHash },
+    Function { body: NodeHash },
     Integer { value: i32 },
 }
 
@@ -15,7 +15,7 @@ impl fmt::Display for Value {
             Self::Nothing => {
                 write!(f, "nothing")?;
             }
-            Self::Function { hash } => {
+            Self::Function { body: hash } => {
                 write!(f, "fn ")?;
                 write!(f, "{}", hash)?;
             }
@@ -37,7 +37,7 @@ pub struct ValueWithSource {
 impl ValueWithSource {
     pub fn into_function_body(self) -> Result<NodePath, Self> {
         match self.inner {
-            Value::Function { hash } => Ok(NodePath { hash }),
+            Value::Function { body: hash } => Ok(NodePath { hash }),
             _ => Err(self),
         }
     }

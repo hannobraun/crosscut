@@ -307,7 +307,7 @@ fn render_help<A: EditorOutputAdapter>(
                                         value.",
                                     )?;
                                 }
-                                Value::Function { hash: _ } => {
+                                Value::Function { body: _ } => {
                                     writeln!(
                                         adapter,
                                         "This literal returns a function.",
