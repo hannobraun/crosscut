@@ -4,10 +4,7 @@ use std::fmt;
 pub enum Type {
     Integer,
     Nothing,
-    #[allow(unused)]
-    Opaque {
-        name: &'static str,
-    },
+    Opaque { name: &'static str },
 }
 
 impl fmt::Display for Type {
