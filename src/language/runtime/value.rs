@@ -5,17 +5,9 @@ use crate::language::code::{NodeHash, NodePath};
 #[derive(Clone, Copy, Debug, Eq, PartialEq, udigest::Digestable)]
 pub enum Value {
     Nothing,
-    Function {
-        body: NodeHash,
-    },
-    Integer {
-        value: i32,
-    },
-    #[allow(unused)] // code using this is being worked on
-    Opaque {
-        id: u32,
-        display: &'static str,
-    },
+    Function { body: NodeHash },
+    Integer { value: i32 },
+    Opaque { id: u32, display: &'static str },
 }
 
 impl fmt::Display for Value {
