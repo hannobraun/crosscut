@@ -51,7 +51,7 @@ fn self_recursion() {
 }
 
 #[test]
-fn function_without_body() {
+fn empty_function() {
     // An `fn` token that doesn't follow an expression would create a function
     // without a body. This is an error.
 
