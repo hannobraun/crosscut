@@ -184,8 +184,10 @@ impl Evaluator {
                             return StepResult::Error;
                         };
 
+                        let value = literal.to_value(&path, codebase);
+
                         self.active_value = ValueWithSource {
-                            inner: literal.to_value(&path, codebase),
+                            inner: value,
                             source: Some(path),
                         };
                     }
