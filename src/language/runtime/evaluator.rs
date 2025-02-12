@@ -162,10 +162,8 @@ impl Evaluator {
 
                 return StepResult::EffectTriggered { effect };
             }
-            Expression::IntrinsicFunction {
-                intrinsic: function,
-            } => {
-                match function {
+            Expression::IntrinsicFunction { intrinsic } => {
+                match intrinsic {
                     IntrinsicFunction::Identity => {
                         // Active value stays the same.
                     }
