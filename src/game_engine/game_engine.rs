@@ -49,6 +49,7 @@ where
     pub fn new(adapter: A) -> Self {
         let mut package = Package::new();
         package.function(GameEngineFunction::Dim);
+        package.function(GameEngineFunction::Black);
 
         let mut game_engine = Self {
             language: Language::with_package(package),
@@ -165,6 +166,19 @@ where
                     });
                 }
             },
+            GameEngineFunction::Black => match input {
+                Value::Integer { value: _ } => {
+                    self.language.provide_host_function_output(
+                        Value::Integer { value: 0 },
+                    );
+                }
+                value => {
+                    self.language.trigger_effect(Effect::UnexpectedInput {
+                        expected: Type::Integer,
+                        actual: value,
+                    });
+                }
+            },
         }
     }
 }
@@ -217,12 +231,14 @@ pub enum GameOutput {
 
 pub enum GameEngineFunction {
     Dim,
+    Black,
 }
 
 impl Function for GameEngineFunction {
     fn from_id(FunctionId { id }: FunctionId) -> Option<Self> {
         match id {
             0 => Some(Self::Dim),
+            1 => Some(Self::Black),
             _ => None,
         }
     }
@@ -230,6 +246,7 @@ impl Function for GameEngineFunction {
     fn id(&self) -> FunctionId {
         let id = match self {
             Self::Dim => 0,
+            Self::Black => 1,
         };
 
         FunctionId { id }
@@ -238,6 +255,7 @@ impl Function for GameEngineFunction {
     fn name(&self) -> &str {
         match self {
             Self::Dim => "dim",
+            Self::Black => "black",
         }
     }
 }
