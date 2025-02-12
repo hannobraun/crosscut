@@ -93,9 +93,9 @@ fn resolve_function(
 
     match (host_function, intrinsic_function) {
         (Some(id), None) => Ok(Expression::HostFunction { id }),
-        (None, Some(function)) => Ok(Expression::IntrinsicFunction {
-            intrinsic: function,
-        }),
+        (None, Some(intrinsic)) => {
+            Ok(Expression::IntrinsicFunction { intrinsic })
+        }
         (None, None) => {
             let candidates = Vec::new();
             Err(candidates)
