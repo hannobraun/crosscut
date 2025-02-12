@@ -1,9 +1,5 @@
 use std::fmt;
 
-use crate::language::runtime::Value;
-
-use super::{Codebase, NodePath};
-
 #[derive(Clone, Debug, Eq, PartialEq, udigest::Digestable)]
 pub enum IntrinsicFunction {
     Identity,
@@ -49,24 +45,4 @@ impl fmt::Display for IntrinsicFunction {
 pub enum Literal {
     Function,
     Integer { value: i32 },
-}
-
-impl Literal {
-    pub fn to_value(&self, path: &NodePath, codebase: &Codebase) -> Value {
-        match *self {
-            Self::Function => {
-                let Some(child) = codebase.child_of(path) else {
-                    unreachable!(
-                        "Function literal must have a child, or it wouldn't \
-                        have been resolved as a function literal."
-                    );
-                };
-
-                Value::Function {
-                    body: *child.hash(),
-                }
-            }
-            Self::Integer { value } => Value::Integer { value },
-        }
-    }
 }

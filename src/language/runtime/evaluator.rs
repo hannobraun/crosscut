@@ -184,7 +184,27 @@ impl Evaluator {
                             return StepResult::Error;
                         };
 
-                        let value = literal.to_value(&path, codebase);
+                        let value = {
+                            match *literal {
+                                Literal::Function => {
+                                    let Some(child) = codebase.child_of(&path)
+                                    else {
+                                        unreachable!(
+                                            "Function literal must have a \
+                                            child, or it wouldn't have been \
+                                            resolved as a function literal."
+                                        );
+                                    };
+
+                                    Value::Function {
+                                        body: *child.hash(),
+                                    }
+                                }
+                                Literal::Integer { value } => {
+                                    Value::Integer { value }
+                                }
+                            }
+                        };
 
                         self.active_value = ValueWithSource {
                             inner: value,
