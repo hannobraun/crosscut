@@ -215,7 +215,7 @@ impl Evaluator {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Eq, PartialEq)]
 pub enum EvaluatorState<'r> {
     Running {
         expression: &'r Expression,
