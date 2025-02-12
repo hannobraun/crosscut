@@ -4,7 +4,8 @@ use crate::{
     io::editor::output::{Cursor, EditorOutputAdapter},
     language::{
         code::{
-            Codebase, Expression, IntrinsicFunction, LocatedNode, NodeKind,
+            Codebase, Expression, IntrinsicFunction, Literal, LocatedNode,
+            NodeKind,
         },
         editor::Editor,
         instance::Language,
@@ -297,23 +298,14 @@ fn render_help<A: EditorOutputAdapter>(
 
                             writeln!(adapter)?;
 
-                            let value =
-                                literal.to_value(path, context.codebase);
-                            match value {
-                                Value::Nothing => {
-                                    writeln!(
-                                        adapter,
-                                        "This literal returns the `{value}` \
-                                        value.",
-                                    )?;
-                                }
-                                Value::Function { body: _ } => {
+                            match literal {
+                                Literal::Function => {
                                     writeln!(
                                         adapter,
                                         "This literal returns a function.",
                                     )?;
                                 }
-                                Value::Integer { value } => {
+                                Literal::Integer { value } => {
                                     writeln!(
                                         adapter,
                                         "This literal returns the integer \
