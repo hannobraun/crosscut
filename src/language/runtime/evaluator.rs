@@ -203,6 +203,10 @@ impl Evaluator {
                                 Literal::Integer { value } => {
                                     Value::Integer { value }
                                 }
+                                Literal::Tuple => {
+                                    // Evaluating tuples is not supported yet.
+                                    return StepResult::Error;
+                                }
                             }
                         };
 

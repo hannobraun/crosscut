@@ -312,6 +312,12 @@ fn render_help<A: EditorOutputAdapter>(
                                         `{value}`.",
                                     )?;
                                 }
+                                Literal::Tuple => {
+                                    writeln!(
+                                        adapter,
+                                        "This literal returns a tuple.",
+                                    )?;
+                                }
                             }
                         }
                     }

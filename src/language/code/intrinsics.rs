@@ -34,6 +34,9 @@ impl fmt::Display for IntrinsicFunction {
                 Literal::Integer { value } => {
                     write!(f, "{value}")?;
                 }
+                Literal::Tuple => {
+                    write!(f, "tuple")?;
+                }
             },
         }
 
@@ -45,4 +48,5 @@ impl fmt::Display for IntrinsicFunction {
 pub enum Literal {
     Function,
     Integer { value: i32 },
+    Tuple,
 }
