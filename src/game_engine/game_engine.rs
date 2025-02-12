@@ -164,19 +164,17 @@ where
                     });
                 }
             },
-            GameEngineFunction::Black => match input {
-                Value::Integer { value: _ } => {
-                    self.language.provide_host_function_output(
-                        Value::Integer { value: 0 },
-                    );
-                }
-                value => {
+            GameEngineFunction::Black => {
+                if input == self.display {
+                    self.output_color(0);
+                    self.language.provide_host_function_output(input);
+                } else {
                     self.language.trigger_effect(Effect::UnexpectedInput {
-                        expected: Type::Integer,
-                        actual: value,
+                        expected: Type::Opaque { name: "Display" },
+                        actual: input,
                     });
                 }
-            },
+            }
             GameEngineFunction::White => match input {
                 Value::Integer { value: _ } => {
                     self.language.provide_host_function_output(
