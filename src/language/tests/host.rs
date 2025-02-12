@@ -3,6 +3,7 @@ use crate::language::{
     instance::Language,
     packages::{Function, FunctionId, Package},
     runtime::{Effect, StepResult, Value},
+    tests::functions::IntoFunctionBody,
 };
 
 #[test]
@@ -66,6 +67,45 @@ fn host_functions_can_trigger_effects() {
     assert_eq!(language.step(), StepResult::EffectTriggered { effect });
 }
 
+#[test]
+fn host_functions_can_inject_opaque_value() {
+    // A host function can define an opaque value and inject that into a
+    // function.
+
+    let mut package = Package::new();
+    package.function(ObserveOpaqueValue);
+
+    let mut language = Language::with_package(package);
+    language.enter_code("observe_opaque_value fn");
+
+    let path = match language.step_until_finished().into_function_body() {
+        Ok(path) => path,
+        output => {
+            panic!("Unexpected output: {output:?}");
+        }
+    };
+
+    let opaque_value = Value::Opaque {
+        id: 0,
+        display: "opaque",
+    };
+    language.evaluate(path, opaque_value);
+
+    let mut value_observed = false;
+    let output =
+        language.step_until_finished_and_handle_host_functions(|id, input| {
+            match Function::from_verified_id(id) {
+                ObserveOpaqueValue => {
+                    value_observed = input == opaque_value;
+                    Ok(input)
+                }
+            }
+        });
+
+    assert!(value_observed);
+    assert_eq!(output.map(|value| value.inner), Ok(opaque_value));
+}
+
 struct Halve;
 
 impl Function for Halve {
@@ -82,5 +122,24 @@ impl Function for Halve {
 
     fn name(&self) -> &str {
         "halve"
+    }
+}
+
+struct ObserveOpaqueValue;
+
+impl Function for ObserveOpaqueValue {
+    fn from_id(FunctionId { id }: FunctionId) -> Option<Self> {
+        match id {
+            0 => Some(Self),
+            _ => None,
+        }
+    }
+
+    fn id(&self) -> FunctionId {
+        FunctionId { id: 0 }
+    }
+
+    fn name(&self) -> &str {
+        "observe_opaque_value"
     }
 }

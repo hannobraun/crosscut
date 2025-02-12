@@ -5,8 +5,17 @@ use crate::language::code::{NodeHash, NodePath};
 #[derive(Clone, Copy, Debug, Eq, PartialEq, udigest::Digestable)]
 pub enum Value {
     Nothing,
-    Function { body: NodeHash },
-    Integer { value: i32 },
+    Function {
+        body: NodeHash,
+    },
+    Integer {
+        value: i32,
+    },
+    #[allow(unused)] // code using this is being worked on
+    Opaque {
+        id: u32,
+        display: &'static str,
+    },
 }
 
 impl fmt::Display for Value {
@@ -21,6 +30,9 @@ impl fmt::Display for Value {
             }
             Self::Integer { value } => {
                 write!(f, "{value}")?;
+            }
+            Self::Opaque { id: _, display } => {
+                write!(f, "{display}")?;
             }
         }
 
