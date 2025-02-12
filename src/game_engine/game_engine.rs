@@ -21,6 +21,7 @@ pub struct GameEngine<A> {
     game_output: Vec<GameOutput>,
     editor_input: TerminalEditorInput,
     editor_output: TerminalEditorOutput<A>,
+    display: Value,
 }
 
 impl GameEngine<DebugOutputAdapter> {
@@ -57,6 +58,10 @@ where
             game_output: Vec::new(),
             editor_input: TerminalEditorInput::new(),
             editor_output: TerminalEditorOutput::new(adapter),
+            display: Value::Opaque {
+                id: 0,
+                display: "display",
+            },
         };
         game_engine.run_game_until_finished();
 
@@ -130,13 +135,7 @@ where
                     value => {
                         match value.into_function_body() {
                             Ok(path) => {
-                                self.language.evaluate(
-                                    path,
-                                    Value::Opaque {
-                                        id: 0,
-                                        display: "display",
-                                    },
-                                );
+                                self.language.evaluate(path, self.display);
                                 continue;
                             }
                             Err(_) => {
