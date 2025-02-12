@@ -37,7 +37,7 @@ pub struct ValueWithSource {
 impl ValueWithSource {
     pub fn into_function_body(self) -> Result<NodePath, Self> {
         match self.inner {
-            Value::Function { body: hash } => Ok(NodePath { hash }),
+            Value::Function { body } => Ok(NodePath { hash: body }),
             _ => Err(self),
         }
     }
