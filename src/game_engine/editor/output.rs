@@ -260,7 +260,7 @@ fn render_help<A: EditorOutputAdapter>(
                         do so).",
                     )?;
                 }
-                Expression::IntrinsicFunction { intrinsic: function } => {
+                Expression::IntrinsicFunction { intrinsic } => {
                     writeln!(
                         adapter,
                         "This expression is the application of an intrinsic \
@@ -279,11 +279,11 @@ fn render_help<A: EditorOutputAdapter>(
 
                     writeln!(adapter)?;
 
-                    match function {
+                    match intrinsic {
                         IntrinsicFunction::Identity => {
                             writeln!(
                                 adapter,
-                                "The `{function}` function just returns its \
+                                "The `{intrinsic}` function just returns its \
                                 input unchanged.",
                             )?;
                         }
