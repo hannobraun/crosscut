@@ -50,6 +50,7 @@ where
         let mut package = Package::new();
         package.function(GameEngineFunction::Dim);
         package.function(GameEngineFunction::Black);
+        package.function(GameEngineFunction::White);
 
         let mut game_engine = Self {
             language: Language::with_package(package),
@@ -179,6 +180,19 @@ where
                     });
                 }
             },
+            GameEngineFunction::White => match input {
+                Value::Integer { value: _ } => {
+                    self.language.provide_host_function_output(
+                        Value::Integer { value: 255 },
+                    );
+                }
+                value => {
+                    self.language.trigger_effect(Effect::UnexpectedInput {
+                        expected: Type::Integer,
+                        actual: value,
+                    });
+                }
+            },
         }
     }
 }
@@ -232,6 +246,7 @@ pub enum GameOutput {
 pub enum GameEngineFunction {
     Dim,
     Black,
+    White,
 }
 
 impl Function for GameEngineFunction {
@@ -239,6 +254,7 @@ impl Function for GameEngineFunction {
         match id {
             0 => Some(Self::Dim),
             1 => Some(Self::Black),
+            2 => Some(Self::White),
             _ => None,
         }
     }
@@ -247,6 +263,7 @@ impl Function for GameEngineFunction {
         let id = match self {
             Self::Dim => 0,
             Self::Black => 1,
+            Self::White => 2,
         };
 
         FunctionId { id }
@@ -256,6 +273,7 @@ impl Function for GameEngineFunction {
         match self {
             Self::Dim => "dim",
             Self::Black => "black",
+            Self::White => "white",
         }
     }
 }
