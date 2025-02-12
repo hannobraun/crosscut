@@ -63,7 +63,7 @@ fn resolve_keyword(
                 Some((
                     NodeKind::Expression {
                         expression: Expression::IntrinsicFunction {
-                            function: IntrinsicFunction::Literal {
+                            intrinsic: IntrinsicFunction::Literal {
                                 literal: Literal::Function,
                             },
                         },
@@ -93,9 +93,9 @@ fn resolve_function(
 
     match (host_function, intrinsic_function) {
         (Some(id), None) => Ok(Expression::HostFunction { id }),
-        (None, Some(function)) => {
-            Ok(Expression::IntrinsicFunction { function })
-        }
+        (None, Some(function)) => Ok(Expression::IntrinsicFunction {
+            intrinsic: function,
+        }),
         (None, None) => {
             let candidates = Vec::new();
             Err(candidates)
@@ -103,7 +103,9 @@ fn resolve_function(
         (Some(id), Some(function)) => {
             let candidates = vec![
                 Expression::HostFunction { id },
-                Expression::IntrinsicFunction { function },
+                Expression::IntrinsicFunction {
+                    intrinsic: function,
+                },
             ];
             Err(candidates)
         }

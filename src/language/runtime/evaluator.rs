@@ -60,7 +60,7 @@ impl Evaluator {
             if let NodeKind::Expression {
                 expression:
                     Expression::IntrinsicFunction {
-                        function:
+                        intrinsic:
                             IntrinsicFunction::Literal {
                                 literal: Literal::Function,
                             },
@@ -162,7 +162,9 @@ impl Evaluator {
 
                 return StepResult::EffectTriggered { effect };
             }
-            Expression::IntrinsicFunction { function } => {
+            Expression::IntrinsicFunction {
+                intrinsic: function,
+            } => {
                 match function {
                     IntrinsicFunction::Identity => {
                         // Active value stays the same.

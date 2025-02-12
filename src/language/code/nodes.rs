@@ -139,7 +139,7 @@ impl NodeKind {
 
         Self::Expression {
             expression: Expression::IntrinsicFunction {
-                function: IntrinsicFunction::Literal {
+                intrinsic: IntrinsicFunction::Literal {
                     literal: Literal::Integer { value },
                 },
             },

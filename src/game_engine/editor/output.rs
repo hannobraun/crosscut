@@ -260,7 +260,7 @@ fn render_help<A: EditorOutputAdapter>(
                         do so).",
                     )?;
                 }
-                Expression::IntrinsicFunction { function } => {
+                Expression::IntrinsicFunction { intrinsic: function } => {
                     writeln!(
                         adapter,
                         "This expression is the application of an intrinsic \

@@ -93,7 +93,7 @@ fn syntax_node_that_could_resolve_to_multiple_functions_is_unresolved() {
                     id: FunctionId { id: 0 }
                 },
                 Expression::IntrinsicFunction {
-                    function: IntrinsicFunction::Identity
+                    intrinsic: IntrinsicFunction::Identity
                 }
             ]
         }),

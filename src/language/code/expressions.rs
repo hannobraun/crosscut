@@ -7,7 +7,7 @@ use super::IntrinsicFunction;
 #[derive(Clone, Debug, Eq, PartialEq, udigest::Digestable)]
 pub enum Expression {
     HostFunction { id: FunctionId },
-    IntrinsicFunction { function: IntrinsicFunction },
+    IntrinsicFunction { intrinsic: IntrinsicFunction },
 }
 
 impl Expression {
@@ -34,7 +34,9 @@ impl fmt::Display for ExpressionDisplay<'_> {
                 let name = self.package.function_name_by_id(id);
                 write!(f, "{name}")
             }
-            Expression::IntrinsicFunction { function } => {
+            Expression::IntrinsicFunction {
+                intrinsic: function,
+            } => {
                 write!(f, "{function}")
             }
         }
