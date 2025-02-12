@@ -132,7 +132,10 @@ where
                             Ok(path) => {
                                 self.language.evaluate(
                                     path,
-                                    Value::Integer { value: 0 },
+                                    Value::Opaque {
+                                        id: 0,
+                                        display: "display",
+                                    },
                                 );
                                 continue;
                             }
