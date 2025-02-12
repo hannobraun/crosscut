@@ -12,10 +12,12 @@ pub enum Value {
 impl fmt::Display for Value {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match self {
-            Self::Nothing => write!(f, "nothing"),
-            Self::Function { hash } => write!(f, "fn {}", hash),
-            Self::Integer { value } => write!(f, "{value}"),
+            Self::Nothing => write!(f, "nothing")?,
+            Self::Function { hash } => write!(f, "fn {}", hash)?,
+            Self::Integer { value } => write!(f, "{value}")?,
         }
+
+        Ok(())
     }
 }
 
