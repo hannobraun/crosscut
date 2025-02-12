@@ -34,10 +34,8 @@ impl fmt::Display for ExpressionDisplay<'_> {
                 let name = self.package.function_name_by_id(id);
                 write!(f, "{name}")
             }
-            Expression::IntrinsicFunction {
-                intrinsic: function,
-            } => {
-                write!(f, "{function}")
+            Expression::IntrinsicFunction { intrinsic } => {
+                write!(f, "{intrinsic}")
             }
         }
     }
