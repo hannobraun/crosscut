@@ -4,6 +4,10 @@ use std::fmt;
 pub enum Type {
     Integer,
     Nothing,
+    #[allow(unused)]
+    Opaque {
+        name: &'static str,
+    },
 }
 
 impl fmt::Display for Type {
@@ -11,6 +15,7 @@ impl fmt::Display for Type {
         let text = match self {
             Self::Integer => "Integer",
             Self::Nothing => "Nothing",
+            Self::Opaque { name } => name,
         };
 
         write!(f, "{text}")
