@@ -32,7 +32,7 @@ impl fmt::Display for Value {
     }
 }
 
-#[derive(Clone, Copy, Debug, Eq, PartialEq)]
+#[derive(Clone, Debug, Eq, PartialEq)]
 pub struct ValueWithSource {
     pub inner: Value,
     pub source: Option<NodePath>,
