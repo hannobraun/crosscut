@@ -125,12 +125,7 @@ where
                         // If the program returns an integer, we use that to set
                         // the color.
 
-                        let value: f64 = value.into();
-                        let value = value / 255.;
-
-                        self.game_output.push(GameOutput::SubmitColor {
-                            color: [value, value, value, 1.],
-                        });
+                        self.output_color(value);
                     }
                     value => {
                         match value.into_function_body() {
@@ -196,6 +191,15 @@ where
                 }
             },
         }
+    }
+
+    fn output_color(&mut self, value: i32) {
+        let value: f64 = value.into();
+        let value = value / 255.;
+
+        self.game_output.push(GameOutput::SubmitColor {
+            color: [value, value, value, 1.],
+        });
     }
 }
 
