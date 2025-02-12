@@ -30,7 +30,7 @@ impl Evaluator {
 
         evaluator.evaluate(
             evaluator.root,
-            evaluator.active_value.inner,
+            evaluator.active_value.inner.clone(),
             codebase,
         );
 
@@ -156,7 +156,7 @@ impl Evaluator {
             Expression::HostFunction { id } => {
                 let effect = Effect::ApplyHostFunction {
                     id: *id,
-                    input: self.active_value.inner,
+                    input: self.active_value.inner.clone(),
                 };
                 self.effect = Some(effect.clone());
 
@@ -178,7 +178,7 @@ impl Evaluator {
                             // we need to keep track of it here.
                             self.effect = Some(Effect::UnexpectedInput {
                                 expected: Type::Nothing,
-                                actual: self.active_value.inner,
+                                actual: self.active_value.inner.clone(),
                             });
 
                             return StepResult::Error;
@@ -196,7 +196,7 @@ impl Evaluator {
         self.advance();
 
         StepResult::FunctionApplied {
-            output: self.active_value.inner,
+            output: self.active_value.inner.clone(),
         }
     }
 

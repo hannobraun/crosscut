@@ -2,7 +2,7 @@ use std::fmt;
 
 use crate::language::code::{NodeHash, NodePath};
 
-#[derive(Clone, Copy, Debug, Eq, PartialEq, udigest::Digestable)]
+#[derive(Clone, Debug, Eq, PartialEq, udigest::Digestable)]
 pub enum Value {
     Nothing,
     Function { body: NodeHash },
