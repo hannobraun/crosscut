@@ -5,7 +5,7 @@ use crate::language::{
 };
 
 #[test]
-fn define_and_evaluate_function() {
+fn define_and_evaluate() {
     // It is possible to define a function using a function literal, return that
     // function from the program, then tell the language to evaluate it.
 
