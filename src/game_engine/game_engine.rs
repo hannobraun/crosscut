@@ -150,6 +150,8 @@ where
     }
 
     fn apply_host_function(&mut self, id: FunctionId, input: Value) {
+        let display_type = Type::Opaque { name: "Display" };
+
         match Function::from_verified_id(id) {
             GameEngineFunction::Dim => match input {
                 Value::Integer { value } => {
@@ -170,7 +172,7 @@ where
                     self.language.provide_host_function_output(input);
                 } else {
                     self.language.trigger_effect(Effect::UnexpectedInput {
-                        expected: Type::Opaque { name: "Display" },
+                        expected: display_type,
                         actual: input,
                     });
                 }
