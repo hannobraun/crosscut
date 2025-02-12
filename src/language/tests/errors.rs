@@ -1,8 +1,10 @@
+use itertools::Itertools;
+
 use crate::language::{
-    code::{CodeError, Expression, IntrinsicFunction},
+    code::{CodeError, Expression, IntrinsicFunction, Type},
     instance::Language,
     packages::{Function, FunctionId, Package},
-    runtime::{StepResult, Value},
+    runtime::{Effect, EvaluatorState, StepResult, Value},
 };
 
 #[test]
@@ -109,4 +111,41 @@ fn do_not_step_beyond_errors() {
 
     assert_eq!(language.step(), StepResult::Error);
     assert_eq!(language.step(), StepResult::Error);
+}
+
+#[test]
+fn pure_runtime_error_should_result_in_error_state() {
+    // Some errors are not known at compile-time and are only encountered at
+    // runtime. Such an error should still be reported by the evaluator.
+
+    let mut language = Language::without_package();
+
+    // The compiler doesn't do type checking at this point, so it doesn't know
+    // that the second number literal gets an invalid input.
+    language.enter_code("127 127");
+
+    assert_eq!(
+        language.step(),
+        StepResult::FunctionApplied {
+            output: Value::Integer { value: 127 }
+        }
+    );
+    assert_eq!(language.step(), StepResult::Error);
+
+    let (_valid, invalid) = language
+        .codebase()
+        .leaf_to_root()
+        .map(|located_node| located_node.path)
+        .collect_tuple()
+        .unwrap();
+    assert_eq!(
+        language.evaluator().state(language.codebase()),
+        EvaluatorState::Effect {
+            effect: Effect::UnexpectedInput {
+                expected: Type::Nothing,
+                actual: Value::Integer { value: 127 },
+            },
+            path: invalid,
+        },
+    );
 }

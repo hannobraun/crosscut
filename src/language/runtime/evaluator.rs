@@ -170,6 +170,15 @@ impl Evaluator {
                             // A literal is a function that takes `None`. If
                             // that isn't what we currently have, that's an
                             // error.
+
+                            // The compiler doesn't know about this error. If we
+                            // want the return value of `state` to reflect it,
+                            // we need to keep track of it here.
+                            self.effect = Some(Effect::UnexpectedInput {
+                                expected: Type::Nothing,
+                                actual: self.active_value.inner,
+                            });
+
                             return StepResult::Error;
                         };
 
