@@ -177,19 +177,17 @@ where
                     });
                 }
             }
-            GameEngineFunction::White => match input {
-                Value::Integer { value: _ } => {
-                    self.language.provide_host_function_output(
-                        Value::Integer { value: 255 },
-                    );
-                }
-                value => {
+            GameEngineFunction::White => {
+                if input == self.display {
+                    self.output_color(255);
+                    self.language.provide_host_function_output(input);
+                } else {
                     self.language.trigger_effect(Effect::UnexpectedInput {
-                        expected: Type::Integer,
-                        actual: value,
+                        expected: display_type,
+                        actual: input,
                     });
                 }
-            },
+            }
         }
     }
 
