@@ -78,6 +78,9 @@ impl Evaluator {
             inner: active_value,
             source: None,
         };
+        self.state = EvaluatorState::Running {
+            active_value: active_value.clone(),
+        };
         self.contexts.push(Context {
             nodes_from_root,
             active_value,
