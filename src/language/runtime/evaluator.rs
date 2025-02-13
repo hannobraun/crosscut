@@ -207,6 +207,7 @@ impl Evaluator {
                     },
                     path,
                 };
+
                 return;
             }
             Expression::IntrinsicFunction { intrinsic } => {
