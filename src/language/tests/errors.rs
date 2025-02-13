@@ -19,7 +19,7 @@ fn number_literal_wrong_input() {
 
     assert_eq!(
         language.step(),
-        StepResult::FunctionApplied {
+        StepResult::Running {
             output: Value::Integer { value: 127 }
         },
     );
@@ -126,7 +126,7 @@ fn pure_runtime_error_should_result_in_error_state() {
 
     assert_eq!(
         language.step(),
-        StepResult::FunctionApplied {
+        StepResult::Running {
             output: Value::Integer { value: 127 }
         }
     );

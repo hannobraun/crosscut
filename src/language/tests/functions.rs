@@ -42,7 +42,7 @@ fn self_recursion() {
 
     language.evaluate(path, Value::Nothing);
 
-    let expected = StepResult::FunctionApplied {
+    let expected = StepResult::Running {
         output: Value::Integer { value: 127 },
     };
     assert_eq!(language.step(), expected);

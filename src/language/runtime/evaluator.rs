@@ -237,7 +237,7 @@ impl Evaluator {
             }
         };
 
-        let result = StepResult::FunctionApplied {
+        let result = StepResult::Running {
             output: context.active_value.inner.clone(),
         };
 
@@ -333,7 +333,7 @@ pub enum Next<'r> {
 
 #[derive(Debug, Eq, PartialEq)]
 pub enum StepResult {
-    FunctionApplied { output: Value },
+    Running { output: Value },
     Recursing,
     Effect { effect: Effect },
     Finished { output: ValueWithSource },

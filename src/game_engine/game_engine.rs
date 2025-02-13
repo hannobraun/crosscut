@@ -100,7 +100,7 @@ where
             }
 
             match self.language.step() {
-                StepResult::FunctionApplied { output: _ } => {
+                StepResult::Running { output: _ } => {
                     // We're not interested in intermediate values here.
                     continue;
                 }
