@@ -148,7 +148,7 @@ impl Evaluator {
             }
         };
 
-        let active_value = &self.active_value;
+        let active_value = &mut self.active_value;
 
         match next {
             Expression::HostFunction { id } => {
@@ -208,7 +208,7 @@ impl Evaluator {
                             }
                         };
 
-                        self.active_value = ValueWithSource {
+                        *active_value = ValueWithSource {
                             inner: value,
                             source: Some(path),
                         };
