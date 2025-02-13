@@ -148,11 +148,13 @@ impl Evaluator {
             }
         };
 
+        let active_value = &self.active_value;
+
         match next {
             Expression::HostFunction { id } => {
                 let effect = Effect::ApplyHostFunction {
                     id: *id,
-                    input: self.active_value.inner.clone(),
+                    input: active_value.inner.clone(),
                 };
                 self.effect = Some(effect.clone());
 
@@ -164,7 +166,7 @@ impl Evaluator {
                         // Active value stays the same.
                     }
                     IntrinsicFunction::Literal { literal } => {
-                        let Value::Nothing = self.active_value.inner else {
+                        let Value::Nothing = active_value.inner else {
                             // A literal is a function that takes `None`. If
                             // that isn't what we currently have, that's an
                             // error.
@@ -174,7 +176,7 @@ impl Evaluator {
                             // we need to keep track of it here.
                             self.effect = Some(Effect::UnexpectedInput {
                                 expected: Type::Nothing,
-                                actual: self.active_value.inner.clone(),
+                                actual: active_value.inner.clone(),
                             });
 
                             return StepResult::Error;
