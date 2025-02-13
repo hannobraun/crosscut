@@ -159,7 +159,12 @@ impl Evaluator {
             }
         };
 
-        let context = self.contexts.last_mut().unwrap();
+        let Some(context) = self.contexts.last_mut() else {
+            unreachable!(
+                "A context must be available, or `next` wouldn't have returned \
+                `EvaluatorState::Running`, and this wouldn't get executed."
+            );
+        };
 
         match next {
             Expression::HostFunction { id } => {
