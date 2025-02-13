@@ -21,7 +21,7 @@ fn number_literal_wrong_input() {
         language.step().active_value(),
         Some(Value::Integer { value: 127 }),
     );
-    assert!(matches!(language.step(), StepResult::Error));
+    assert!(matches!(language.step(), StepResult::Error { .. }));
 }
 
 #[test]
@@ -41,7 +41,7 @@ fn unresolved_syntax_node() {
     );
 
     // And it should also result in a runtime error when stepping.
-    assert!(matches!(language.step(), StepResult::Error));
+    assert!(matches!(language.step(), StepResult::Error { .. }));
 
     // Once we resolve the error, it should no longer be there.
     language.enter_code("y");
@@ -107,8 +107,8 @@ fn do_not_step_beyond_errors() {
 
     language.enter_code("error");
 
-    assert!(matches!(language.step(), StepResult::Error));
-    assert!(matches!(language.step(), StepResult::Error));
+    assert!(matches!(language.step(), StepResult::Error { .. }));
+    assert!(matches!(language.step(), StepResult::Error { .. }));
 }
 
 #[test]
@@ -126,7 +126,7 @@ fn pure_runtime_error_should_result_in_error_state() {
         language.step().active_value(),
         Some(Value::Integer { value: 127 }),
     );
-    assert!(matches!(language.step(), StepResult::Error));
+    assert!(matches!(language.step(), StepResult::Error { .. }));
 
     let (_valid, invalid) = language
         .codebase()
