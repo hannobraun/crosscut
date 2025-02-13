@@ -231,8 +231,7 @@ impl Evaluator {
             let output = self
                 .contexts
                 .last()
-                .cloned()
-                .map(|context| context.active_value)
+                .map(|context| context.active_value.clone())
                 .unwrap_or(ValueWithSource {
                     inner: Value::Nothing,
                     source: None,
