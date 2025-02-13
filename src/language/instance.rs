@@ -116,7 +116,7 @@ impl Language {
                     // We're not concerned with intermediate results here.
                 }
                 StepResult::Recursing => {}
-                StepResult::Effect { effect } => match effect {
+                StepResult::Effect { effect, path: _ } => match effect {
                     Effect::ApplyHostFunction { id, input } => {
                         match handler(id, input) {
                             Ok(output) => {

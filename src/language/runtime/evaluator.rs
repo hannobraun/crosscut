@@ -144,8 +144,8 @@ impl Evaluator {
                     // endless loops.
                     return StepResult::Recursing;
                 }
-                Next::Effect { effect, path: _ } => {
-                    return StepResult::Effect { effect };
+                Next::Effect { effect, path } => {
+                    return StepResult::Effect { effect, path };
                 }
                 Next::Error { path: _ } => {
                     return StepResult::Error;
@@ -178,7 +178,7 @@ impl Evaluator {
                 };
                 self.effect = Some(effect.clone());
 
-                return StepResult::Effect { effect };
+                return StepResult::Effect { effect, path };
             }
             Expression::IntrinsicFunction { intrinsic } => {
                 match intrinsic {
@@ -335,7 +335,7 @@ pub enum Next<'r> {
 pub enum StepResult {
     Running { active_value: ValueWithSource },
     Recursing,
-    Effect { effect: Effect },
+    Effect { effect: Effect, path: NodePath },
     Finished { output: ValueWithSource },
     Error,
 }
