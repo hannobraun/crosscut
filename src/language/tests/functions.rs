@@ -68,7 +68,7 @@ fn empty_function() {
         Some(&CodeError::FunctionWithoutBody),
     );
 
-    assert_eq!(language.step(), StepResult::Error);
+    assert!(matches!(language.step(), StepResult::Error));
 }
 
 pub trait IntoFunctionBody {
