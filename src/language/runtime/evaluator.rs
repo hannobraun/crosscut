@@ -78,22 +78,6 @@ impl Evaluator {
         self.contexts.push(context);
     }
 
-    pub fn state(&self, codebase: &Codebase) -> EvaluatorState {
-        match self.next(codebase) {
-            Next::Running {
-                expression: _,
-                path,
-            } => EvaluatorState::Running { path },
-            Next::IgnoringSyntaxNode => EvaluatorState::IgnoringSyntaxNode,
-            Next::Recursing => EvaluatorState::Recursing,
-            Next::Effect { effect, path } => {
-                EvaluatorState::Effect { effect, path }
-            }
-            Next::Error { path } => EvaluatorState::Error { path },
-            Next::Finished { output } => EvaluatorState::Finished { output },
-        }
-    }
-
     pub fn provide_host_function_output(&mut self, value: Value) {
         let Some(Effect::ApplyHostFunction { .. }) = &self.effect else {
             panic!(
@@ -294,6 +278,22 @@ impl Evaluator {
     fn advance(&mut self) {
         if let Some(context) = self.contexts.last_mut() {
             context.nodes_from_root.pop();
+        }
+    }
+
+    pub fn state(&self, codebase: &Codebase) -> EvaluatorState {
+        match self.next(codebase) {
+            Next::Running {
+                expression: _,
+                path,
+            } => EvaluatorState::Running { path },
+            Next::IgnoringSyntaxNode => EvaluatorState::IgnoringSyntaxNode,
+            Next::Recursing => EvaluatorState::Recursing,
+            Next::Effect { effect, path } => {
+                EvaluatorState::Effect { effect, path }
+            }
+            Next::Error { path } => EvaluatorState::Error { path },
+            Next::Finished { output } => EvaluatorState::Finished { output },
         }
     }
 }
