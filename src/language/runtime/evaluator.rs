@@ -12,7 +12,7 @@ use super::{Value, ValueWithSource};
 pub struct Evaluator {
     root: NodePath,
     next: Vec<NodePath>,
-    active_value: Vec<ValueWithSource>,
+    contexts: Vec<ValueWithSource>,
     effect: Option<Effect>,
 }
 
@@ -21,7 +21,7 @@ impl Evaluator {
         let mut evaluator = Self {
             root,
             next: Vec::new(),
-            active_value: Vec::new(),
+            contexts: Vec::new(),
             effect: None,
         };
 
@@ -41,7 +41,7 @@ impl Evaluator {
         codebase: &Codebase,
     ) {
         self.root = root;
-        self.active_value.push(ValueWithSource {
+        self.contexts.push(ValueWithSource {
             inner: active_value,
             source: None,
         });
@@ -90,7 +90,7 @@ impl Evaluator {
         };
 
         self.effect = None;
-        *self.active_value.last_mut().unwrap() = ValueWithSource {
+        *self.contexts.last_mut().unwrap() = ValueWithSource {
             inner: value,
             source: Some(source),
         };
@@ -145,7 +145,7 @@ impl Evaluator {
             }
         };
 
-        let active_value = self.active_value.last_mut().unwrap();
+        let active_value = self.contexts.last_mut().unwrap();
 
         match next {
             Expression::HostFunction { id } => {
@@ -226,13 +226,10 @@ impl Evaluator {
     fn next<'r>(&self, codebase: &'r Codebase) -> EvaluatorState<'r> {
         let Some(path) = self.next.last().copied() else {
             let output =
-                self.active_value
-                    .last()
-                    .cloned()
-                    .unwrap_or(ValueWithSource {
-                        inner: Value::Nothing,
-                        source: None,
-                    });
+                self.contexts.last().cloned().unwrap_or(ValueWithSource {
+                    inner: Value::Nothing,
+                    source: None,
+                });
 
             return EvaluatorState::Finished { output };
         };
