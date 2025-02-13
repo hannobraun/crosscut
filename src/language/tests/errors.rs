@@ -21,7 +21,7 @@ fn number_literal_wrong_input() {
         language.step().active_value(),
         Some(Value::Integer { value: 127 }),
     );
-    assert!(matches!(language.step(), StepResult::Error { .. }));
+    assert!(matches!(language.step(), StepResult::Effect { .. }));
 }
 
 #[test]
@@ -126,7 +126,7 @@ fn pure_runtime_error_should_result_in_error_state() {
         language.step().active_value(),
         Some(Value::Integer { value: 127 }),
     );
-    assert!(matches!(language.step(), StepResult::Error { .. }));
+    assert!(matches!(language.step(), StepResult::Effect { .. }));
 
     let (_valid, invalid) = language
         .codebase()

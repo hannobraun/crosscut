@@ -198,9 +198,9 @@ impl Evaluator {
                                 expected: Type::Nothing,
                                 actual: context.active_value.inner.clone(),
                             };
-                            self.effect = Some(effect);
+                            self.effect = Some(effect.clone());
 
-                            return StepResult::Error { path };
+                            return StepResult::Effect { effect, path };
                         };
 
                         let value = {
