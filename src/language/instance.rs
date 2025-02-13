@@ -113,10 +113,9 @@ impl Language {
 
         loop {
             match self.step().clone() {
-                EvaluatorState::Running { .. } => {
+                EvaluatorState::Running { .. } | EvaluatorState::Recursing => {
                     // We're not concerned with intermediate results here.
                 }
-                EvaluatorState::Recursing => {}
                 EvaluatorState::Effect { effect, path: _ } => match effect {
                     Effect::ApplyHostFunction { id, input } => {
                         match handler(id, input) {
