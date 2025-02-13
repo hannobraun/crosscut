@@ -115,6 +115,9 @@ impl Evaluator {
             inner: value,
             source: Some(source),
         };
+        self.state = EvaluatorState::Running {
+            active_value: context.active_value.clone(),
+        };
 
         self.advance();
     }
