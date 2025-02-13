@@ -40,7 +40,7 @@ impl Evaluator {
     ) {
         self.root = root;
         let mut context = Context {
-            next: Vec::new(),
+            nodes_from_root: Vec::new(),
             active_value: ValueWithSource {
                 inner: active_value,
                 source: None,
@@ -49,7 +49,7 @@ impl Evaluator {
         let mut path = root;
 
         loop {
-            context.next.push(path);
+            context.nodes_from_root.push(path);
 
             if let NodeKind::Expression {
                 expression:
@@ -96,7 +96,7 @@ impl Evaluator {
                 would have triggered the effect?"
             );
         };
-        let Some(source) = context.next.last().copied() else {
+        let Some(source) = context.nodes_from_root.last().copied() else {
             unreachable!(
                 "Host function is being applied, but there doesn't seem to be \
                 a syntax node that could have triggered it."
@@ -247,7 +247,7 @@ impl Evaluator {
             };
         };
 
-        let Some(path) = context.next.last().copied() else {
+        let Some(path) = context.nodes_from_root.last().copied() else {
             let output = context.active_value.clone();
             return EvaluatorState::Finished { output };
         };
@@ -268,14 +268,14 @@ impl Evaluator {
 
     fn advance(&mut self) {
         if let Some(context) = self.contexts.last_mut() {
-            context.next.pop();
+            context.nodes_from_root.pop();
         }
     }
 }
 
 #[derive(Clone, Debug)]
 pub struct Context {
-    pub next: Vec<NodePath>,
+    pub nodes_from_root: Vec<NodePath>,
     pub active_value: ValueWithSource,
 }
 
