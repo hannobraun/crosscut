@@ -147,8 +147,8 @@ impl Evaluator {
                 Next::Effect { effect, path } => {
                     return StepResult::Effect { effect, path };
                 }
-                Next::Error { path: _ } => {
-                    return StepResult::Error;
+                Next::Error { path } => {
+                    return StepResult::Error { path };
                 }
                 Next::Finished { output } => {
                     return StepResult::Finished { output };
@@ -199,7 +199,7 @@ impl Evaluator {
                                 actual: context.active_value.inner.clone(),
                             });
 
-                            return StepResult::Error;
+                            return StepResult::Error { path };
                         };
 
                         let value = {
@@ -223,7 +223,7 @@ impl Evaluator {
                                 }
                                 Literal::Tuple => {
                                     // Evaluating tuples is not supported yet.
-                                    return StepResult::Error;
+                                    return StepResult::Error { path };
                                 }
                             }
                         };
@@ -337,7 +337,7 @@ pub enum StepResult {
     Recursing,
     Effect { effect: Effect, path: NodePath },
     Finished { output: ValueWithSource },
-    Error,
+    Error { path: NodePath },
 }
 
 impl StepResult {
