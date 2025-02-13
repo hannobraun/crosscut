@@ -2,6 +2,6 @@ mod evaluator;
 mod value;
 
 pub use self::{
-    evaluator::{Effect, Evaluator, EvaluatorState, StepResult},
+    evaluator::{Effect, Evaluator, StepResult},
     value::{Value, ValueWithSource},
 };

@@ -291,18 +291,8 @@ impl Evaluator {
     }
 
     pub fn state(&self) -> EvaluatorState {
-        match self.state.clone() {
-            StepResult::Running { active_value } => EvaluatorState::Running {
-                path: active_value.source,
-            },
-            StepResult::Recursing => EvaluatorState::Recursing,
-            StepResult::Effect { effect, path } => {
-                EvaluatorState::Effect { effect, path }
-            }
-            StepResult::Error { path } => EvaluatorState::Error { path },
-            StepResult::Finished { output } => {
-                EvaluatorState::Finished { output }
-            }
+        EvaluatorState {
+            inner: self.state.clone(),
         }
     }
 }
@@ -361,22 +351,20 @@ impl StepResult {
 }
 
 #[derive(Debug, Eq, PartialEq)]
-pub enum EvaluatorState {
-    Running { path: Option<NodePath> },
-    Recursing,
-    Effect { effect: Effect, path: NodePath },
-    Error { path: NodePath },
-    Finished { output: ValueWithSource },
+pub struct EvaluatorState {
+    pub inner: StepResult,
 }
 
 impl EvaluatorState {
     pub fn path(&self) -> Option<&NodePath> {
-        match self {
-            Self::Running { path } => path.as_ref(),
-            Self::Recursing => None,
-            Self::Effect { effect: _, path } => Some(path),
-            Self::Error { path } => Some(path),
-            Self::Finished { output: _ } => None,
+        match &self.inner {
+            StepResult::Running { active_value } => {
+                active_value.source.as_ref()
+            }
+            StepResult::Recursing => None,
+            StepResult::Effect { effect: _, path } => Some(path),
+            StepResult::Error { path } => Some(path),
+            StepResult::Finished { output: _ } => None,
         }
     }
 }

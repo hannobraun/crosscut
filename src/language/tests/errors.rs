@@ -4,7 +4,7 @@ use crate::language::{
     code::{CodeError, Expression, IntrinsicFunction, Type},
     instance::Language,
     packages::{Function, FunctionId, Package},
-    runtime::{Effect, EvaluatorState, StepResult, Value},
+    runtime::{Effect, StepResult, Value},
 };
 
 #[test]
@@ -135,8 +135,8 @@ fn pure_runtime_error_should_result_in_error_state() {
         .collect_tuple()
         .unwrap();
     assert_eq!(
-        language.evaluator().state(),
-        EvaluatorState::Effect {
+        language.evaluator().state().inner,
+        StepResult::Effect {
             effect: Effect::UnexpectedInput {
                 expected: Type::Nothing,
                 actual: Value::Integer { value: 127 },
