@@ -351,13 +351,11 @@ impl StepResult {
 
     pub fn path(&self) -> Option<&NodePath> {
         match self {
-            StepResult::Running { active_value } => {
-                active_value.source.as_ref()
-            }
-            StepResult::Recursing => None,
-            StepResult::Effect { path, .. } => Some(path),
-            StepResult::Error { path } => Some(path),
-            StepResult::Finished { .. } => None,
+            Self::Running { active_value } => active_value.source.as_ref(),
+            Self::Recursing => None,
+            Self::Effect { path, .. } => Some(path),
+            Self::Error { path } => Some(path),
+            Self::Finished { .. } => None,
         }
     }
 }
