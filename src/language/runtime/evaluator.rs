@@ -341,6 +341,17 @@ pub enum StepResult {
     Error,
 }
 
+impl StepResult {
+    #[cfg(test)]
+    pub fn active_value(&self) -> Option<Value> {
+        if let Self::Running { active_value, .. } = self {
+            Some(active_value.clone())
+        } else {
+            None
+        }
+    }
+}
+
 #[derive(Debug, Eq, PartialEq)]
 pub enum EvaluatorState {
     Running { path: NodePath },

@@ -42,21 +42,15 @@ fn self_recursion() {
 
     language.evaluate(path, Value::Nothing);
 
-    assert!(matches!(
-        language.step(),
-        StepResult::Running {
-            active_value: Value::Integer { value: 127 },
-            ..
-        }
-    ));
+    assert_eq!(
+        language.step().active_value(),
+        Some(Value::Integer { value: 127 }),
+    );
     assert_eq!(language.step(), StepResult::Recursing);
-    assert!(matches!(
-        language.step(),
-        StepResult::Running {
-            active_value: Value::Integer { value: 127 },
-            ..
-        }
-    ));
+    assert_eq!(
+        language.step().active_value(),
+        Some(Value::Integer { value: 127 }),
+    );
 }
 
 #[test]
