@@ -64,7 +64,7 @@ fn host_functions_can_trigger_effects() {
         });
 
     assert_eq!(output.as_ref(), Err(&effect));
-    assert_eq!(language.step(), StepResult::EffectTriggered { effect });
+    assert_eq!(language.step(), StepResult::Effect { effect });
 }
 
 #[test]

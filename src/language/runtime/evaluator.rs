@@ -161,7 +161,7 @@ impl Evaluator {
                     return StepResult::Recursing;
                 }
                 Next::Effect { effect, path: _ } => {
-                    return StepResult::EffectTriggered { effect };
+                    return StepResult::Effect { effect };
                 }
                 Next::Error { path: _ } => {
                     return StepResult::Error;
@@ -194,7 +194,7 @@ impl Evaluator {
                 };
                 self.effect = Some(effect.clone());
 
-                return StepResult::EffectTriggered { effect };
+                return StepResult::Effect { effect };
             }
             Expression::IntrinsicFunction { intrinsic } => {
                 match intrinsic {
@@ -358,7 +358,7 @@ pub enum Next<'r> {
 pub enum StepResult {
     FunctionApplied { output: Value },
     Recursing,
-    EffectTriggered { effect: Effect },
+    Effect { effect: Effect },
     Finished { output: ValueWithSource },
     Error,
 }

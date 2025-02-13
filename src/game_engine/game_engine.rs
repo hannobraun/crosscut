@@ -107,7 +107,7 @@ where
                 StepResult::Recursing => {
                     continue;
                 }
-                StepResult::EffectTriggered { effect } => match effect {
+                StepResult::Effect { effect } => match effect {
                     Effect::ApplyHostFunction { id, input } => {
                         self.apply_host_function(id, input);
                         continue;
