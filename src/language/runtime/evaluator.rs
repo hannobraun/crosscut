@@ -12,7 +12,7 @@ use super::{Value, ValueWithSource};
 pub struct Evaluator {
     root: NodePath,
     next: Vec<NodePath>,
-    contexts: Vec<ValueWithSource>,
+    contexts: Vec<Context>,
     effect: Option<Effect>,
 }
 
@@ -41,9 +41,11 @@ impl Evaluator {
         codebase: &Codebase,
     ) {
         self.root = root;
-        self.contexts.push(ValueWithSource {
-            inner: active_value,
-            source: None,
+        self.contexts.push(Context {
+            active_value: ValueWithSource {
+                inner: active_value,
+                source: None,
+            },
         });
         let mut path = root;
 
@@ -90,7 +92,7 @@ impl Evaluator {
         };
 
         self.effect = None;
-        *self.contexts.last_mut().unwrap() = ValueWithSource {
+        self.contexts.last_mut().unwrap().active_value = ValueWithSource {
             inner: value,
             source: Some(source),
         };
@@ -151,7 +153,7 @@ impl Evaluator {
             Expression::HostFunction { id } => {
                 let effect = Effect::ApplyHostFunction {
                     id: *id,
-                    input: active_value.inner.clone(),
+                    input: active_value.active_value.inner.clone(),
                 };
                 self.effect = Some(effect.clone());
 
@@ -163,7 +165,8 @@ impl Evaluator {
                         // Active value stays the same.
                     }
                     IntrinsicFunction::Literal { literal } => {
-                        let Value::Nothing = active_value.inner else {
+                        let Value::Nothing = active_value.active_value.inner
+                        else {
                             // A literal is a function that takes `None`. If
                             // that isn't what we currently have, that's an
                             // error.
@@ -173,7 +176,7 @@ impl Evaluator {
                             // we need to keep track of it here.
                             self.effect = Some(Effect::UnexpectedInput {
                                 expected: Type::Nothing,
-                                actual: active_value.inner.clone(),
+                                actual: active_value.active_value.inner.clone(),
                             });
 
                             return StepResult::Error;
@@ -205,7 +208,7 @@ impl Evaluator {
                             }
                         };
 
-                        *active_value = ValueWithSource {
+                        active_value.active_value = ValueWithSource {
                             inner: value,
                             source: Some(path),
                         };
@@ -215,7 +218,7 @@ impl Evaluator {
         };
 
         let result = StepResult::FunctionApplied {
-            output: active_value.inner.clone(),
+            output: active_value.active_value.inner.clone(),
         };
 
         self.advance();
@@ -225,8 +228,12 @@ impl Evaluator {
 
     fn next<'r>(&self, codebase: &'r Codebase) -> EvaluatorState<'r> {
         let Some(path) = self.next.last().copied() else {
-            let output =
-                self.contexts.last().cloned().unwrap_or(ValueWithSource {
+            let output = self
+                .contexts
+                .last()
+                .cloned()
+                .map(|context| context.active_value)
+                .unwrap_or(ValueWithSource {
                     inner: Value::Nothing,
                     source: None,
                 });
@@ -251,6 +258,11 @@ impl Evaluator {
     fn advance(&mut self) {
         self.next.pop();
     }
+}
+
+#[derive(Clone, Debug)]
+pub struct Context {
+    pub active_value: ValueWithSource,
 }
 
 #[derive(Debug, Eq, PartialEq)]
