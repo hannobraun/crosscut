@@ -364,7 +364,7 @@ impl EvaluatorState {
             StepResult::Recursing => None,
             StepResult::Effect { path, .. } => Some(path),
             StepResult::Error { path } => Some(path),
-            StepResult::Finished { output: _ } => None,
+            StepResult::Finished { .. } => None,
         }
     }
 }
