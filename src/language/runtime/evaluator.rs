@@ -167,6 +167,7 @@ impl Evaluator {
                     // let's do that, and let the caller decide what to do about
                     // endless loops.
                     self.state = EvaluatorState::Recursing;
+
                     return;
                 }
                 Next::Effect { effect, path } => {
