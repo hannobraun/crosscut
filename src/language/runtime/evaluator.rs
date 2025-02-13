@@ -126,11 +126,11 @@ impl Evaluator {
                     // land back here, producing an endless loop and hanging the
                     // caller.
                     //
-                    // And endless loop that does nothing is likely a problem
+                    // An endless loop that does nothing is likely a problem
                     // either way, but it's not our responsibility to address
                     // that. All we're doing here is evaluate Crosscut code, so
                     // let's do that, and let the caller decide what to do about
-                    // endless loops in that.
+                    // endless loops.
                     return StepResult::Recursing;
                 }
                 EvaluatorState::Effect { effect, path: _ } => {
