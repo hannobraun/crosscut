@@ -113,7 +113,7 @@ impl Language {
 
         loop {
             match self.step().clone() {
-                EvaluatorState::Running { .. } | EvaluatorState::Recursing => {
+                EvaluatorState::Running { .. } => {
                     // We're not concerned with intermediate results here.
                 }
                 EvaluatorState::Effect { effect, path: _ } => match effect {

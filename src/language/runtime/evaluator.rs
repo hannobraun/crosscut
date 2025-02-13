@@ -166,8 +166,6 @@ impl Evaluator {
                     // that. All we're doing here is evaluate Crosscut code, so
                     // let's do that, and let the caller decide what to do about
                     // endless loops.
-                    self.state = EvaluatorState::Recursing;
-
                     return;
                 }
                 Next::Effect { effect, path } => {
@@ -355,7 +353,6 @@ pub enum Next<'r> {
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub enum EvaluatorState {
     Running { active_value: ValueWithSource },
-    Recursing,
     Effect { effect: Effect, path: NodePath },
     Finished { output: ValueWithSource },
     Error { path: NodePath },
@@ -374,7 +371,6 @@ impl EvaluatorState {
     pub fn path(&self) -> Option<&NodePath> {
         match self {
             Self::Running { active_value } => active_value.source.as_ref(),
-            Self::Recursing => None,
             Self::Effect { path, .. } => Some(path),
             Self::Error { path } => Some(path),
             Self::Finished { .. } => None,
@@ -392,7 +388,7 @@ pub enum Effect {
 mod tests {
     use crate::language::{
         code::{Codebase, Node, NodeKind},
-        runtime::{Evaluator, EvaluatorState},
+        runtime::{Evaluator, Value},
     };
 
     #[test]
@@ -414,6 +410,6 @@ mod tests {
         let mut evaluator = Evaluator::new(codebase.root().path, &codebase);
         evaluator.step(&codebase);
 
-        assert_eq!(evaluator.state(), &EvaluatorState::Recursing);
+        assert_eq!(evaluator.state().active_value(), Some(Value::Nothing));
     }
 }

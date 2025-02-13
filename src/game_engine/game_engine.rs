@@ -100,7 +100,7 @@ where
             }
 
             match self.language.step().clone() {
-                EvaluatorState::Running { .. } | EvaluatorState::Recursing => {
+                EvaluatorState::Running { .. } => {
                     // We're not interested in intermediate values here.
                     continue;
                 }

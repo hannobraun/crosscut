@@ -46,7 +46,10 @@ fn self_recursion() {
         language.step().active_value(),
         Some(Value::Integer { value: 127 }),
     );
-    assert_eq!(language.step(), &EvaluatorState::Recursing);
+    assert_eq!(
+        language.step().active_value(),
+        Some(Value::Integer { value: 127 }),
+    );
     assert_eq!(
         language.step().active_value(),
         Some(Value::Integer { value: 127 }),
