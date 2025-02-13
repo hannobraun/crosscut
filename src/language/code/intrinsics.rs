@@ -15,6 +15,9 @@ impl IntrinsicFunction {
         } else {
             match name {
                 "identity" => Some(Self::Identity),
+                "tuple" => Some(Self::Literal {
+                    literal: Literal::Tuple,
+                }),
                 _ => None,
             }
         }

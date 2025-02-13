@@ -80,16 +80,6 @@ fn resolve_keyword(
             }
         }
         "self" => Some((NodeKind::Recursion, None)),
-        "tuple" => Some((
-            NodeKind::Expression {
-                expression: Expression::IntrinsicFunction {
-                    intrinsic: IntrinsicFunction::Literal {
-                        literal: Literal::Tuple,
-                    },
-                },
-            },
-            None,
-        )),
         _ => None,
     }
 }
