@@ -362,7 +362,7 @@ impl EvaluatorState {
                 active_value.source.as_ref()
             }
             StepResult::Recursing => None,
-            StepResult::Effect { effect: _, path } => Some(path),
+            StepResult::Effect { path, .. } => Some(path),
             StepResult::Error { path } => Some(path),
             StepResult::Finished { output: _ } => None,
         }
