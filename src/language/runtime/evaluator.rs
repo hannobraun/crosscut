@@ -74,12 +74,13 @@ impl Evaluator {
             }
         }
 
+        let active_value = ValueWithSource {
+            inner: active_value,
+            source: None,
+        };
         self.contexts.push(Context {
             nodes_from_root,
-            active_value: ValueWithSource {
-                inner: active_value,
-                source: None,
-            },
+            active_value,
         });
     }
 
