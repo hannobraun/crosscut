@@ -218,7 +218,7 @@ impl Evaluator {
         };
 
         let result = StepResult::FunctionApplied {
-            output: self.active_value.inner.clone(),
+            output: active_value.inner.clone(),
         };
 
         self.advance();
