@@ -228,9 +228,8 @@ impl Evaluator {
 
     fn next<'r>(&self, codebase: &'r Codebase) -> EvaluatorState<'r> {
         let Some(path) = self.next.last().copied() else {
-            return EvaluatorState::Finished {
-                output: self.active_value.clone(),
-            };
+            let output = self.active_value.clone();
+            return EvaluatorState::Finished { output };
         };
 
         if let Some(effect) = self.effect.clone() {
