@@ -217,11 +217,13 @@ impl Evaluator {
             }
         };
 
+        let result = StepResult::FunctionApplied {
+            output: self.active_value.inner.clone(),
+        };
+
         self.advance();
 
-        StepResult::FunctionApplied {
-            output: self.active_value.inner.clone(),
-        }
+        result
     }
 
     fn next<'r>(&self, codebase: &'r Codebase) -> EvaluatorState<'r> {
