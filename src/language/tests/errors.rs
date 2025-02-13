@@ -17,12 +17,12 @@ fn number_literal_wrong_input() {
 
     language.enter_code("127 255");
 
-    assert_eq!(
+    assert!(matches!(
         language.step(),
         StepResult::Running {
             output: Value::Integer { value: 127 }
         },
-    );
+    ));
     assert_eq!(language.step(), StepResult::Error);
 }
 
@@ -124,12 +124,12 @@ fn pure_runtime_error_should_result_in_error_state() {
     // that the second number literal gets an invalid input.
     language.enter_code("127 127");
 
-    assert_eq!(
+    assert!(matches!(
         language.step(),
         StepResult::Running {
             output: Value::Integer { value: 127 }
         }
-    );
+    ));
     assert_eq!(language.step(), StepResult::Error);
 
     let (_valid, invalid) = language
