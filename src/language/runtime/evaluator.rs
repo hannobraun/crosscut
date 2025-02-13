@@ -149,11 +149,11 @@ impl Evaluator {
                 Next::Recursing => {
                     self.evaluate(self.root, Value::Nothing, codebase);
 
-                    // We could `continue` here. Then the following call to
+                    // We could `continue` here. Then the next call to
                     // `Self::next` above would return the next expression we
                     // need to evaluate, and we could immediately do that.
-                    // Without bothering the caller about this recursion, which
-                    // would become an internal implementation detail.
+                    // Without bothering the caller with making an otherwise
+                    // useless step.
                     //
                     // But that won't work, because of one very important edge
                     // case: If `self.root` points to nothing except a bare
