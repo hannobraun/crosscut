@@ -129,7 +129,7 @@ impl Evaluator {
     }
 
     pub fn step(&mut self, codebase: &Codebase) -> StepResult {
-        let (next, path) = loop {
+        let (expression, path) = loop {
             match self.next(codebase) {
                 Next::Running { expression, path } => {
                     break (expression, path);
@@ -186,7 +186,7 @@ impl Evaluator {
             );
         };
 
-        match next {
+        match expression {
             Expression::HostFunction { id } => {
                 let effect = Effect::ApplyHostFunction {
                     id: *id,
