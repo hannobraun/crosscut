@@ -159,6 +159,13 @@ impl Evaluator {
             }
         };
 
+        // It would be nicer, if `next` could return the context to us. It must
+        // have had one available, or we wouldn't be here right now.
+        //
+        // But in addition to making the lifetimes more complicated, this would
+        // require `next` to take `&mut self`. Which wouldn't be a problem for
+        // the use here, but `next` is also called from `state`, which doesn't
+        // have (and shouldn't need!) `&mut self`.
         let Some(context) = self.contexts.last_mut() else {
             unreachable!(
                 "A context must be available, or `next` wouldn't have returned \
