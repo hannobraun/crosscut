@@ -41,12 +41,12 @@ impl Evaluator {
         codebase: &Codebase,
     ) {
         self.root = root;
-        self.contexts.push(Context {
+        let context = Context {
             active_value: ValueWithSource {
                 inner: active_value,
                 source: None,
             },
-        });
+        };
         let mut path = root;
 
         loop {
@@ -75,6 +75,8 @@ impl Evaluator {
                 break;
             }
         }
+
+        self.contexts.push(context);
     }
 
     pub fn state<'r>(&self, codebase: &'r Codebase) -> EvaluatorState<'r> {
