@@ -194,10 +194,11 @@ impl Evaluator {
                             // The compiler doesn't know about this error. If we
                             // want the return value of `state` to reflect it,
                             // we need to keep track of it here.
-                            self.effect = Some(Effect::UnexpectedInput {
+                            let effect = Effect::UnexpectedInput {
                                 expected: Type::Nothing,
                                 actual: context.active_value.inner.clone(),
-                            });
+                            };
+                            self.effect = Some(effect);
 
                             return StepResult::Error { path };
                         };
