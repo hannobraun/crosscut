@@ -44,17 +44,11 @@ impl Evaluator {
         codebase: &Codebase,
     ) {
         self.root = root;
-        let mut context = Context {
-            nodes_from_root: Vec::new(),
-            active_value: ValueWithSource {
-                inner: active_value,
-                source: None,
-            },
-        };
+        let mut nodes_from_root = Vec::new();
         let mut path = root;
 
         loop {
-            context.nodes_from_root.push(path);
+            nodes_from_root.push(path);
 
             if let NodeKind::Expression {
                 expression:
@@ -80,7 +74,13 @@ impl Evaluator {
             }
         }
 
-        self.contexts.push(context);
+        self.contexts.push(Context {
+            nodes_from_root,
+            active_value: ValueWithSource {
+                inner: active_value,
+                source: None,
+            },
+        });
     }
 
     pub fn provide_host_function_output(&mut self, value: Value) {
