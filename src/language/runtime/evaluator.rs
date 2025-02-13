@@ -12,7 +12,6 @@ use super::{Value, ValueWithSource};
 pub struct Evaluator {
     root: NodePath,
     contexts: Vec<Context>,
-    effect: Option<Effect>,
     state: EvaluatorState,
 }
 
@@ -21,7 +20,6 @@ impl Evaluator {
         let mut evaluator = Self {
             root,
             contexts: Vec::new(),
-            effect: None,
             state: EvaluatorState::Running {
                 active_value: ValueWithSource {
                     inner: Value::Nothing,
@@ -110,7 +108,6 @@ impl Evaluator {
             );
         };
 
-        self.effect = None;
         context.active_value = ValueWithSource {
             inner: value,
             source: Some(source),
@@ -123,8 +120,6 @@ impl Evaluator {
     }
 
     pub fn trigger_effect(&mut self, effect: Effect) {
-        self.effect = Some(effect.clone());
-
         let Some(context) = self.contexts.last_mut() else {
             panic!(
                 "Not allowed to trigger effect, if there is no context it \
@@ -209,7 +204,6 @@ impl Evaluator {
                     id: *id,
                     input: context.active_value.inner.clone(),
                 };
-                self.effect = Some(effect.clone());
 
                 self.state = EvaluatorState::Effect { effect, path };
                 return;
@@ -232,7 +226,6 @@ impl Evaluator {
                                 expected: Type::Nothing,
                                 actual: context.active_value.inner.clone(),
                             };
-                            self.effect = Some(effect.clone());
 
                             self.state =
                                 EvaluatorState::Effect { effect, path };
