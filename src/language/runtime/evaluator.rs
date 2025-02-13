@@ -290,10 +290,8 @@ impl Evaluator {
         }
     }
 
-    pub fn state(&self) -> EvaluatorState {
-        EvaluatorState {
-            inner: self.state.clone(),
-        }
+    pub fn state(&self) -> StepResult {
+        self.state.clone()
     }
 }
 
@@ -357,17 +355,6 @@ impl StepResult {
             Self::Error { path } => Some(path),
             Self::Finished { .. } => None,
         }
-    }
-}
-
-#[derive(Debug, Eq, PartialEq)]
-pub struct EvaluatorState {
-    pub inner: StepResult,
-}
-
-impl EvaluatorState {
-    pub fn path(&self) -> Option<&NodePath> {
-        self.inner.path()
     }
 }
 

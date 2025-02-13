@@ -64,7 +64,7 @@ fn render_interpreter_state<A: EditorOutputAdapter>(
     context: &RenderContext,
 ) -> anyhow::Result<()> {
     adapter.attribute(Attribute::Bold, |adapter| {
-        match context.evaluator.state().inner {
+        match context.evaluator.state() {
             StepResult::Running { .. } | StepResult::Recursing => {
                 adapter.color(Color::DarkGreen, |adapter| {
                     writeln!(adapter, "Running")
