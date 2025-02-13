@@ -89,7 +89,7 @@ impl Evaluator {
                 is currently being applied."
             );
         };
-        let Some(context) = self.contexts.last() else {
+        let Some(context) = self.contexts.last_mut() else {
             unreachable!(
                 "Host function is being applied, but no context is available. \
                 This should not be possible, because without a context, what \
