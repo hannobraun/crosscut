@@ -312,29 +312,6 @@ pub struct Context {
 }
 
 #[derive(Debug, Eq, PartialEq)]
-pub enum EvaluatorState {
-    Running { path: NodePath },
-    IgnoringSyntaxNode,
-    Recursing,
-    Effect { effect: Effect, path: NodePath },
-    Error { path: NodePath },
-    Finished { output: ValueWithSource },
-}
-
-impl EvaluatorState {
-    pub fn path(&self) -> Option<&NodePath> {
-        match self {
-            Self::Running { path } => Some(path),
-            Self::IgnoringSyntaxNode => None,
-            Self::Recursing => None,
-            Self::Effect { effect: _, path } => Some(path),
-            Self::Error { path } => Some(path),
-            Self::Finished { output: _ } => None,
-        }
-    }
-}
-
-#[derive(Debug, Eq, PartialEq)]
 pub enum Next<'r> {
     Running {
         expression: &'r Expression,
@@ -361,6 +338,29 @@ pub enum StepResult {
     Effect { effect: Effect },
     Finished { output: ValueWithSource },
     Error,
+}
+
+#[derive(Debug, Eq, PartialEq)]
+pub enum EvaluatorState {
+    Running { path: NodePath },
+    IgnoringSyntaxNode,
+    Recursing,
+    Effect { effect: Effect, path: NodePath },
+    Error { path: NodePath },
+    Finished { output: ValueWithSource },
+}
+
+impl EvaluatorState {
+    pub fn path(&self) -> Option<&NodePath> {
+        match self {
+            Self::Running { path } => Some(path),
+            Self::IgnoringSyntaxNode => None,
+            Self::Recursing => None,
+            Self::Effect { effect: _, path } => Some(path),
+            Self::Error { path } => Some(path),
+            Self::Finished { output: _ } => None,
+        }
+    }
 }
 
 #[derive(Clone, Debug, Eq, PartialEq)]
