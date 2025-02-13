@@ -46,6 +46,7 @@ fn self_recursion() {
         language.step(),
         StepResult::Running {
             output: Value::Integer { value: 127 },
+            ..
         }
     ));
     assert_eq!(language.step(), StepResult::Recursing);
@@ -53,6 +54,7 @@ fn self_recursion() {
         language.step(),
         StepResult::Running {
             output: Value::Integer { value: 127 },
+            ..
         }
     ));
 }
