@@ -13,6 +13,7 @@ pub struct Evaluator {
     root: NodePath,
     contexts: Vec<Context>,
     effect: Option<Effect>,
+    state: StepResult,
 }
 
 impl Evaluator {
@@ -21,6 +22,12 @@ impl Evaluator {
             root,
             contexts: Vec::new(),
             effect: None,
+            state: StepResult::Running {
+                active_value: ValueWithSource {
+                    inner: Value::Nothing,
+                    source: None,
+                },
+            },
         };
 
         evaluator.evaluate(evaluator.root, Value::Nothing, codebase);
@@ -200,7 +207,8 @@ impl Evaluator {
                             };
                             self.effect = Some(effect.clone());
 
-                            return StepResult::Effect { effect, path };
+                            self.state = StepResult::Effect { effect, path };
+                            return self.state.clone();
                         };
 
                         let value = {
@@ -282,19 +290,19 @@ impl Evaluator {
         }
     }
 
-    pub fn state(&self, codebase: &Codebase) -> EvaluatorState {
-        match self.next(codebase) {
-            Next::Running {
-                expression: _,
-                path,
-            } => EvaluatorState::Running { path: Some(path) },
-            Next::IgnoringSyntaxNode => EvaluatorState::IgnoringSyntaxNode,
-            Next::Recursing => EvaluatorState::Recursing,
-            Next::Effect { effect, path } => {
+    pub fn state(&self, _: &Codebase) -> EvaluatorState {
+        match self.state.clone() {
+            StepResult::Running { active_value } => EvaluatorState::Running {
+                path: active_value.source,
+            },
+            StepResult::Recursing => EvaluatorState::Recursing,
+            StepResult::Effect { effect, path } => {
                 EvaluatorState::Effect { effect, path }
             }
-            Next::Error { path } => EvaluatorState::Error { path },
-            Next::Finished { output } => EvaluatorState::Finished { output },
+            StepResult::Error { path } => EvaluatorState::Error { path },
+            StepResult::Finished { output } => {
+                EvaluatorState::Finished { output }
+            }
         }
     }
 }
@@ -355,7 +363,6 @@ impl StepResult {
 #[derive(Debug, Eq, PartialEq)]
 pub enum EvaluatorState {
     Running { path: Option<NodePath> },
-    IgnoringSyntaxNode,
     Recursing,
     Effect { effect: Effect, path: NodePath },
     Error { path: NodePath },
@@ -366,7 +373,6 @@ impl EvaluatorState {
     pub fn path(&self) -> Option<&NodePath> {
         match self {
             Self::Running { path } => path.as_ref(),
-            Self::IgnoringSyntaxNode => None,
             Self::Recursing => None,
             Self::Effect { effect: _, path } => Some(path),
             Self::Error { path } => Some(path),
