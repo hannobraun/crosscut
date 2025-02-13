@@ -64,9 +64,9 @@ impl Language {
         self.evaluator.evaluate(root, active_value, &self.codebase);
     }
 
-    pub fn step(&mut self) -> EvaluatorState {
+    pub fn step(&mut self) -> &EvaluatorState {
         self.evaluator.step(&self.codebase);
-        self.evaluator().state().clone()
+        self.evaluator().state()
     }
 
     pub fn provide_host_function_output(&mut self, output: Value) {
@@ -112,7 +112,7 @@ impl Language {
         let mut i = 0;
 
         loop {
-            match self.step() {
+            match self.step().clone() {
                 EvaluatorState::Running { .. } => {
                     // We're not concerned with intermediate results here.
                 }

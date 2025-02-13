@@ -99,7 +99,7 @@ where
                 break;
             }
 
-            match self.language.step() {
+            match self.language.step().clone() {
                 EvaluatorState::Running { .. } => {
                     // We're not interested in intermediate values here.
                     continue;
