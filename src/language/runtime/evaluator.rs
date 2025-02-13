@@ -86,7 +86,11 @@ impl Evaluator {
     }
 
     pub fn provide_host_function_output(&mut self, value: Value) {
-        let Some(Effect::ApplyHostFunction { .. }) = &self.effect else {
+        let EvaluatorState::Effect {
+            effect: Effect::ApplyHostFunction { .. },
+            ..
+        } = &self.state
+        else {
             panic!(
                 "Trying to provide host function output, but no host function \
                 is currently being applied."
