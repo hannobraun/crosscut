@@ -83,12 +83,17 @@ impl Evaluator {
     }
 
     pub fn provide_host_function_output(&mut self, value: Value) {
-        let (Some(Effect::ApplyHostFunction { .. }), Some(context)) =
-            (&self.effect, self.contexts.last())
-        else {
+        let Some(Effect::ApplyHostFunction { .. }) = &self.effect else {
             panic!(
                 "Trying to provide host function output, but no host function \
                 is currently being applied."
+            );
+        };
+        let Some(context) = self.contexts.last() else {
+            unreachable!(
+                "Host function is being applied, but no context is available. \
+                This should not be possible, because without a context, what \
+                would have triggered the effect?"
             );
         };
 
