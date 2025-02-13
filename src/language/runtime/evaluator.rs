@@ -28,11 +28,7 @@ impl Evaluator {
             effect: None,
         };
 
-        evaluator.evaluate(
-            evaluator.root,
-            evaluator.active_value.inner.clone(),
-            codebase,
-        );
+        evaluator.evaluate(evaluator.root, Value::Nothing, codebase);
 
         evaluator
     }
