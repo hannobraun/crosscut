@@ -112,7 +112,7 @@ impl Language {
 
         loop {
             match self.step() {
-                StepResult::Running { output: _ } => {
+                StepResult::Running { .. } => {
                     // We're not concerned with intermediate results here.
                 }
                 StepResult::Recursing => {}
