@@ -123,7 +123,22 @@ impl Evaluator {
     }
 
     pub fn trigger_effect(&mut self, effect: Effect) {
-        self.effect = Some(effect);
+        self.effect = Some(effect.clone());
+
+        let Some(context) = self.contexts.last_mut() else {
+            panic!(
+                "Not allowed to trigger effect, if there is no context it \
+                could come from."
+            );
+        };
+        let Some(path) = context.nodes_from_root.last().copied() else {
+            panic!(
+                "Not allowed to trigger effect, if there is no active syntax \
+                node that could trigger it."
+            );
+        };
+
+        self.state = EvaluatorState::Effect { effect, path };
     }
 
     pub fn step(&mut self, codebase: &Codebase) {
