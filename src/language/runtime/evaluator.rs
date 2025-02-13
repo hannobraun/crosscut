@@ -348,6 +348,18 @@ impl StepResult {
             None
         }
     }
+
+    pub fn path(&self) -> Option<&NodePath> {
+        match self {
+            StepResult::Running { active_value } => {
+                active_value.source.as_ref()
+            }
+            StepResult::Recursing => None,
+            StepResult::Effect { path, .. } => Some(path),
+            StepResult::Error { path } => Some(path),
+            StepResult::Finished { .. } => None,
+        }
+    }
 }
 
 #[derive(Debug, Eq, PartialEq)]
@@ -357,15 +369,7 @@ pub struct EvaluatorState {
 
 impl EvaluatorState {
     pub fn path(&self) -> Option<&NodePath> {
-        match &self.inner {
-            StepResult::Running { active_value } => {
-                active_value.source.as_ref()
-            }
-            StepResult::Recursing => None,
-            StepResult::Effect { path, .. } => Some(path),
-            StepResult::Error { path } => Some(path),
-            StepResult::Finished { .. } => None,
-        }
+        self.inner.path()
     }
 }
 
