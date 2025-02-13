@@ -79,7 +79,18 @@ impl Evaluator {
     }
 
     pub fn state<'r>(&self, codebase: &'r Codebase) -> EvaluatorState<'r> {
-        self.next(codebase)
+        match self.next(codebase) {
+            Next::Running { expression, path } => {
+                EvaluatorState::Running { expression, path }
+            }
+            Next::IgnoringSyntaxNode => EvaluatorState::IgnoringSyntaxNode,
+            Next::Recursing => EvaluatorState::Recursing,
+            Next::Effect { effect, path } => {
+                EvaluatorState::Effect { effect, path }
+            }
+            Next::Error { path } => EvaluatorState::Error { path },
+            Next::Finished { output } => EvaluatorState::Finished { output },
+        }
     }
 
     pub fn provide_host_function_output(&mut self, value: Value) {
@@ -119,14 +130,14 @@ impl Evaluator {
     pub fn step(&mut self, codebase: &Codebase) -> StepResult {
         let (next, path) = loop {
             match self.next(codebase) {
-                EvaluatorState::Running { expression, path } => {
+                Next::Running { expression, path } => {
                     break (expression, path);
                 }
-                EvaluatorState::IgnoringSyntaxNode => {
+                Next::IgnoringSyntaxNode => {
                     self.advance();
                     continue;
                 }
-                EvaluatorState::Recursing => {
+                Next::Recursing => {
                     self.evaluate(self.root, Value::Nothing, codebase);
 
                     // We could `continue` here. Then the following call to
@@ -148,13 +159,13 @@ impl Evaluator {
                     // endless loops.
                     return StepResult::Recursing;
                 }
-                EvaluatorState::Effect { effect, path: _ } => {
+                Next::Effect { effect, path: _ } => {
                     return StepResult::EffectTriggered { effect };
                 }
-                EvaluatorState::Error { path: _ } => {
+                Next::Error { path: _ } => {
                     return StepResult::Error;
                 }
-                EvaluatorState::Finished { output } => {
+                Next::Finished { output } => {
                     return StepResult::Finished { output };
                 }
             }
@@ -250,9 +261,9 @@ impl Evaluator {
         result
     }
 
-    fn next<'r>(&self, codebase: &'r Codebase) -> EvaluatorState<'r> {
+    fn next<'r>(&self, codebase: &'r Codebase) -> Next<'r> {
         let Some(context) = self.contexts.last() else {
-            return EvaluatorState::Finished {
+            return Next::Finished {
                 output: ValueWithSource {
                     inner: Value::Nothing,
                     source: None,
@@ -262,20 +273,20 @@ impl Evaluator {
 
         let Some(path) = context.nodes_from_root.last().copied() else {
             let output = context.active_value.clone();
-            return EvaluatorState::Finished { output };
+            return Next::Finished { output };
         };
 
         if let Some(effect) = self.effect.clone() {
-            return EvaluatorState::Effect { effect, path };
+            return Next::Effect { effect, path };
         }
 
         match &codebase.node_at(&path).kind {
-            NodeKind::Empty => EvaluatorState::IgnoringSyntaxNode,
+            NodeKind::Empty => Next::IgnoringSyntaxNode,
             NodeKind::Expression { expression } => {
-                EvaluatorState::Running { expression, path }
+                Next::Running { expression, path }
             }
-            NodeKind::Recursion => EvaluatorState::Recursing,
-            NodeKind::Error { node: _ } => EvaluatorState::Error { path },
+            NodeKind::Recursion => Next::Recursing,
+            NodeKind::Error { node: _ } => Next::Error { path },
         }
     }
 
@@ -333,6 +344,26 @@ impl EvaluatorState<'_> {
             Self::Finished { output: _ } => None,
         }
     }
+}
+
+#[derive(Debug, Eq, PartialEq)]
+pub enum Next<'r> {
+    Running {
+        expression: &'r Expression,
+        path: NodePath,
+    },
+    IgnoringSyntaxNode,
+    Recursing,
+    Effect {
+        effect: Effect,
+        path: NodePath,
+    },
+    Error {
+        path: NodePath,
+    },
+    Finished {
+        output: ValueWithSource,
+    },
 }
 
 #[derive(Debug, Eq, PartialEq)]
