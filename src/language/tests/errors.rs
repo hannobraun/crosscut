@@ -136,7 +136,7 @@ fn pure_runtime_error_should_result_in_error_state() {
         .unwrap();
     assert_eq!(
         language.evaluator().state(),
-        StepResult::Effect {
+        &StepResult::Effect {
             effect: Effect::UnexpectedInput {
                 expected: Type::Nothing,
                 actual: Value::Integer { value: 127 },

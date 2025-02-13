@@ -290,8 +290,8 @@ impl Evaluator {
         }
     }
 
-    pub fn state(&self) -> StepResult {
-        self.state.clone()
+    pub fn state(&self) -> &StepResult {
+        &self.state
     }
 }
 
