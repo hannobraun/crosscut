@@ -134,7 +134,7 @@ impl Language {
                 StepResult::Finished { output } => {
                     break Ok(output);
                 }
-                StepResult::Error => {
+                StepResult::Error { .. } => {
                     panic!("Unexpected runtime error.");
                 }
             }

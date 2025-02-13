@@ -141,7 +141,7 @@ where
                         }
                     }
                 },
-                StepResult::Error => {
+                StepResult::Error { .. } => {
                     // Currently not handling errors.
                 }
             }
