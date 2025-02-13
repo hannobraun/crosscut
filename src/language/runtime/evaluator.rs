@@ -286,7 +286,7 @@ impl Evaluator {
             Next::Running {
                 expression: _,
                 path,
-            } => EvaluatorState::Running { path },
+            } => EvaluatorState::Running { path: Some(path) },
             Next::IgnoringSyntaxNode => EvaluatorState::IgnoringSyntaxNode,
             Next::Recursing => EvaluatorState::Recursing,
             Next::Effect { effect, path } => {
@@ -353,7 +353,7 @@ impl StepResult {
 
 #[derive(Debug, Eq, PartialEq)]
 pub enum EvaluatorState {
-    Running { path: NodePath },
+    Running { path: Option<NodePath> },
     IgnoringSyntaxNode,
     Recursing,
     Effect { effect: Effect, path: NodePath },
@@ -364,7 +364,7 @@ pub enum EvaluatorState {
 impl EvaluatorState {
     pub fn path(&self) -> Option<&NodePath> {
         match self {
-            Self::Running { path } => Some(path),
+            Self::Running { path } => path.as_ref(),
             Self::IgnoringSyntaxNode => None,
             Self::Recursing => None,
             Self::Effect { effect: _, path } => Some(path),
