@@ -239,7 +239,6 @@ impl Evaluator {
 
         let Some(path) = self.next.last().copied() else {
             let output = context.active_value.clone();
-
             return EvaluatorState::Finished { output };
         };
 
