@@ -104,7 +104,7 @@ impl Evaluator {
         };
 
         self.effect = None;
-        self.contexts.last_mut().unwrap().active_value = ValueWithSource {
+        context.active_value = ValueWithSource {
             inner: value,
             source: Some(source),
         };
