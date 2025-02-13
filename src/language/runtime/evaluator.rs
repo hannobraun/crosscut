@@ -55,7 +55,7 @@ impl Evaluator {
                     Expression::IntrinsicFunction {
                         intrinsic:
                             IntrinsicFunction::Literal {
-                                literal: Literal::Function,
+                                literal: Literal::Function | Literal::Tuple,
                             },
                     },
             } = codebase.node_at(&path).kind
