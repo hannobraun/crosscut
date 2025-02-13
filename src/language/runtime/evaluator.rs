@@ -147,13 +147,13 @@ impl Evaluator {
             }
         };
 
-        let active_value = self.contexts.last_mut().unwrap();
+        let context = self.contexts.last_mut().unwrap();
 
         match next {
             Expression::HostFunction { id } => {
                 let effect = Effect::ApplyHostFunction {
                     id: *id,
-                    input: active_value.active_value.inner.clone(),
+                    input: context.active_value.inner.clone(),
                 };
                 self.effect = Some(effect.clone());
 
@@ -165,8 +165,7 @@ impl Evaluator {
                         // Active value stays the same.
                     }
                     IntrinsicFunction::Literal { literal } => {
-                        let Value::Nothing = active_value.active_value.inner
-                        else {
+                        let Value::Nothing = context.active_value.inner else {
                             // A literal is a function that takes `None`. If
                             // that isn't what we currently have, that's an
                             // error.
@@ -176,7 +175,7 @@ impl Evaluator {
                             // we need to keep track of it here.
                             self.effect = Some(Effect::UnexpectedInput {
                                 expected: Type::Nothing,
-                                actual: active_value.active_value.inner.clone(),
+                                actual: context.active_value.inner.clone(),
                             });
 
                             return StepResult::Error;
@@ -208,7 +207,7 @@ impl Evaluator {
                             }
                         };
 
-                        active_value.active_value = ValueWithSource {
+                        context.active_value = ValueWithSource {
                             inner: value,
                             source: Some(path),
                         };
@@ -218,7 +217,7 @@ impl Evaluator {
         };
 
         let result = StepResult::FunctionApplied {
-            output: active_value.active_value.inner.clone(),
+            output: context.active_value.inner.clone(),
         };
 
         self.advance();
