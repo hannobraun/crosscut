@@ -64,7 +64,7 @@ fn render_interpreter_state<A: EditorOutputAdapter>(
     context: &RenderContext,
 ) -> anyhow::Result<()> {
     adapter.attribute(Attribute::Bold, |adapter| {
-        match context.evaluator.state(context.codebase) {
+        match context.evaluator.state() {
             EvaluatorState::Running { .. } | EvaluatorState::Recursing => {
                 adapter.color(Color::DarkGreen, |adapter| {
                     writeln!(adapter, "Running")
@@ -144,8 +144,8 @@ fn render_possibly_active_node<A: EditorOutputAdapter>(
     adapter: &mut A,
     context: &mut RenderContext,
 ) -> anyhow::Result<()> {
-    let is_active_node = context.evaluator.state(context.codebase).path()
-        == Some(&located_node.path);
+    let is_active_node =
+        context.evaluator.state().path() == Some(&located_node.path);
 
     if is_active_node {
         adapter.attribute(Attribute::Bold, |adapter| {

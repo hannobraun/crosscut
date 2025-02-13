@@ -290,7 +290,7 @@ impl Evaluator {
         }
     }
 
-    pub fn state(&self, _: &Codebase) -> EvaluatorState {
+    pub fn state(&self) -> EvaluatorState {
         match self.state.clone() {
             StepResult::Running { active_value } => EvaluatorState::Running {
                 path: active_value.source,
