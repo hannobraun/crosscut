@@ -11,7 +11,6 @@ use super::{Value, ValueWithSource};
 #[derive(Debug)]
 pub struct Evaluator {
     root: NodePath,
-    next: Vec<NodePath>,
     contexts: Vec<Context>,
     effect: Option<Effect>,
 }
@@ -20,7 +19,6 @@ impl Evaluator {
     pub fn new(root: NodePath, codebase: &Codebase) -> Self {
         let mut evaluator = Self {
             root,
-            next: Vec::new(),
             contexts: Vec::new(),
             effect: None,
         };
@@ -41,7 +39,8 @@ impl Evaluator {
         codebase: &Codebase,
     ) {
         self.root = root;
-        let context = Context {
+        let mut context = Context {
+            next: Vec::new(),
             active_value: ValueWithSource {
                 inner: active_value,
                 source: None,
@@ -50,7 +49,7 @@ impl Evaluator {
         let mut path = root;
 
         loop {
-            self.next.push(path);
+            context.next.push(path);
 
             if let NodeKind::Expression {
                 expression:
@@ -85,7 +84,7 @@ impl Evaluator {
 
     pub fn provide_host_function_output(&mut self, value: Value) {
         let (Some(Effect::ApplyHostFunction { .. }), Some(source)) =
-            (self.effect.clone(), self.next.last())
+            (self.effect.clone(), self.contexts.last())
         else {
             panic!(
                 "Trying to provide host function output, but no host function \
@@ -96,7 +95,7 @@ impl Evaluator {
         self.effect = None;
         self.contexts.last_mut().unwrap().active_value = ValueWithSource {
             inner: value,
-            source: Some(*source),
+            source: source.next.last().copied(),
         };
         self.advance();
     }
@@ -237,7 +236,7 @@ impl Evaluator {
             };
         };
 
-        let Some(path) = self.next.last().copied() else {
+        let Some(path) = context.next.last().copied() else {
             let output = context.active_value.clone();
             return EvaluatorState::Finished { output };
         };
@@ -257,12 +256,15 @@ impl Evaluator {
     }
 
     fn advance(&mut self) {
-        self.next.pop();
+        if let Some(context) = self.contexts.last_mut() {
+            context.next.pop();
+        }
     }
 }
 
 #[derive(Clone, Debug)]
 pub struct Context {
+    pub next: Vec<NodePath>,
     pub active_value: ValueWithSource,
 }
 
