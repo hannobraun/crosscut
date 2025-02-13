@@ -332,7 +332,7 @@ pub enum Next<'r> {
     },
 }
 
-#[derive(Debug, Eq, PartialEq)]
+#[derive(Clone, Debug, Eq, PartialEq)]
 pub enum StepResult {
     Running { active_value: ValueWithSource },
     Recursing,
