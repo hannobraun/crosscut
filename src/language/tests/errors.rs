@@ -4,7 +4,7 @@ use crate::language::{
     code::{CodeError, Expression, IntrinsicFunction, Type},
     instance::Language,
     packages::{Function, FunctionId, Package},
-    runtime::{Effect, StepResult, Value},
+    runtime::{Effect, EvaluatorState, Value},
 };
 
 #[test]
@@ -21,7 +21,7 @@ fn number_literal_wrong_input() {
         language.step().active_value(),
         Some(Value::Integer { value: 127 }),
     );
-    assert!(matches!(language.step(), StepResult::Effect { .. }));
+    assert!(matches!(language.step(), EvaluatorState::Effect { .. }));
 }
 
 #[test]
@@ -41,7 +41,7 @@ fn unresolved_syntax_node() {
     );
 
     // And it should also result in a runtime error when stepping.
-    assert!(matches!(language.step(), StepResult::Error { .. }));
+    assert!(matches!(language.step(), EvaluatorState::Error { .. }));
 
     // Once we resolve the error, it should no longer be there.
     language.enter_code("y");
@@ -107,8 +107,8 @@ fn do_not_step_beyond_errors() {
 
     language.enter_code("error");
 
-    assert!(matches!(language.step(), StepResult::Error { .. }));
-    assert!(matches!(language.step(), StepResult::Error { .. }));
+    assert!(matches!(language.step(), EvaluatorState::Error { .. }));
+    assert!(matches!(language.step(), EvaluatorState::Error { .. }));
 }
 
 #[test]
@@ -126,7 +126,7 @@ fn pure_runtime_error_should_result_in_error_state() {
         language.step().active_value(),
         Some(Value::Integer { value: 127 }),
     );
-    assert!(matches!(language.step(), StepResult::Effect { .. }));
+    assert!(matches!(language.step(), EvaluatorState::Effect { .. }));
 
     let (_valid, invalid) = language
         .codebase()
@@ -136,7 +136,7 @@ fn pure_runtime_error_should_result_in_error_state() {
         .unwrap();
     assert_eq!(
         language.evaluator().state(),
-        &StepResult::Effect {
+        &EvaluatorState::Effect {
             effect: Effect::UnexpectedInput {
                 expected: Type::Nothing,
                 actual: Value::Integer { value: 127 },

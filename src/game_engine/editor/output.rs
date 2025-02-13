@@ -10,7 +10,7 @@ use crate::{
         editor::Editor,
         instance::Language,
         packages::Package,
-        runtime::{Effect, Evaluator, StepResult, Value},
+        runtime::{Effect, Evaluator, EvaluatorState, Value},
     },
 };
 
@@ -65,12 +65,12 @@ fn render_interpreter_state<A: EditorOutputAdapter>(
 ) -> anyhow::Result<()> {
     adapter.attribute(Attribute::Bold, |adapter| {
         match context.evaluator.state() {
-            StepResult::Running { .. } | StepResult::Recursing => {
+            EvaluatorState::Running { .. } | EvaluatorState::Recursing => {
                 adapter.color(Color::DarkGreen, |adapter| {
                     writeln!(adapter, "Running")
                 })?;
             }
-            StepResult::Effect { effect, .. } => {
+            EvaluatorState::Effect { effect, .. } => {
                 adapter.color(Color::DarkCyan, |adapter| {
                     write!(adapter, "Effect: ")?;
 
@@ -93,7 +93,7 @@ fn render_interpreter_state<A: EditorOutputAdapter>(
                     Ok(())
                 })?;
             }
-            StepResult::Error { path } => {
+            EvaluatorState::Error { path } => {
                 // While we have a dynamic type system, it's possible that an
                 // error is only known at runtime. In that case, we'll get
                 // `None` here.
@@ -111,7 +111,7 @@ fn render_interpreter_state<A: EditorOutputAdapter>(
                     Ok(())
                 })?;
             }
-            StepResult::Finished { output } => {
+            EvaluatorState::Finished { output } => {
                 adapter.color(Color::DarkYellow, |adapter| {
                     writeln!(adapter, "Finished: {}", output.inner)
                 })?;

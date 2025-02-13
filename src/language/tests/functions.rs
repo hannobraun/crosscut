@@ -1,7 +1,7 @@
 use crate::language::{
     code::{CodeError, NodePath},
     instance::Language,
-    runtime::{Effect, StepResult, Value, ValueWithSource},
+    runtime::{Effect, EvaluatorState, Value, ValueWithSource},
 };
 
 #[test]
@@ -46,7 +46,7 @@ fn self_recursion() {
         language.step().active_value(),
         Some(Value::Integer { value: 127 }),
     );
-    assert_eq!(language.step(), StepResult::Recursing);
+    assert_eq!(language.step(), EvaluatorState::Recursing);
     assert_eq!(
         language.step().active_value(),
         Some(Value::Integer { value: 127 }),
@@ -68,7 +68,7 @@ fn empty_function() {
         Some(&CodeError::FunctionWithoutBody),
     );
 
-    assert!(matches!(language.step(), StepResult::Error { .. }));
+    assert!(matches!(language.step(), EvaluatorState::Error { .. }));
 }
 
 pub trait IntoFunctionBody {

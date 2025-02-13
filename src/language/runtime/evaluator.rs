@@ -13,7 +13,7 @@ pub struct Evaluator {
     root: NodePath,
     contexts: Vec<Context>,
     effect: Option<Effect>,
-    state: StepResult,
+    state: EvaluatorState,
 }
 
 impl Evaluator {
@@ -22,7 +22,7 @@ impl Evaluator {
             root,
             contexts: Vec::new(),
             effect: None,
-            state: StepResult::Running {
+            state: EvaluatorState::Running {
                 active_value: ValueWithSource {
                     inner: Value::Nothing,
                     source: None,
@@ -119,7 +119,7 @@ impl Evaluator {
         self.effect = Some(effect);
     }
 
-    pub fn step(&mut self, codebase: &Codebase) -> StepResult {
+    pub fn step(&mut self, codebase: &Codebase) -> EvaluatorState {
         let (expression, path) = loop {
             match self.next(codebase) {
                 Next::Running { expression, path } => {
@@ -149,16 +149,16 @@ impl Evaluator {
                     // that. All we're doing here is evaluate Crosscut code, so
                     // let's do that, and let the caller decide what to do about
                     // endless loops.
-                    return StepResult::Recursing;
+                    return EvaluatorState::Recursing;
                 }
                 Next::Effect { effect, path } => {
-                    return StepResult::Effect { effect, path };
+                    return EvaluatorState::Effect { effect, path };
                 }
                 Next::Error { path } => {
-                    return StepResult::Error { path };
+                    return EvaluatorState::Error { path };
                 }
                 Next::Finished { output } => {
-                    return StepResult::Finished { output };
+                    return EvaluatorState::Finished { output };
                 }
             }
         };
@@ -185,7 +185,7 @@ impl Evaluator {
                 };
                 self.effect = Some(effect.clone());
 
-                return StepResult::Effect { effect, path };
+                return EvaluatorState::Effect { effect, path };
             }
             Expression::IntrinsicFunction { intrinsic } => {
                 match intrinsic {
@@ -207,7 +207,8 @@ impl Evaluator {
                             };
                             self.effect = Some(effect.clone());
 
-                            self.state = StepResult::Effect { effect, path };
+                            self.state =
+                                EvaluatorState::Effect { effect, path };
                             return self.state.clone();
                         };
 
@@ -232,7 +233,7 @@ impl Evaluator {
                                 }
                                 Literal::Tuple => {
                                     // Evaluating tuples is not supported yet.
-                                    return StepResult::Error { path };
+                                    return EvaluatorState::Error { path };
                                 }
                             }
                         };
@@ -246,7 +247,7 @@ impl Evaluator {
             }
         };
 
-        let result = StepResult::Running {
+        let result = EvaluatorState::Running {
             active_value: context.active_value.clone(),
         };
 
@@ -290,7 +291,7 @@ impl Evaluator {
         }
     }
 
-    pub fn state(&self) -> &StepResult {
+    pub fn state(&self) -> &EvaluatorState {
         &self.state
     }
 }
@@ -329,7 +330,7 @@ pub enum Next<'r> {
 }
 
 #[derive(Clone, Debug, Eq, PartialEq)]
-pub enum StepResult {
+pub enum EvaluatorState {
     Running { active_value: ValueWithSource },
     Recursing,
     Effect { effect: Effect, path: NodePath },
@@ -337,7 +338,7 @@ pub enum StepResult {
     Error { path: NodePath },
 }
 
-impl StepResult {
+impl EvaluatorState {
     #[cfg(test)]
     pub fn active_value(&self) -> Option<Value> {
         if let Self::Running { active_value, .. } = self {
@@ -368,7 +369,7 @@ pub enum Effect {
 mod tests {
     use crate::language::{
         code::{Codebase, Node, NodeKind},
-        runtime::{Evaluator, StepResult},
+        runtime::{Evaluator, EvaluatorState},
     };
 
     #[test]
@@ -389,6 +390,6 @@ mod tests {
 
         let mut evaluator = Evaluator::new(codebase.root().path, &codebase);
 
-        assert_eq!(evaluator.step(&codebase), StepResult::Recursing);
+        assert_eq!(evaluator.step(&codebase), EvaluatorState::Recursing);
     }
 }

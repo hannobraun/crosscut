@@ -2,7 +2,7 @@ use crate::language::{
     code::Type,
     instance::Language,
     packages::{Function, FunctionId, Package},
-    runtime::{Effect, StepResult, Value},
+    runtime::{Effect, EvaluatorState, Value},
     tests::functions::IntoFunctionBody,
 };
 
@@ -64,7 +64,7 @@ fn host_functions_can_trigger_effects() {
         });
 
     assert_eq!(output.as_ref(), Err(&effect));
-    assert!(matches!(language.step(), StepResult::Effect { .. }));
+    assert!(matches!(language.step(), EvaluatorState::Effect { .. }));
 }
 
 #[test]
