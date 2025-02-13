@@ -100,11 +100,8 @@ where
             }
 
             match self.language.step().clone() {
-                EvaluatorState::Running { .. } => {
+                EvaluatorState::Running { .. } | EvaluatorState::Recursing => {
                     // We're not interested in intermediate values here.
-                    continue;
-                }
-                EvaluatorState::Recursing => {
                     continue;
                 }
                 EvaluatorState::Effect { effect, path: _ } => match effect {
