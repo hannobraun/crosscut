@@ -108,6 +108,7 @@ impl Evaluator {
             inner: value,
             source: Some(source),
         };
+
         self.advance();
     }
 
