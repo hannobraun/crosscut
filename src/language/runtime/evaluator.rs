@@ -78,11 +78,12 @@ impl Evaluator {
         self.contexts.push(context);
     }
 
-    pub fn state<'r>(&self, codebase: &'r Codebase) -> EvaluatorState<'r> {
+    pub fn state(&self, codebase: &Codebase) -> EvaluatorState {
         match self.next(codebase) {
-            Next::Running { expression, path } => {
-                EvaluatorState::Running { expression, path }
-            }
+            Next::Running {
+                expression: _,
+                path,
+            } => EvaluatorState::Running { path },
             Next::IgnoringSyntaxNode => EvaluatorState::IgnoringSyntaxNode,
             Next::Recursing => EvaluatorState::Recursing,
             Next::Effect { effect, path } => {
@@ -311,32 +312,19 @@ pub struct Context {
 }
 
 #[derive(Debug, Eq, PartialEq)]
-pub enum EvaluatorState<'r> {
-    Running {
-        expression: &'r Expression,
-        path: NodePath,
-    },
+pub enum EvaluatorState {
+    Running { path: NodePath },
     IgnoringSyntaxNode,
     Recursing,
-    Effect {
-        effect: Effect,
-        path: NodePath,
-    },
-    Error {
-        path: NodePath,
-    },
-    Finished {
-        output: ValueWithSource,
-    },
+    Effect { effect: Effect, path: NodePath },
+    Error { path: NodePath },
+    Finished { output: ValueWithSource },
 }
 
-impl EvaluatorState<'_> {
+impl EvaluatorState {
     pub fn path(&self) -> Option<&NodePath> {
         match self {
-            Self::Running {
-                expression: _,
-                path,
-            } => Some(path),
+            Self::Running { path } => Some(path),
             Self::IgnoringSyntaxNode => None,
             Self::Recursing => None,
             Self::Effect { effect: _, path } => Some(path),
