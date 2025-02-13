@@ -83,7 +83,7 @@ impl Evaluator {
     }
 
     pub fn provide_host_function_output(&mut self, value: Value) {
-        let (Some(Effect::ApplyHostFunction { .. }), Some(source)) =
+        let (Some(Effect::ApplyHostFunction { .. }), Some(context)) =
             (self.effect.clone(), self.contexts.last())
         else {
             panic!(
@@ -95,7 +95,7 @@ impl Evaluator {
         self.effect = None;
         self.contexts.last_mut().unwrap().active_value = ValueWithSource {
             inner: value,
-            source: source.next.last().copied(),
+            source: context.next.last().copied(),
         };
         self.advance();
     }
