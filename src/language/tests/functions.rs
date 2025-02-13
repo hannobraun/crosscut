@@ -45,7 +45,7 @@ fn self_recursion() {
     assert!(matches!(
         language.step(),
         StepResult::Running {
-            output: Value::Integer { value: 127 },
+            active_value: Value::Integer { value: 127 },
             ..
         }
     ));
@@ -53,7 +53,7 @@ fn self_recursion() {
     assert!(matches!(
         language.step(),
         StepResult::Running {
-            output: Value::Integer { value: 127 },
+            active_value: Value::Integer { value: 127 },
             ..
         }
     ));
