@@ -228,15 +228,17 @@ impl Evaluator {
     }
 
     fn next<'r>(&self, codebase: &'r Codebase) -> EvaluatorState<'r> {
-        let Some(path) = self.next.last().copied() else {
-            let output = self
-                .contexts
-                .last()
-                .map(|context| context.active_value.clone())
-                .unwrap_or(ValueWithSource {
+        let Some(context) = self.contexts.last() else {
+            return EvaluatorState::Finished {
+                output: ValueWithSource {
                     inner: Value::Nothing,
                     source: None,
-                });
+                },
+            };
+        };
+
+        let Some(path) = self.next.last().copied() else {
+            let output = context.active_value.clone();
 
             return EvaluatorState::Finished { output };
         };
