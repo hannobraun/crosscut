@@ -297,7 +297,7 @@ impl Evaluator {
             return Next::Finished { output };
         };
 
-        if let Some(effect) = self.effect.clone() {
+        if let EvaluatorState::Effect { effect, path } = self.state.clone() {
             return Next::Effect { effect, path };
         }
 
