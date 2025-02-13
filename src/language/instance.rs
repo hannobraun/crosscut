@@ -65,7 +65,8 @@ impl Language {
     }
 
     pub fn step(&mut self) -> EvaluatorState {
-        self.evaluator.step(&self.codebase)
+        self.evaluator.step(&self.codebase);
+        self.evaluator().state().clone()
     }
 
     pub fn provide_host_function_output(&mut self, output: Value) {
