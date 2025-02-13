@@ -96,11 +96,17 @@ impl Evaluator {
                 would have triggered the effect?"
             );
         };
+        let Some(source) = context.next.last().copied() else {
+            unreachable!(
+                "Host function is being applied, but there doesn't seem to be \
+                a syntax node that could have triggered it."
+            );
+        };
 
         self.effect = None;
         self.contexts.last_mut().unwrap().active_value = ValueWithSource {
             inner: value,
-            source: context.next.last().copied(),
+            source: Some(source),
         };
         self.advance();
     }
