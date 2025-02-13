@@ -200,12 +200,13 @@ impl Evaluator {
 
         match expression {
             Expression::HostFunction { id } => {
-                let effect = Effect::ApplyHostFunction {
-                    id: *id,
-                    input: context.active_value.inner.clone(),
+                self.state = EvaluatorState::Effect {
+                    effect: Effect::ApplyHostFunction {
+                        id: *id,
+                        input: context.active_value.inner.clone(),
+                    },
+                    path,
                 };
-
-                self.state = EvaluatorState::Effect { effect, path };
                 return;
             }
             Expression::IntrinsicFunction { intrinsic } => {
