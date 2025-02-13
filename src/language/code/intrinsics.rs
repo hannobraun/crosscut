@@ -9,7 +9,7 @@ pub enum IntrinsicFunction {
 impl IntrinsicFunction {
     pub fn resolve(name: &str) -> Option<Self> {
         if let Ok(value) = name.parse() {
-            Some(IntrinsicFunction::Literal {
+            Some(Self::Literal {
                 literal: Literal::Integer { value },
             })
         } else {
