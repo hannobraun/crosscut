@@ -1,7 +1,7 @@
 use super::{
     code::{
         CodeError, Codebase, Expression, IntrinsicFunction, Literal, Node,
-        NodeKind, NodePath,
+        NodeHash, NodeKind, NodePath,
     },
     packages::Package,
 };
@@ -31,7 +31,7 @@ fn compile_token(
     let (kind, maybe_error) = if token.is_empty() {
         (NodeKind::Empty, None)
     } else if let Some((node, maybe_err)) =
-        resolve_keyword(token, path, codebase)
+        resolve_keyword(token, path, node.child().copied(), codebase)
     {
         (node, maybe_err)
     } else {
@@ -54,6 +54,7 @@ fn compile_token(
 fn resolve_keyword(
     name: &str,
     path: &NodePath,
+    _: Option<NodeHash>,
     codebase: &Codebase,
 ) -> Option<(NodeKind, Option<CodeError>)> {
     match name {
