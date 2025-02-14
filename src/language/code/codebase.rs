@@ -17,11 +17,11 @@ pub struct Codebase {
 impl Codebase {
     pub fn new() -> Self {
         let mut nodes = Nodes::new();
-        let root = nodes.insert(Node::Empty { child: None });
+        let empty = nodes.insert(Node::Empty { child: None });
 
         Self {
-            root,
-            empty: root,
+            root: empty,
+            empty,
             nodes,
             changes: Changes::new(),
             errors: BTreeMap::new(),
