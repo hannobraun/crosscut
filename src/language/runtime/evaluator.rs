@@ -281,7 +281,7 @@ impl Evaluator {
         self.advance();
     }
 
-    fn next<'r>(&self, codebase: &'r Codebase) -> Next<'r> {
+    fn next<'r>(&mut self, codebase: &'r Codebase) -> Next<'r> {
         let Some(context) = self.contexts.last() else {
             return Next::Finished {
                 output: ValueWithSource {
