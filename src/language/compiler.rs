@@ -12,7 +12,8 @@ pub fn compile_and_replace(
     package: &Package,
     codebase: &mut Codebase,
 ) {
-    let (node, maybe_error) = compile_token(token, path, package, codebase);
+    let mut node = codebase.node_at(path).clone();
+    let maybe_error = compile_token(token, &mut node, path, package, codebase);
 
     *path = codebase.replace_node(path, node);
     if let Some(error) = maybe_error {
@@ -22,10 +23,11 @@ pub fn compile_and_replace(
 
 fn compile_token(
     token: &str,
+    node: &mut Node,
     path: &NodePath,
     package: &Package,
     codebase: &Codebase,
-) -> (Node, Option<CodeError>) {
+) -> Option<CodeError> {
     let (kind, maybe_error) = if token.is_empty() {
         (NodeKind::Empty, None)
     } else if let Some((node, maybe_err)) =
@@ -44,12 +46,12 @@ fn compile_token(
         }
     };
 
-    let node = Node {
+    *node = Node {
         child: codebase.child_of(path).map(|path| *path.hash()),
         kind,
     };
 
-    (node, maybe_error)
+    maybe_error
 }
 
 fn resolve_keyword(
