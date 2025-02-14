@@ -132,12 +132,12 @@ impl Node {
         }
     }
 
-    pub fn child_mut(&mut self) -> &mut Option<NodeHash> {
+    pub fn replace_child(&mut self, replacement: Option<NodeHash>) {
         match self {
-            Self::Empty { child } => child,
-            Self::Expression { child, .. } => child,
-            Self::Recursion { child } => child,
-            Self::Error { child, .. } => child,
+            Self::Empty { child } => *child = replacement,
+            Self::Expression { child, .. } => *child = replacement,
+            Self::Recursion { child } => *child = replacement,
+            Self::Error { child, .. } => *child = replacement,
         }
     }
 
