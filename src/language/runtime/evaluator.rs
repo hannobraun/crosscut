@@ -293,6 +293,7 @@ impl Evaluator {
 
         let Some(path) = context.nodes_from_root.last().copied() else {
             let output = context.active_value.clone();
+            self.contexts.pop();
             return Next::Finished { output };
         };
 
