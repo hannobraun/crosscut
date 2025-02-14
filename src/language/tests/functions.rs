@@ -32,7 +32,7 @@ fn self_recursion() {
 
     let mut language = Language::without_package();
 
-    language.enter_code("127 self fn");
+    language.enter_code("identity self fn");
     let path = match language.step_until_finished().into_function_body() {
         Ok(path) => path,
         output => {
@@ -40,13 +40,16 @@ fn self_recursion() {
         }
     };
 
-    language.evaluate(path, Value::Nothing);
+    language.evaluate(path, Value::Integer { value: 127 });
 
     assert_eq!(
         language.step().active_value(),
         Some(Value::Integer { value: 127 }),
     );
-    assert_eq!(language.step().active_value(), Some(Value::Nothing));
+    assert_eq!(
+        language.step().active_value(),
+        Some(Value::Integer { value: 127 }),
+    );
     assert_eq!(
         language.step().active_value(),
         Some(Value::Integer { value: 127 }),

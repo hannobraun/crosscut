@@ -343,7 +343,11 @@ impl Evaluator {
                 Next::Running { expression, path }
             }
             NodeKind::Recursion => {
-                self.evaluate(self.root, Value::Nothing, codebase);
+                self.evaluate(
+                    self.root,
+                    context.active_value.inner.clone(),
+                    codebase,
+                );
                 Next::Recursing
             }
             NodeKind::Error { node: _ } => Next::Error { path },
