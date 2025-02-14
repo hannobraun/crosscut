@@ -262,8 +262,29 @@ impl Evaluator {
                                     Value::Integer { value }
                                 }
                                 Literal::Tuple => {
-                                    // Evaluating tuples is not supported yet.
-                                    self.state = EvaluatorState::Error { path };
+                                    let Some(child) = codebase.child_of(&path)
+                                    else {
+                                        unreachable!(
+                                            "Tuple literal must have a child, \
+                                            or it wouldn't have been resolved \
+                                            as a tuple literal."
+                                        );
+                                    };
+
+                                    context.active_value = ValueWithSource {
+                                        inner: Value::Tuple {
+                                            elements: Vec::new(),
+                                        },
+                                        source: Some(path),
+                                    };
+
+                                    self.advance();
+                                    self.evaluate(
+                                        child,
+                                        Value::Nothing,
+                                        codebase,
+                                    );
+
                                     return;
                                 }
                             }
