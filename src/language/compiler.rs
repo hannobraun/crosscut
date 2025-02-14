@@ -30,7 +30,7 @@ fn compile_token(
 ) -> (Node, Option<CodeError>) {
     let child = node.child().copied();
 
-    let (kind, maybe_error) = if token.is_empty() {
+    let (node, maybe_error) = if token.is_empty() {
         (Node::Empty { child }, None)
     } else if let Some((node, maybe_err)) =
         resolve_keyword(token, path, child, codebase)
@@ -49,7 +49,7 @@ fn compile_token(
         }
     };
 
-    (kind, maybe_error)
+    (node, maybe_error)
 }
 
 fn resolve_keyword(
