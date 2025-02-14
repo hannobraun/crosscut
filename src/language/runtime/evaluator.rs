@@ -58,6 +58,7 @@ impl Evaluator {
                                 literal: Literal::Function | Literal::Tuple,
                             },
                     },
+                ..
             } = codebase.node_at(&path).kind
             {
                 // We have already pushed the function literal, which means
