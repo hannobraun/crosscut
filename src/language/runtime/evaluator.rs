@@ -1,7 +1,6 @@
 use crate::language::{
     code::{
-        Codebase, Expression, IntrinsicFunction, Literal, NodeKind, NodePath,
-        Type,
+        Codebase, Expression, IntrinsicFunction, Literal, Node, NodePath, Type,
     },
     packages::FunctionId,
 };
@@ -50,7 +49,7 @@ impl Evaluator {
         loop {
             nodes_from_root.push(path);
 
-            if let NodeKind::Expression {
+            if let Node::Expression {
                 expression:
                     Expression::IntrinsicFunction {
                         intrinsic:
@@ -59,7 +58,7 @@ impl Evaluator {
                             },
                     },
                 ..
-            } = codebase.node_at(&path).kind
+            } = codebase.node_at(&path)
             {
                 // We have already pushed the function literal, which means
                 // we're going to evaluate it. But we need to stop here, since
@@ -338,12 +337,12 @@ impl Evaluator {
             return Next::Effect { effect, path };
         }
 
-        match &codebase.node_at(&path).kind {
-            NodeKind::Empty { .. } => Next::IgnoringSyntaxNode,
-            NodeKind::Expression { expression, .. } => {
+        match codebase.node_at(&path) {
+            Node::Empty { .. } => Next::IgnoringSyntaxNode,
+            Node::Expression { expression, .. } => {
                 Next::Running { expression, path }
             }
-            NodeKind::Recursion { .. } => {
+            Node::Recursion { .. } => {
                 let active_value = context.active_value.inner.clone();
 
                 self.contexts.pop();
@@ -351,7 +350,7 @@ impl Evaluator {
 
                 Next::Recursing
             }
-            NodeKind::Error { .. } => Next::Error { path },
+            Node::Error { .. } => Next::Error { path },
         }
     }
 
@@ -437,7 +436,7 @@ pub enum Effect {
 #[cfg(test)]
 mod tests {
     use crate::language::{
-        code::{Codebase, Node, NodeKind},
+        code::{Codebase, Node},
         runtime::{Evaluator, Value},
     };
 
@@ -451,10 +450,8 @@ mod tests {
         let mut codebase = Codebase::new();
         codebase.insert_as_parent_of(
             codebase.root().path,
-            Node {
-                kind: NodeKind::Recursion {
-                    child: Some(*codebase.root().path.hash()),
-                },
+            Node::Recursion {
+                child: Some(*codebase.root().path.hash()),
             },
         );
 
@@ -472,10 +469,8 @@ mod tests {
         let mut codebase = Codebase::new();
         codebase.insert_as_parent_of(
             codebase.root().path,
-            Node {
-                kind: NodeKind::Recursion {
-                    child: Some(*codebase.root().path.hash()),
-                },
+            Node::Recursion {
+                child: Some(*codebase.root().path.hash()),
             },
         );
 

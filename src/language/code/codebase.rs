@@ -185,7 +185,7 @@ impl Codebase {
 
 #[cfg(test)]
 mod tests {
-    use crate::language::code::{Node, NodeKind};
+    use crate::language::code::Node;
 
     use super::Codebase;
 
@@ -211,20 +211,16 @@ mod tests {
 
         let a = codebase.replace_node(
             &codebase.leaf(),
-            Node {
-                kind: NodeKind::Error {
-                    node: String::from("a"),
-                    child: None,
-                },
+            Node::Error {
+                node: String::from("a"),
+                child: None,
             },
         );
         let b = codebase.insert_as_parent_of(
             a,
-            Node {
-                kind: NodeKind::Error {
-                    node: String::from("b"),
-                    child: Some(*a.hash()),
-                },
+            Node::Error {
+                node: String::from("b"),
+                child: Some(*a.hash()),
             },
         );
 

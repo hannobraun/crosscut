@@ -89,47 +89,7 @@ impl fmt::Display for NodeHash {
 }
 
 #[derive(Clone, Debug, Eq, PartialEq, udigest::Digestable)]
-pub struct Node {
-    pub kind: NodeKind,
-}
-
-impl Node {
-    pub fn empty(child: Option<NodeHash>) -> Self {
-        Self {
-            kind: NodeKind::Empty { child },
-        }
-    }
-
-    pub fn child(&self) -> Option<&NodeHash> {
-        let child = match &self.kind {
-            NodeKind::Empty { child } => child,
-            NodeKind::Expression { child, .. } => child,
-            NodeKind::Recursion { child } => child,
-            NodeKind::Error { child, .. } => child,
-        };
-
-        child.as_ref()
-    }
-
-    pub fn child_mut(&mut self) -> &mut Option<NodeHash> {
-        match &mut self.kind {
-            NodeKind::Empty { child } => child,
-            NodeKind::Expression { child, .. } => child,
-            NodeKind::Recursion { child } => child,
-            NodeKind::Error { child, .. } => child,
-        }
-    }
-
-    pub fn display<'r>(&'r self, package: &'r Package) -> NodeDisplay<'r> {
-        NodeDisplay {
-            node: self,
-            package,
-        }
-    }
-}
-
-#[derive(Clone, Debug, Eq, PartialEq, udigest::Digestable)]
-pub enum NodeKind {
+pub enum Node {
     Empty {
         child: Option<NodeHash>,
     },
@@ -146,7 +106,11 @@ pub enum NodeKind {
     },
 }
 
-impl NodeKind {
+impl Node {
+    pub fn empty(child: Option<NodeHash>) -> Self {
+        Self::Empty { child }
+    }
+
     #[cfg(test)]
     pub fn integer_literal(value: i32, child: Option<NodeHash>) -> Self {
         use crate::language::code::Literal;
@@ -162,6 +126,33 @@ impl NodeKind {
             child,
         }
     }
+
+    pub fn child(&self) -> Option<&NodeHash> {
+        let child = match self {
+            Node::Empty { child } => child,
+            Node::Expression { child, .. } => child,
+            Node::Recursion { child } => child,
+            Node::Error { child, .. } => child,
+        };
+
+        child.as_ref()
+    }
+
+    pub fn child_mut(&mut self) -> &mut Option<NodeHash> {
+        match self {
+            Node::Empty { child } => child,
+            Node::Expression { child, .. } => child,
+            Node::Recursion { child } => child,
+            Node::Error { child, .. } => child,
+        }
+    }
+
+    pub fn display<'r>(&'r self, package: &'r Package) -> NodeDisplay<'r> {
+        NodeDisplay {
+            node: self,
+            package,
+        }
+    }
 }
 
 pub struct NodeDisplay<'r> {
@@ -171,17 +162,17 @@ pub struct NodeDisplay<'r> {
 
 impl fmt::Display for NodeDisplay<'_> {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        match &self.node.kind {
-            NodeKind::Empty { .. } => {
+        match self.node {
+            Node::Empty { .. } => {
                 write!(f, "")
             }
-            NodeKind::Expression { expression, .. } => {
+            Node::Expression { expression, .. } => {
                 write!(f, "{}", expression.display(self.package))
             }
-            NodeKind::Recursion { .. } => {
+            Node::Recursion { .. } => {
                 write!(f, "self")
             }
-            NodeKind::Error { node, .. } => {
+            Node::Error { node, .. } => {
                 write!(f, "{node}")
             }
         }

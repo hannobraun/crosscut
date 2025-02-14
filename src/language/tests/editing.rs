@@ -1,7 +1,7 @@
 use itertools::Itertools;
 
 use crate::language::{
-    code::NodeKind,
+    code::Node,
     editor::EditorInputEvent,
     instance::Language,
     packages::{Function, FunctionId, Package},
@@ -280,10 +280,10 @@ fn remove_left_removes_previous_syntax_node_if_empty() {
     // Make sure the test setup worked as expected.
     let (empty, literal) =
         language.codebase().leaf_to_root().collect_tuple().unwrap();
-    assert_eq!(empty.node.kind, NodeKind::Empty { child: None });
+    assert_eq!(empty.node, &Node::Empty { child: None });
     assert_eq!(
-        literal.node.kind,
-        NodeKind::integer_literal(127, Some(*empty.path.hash())),
+        literal.node,
+        &Node::integer_literal(127, Some(*empty.path.hash())),
     );
 
     // Actual testing starts here.
@@ -291,7 +291,7 @@ fn remove_left_removes_previous_syntax_node_if_empty() {
 
     let (literal,) =
         language.codebase().leaf_to_root().collect_tuple().unwrap();
-    assert_eq!(literal.node.kind, NodeKind::integer_literal(127, None));
+    assert_eq!(literal.node, &Node::integer_literal(127, None));
 }
 
 #[test]
@@ -327,10 +327,10 @@ fn remove_right_removes_next_syntax_node_if_empty() {
     // Make sure the test setup worked as expected.
     let (literal, empty) =
         language.codebase().leaf_to_root().collect_tuple().unwrap();
-    assert_eq!(literal.node.kind, NodeKind::integer_literal(127, None));
+    assert_eq!(literal.node, &Node::integer_literal(127, None));
     assert_eq!(
-        empty.node.kind,
-        NodeKind::Empty {
+        empty.node,
+        &Node::Empty {
             child: Some(*literal.path.hash()),
         },
     );
@@ -340,7 +340,7 @@ fn remove_right_removes_next_syntax_node_if_empty() {
 
     let (literal,) =
         language.codebase().leaf_to_root().collect_tuple().unwrap();
-    assert_eq!(literal.node.kind, NodeKind::integer_literal(127, None));
+    assert_eq!(literal.node, &Node::integer_literal(127, None));
 }
 
 #[test]

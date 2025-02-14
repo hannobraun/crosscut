@@ -1,7 +1,7 @@
 use super::{
     code::{
         CodeError, Codebase, Expression, IntrinsicFunction, Literal, Node,
-        NodeHash, NodeKind, NodePath,
+        NodeHash, NodePath,
     },
     packages::Package,
 };
@@ -31,18 +31,16 @@ fn compile_token(
     let child = node.child().copied();
 
     let (kind, maybe_error) = if token.is_empty() {
-        (NodeKind::Empty { child }, None)
+        (Node::Empty { child }, None)
     } else if let Some((node, maybe_err)) =
         resolve_keyword(token, path, child, codebase)
     {
         (node, maybe_err)
     } else {
         match resolve_function(token, package) {
-            Ok(expression) => {
-                (NodeKind::Expression { expression, child }, None)
-            }
+            Ok(expression) => (Node::Expression { expression, child }, None),
             Err(candidates) => (
-                NodeKind::Error {
+                Node::Error {
                     node: token.to_string(),
                     child,
                 },
@@ -51,7 +49,7 @@ fn compile_token(
         }
     };
 
-    node.kind = kind;
+    *node = kind;
 
     maybe_error
 }
@@ -61,7 +59,7 @@ fn resolve_keyword(
     path: &NodePath,
     child: Option<NodeHash>,
     codebase: &Codebase,
-) -> Option<(NodeKind, Option<CodeError>)> {
+) -> Option<(Node, Option<CodeError>)> {
     match name {
         "fn" => {
             // This isn't quite right. Functions with an empty body are a
@@ -89,7 +87,7 @@ fn resolve_keyword(
             // be relevant.
             if codebase.node_at(path).child().is_some() {
                 Some((
-                    NodeKind::Expression {
+                    Node::Expression {
                         expression: Expression::IntrinsicFunction {
                             intrinsic: IntrinsicFunction::Literal {
                                 literal: Literal::Function,
@@ -101,7 +99,7 @@ fn resolve_keyword(
                 ))
             } else {
                 Some((
-                    NodeKind::Error {
+                    Node::Error {
                         node: name.to_string(),
                         child,
                     },
@@ -109,7 +107,7 @@ fn resolve_keyword(
                 ))
             }
         }
-        "self" => Some((NodeKind::Recursion { child }, None)),
+        "self" => Some((Node::Recursion { child }, None)),
         _ => None,
     }
 }
