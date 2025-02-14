@@ -151,16 +151,16 @@ pub struct NodeDisplay<'r> {
 impl fmt::Display for NodeDisplay<'_> {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match &self.node.kind {
-            NodeKind::Empty => {
+            NodeKind::Empty { .. } => {
                 write!(f, "")
             }
-            NodeKind::Expression { expression } => {
+            NodeKind::Expression { expression, .. } => {
                 write!(f, "{}", expression.display(self.package))
             }
-            NodeKind::Recursion => {
+            NodeKind::Recursion { .. } => {
                 write!(f, "self")
             }
-            NodeKind::Error { node } => {
+            NodeKind::Error { node, .. } => {
                 write!(f, "{node}")
             }
         }
