@@ -227,9 +227,6 @@ impl Evaluator {
                             // that isn't what we currently have, that's an
                             // error.
 
-                            // The compiler doesn't know about this error. If we
-                            // want the return value of `state` to reflect it,
-                            // we need to keep track of it here.
                             self.state = EvaluatorState::Effect {
                                 effect: Effect::UnexpectedInput {
                                     expected: Type::Nothing,
