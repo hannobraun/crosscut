@@ -13,7 +13,8 @@ pub fn compile_and_replace(
     codebase: &mut Codebase,
 ) {
     let mut node = codebase.node_at(path).clone();
-    let maybe_error = compile_token(token, &mut node, path, package, codebase);
+    let (node, maybe_error) =
+        compile_token(token, &mut node, path, package, codebase);
 
     *path = codebase.replace_node(path, node);
     if let Some(error) = maybe_error {
@@ -27,7 +28,7 @@ fn compile_token(
     path: &NodePath,
     package: &Package,
     codebase: &Codebase,
-) -> Option<CodeError> {
+) -> (Node, Option<CodeError>) {
     let child = node.child().copied();
 
     let (kind, maybe_error) = if token.is_empty() {
@@ -49,9 +50,7 @@ fn compile_token(
         }
     };
 
-    *node = kind;
-
-    maybe_error
+    (kind, maybe_error)
 }
 
 fn resolve_keyword(
