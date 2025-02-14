@@ -18,7 +18,7 @@ impl Codebase {
     pub fn new() -> Self {
         let mut nodes = Nodes::new();
 
-        let root = { nodes.insert(Node::Empty { child: None }) };
+        let root = nodes.insert(Node::Empty { child: None });
 
         Self {
             root,
