@@ -19,8 +19,7 @@ impl Codebase {
         let mut nodes = Nodes::new();
 
         let root = {
-            let child = None;
-            let node = Node::Empty { child };
+            let node = Node::Empty { child: None };
 
             nodes.insert(node)
         };
