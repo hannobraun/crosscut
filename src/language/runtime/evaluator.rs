@@ -180,6 +180,10 @@ impl Evaluator {
                     self.state = EvaluatorState::Error { path };
                     return;
                 }
+                Next::ContextEvaluated { output: _ } => {
+                    // Evaluating contexts is not supported yet.
+                    return;
+                }
                 Next::Finished { output } => {
                     self.state = EvaluatorState::Finished { output };
                     return;
@@ -294,7 +298,12 @@ impl Evaluator {
         let Some(path) = context.nodes_from_root.last().copied() else {
             let output = context.active_value.clone();
             self.contexts.pop();
-            return Next::Finished { output };
+
+            if self.contexts.is_empty() {
+                return Next::Finished { output };
+            } else {
+                return Next::ContextEvaluated { output };
+            }
         };
 
         if let EvaluatorState::Effect { effect, path } = self.state.clone() {
@@ -349,6 +358,9 @@ pub enum Next<'r> {
     },
     Error {
         path: NodePath,
+    },
+    ContextEvaluated {
+        output: ValueWithSource,
     },
     Finished {
         output: ValueWithSource,
