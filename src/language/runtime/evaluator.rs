@@ -180,9 +180,27 @@ impl Evaluator {
                     self.state = EvaluatorState::Error { path };
                     return;
                 }
-                Next::ContextEvaluated { output: _ } => {
-                    // Evaluating contexts is not supported yet.
-                    return;
+                Next::ContextEvaluated { output } => {
+                    let Some(context) = self.contexts.last_mut() else {
+                        unreachable!(
+                            "A context must exist, or we would be handling \
+                            `Next::Finished` right now."
+                        );
+                    };
+
+                    match &mut context.active_value.inner {
+                        Value::Tuple { elements } => {
+                            elements.push(output.inner);
+                        }
+                        value => {
+                            panic!(
+                                "Expected value that would have created a \
+                                context (got `{value:?}`)."
+                            );
+                        }
+                    }
+
+                    continue;
                 }
                 Next::Finished { output } => {
                     self.state = EvaluatorState::Finished { output };
