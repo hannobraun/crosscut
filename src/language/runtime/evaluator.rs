@@ -150,26 +150,7 @@ impl Evaluator {
                     self.advance();
                     continue;
                 }
-                Next::ContextEvaluated { output } => {
-                    let Some(context) = self.contexts.last_mut() else {
-                        unreachable!(
-                            "A context must exist, or we would be handling \
-                            `Next::Finished` right now."
-                        );
-                    };
-
-                    match &mut context.active_value.inner {
-                        Value::Tuple { elements } => {
-                            elements.push(output.inner);
-                        }
-                        value => {
-                            panic!(
-                                "Expected value that would have created a \
-                                context (got `{value:?}`)."
-                            );
-                        }
-                    }
-
+                Next::ContextEvaluated { output: _ } => {
                     continue;
                 }
                 Next::Recursing => {
@@ -338,7 +319,19 @@ impl Evaluator {
             let output = context.active_value.clone();
             self.contexts.pop();
 
-            if self.contexts.last_mut().is_some() {
+            if let Some(context) = self.contexts.last_mut() {
+                match &mut context.active_value.inner {
+                    Value::Tuple { elements } => {
+                        elements.push(output.inner.clone());
+                    }
+                    value => {
+                        panic!(
+                            "Expected value that would have created a context \
+                            (got `{value:?}`)."
+                        );
+                    }
+                }
+
                 return Next::ContextEvaluated { output };
             } else {
                 return Next::Finished { output };
