@@ -339,11 +339,11 @@ impl Evaluator {
         }
 
         match &codebase.node_at(&path).kind {
-            NodeKind::Empty => Next::IgnoringSyntaxNode,
-            NodeKind::Expression { expression } => {
+            NodeKind::Empty { .. } => Next::IgnoringSyntaxNode,
+            NodeKind::Expression { expression, .. } => {
                 Next::Running { expression, path }
             }
-            NodeKind::Recursion => {
+            NodeKind::Recursion { .. } => {
                 let active_value = context.active_value.inner.clone();
 
                 self.contexts.pop();
