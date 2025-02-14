@@ -350,7 +350,7 @@ impl Evaluator {
 
                 Next::Recursing
             }
-            NodeKind::Error { node: _ } => Next::Error { path },
+            NodeKind::Error { .. } => Next::Error { path },
         }
     }
 
