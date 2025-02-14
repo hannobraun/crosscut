@@ -12,9 +12,9 @@ pub fn compile_and_replace(
     package: &Package,
     codebase: &mut Codebase,
 ) {
-    let mut node = codebase.node_at(path).clone();
+    let node = codebase.node_at(path).clone();
     let (node, maybe_error) =
-        compile_token(token, &mut node, path, package, codebase);
+        compile_token(token, &node, path, package, codebase);
 
     *path = codebase.replace_node(path, node);
     if let Some(error) = maybe_error {
@@ -24,7 +24,7 @@ pub fn compile_and_replace(
 
 fn compile_token(
     token: &str,
-    node: &mut Node,
+    node: &Node,
     path: &NodePath,
     package: &Package,
     codebase: &Codebase,
