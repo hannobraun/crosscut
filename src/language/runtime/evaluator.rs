@@ -344,6 +344,7 @@ impl Evaluator {
             }
             NodeKind::Recursion => {
                 let active_value = context.active_value.inner.clone();
+                self.contexts.pop();
                 self.evaluate(self.root, active_value, codebase);
                 Next::Recursing
             }
@@ -457,5 +458,26 @@ mod tests {
         evaluator.step(&codebase);
 
         assert_eq!(evaluator.state().active_value(), Some(Value::Nothing));
+    }
+
+    #[test]
+    fn tail_call_elimination() {
+        // The memory used by the evaluator should not grow, if a function is
+        // tail-recursive.
+
+        let mut codebase = Codebase::new();
+        codebase.insert_as_parent_of(
+            codebase.root().path,
+            Node {
+                kind: NodeKind::Recursion,
+                child: Some(*codebase.root().path.hash()),
+            },
+        );
+
+        let mut evaluator = Evaluator::new(codebase.root().path, &codebase);
+        assert_eq!(evaluator.contexts.len(), 1);
+
+        evaluator.step(&codebase);
+        assert_eq!(evaluator.contexts.len(), 1);
     }
 }
