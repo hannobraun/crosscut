@@ -52,7 +52,7 @@ impl Codebase {
     }
 
     pub fn child_of(&self, path: &NodePath) -> Option<NodePath> {
-        let hash = self.node_at(path).child?;
+        let hash = *self.node_at(path).child()?;
         Some(NodePath { hash })
     }
 
@@ -94,7 +94,7 @@ impl Codebase {
         node: Node,
     ) -> NodePath {
         assert_eq!(
-            node.child.as_ref(),
+            node.child(),
             Some(child.hash()),
             "Inserting a node as the parent of another, but other node is not \
             the new parent's child.",
@@ -119,11 +119,11 @@ impl Codebase {
 
         if let Some(parent) = self.parent_of(to_remove) {
             let mut updated_parent = self.nodes.get(parent.hash()).clone();
-            updated_parent.child = node_to_remove.child;
+            updated_parent.child = node_to_remove.child().copied();
 
             self.replace_node(&parent, updated_parent);
         } else {
-            self.root = node_to_remove.child.unwrap_or(self.empty);
+            self.root = node_to_remove.child().copied().unwrap_or(self.empty);
         }
     }
 

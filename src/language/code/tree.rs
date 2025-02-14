@@ -12,7 +12,7 @@ impl SyntaxTree {
     pub fn find_leaf(self, nodes: &Nodes) -> NodeHash {
         let mut possible_leaf = self.root;
 
-        while let Some(child) = nodes.get(&possible_leaf).child {
+        while let Some(child) = nodes.get(&possible_leaf).child().copied() {
             possible_leaf = child;
         }
 
@@ -25,7 +25,7 @@ impl SyntaxTree {
         nodes: &Nodes,
     ) -> Option<NodePath> {
         let parent_of_node = |located_node: LocatedNode| {
-            (located_node.node.child.as_ref() == Some(node))
+            (located_node.node.child() == Some(node))
                 .then_some(located_node.path)
         };
 
@@ -48,7 +48,7 @@ impl SyntaxTree {
         let mut current_node = self.root;
 
         loop {
-            let child = nodes.get(&current_node).child;
+            let child = nodes.get(&current_node).child().copied();
             hashes.push(current_node);
 
             if let Some(child) = child {

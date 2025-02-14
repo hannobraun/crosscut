@@ -102,6 +102,10 @@ impl Node {
         }
     }
 
+    pub fn child(&self) -> Option<&NodeHash> {
+        self.child.as_ref()
+    }
+
     pub fn display<'r>(&'r self, package: &'r Package) -> NodeDisplay<'r> {
         NodeDisplay {
             node: self,
