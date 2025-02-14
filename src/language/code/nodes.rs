@@ -128,7 +128,7 @@ pub enum NodeKind {
 
 impl NodeKind {
     #[cfg(test)]
-    pub fn integer_literal(value: i32) -> Self {
+    pub fn integer_literal(value: i32, _: Option<NodeHash>) -> Self {
         use crate::language::code::Literal;
 
         use super::IntrinsicFunction;
