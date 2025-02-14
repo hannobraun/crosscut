@@ -28,10 +28,12 @@ fn compile_token(
     package: &Package,
     codebase: &Codebase,
 ) -> Option<CodeError> {
+    let child = node.child().copied();
+
     let (kind, maybe_error) = if token.is_empty() {
         (NodeKind::Empty, None)
     } else if let Some((node, maybe_err)) =
-        resolve_keyword(token, path, node.child().copied(), codebase)
+        resolve_keyword(token, path, child, codebase)
     {
         (node, maybe_err)
     } else {
