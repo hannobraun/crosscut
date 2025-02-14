@@ -106,6 +106,10 @@ impl Node {
         self.child.as_ref()
     }
 
+    pub fn child_mut(&mut self) -> &mut Option<NodeHash> {
+        &mut self.child
+    }
+
     pub fn display<'r>(&'r self, package: &'r Package) -> NodeDisplay<'r> {
         NodeDisplay {
             node: self,

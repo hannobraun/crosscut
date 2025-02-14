@@ -104,7 +104,7 @@ impl Codebase {
 
         if let Some(parent) = self.parent_of(&child) {
             let mut updated_parent = self.nodes.get(parent.hash()).clone();
-            updated_parent.child = Some(hash);
+            *updated_parent.child_mut() = Some(hash);
 
             self.replace_node(&parent, updated_parent);
         } else {
@@ -119,7 +119,7 @@ impl Codebase {
 
         if let Some(parent) = self.parent_of(to_remove) {
             let mut updated_parent = self.nodes.get(parent.hash()).clone();
-            updated_parent.child = node_to_remove.child().copied();
+            *updated_parent.child_mut() = node_to_remove.child().copied();
 
             self.replace_node(&parent, updated_parent);
         } else {
@@ -154,7 +154,7 @@ impl Codebase {
 
                 next_replacement =
                     self.nodes.get(next_to_replace.hash()).clone();
-                next_replacement.child = Some(previous_replacement);
+                *next_replacement.child_mut() = Some(previous_replacement);
 
                 continue;
             } else {
