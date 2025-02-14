@@ -125,10 +125,10 @@ impl Node {
 
     pub fn child(&self) -> Option<&NodeHash> {
         let child = match self {
-            Node::Empty { child } => child,
-            Node::Expression { child, .. } => child,
-            Node::Recursion { child } => child,
-            Node::Error { child, .. } => child,
+            Self::Empty { child } => child,
+            Self::Expression { child, .. } => child,
+            Self::Recursion { child } => child,
+            Self::Error { child, .. } => child,
         };
 
         child.as_ref()
@@ -136,10 +136,10 @@ impl Node {
 
     pub fn child_mut(&mut self) -> &mut Option<NodeHash> {
         match self {
-            Node::Empty { child } => child,
-            Node::Expression { child, .. } => child,
-            Node::Recursion { child } => child,
-            Node::Error { child, .. } => child,
+            Self::Empty { child } => child,
+            Self::Expression { child, .. } => child,
+            Self::Recursion { child } => child,
+            Self::Error { child, .. } => child,
         }
     }
 
