@@ -107,10 +107,6 @@ pub enum Node {
 }
 
 impl Node {
-    pub fn empty(child: Option<NodeHash>) -> Self {
-        Self::Empty { child }
-    }
-
     #[cfg(test)]
     pub fn integer_literal(value: i32, child: Option<NodeHash>) -> Self {
         use crate::language::code::Literal;

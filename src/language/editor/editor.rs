@@ -92,8 +92,10 @@ impl Editor {
                     );
 
                     let child = Some(*self.editing.hash());
-                    self.editing = codebase
-                        .insert_as_parent_of(self.editing, Node::empty(child));
+                    self.editing = codebase.insert_as_parent_of(
+                        self.editing,
+                        Node::Empty { child },
+                    );
                 }
             }
         }

@@ -20,7 +20,7 @@ impl Codebase {
 
         let root = {
             let child = None;
-            let node = Node::empty(child);
+            let node = Node::Empty { child };
 
             nodes.insert(node)
         };
@@ -194,7 +194,12 @@ mod tests {
         let mut codebase = Codebase::new();
 
         let a = codebase.leaf();
-        let b = codebase.insert_as_parent_of(a, Node::empty(Some(*a.hash())));
+        let b = codebase.insert_as_parent_of(
+            a,
+            Node::Empty {
+                child: Some(*a.hash()),
+            },
+        );
 
         assert_eq!(
             codebase
@@ -230,6 +235,6 @@ mod tests {
         assert_eq!(codebase.root().path, a);
 
         codebase.remove_node(&a);
-        assert_eq!(codebase.root().node, &Node::empty(None));
+        assert_eq!(codebase.root().node, &Node::Empty { child: None });
     }
 }
