@@ -154,8 +154,6 @@ impl Evaluator {
                     continue;
                 }
                 Next::Recursing => {
-                    self.evaluate(self.root, Value::Nothing, codebase);
-
                     // We could `continue` here. Then the next call to
                     // `Self::next` above would return the next expression we
                     // need to evaluate, and we could immediately do that.
@@ -344,7 +342,10 @@ impl Evaluator {
             NodeKind::Expression { expression } => {
                 Next::Running { expression, path }
             }
-            NodeKind::Recursion => Next::Recursing,
+            NodeKind::Recursion => {
+                self.evaluate(self.root, Value::Nothing, codebase);
+                Next::Recursing
+            }
             NodeKind::Error { node: _ } => Next::Error { path },
         }
     }
