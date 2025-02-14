@@ -236,7 +236,7 @@ fn render_help<A: EditorOutputAdapter>(
     writeln!(adapter)?;
 
     match &node.kind {
-        NodeKind::Empty => {
+        NodeKind::Empty { .. } => {
             writeln!(
                 adapter,
                 "You are editing an empty syntax node. Those get completely \
@@ -244,7 +244,7 @@ fn render_help<A: EditorOutputAdapter>(
                 making up your mind about what you want to type."
             )?;
         }
-        NodeKind::Expression { expression } => {
+        NodeKind::Expression { expression, .. } => {
             write!(adapter, "You are editing an expression. ")?;
 
             match expression {
@@ -322,7 +322,7 @@ fn render_help<A: EditorOutputAdapter>(
                 }
             }
         }
-        NodeKind::Recursion => {
+        NodeKind::Recursion { .. } => {
             writeln!(
                 adapter,
                 "You are editing the `{}` keyword, which calls the current \
