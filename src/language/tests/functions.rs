@@ -42,18 +42,12 @@ fn self_recursion() {
 
     language.evaluate(path, Value::Integer { value: 127 });
 
-    assert_eq!(
-        language.step().active_value(),
-        Some(Value::Integer { value: 127 }),
-    );
-    assert_eq!(
-        language.step().active_value(),
-        Some(Value::Integer { value: 127 }),
-    );
-    assert_eq!(
-        language.step().active_value(),
-        Some(Value::Integer { value: 127 }),
-    );
+    for _ in 0..3 {
+        assert_eq!(
+            language.step().active_value(),
+            Some(Value::Integer { value: 127 }),
+        );
+    }
 }
 
 #[test]
