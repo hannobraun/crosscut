@@ -46,10 +46,7 @@ fn compile_token(
         }
     };
 
-    *node = Node {
-        child: codebase.child_of(path).map(|path| *path.hash()),
-        kind,
-    };
+    node.kind = kind;
 
     maybe_error
 }
