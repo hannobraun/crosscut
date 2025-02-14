@@ -338,7 +338,7 @@ impl Evaluator {
             let output = context.active_value.clone();
             self.contexts.pop();
 
-            if self.contexts.is_empty() {
+            if self.contexts.last_mut().is_none() {
                 return Next::Finished { output };
             } else {
                 return Next::ContextEvaluated { output };
