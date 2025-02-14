@@ -173,7 +173,7 @@ fn render_node<A: EditorOutputAdapter>(
     }
 
     let color = match &located_node.node.kind {
-        NodeKind::Expression { expression } => match expression {
+        NodeKind::Expression { expression, .. } => match expression {
             Expression::HostFunction { .. } => Some(Color::DarkMagenta),
             Expression::IntrinsicFunction { .. } => Some(Color::DarkBlue),
         },
