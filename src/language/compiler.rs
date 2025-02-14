@@ -31,17 +31,20 @@ fn compile_token(
     let child = node.child().copied();
 
     let (kind, maybe_error) = if token.is_empty() {
-        (NodeKind::Empty, None)
+        (NodeKind::Empty { child }, None)
     } else if let Some((node, maybe_err)) =
         resolve_keyword(token, path, child, codebase)
     {
         (node, maybe_err)
     } else {
         match resolve_function(token, package) {
-            Ok(expression) => (NodeKind::Expression { expression }, None),
+            Ok(expression) => {
+                (NodeKind::Expression { expression, child }, None)
+            }
             Err(candidates) => (
                 NodeKind::Error {
                     node: token.to_string(),
+                    child,
                 },
                 Some(CodeError::UnresolvedIdentifier { candidates }),
             ),
@@ -56,7 +59,7 @@ fn compile_token(
 fn resolve_keyword(
     name: &str,
     path: &NodePath,
-    _: Option<NodeHash>,
+    child: Option<NodeHash>,
     codebase: &Codebase,
 ) -> Option<(NodeKind, Option<CodeError>)> {
     match name {
@@ -92,6 +95,7 @@ fn resolve_keyword(
                                 literal: Literal::Function,
                             },
                         },
+                        child,
                     },
                     None,
                 ))
@@ -99,12 +103,13 @@ fn resolve_keyword(
                 Some((
                     NodeKind::Error {
                         node: name.to_string(),
+                        child,
                     },
                     Some(CodeError::FunctionWithoutBody),
                 ))
             }
         }
-        "self" => Some((NodeKind::Recursion, None)),
+        "self" => Some((NodeKind::Recursion { child }, None)),
         _ => None,
     }
 }

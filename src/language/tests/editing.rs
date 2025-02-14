@@ -280,10 +280,10 @@ fn remove_left_removes_previous_syntax_node_if_empty() {
     // Make sure the test setup worked as expected.
     let (empty, literal) =
         language.codebase().leaf_to_root().collect_tuple().unwrap();
-    assert_eq!(empty.node.kind, NodeKind::Empty);
+    assert_eq!(empty.node.kind, NodeKind::Empty { child: None });
     assert_eq!(
         literal.node.kind,
-        NodeKind::integer_literal(127, empty.node.child().copied()),
+        NodeKind::integer_literal(127, Some(*empty.path.hash())),
     );
 
     // Actual testing starts here.
@@ -328,7 +328,12 @@ fn remove_right_removes_next_syntax_node_if_empty() {
     let (literal, empty) =
         language.codebase().leaf_to_root().collect_tuple().unwrap();
     assert_eq!(literal.node.kind, NodeKind::integer_literal(127, None));
-    assert_eq!(empty.node.kind, NodeKind::Empty);
+    assert_eq!(
+        empty.node.kind,
+        NodeKind::Empty {
+            child: Some(*literal.path.hash()),
+        },
+    );
 
     // Actual testing starts here.
     language.on_input(EditorInputEvent::RemoveRight { whole_node: false });

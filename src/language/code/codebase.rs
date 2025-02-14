@@ -214,8 +214,8 @@ mod tests {
             Node {
                 kind: NodeKind::Error {
                     node: String::from("a"),
+                    child: None,
                 },
-                child: None,
             },
         );
         let b = codebase.insert_as_parent_of(
@@ -223,8 +223,8 @@ mod tests {
             Node {
                 kind: NodeKind::Error {
                     node: String::from("b"),
+                    child: Some(*a.hash()),
                 },
-                child: Some(*a.hash()),
             },
         );
 

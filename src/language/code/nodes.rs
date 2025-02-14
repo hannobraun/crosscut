@@ -91,23 +91,33 @@ impl fmt::Display for NodeHash {
 #[derive(Clone, Debug, Eq, PartialEq, udigest::Digestable)]
 pub struct Node {
     pub kind: NodeKind,
-    pub child: Option<NodeHash>,
 }
 
 impl Node {
     pub fn empty(child: Option<NodeHash>) -> Self {
         Self {
-            child,
-            kind: NodeKind::Empty,
+            kind: NodeKind::Empty { child },
         }
     }
 
     pub fn child(&self) -> Option<&NodeHash> {
-        self.child.as_ref()
+        let child = match &self.kind {
+            NodeKind::Empty { child } => child,
+            NodeKind::Expression { child, .. } => child,
+            NodeKind::Recursion { child } => child,
+            NodeKind::Error { child, .. } => child,
+        };
+
+        child.as_ref()
     }
 
     pub fn child_mut(&mut self) -> &mut Option<NodeHash> {
-        &mut self.child
+        match &mut self.kind {
+            NodeKind::Empty { child } => child,
+            NodeKind::Expression { child, .. } => child,
+            NodeKind::Recursion { child } => child,
+            NodeKind::Error { child, .. } => child,
+        }
     }
 
     pub fn display<'r>(&'r self, package: &'r Package) -> NodeDisplay<'r> {
@@ -120,15 +130,25 @@ impl Node {
 
 #[derive(Clone, Debug, Eq, PartialEq, udigest::Digestable)]
 pub enum NodeKind {
-    Empty,
-    Expression { expression: Expression },
-    Recursion,
-    Error { node: String },
+    Empty {
+        child: Option<NodeHash>,
+    },
+    Expression {
+        expression: Expression,
+        child: Option<NodeHash>,
+    },
+    Recursion {
+        child: Option<NodeHash>,
+    },
+    Error {
+        node: String,
+        child: Option<NodeHash>,
+    },
 }
 
 impl NodeKind {
     #[cfg(test)]
-    pub fn integer_literal(value: i32, _: Option<NodeHash>) -> Self {
+    pub fn integer_literal(value: i32, child: Option<NodeHash>) -> Self {
         use crate::language::code::Literal;
 
         use super::IntrinsicFunction;
@@ -139,6 +159,7 @@ impl NodeKind {
                     literal: Literal::Integer { value },
                 },
             },
+            child,
         }
     }
 }

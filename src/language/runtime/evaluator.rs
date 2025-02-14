@@ -452,8 +452,9 @@ mod tests {
         codebase.insert_as_parent_of(
             codebase.root().path,
             Node {
-                kind: NodeKind::Recursion,
-                child: Some(*codebase.root().path.hash()),
+                kind: NodeKind::Recursion {
+                    child: Some(*codebase.root().path.hash()),
+                },
             },
         );
 
@@ -472,8 +473,9 @@ mod tests {
         codebase.insert_as_parent_of(
             codebase.root().path,
             Node {
-                kind: NodeKind::Recursion,
-                child: Some(*codebase.root().path.hash()),
+                kind: NodeKind::Recursion {
+                    child: Some(*codebase.root().path.hash()),
+                },
             },
         );
 
