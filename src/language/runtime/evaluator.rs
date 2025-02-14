@@ -322,7 +322,7 @@ impl Evaluator {
             if let Some(context) = self.contexts.last_mut() {
                 match &mut context.active_value.inner {
                     Value::Tuple { elements } => {
-                        elements.push(output.inner.clone());
+                        elements.push(output.inner);
                     }
                     value => {
                         panic!(
