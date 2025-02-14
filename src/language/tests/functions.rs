@@ -42,6 +42,9 @@ fn self_recursion() {
 
     language.evaluate(path, Value::Integer { value: 127 });
 
+    // To verify we are actually recursing, we need to see at least two values.
+    // But evaluating `self` could result in its own iterator step. We need to
+    // account for that.
     for _ in 0..3 {
         assert_eq!(
             language.step().active_value(),
