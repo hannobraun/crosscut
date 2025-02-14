@@ -150,6 +150,28 @@ impl Evaluator {
                     self.advance();
                     continue;
                 }
+                Next::ContextEvaluated { output } => {
+                    let Some(context) = self.contexts.last_mut() else {
+                        unreachable!(
+                            "A context must exist, or we would be handling \
+                            `Next::Finished` right now."
+                        );
+                    };
+
+                    match &mut context.active_value.inner {
+                        Value::Tuple { elements } => {
+                            elements.push(output.inner);
+                        }
+                        value => {
+                            panic!(
+                                "Expected value that would have created a \
+                                context (got `{value:?}`)."
+                            );
+                        }
+                    }
+
+                    continue;
+                }
                 Next::Recursing => {
                     self.evaluate(self.root, Value::Nothing, codebase);
 
@@ -179,28 +201,6 @@ impl Evaluator {
                 Next::Error { path } => {
                     self.state = EvaluatorState::Error { path };
                     return;
-                }
-                Next::ContextEvaluated { output } => {
-                    let Some(context) = self.contexts.last_mut() else {
-                        unreachable!(
-                            "A context must exist, or we would be handling \
-                            `Next::Finished` right now."
-                        );
-                    };
-
-                    match &mut context.active_value.inner {
-                        Value::Tuple { elements } => {
-                            elements.push(output.inner);
-                        }
-                        value => {
-                            panic!(
-                                "Expected value that would have created a \
-                                context (got `{value:?}`)."
-                            );
-                        }
-                    }
-
-                    continue;
                 }
                 Next::Finished { output } => {
                     self.state = EvaluatorState::Finished { output };
@@ -390,6 +390,9 @@ pub enum Next<'r> {
         path: NodePath,
     },
     IgnoringSyntaxNode,
+    ContextEvaluated {
+        output: ValueWithSource,
+    },
     Recursing,
     Effect {
         effect: Effect,
@@ -397,9 +400,6 @@ pub enum Next<'r> {
     },
     Error {
         path: NodePath,
-    },
-    ContextEvaluated {
-        output: ValueWithSource,
     },
     Finished {
         output: ValueWithSource,
