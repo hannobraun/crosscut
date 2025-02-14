@@ -150,7 +150,7 @@ impl Evaluator {
                     self.advance();
                     continue;
                 }
-                Next::ContextEvaluated { output: _ } => {
+                Next::ContextEvaluated => {
                     continue;
                 }
                 Next::Recursing => {
@@ -332,7 +332,7 @@ impl Evaluator {
                     }
                 }
 
-                return Next::ContextEvaluated { output };
+                return Next::ContextEvaluated;
             } else {
                 return Next::Finished { output };
             }
@@ -383,9 +383,7 @@ pub enum Next<'r> {
         path: NodePath,
     },
     IgnoringSyntaxNode,
-    ContextEvaluated {
-        output: ValueWithSource,
-    },
+    ContextEvaluated,
     Recursing,
     Effect {
         effect: Effect,
