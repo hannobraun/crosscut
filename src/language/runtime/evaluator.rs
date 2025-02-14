@@ -338,6 +338,7 @@ impl Evaluator {
         }
 
         match codebase.node_at(&path) {
+            Node::Leaf => Next::IgnoringSyntaxNode,
             Node::Empty { .. } => Next::IgnoringSyntaxNode,
             Node::Expression { expression, .. } => {
                 Next::Running { expression, path }
