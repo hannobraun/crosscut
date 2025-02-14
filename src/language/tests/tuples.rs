@@ -16,3 +16,22 @@ fn single_field() {
         })
     );
 }
+
+#[test]
+fn nested() {
+    // It is possible to defined nested tuples.
+
+    let mut language = Language::without_package();
+
+    language.enter_code("127 tuple tuple");
+    let output = language.step_until_finished();
+
+    assert_eq!(
+        output.map(|value| value.inner),
+        Ok(Value::Tuple {
+            elements: vec![Value::Tuple {
+                elements: vec![Value::Integer { value: 127 }]
+            }]
+        })
+    );
+}
