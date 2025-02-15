@@ -1,11 +1,8 @@
-use crate::language::{
-    code::{
-        Codebase, Expression, IntrinsicFunction, Literal, Node, NodePath, Type,
-    },
-    packages::FunctionId,
+use crate::language::code::{
+    Codebase, Expression, IntrinsicFunction, Literal, Node, NodePath, Type,
 };
 
-use super::{context::Context, RuntimeState, Value, ValueWithSource};
+use super::{context::Context, Effect, RuntimeState, Value, ValueWithSource};
 
 #[derive(Debug)]
 pub struct Evaluator {
@@ -393,12 +390,6 @@ pub enum Next<'r> {
     Finished {
         output: ValueWithSource,
     },
-}
-
-#[derive(Clone, Debug, Eq, PartialEq)]
-pub enum Effect {
-    ApplyHostFunction { id: FunctionId, input: Value },
-    UnexpectedInput { expected: Type, actual: Value },
 }
 
 #[cfg(test)]
