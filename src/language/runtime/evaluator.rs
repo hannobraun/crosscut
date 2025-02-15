@@ -356,11 +356,11 @@ impl Evaluator {
             }
         };
 
+        context.advance();
+
         self.state = EvaluatorState::Running {
             active_value: context.active_value.clone(),
         };
-
-        context.advance();
     }
 
     fn advance(&mut self) {
