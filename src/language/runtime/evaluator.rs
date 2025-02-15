@@ -1,5 +1,5 @@
 use crate::language::code::{
-    Codebase, Expression, IntrinsicFunction, Literal, Node, NodePath, Type,
+    Codebase, Expression, IntrinsicFunction, Literal, Node, NodePath,
 };
 
 use super::{
@@ -273,104 +273,7 @@ impl Evaluator {
             );
         };
 
-        match expression {
-            Expression::HostFunction { id } => {
-                return EvaluateUpdate::UpdateState {
-                    new_state: RuntimeState::Effect {
-                        effect: Effect::ApplyHostFunction {
-                            id: *id,
-                            input: context.active_value.inner.clone(),
-                        },
-                        path,
-                    },
-                };
-            }
-            Expression::IntrinsicFunction { intrinsic } => {
-                match intrinsic {
-                    IntrinsicFunction::Identity => {
-                        // Active value stays the same.
-                    }
-                    IntrinsicFunction::Literal { literal } => {
-                        let Value::Nothing = context.active_value.inner else {
-                            // A literal is a function that takes `None`. If
-                            // that isn't what we currently have, that's an
-                            // error.
-
-                            return EvaluateUpdate::UpdateState {
-                                new_state: RuntimeState::Effect {
-                                    effect: Effect::UnexpectedInput {
-                                        expected: Type::Nothing,
-                                        actual: context
-                                            .active_value
-                                            .inner
-                                            .clone(),
-                                    },
-                                    path,
-                                },
-                            };
-                        };
-
-                        let value = {
-                            match *literal {
-                                Literal::Function => {
-                                    let Some(child) = codebase.child_of(&path)
-                                    else {
-                                        unreachable!(
-                                            "Function literal must have a \
-                                            child, or it wouldn't have been \
-                                            resolved as a function literal."
-                                        );
-                                    };
-
-                                    Value::Function {
-                                        body: *child.hash(),
-                                    }
-                                }
-                                Literal::Integer { value } => {
-                                    Value::Integer { value }
-                                }
-                                Literal::Tuple => {
-                                    let Some(child) = codebase.child_of(&path)
-                                    else {
-                                        unreachable!(
-                                            "Tuple literal must have a child, \
-                                            or it wouldn't have been resolved \
-                                            as a tuple literal."
-                                        );
-                                    };
-
-                                    context.active_value = ValueWithSource {
-                                        inner: Value::Tuple {
-                                            elements: Vec::new(),
-                                        },
-                                        source: Some(path),
-                                    };
-                                    context.advance();
-
-                                    return EvaluateUpdate::NewContext {
-                                        root: child,
-                                        active_value: Value::Nothing,
-                                    };
-                                }
-                            }
-                        };
-
-                        context.active_value = ValueWithSource {
-                            inner: value,
-                            source: Some(path),
-                        };
-                    }
-                }
-            }
-        };
-
-        context.advance();
-
-        EvaluateUpdate::UpdateState {
-            new_state: RuntimeState::Running {
-                active_value: context.active_value.clone(),
-            },
-        }
+        context.evaluate(expression, path, codebase)
     }
 
     fn advance(&mut self) {
