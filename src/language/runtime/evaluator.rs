@@ -141,10 +141,11 @@ impl Evaluator {
     }
 
     pub fn step(&mut self, codebase: &Codebase) {
-        let (expression, path) = loop {
+        loop {
             match self.next(codebase) {
                 Next::Running { expression, path } => {
-                    break (expression, path);
+                    self.evaluate_expression(expression, path, codebase);
+                    break;
                 }
                 Next::IgnoringSyntaxNode => {
                     self.advance();
@@ -186,9 +187,7 @@ impl Evaluator {
                     return;
                 }
             }
-        };
-
-        self.evaluate_expression(expression, path, codebase);
+        }
     }
 
     fn next<'r>(&mut self, codebase: &'r Codebase) -> Next<'r> {
