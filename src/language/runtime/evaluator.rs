@@ -144,11 +144,10 @@ impl Evaluator {
         loop {
             match self.next(codebase) {
                 Next::Running { expression, path } => {
-                    if let Some(EvaluateUpdate::UpdateState {
-                        new_state: state,
-                    }) = self.evaluate_expression(expression, path, codebase)
+                    if let Some(EvaluateUpdate::UpdateState { new_state }) =
+                        self.evaluate_expression(expression, path, codebase)
                     {
-                        self.state = state;
+                        self.state = new_state;
                     };
                     break;
                 }
