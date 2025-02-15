@@ -1,6 +1,6 @@
 use crate::language::code::NodePath;
 
-use super::ValueWithSource;
+use super::{RuntimeState, ValueWithSource};
 
 #[derive(Clone, Debug)]
 pub struct Context {
@@ -19,4 +19,8 @@ impl Context {
     pub fn advance(&mut self) {
         self.nodes_from_root.pop();
     }
+}
+
+pub enum EvaluateUpdate {
+    UpdateState { new_state: RuntimeState },
 }

@@ -2,7 +2,10 @@ use crate::language::code::{
     Codebase, Expression, IntrinsicFunction, Literal, Node, NodePath, Type,
 };
 
-use super::{context::Context, Effect, RuntimeState, Value, ValueWithSource};
+use super::{
+    context::{Context, EvaluateUpdate},
+    Effect, RuntimeState, Value, ValueWithSource,
+};
 
 #[derive(Debug)]
 pub struct Evaluator {
@@ -141,8 +144,9 @@ impl Evaluator {
         loop {
             match self.next(codebase) {
                 Next::Running { expression, path } => {
-                    if let Some(state) =
-                        self.evaluate_expression(expression, path, codebase)
+                    if let Some(EvaluateUpdate::UpdateState {
+                        new_state: state,
+                    }) = self.evaluate_expression(expression, path, codebase)
                     {
                         self.state = state;
                     };
@@ -251,7 +255,7 @@ impl Evaluator {
         expression: &Expression,
         path: NodePath,
         codebase: &Codebase,
-    ) -> Option<RuntimeState> {
+    ) -> Option<EvaluateUpdate> {
         // It would be nicer, if `next` could return the context to us. It must
         // have had one available, or we wouldn't be here right now.
         //
@@ -268,12 +272,14 @@ impl Evaluator {
 
         match expression {
             Expression::HostFunction { id } => {
-                return Some(RuntimeState::Effect {
-                    effect: Effect::ApplyHostFunction {
-                        id: *id,
-                        input: context.active_value.inner.clone(),
+                return Some(EvaluateUpdate::UpdateState {
+                    new_state: RuntimeState::Effect {
+                        effect: Effect::ApplyHostFunction {
+                            id: *id,
+                            input: context.active_value.inner.clone(),
+                        },
+                        path,
                     },
-                    path,
                 });
             }
             Expression::IntrinsicFunction { intrinsic } => {
@@ -287,12 +293,17 @@ impl Evaluator {
                             // that isn't what we currently have, that's an
                             // error.
 
-                            return Some(RuntimeState::Effect {
-                                effect: Effect::UnexpectedInput {
-                                    expected: Type::Nothing,
-                                    actual: context.active_value.inner.clone(),
+                            return Some(EvaluateUpdate::UpdateState {
+                                new_state: RuntimeState::Effect {
+                                    effect: Effect::UnexpectedInput {
+                                        expected: Type::Nothing,
+                                        actual: context
+                                            .active_value
+                                            .inner
+                                            .clone(),
+                                    },
+                                    path,
                                 },
-                                path,
                             });
                         };
 
@@ -355,8 +366,10 @@ impl Evaluator {
 
         context.advance();
 
-        Some(RuntimeState::Running {
-            active_value: context.active_value.clone(),
+        Some(EvaluateUpdate::UpdateState {
+            new_state: RuntimeState::Running {
+                active_value: context.active_value.clone(),
+            },
         })
     }
 
