@@ -148,6 +148,12 @@ impl Evaluator {
                         Some(EvaluateUpdate::UpdateState { new_state }) => {
                             self.state = new_state;
                         }
+                        Some(EvaluateUpdate::NewContext {
+                            root,
+                            active_value,
+                        }) => {
+                            self.evaluate(root, active_value, codebase);
+                        }
                         None => {}
                     }
 
@@ -345,13 +351,10 @@ impl Evaluator {
                                     };
                                     context.advance();
 
-                                    self.evaluate(
-                                        child,
-                                        Value::Nothing,
-                                        codebase,
-                                    );
-
-                                    return None;
+                                    return Some(EvaluateUpdate::NewContext {
+                                        root: child,
+                                        active_value: Value::Nothing,
+                                    });
                                 }
                             }
                         };
