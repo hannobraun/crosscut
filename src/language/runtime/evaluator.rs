@@ -144,7 +144,11 @@ impl Evaluator {
         loop {
             match self.next(codebase) {
                 Next::Running { expression, path } => {
-                    self.evaluate_expression(expression, path, codebase);
+                    if let Some(state) =
+                        self.evaluate_expression(expression, path, codebase)
+                    {
+                        self.state = state;
+                    };
                     break;
                 }
                 Next::IgnoringSyntaxNode => {
@@ -250,7 +254,7 @@ impl Evaluator {
         expression: &Expression,
         path: NodePath,
         codebase: &Codebase,
-    ) {
+    ) -> Option<EvaluatorState> {
         // It would be nicer, if `next` could return the context to us. It must
         // have had one available, or we wouldn't be here right now.
         //
@@ -267,15 +271,13 @@ impl Evaluator {
 
         match expression {
             Expression::HostFunction { id } => {
-                self.state = EvaluatorState::Effect {
+                return Some(EvaluatorState::Effect {
                     effect: Effect::ApplyHostFunction {
                         id: *id,
                         input: context.active_value.inner.clone(),
                     },
                     path,
-                };
-
-                return;
+                });
             }
             Expression::IntrinsicFunction { intrinsic } => {
                 match intrinsic {
@@ -288,15 +290,13 @@ impl Evaluator {
                             // that isn't what we currently have, that's an
                             // error.
 
-                            self.state = EvaluatorState::Effect {
+                            return Some(EvaluatorState::Effect {
                                 effect: Effect::UnexpectedInput {
                                     expected: Type::Nothing,
                                     actual: context.active_value.inner.clone(),
                                 },
                                 path,
-                            };
-
-                            return;
+                            });
                         };
 
                         let value = {
@@ -342,7 +342,7 @@ impl Evaluator {
                                         codebase,
                                     );
 
-                                    return;
+                                    return None;
                                 }
                             }
                         };
@@ -358,9 +358,9 @@ impl Evaluator {
 
         context.advance();
 
-        self.state = EvaluatorState::Running {
+        Some(EvaluatorState::Running {
             active_value: context.active_value.clone(),
-        };
+        })
     }
 
     fn advance(&mut self) {
