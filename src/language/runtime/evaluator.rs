@@ -335,7 +335,7 @@ impl Evaluator {
                                         source: Some(path),
                                     };
 
-                                    self.advance();
+                                    context.advance();
                                     self.evaluate(
                                         child,
                                         Value::Nothing,
