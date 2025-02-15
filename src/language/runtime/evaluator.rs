@@ -5,13 +5,13 @@ use crate::language::{
     packages::FunctionId,
 };
 
-use super::{context::Context, EvaluatorState, Value, ValueWithSource};
+use super::{context::Context, RuntimeState, Value, ValueWithSource};
 
 #[derive(Debug)]
 pub struct Evaluator {
     root: NodePath,
     contexts: Vec<Context>,
-    state: EvaluatorState,
+    state: RuntimeState,
 }
 
 impl Evaluator {
@@ -19,7 +19,7 @@ impl Evaluator {
         let mut evaluator = Self {
             root,
             contexts: Vec::new(),
-            state: EvaluatorState::Running {
+            state: RuntimeState::Running {
                 active_value: ValueWithSource {
                     inner: Value::Nothing,
                     source: None,
@@ -78,7 +78,7 @@ impl Evaluator {
             inner: active_value,
             source: None,
         };
-        self.state = EvaluatorState::Running {
+        self.state = RuntimeState::Running {
             active_value: active_value.clone(),
         };
         self.contexts.push(Context {
@@ -88,7 +88,7 @@ impl Evaluator {
     }
 
     pub fn provide_host_function_output(&mut self, value: Value) {
-        let EvaluatorState::Effect {
+        let RuntimeState::Effect {
             effect: Effect::ApplyHostFunction { .. },
             ..
         } = &self.state
@@ -116,7 +116,7 @@ impl Evaluator {
             inner: value,
             source: Some(source),
         };
-        self.state = EvaluatorState::Running {
+        self.state = RuntimeState::Running {
             active_value: context.active_value.clone(),
         };
 
@@ -137,7 +137,7 @@ impl Evaluator {
             );
         };
 
-        self.state = EvaluatorState::Effect { effect, path };
+        self.state = RuntimeState::Effect { effect, path };
     }
 
     pub fn step(&mut self, codebase: &Codebase) {
@@ -179,15 +179,15 @@ impl Evaluator {
                     return;
                 }
                 Next::Effect { effect, path } => {
-                    self.state = EvaluatorState::Effect { effect, path };
+                    self.state = RuntimeState::Effect { effect, path };
                     return;
                 }
                 Next::Error { path } => {
-                    self.state = EvaluatorState::Error { path };
+                    self.state = RuntimeState::Error { path };
                     return;
                 }
                 Next::Finished { output } => {
-                    self.state = EvaluatorState::Finished { output };
+                    self.state = RuntimeState::Finished { output };
                     return;
                 }
             }
@@ -227,7 +227,7 @@ impl Evaluator {
             }
         };
 
-        if let EvaluatorState::Effect { effect, path } = self.state.clone() {
+        if let RuntimeState::Effect { effect, path } = self.state.clone() {
             return Next::Effect { effect, path };
         }
 
@@ -254,7 +254,7 @@ impl Evaluator {
         expression: &Expression,
         path: NodePath,
         codebase: &Codebase,
-    ) -> Option<EvaluatorState> {
+    ) -> Option<RuntimeState> {
         // It would be nicer, if `next` could return the context to us. It must
         // have had one available, or we wouldn't be here right now.
         //
@@ -271,7 +271,7 @@ impl Evaluator {
 
         match expression {
             Expression::HostFunction { id } => {
-                return Some(EvaluatorState::Effect {
+                return Some(RuntimeState::Effect {
                     effect: Effect::ApplyHostFunction {
                         id: *id,
                         input: context.active_value.inner.clone(),
@@ -290,7 +290,7 @@ impl Evaluator {
                             // that isn't what we currently have, that's an
                             // error.
 
-                            return Some(EvaluatorState::Effect {
+                            return Some(RuntimeState::Effect {
                                 effect: Effect::UnexpectedInput {
                                     expected: Type::Nothing,
                                     actual: context.active_value.inner.clone(),
@@ -358,7 +358,7 @@ impl Evaluator {
 
         context.advance();
 
-        Some(EvaluatorState::Running {
+        Some(RuntimeState::Running {
             active_value: context.active_value.clone(),
         })
     }
@@ -369,7 +369,7 @@ impl Evaluator {
         }
     }
 
-    pub fn state(&self) -> &EvaluatorState {
+    pub fn state(&self) -> &RuntimeState {
         &self.state
     }
 }

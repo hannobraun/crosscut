@@ -1,7 +1,7 @@
 use crate::language::{
     code::{CodeError, NodePath},
     instance::Language,
-    runtime::{Effect, EvaluatorState, Value, ValueWithSource},
+    runtime::{Effect, RuntimeState, Value, ValueWithSource},
 };
 
 #[test]
@@ -68,7 +68,7 @@ fn empty_function() {
         Some(&CodeError::FunctionWithoutBody),
     );
 
-    assert!(matches!(language.step(), EvaluatorState::Error { .. }));
+    assert!(matches!(language.step(), RuntimeState::Error { .. }));
 }
 
 pub trait IntoFunctionBody {

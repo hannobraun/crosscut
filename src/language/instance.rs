@@ -2,7 +2,7 @@ use super::{
     code::{Codebase, NodePath},
     editor::{Editor, EditorCommand, EditorInputEvent},
     packages::Package,
-    runtime::{Effect, Evaluator, EvaluatorState, Value},
+    runtime::{Effect, Evaluator, RuntimeState, Value},
 };
 
 #[derive(Debug)]
@@ -64,7 +64,7 @@ impl Language {
         self.evaluator.evaluate(root, active_value, &self.codebase);
     }
 
-    pub fn step(&mut self) -> &EvaluatorState {
+    pub fn step(&mut self) -> &RuntimeState {
         self.evaluator.step(&self.codebase);
         self.evaluator().state()
     }
@@ -113,10 +113,10 @@ impl Language {
 
         loop {
             match self.step().clone() {
-                EvaluatorState::Running { .. } => {
+                RuntimeState::Running { .. } => {
                     // We're not concerned with intermediate results here.
                 }
-                EvaluatorState::Effect { effect, path: _ } => match effect {
+                RuntimeState::Effect { effect, path: _ } => match effect {
                     Effect::ApplyHostFunction { id, input } => {
                         match handler(id, input) {
                             Ok(output) => {
@@ -131,10 +131,10 @@ impl Language {
                         break Err(effect);
                     }
                 },
-                EvaluatorState::Finished { output } => {
+                RuntimeState::Finished { output } => {
                     break Ok(output);
                 }
-                EvaluatorState::Error { .. } => {
+                RuntimeState::Error { .. } => {
                     panic!("Unexpected runtime error.");
                 }
             }

@@ -5,6 +5,6 @@ mod value;
 
 pub use self::{
     evaluator::{Effect, Evaluator},
-    state::EvaluatorState,
+    state::RuntimeState,
     value::{Value, ValueWithSource},
 };

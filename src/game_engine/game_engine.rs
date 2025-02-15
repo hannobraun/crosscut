@@ -6,7 +6,7 @@ use crate::{
         code::Type,
         instance::Language,
         packages::{Function, FunctionId, Package},
-        runtime::{Effect, EvaluatorState, Value, ValueWithSource},
+        runtime::{Effect, RuntimeState, Value, ValueWithSource},
     },
 };
 
@@ -100,11 +100,11 @@ where
             }
 
             match self.language.step().clone() {
-                EvaluatorState::Running { .. } => {
+                RuntimeState::Running { .. } => {
                     // We're not interested in intermediate values here.
                     continue;
                 }
-                EvaluatorState::Effect { effect, path: _ } => match effect {
+                RuntimeState::Effect { effect, path: _ } => match effect {
                     Effect::ApplyHostFunction { id, input } => {
                         self.apply_host_function(id, input);
                         continue;
@@ -114,7 +114,7 @@ where
                         break;
                     }
                 },
-                EvaluatorState::Finished { output } => match output {
+                RuntimeState::Finished { output } => match output {
                     ValueWithSource {
                         inner: Value::Integer { value },
                         ..
@@ -138,7 +138,7 @@ where
                         }
                     }
                 },
-                EvaluatorState::Error { .. } => {
+                RuntimeState::Error { .. } => {
                     // Currently not handling errors.
                 }
             }

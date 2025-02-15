@@ -6,14 +6,14 @@ use super::{Effect, ValueWithSource};
 use super::Value;
 
 #[derive(Clone, Debug, Eq, PartialEq)]
-pub enum EvaluatorState {
+pub enum RuntimeState {
     Running { active_value: ValueWithSource },
     Effect { effect: Effect, path: NodePath },
     Finished { output: ValueWithSource },
     Error { path: NodePath },
 }
 
-impl EvaluatorState {
+impl RuntimeState {
     #[cfg(test)]
     pub fn active_value(&self) -> Option<Value> {
         if let Self::Running { active_value, .. } = self {

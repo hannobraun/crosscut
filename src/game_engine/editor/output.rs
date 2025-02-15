@@ -9,7 +9,7 @@ use crate::{
         editor::Editor,
         instance::Language,
         packages::Package,
-        runtime::{Effect, Evaluator, EvaluatorState, Value},
+        runtime::{Effect, Evaluator, RuntimeState, Value},
     },
 };
 
@@ -64,12 +64,12 @@ fn render_interpreter_state<A: EditorOutputAdapter>(
 ) -> anyhow::Result<()> {
     adapter.attribute(Attribute::Bold, |adapter| {
         match context.evaluator.state() {
-            EvaluatorState::Running { .. } => {
+            RuntimeState::Running { .. } => {
                 adapter.color(Color::DarkGreen, |adapter| {
                     writeln!(adapter, "Running")
                 })?;
             }
-            EvaluatorState::Effect { effect, .. } => {
+            RuntimeState::Effect { effect, .. } => {
                 adapter.color(Color::DarkCyan, |adapter| {
                     write!(adapter, "Effect: ")?;
 
@@ -92,7 +92,7 @@ fn render_interpreter_state<A: EditorOutputAdapter>(
                     Ok(())
                 })?;
             }
-            EvaluatorState::Error { path } => {
+            RuntimeState::Error { path } => {
                 // While we have a dynamic type system, it's possible that an
                 // error is only known at runtime. In that case, we'll get
                 // `None` here.
@@ -110,7 +110,7 @@ fn render_interpreter_state<A: EditorOutputAdapter>(
                     Ok(())
                 })?;
             }
-            EvaluatorState::Finished { output } => {
+            RuntimeState::Finished { output } => {
                 adapter.color(Color::DarkYellow, |adapter| {
                     writeln!(adapter, "Finished: {}", output.inner)
                 })?;
