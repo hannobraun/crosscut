@@ -188,6 +188,70 @@ impl Evaluator {
             }
         };
 
+        self.evaluate_expression(expression, path, codebase);
+    }
+
+    fn next<'r>(&mut self, codebase: &'r Codebase) -> Next<'r> {
+        let Some(context) = self.contexts.last() else {
+            return Next::Finished {
+                output: ValueWithSource {
+                    inner: Value::Nothing,
+                    source: None,
+                },
+            };
+        };
+
+        let Some(path) = context.nodes_from_root.last().copied() else {
+            let output = context.active_value.clone();
+            self.contexts.pop();
+
+            if let Some(context) = self.contexts.last_mut() {
+                match &mut context.active_value.inner {
+                    Value::Tuple { elements } => {
+                        elements.push(output.inner);
+                    }
+                    value => {
+                        panic!(
+                            "Expected value that would have created a context \
+                            (got `{value:?}`)."
+                        );
+                    }
+                }
+
+                return Next::ContextEvaluated;
+            } else {
+                return Next::Finished { output };
+            }
+        };
+
+        if let EvaluatorState::Effect { effect, path } = self.state.clone() {
+            return Next::Effect { effect, path };
+        }
+
+        match codebase.node_at(&path) {
+            Node::Leaf => Next::IgnoringSyntaxNode,
+            Node::Empty { .. } => Next::IgnoringSyntaxNode,
+            Node::Expression { expression, .. } => {
+                Next::Running { expression, path }
+            }
+            Node::Recursion { .. } => {
+                let active_value = context.active_value.inner.clone();
+
+                self.contexts.pop();
+                self.evaluate(self.root, active_value, codebase);
+
+                Next::Recursing
+            }
+            Node::Error { .. } => Next::Error { path },
+        }
+    }
+
+    fn evaluate_expression(
+        &mut self,
+        expression: &Expression,
+        path: NodePath,
+        codebase: &Codebase,
+    ) {
         // It would be nicer, if `next` could return the context to us. It must
         // have had one available, or we wouldn't be here right now.
         //
@@ -298,61 +362,6 @@ impl Evaluator {
         };
 
         self.advance();
-    }
-
-    fn next<'r>(&mut self, codebase: &'r Codebase) -> Next<'r> {
-        let Some(context) = self.contexts.last() else {
-            return Next::Finished {
-                output: ValueWithSource {
-                    inner: Value::Nothing,
-                    source: None,
-                },
-            };
-        };
-
-        let Some(path) = context.nodes_from_root.last().copied() else {
-            let output = context.active_value.clone();
-            self.contexts.pop();
-
-            if let Some(context) = self.contexts.last_mut() {
-                match &mut context.active_value.inner {
-                    Value::Tuple { elements } => {
-                        elements.push(output.inner);
-                    }
-                    value => {
-                        panic!(
-                            "Expected value that would have created a context \
-                            (got `{value:?}`)."
-                        );
-                    }
-                }
-
-                return Next::ContextEvaluated;
-            } else {
-                return Next::Finished { output };
-            }
-        };
-
-        if let EvaluatorState::Effect { effect, path } = self.state.clone() {
-            return Next::Effect { effect, path };
-        }
-
-        match codebase.node_at(&path) {
-            Node::Leaf => Next::IgnoringSyntaxNode,
-            Node::Empty { .. } => Next::IgnoringSyntaxNode,
-            Node::Expression { expression, .. } => {
-                Next::Running { expression, path }
-            }
-            Node::Recursion { .. } => {
-                let active_value = context.active_value.inner.clone();
-
-                self.contexts.pop();
-                self.evaluate(self.root, active_value, codebase);
-
-                Next::Recursing
-            }
-            Node::Error { .. } => Next::Error { path },
-        }
     }
 
     fn advance(&mut self) {
