@@ -120,7 +120,7 @@ impl Evaluator {
             active_value: context.active_value.clone(),
         };
 
-        self.advance();
+        context.advance();
     }
 
     pub fn trigger_effect(&mut self, effect: Effect) {
