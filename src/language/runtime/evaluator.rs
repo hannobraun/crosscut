@@ -365,7 +365,7 @@ impl Evaluator {
 
     fn advance(&mut self) {
         if let Some(context) = self.contexts.last_mut() {
-            context.nodes_from_root.pop();
+            context.advance();
         }
     }
 
@@ -385,6 +385,12 @@ pub struct Context {
     pub nodes_from_root: Vec<NodePath>,
 
     pub active_value: ValueWithSource,
+}
+
+impl Context {
+    pub fn advance(&mut self) {
+        self.nodes_from_root.pop();
+    }
 }
 
 #[derive(Debug, Eq, PartialEq)]
