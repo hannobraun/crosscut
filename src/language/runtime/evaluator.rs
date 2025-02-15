@@ -360,7 +360,7 @@ impl Evaluator {
             active_value: context.active_value.clone(),
         };
 
-        self.advance();
+        context.advance();
     }
 
     fn advance(&mut self) {
