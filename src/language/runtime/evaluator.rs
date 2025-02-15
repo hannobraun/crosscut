@@ -145,16 +145,12 @@ impl Evaluator {
             match self.next(codebase) {
                 Next::Running { expression, path } => {
                     match self.evaluate_expression(expression, path, codebase) {
-                        Some(EvaluateUpdate::UpdateState { new_state }) => {
+                        EvaluateUpdate::UpdateState { new_state } => {
                             self.state = new_state;
                         }
-                        Some(EvaluateUpdate::NewContext {
-                            root,
-                            active_value,
-                        }) => {
+                        EvaluateUpdate::NewContext { root, active_value } => {
                             self.evaluate(root, active_value, codebase);
                         }
-                        None => {}
                     }
 
                     break;
@@ -262,7 +258,7 @@ impl Evaluator {
         expression: &Expression,
         path: NodePath,
         codebase: &Codebase,
-    ) -> Option<EvaluateUpdate> {
+    ) -> EvaluateUpdate {
         // It would be nicer, if `next` could return the context to us. It must
         // have had one available, or we wouldn't be here right now.
         //
@@ -279,7 +275,7 @@ impl Evaluator {
 
         match expression {
             Expression::HostFunction { id } => {
-                return Some(EvaluateUpdate::UpdateState {
+                return EvaluateUpdate::UpdateState {
                     new_state: RuntimeState::Effect {
                         effect: Effect::ApplyHostFunction {
                             id: *id,
@@ -287,7 +283,7 @@ impl Evaluator {
                         },
                         path,
                     },
-                });
+                };
             }
             Expression::IntrinsicFunction { intrinsic } => {
                 match intrinsic {
@@ -300,7 +296,7 @@ impl Evaluator {
                             // that isn't what we currently have, that's an
                             // error.
 
-                            return Some(EvaluateUpdate::UpdateState {
+                            return EvaluateUpdate::UpdateState {
                                 new_state: RuntimeState::Effect {
                                     effect: Effect::UnexpectedInput {
                                         expected: Type::Nothing,
@@ -311,7 +307,7 @@ impl Evaluator {
                                     },
                                     path,
                                 },
-                            });
+                            };
                         };
 
                         let value = {
@@ -351,10 +347,10 @@ impl Evaluator {
                                     };
                                     context.advance();
 
-                                    return Some(EvaluateUpdate::NewContext {
+                                    return EvaluateUpdate::NewContext {
                                         root: child,
                                         active_value: Value::Nothing,
-                                    });
+                                    };
                                 }
                             }
                         };
@@ -370,11 +366,11 @@ impl Evaluator {
 
         context.advance();
 
-        Some(EvaluateUpdate::UpdateState {
+        EvaluateUpdate::UpdateState {
             new_state: RuntimeState::Running {
                 active_value: context.active_value.clone(),
             },
-        })
+        }
     }
 
     fn advance(&mut self) {
