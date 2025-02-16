@@ -141,7 +141,7 @@ impl Evaluator {
     }
 
     pub fn step(&mut self, codebase: &Codebase) {
-        if let RuntimeState::Effect { .. } = self.state.clone() {
+        if let RuntimeState::Effect { .. } = &self.state {
             return;
         }
 
