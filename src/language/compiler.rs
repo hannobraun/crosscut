@@ -55,7 +55,7 @@ fn resolve_keyword(
     name: &str,
     path: &NodePath,
     child: Option<NodeHash>,
-    codebase: &Codebase,
+    codebase: &mut Codebase,
 ) -> Option<(Node, Option<CodeError>)> {
     match name {
         "fn" => {
