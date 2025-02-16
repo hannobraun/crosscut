@@ -146,8 +146,7 @@ impl Evaluator {
                 Some(Next::AlreadyStepped) => {
                     break;
                 }
-                Some(Next::Error { path }) => {
-                    self.state = RuntimeState::Error { path };
+                Some(Next::Error { path: _ }) => {
                     return;
                 }
                 Some(Next::Finished { output }) => {
@@ -267,7 +266,10 @@ impl Evaluator {
                 // endless loops.
                 return Some(Next::AlreadyStepped);
             }
-            Node::Error { .. } => Next::Error { path },
+            Node::Error { .. } => {
+                self.state = RuntimeState::Error { path };
+                Next::Error { path }
+            }
         };
 
         // Any case in which the context shouldn't be restored would have
