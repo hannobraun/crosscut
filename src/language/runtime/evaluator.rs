@@ -146,9 +146,6 @@ impl Evaluator {
                 Some(Next::AlreadyStepped) => {
                     break;
                 }
-                Some(Next::Error { path: _ }) => {
-                    return;
-                }
                 Some(Next::Finished { output }) => {
                     self.state = RuntimeState::Finished { output };
                     return;
@@ -268,7 +265,7 @@ impl Evaluator {
             }
             Node::Error { .. } => {
                 self.state = RuntimeState::Error { path };
-                Next::Error { path }
+                Next::AlreadyStepped
             }
         };
 
@@ -287,7 +284,6 @@ impl Evaluator {
 #[derive(Debug, Eq, PartialEq)]
 pub enum Next {
     AlreadyStepped,
-    Error { path: NodePath },
     Finished { output: ValueWithSource },
 }
 
