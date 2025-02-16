@@ -236,7 +236,6 @@ impl Evaluator {
             Node::Empty { .. } => {
                 context.advance();
                 self.contexts.push(context);
-
                 return None;
             }
             Node::Expression { expression, .. } => {
