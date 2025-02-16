@@ -144,11 +144,12 @@ impl Evaluator {
     pub fn step(&mut self, codebase: &Codebase) {
         loop {
             match self.next(codebase) {
-                Some(Next::HostFunction { id, path, context }) => {
-                    let effect = context.evaluate_host_function(id);
-                    self.state = RuntimeState::Effect { effect, path };
+                Some(Next::HostFunction {
+                    id: _,
+                    path: _,
+                    context,
+                }) => {
                     self.contexts.push(context);
-
                     break;
                 }
                 Some(Next::IntrinsicFunction {
@@ -269,11 +270,16 @@ impl Evaluator {
             }
             Node::Expression { expression, .. } => {
                 let next = match expression {
-                    Expression::HostFunction { id } => Next::HostFunction {
-                        id: *id,
-                        path,
-                        context,
-                    },
+                    Expression::HostFunction { id } => {
+                        let effect = context.evaluate_host_function(*id);
+                        self.state = RuntimeState::Effect { effect, path };
+
+                        Next::HostFunction {
+                            id: *id,
+                            path,
+                            context,
+                        }
+                    }
                     Expression::IntrinsicFunction { intrinsic } => {
                         Next::IntrinsicFunction {
                             intrinsic,
