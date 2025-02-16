@@ -146,8 +146,7 @@ impl Evaluator {
                 Some(Next::AlreadyStepped) => {
                     break;
                 }
-                Some(Next::IgnoringSyntaxNode { mut context }) => {
-                    context.advance();
+                Some(Next::IgnoringSyntaxNode { context }) => {
                     self.contexts.push(context);
                     continue;
                 }
@@ -239,6 +238,8 @@ impl Evaluator {
 
         let next = match codebase.node_at(&path) {
             Node::Empty { .. } => {
+                context.advance();
+
                 // Restoring the context is the responsibility of the caller.
                 return Some(Next::IgnoringSyntaxNode { context });
             }
