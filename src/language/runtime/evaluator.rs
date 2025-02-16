@@ -146,16 +146,7 @@ impl Evaluator {
                 Some(Next::HostFunction) => {
                     break;
                 }
-                Some(Next::IntrinsicFunction { update }) => {
-                    match update {
-                        EvaluateUpdate::UpdateState { new_state } => {
-                            self.state = new_state;
-                        }
-                        EvaluateUpdate::NewContext { root, active_value } => {
-                            self.evaluate(root, active_value, codebase);
-                        }
-                    }
-
+                Some(Next::IntrinsicFunction) => {
                     break;
                 }
                 Some(Next::IgnoringSyntaxNode { mut context }) => {
@@ -269,7 +260,19 @@ impl Evaluator {
                         );
                         self.contexts.push(context);
 
-                        Next::IntrinsicFunction { update }
+                        match update {
+                            EvaluateUpdate::UpdateState { new_state } => {
+                                self.state = new_state;
+                            }
+                            EvaluateUpdate::NewContext {
+                                root,
+                                active_value,
+                            } => {
+                                self.evaluate(root, active_value, codebase);
+                            }
+                        }
+
+                        Next::IntrinsicFunction
                     }
                 };
 
@@ -302,7 +305,7 @@ impl Evaluator {
 #[derive(Debug, Eq, PartialEq)]
 pub enum Next {
     HostFunction,
-    IntrinsicFunction { update: EvaluateUpdate },
+    IntrinsicFunction,
     IgnoringSyntaxNode { context: Context },
     ContextEvaluated,
     Recursing,
