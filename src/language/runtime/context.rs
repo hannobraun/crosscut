@@ -4,7 +4,7 @@ use crate::language::code::{
 
 use super::{Effect, RuntimeState, Value, ValueWithSource};
 
-#[derive(Clone, Debug)]
+#[derive(Clone, Debug, Eq, PartialEq)]
 pub struct Context {
     /// # The nodes to be evaluated, sorted from root to leaf
     ///
