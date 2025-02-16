@@ -146,26 +146,6 @@ impl Evaluator {
                 Some(Next::AlreadyStepped) => {
                     break;
                 }
-                Some(Next::Recursing) => {
-                    // We could `continue` here. Then the next call to
-                    // `Self::next` above would return the next expression we
-                    // need to evaluate, and we could immediately do that.
-                    // Without bothering the caller with making an otherwise
-                    // useless step.
-                    //
-                    // But that won't work, because of one very important edge
-                    // case: If `self.root` points to nothing except a bare
-                    // `self` without any children, then we would immediately
-                    // land back here, producing an endless loop and hanging the
-                    // caller.
-                    //
-                    // An endless loop that does nothing is likely a problem
-                    // either way, but it's not our responsibility to address
-                    // that. All we're doing here is evaluate Crosscut code, so
-                    // let's do that, and let the caller decide what to do about
-                    // endless loops.
-                    return;
-                }
                 Some(Next::Effect { effect, path }) => {
                     self.state = RuntimeState::Effect { effect, path };
                     return;
@@ -273,9 +253,22 @@ impl Evaluator {
                 let active_value = context.active_value.inner.clone();
                 self.evaluate(self.root, active_value, codebase);
 
-                // Must return directly, since we don't want the context to be
-                // restored.
-                return Some(Next::Recursing);
+                // We could signal that we haven't stepped, causing the `step`
+                // function to run for another loop, not bothering its caller
+                // with an otherwise useless step.
+                //
+                // But that won't work, because of one very important edge
+                // case: If `self.root` points to nothing except a bare
+                // `self` without any children, then we would immediately
+                // land back here, producing an endless loop and hanging the
+                // caller.
+                //
+                // An endless loop that does nothing is likely a problem
+                // either way, but it's not our responsibility to address
+                // that. All we're doing here is evaluate Crosscut code, so
+                // let's do that, and let the caller decide what to do about
+                // endless loops.
+                return Some(Next::AlreadyStepped);
             }
             Node::Error { .. } => Next::Error { path },
         };
@@ -295,7 +288,6 @@ impl Evaluator {
 #[derive(Debug, Eq, PartialEq)]
 pub enum Next {
     AlreadyStepped,
-    Recursing,
     Effect { effect: Effect, path: NodePath },
     Error { path: NodePath },
     Finished { output: ValueWithSource },
