@@ -22,7 +22,7 @@ pub fn compile_and_replace(
 
 fn compile_token(
     token: &str,
-    path: &NodePath,
+    path: &mut NodePath,
     package: &Package,
     codebase: &mut Codebase,
 ) -> (Node, Option<CodeError>) {
