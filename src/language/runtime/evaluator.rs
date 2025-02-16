@@ -146,8 +146,7 @@ impl Evaluator {
                 Some(Next::AlreadyStepped) => {
                     break;
                 }
-                Some(Next::IgnoringSyntaxNode { context }) => {
-                    self.contexts.push(context);
+                Some(Next::IgnoringSyntaxNode) => {
                     continue;
                 }
                 Some(Next::ContextEvaluated) => {
@@ -239,9 +238,10 @@ impl Evaluator {
         let next = match codebase.node_at(&path) {
             Node::Empty { .. } => {
                 context.advance();
+                self.contexts.push(context);
 
                 // Restoring the context is the responsibility of the caller.
-                return Some(Next::IgnoringSyntaxNode { context });
+                return Some(Next::IgnoringSyntaxNode);
             }
             Node::Expression { expression, .. } => {
                 let next = match expression {
@@ -303,7 +303,7 @@ impl Evaluator {
 #[derive(Debug, Eq, PartialEq)]
 pub enum Next {
     AlreadyStepped,
-    IgnoringSyntaxNode { context: Context },
+    IgnoringSyntaxNode,
     ContextEvaluated,
     Recursing,
     Effect { effect: Effect, path: NodePath },
