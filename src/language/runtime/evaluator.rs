@@ -144,7 +144,24 @@ impl Evaluator {
         loop {
             match self.next(codebase) {
                 Next::Running { expression, path } => {
-                    match self.evaluate_expression(expression, path, codebase) {
+                    // It would be nicer, if `next` could return the context to
+                    // us. It must have had one available, or we wouldn't be
+                    // here right now.
+                    //
+                    // But in addition to making the lifetimes more complicated,
+                    // this would require `next` to take `&mut self`. Which
+                    // wouldn't be a problem for the use here, but `next` is
+                    // also called from `state`, which doesn't have (and
+                    // shouldn't need!) `&mut self`.
+                    let Some(context) = self.contexts.last_mut() else {
+                        unreachable!(
+                            "A context must be available, or `next` wouldn't \
+                            have returned `EvaluatorState::Running`, and this \
+                            wouldn't get executed."
+                        );
+                    };
+
+                    match context.evaluate(expression, path, codebase) {
                         EvaluateUpdate::UpdateState { new_state } => {
                             self.state = new_state;
                         }
@@ -251,29 +268,6 @@ impl Evaluator {
             }
             Node::Error { .. } => Next::Error { path },
         }
-    }
-
-    fn evaluate_expression(
-        &mut self,
-        expression: &Expression,
-        path: NodePath,
-        codebase: &Codebase,
-    ) -> EvaluateUpdate {
-        // It would be nicer, if `next` could return the context to us. It must
-        // have had one available, or we wouldn't be here right now.
-        //
-        // But in addition to making the lifetimes more complicated, this would
-        // require `next` to take `&mut self`. Which wouldn't be a problem for
-        // the use here, but `next` is also called from `state`, which doesn't
-        // have (and shouldn't need!) `&mut self`.
-        let Some(context) = self.contexts.last_mut() else {
-            unreachable!(
-                "A context must be available, or `next` wouldn't have returned \
-                `EvaluatorState::Running`, and this wouldn't get executed."
-            );
-        };
-
-        context.evaluate(expression, path, codebase)
     }
 
     fn advance(&mut self) {
