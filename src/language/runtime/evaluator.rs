@@ -265,7 +265,7 @@ mod tests {
 
         let mut codebase = Codebase::new();
         codebase.insert_as_parent_of(
-            codebase.root().path,
+            &codebase.root().path,
             Node::Recursion {
                 child: Some(*codebase.root().path.hash()),
             },
@@ -284,7 +284,7 @@ mod tests {
 
         let mut codebase = Codebase::new();
         codebase.insert_as_parent_of(
-            codebase.root().path,
+            &codebase.root().path,
             Node::Recursion {
                 child: Some(*codebase.root().path.hash()),
             },

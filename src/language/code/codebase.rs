@@ -88,7 +88,7 @@ impl Codebase {
     /// Panics, if the inserted node does not have its child node set correctly.
     pub fn insert_as_parent_of(
         &mut self,
-        child: NodePath,
+        child: &NodePath,
         node: Node,
     ) -> NodePath {
         assert_eq!(
@@ -100,7 +100,7 @@ impl Codebase {
 
         let hash = self.nodes.insert(node);
 
-        if let Some(parent) = self.parent_of(&child) {
+        if let Some(parent) = self.parent_of(child) {
             let mut updated_parent = self.nodes.get(parent.hash()).clone();
             updated_parent.replace_child(Some(hash));
 
@@ -193,7 +193,7 @@ mod tests {
 
         let a = codebase.leaf();
         let b = codebase.insert_as_parent_of(
-            a,
+            &a,
             Node::Empty {
                 child: Some(*a.hash()),
             },
@@ -220,7 +220,7 @@ mod tests {
             },
         );
         let b = codebase.insert_as_parent_of(
-            a,
+            &a,
             Node::Error {
                 node: String::from("b"),
                 child: Some(*a.hash()),
