@@ -143,7 +143,7 @@ impl Evaluator {
     pub fn step(&mut self, codebase: &Codebase) {
         loop {
             match self.next(codebase) {
-                Next::Running {
+                Next::Expression {
                     mut context,
                     expression,
                     path,
@@ -271,7 +271,7 @@ impl Evaluator {
             }
             Node::Expression { expression, .. } => {
                 // Restoring the context is the responsibility of the caller.
-                return Next::Running {
+                return Next::Expression {
                     context,
                     expression,
                     path,
@@ -302,7 +302,7 @@ impl Evaluator {
 
 #[derive(Debug, Eq, PartialEq)]
 pub enum Next<'r> {
-    Running {
+    Expression {
         context: Context,
         expression: &'r Expression,
         path: NodePath,
