@@ -146,9 +146,6 @@ impl Evaluator {
                 Some(Next::AlreadyStepped) => {
                     break;
                 }
-                Some(Next::Finished) => {
-                    return;
-                }
                 None => {
                     continue;
                 }
@@ -168,7 +165,7 @@ impl Evaluator {
                 source: None,
             };
             self.state = RuntimeState::Finished { output };
-            return Some(Next::Finished);
+            return Some(Next::AlreadyStepped);
         };
 
         let Some(path) = context.nodes_from_root.last().copied() else {
@@ -190,7 +187,7 @@ impl Evaluator {
                 return None;
             } else {
                 self.state = RuntimeState::Finished { output };
-                return Some(Next::Finished);
+                return Some(Next::AlreadyStepped);
             }
         };
 
@@ -284,7 +281,6 @@ impl Evaluator {
 #[derive(Debug, Eq, PartialEq)]
 pub enum Next {
     AlreadyStepped,
-    Finished,
 }
 
 #[cfg(test)]
