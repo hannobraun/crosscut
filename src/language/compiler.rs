@@ -59,6 +59,7 @@ fn resolve_keyword(
 ) -> Option<(Node, Option<CodeError>)> {
     match name {
         "fn" => {
+            // Every function must have a child. Other code assumes that.
             let child = if child.is_none() {
                 let child = codebase
                     .insert_as_child_of(path, Node::Empty { child: None });
