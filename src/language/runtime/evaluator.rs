@@ -145,11 +145,12 @@ impl Evaluator {
             return;
         }
 
-        // Pop the current context. We'll later restore it, if we don't mean to
-        // actually remove it.
+        // Take the current context. Depending on how things will go, we'll
+        // restore it below, or do nothing, if it turns out we actually need to
+        // remove it.
         //
-        // Doing it this way gets the borrow checker of our back, giving us a
-        // bit more breathing room to deal with contexts.
+        // Doing it this way makes some of the code below simpler or more
+        // efficient, for lifetime or cloning reasons.
         let Some(mut context) = self.contexts.pop() else {
             // No context is available, which means we're not running.
 
