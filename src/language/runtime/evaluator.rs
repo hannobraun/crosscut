@@ -218,7 +218,6 @@ impl Evaluator {
                     }
                 }
 
-                // Restoring the context is the responsibility of the caller.
                 return;
             }
             Node::Recursion { .. } => {
