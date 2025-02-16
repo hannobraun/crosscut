@@ -240,8 +240,8 @@ impl Evaluator {
                     }
                     value => {
                         panic!(
-                            "Expected value that would have created a context \
-                            (got `{value:?}`)."
+                            "Expected value that would have created a context, \
+                            got `{value:?}`."
                         );
                     }
                 }
