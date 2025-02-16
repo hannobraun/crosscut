@@ -147,11 +147,14 @@ impl Evaluator {
         // Doing it this way gets the borrow checker of our back, giving us a
         // bit more breathing room to deal with contexts.
         let Some(mut context) = self.contexts.pop() else {
+            // No context is available, which means we're not running.
+
             let output = ValueWithSource {
                 inner: Value::Nothing,
                 source: None,
             };
             self.state = RuntimeState::Finished { output };
+
             return;
         };
 
