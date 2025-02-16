@@ -170,12 +170,11 @@ impl Evaluator {
                         );
                     }
                 }
-
-                return;
             } else {
                 self.state = RuntimeState::Finished { output };
-                return;
             }
+
+            return;
         };
 
         if let RuntimeState::Effect { effect, path } = self.state.clone() {
