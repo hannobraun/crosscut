@@ -147,12 +147,11 @@ impl Evaluator {
                     break;
                 }
                 Some(Next::IntrinsicFunction {
-                    intrinsic,
-                    path,
-                    mut context,
+                    update,
+                    intrinsic: _,
+                    path: _,
+                    context,
                 }) => {
-                    let update = context
-                        .evaluate_intrinsic_function(intrinsic, path, codebase);
                     self.contexts.push(context);
 
                     match update {
@@ -219,7 +218,7 @@ impl Evaluator {
         //
         // Doing it this way gets the borrow checker of our back, giving us a
         // bit more breathing room to deal with contexts.
-        let Some(context) = self.contexts.pop() else {
+        let Some(mut context) = self.contexts.pop() else {
             return Some(Next::Finished {
                 output: ValueWithSource {
                     inner: Value::Nothing,
@@ -272,7 +271,12 @@ impl Evaluator {
                         Next::HostFunction
                     }
                     Expression::IntrinsicFunction { intrinsic } => {
+                        let update = context.evaluate_intrinsic_function(
+                            intrinsic, path, codebase,
+                        );
+
                         Next::IntrinsicFunction {
+                            update,
                             intrinsic,
                             path,
                             context,
@@ -310,6 +314,7 @@ impl Evaluator {
 pub enum Next<'r> {
     HostFunction,
     IntrinsicFunction {
+        update: EvaluateUpdate,
         intrinsic: &'r IntrinsicFunction,
         path: NodePath,
         context: Context,
