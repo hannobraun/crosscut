@@ -143,7 +143,7 @@ impl Evaluator {
     pub fn step(&mut self, codebase: &Codebase) {
         loop {
             match self.next(codebase) {
-                Some(Next::HostFunction) => {
+                Some(Next::AlreadyStepped) => {
                     break;
                 }
                 Some(Next::IntrinsicFunction) => {
@@ -252,7 +252,7 @@ impl Evaluator {
                         self.state = RuntimeState::Effect { effect, path };
                         self.contexts.push(context);
 
-                        Next::HostFunction
+                        Next::AlreadyStepped
                     }
                     Expression::IntrinsicFunction { intrinsic } => {
                         let update = context.evaluate_intrinsic_function(
@@ -304,7 +304,7 @@ impl Evaluator {
 
 #[derive(Debug, Eq, PartialEq)]
 pub enum Next {
-    HostFunction,
+    AlreadyStepped,
     IntrinsicFunction,
     IgnoringSyntaxNode { context: Context },
     ContextEvaluated,
