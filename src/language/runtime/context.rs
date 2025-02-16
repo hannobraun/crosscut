@@ -86,7 +86,7 @@ impl Context {
                             };
                             self.advance();
 
-                            return EvaluateUpdate::NewContext {
+                            return EvaluateUpdate::PushContext {
                                 root: child,
                                 active_value: Value::Nothing,
                             };
@@ -118,5 +118,5 @@ impl Context {
 #[derive(Debug, Eq, PartialEq)]
 pub enum EvaluateUpdate {
     UpdateState { new_state: RuntimeState },
-    NewContext { root: NodePath, active_value: Value },
+    PushContext { root: NodePath, active_value: Value },
 }

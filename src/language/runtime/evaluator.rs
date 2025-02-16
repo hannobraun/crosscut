@@ -214,7 +214,7 @@ impl Evaluator {
                     EvaluateUpdate::UpdateState { new_state } => {
                         self.state = new_state;
                     }
-                    EvaluateUpdate::NewContext { root, active_value } => {
+                    EvaluateUpdate::PushContext { root, active_value } => {
                         self.push_context(root, active_value, codebase);
                     }
                 }
