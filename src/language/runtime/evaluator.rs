@@ -148,32 +148,32 @@ impl Evaluator {
                     expression,
                     path,
                 } => {
-                    let update = match expression {
+                    match expression {
                         Expression::HostFunction { id } => {
                             let effect = context.evaluate_host_function(*id);
-                            EvaluateUpdate::UpdateState {
-                                new_state: RuntimeState::Effect {
-                                    effect,
-                                    path,
-                                },
+                            self.state = RuntimeState::Effect { effect, path };
+                            self.contexts.push(context);
+                        }
+                        Expression::IntrinsicFunction { intrinsic } => {
+                            let update = context.evaluate_intrinsic_function(
+                                intrinsic, path, codebase,
+                            );
+
+                            match update {
+                                EvaluateUpdate::UpdateState { new_state } => {
+                                    self.contexts.push(context);
+                                    self.state = new_state;
+                                }
+                                EvaluateUpdate::NewContext {
+                                    root,
+                                    active_value,
+                                } => {
+                                    self.contexts.push(context);
+                                    self.evaluate(root, active_value, codebase);
+                                }
                             }
                         }
-                        Expression::IntrinsicFunction { intrinsic } => context
-                            .evaluate_intrinsic_function(
-                                intrinsic, path, codebase,
-                            ),
                     };
-
-                    match update {
-                        EvaluateUpdate::UpdateState { new_state } => {
-                            self.contexts.push(context);
-                            self.state = new_state;
-                        }
-                        EvaluateUpdate::NewContext { root, active_value } => {
-                            self.contexts.push(context);
-                            self.evaluate(root, active_value, codebase);
-                        }
-                    }
 
                     break;
                 }
