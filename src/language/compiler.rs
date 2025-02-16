@@ -24,7 +24,7 @@ fn compile_token(
     token: &str,
     path: &NodePath,
     package: &Package,
-    codebase: &Codebase,
+    codebase: &mut Codebase,
 ) -> (Node, Option<CodeError>) {
     let node = codebase.node_at(path);
     let child = node.child().copied();
