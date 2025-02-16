@@ -214,6 +214,7 @@ impl Evaluator {
                         self.evaluate(root, active_value, codebase);
                     }
                 }
+
                 return;
             }
             Node::Recursion { .. } => {
