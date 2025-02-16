@@ -60,7 +60,7 @@ impl Language {
         );
     }
 
-    pub fn evaluate(&mut self, root: NodePath, active_value: Value) {
+    pub fn push_context(&mut self, root: NodePath, active_value: Value) {
         self.evaluator
             .push_context(root, active_value, &self.codebase);
     }

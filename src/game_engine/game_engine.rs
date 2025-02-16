@@ -128,7 +128,7 @@ where
                         match value.into_function_body() {
                             Ok(path) => {
                                 self.language
-                                    .evaluate(path, self.display.clone());
+                                    .push_context(path, self.display.clone());
                                 continue;
                             }
                             Err(_) => {
