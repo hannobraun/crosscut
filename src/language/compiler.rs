@@ -83,7 +83,15 @@ fn resolve_keyword(
             // functions can have an arbitrary number. Zero could be a valid
             // number of branches then, and the error case here would no longer
             // be relevant.
-            if codebase.node_at(path).child().is_some() {
+            if codebase.node_at(path).child().is_none() {
+                Some((
+                    Node::Error {
+                        node: name.to_string(),
+                        child,
+                    },
+                    Some(CodeError::FunctionWithoutBody),
+                ))
+            } else {
                 Some((
                     Node::Expression {
                         expression: Expression::IntrinsicFunction {
@@ -94,14 +102,6 @@ fn resolve_keyword(
                         child,
                     },
                     None,
-                ))
-            } else {
-                Some((
-                    Node::Error {
-                        node: name.to_string(),
-                        child,
-                    },
-                    Some(CodeError::FunctionWithoutBody),
                 ))
             }
         }
