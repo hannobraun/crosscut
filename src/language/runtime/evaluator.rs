@@ -159,6 +159,9 @@ impl Evaluator {
         };
 
         let Some(path) = context.nodes_from_root.last().copied() else {
+            // The context has no syntax tree remaining, which means we're done
+            // with it.
+
             let output = context.active_value.clone();
 
             if let Some(context) = self.contexts.last_mut() {
