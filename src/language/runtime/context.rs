@@ -27,7 +27,7 @@ impl Context {
     ) -> EvaluateUpdate {
         match expression {
             Expression::HostFunction { id } => {
-                return self.evaluate_host_function(id, path);
+                return self.evaluate_host_function(*id, path);
             }
             Expression::IntrinsicFunction { intrinsic } => {
                 match intrinsic {
@@ -116,13 +116,13 @@ impl Context {
 
     pub fn evaluate_host_function(
         &mut self,
-        id: &FunctionId,
+        id: FunctionId,
         path: NodePath,
     ) -> EvaluateUpdate {
         EvaluateUpdate::UpdateState {
             new_state: RuntimeState::Effect {
                 effect: Effect::ApplyHostFunction {
-                    id: *id,
+                    id,
                     input: self.active_value.inner.clone(),
                 },
                 path,
