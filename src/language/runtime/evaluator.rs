@@ -199,7 +199,7 @@ impl Evaluator {
             return Some(Next::AlreadyStepped);
         }
 
-        let next = match codebase.node_at(&path) {
+        match codebase.node_at(&path) {
             Node::Empty { .. } => {
                 context.advance();
                 self.contexts.push(context);
@@ -262,7 +262,6 @@ impl Evaluator {
             }
             Node::Error { .. } => {
                 self.state = RuntimeState::Error { path };
-                Next::AlreadyStepped
             }
         };
 
@@ -270,7 +269,7 @@ impl Evaluator {
         // returned by now.
         self.contexts.push(context);
 
-        Some(next)
+        Some(Next::AlreadyStepped)
     }
 
     pub fn state(&self) -> &RuntimeState {
