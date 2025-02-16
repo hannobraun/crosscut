@@ -146,9 +146,6 @@ impl Evaluator {
                 Some(Next::AlreadyStepped) => {
                     break;
                 }
-                Some(Next::Effect { path: _ }) => {
-                    return;
-                }
                 Some(Next::Error { path }) => {
                     self.state = RuntimeState::Error { path };
                     return;
@@ -206,7 +203,7 @@ impl Evaluator {
             // restore it.
             self.contexts.push(context);
             self.state = RuntimeState::Effect { effect, path };
-            return Some(Next::Effect { path });
+            return Some(Next::AlreadyStepped);
         }
 
         let next = match codebase.node_at(&path) {
@@ -288,7 +285,6 @@ impl Evaluator {
 #[derive(Debug, Eq, PartialEq)]
 pub enum Next {
     AlreadyStepped,
-    Effect { path: NodePath },
     Error { path: NodePath },
     Finished { output: ValueWithSource },
 }
