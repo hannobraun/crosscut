@@ -144,18 +144,18 @@ impl Evaluator {
     pub fn step(&mut self, codebase: &Codebase) {
         loop {
             match self.next(codebase) {
-                Next::HostFunction { id, path, context } => {
+                Some(Next::HostFunction { id, path, context }) => {
                     let effect = context.evaluate_host_function(id);
                     self.state = RuntimeState::Effect { effect, path };
                     self.contexts.push(context);
 
                     break;
                 }
-                Next::IntrinsicFunction {
+                Some(Next::IntrinsicFunction {
                     intrinsic,
                     path,
                     mut context,
-                } => {
+                }) => {
                     let update = context
                         .evaluate_intrinsic_function(intrinsic, path, codebase);
                     self.contexts.push(context);
@@ -171,15 +171,15 @@ impl Evaluator {
 
                     break;
                 }
-                Next::IgnoringSyntaxNode { mut context } => {
+                Some(Next::IgnoringSyntaxNode { mut context }) => {
                     context.advance();
                     self.contexts.push(context);
                     continue;
                 }
-                Next::ContextEvaluated => {
+                Some(Next::ContextEvaluated) => {
                     continue;
                 }
-                Next::Recursing => {
+                Some(Next::Recursing) => {
                     // We could `continue` here. Then the next call to
                     // `Self::next` above would return the next expression we
                     // need to evaluate, and we could immediately do that.
@@ -199,35 +199,38 @@ impl Evaluator {
                     // endless loops.
                     return;
                 }
-                Next::Effect { effect, path } => {
+                Some(Next::Effect { effect, path }) => {
                     self.state = RuntimeState::Effect { effect, path };
                     return;
                 }
-                Next::Error { path } => {
+                Some(Next::Error { path }) => {
                     self.state = RuntimeState::Error { path };
                     return;
                 }
-                Next::Finished { output } => {
+                Some(Next::Finished { output }) => {
                     self.state = RuntimeState::Finished { output };
                     return;
+                }
+                None => {
+                    continue;
                 }
             }
         }
     }
 
-    fn next<'r>(&mut self, codebase: &'r Codebase) -> Next<'r> {
+    fn next<'r>(&mut self, codebase: &'r Codebase) -> Option<Next<'r>> {
         // Pop the current context. We'll later restore it, if we don't mean to
         // actually remove it.
         //
         // Doing it this way gets the borrow checker of our back, giving us a
         // bit more breathing room to deal with contexts.
         let Some(context) = self.contexts.pop() else {
-            return Next::Finished {
+            return Some(Next::Finished {
                 output: ValueWithSource {
                     inner: Value::Nothing,
                     source: None,
                 },
-            };
+            });
         };
 
         let Some(path) = context.nodes_from_root.last().copied() else {
@@ -246,9 +249,9 @@ impl Evaluator {
                     }
                 }
 
-                return Next::ContextEvaluated;
+                return Some(Next::ContextEvaluated);
             } else {
-                return Next::Finished { output };
+                return Some(Next::Finished { output });
             }
         };
 
@@ -256,13 +259,13 @@ impl Evaluator {
             // We don't ant to change anything about the context, so let's
             // restore it.
             self.contexts.push(context);
-            return Next::Effect { effect, path };
+            return Some(Next::Effect { effect, path });
         }
 
         let next = match codebase.node_at(&path) {
             Node::Empty { .. } => {
                 // Restoring the context is the responsibility of the caller.
-                return Next::IgnoringSyntaxNode { context };
+                return Some(Next::IgnoringSyntaxNode { context });
             }
             Node::Expression { expression, .. } => {
                 let next = match expression {
@@ -281,7 +284,7 @@ impl Evaluator {
                 };
 
                 // Restoring the context is the responsibility of the caller.
-                return next;
+                return Some(next);
             }
             Node::Recursion { .. } => {
                 let active_value = context.active_value.inner.clone();
@@ -289,7 +292,7 @@ impl Evaluator {
 
                 // Must return directly, since we don't want the context to be
                 // restored.
-                return Next::Recursing;
+                return Some(Next::Recursing);
             }
             Node::Error { .. } => Next::Error { path },
         };
@@ -298,7 +301,7 @@ impl Evaluator {
         // returned by now.
         self.contexts.push(context);
 
-        next
+        Some(next)
     }
 
     pub fn state(&self) -> &RuntimeState {
