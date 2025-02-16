@@ -237,7 +237,6 @@ impl Evaluator {
                 context.advance();
                 self.contexts.push(context);
 
-                // Restoring the context is the responsibility of the caller.
                 return None;
             }
             Node::Expression { expression, .. } => {
