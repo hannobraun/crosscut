@@ -142,7 +142,7 @@ impl Evaluator {
 
     pub fn step(&mut self, codebase: &Codebase) {
         loop {
-            match self.next(codebase) {
+            match self.maybe_step(codebase) {
                 Some(Next::AlreadyStepped) => {
                     break;
                 }
@@ -153,7 +153,7 @@ impl Evaluator {
         }
     }
 
-    fn next(&mut self, codebase: &Codebase) -> Option<Next> {
+    fn maybe_step(&mut self, codebase: &Codebase) -> Option<Next> {
         // Pop the current context. We'll later restore it, if we don't mean to
         // actually remove it.
         //
