@@ -71,17 +71,6 @@ impl Codebase {
     /// ## Panics
     ///
     /// Panics, if the inserted node does not have its child node set correctly.
-    ///
-    /// ## Implementation Note
-    ///
-    /// This function is a bit weird. It explicitly inserts a node as the parent
-    /// of another, but then requires the caller to set the new parent's `child`
-    /// field explicitly. It could take a `NodeKind` instead, and do that
-    /// itself.
-    ///
-    /// I've decided not to fix that for now, because I first want to see how
-    /// this API (and its caller's needs) evolve, as the language expands and
-    /// the syntax tree takes something akin to its final form.
     pub fn insert_as_parent_of(
         &mut self,
         child: NodePath,
