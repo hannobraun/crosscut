@@ -27,7 +27,7 @@ impl Context {
     ) -> EvaluateUpdate {
         match expression {
             Expression::HostFunction { id } => {
-                return self.evaluate_host_function(*id, path);
+                self.evaluate_host_function(*id, path)
             }
             Expression::IntrinsicFunction { intrinsic } => {
                 match intrinsic {
@@ -102,15 +102,15 @@ impl Context {
                         };
                     }
                 }
+
+                self.advance();
+
+                EvaluateUpdate::UpdateState {
+                    new_state: RuntimeState::Running {
+                        active_value: self.active_value.clone(),
+                    },
+                }
             }
-        }
-
-        self.advance();
-
-        EvaluateUpdate::UpdateState {
-            new_state: RuntimeState::Running {
-                active_value: self.active_value.clone(),
-            },
         }
     }
 
