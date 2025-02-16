@@ -141,6 +141,11 @@ impl Evaluator {
     }
 
     pub fn step(&mut self, codebase: &Codebase) {
+        if let RuntimeState::Effect { effect, path } = self.state.clone() {
+            self.state = RuntimeState::Effect { effect, path };
+            return;
+        }
+
         // Pop the current context. We'll later restore it, if we don't mean to
         // actually remove it.
         //
@@ -182,14 +187,6 @@ impl Evaluator {
 
             return;
         };
-
-        if let RuntimeState::Effect { effect, path } = self.state.clone() {
-            // We don't ant to change anything about the context, so let's
-            // restore it.
-            self.contexts.push(context);
-            self.state = RuntimeState::Effect { effect, path };
-            return;
-        }
 
         match codebase.node_at(&path) {
             Node::Empty { .. } => {
