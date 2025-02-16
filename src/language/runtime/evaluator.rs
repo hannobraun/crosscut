@@ -190,8 +190,6 @@ impl Evaluator {
         match codebase.node_at(&path) {
             Node::Empty { .. } => {
                 context.advance();
-                self.contexts.push(context);
-                return;
             }
             Node::Expression { expression, .. } => {
                 match expression {
