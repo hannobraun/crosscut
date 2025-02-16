@@ -235,7 +235,6 @@ fn render_help<A: EditorOutputAdapter>(
     writeln!(adapter)?;
 
     match node {
-        Node::Leaf => {}
         Node::Empty { .. } => {
             writeln!(
                 adapter,

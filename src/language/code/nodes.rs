@@ -90,8 +90,6 @@ impl fmt::Display for NodeHash {
 
 #[derive(Clone, Debug, Eq, PartialEq, udigest::Digestable)]
 pub enum Node {
-    #[allow(unused)] // code using this variant is being worked on
-    Leaf,
     Empty {
         child: Option<NodeHash>,
     },
@@ -127,7 +125,6 @@ impl Node {
 
     pub fn child(&self) -> Option<&NodeHash> {
         match self {
-            Self::Leaf => None,
             Self::Empty { child } => child.as_ref(),
             Self::Expression { child, .. } => child.as_ref(),
             Self::Recursion { child } => child.as_ref(),
@@ -137,11 +134,6 @@ impl Node {
 
     pub fn replace_child(&mut self, replacement: Option<NodeHash>) {
         match self {
-            Self::Leaf => {
-                panic!(
-                    "Attempting to replace non-existing child of a leaf node."
-                );
-            }
             Self::Empty { child } => *child = replacement,
             Self::Expression { child, .. } => *child = replacement,
             Self::Recursion { child } => *child = replacement,
@@ -165,9 +157,6 @@ pub struct NodeDisplay<'r> {
 impl fmt::Display for NodeDisplay<'_> {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match self.node {
-            Node::Leaf => {
-                panic!("Must not format leaf node.");
-            }
             Node::Empty { .. } => {
                 write!(f, "")
             }
