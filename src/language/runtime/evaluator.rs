@@ -146,9 +146,6 @@ impl Evaluator {
                 Some(Next::AlreadyStepped) => {
                     break;
                 }
-                Some(Next::ContextEvaluated) => {
-                    continue;
-                }
                 Some(Next::Recursing) => {
                     // We could `continue` here. Then the next call to
                     // `Self::next` above would return the next expression we
@@ -219,7 +216,7 @@ impl Evaluator {
                     }
                 }
 
-                return Some(Next::ContextEvaluated);
+                return None;
             } else {
                 return Some(Next::Finished { output });
             }
@@ -298,7 +295,6 @@ impl Evaluator {
 #[derive(Debug, Eq, PartialEq)]
 pub enum Next {
     AlreadyStepped,
-    ContextEvaluated,
     Recursing,
     Effect { effect: Effect, path: NodePath },
     Error { path: NodePath },
