@@ -148,7 +148,9 @@ impl Evaluator {
                     expression,
                     path,
                 } => {
-                    match context.evaluate(expression, path, codebase) {
+                    let update = context.evaluate(expression, path, codebase);
+
+                    match update {
                         EvaluateUpdate::UpdateState { new_state } => {
                             self.contexts.push(context);
                             self.state = new_state;
