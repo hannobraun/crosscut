@@ -226,6 +226,11 @@ impl Evaluator {
                 let active_value = context.active_value.inner.clone();
                 self.evaluate(self.root, active_value, codebase);
 
+                // Return here, to bypass restoring the context. We already
+                // created a new one with the call above, and the old one has
+                // become redundant.
+                //
+                // This is tail call elimination.
                 return;
             }
             Node::Error { .. } => {
