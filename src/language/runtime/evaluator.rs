@@ -161,8 +161,9 @@ impl Evaluator {
 
                     break;
                 }
-                Next::IgnoringSyntaxNode => {
-                    self.advance();
+                Next::IgnoringSyntaxNode { mut context } => {
+                    context.advance();
+                    self.contexts.push(context);
                     continue;
                 }
                 Next::ContextEvaluated => {
@@ -249,7 +250,10 @@ impl Evaluator {
         }
 
         let next = match codebase.node_at(&path) {
-            Node::Empty { .. } => Next::IgnoringSyntaxNode,
+            Node::Empty { .. } => {
+                // Restoring the context is the responsibility of the caller.
+                return Next::IgnoringSyntaxNode { context };
+            }
             Node::Expression { expression, .. } => {
                 // Restoring the context is the responsibility of the caller.
                 return Next::Running {
@@ -276,12 +280,6 @@ impl Evaluator {
         next
     }
 
-    fn advance(&mut self) {
-        if let Some(context) = self.contexts.last_mut() {
-            context.advance();
-        }
-    }
-
     pub fn state(&self) -> &RuntimeState {
         &self.state
     }
@@ -294,7 +292,9 @@ pub enum Next<'r> {
         expression: &'r Expression,
         path: NodePath,
     },
-    IgnoringSyntaxNode,
+    IgnoringSyntaxNode {
+        context: Context,
+    },
     ContextEvaluated,
     Recursing,
     Effect {
