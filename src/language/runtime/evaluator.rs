@@ -148,7 +148,21 @@ impl Evaluator {
                     expression,
                     path,
                 } => {
-                    let update = context.evaluate(expression, path, codebase);
+                    let update = match expression {
+                        Expression::HostFunction { id } => {
+                            let effect = context.evaluate_host_function(*id);
+                            EvaluateUpdate::UpdateState {
+                                new_state: RuntimeState::Effect {
+                                    effect,
+                                    path,
+                                },
+                            }
+                        }
+                        Expression::IntrinsicFunction { intrinsic } => context
+                            .evaluate_intrinsic_function(
+                                intrinsic, path, codebase,
+                            ),
+                    };
 
                     match update {
                         EvaluateUpdate::UpdateState { new_state } => {

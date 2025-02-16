@@ -1,5 +1,5 @@
 use crate::language::{
-    code::{Codebase, Expression, IntrinsicFunction, Literal, NodePath, Type},
+    code::{Codebase, IntrinsicFunction, Literal, NodePath, Type},
     packages::FunctionId,
 };
 
@@ -19,25 +19,6 @@ pub struct Context {
 }
 
 impl Context {
-    pub fn evaluate(
-        &mut self,
-        expression: &Expression,
-        path: NodePath,
-        codebase: &Codebase,
-    ) -> EvaluateUpdate {
-        match expression {
-            Expression::HostFunction { id } => {
-                let effect = self.evaluate_host_function(*id);
-                EvaluateUpdate::UpdateState {
-                    new_state: RuntimeState::Effect { effect, path },
-                }
-            }
-            Expression::IntrinsicFunction { intrinsic } => {
-                self.evaluate_intrinsic_function(intrinsic, path, codebase)
-            }
-        }
-    }
-
     pub fn evaluate_host_function(&self, id: FunctionId) -> Effect {
         Effect::ApplyHostFunction {
             id,
