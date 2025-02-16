@@ -143,8 +143,7 @@ impl Evaluator {
     pub fn step(&mut self, codebase: &Codebase) {
         loop {
             match self.next(codebase) {
-                Some(Next::HostFunction { context }) => {
-                    self.contexts.push(context);
+                Some(Next::HostFunction) => {
                     break;
                 }
                 Some(Next::IntrinsicFunction {
@@ -268,8 +267,9 @@ impl Evaluator {
                     Expression::HostFunction { id } => {
                         let effect = context.evaluate_host_function(*id);
                         self.state = RuntimeState::Effect { effect, path };
+                        self.contexts.push(context);
 
-                        Next::HostFunction { context }
+                        Next::HostFunction
                     }
                     Expression::IntrinsicFunction { intrinsic } => {
                         Next::IntrinsicFunction {
@@ -308,9 +308,7 @@ impl Evaluator {
 
 #[derive(Debug, Eq, PartialEq)]
 pub enum Next<'r> {
-    HostFunction {
-        context: Context,
-    },
+    HostFunction,
     IntrinsicFunction {
         intrinsic: &'r IntrinsicFunction,
         path: NodePath,
