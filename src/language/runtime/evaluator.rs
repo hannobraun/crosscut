@@ -146,11 +146,7 @@ impl Evaluator {
                 Some(Next::HostFunction) => {
                     break;
                 }
-                Some(Next::IntrinsicFunction {
-                    update,
-                    path: _,
-                    context,
-                }) => {
+                Some(Next::IntrinsicFunction { update, context }) => {
                     self.contexts.push(context);
 
                     match update {
@@ -274,11 +270,7 @@ impl Evaluator {
                             intrinsic, path, codebase,
                         );
 
-                        Next::IntrinsicFunction {
-                            update,
-                            path,
-                            context,
-                        }
+                        Next::IntrinsicFunction { update, context }
                     }
                 };
 
@@ -313,7 +305,6 @@ pub enum Next {
     HostFunction,
     IntrinsicFunction {
         update: EvaluateUpdate,
-        path: NodePath,
         context: Context,
     },
     IgnoringSyntaxNode {
