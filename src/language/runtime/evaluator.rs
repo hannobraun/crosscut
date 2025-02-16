@@ -148,7 +148,6 @@ impl Evaluator {
                 }
                 Some(Next::IntrinsicFunction {
                     update,
-                    intrinsic: _,
                     path: _,
                     context,
                 }) => {
@@ -212,7 +211,7 @@ impl Evaluator {
         }
     }
 
-    fn next<'r>(&mut self, codebase: &'r Codebase) -> Option<Next<'r>> {
+    fn next(&mut self, codebase: &Codebase) -> Option<Next> {
         // Pop the current context. We'll later restore it, if we don't mean to
         // actually remove it.
         //
@@ -277,7 +276,6 @@ impl Evaluator {
 
                         Next::IntrinsicFunction {
                             update,
-                            intrinsic,
                             path,
                             context,
                         }
@@ -311,11 +309,10 @@ impl Evaluator {
 }
 
 #[derive(Debug, Eq, PartialEq)]
-pub enum Next<'r> {
+pub enum Next {
     HostFunction,
     IntrinsicFunction {
         update: EvaluateUpdate,
-        intrinsic: &'r IntrinsicFunction,
         path: NodePath,
         context: Context,
     },
