@@ -115,7 +115,7 @@ impl Context {
     }
 
     pub fn evaluate_host_function(
-        &mut self,
+        &self,
         id: FunctionId,
         path: NodePath,
     ) -> EvaluateUpdate {
