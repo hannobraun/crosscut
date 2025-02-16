@@ -59,7 +59,7 @@ fn resolve_keyword(
 ) -> Option<(Node, Option<CodeError>)> {
     match name {
         "fn" => {
-            let child = if codebase.node_at(path).child().is_none() {
+            let child = if child.is_none() {
                 let child = codebase
                     .insert_as_child_of(path, Node::Empty { child: None });
                 *path = codebase.latest_version_of(*path);
