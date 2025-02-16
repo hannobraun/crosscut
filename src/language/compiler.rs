@@ -59,29 +59,6 @@ fn resolve_keyword(
 ) -> Option<(Node, Option<CodeError>)> {
     match name {
         "fn" => {
-            // This isn't quite right. Functions with an empty body are a
-            // completely reasonable thing to design. They'd just do nothing,
-            // returning the active value unchanged.
-            //
-            // And if we didn't have to handle the error case here, then this
-            // code could move into `IntrinsicFunction::resolve`, where it fits
-            // better.
-            //
-            // But we would have to handle the potential emptiness of a function
-            // somehow:
-            //
-            // - Either `Value::Function` would have to have an optional body.
-            //   I've tried this, and don't like it, because it increases
-            //   complexity.
-            // - Or we'd need some kind of leaf node that can fill in as an
-            //   empty body. But that's a larger change, and then we have to
-            //   deal with nodes that the editor shouldn't display or edit.
-            //
-            // Due to these problems, I'd like to leave this as-is, for now. And
-            // I think this situation is only temporary anyway: At some point,
-            // functions can have an arbitrary number. Zero could be a valid
-            // number of branches then, and the error case here would no longer
-            // be relevant.
             let child = if codebase.node_at(path).child().is_none() {
                 let child = codebase
                     .insert_as_child_of(path, Node::Empty { child: None });
