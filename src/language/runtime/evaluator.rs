@@ -191,33 +191,32 @@ impl Evaluator {
             Node::Empty { .. } => {
                 context.advance();
             }
-            Node::Expression { expression, .. } => {
-                match expression {
-                    Expression::HostFunction { id } => {
-                        let effect = context.evaluate_host_function(*id);
-                        self.state = RuntimeState::Effect { effect, path };
-                        self.contexts.push(context);
-                    }
-                    Expression::IntrinsicFunction { intrinsic } => {
-                        let update = context.evaluate_intrinsic_function(
-                            intrinsic, path, codebase,
-                        );
-                        self.contexts.push(context);
+            Node::Expression {
+                expression: Expression::HostFunction { id },
+                ..
+            } => {
+                let effect = context.evaluate_host_function(*id);
+                self.state = RuntimeState::Effect { effect, path };
+                self.contexts.push(context);
 
-                        match update {
-                            EvaluateUpdate::UpdateState { new_state } => {
-                                self.state = new_state;
-                            }
-                            EvaluateUpdate::NewContext {
-                                root,
-                                active_value,
-                            } => {
-                                self.evaluate(root, active_value, codebase);
-                            }
-                        }
+                return;
+            }
+            Node::Expression {
+                expression: Expression::IntrinsicFunction { intrinsic },
+                ..
+            } => {
+                let update = context
+                    .evaluate_intrinsic_function(intrinsic, path, codebase);
+                self.contexts.push(context);
+
+                match update {
+                    EvaluateUpdate::UpdateState { new_state } => {
+                        self.state = new_state;
+                    }
+                    EvaluateUpdate::NewContext { root, active_value } => {
+                        self.evaluate(root, active_value, codebase);
                     }
                 }
-
                 return;
             }
             Node::Recursion { .. } => {
