@@ -197,9 +197,6 @@ impl Evaluator {
             } => {
                 let effect = context.evaluate_host_function(*id);
                 self.state = RuntimeState::Effect { effect, path };
-                self.contexts.push(context);
-
-                return;
             }
             Node::Expression {
                 expression: Expression::IntrinsicFunction { intrinsic },
