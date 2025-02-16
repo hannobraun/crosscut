@@ -141,10 +141,6 @@ impl Evaluator {
     }
 
     pub fn step(&mut self, codebase: &Codebase) {
-        self.maybe_step(codebase);
-    }
-
-    fn maybe_step(&mut self, codebase: &Codebase) -> bool {
         // Pop the current context. We'll later restore it, if we don't mean to
         // actually remove it.
         //
@@ -156,7 +152,7 @@ impl Evaluator {
                 source: None,
             };
             self.state = RuntimeState::Finished { output };
-            return true;
+            return;
         };
 
         let Some(path) = context.nodes_from_root.last().copied() else {
@@ -175,10 +171,10 @@ impl Evaluator {
                     }
                 }
 
-                return false;
+                return;
             } else {
                 self.state = RuntimeState::Finished { output };
-                return true;
+                return;
             }
         };
 
@@ -187,14 +183,14 @@ impl Evaluator {
             // restore it.
             self.contexts.push(context);
             self.state = RuntimeState::Effect { effect, path };
-            return true;
+            return;
         }
 
         match codebase.node_at(&path) {
             Node::Empty { .. } => {
                 context.advance();
                 self.contexts.push(context);
-                return false;
+                return;
             }
             Node::Expression { expression, .. } => {
                 match expression {
@@ -224,7 +220,7 @@ impl Evaluator {
                 }
 
                 // Restoring the context is the responsibility of the caller.
-                return true;
+                return;
             }
             Node::Recursion { .. } => {
                 let active_value = context.active_value.inner.clone();
@@ -245,7 +241,7 @@ impl Evaluator {
                 // that. All we're doing here is evaluate Crosscut code, so
                 // let's do that, and let the caller decide what to do about
                 // endless loops.
-                return true;
+                return;
             }
             Node::Error { .. } => {
                 self.state = RuntimeState::Error { path };
@@ -255,8 +251,6 @@ impl Evaluator {
         // Any case in which the context shouldn't be restored would have
         // returned by now.
         self.contexts.push(context);
-
-        true
     }
 
     pub fn state(&self) -> &RuntimeState {
