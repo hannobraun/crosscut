@@ -1,5 +1,6 @@
-use crate::language::code::{
-    Codebase, Expression, IntrinsicFunction, Literal, NodePath, Type,
+use crate::language::{
+    code::{Codebase, Expression, IntrinsicFunction, Literal, NodePath, Type},
+    packages::FunctionId,
 };
 
 use super::{Effect, RuntimeState, Value, ValueWithSource};
@@ -26,15 +27,7 @@ impl Context {
     ) -> EvaluateUpdate {
         match expression {
             Expression::HostFunction { id } => {
-                return EvaluateUpdate::UpdateState {
-                    new_state: RuntimeState::Effect {
-                        effect: Effect::ApplyHostFunction {
-                            id: *id,
-                            input: self.active_value.inner.clone(),
-                        },
-                        path,
-                    },
-                };
+                return self.evaluate_host_function(id, path);
             }
             Expression::IntrinsicFunction { intrinsic } => {
                 match intrinsic {
@@ -117,6 +110,22 @@ impl Context {
         EvaluateUpdate::UpdateState {
             new_state: RuntimeState::Running {
                 active_value: self.active_value.clone(),
+            },
+        }
+    }
+
+    pub fn evaluate_host_function(
+        &mut self,
+        id: &FunctionId,
+        path: NodePath,
+    ) -> EvaluateUpdate {
+        EvaluateUpdate::UpdateState {
+            new_state: RuntimeState::Effect {
+                effect: Effect::ApplyHostFunction {
+                    id: *id,
+                    input: self.active_value.inner.clone(),
+                },
+                path,
             },
         }
     }
