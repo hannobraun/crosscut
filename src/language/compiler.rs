@@ -82,27 +82,27 @@ fn resolve_keyword(
             // functions can have an arbitrary number. Zero could be a valid
             // number of branches then, and the error case here would no longer
             // be relevant.
-            if codebase.node_at(path).child().is_none() {
-                Some((
-                    Node::Error {
-                        node: name.to_string(),
-                        child,
-                    },
-                    Some(CodeError::FunctionWithoutBody),
-                ))
+            let child = if codebase.node_at(path).child().is_none() {
+                let child = codebase
+                    .insert_as_child_of(path, Node::Empty { child: None });
+                *path = codebase.latest_version_of(*path);
+
+                Some(*child.hash())
             } else {
-                Some((
-                    Node::Expression {
-                        expression: Expression::IntrinsicFunction {
-                            intrinsic: IntrinsicFunction::Literal {
-                                literal: Literal::Function,
-                            },
+                child
+            };
+
+            Some((
+                Node::Expression {
+                    expression: Expression::IntrinsicFunction {
+                        intrinsic: IntrinsicFunction::Literal {
+                            literal: Literal::Function,
                         },
-                        child,
                     },
-                    None,
-                ))
-            }
+                    child,
+                },
+                None,
+            ))
         }
         "self" => Some((Node::Recursion { child }, None)),
         _ => None,

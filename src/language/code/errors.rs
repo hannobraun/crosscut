@@ -4,16 +4,12 @@ use super::Expression;
 
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub enum CodeError {
-    FunctionWithoutBody,
     UnresolvedIdentifier { candidates: Vec<Expression> },
 }
 
 impl fmt::Display for CodeError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match self {
-            Self::FunctionWithoutBody => {
-                write!(f, "function without body")?;
-            }
             Self::UnresolvedIdentifier { candidates } => {
                 write!(f, "unresolved syntax node")?;
 

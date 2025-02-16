@@ -62,6 +62,21 @@ impl Codebase {
         self.changes.latest_version_of(path)
     }
 
+    pub fn insert_as_child_of(
+        &mut self,
+        parent: &NodePath,
+        node: Node,
+    ) -> NodePath {
+        let hash = self.nodes.insert(node);
+
+        let mut updated_parent = self.nodes.get(parent.hash()).clone();
+        updated_parent.replace_child(Some(hash));
+
+        self.replace_node(parent, updated_parent);
+
+        NodePath { hash }
+    }
+
     /// # Insert a node as the parent of another
     ///
     /// The new node takes the place of the other node in the syntax tree. The

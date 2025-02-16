@@ -1,7 +1,7 @@
 use crate::language::{
-    code::{CodeError, NodePath},
+    code::NodePath,
     instance::Language,
-    runtime::{Effect, RuntimeState, Value, ValueWithSource},
+    runtime::{Effect, Value, ValueWithSource},
 };
 
 #[test]
@@ -55,20 +55,24 @@ fn self_recursion() {
 
 #[test]
 fn empty_function() {
-    // An `fn` token that doesn't follow an expression would create a function
-    // without a body. This is an error.
+    // If an `fn` node doesn't have a child, an empty syntax node should be
+    // created as a child for it.
 
     let mut language = Language::without_package();
 
     language.enter_code("fn");
+    let path = match language.step_until_finished().into_function_body() {
+        Ok(path) => path,
+        output => {
+            panic!("Unexpected output: {output:?}");
+        }
+    };
 
-    let bare_fn = language.codebase().root().path;
+    language.push_context(path, Value::Nothing);
     assert_eq!(
-        language.codebase().error_at(&bare_fn),
-        Some(&CodeError::FunctionWithoutBody),
+        language.step_until_finished().map(|value| value.inner),
+        Ok(Value::Nothing),
     );
-
-    assert!(matches!(language.step(), RuntimeState::Error { .. }));
 }
 
 pub trait IntoFunctionBody {
