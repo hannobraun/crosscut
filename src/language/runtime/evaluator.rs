@@ -172,7 +172,7 @@ impl Evaluator {
                                 }
                             }
                         }
-                    };
+                    }
 
                     break;
                 }
