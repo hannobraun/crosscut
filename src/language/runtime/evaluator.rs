@@ -143,29 +143,18 @@ impl Evaluator {
     pub fn step(&mut self, codebase: &Codebase) {
         loop {
             match self.next(codebase) {
-                Next::Running { expression, path } => {
-                    // It would be nicer, if `next` could return the context to
-                    // us. It must have had one available, or we wouldn't be
-                    // here right now.
-                    //
-                    // But in addition to making the lifetimes more complicated,
-                    // this would require `next` to take `&mut self`. Which
-                    // wouldn't be a problem for the use here, but `next` is
-                    // also called from `state`, which doesn't have (and
-                    // shouldn't need!) `&mut self`.
-                    let Some(context) = self.contexts.last_mut() else {
-                        unreachable!(
-                            "A context must be available, or `next` wouldn't \
-                            have returned `EvaluatorState::Running`, and this \
-                            wouldn't get executed."
-                        );
-                    };
-
+                Next::Running {
+                    mut context,
+                    expression,
+                    path,
+                } => {
                     match context.evaluate(expression, path, codebase) {
                         EvaluateUpdate::UpdateState { new_state } => {
+                            self.contexts.push(context);
                             self.state = new_state;
                         }
                         EvaluateUpdate::NewContext { root, active_value } => {
+                            self.contexts.push(context);
                             self.evaluate(root, active_value, codebase);
                         }
                     }
@@ -263,7 +252,11 @@ impl Evaluator {
             Node::Leaf => Next::IgnoringSyntaxNode,
             Node::Empty { .. } => Next::IgnoringSyntaxNode,
             Node::Expression { expression, .. } => {
-                Next::Running { expression, path }
+                return Next::Running {
+                    context,
+                    expression,
+                    path,
+                };
             }
             Node::Recursion { .. } => {
                 let active_value = context.active_value.inner.clone();
@@ -297,6 +290,7 @@ impl Evaluator {
 #[derive(Debug, Eq, PartialEq)]
 pub enum Next<'r> {
     Running {
+        context: Context,
         expression: &'r Expression,
         path: NodePath,
     },
