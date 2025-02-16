@@ -58,9 +58,9 @@ impl Context {
                         Literal::Function => {
                             let Some(child) = codebase.child_of(&path) else {
                                 unreachable!(
-                                    "Function literal must have a \
-                                            child, or it wouldn't have been \
-                                            resolved as a function literal."
+                                    "Function literal must have a child, or it \
+                                    wouldn't have been resolved as a function \
+                                    literal."
                                 );
                             };
 
@@ -72,9 +72,9 @@ impl Context {
                         Literal::Tuple => {
                             let Some(child) = codebase.child_of(&path) else {
                                 unreachable!(
-                                    "Tuple literal must have a child, \
-                                            or it wouldn't have been resolved \
-                                            as a tuple literal."
+                                    "Tuple literal must have a child, or it \
+                                    wouldn't have been resolved as a tuple \
+                                    literal."
                                 );
                             };
 
