@@ -27,7 +27,7 @@ impl Evaluator {
             },
         };
 
-        evaluator.evaluate(evaluator.root, Value::Nothing, codebase);
+        evaluator.push_context(evaluator.root, Value::Nothing, codebase);
 
         evaluator
     }
@@ -36,7 +36,7 @@ impl Evaluator {
         *self = Self::new(codebase.root().path, codebase);
     }
 
-    pub fn evaluate(
+    pub fn push_context(
         &mut self,
         root: NodePath,
         active_value: Value,
@@ -215,7 +215,7 @@ impl Evaluator {
                         self.state = new_state;
                     }
                     EvaluateUpdate::NewContext { root, active_value } => {
-                        self.evaluate(root, active_value, codebase);
+                        self.push_context(root, active_value, codebase);
                     }
                 }
 
@@ -225,7 +225,7 @@ impl Evaluator {
             }
             Node::Recursion { .. } => {
                 let active_value = context.active_value.inner.clone();
-                self.evaluate(self.root, active_value, codebase);
+                self.push_context(self.root, active_value, codebase);
 
                 // Return here, to bypass restoring the context. We already
                 // created a new one with the call above, and the old one has

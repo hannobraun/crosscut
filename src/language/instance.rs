@@ -61,7 +61,8 @@ impl Language {
     }
 
     pub fn evaluate(&mut self, root: NodePath, active_value: Value) {
-        self.evaluator.evaluate(root, active_value, &self.codebase);
+        self.evaluator
+            .push_context(root, active_value, &self.codebase);
     }
 
     pub fn step(&mut self) -> &RuntimeState {
