@@ -166,7 +166,7 @@ impl Evaluator {
             // The context has no syntax tree remaining, which means we're done
             // with it.
 
-            let output = context.active_value.clone();
+            let output = context.active_value;
 
             if let Some(context) = self.contexts.last_mut() {
                 match &mut context.active_value.inner {
