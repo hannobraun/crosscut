@@ -142,13 +142,10 @@ impl Evaluator {
 
     pub fn step(&mut self, codebase: &Codebase) {
         loop {
-            match self.maybe_step(codebase) {
-                true => {
-                    break;
-                }
-                false => {
-                    continue;
-                }
+            if self.maybe_step(codebase) {
+                break;
+            } else {
+                continue;
             }
         }
     }
