@@ -143,17 +143,17 @@ impl Evaluator {
     pub fn step(&mut self, codebase: &Codebase) {
         loop {
             match self.maybe_step(codebase) {
-                Some(Next::AlreadyStepped) => {
+                true => {
                     break;
                 }
-                None => {
+                false => {
                     continue;
                 }
             }
         }
     }
 
-    fn maybe_step(&mut self, codebase: &Codebase) -> Option<Next> {
+    fn maybe_step(&mut self, codebase: &Codebase) -> bool {
         // Pop the current context. We'll later restore it, if we don't mean to
         // actually remove it.
         //
@@ -165,7 +165,7 @@ impl Evaluator {
                 source: None,
             };
             self.state = RuntimeState::Finished { output };
-            return Some(Next::AlreadyStepped);
+            return true;
         };
 
         let Some(path) = context.nodes_from_root.last().copied() else {
@@ -184,10 +184,10 @@ impl Evaluator {
                     }
                 }
 
-                return None;
+                return false;
             } else {
                 self.state = RuntimeState::Finished { output };
-                return Some(Next::AlreadyStepped);
+                return true;
             }
         };
 
@@ -196,14 +196,14 @@ impl Evaluator {
             // restore it.
             self.contexts.push(context);
             self.state = RuntimeState::Effect { effect, path };
-            return Some(Next::AlreadyStepped);
+            return true;
         }
 
         match codebase.node_at(&path) {
             Node::Empty { .. } => {
                 context.advance();
                 self.contexts.push(context);
-                return None;
+                return false;
             }
             Node::Expression { expression, .. } => {
                 match expression {
@@ -233,7 +233,7 @@ impl Evaluator {
                 }
 
                 // Restoring the context is the responsibility of the caller.
-                return Some(Next::AlreadyStepped);
+                return true;
             }
             Node::Recursion { .. } => {
                 let active_value = context.active_value.inner.clone();
@@ -254,7 +254,7 @@ impl Evaluator {
                 // that. All we're doing here is evaluate Crosscut code, so
                 // let's do that, and let the caller decide what to do about
                 // endless loops.
-                return Some(Next::AlreadyStepped);
+                return true;
             }
             Node::Error { .. } => {
                 self.state = RuntimeState::Error { path };
@@ -265,17 +265,12 @@ impl Evaluator {
         // returned by now.
         self.contexts.push(context);
 
-        Some(Next::AlreadyStepped)
+        true
     }
 
     pub fn state(&self) -> &RuntimeState {
         &self.state
     }
-}
-
-#[derive(Debug, Eq, PartialEq)]
-pub enum Next {
-    AlreadyStepped,
 }
 
 #[cfg(test)]
