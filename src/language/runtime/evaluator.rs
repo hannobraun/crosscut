@@ -226,21 +226,6 @@ impl Evaluator {
                 let active_value = context.active_value.inner.clone();
                 self.evaluate(self.root, active_value, codebase);
 
-                // We could signal that we haven't stepped, causing the `step`
-                // function to run for another loop, not bothering its caller
-                // with an otherwise useless step.
-                //
-                // But that won't work, because of one very important edge
-                // case: If `self.root` points to nothing except a bare
-                // `self` without any children, then we would immediately
-                // land back here, producing an endless loop and hanging the
-                // caller.
-                //
-                // An endless loop that does nothing is likely a problem
-                // either way, but it's not our responsibility to address
-                // that. All we're doing here is evaluate Crosscut code, so
-                // let's do that, and let the caller decide what to do about
-                // endless loops.
                 return;
             }
             Node::Error { .. } => {
