@@ -164,12 +164,11 @@ impl Evaluator {
         // Doing it this way gets the borrow checker of our back, giving us a
         // bit more breathing room to deal with contexts.
         let Some(mut context) = self.contexts.pop() else {
-            return Some(Next::Finished {
-                output: ValueWithSource {
-                    inner: Value::Nothing,
-                    source: None,
-                },
-            });
+            let output = ValueWithSource {
+                inner: Value::Nothing,
+                source: None,
+            };
+            return Some(Next::Finished { output });
         };
 
         let Some(path) = context.nodes_from_root.last().copied() else {
