@@ -1,6 +1,5 @@
-use crate::language::{
-    code::{Codebase, Expression, IntrinsicFunction, Literal, Node, NodePath},
-    packages::FunctionId,
+use crate::language::code::{
+    Codebase, Expression, IntrinsicFunction, Literal, Node, NodePath,
 };
 
 use super::{
@@ -144,11 +143,7 @@ impl Evaluator {
     pub fn step(&mut self, codebase: &Codebase) {
         loop {
             match self.next(codebase) {
-                Some(Next::HostFunction {
-                    id: _,
-                    path: _,
-                    context,
-                }) => {
+                Some(Next::HostFunction { path: _, context }) => {
                     self.contexts.push(context);
                     break;
                 }
@@ -274,11 +269,7 @@ impl Evaluator {
                         let effect = context.evaluate_host_function(*id);
                         self.state = RuntimeState::Effect { effect, path };
 
-                        Next::HostFunction {
-                            id: *id,
-                            path,
-                            context,
-                        }
+                        Next::HostFunction { path, context }
                     }
                     Expression::IntrinsicFunction { intrinsic } => {
                         Next::IntrinsicFunction {
@@ -318,7 +309,6 @@ impl Evaluator {
 #[derive(Debug, Eq, PartialEq)]
 pub enum Next<'r> {
     HostFunction {
-        id: FunctionId,
         path: NodePath,
         context: Context,
     },
