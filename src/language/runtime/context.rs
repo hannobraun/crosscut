@@ -115,6 +115,7 @@ impl Context {
     }
 }
 
+#[derive(Debug)]
 pub enum EvaluateUpdate {
     UpdateState { new_state: RuntimeState },
     NewContext { root: NodePath, active_value: Value },
