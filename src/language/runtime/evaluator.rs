@@ -158,17 +158,16 @@ impl Evaluator {
                             let update = context.evaluate_intrinsic_function(
                                 intrinsic, path, codebase,
                             );
+                            self.contexts.push(context);
 
                             match update {
                                 EvaluateUpdate::UpdateState { new_state } => {
-                                    self.contexts.push(context);
                                     self.state = new_state;
                                 }
                                 EvaluateUpdate::NewContext {
                                     root,
                                     active_value,
                                 } => {
-                                    self.contexts.push(context);
                                     self.evaluate(root, active_value, codebase);
                                 }
                             }
