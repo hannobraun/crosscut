@@ -216,7 +216,12 @@ impl Evaluator {
     }
 
     fn next<'r>(&mut self, codebase: &'r Codebase) -> Next<'r> {
-        let Some(context) = self.contexts.last() else {
+        // Pop the current context. We'll later restore it, if we don't mean to
+        // actually remove it.
+        //
+        // Doing it this way gets the borrow checker of our back, giving us a
+        // bit more breathing room to deal with contexts.
+        let Some(context) = self.contexts.pop() else {
             return Next::Finished {
                 output: ValueWithSource {
                     inner: Value::Nothing,
@@ -227,7 +232,6 @@ impl Evaluator {
 
         let Some(path) = context.nodes_from_root.last().copied() else {
             let output = context.active_value.clone();
-            self.contexts.pop();
 
             if let Some(context) = self.contexts.last_mut() {
                 match &mut context.active_value.inner {
@@ -249,10 +253,13 @@ impl Evaluator {
         };
 
         if let RuntimeState::Effect { effect, path } = self.state.clone() {
+            // We don't ant to change anything about the context, so let's
+            // restore it.
+            self.contexts.push(context);
             return Next::Effect { effect, path };
         }
 
-        match codebase.node_at(&path) {
+        let next = match codebase.node_at(&path) {
             Node::Leaf => Next::IgnoringSyntaxNode,
             Node::Empty { .. } => Next::IgnoringSyntaxNode,
             Node::Expression { expression, .. } => {
@@ -260,14 +267,20 @@ impl Evaluator {
             }
             Node::Recursion { .. } => {
                 let active_value = context.active_value.inner.clone();
-
-                self.contexts.pop();
                 self.evaluate(self.root, active_value, codebase);
 
-                Next::Recursing
+                // Must return directly, since we don't want the context to be
+                // restored.
+                return Next::Recursing;
             }
             Node::Error { .. } => Next::Error { path },
-        }
+        };
+
+        // Any case in which the context shouldn't be restored would have
+        // returned by now.
+        self.contexts.push(context);
+
+        next
     }
 
     fn advance(&mut self) {
