@@ -239,8 +239,8 @@ impl Evaluator {
             }
         };
 
-        // Any case in which the context shouldn't be restored would have
-        // returned by now.
+        // Restore the context that we took above. If that wasn't the right
+        // thing to do, we'd have returned already.
         self.contexts.push(context);
     }
 
