@@ -206,13 +206,11 @@ impl Evaluator {
                 return None;
             }
             Node::Expression { expression, .. } => {
-                let next = match expression {
+                match expression {
                     Expression::HostFunction { id } => {
                         let effect = context.evaluate_host_function(*id);
                         self.state = RuntimeState::Effect { effect, path };
                         self.contexts.push(context);
-
-                        Next::AlreadyStepped
                     }
                     Expression::IntrinsicFunction { intrinsic } => {
                         let update = context.evaluate_intrinsic_function(
@@ -231,13 +229,11 @@ impl Evaluator {
                                 self.evaluate(root, active_value, codebase);
                             }
                         }
-
-                        Next::AlreadyStepped
                     }
                 };
 
                 // Restoring the context is the responsibility of the caller.
-                return Some(next);
+                return Some(Next::AlreadyStepped);
             }
             Node::Recursion { .. } => {
                 let active_value = context.active_value.inner.clone();
