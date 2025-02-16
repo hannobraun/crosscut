@@ -146,9 +146,6 @@ impl Evaluator {
                 Some(Next::AlreadyStepped) => {
                     break;
                 }
-                Some(Next::IntrinsicFunction) => {
-                    break;
-                }
                 Some(Next::IgnoringSyntaxNode { mut context }) => {
                     context.advance();
                     self.contexts.push(context);
@@ -272,7 +269,7 @@ impl Evaluator {
                             }
                         }
 
-                        Next::IntrinsicFunction
+                        Next::AlreadyStepped
                     }
                 };
 
@@ -305,7 +302,6 @@ impl Evaluator {
 #[derive(Debug, Eq, PartialEq)]
 pub enum Next {
     AlreadyStepped,
-    IntrinsicFunction,
     IgnoringSyntaxNode { context: Context },
     ContextEvaluated,
     Recursing,
