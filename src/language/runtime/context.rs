@@ -27,7 +27,7 @@ impl Context {
     ) -> EvaluateUpdate {
         match expression {
             Expression::HostFunction { id } => {
-                let effect = self.evaluate_host_function(*id, path);
+                let effect = self.evaluate_host_function(*id);
                 EvaluateUpdate::UpdateState {
                     new_state: RuntimeState::Effect { effect, path },
                 }
@@ -38,11 +38,7 @@ impl Context {
         }
     }
 
-    pub fn evaluate_host_function(
-        &self,
-        id: FunctionId,
-        _: NodePath,
-    ) -> Effect {
+    pub fn evaluate_host_function(&self, id: FunctionId) -> Effect {
         Effect::ApplyHostFunction {
             id,
             input: self.active_value.inner.clone(),
