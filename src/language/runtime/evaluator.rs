@@ -1,5 +1,6 @@
-use crate::language::code::{
-    Codebase, Expression, IntrinsicFunction, Literal, Node, NodePath,
+use crate::language::{
+    code::{Codebase, Expression, IntrinsicFunction, Literal, Node, NodePath},
+    packages::FunctionId,
 };
 
 use super::{
@@ -143,34 +144,28 @@ impl Evaluator {
     pub fn step(&mut self, codebase: &Codebase) {
         loop {
             match self.next(codebase) {
-                Next::Expression {
-                    mut context,
-                    expression,
-                    path,
-                } => {
-                    match expression {
-                        Expression::HostFunction { id } => {
-                            let effect = context.evaluate_host_function(*id);
-                            self.state = RuntimeState::Effect { effect, path };
-                            self.contexts.push(context);
-                        }
-                        Expression::IntrinsicFunction { intrinsic } => {
-                            let update = context.evaluate_intrinsic_function(
-                                intrinsic, path, codebase,
-                            );
-                            self.contexts.push(context);
+                Next::HostFunction { id, path, context } => {
+                    let effect = context.evaluate_host_function(id);
+                    self.state = RuntimeState::Effect { effect, path };
+                    self.contexts.push(context);
 
-                            match update {
-                                EvaluateUpdate::UpdateState { new_state } => {
-                                    self.state = new_state;
-                                }
-                                EvaluateUpdate::NewContext {
-                                    root,
-                                    active_value,
-                                } => {
-                                    self.evaluate(root, active_value, codebase);
-                                }
-                            }
+                    break;
+                }
+                Next::IntrinsicFunction {
+                    intrinsic,
+                    path,
+                    mut context,
+                } => {
+                    let update = context
+                        .evaluate_intrinsic_function(intrinsic, path, codebase);
+                    self.contexts.push(context);
+
+                    match update {
+                        EvaluateUpdate::UpdateState { new_state } => {
+                            self.state = new_state;
+                        }
+                        EvaluateUpdate::NewContext { root, active_value } => {
+                            self.evaluate(root, active_value, codebase);
                         }
                     }
 
@@ -270,12 +265,23 @@ impl Evaluator {
                 return Next::IgnoringSyntaxNode { context };
             }
             Node::Expression { expression, .. } => {
-                // Restoring the context is the responsibility of the caller.
-                return Next::Expression {
-                    context,
-                    expression,
-                    path,
+                let next = match expression {
+                    Expression::HostFunction { id } => Next::HostFunction {
+                        id: *id,
+                        path,
+                        context,
+                    },
+                    Expression::IntrinsicFunction { intrinsic } => {
+                        Next::IntrinsicFunction {
+                            intrinsic,
+                            path,
+                            context,
+                        }
+                    }
                 };
+
+                // Restoring the context is the responsibility of the caller.
+                return next;
             }
             Node::Recursion { .. } => {
                 let active_value = context.active_value.inner.clone();
@@ -302,10 +308,15 @@ impl Evaluator {
 
 #[derive(Debug, Eq, PartialEq)]
 pub enum Next<'r> {
-    Expression {
-        context: Context,
-        expression: &'r Expression,
+    HostFunction {
+        id: FunctionId,
         path: NodePath,
+        context: Context,
+    },
+    IntrinsicFunction {
+        intrinsic: &'r IntrinsicFunction,
+        path: NodePath,
+        context: Context,
     },
     IgnoringSyntaxNode {
         context: Context,
