@@ -252,6 +252,7 @@ impl Evaluator {
             Node::Leaf => Next::IgnoringSyntaxNode,
             Node::Empty { .. } => Next::IgnoringSyntaxNode,
             Node::Expression { expression, .. } => {
+                // Restoring the context is the responsibility of the caller.
                 return Next::Running {
                     context,
                     expression,
