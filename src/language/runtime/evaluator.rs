@@ -141,7 +141,7 @@ impl Evaluator {
     }
 
     pub fn step(&mut self, codebase: &Codebase) {
-        while !self.maybe_step(codebase) {}
+        self.maybe_step(codebase);
     }
 
     fn maybe_step(&mut self, codebase: &Codebase) -> bool {
