@@ -53,7 +53,7 @@ fn compile_token(
 
 fn resolve_keyword(
     name: &str,
-    path: &NodePath,
+    path: &mut NodePath,
     child: Option<NodeHash>,
     codebase: &mut Codebase,
 ) -> Option<(Node, Option<CodeError>)> {
