@@ -206,6 +206,9 @@ impl Evaluator {
                     .evaluate_intrinsic_function(intrinsic, path, codebase);
                 self.contexts.push(context);
 
+                // The context is now restored. This means we can apply the
+                // update from the evaluation now.
+
                 match update {
                     EvaluateUpdate::UpdateState { new_state } => {
                         self.state = new_state;
@@ -215,6 +218,8 @@ impl Evaluator {
                     }
                 }
 
+                // We already restored the context. So we have to return now,
+                // because the code below would do it again.
                 return;
             }
             Node::Recursion { .. } => {
