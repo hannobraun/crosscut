@@ -53,6 +53,7 @@ where
             .with_function(GameEngineFunction::Dim)
             .with_function(GameEngineFunction::Black)
             .with_function(GameEngineFunction::White);
+
         let mut language = Language::new();
         language.with_package(&package);
 
