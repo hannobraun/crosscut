@@ -33,12 +33,12 @@ where
         language: &Language,
         editor_input: &TerminalEditorInput,
     ) -> anyhow::Result<()> {
-        let resolver = language.package().resolver();
+        let resolver = language.package();
         let mut context = RenderContext {
             codebase: language.codebase(),
             editor: language.editor(),
             evaluator: language.evaluator(),
-            resolver: &resolver,
+            resolver,
             cursor: None,
         };
 
