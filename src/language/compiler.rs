@@ -12,8 +12,7 @@ pub fn compile_and_replace(
     packages: &Packages,
     codebase: &mut Codebase,
 ) {
-    let (node, maybe_error) =
-        compile_token(token, path, &packages.resolver(), codebase);
+    let (node, maybe_error) = compile_token(token, path, packages, codebase);
 
     *path = codebase.replace_node(path, node);
     if let Some(error) = maybe_error {
@@ -24,7 +23,7 @@ pub fn compile_and_replace(
 fn compile_token(
     token: &str,
     path: &mut NodePath,
-    resolver: &Resolver,
+    resolver: &Packages,
     codebase: &mut Codebase,
 ) -> (Node, Option<CodeError>) {
     let node = codebase.node_at(path);
@@ -37,7 +36,7 @@ fn compile_token(
     {
         (node, maybe_err)
     } else {
-        match resolve_function(token, resolver) {
+        match resolve_function(token, &resolver.resolver()) {
             Ok(expression) => (Node::Expression { expression, child }, None),
             Err(candidates) => (
                 Node::Error {
