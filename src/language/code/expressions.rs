@@ -31,7 +31,7 @@ impl fmt::Display for ExpressionDisplay<'_> {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match self.expression {
             Expression::HostFunction { id } => {
-                let resolver = self.package;
+                let resolver = self.package.resolver();
                 let name = resolver.function_name_by_id(id);
                 write!(f, "{name}")
             }

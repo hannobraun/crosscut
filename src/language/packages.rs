@@ -28,6 +28,20 @@ impl Package {
             .insert(function.id(), function.name().to_string());
     }
 
+    pub fn resolver(&self) -> Resolver {
+        Resolver {
+            function_ids_by_name: self.function_ids_by_name.clone(),
+            function_names_by_id: self.function_names_by_id.clone(),
+        }
+    }
+}
+
+pub struct Resolver {
+    function_ids_by_name: BTreeMap<String, FunctionId>,
+    function_names_by_id: BTreeMap<FunctionId, String>,
+}
+
+impl Resolver {
     pub fn resolve_function(&self, name: &str) -> Option<FunctionId> {
         self.function_ids_by_name.get(name).copied()
     }
