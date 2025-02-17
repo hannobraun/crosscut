@@ -34,7 +34,7 @@ impl Editor {
         event: EditorInputEvent,
         codebase: &mut Codebase,
         evaluator: &mut Evaluator,
-        resolver: &Packages,
+        packages: &Packages,
     ) {
         if let Some(action) = self.input.update(event) {
             // This code results in non-intuitive cursor movement, if using the
@@ -46,7 +46,7 @@ impl Editor {
                         self.navigate_to(
                             location,
                             codebase,
-                            &resolver.resolver(),
+                            &packages.resolver(),
                         );
                         self.input.move_cursor_to_end();
                     }
@@ -56,7 +56,7 @@ impl Editor {
                         self.navigate_to(
                             location,
                             codebase,
-                            &resolver.resolver(),
+                            &packages.resolver(),
                         );
                     }
                 }
@@ -66,7 +66,7 @@ impl Editor {
                             .map(|path| {
                                 codebase
                                     .node_at(path)
-                                    .display(&resolver.resolver())
+                                    .display(&packages.resolver())
                                     .to_string()
                             })
                             .join("");
@@ -82,7 +82,7 @@ impl Editor {
                             .map(|path| {
                                 codebase
                                     .node_at(path)
-                                    .display(&resolver.resolver())
+                                    .display(&packages.resolver())
                                     .to_string()
                             })
                             .join("");
@@ -95,7 +95,7 @@ impl Editor {
                     compile_and_replace(
                         &submitted,
                         &mut self.editing,
-                        &resolver.resolver(),
+                        &packages.resolver(),
                         codebase,
                     );
 
@@ -111,7 +111,7 @@ impl Editor {
         compile_and_replace(
             self.input.buffer(),
             &mut self.editing,
-            &resolver.resolver(),
+            &packages.resolver(),
             codebase,
         );
 
