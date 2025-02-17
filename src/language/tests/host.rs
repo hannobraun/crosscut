@@ -110,13 +110,6 @@ fn host_functions_can_inject_opaque_value() {
 struct Halve;
 
 impl Function for Halve {
-    fn from_id(FunctionId { id }: FunctionId) -> Option<Self> {
-        match id {
-            0 => Some(Self),
-            _ => None,
-        }
-    }
-
     fn id(&self) -> FunctionId {
         FunctionId { id: 0 }
     }
@@ -130,13 +123,6 @@ impl Function for Halve {
 struct ObserveOpaqueValue;
 
 impl Function for ObserveOpaqueValue {
-    fn from_id(FunctionId { id }: FunctionId) -> Option<Self> {
-        match id {
-            0 => Some(Self),
-            _ => None,
-        }
-    }
-
     fn id(&self) -> FunctionId {
         FunctionId { id: 0 }
     }

@@ -86,13 +86,6 @@ fn submitting_the_node_should_insert_a_new_one_after_the_current_one() {
         IfZeroThen127,
     }
     impl Function for TestFunction {
-        fn from_id(FunctionId { id }: FunctionId) -> Option<Self> {
-            match id {
-                0 => Some(Self::Zero),
-                1 => Some(Self::IfZeroThen127),
-                _ => None,
-            }
-        }
         fn id(&self) -> FunctionId {
             let id = match self {
                 Self::Zero => 0,

@@ -15,13 +15,6 @@ impl<T: Function> Package<T> {
     }
 
     pub fn function(&mut self, function: T) {
-        assert_eq!(
-            Some(function.id()),
-            T::from_id(function.id()).map(|function| function.id()),
-            "Function must return an ID that converts back into the same \
-            function.",
-        );
-
         let id = self.next_id;
         self.next_id = FunctionId { id: id.id + 1 };
         assert_eq!(id, function.id());
@@ -77,22 +70,11 @@ impl Resolver {
 }
 
 pub trait Function: Copy + Ord {
-    fn from_id(id: FunctionId) -> Option<Self>
-    where
-        Self: Sized;
-
     fn id(&self) -> FunctionId;
     fn name(&self) -> &str;
 }
 
 impl Function for () {
-    fn from_id(_: FunctionId) -> Option<Self>
-    where
-        Self: Sized,
-    {
-        None
-    }
-
     fn id(&self) -> FunctionId {
         FunctionId { id: 0 }
     }
