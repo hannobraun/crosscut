@@ -39,7 +39,7 @@ impl Language {
         &self.evaluator
     }
 
-    pub fn package(&self) -> &Resolver {
+    pub fn resolver(&self) -> &Resolver {
         &self.package
     }
 

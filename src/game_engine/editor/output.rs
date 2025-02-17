@@ -37,7 +37,7 @@ where
             codebase: language.codebase(),
             editor: language.editor(),
             evaluator: language.evaluator(),
-            resolver: language.package(),
+            resolver: language.resolver(),
             cursor: None,
         };
 
