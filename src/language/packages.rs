@@ -35,12 +35,12 @@ impl<T: Function> Package<T> {
             function_ids_by_name: self
                 .functions_by_name
                 .iter()
-                .map(|(name, (_, id))| (name.clone(), *id))
+                .map(|(_, (function, id))| (function.name().to_string(), *id))
                 .collect(),
             function_names_by_id: self
                 .functions_by_name
                 .iter()
-                .map(|(name, (_, id))| (*id, name.clone()))
+                .map(|(_, (function, id))| (*id, function.name().to_string()))
                 .collect(),
         }
     }
