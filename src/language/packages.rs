@@ -42,19 +42,28 @@ pub struct Packages {
 }
 
 impl Packages {
-    pub fn from_package<T: Function>(package: &Package<T>) -> Self {
+    pub fn new() -> Self {
         Self {
-            function_ids_by_name: package
-                .functions_by_id
-                .iter()
-                .map(|(id, function)| (function.name().to_string(), *id))
-                .collect(),
-            function_names_by_id: package
-                .functions_by_id
-                .iter()
-                .map(|(id, function)| (*id, function.name().to_string()))
-                .collect(),
+            function_ids_by_name: BTreeMap::new(),
+            function_names_by_id: BTreeMap::new(),
         }
+    }
+
+    pub fn from_package<T: Function>(package: &Package<T>) -> Self {
+        let mut packages = Self::new();
+
+        packages.function_ids_by_name = package
+            .functions_by_id
+            .iter()
+            .map(|(id, function)| (function.name().to_string(), *id))
+            .collect();
+        packages.function_names_by_id = package
+            .functions_by_id
+            .iter()
+            .map(|(id, function)| (*id, function.name().to_string()))
+            .collect();
+
+        packages
     }
 
     pub fn resolve_function(&self, name: &str) -> Option<FunctionId> {
