@@ -1,7 +1,7 @@
 use super::{
     code::{Codebase, NodePath},
     editor::{Editor, EditorCommand, EditorInputEvent},
-    packages::{Function, Package, Resolver},
+    packages::{Function, Package, Packages, Resolver},
     runtime::{Effect, Evaluator, RuntimeState, Value},
 };
 
@@ -18,6 +18,8 @@ impl Language {
         let codebase = Codebase::new();
         let editor = Editor::new(&codebase);
         let evaluator = Evaluator::new(codebase.root().path, &codebase);
+
+        let package = Packages::from_package(package);
 
         Self {
             codebase,

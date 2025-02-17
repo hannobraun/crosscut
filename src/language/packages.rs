@@ -33,19 +33,33 @@ impl<T: Function> Package<T> {
 
         function
     }
+}
 
-    pub fn resolver(&self) -> Resolver {
-        Resolver {
-            function_ids_by_name: self
+pub struct Packages {
+    function_ids_by_name: BTreeMap<String, FunctionId>,
+    function_names_by_id: BTreeMap<FunctionId, String>,
+}
+
+impl Packages {
+    pub fn from_package<T: Function>(package: &Package<T>) -> Self {
+        Self {
+            function_ids_by_name: package
                 .functions_by_id
                 .iter()
                 .map(|(id, function)| (function.name().to_string(), *id))
                 .collect(),
-            function_names_by_id: self
+            function_names_by_id: package
                 .functions_by_id
                 .iter()
                 .map(|(id, function)| (*id, function.name().to_string()))
                 .collect(),
+        }
+    }
+
+    pub fn resolver(&self) -> Resolver {
+        Resolver {
+            function_ids_by_name: self.function_ids_by_name.clone(),
+            function_names_by_id: self.function_names_by_id.clone(),
         }
     }
 }
