@@ -48,7 +48,7 @@ impl Language {
             event,
             &mut self.codebase,
             &mut self.evaluator,
-            &self.package,
+            &self.package.resolver().clone(),
         );
     }
 
