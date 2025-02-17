@@ -106,7 +106,7 @@ fn host_functions_can_inject_opaque_value() {
     assert_eq!(output.map(|value| value.inner), Ok(opaque_value));
 }
 
-#[derive(Eq, Ord, PartialEq, PartialOrd)]
+#[derive(Clone, Copy, Eq, Ord, PartialEq, PartialOrd)]
 struct Halve;
 
 impl Function for Halve {
@@ -126,7 +126,7 @@ impl Function for Halve {
     }
 }
 
-#[derive(Eq, Ord, PartialEq, PartialOrd)]
+#[derive(Clone, Copy, Eq, Ord, PartialEq, PartialOrd)]
 struct ObserveOpaqueValue;
 
 impl Function for ObserveOpaqueValue {
