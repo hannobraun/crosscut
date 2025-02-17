@@ -1,7 +1,7 @@
 use crate::language::{
     code::Type,
     instance::Language,
-    packages::{Function, FunctionId, Package},
+    packages::{Function, Package},
     runtime::{Effect, RuntimeState, Value},
     tests::functions::IntoFunctionBody,
 };
@@ -110,10 +110,6 @@ fn host_functions_can_inject_opaque_value() {
 struct Halve;
 
 impl Function for Halve {
-    fn id(&self) -> FunctionId {
-        FunctionId { id: 0 }
-    }
-
     fn name(&self) -> &str {
         "halve"
     }
@@ -123,10 +119,6 @@ impl Function for Halve {
 struct ObserveOpaqueValue;
 
 impl Function for ObserveOpaqueValue {
-    fn id(&self) -> FunctionId {
-        FunctionId { id: 0 }
-    }
-
     fn name(&self) -> &str {
         "observe_opaque_value"
     }

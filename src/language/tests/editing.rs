@@ -4,7 +4,7 @@ use crate::language::{
     code::Node,
     editor::EditorInputEvent,
     instance::Language,
-    packages::{Function, FunctionId, Package},
+    packages::{Function, Package},
     runtime::Value,
 };
 
@@ -86,14 +86,6 @@ fn submitting_the_node_should_insert_a_new_one_after_the_current_one() {
         IfZeroThen127,
     }
     impl Function for TestFunction {
-        fn id(&self) -> FunctionId {
-            let id = match self {
-                Self::Zero => 0,
-                Self::IfZeroThen127 => 1,
-            };
-
-            FunctionId { id }
-        }
         fn name(&self) -> &str {
             match self {
                 Self::Zero => "zero",

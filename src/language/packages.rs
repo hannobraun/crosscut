@@ -17,7 +17,6 @@ impl<T: Function> Package<T> {
     pub fn function(&mut self, function: T) {
         let id = self.next_id;
         self.next_id = FunctionId { id: id.id + 1 };
-        assert_eq!(id, function.id());
 
         self.functions_by_id.insert(id, function);
     }
@@ -70,15 +69,10 @@ impl Resolver {
 }
 
 pub trait Function: Copy + Ord {
-    fn id(&self) -> FunctionId;
     fn name(&self) -> &str;
 }
 
 impl Function for () {
-    fn id(&self) -> FunctionId {
-        FunctionId { id: 0 }
-    }
-
     fn name(&self) -> &str {
         ""
     }

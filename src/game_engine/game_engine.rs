@@ -255,16 +255,6 @@ pub enum GameEngineFunction {
 }
 
 impl Function for GameEngineFunction {
-    fn id(&self) -> FunctionId {
-        let id = match self {
-            Self::Dim => 0,
-            Self::Black => 1,
-            Self::White => 2,
-        };
-
-        FunctionId { id }
-    }
-
     fn name(&self) -> &str {
         match self {
             Self::Dim => "dim",
