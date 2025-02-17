@@ -61,19 +61,6 @@ impl Packages {
         self.function_ids_by_name.get(name).copied()
     }
 
-    pub fn resolver(&self) -> Resolver {
-        Resolver {
-            function_names_by_id: self.function_names_by_id.clone(),
-        }
-    }
-}
-
-#[derive(Clone, Debug)]
-pub struct Resolver {
-    function_names_by_id: BTreeMap<FunctionId, String>,
-}
-
-impl Resolver {
     pub fn function_name_by_id(&self, id: &FunctionId) -> &str {
         let Some(name) = self.function_names_by_id.get(id) else {
             panic!("Expected function ID `{id:?}` to be valid.");
