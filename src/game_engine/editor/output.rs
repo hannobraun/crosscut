@@ -38,7 +38,7 @@ where
             codebase: language.codebase(),
             editor: language.editor(),
             evaluator: language.evaluator(),
-            package: &resolver,
+            resolver: &resolver,
             cursor: None,
         };
 
@@ -181,7 +181,7 @@ fn render_node<A: EditorOutputAdapter>(
         _ => None,
     };
 
-    let node_display = located_node.node.display(context.package);
+    let node_display = located_node.node.display(context.resolver);
     if let Some(color) = color {
         adapter.color(color, |adapter| write!(adapter, "{node_display}"))?;
     } else {
@@ -327,7 +327,7 @@ fn render_help<A: EditorOutputAdapter>(
                 adapter,
                 "You are editing the `{}` keyword, which calls the current \
                 function recursively.",
-                node.display(context.package),
+                node.display(context.resolver),
             )?;
         }
         Node::Error { .. } => {
@@ -342,7 +342,7 @@ struct RenderContext<'r> {
     codebase: &'r Codebase,
     editor: &'r Editor,
     evaluator: &'r Evaluator,
-    package: &'r Resolver,
+    resolver: &'r Resolver,
     cursor: Option<Cursor>,
 }
 
