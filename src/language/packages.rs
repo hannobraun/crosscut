@@ -36,7 +36,7 @@ impl Package {
     }
 }
 
-#[derive(Clone)]
+#[derive(Clone, Debug)]
 pub struct Resolver {
     function_ids_by_name: BTreeMap<String, FunctionId>,
     function_names_by_id: BTreeMap<FunctionId, String>,
