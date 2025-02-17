@@ -13,7 +13,7 @@ fn number_literal_wrong_input() {
     // So having two in a row means, that the second one does not get the
     // expected input.
 
-    let mut language = Language::without_package();
+    let mut language = Language::new();
 
     language.enter_code("127 255");
 
@@ -29,7 +29,7 @@ fn unresolved_syntax_node() {
     // If a syntax node does not refer to a known function, that should result
     // in an error.
 
-    let mut language = Language::without_package();
+    let mut language = Language::new();
 
     language.enter_code("identit");
 
@@ -94,7 +94,7 @@ fn do_not_step_beyond_errors() {
     // If there's an error in the code, the interpreter should never step beyond
     // that, if it encounters it.
 
-    let mut language = Language::without_package();
+    let mut language = Language::new();
 
     language.enter_code("error");
 
@@ -107,7 +107,7 @@ fn pure_runtime_error_should_result_in_error_state() {
     // Some errors are not known at compile-time and are only encountered at
     // runtime. Such an error should still be reported by the evaluator.
 
-    let mut language = Language::without_package();
+    let mut language = Language::new();
 
     // The compiler doesn't do type checking at this point, so it doesn't know
     // that the second number literal gets an invalid input.

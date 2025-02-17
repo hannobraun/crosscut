@@ -91,10 +91,6 @@ use super::{packages::FunctionId, runtime::ValueWithSource};
 
 #[cfg(test)]
 impl Language {
-    pub fn without_package() -> Self {
-        Self::new()
-    }
-
     pub fn enter_code(&mut self, code: &str) {
         for ch in code.chars() {
             let event = if ch.is_whitespace() {

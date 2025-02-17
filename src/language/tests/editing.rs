@@ -14,7 +14,7 @@ fn update_on_every_character() {
     // has finished running, as is the case here, it should also reset the
     // interpreter, so the next step will run the new code.
 
-    let mut language = Language::without_package();
+    let mut language = Language::new();
 
     language.enter_code("1");
     assert_eq!(
@@ -34,7 +34,7 @@ fn update_after_removing_character() {
     // Removing a character should have an immediate effect on the program, just
     // like adding one.
 
-    let mut language = Language::without_package();
+    let mut language = Language::new();
 
     language.enter_code("127");
     assert_eq!(
@@ -60,7 +60,7 @@ fn update_after_removing_all_characters() {
     // Removing all characters should have an immediate effect on the program,
     // just like any other edits.
 
-    let mut language = Language::without_package();
+    let mut language = Language::new();
 
     language.enter_code("1");
     assert_eq!(
@@ -130,7 +130,7 @@ fn split_node_if_submitting_while_cursor_is_in_the_middle() {
     // If we submit the node we're currently editing, while the cursor is in the
     // middle of it, we should split the node right there.
 
-    let mut language = Language::without_package();
+    let mut language = Language::new();
 
     language.enter_code("127identity");
     for _ in "identity".chars() {
@@ -148,7 +148,7 @@ fn split_node_if_submitting_while_cursor_is_in_the_middle() {
 fn moving_cursor_up_should_navigate_to_previous_node() {
     // It is possible to navigate to the previous node in the editor.
 
-    let mut language = Language::without_package();
+    let mut language = Language::new();
 
     language.enter_code("12 identity");
     language.on_input(EditorInputEvent::MoveCursorUp);
@@ -165,7 +165,7 @@ fn moving_cursor_up_at_first_node_should_do_nothing() {
     // If already at the first node, moving to the previous one should do
     // nothing.
 
-    let mut language = Language::without_package();
+    let mut language = Language::new();
 
     language.enter_code("17");
     language.on_input(EditorInputEvent::MoveCursorLeft);
@@ -182,7 +182,7 @@ fn moving_cursor_up_at_first_node_should_do_nothing() {
 fn moving_cursor_down_should_navigate_to_next_node() {
     // It is possible to navigate to the next node in the editor.
 
-    let mut language = Language::without_package();
+    let mut language = Language::new();
 
     language.enter_code("identity dentity");
     language.on_input(EditorInputEvent::MoveCursorUp);
@@ -199,7 +199,7 @@ fn moving_cursor_down_should_navigate_to_next_node() {
 fn moving_cursor_down_at_last_node_should_do_nothing() {
     // If already at the last node, moving to the next one should do nothing.
 
-    let mut language = Language::without_package();
+    let mut language = Language::new();
 
     language.enter_code("12");
     language.on_input(EditorInputEvent::MoveCursorDown);
@@ -216,7 +216,7 @@ fn moving_cursor_left_at_start_of_node_should_move_to_previous_node() {
     // If the cursor is at the start of a node, then pressing left should move
     // it the end of the previous node.
 
-    let mut language = Language::without_package();
+    let mut language = Language::new();
 
     language.enter_code("12 identity");
     for _ in "identity".chars() {
@@ -237,7 +237,7 @@ fn moving_cursor_right_at_end_of_node_should_move_to_next_node() {
     // If the cursor is at the end of a node, then pressing right should move it
     // the start of the previous node.
 
-    let mut language = Language::without_package();
+    let mut language = Language::new();
 
     language.enter_code("127 dentity");
     language.on_input(EditorInputEvent::MoveCursorUp);
@@ -256,7 +256,7 @@ fn remove_left_removes_previous_syntax_node_if_empty() {
     // Removing left while cursor is in the leftmost position within the current
     // syntax node, removes the previous syntax node, if that is empty.
 
-    let mut language = Language::without_package();
+    let mut language = Language::new();
 
     language.enter_code(" 127");
     for _ in "127".chars() {
@@ -285,7 +285,7 @@ fn remove_left_merges_with_previous_syntax_node() {
     // Removing left while cursor is in the leftmost position within the current
     // syntax node, merges the current and the previous syntax node.
 
-    let mut language = Language::without_package();
+    let mut language = Language::new();
 
     language.enter_code("1 27");
     for _ in "27".chars() {
@@ -305,7 +305,7 @@ fn remove_right_removes_next_syntax_node_if_empty() {
     // Removing right while cursor is in the rightmost position within the
     // current syntax node, removes the next syntax node, if that is empty.
 
-    let mut language = Language::without_package();
+    let mut language = Language::new();
 
     language.enter_code("127 ");
     language.on_input(EditorInputEvent::MoveCursorLeft);
@@ -334,7 +334,7 @@ fn remove_right_merges_with_next_syntax_node() {
     // Removing right while cursor is in the rightmost position within the
     // current syntax node, merges the current and the next syntax node.
 
-    let mut language = Language::without_package();
+    let mut language = Language::new();
 
     language.enter_code("1 27");
     for _ in "27".chars() {
