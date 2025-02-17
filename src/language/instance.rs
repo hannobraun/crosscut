@@ -92,7 +92,7 @@ use super::{packages::FunctionId, runtime::ValueWithSource};
 #[cfg(test)]
 impl Language {
     pub fn without_package() -> Self {
-        Self::with_package(&Package::<()>::new())
+        Self::new()
     }
 
     pub fn enter_code(&mut self, code: &str) {
