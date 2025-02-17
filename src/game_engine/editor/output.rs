@@ -8,7 +8,7 @@ use crate::{
         },
         editor::Editor,
         instance::Language,
-        packages::Resolver,
+        packages::Packages,
         runtime::{Effect, Evaluator, RuntimeState, Value},
     },
 };
@@ -37,7 +37,7 @@ where
             codebase: language.codebase(),
             editor: language.editor(),
             evaluator: language.evaluator(),
-            resolver: &language.packages().resolver(),
+            resolver: language.packages(),
             cursor: None,
         };
 
@@ -180,8 +180,8 @@ fn render_node<A: EditorOutputAdapter>(
         _ => None,
     };
 
-    let resolver = context.resolver;
-    let node_display = located_node.node.display(resolver);
+    let resolver = context.resolver.resolver();
+    let node_display = located_node.node.display(&resolver);
     if let Some(color) = color {
         adapter.color(color, |adapter| write!(adapter, "{node_display}"))?;
     } else {
@@ -327,7 +327,7 @@ fn render_help<A: EditorOutputAdapter>(
                 adapter,
                 "You are editing the `{}` keyword, which calls the current \
                 function recursively.",
-                node.display(context.resolver),
+                node.display(&context.resolver.resolver()),
             )?;
         }
         Node::Error { .. } => {
@@ -342,7 +342,7 @@ struct RenderContext<'r> {
     codebase: &'r Codebase,
     editor: &'r Editor,
     evaluator: &'r Evaluator,
-    resolver: &'r Resolver,
+    resolver: &'r Packages,
     cursor: Option<Cursor>,
 }
 
