@@ -24,11 +24,9 @@ pub fn compile_and_replace(
 fn compile_token(
     token: &str,
     path: &mut NodePath,
-    package: &Resolver,
+    resolver: &Resolver,
     codebase: &mut Codebase,
 ) -> (Node, Option<CodeError>) {
-    let resolver = package;
-
     let node = codebase.node_at(path);
     let child = node.child().copied();
 
