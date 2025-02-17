@@ -323,12 +323,11 @@ fn render_help<A: EditorOutputAdapter>(
             }
         }
         Node::Recursion { .. } => {
-            let resolver = context.package;
             writeln!(
                 adapter,
                 "You are editing the `{}` keyword, which calls the current \
                 function recursively.",
-                node.display(resolver),
+                node.display(context.package),
             )?;
         }
         Node::Error { .. } => {
