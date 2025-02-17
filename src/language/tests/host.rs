@@ -11,7 +11,7 @@ fn host_functions() {
     // The host can define functions that Crosscut code can call.
 
     let mut package = Package::new();
-    package.function(Halve);
+    package.with_function(Halve);
 
     let mut language = Language::with_package(&package);
     language.enter_code("64 halve");
@@ -42,7 +42,7 @@ fn host_functions_can_trigger_effects() {
     // example to indicate an error.
 
     let mut package = Package::new();
-    package.function(Halve);
+    package.with_function(Halve);
 
     let mut language = Language::with_package(&package);
     language.enter_code("halve");
@@ -73,7 +73,7 @@ fn host_functions_can_inject_opaque_value() {
     // function.
 
     let mut package = Package::new();
-    package.function(ObserveOpaqueValue);
+    package.with_function(ObserveOpaqueValue);
 
     let mut language = Language::with_package(&package);
     language.enter_code("observe_opaque_value fn");
