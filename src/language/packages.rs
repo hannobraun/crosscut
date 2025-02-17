@@ -49,21 +49,17 @@ impl Packages {
         }
     }
 
-    pub fn from_package<T: Function>(package: &Package<T>) -> Self {
-        let mut packages = Self::new();
-
-        packages.function_ids_by_name = package
+    pub fn register_package<T: Function>(&mut self, package: &Package<T>) {
+        self.function_ids_by_name = package
             .functions_by_id
             .iter()
             .map(|(id, function)| (function.name().to_string(), *id))
             .collect();
-        packages.function_names_by_id = package
+        self.function_names_by_id = package
             .functions_by_id
             .iter()
             .map(|(id, function)| (*id, function.name().to_string()))
             .collect();
-
-        packages
     }
 
     pub fn resolve_function(&self, name: &str) -> Option<FunctionId> {

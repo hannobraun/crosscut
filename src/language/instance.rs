@@ -19,7 +19,8 @@ impl Language {
         let editor = Editor::new(&codebase);
         let evaluator = Evaluator::new(codebase.root().path, &codebase);
 
-        let packages = Packages::from_package(package);
+        let mut packages = Packages::new();
+        packages.register_package(package);
 
         Self {
             codebase,
