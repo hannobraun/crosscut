@@ -54,7 +54,7 @@ where
         package.function(GameEngineFunction::White);
 
         let mut game_engine = Self {
-            language: Language::with_package(package),
+            language: Language::with_package(&package),
             game_output: Vec::new(),
             editor_input: TerminalEditorInput::new(),
             editor_output: TerminalEditorOutput::new(adapter),

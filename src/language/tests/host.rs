@@ -13,7 +13,7 @@ fn host_functions() {
     let mut package = Package::new();
     package.function(Halve);
 
-    let mut language = Language::with_package(package);
+    let mut language = Language::with_package(&package);
     language.enter_code("64 halve");
 
     let output =
@@ -44,7 +44,7 @@ fn host_functions_can_trigger_effects() {
     let mut package = Package::new();
     package.function(Halve);
 
-    let mut language = Language::with_package(package);
+    let mut language = Language::with_package(&package);
     language.enter_code("halve");
 
     let effect = Effect::UnexpectedInput {
@@ -75,7 +75,7 @@ fn host_functions_can_inject_opaque_value() {
     let mut package = Package::new();
     package.function(ObserveOpaqueValue);
 
-    let mut language = Language::with_package(package);
+    let mut language = Language::with_package(&package);
     language.enter_code("observe_opaque_value fn");
 
     let path = match language.step_until_finished().into_function_body() {
