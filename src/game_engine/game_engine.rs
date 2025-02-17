@@ -50,9 +50,10 @@ where
 {
     pub fn new(adapter: A) -> Self {
         let mut package = Package::new();
-        package.with_function(GameEngineFunction::Dim);
-        package.with_function(GameEngineFunction::Black);
-        package.with_function(GameEngineFunction::White);
+        package
+            .with_function(GameEngineFunction::Dim)
+            .with_function(GameEngineFunction::Black)
+            .with_function(GameEngineFunction::White);
 
         let mut game_engine = Self {
             language: Language::with_package(&package),

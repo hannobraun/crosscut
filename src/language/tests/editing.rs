@@ -95,8 +95,9 @@ fn submitting_the_node_should_insert_a_new_one_after_the_current_one() {
     }
 
     let mut package = Package::new();
-    package.with_function(TestFunction::Zero);
-    package.with_function(TestFunction::IfZeroThen127);
+    package
+        .with_function(TestFunction::Zero)
+        .with_function(TestFunction::IfZeroThen127);
 
     let mut language = Language::with_package(&package);
 
