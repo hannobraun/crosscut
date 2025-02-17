@@ -181,8 +181,7 @@ fn render_node<A: EditorOutputAdapter>(
         _ => None,
     };
 
-    let resolver = context.package;
-    let node_display = located_node.node.display(resolver);
+    let node_display = located_node.node.display(context.package);
     if let Some(color) = color {
         adapter.color(color, |adapter| write!(adapter, "{node_display}"))?;
     } else {
