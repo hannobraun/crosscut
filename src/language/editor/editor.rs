@@ -1,7 +1,7 @@
 use crate::language::{
     code::{Codebase, Node, NodePath},
     compiler::compile_and_replace,
-    packages::Package,
+    packages::{Package, Resolver},
     runtime::Evaluator,
 };
 
@@ -45,13 +45,13 @@ impl Editor {
             match action {
                 UpdateAction::NavigateToPrevious => {
                     if let Some(location) = codebase.child_of(&self.editing) {
-                        self.navigate_to(location, codebase, package);
+                        self.navigate_to(location, codebase, &resolver);
                         self.input.move_cursor_to_end();
                     }
                 }
                 UpdateAction::NavigateToNextNode => {
                     if let Some(location) = codebase.parent_of(&self.editing) {
-                        self.navigate_to(location, codebase, package);
+                        self.navigate_to(location, codebase, &resolver);
                     }
                 }
                 UpdateAction::MergeWithPrevious => {
@@ -137,15 +137,14 @@ impl Editor {
         &mut self,
         path: NodePath,
         codebase: &Codebase,
-        package: &Package,
+        package: &Resolver,
     ) {
-        let resolver = package.resolver();
+        let resolver = package;
 
         self.editing = path;
 
         let node = codebase.node_at(&path);
-        self.input =
-            EditorInputBuffer::new(node.display(&resolver).to_string());
+        self.input = EditorInputBuffer::new(node.display(resolver).to_string());
     }
 }
 
