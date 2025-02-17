@@ -2,14 +2,14 @@ use std::collections::BTreeMap;
 
 #[derive(Debug)]
 pub struct Package<T: Function> {
-    function_ids_by_name: BTreeMap<String, T>,
+    functions_by_name: BTreeMap<String, T>,
     function_names_by_id: BTreeMap<T, String>,
 }
 
 impl<T: Function> Package<T> {
     pub fn new() -> Self {
         Self {
-            function_ids_by_name: BTreeMap::new(),
+            functions_by_name: BTreeMap::new(),
             function_names_by_id: BTreeMap::new(),
         }
     }
@@ -22,7 +22,7 @@ impl<T: Function> Package<T> {
             function.",
         );
 
-        self.function_ids_by_name
+        self.functions_by_name
             .insert(function.name().to_string(), function);
         self.function_names_by_id
             .insert(function, function.name().to_string());
@@ -31,7 +31,7 @@ impl<T: Function> Package<T> {
     pub fn resolver(&self) -> Resolver {
         Resolver {
             function_ids_by_name: self
-                .function_ids_by_name
+                .functions_by_name
                 .iter()
                 .map(|(name, function)| (name.clone(), function.id()))
                 .collect(),
