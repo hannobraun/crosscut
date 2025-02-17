@@ -3,17 +3,17 @@ use super::{
         CodeError, Codebase, Expression, IntrinsicFunction, Literal, Node,
         NodeHash, NodePath,
     },
-    packages::{Package, Resolver},
+    packages::Resolver,
 };
 
 pub fn compile_and_replace(
     token: &str,
     path: &mut NodePath,
-    package: &Package,
+    package: &Resolver,
     codebase: &mut Codebase,
 ) {
-    let resolver = package.resolver();
-    let (node, maybe_error) = compile_token(token, path, &resolver, codebase);
+    let resolver = package;
+    let (node, maybe_error) = compile_token(token, path, resolver, codebase);
 
     *path = codebase.replace_node(path, node);
     if let Some(error) = maybe_error {
