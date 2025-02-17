@@ -9,10 +9,9 @@ use super::{
 pub fn compile_and_replace(
     token: &str,
     path: &mut NodePath,
-    package: &Resolver,
+    resolver: &Resolver,
     codebase: &mut Codebase,
 ) {
-    let resolver = package;
     let (node, maybe_error) = compile_token(token, path, resolver, codebase);
 
     *path = codebase.replace_node(path, node);
