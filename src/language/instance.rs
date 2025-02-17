@@ -1,7 +1,7 @@
 use super::{
     code::{Codebase, NodePath},
     editor::{Editor, EditorCommand, EditorInputEvent},
-    packages::{Package, Resolver},
+    packages::{Function, Package, Resolver},
     runtime::{Effect, Evaluator, RuntimeState, Value},
 };
 
@@ -14,7 +14,7 @@ pub struct Language {
 }
 
 impl Language {
-    pub fn with_package(package: Package) -> Self {
+    pub fn with_package<T: Function>(package: Package<T>) -> Self {
         let codebase = Codebase::new();
         let editor = Editor::new(&codebase);
         let evaluator = Evaluator::new(codebase.root().path, &codebase);
@@ -85,7 +85,7 @@ use super::{packages::FunctionId, runtime::ValueWithSource};
 #[cfg(test)]
 impl Language {
     pub fn without_package() -> Self {
-        Self::with_package(Package::new())
+        Self::with_package(Package::<()>::new())
     }
 
     pub fn enter_code(&mut self, code: &str) {

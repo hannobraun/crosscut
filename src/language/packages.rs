@@ -1,12 +1,12 @@
 use std::collections::BTreeMap;
 
 #[derive(Debug)]
-pub struct Package {
-    function_ids_by_name: BTreeMap<String, FunctionId>,
-    function_names_by_id: BTreeMap<FunctionId, String>,
+pub struct Package<T: Function> {
+    function_ids_by_name: BTreeMap<String, T>,
+    function_names_by_id: BTreeMap<T, String>,
 }
 
-impl Package {
+impl<T: Function> Package<T> {
     pub fn new() -> Self {
         Self {
             function_ids_by_name: BTreeMap::new(),
@@ -14,7 +14,7 @@ impl Package {
         }
     }
 
-    pub fn function<T: Function>(&mut self, function: T) {
+    pub fn function(&mut self, function: T) {
         assert_eq!(
             Some(function.id()),
             T::from_id(function.id()).map(|function| function.id()),
@@ -23,15 +23,23 @@ impl Package {
         );
 
         self.function_ids_by_name
-            .insert(function.name().to_string(), function.id());
+            .insert(function.name().to_string(), function);
         self.function_names_by_id
-            .insert(function.id(), function.name().to_string());
+            .insert(function, function.name().to_string());
     }
 
     pub fn resolver(&self) -> Resolver {
         Resolver {
-            function_ids_by_name: self.function_ids_by_name.clone(),
-            function_names_by_id: self.function_names_by_id.clone(),
+            function_ids_by_name: self
+                .function_ids_by_name
+                .iter()
+                .map(|(name, function)| (name.clone(), function.id()))
+                .collect(),
+            function_names_by_id: self
+                .function_names_by_id
+                .iter()
+                .map(|(function, name)| (function.id(), name.clone()))
+                .collect(),
         }
     }
 }
