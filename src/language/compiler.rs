@@ -3,7 +3,7 @@ use super::{
         CodeError, Codebase, Expression, IntrinsicFunction, Literal, Node,
         NodeHash, NodePath,
     },
-    packages::Package,
+    packages::{Package, Resolver},
 };
 
 pub fn compile_and_replace(
@@ -26,6 +26,8 @@ fn compile_token(
     package: &Package,
     codebase: &mut Codebase,
 ) -> (Node, Option<CodeError>) {
+    let resolver = package.resolver();
+
     let node = codebase.node_at(path);
     let child = node.child().copied();
 
@@ -36,7 +38,7 @@ fn compile_token(
     {
         (node, maybe_err)
     } else {
-        match resolve_function(token, package) {
+        match resolve_function(token, &resolver) {
             Ok(expression) => (Node::Expression { expression, child }, None),
             Err(candidates) => (
                 Node::Error {
@@ -89,9 +91,9 @@ fn resolve_keyword(
 
 fn resolve_function(
     name: &str,
-    package: &Package,
+    package: &Resolver,
 ) -> Result<Expression, Vec<Expression>> {
-    let resolver = package.resolver();
+    let resolver = package;
     let host_function = resolver.resolve_function(name);
     let intrinsic_function = IntrinsicFunction::resolve(name);
 
