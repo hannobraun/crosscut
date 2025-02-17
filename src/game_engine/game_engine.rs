@@ -53,9 +53,10 @@ where
             .with_function(GameEngineFunction::Dim)
             .with_function(GameEngineFunction::Black)
             .with_function(GameEngineFunction::White);
+        let language = Language::with_package(&package);
 
         let mut game_engine = Self {
-            language: Language::with_package(&package),
+            language,
             package,
             game_output: Vec::new(),
             editor_input: TerminalEditorInput::new(),
