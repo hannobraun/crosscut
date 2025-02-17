@@ -1,7 +1,7 @@
 use super::{
     code::{Codebase, NodePath},
     editor::{Editor, EditorCommand, EditorInputEvent},
-    packages::{Function, Package, Packages, Resolver},
+    packages::{Function, Package, Packages},
     runtime::{Effect, Evaluator, RuntimeState, Value},
 };
 
@@ -10,7 +10,7 @@ pub struct Language {
     codebase: Codebase,
     editor: Editor,
     evaluator: Evaluator,
-    resolver: Resolver,
+    resolver: Packages,
 }
 
 impl Language {
@@ -25,7 +25,7 @@ impl Language {
             codebase,
             editor,
             evaluator,
-            resolver: packages.resolver(),
+            resolver: packages,
         }
     }
 
@@ -41,7 +41,7 @@ impl Language {
         &self.evaluator
     }
 
-    pub fn resolver(&self) -> &Resolver {
+    pub fn resolver(&self) -> &Packages {
         &self.resolver
     }
 
@@ -50,7 +50,7 @@ impl Language {
             event,
             &mut self.codebase,
             &mut self.evaluator,
-            &self.resolver,
+            &self.resolver.resolver(),
         );
     }
 
