@@ -9,11 +9,11 @@ use super::{
 pub fn compile_and_replace(
     token: &str,
     path: &mut NodePath,
-    resolver: &Packages,
+    packages: &Packages,
     codebase: &mut Codebase,
 ) {
     let (node, maybe_error) =
-        compile_token(token, path, &resolver.resolver(), codebase);
+        compile_token(token, path, &packages.resolver(), codebase);
 
     *path = codebase.replace_node(path, node);
     if let Some(error) = maybe_error {
