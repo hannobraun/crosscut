@@ -35,6 +35,7 @@ impl<T: Function> Package<T> {
     }
 }
 
+#[derive(Debug)]
 pub struct Packages {
     function_ids_by_name: BTreeMap<String, FunctionId>,
     function_names_by_id: BTreeMap<FunctionId, String>,
