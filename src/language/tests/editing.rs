@@ -98,7 +98,8 @@ fn submitting_the_node_should_insert_a_new_one_after_the_current_one() {
         .with_function(TestFunction::Zero)
         .with_function(TestFunction::IfZeroThen127);
 
-    let mut language = Language::with_package(&package);
+    let mut language = Language::new();
+    language.with_package(&package);
 
     language.enter_code("255 if_zero_then_127");
     language.on_input(EditorInputEvent::MoveCursorUp);

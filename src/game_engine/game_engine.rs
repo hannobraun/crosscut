@@ -53,7 +53,8 @@ where
             .with_function(GameEngineFunction::Dim)
             .with_function(GameEngineFunction::Black)
             .with_function(GameEngineFunction::White);
-        let language = Language::with_package(&package);
+        let mut language = Language::new();
+        language.with_package(&package);
 
         let mut game_engine = Self {
             language,

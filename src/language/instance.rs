@@ -28,10 +28,8 @@ impl Language {
         }
     }
 
-    pub fn with_package<T: Function>(package: &Package<T>) -> Self {
-        let mut language = Language::new();
-        language.packages.register_package(package);
-        language
+    pub fn with_package<T: Function>(&mut self, package: &Package<T>) {
+        self.packages.register_package(package);
     }
 
     pub fn codebase(&self) -> &Codebase {

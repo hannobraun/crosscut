@@ -69,7 +69,8 @@ fn syntax_node_that_could_resolve_to_multiple_functions_is_unresolved() {
 
     let package = Package::new().with_function(Identity);
 
-    let mut language = Language::with_package(&package);
+    let mut language = Language::new();
+    language.with_package(&package);
 
     language.enter_code("identity");
 
