@@ -80,6 +80,7 @@ fn submitting_the_node_should_insert_a_new_one_after_the_current_one() {
     // When submitting a node, a new one should be inserted after the one we
     // just submitted.
 
+    #[derive(Eq, Ord, PartialEq, PartialOrd)]
     enum TestFunction {
         Zero,
         IfZeroThen127,

@@ -245,6 +245,7 @@ pub enum GameOutput {
     SubmitColor { color: [f64; 4] },
 }
 
+#[derive(Eq, Ord, PartialEq, PartialOrd)]
 pub enum GameEngineFunction {
     Dim,
     Black,

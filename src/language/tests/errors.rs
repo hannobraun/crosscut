@@ -59,6 +59,7 @@ fn syntax_node_that_could_resolve_to_multiple_functions_is_unresolved() {
     // If a syntax node could resolve to multiple functions, it should remain
     // unresolved, and an error should be shown.
 
+    #[derive(Eq, Ord, PartialEq, PartialOrd)]
     struct Identity;
     impl Function for Identity {
         fn from_id(FunctionId { id }: FunctionId) -> Option<Self> {

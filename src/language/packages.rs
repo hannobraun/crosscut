@@ -56,7 +56,7 @@ impl Resolver {
     }
 }
 
-pub trait Function {
+pub trait Function: Ord {
     fn from_id(id: FunctionId) -> Option<Self>
     where
         Self: Sized;
