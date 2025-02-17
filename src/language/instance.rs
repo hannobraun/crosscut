@@ -14,13 +14,11 @@ pub struct Language {
 }
 
 impl Language {
-    pub fn with_package<T: Function>(package: &Package<T>) -> Self {
+    pub fn new() -> Self {
         let codebase = Codebase::new();
         let editor = Editor::new(&codebase);
         let evaluator = Evaluator::new(codebase.root().path, &codebase);
-
-        let mut packages = Packages::new();
-        packages.register_package(package);
+        let packages = Packages::new();
 
         Self {
             codebase,
@@ -28,6 +26,12 @@ impl Language {
             evaluator,
             packages,
         }
+    }
+
+    pub fn with_package<T: Function>(package: &Package<T>) -> Self {
+        let mut language = Language::new();
+        language.packages.register_package(package);
+        language
     }
 
     pub fn codebase(&self) -> &Codebase {
