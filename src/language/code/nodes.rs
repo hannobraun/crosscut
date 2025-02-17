@@ -144,14 +144,14 @@ impl Node {
     pub fn display<'r>(&'r self, packages: &'r Packages) -> NodeDisplay<'r> {
         NodeDisplay {
             node: self,
-            resolver: packages,
+            packages,
         }
     }
 }
 
 pub struct NodeDisplay<'r> {
     node: &'r Node,
-    resolver: &'r Packages,
+    packages: &'r Packages,
 }
 
 impl fmt::Display for NodeDisplay<'_> {
@@ -161,7 +161,7 @@ impl fmt::Display for NodeDisplay<'_> {
                 write!(f, "")
             }
             Node::Expression { expression, .. } => {
-                write!(f, "{}", expression.display(self.resolver))
+                write!(f, "{}", expression.display(self.packages))
             }
             Node::Recursion { .. } => {
                 write!(f, "self")
