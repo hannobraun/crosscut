@@ -91,12 +91,6 @@ pub trait Function: Copy + Ord {
     fn name(&self) -> &str;
 }
 
-impl Function for () {
-    fn name(&self) -> &str {
-        ""
-    }
-}
-
 #[derive(
     Clone, Copy, Debug, Eq, Ord, PartialEq, PartialOrd, udigest::Digestable,
 )]
