@@ -2,7 +2,7 @@ use std::{collections::BTreeMap, fmt};
 
 use base64::{prelude::BASE64_URL_SAFE_NO_PAD, Engine};
 
-use crate::language::packages::Resolver;
+use crate::language::packages::Packages;
 
 use super::Expression;
 
@@ -141,7 +141,7 @@ impl Node {
         }
     }
 
-    pub fn display<'r>(&'r self, resolver: &'r Resolver) -> NodeDisplay<'r> {
+    pub fn display<'r>(&'r self, resolver: &'r Packages) -> NodeDisplay<'r> {
         NodeDisplay {
             node: self,
             resolver,
@@ -151,7 +151,7 @@ impl Node {
 
 pub struct NodeDisplay<'r> {
     node: &'r Node,
-    resolver: &'r Resolver,
+    resolver: &'r Packages,
 }
 
 impl fmt::Display for NodeDisplay<'_> {
@@ -161,7 +161,7 @@ impl fmt::Display for NodeDisplay<'_> {
                 write!(f, "")
             }
             Node::Expression { expression, .. } => {
-                write!(f, "{}", expression.display(self.resolver))
+                write!(f, "{}", expression.display(&self.resolver.resolver()))
             }
             Node::Recursion { .. } => {
                 write!(f, "self")

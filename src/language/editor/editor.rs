@@ -58,7 +58,7 @@ impl Editor {
                             .map(|path| {
                                 codebase
                                     .node_at(path)
-                                    .display(&packages.resolver())
+                                    .display(packages)
                                     .to_string()
                             })
                             .join("");
@@ -74,7 +74,7 @@ impl Editor {
                             .map(|path| {
                                 codebase
                                     .node_at(path)
-                                    .display(&packages.resolver())
+                                    .display(packages)
                                     .to_string()
                             })
                             .join("");
@@ -140,9 +140,7 @@ impl Editor {
         self.editing = path;
 
         let node = codebase.node_at(&path);
-        self.input = EditorInputBuffer::new(
-            node.display(&packages.resolver()).to_string(),
-        );
+        self.input = EditorInputBuffer::new(node.display(packages).to_string());
     }
 }
 
