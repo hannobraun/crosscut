@@ -122,7 +122,7 @@ fn submitting_the_node_should_insert_a_new_one_after_the_current_one() {
 
     let output =
         language.step_until_finished_and_handle_host_functions(|id, input| {
-            match TestFunction::from_verified_id(id) {
+            match package.function_by_id(id) {
                 TestFunction::Zero => Ok(Value::Integer { value: 0 }),
                 TestFunction::IfZeroThen127 => {
                     if let Value::Integer { value: 0 } = input {

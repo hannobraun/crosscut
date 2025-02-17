@@ -18,7 +18,7 @@ fn host_functions() {
 
     let output =
         language.step_until_finished_and_handle_host_functions(|id, input| {
-            match Function::from_verified_id(id) {
+            match package.function_by_id(id) {
                 Halve => match input {
                     Value::Integer { value } => {
                         Ok(Value::Integer { value: value / 2 })
@@ -53,7 +53,7 @@ fn host_functions_can_trigger_effects() {
     };
     let output =
         language.step_until_finished_and_handle_host_functions(|id, input| {
-            match Function::from_verified_id(id) {
+            match package.function_by_id(id) {
                 Halve => match input {
                     Value::Nothing => Err(effect.clone()),
                     input => {
@@ -94,7 +94,7 @@ fn host_functions_can_inject_opaque_value() {
     let mut value_observed = false;
     let output =
         language.step_until_finished_and_handle_host_functions(|id, input| {
-            match Function::from_verified_id(id) {
+            match package.function_by_id(id) {
                 ObserveOpaqueValue => {
                     value_observed = input == opaque_value;
                     Ok(input)

@@ -18,6 +18,7 @@ use super::{
 #[derive(Debug)]
 pub struct GameEngine<A> {
     language: Language,
+    package: Package<GameEngineFunction>,
     game_output: Vec<GameOutput>,
     editor_input: TerminalEditorInput,
     editor_output: TerminalEditorOutput<A>,
@@ -55,6 +56,7 @@ where
 
         let mut game_engine = Self {
             language: Language::with_package(&package),
+            package,
             game_output: Vec::new(),
             editor_input: TerminalEditorInput::new(),
             editor_output: TerminalEditorOutput::new(adapter),
@@ -150,7 +152,7 @@ where
     fn apply_host_function(&mut self, id: FunctionId, input: Value) {
         let display_type = Type::Opaque { name: "Display" };
 
-        match Function::from_verified_id(id) {
+        match self.package.function_by_id(id) {
             GameEngineFunction::Dim => match input {
                 Value::Integer { value } => {
                     self.language.provide_host_function_output(
