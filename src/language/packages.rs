@@ -79,6 +79,23 @@ pub trait Function: Copy + Ord {
     fn name(&self) -> &str;
 }
 
+impl Function for () {
+    fn from_id(_: FunctionId) -> Option<Self>
+    where
+        Self: Sized,
+    {
+        None
+    }
+
+    fn id(&self) -> FunctionId {
+        FunctionId { id: 0 }
+    }
+
+    fn name(&self) -> &str {
+        ""
+    }
+}
+
 #[derive(
     Clone, Copy, Debug, Eq, Ord, PartialEq, PartialOrd, udigest::Digestable,
 )]
