@@ -36,6 +36,8 @@ impl Editor {
         evaluator: &mut Evaluator,
         package: &Package,
     ) {
+        let resolver = package.resolver();
+
         if let Some(action) = self.input.update(event) {
             // This code results in non-intuitive cursor movement, if using the
             // up and down keys. This is tracked here:
@@ -58,7 +60,7 @@ impl Editor {
                             .map(|path| {
                                 codebase
                                     .node_at(path)
-                                    .display(package)
+                                    .display(&resolver)
                                     .to_string()
                             })
                             .join("");
@@ -74,7 +76,7 @@ impl Editor {
                             .map(|path| {
                                 codebase
                                     .node_at(path)
-                                    .display(package)
+                                    .display(&resolver)
                                     .to_string()
                             })
                             .join("");
@@ -137,10 +139,13 @@ impl Editor {
         codebase: &Codebase,
         package: &Package,
     ) {
+        let resolver = package.resolver();
+
         self.editing = path;
 
         let node = codebase.node_at(&path);
-        self.input = EditorInputBuffer::new(node.display(package).to_string());
+        self.input =
+            EditorInputBuffer::new(node.display(&resolver).to_string());
     }
 }
 
