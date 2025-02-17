@@ -19,13 +19,13 @@ impl Language {
         let editor = Editor::new(&codebase);
         let evaluator = Evaluator::new(codebase.root().path, &codebase);
 
-        let package = Packages::from_package(package);
+        let packages = Packages::from_package(package);
 
         Self {
             codebase,
             editor,
             evaluator,
-            resolver: package.resolver(),
+            resolver: packages.resolver(),
         }
     }
 
