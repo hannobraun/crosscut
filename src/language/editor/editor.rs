@@ -87,7 +87,7 @@ impl Editor {
                     compile_and_replace(
                         &submitted,
                         &mut self.editing,
-                        &packages.resolver(),
+                        packages,
                         codebase,
                     );
 
@@ -103,7 +103,7 @@ impl Editor {
         compile_and_replace(
             self.input.buffer(),
             &mut self.editing,
-            &packages.resolver(),
+            packages,
             codebase,
         );
 
