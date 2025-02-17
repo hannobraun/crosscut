@@ -13,11 +13,11 @@ pub enum Expression {
 impl Expression {
     pub fn display<'r>(
         &'r self,
-        package: &'r Resolver,
+        resolver: &'r Resolver,
     ) -> ExpressionDisplay<'r> {
         ExpressionDisplay {
             expression: self,
-            resolver: package,
+            resolver,
         }
     }
 }
