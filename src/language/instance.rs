@@ -10,7 +10,7 @@ pub struct Language {
     codebase: Codebase,
     editor: Editor,
     evaluator: Evaluator,
-    package: Resolver,
+    resolver: Resolver,
 }
 
 impl Language {
@@ -23,7 +23,7 @@ impl Language {
             codebase,
             editor,
             evaluator,
-            package: package.resolver(),
+            resolver: package.resolver(),
         }
     }
 
@@ -40,7 +40,7 @@ impl Language {
     }
 
     pub fn resolver(&self) -> &Resolver {
-        &self.package
+        &self.resolver
     }
 
     pub fn on_input(&mut self, event: EditorInputEvent) {
@@ -48,7 +48,7 @@ impl Language {
             event,
             &mut self.codebase,
             &mut self.evaluator,
-            &self.package,
+            &self.resolver,
         );
     }
 
