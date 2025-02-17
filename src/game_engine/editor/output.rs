@@ -180,7 +180,8 @@ fn render_node<A: EditorOutputAdapter>(
         _ => None,
     };
 
-    let node_display = located_node.node.display(context.resolver);
+    let resolver = context.resolver;
+    let node_display = located_node.node.display(resolver);
     if let Some(color) = color {
         adapter.color(color, |adapter| write!(adapter, "{node_display}"))?;
     } else {
