@@ -50,7 +50,7 @@ impl Language {
             event,
             &mut self.codebase,
             &mut self.evaluator,
-            &self.packages.resolver(),
+            &self.packages,
         );
     }
 

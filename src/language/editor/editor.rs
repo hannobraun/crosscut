@@ -1,7 +1,7 @@
 use crate::language::{
     code::{Codebase, Node, NodePath},
     compiler::compile_and_replace,
-    packages::Resolver,
+    packages::{Packages, Resolver},
     runtime::Evaluator,
 };
 
@@ -34,7 +34,7 @@ impl Editor {
         event: EditorInputEvent,
         codebase: &mut Codebase,
         evaluator: &mut Evaluator,
-        resolver: &Resolver,
+        resolver: &Packages,
     ) {
         if let Some(action) = self.input.update(event) {
             // This code results in non-intuitive cursor movement, if using the
@@ -43,13 +43,21 @@ impl Editor {
             match action {
                 UpdateAction::NavigateToPrevious => {
                     if let Some(location) = codebase.child_of(&self.editing) {
-                        self.navigate_to(location, codebase, resolver);
+                        self.navigate_to(
+                            location,
+                            codebase,
+                            &resolver.resolver(),
+                        );
                         self.input.move_cursor_to_end();
                     }
                 }
                 UpdateAction::NavigateToNextNode => {
                     if let Some(location) = codebase.parent_of(&self.editing) {
-                        self.navigate_to(location, codebase, resolver);
+                        self.navigate_to(
+                            location,
+                            codebase,
+                            &resolver.resolver(),
+                        );
                     }
                 }
                 UpdateAction::MergeWithPrevious => {
@@ -58,7 +66,7 @@ impl Editor {
                             .map(|path| {
                                 codebase
                                     .node_at(path)
-                                    .display(resolver)
+                                    .display(&resolver.resolver())
                                     .to_string()
                             })
                             .join("");
@@ -74,7 +82,7 @@ impl Editor {
                             .map(|path| {
                                 codebase
                                     .node_at(path)
-                                    .display(resolver)
+                                    .display(&resolver.resolver())
                                     .to_string()
                             })
                             .join("");
@@ -87,7 +95,7 @@ impl Editor {
                     compile_and_replace(
                         &submitted,
                         &mut self.editing,
-                        resolver,
+                        &resolver.resolver(),
                         codebase,
                     );
 
@@ -103,7 +111,7 @@ impl Editor {
         compile_and_replace(
             self.input.buffer(),
             &mut self.editing,
-            resolver,
+            &resolver.resolver(),
             codebase,
         );
 
