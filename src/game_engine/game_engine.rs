@@ -49,8 +49,7 @@ where
     A: EditorOutputAdapter,
 {
     pub fn new(adapter: A) -> Self {
-        let mut package = Package::new();
-        package
+        let package = Package::new()
             .with_function(GameEngineFunction::Dim)
             .with_function(GameEngineFunction::Black)
             .with_function(GameEngineFunction::White);

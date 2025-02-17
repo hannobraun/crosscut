@@ -67,8 +67,7 @@ fn syntax_node_that_could_resolve_to_multiple_functions_is_unresolved() {
         }
     }
 
-    let mut package = Package::new();
-    package.with_function(Identity);
+    let package = Package::new().with_function(Identity);
 
     let mut language = Language::with_package(&package);
 
