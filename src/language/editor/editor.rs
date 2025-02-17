@@ -34,10 +34,8 @@ impl Editor {
         event: EditorInputEvent,
         codebase: &mut Codebase,
         evaluator: &mut Evaluator,
-        package: &Resolver,
+        resolver: &Resolver,
     ) {
-        let resolver = package;
-
         if let Some(action) = self.input.update(event) {
             // This code results in non-intuitive cursor movement, if using the
             // up and down keys. This is tracked here:
