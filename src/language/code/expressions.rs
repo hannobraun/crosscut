@@ -17,21 +17,21 @@ impl Expression {
     ) -> ExpressionDisplay<'r> {
         ExpressionDisplay {
             expression: self,
-            resolver: packages,
+            packages,
         }
     }
 }
 
 pub struct ExpressionDisplay<'r> {
     expression: &'r Expression,
-    resolver: &'r Packages,
+    packages: &'r Packages,
 }
 
 impl fmt::Display for ExpressionDisplay<'_> {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match self.expression {
             Expression::HostFunction { id } => {
-                let resolver = self.resolver.resolver();
+                let resolver = self.packages.resolver();
                 let name = resolver.function_name_by_id(id);
                 write!(f, "{name}")
             }
