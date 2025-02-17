@@ -2,6 +2,7 @@ use std::collections::BTreeMap;
 
 #[derive(Debug)]
 pub struct Package<T: Function> {
+    next_id: FunctionId,
     functions_by_name: BTreeMap<String, (T, FunctionId)>,
     names_by_function: BTreeMap<(T, FunctionId), String>,
 }
@@ -9,6 +10,7 @@ pub struct Package<T: Function> {
 impl<T: Function> Package<T> {
     pub fn new() -> Self {
         Self {
+            next_id: FunctionId { id: 0 },
             functions_by_name: BTreeMap::new(),
             names_by_function: BTreeMap::new(),
         }
@@ -22,10 +24,14 @@ impl<T: Function> Package<T> {
             function.",
         );
 
+        let id = self.next_id;
+        self.next_id = FunctionId { id: id.id + 1 };
+        assert_eq!(id, function.id());
+
         self.functions_by_name
-            .insert(function.name().to_string(), (function, function.id()));
+            .insert(function.name().to_string(), (function, id));
         self.names_by_function
-            .insert((function, function.id()), function.name().to_string());
+            .insert((function, id), function.name().to_string());
     }
 
     pub fn resolver(&self) -> Resolver {
