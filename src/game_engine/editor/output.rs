@@ -8,7 +8,7 @@ use crate::{
         },
         editor::Editor,
         instance::Language,
-        packages::Package,
+        packages::Resolver,
         runtime::{Effect, Evaluator, RuntimeState, Value},
     },
 };
@@ -33,12 +33,12 @@ where
         language: &Language,
         editor_input: &TerminalEditorInput,
     ) -> anyhow::Result<()> {
-        let resolver = language.package();
+        let resolver = language.package().resolver();
         let mut context = RenderContext {
             codebase: language.codebase(),
             editor: language.editor(),
             evaluator: language.evaluator(),
-            package: resolver,
+            package: &resolver,
             cursor: None,
         };
 
@@ -181,8 +181,8 @@ fn render_node<A: EditorOutputAdapter>(
         _ => None,
     };
 
-    let resolver = context.package.resolver();
-    let node_display = located_node.node.display(&resolver);
+    let resolver = context.package;
+    let node_display = located_node.node.display(resolver);
     if let Some(color) = color {
         adapter.color(color, |adapter| write!(adapter, "{node_display}"))?;
     } else {
@@ -324,12 +324,12 @@ fn render_help<A: EditorOutputAdapter>(
             }
         }
         Node::Recursion { .. } => {
-            let resolver = context.package.resolver();
+            let resolver = context.package;
             writeln!(
                 adapter,
                 "You are editing the `{}` keyword, which calls the current \
                 function recursively.",
-                node.display(&resolver),
+                node.display(resolver),
             )?;
         }
         Node::Error { .. } => {
@@ -344,7 +344,7 @@ struct RenderContext<'r> {
     codebase: &'r Codebase,
     editor: &'r Editor,
     evaluator: &'r Evaluator,
-    package: &'r Package,
+    package: &'r Resolver,
     cursor: Option<Cursor>,
 }
 
