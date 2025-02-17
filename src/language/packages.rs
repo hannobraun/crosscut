@@ -37,42 +37,54 @@ impl<T: Function> Package<T> {
 
 #[derive(Debug)]
 pub struct Packages {
-    function_ids_by_name: BTreeMap<String, FunctionId>,
-    function_names_by_id: BTreeMap<FunctionId, String>,
+    inner: Vec<RegisteredPackage>,
 }
 
 impl Packages {
     pub fn new() -> Self {
-        Self {
-            function_ids_by_name: BTreeMap::new(),
-            function_names_by_id: BTreeMap::new(),
-        }
+        Self { inner: Vec::new() }
     }
 
     pub fn register_package<T: Function>(&mut self, package: &Package<T>) {
-        self.function_ids_by_name = package
-            .functions_by_id
-            .iter()
-            .map(|(id, function)| (function.name().to_string(), *id))
-            .collect();
-        self.function_names_by_id = package
-            .functions_by_id
-            .iter()
-            .map(|(id, function)| (*id, function.name().to_string()))
-            .collect();
+        let package = RegisteredPackage {
+            function_ids_by_name: package
+                .functions_by_id
+                .iter()
+                .map(|(id, function)| (function.name().to_string(), *id))
+                .collect(),
+            function_names_by_id: package
+                .functions_by_id
+                .iter()
+                .map(|(id, function)| (*id, function.name().to_string()))
+                .collect(),
+        };
+
+        self.inner.push(package);
     }
 
     pub fn resolve_function(&self, name: &str) -> Option<FunctionId> {
-        self.function_ids_by_name.get(name).copied()
+        self.inner
+            .iter()
+            .find_map(|package| package.function_ids_by_name.get(name).copied())
     }
 
     pub fn function_name_by_id(&self, id: &FunctionId) -> &str {
-        let Some(name) = self.function_names_by_id.get(id) else {
+        let Some(name) = self
+            .inner
+            .iter()
+            .find_map(|package| package.function_names_by_id.get(id))
+        else {
             panic!("Expected function ID `{id:?}` to be valid.");
         };
 
         name
     }
+}
+
+#[derive(Debug)]
+struct RegisteredPackage {
+    function_ids_by_name: BTreeMap<String, FunctionId>,
+    function_names_by_id: BTreeMap<FunctionId, String>,
 }
 
 pub trait Function: Copy + Ord {
