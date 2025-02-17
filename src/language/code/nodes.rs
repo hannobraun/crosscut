@@ -141,10 +141,10 @@ impl Node {
         }
     }
 
-    pub fn display<'r>(&'r self, resolver: &'r Packages) -> NodeDisplay<'r> {
+    pub fn display<'r>(&'r self, packages: &'r Packages) -> NodeDisplay<'r> {
         NodeDisplay {
             node: self,
-            resolver,
+            resolver: packages,
         }
     }
 }
