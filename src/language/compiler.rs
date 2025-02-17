@@ -91,7 +91,8 @@ fn resolve_function(
     name: &str,
     package: &Package,
 ) -> Result<Expression, Vec<Expression>> {
-    let host_function = package.resolve_function(name);
+    let resolver = package;
+    let host_function = resolver.resolve_function(name);
     let intrinsic_function = IntrinsicFunction::resolve(name);
 
     match (host_function, intrinsic_function) {
