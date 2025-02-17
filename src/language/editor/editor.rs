@@ -137,10 +137,8 @@ impl Editor {
         &mut self,
         path: NodePath,
         codebase: &Codebase,
-        package: &Resolver,
+        resolver: &Resolver,
     ) {
-        let resolver = package;
-
         self.editing = path;
 
         let node = codebase.node_at(&path);
