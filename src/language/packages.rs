@@ -3,7 +3,7 @@ use std::collections::BTreeMap;
 #[derive(Debug)]
 pub struct Package<T: Function> {
     next_id: FunctionId,
-    functions_by_name: BTreeMap<String, (T, FunctionId)>,
+    functions_by_name: BTreeMap<FunctionId, T>,
 }
 
 impl<T: Function> Package<T> {
@@ -26,8 +26,7 @@ impl<T: Function> Package<T> {
         self.next_id = FunctionId { id: id.id + 1 };
         assert_eq!(id, function.id());
 
-        self.functions_by_name
-            .insert(function.name().to_string(), (function, id));
+        self.functions_by_name.insert(id, function);
     }
 
     pub fn resolver(&self) -> Resolver {
@@ -35,12 +34,12 @@ impl<T: Function> Package<T> {
             function_ids_by_name: self
                 .functions_by_name
                 .iter()
-                .map(|(_, (function, id))| (function.name().to_string(), *id))
+                .map(|(id, function)| (function.name().to_string(), *id))
                 .collect(),
             function_names_by_id: self
                 .functions_by_name
                 .iter()
-                .map(|(_, (function, id))| (*id, function.name().to_string()))
+                .map(|(id, function)| (*id, function.name().to_string()))
                 .collect(),
         }
     }
