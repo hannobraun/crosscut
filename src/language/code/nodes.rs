@@ -161,7 +161,7 @@ impl fmt::Display for NodeDisplay<'_> {
                 write!(f, "")
             }
             Node::Expression { expression, .. } => {
-                write!(f, "{}", expression.display(&self.resolver.resolver()))
+                write!(f, "{}", expression.display(self.resolver))
             }
             Node::Recursion { .. } => {
                 write!(f, "self")

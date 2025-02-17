@@ -1,6 +1,6 @@
 use std::fmt;
 
-use crate::language::packages::{FunctionId, Resolver};
+use crate::language::packages::{FunctionId, Packages};
 
 use super::IntrinsicFunction;
 
@@ -13,7 +13,7 @@ pub enum Expression {
 impl Expression {
     pub fn display<'r>(
         &'r self,
-        resolver: &'r Resolver,
+        resolver: &'r Packages,
     ) -> ExpressionDisplay<'r> {
         ExpressionDisplay {
             expression: self,
@@ -24,14 +24,14 @@ impl Expression {
 
 pub struct ExpressionDisplay<'r> {
     expression: &'r Expression,
-    resolver: &'r Resolver,
+    resolver: &'r Packages,
 }
 
 impl fmt::Display for ExpressionDisplay<'_> {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match self.expression {
             Expression::HostFunction { id } => {
-                let resolver = self.resolver;
+                let resolver = self.resolver.resolver();
                 let name = resolver.function_name_by_id(id);
                 write!(f, "{name}")
             }
