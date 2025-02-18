@@ -103,7 +103,7 @@ fn submitting_the_node_should_insert_a_new_one_after_the_current_one() {
 
     language.enter_code("255 if_zero_then_127");
     language.on_input(EditorInputEvent::MoveCursorUp);
-    language.on_input(EditorInputEvent::SubmitNode);
+    language.on_input(EditorInputEvent::AddParent);
     language.enter_code("zero");
 
     let output =
@@ -137,7 +137,7 @@ fn split_node_if_submitting_while_cursor_is_in_the_middle() {
     for _ in "identity".chars() {
         language.on_input(EditorInputEvent::MoveCursorLeft);
     }
-    language.on_input(EditorInputEvent::SubmitNode);
+    language.on_input(EditorInputEvent::AddParent);
 
     assert_eq!(
         language.step_until_finished().map(|value| value.inner),
