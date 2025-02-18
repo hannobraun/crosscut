@@ -45,9 +45,11 @@ impl Codebase {
         NodePath { hash }
     }
 
-    pub fn child_of(&self, path: &NodePath) -> Option<NodePath> {
-        let hash = self.node_at(path).child()?;
-        Some(NodePath { hash: *hash })
+    pub fn child_of(&self, path: &NodePath) -> impl Iterator<Item = NodePath> {
+        let Some(hash) = self.node_at(path).child() else {
+            return None.into_iter();
+        };
+        Some(NodePath { hash: *hash }).into_iter()
     }
 
     pub fn parent_of(&self, path: &NodePath) -> Option<NodePath> {

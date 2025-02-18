@@ -56,9 +56,9 @@ impl Context {
                 let value = {
                     match *literal {
                         Literal::Function => {
-                            let children = codebase.child_of(&path);
+                            let mut children = codebase.child_of(&path);
 
-                            let Some(child) = children else {
+                            let Some(child) = children.next() else {
                                 unreachable!(
                                     "Function literal must have a child, or it \
                                     wouldn't have been resolved as a function \
@@ -66,21 +66,35 @@ impl Context {
                                 );
                             };
 
+                            assert_eq!(
+                                children.count(),
+                                0,
+                                "Only nodes with one child can be evaluated at \
+                                this point.",
+                            );
+
                             Value::Function {
                                 body: *child.hash(),
                             }
                         }
                         Literal::Integer { value } => Value::Integer { value },
                         Literal::Tuple => {
-                            let children = codebase.child_of(&path);
+                            let mut children = codebase.child_of(&path);
 
-                            let Some(child) = children else {
+                            let Some(child) = children.next() else {
                                 unreachable!(
                                     "Tuple literal must have a child, or it \
                                     wouldn't have been resolved as a tuple \
                                     literal."
                                 );
                             };
+
+                            assert_eq!(
+                                children.count(),
+                                0,
+                                "Only nodes with one child can be evaluated at \
+                                this point.",
+                            );
 
                             self.active_value = ValueWithSource {
                                 inner: Value::Tuple {

@@ -42,7 +42,9 @@ impl Editor {
             // https://github.com/hannobraun/crosscut/issues/71
             match action {
                 UpdateAction::NavigateToPrevious => {
-                    if let Some(location) = codebase.child_of(&self.editing) {
+                    if let Some(location) =
+                        codebase.child_of(&self.editing).last()
+                    {
                         self.navigate_to(location, codebase, packages);
                         self.input.move_cursor_to_end();
                     }
@@ -53,7 +55,9 @@ impl Editor {
                     }
                 }
                 UpdateAction::MergeWithPrevious => {
-                    if let Some(to_remove) = codebase.child_of(&self.editing) {
+                    if let Some(to_remove) =
+                        codebase.child_of(&self.editing).last()
+                    {
                         let merged = [&to_remove, &self.editing]
                             .map(|path| {
                                 codebase

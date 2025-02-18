@@ -66,9 +66,15 @@ impl Evaluator {
                 break;
             }
 
-            let children = codebase.child_of(&path);
+            let mut children = codebase.child_of(&path);
 
-            if let Some(child) = children {
+            if let Some(child) = children.next() {
+                assert_eq!(
+                    children.count(),
+                    0,
+                    "Only nodes with one child can be evaluated at this point.",
+                );
+
                 path = child;
                 continue;
             } else {
