@@ -37,7 +37,7 @@ impl EditorInputBuffer {
                 assert!(
                     !ch.is_whitespace(),
                     "Expecting whitespace characters to be translated into \
-                    `SubmitNode`.",
+                    `AddParent`.",
                 );
 
                 self.insert(ch);
