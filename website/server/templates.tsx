@@ -40,11 +40,6 @@ export const singleDailyThoughtPage = (
         allowedAttributes: { "source": ["src"] },
     });
 
-    const index = dates.findIndex((element) => element == date);
-
-    const prev = dates[index + 1];
-    const next = dates[index - 1];
-
     return page(
         `Daily Thought - ${date}`,
         <>
@@ -59,16 +54,7 @@ export const singleDailyThoughtPage = (
                     {html}
                 </main>
                 <nav class="grid grid-cols-2">
-                    {prev && (
-                        <span class="col-1 justify-self-start">
-                            {dailyThoughtLink(prev, "<< previous thought")}
-                        </span>
-                    )}
-                    {next && (
-                        <span class="col-2 justify-self-end">
-                            {dailyThoughtLink(next, "next thought >>")}
-                        </span>
-                    )}
+                    {dailyThoughtNavigation(date, dates)}
                 </nav>
             </div>
             {subscribe()}
@@ -83,6 +69,28 @@ const dailyThoughtItem = (date: string) => {
         <li class="my-4 font-bold text-lg">
             {link}
         </li>
+    );
+};
+
+const dailyThoughtNavigation = (date: string, dates: string[]) => {
+    const index = dates.findIndex((element) => element == date);
+
+    const prev = dates[index + 1];
+    const next = dates[index - 1];
+
+    return (
+        <>
+            {prev && (
+                <span class="col-1 justify-self-start">
+                    {dailyThoughtLink(prev, "<< previous thought")}
+                </span>
+            )}
+            {next && (
+                <span class="col-2 justify-self-end">
+                    {dailyThoughtLink(next, "next thought >>")}
+                </span>
+            )}
+        </>
     );
 };
 
