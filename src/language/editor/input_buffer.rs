@@ -148,7 +148,7 @@ impl EditorInputBuffer {
 
         *self = Self::new(new_buffer);
 
-        UpdateAction::Submit {
+        UpdateAction::AddParent {
             submitted: old_buffer,
         }
     }
@@ -159,7 +159,7 @@ pub enum UpdateAction {
     NavigateToNextNode,
     MergeWithPrevious,
     MergeWithNext,
-    Submit { submitted: String },
+    AddParent { submitted: String },
 }
 
 #[derive(Debug)]

@@ -83,7 +83,7 @@ impl Editor {
                         codebase.remove_node(&to_remove);
                     }
                 }
-                UpdateAction::Submit { submitted } => {
+                UpdateAction::AddParent { submitted } => {
                     compile_and_replace(
                         &submitted,
                         &mut self.editing,
