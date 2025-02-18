@@ -66,7 +66,7 @@ impl EditorInputBuffer {
                 return self.remove_right();
             }
             AddParent => {
-                return Some(self.submit());
+                return Some(self.add_parent());
             }
         }
 
@@ -142,7 +142,7 @@ impl EditorInputBuffer {
         }
     }
 
-    fn submit(&mut self) -> UpdateAction {
+    fn add_parent(&mut self) -> UpdateAction {
         let mut old_buffer = mem::take(&mut self.buffer);
         let new_buffer = old_buffer.split_off(self.cursor);
 
