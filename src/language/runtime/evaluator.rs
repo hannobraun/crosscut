@@ -66,7 +66,9 @@ impl Evaluator {
                 break;
             }
 
-            if let Some(child) = codebase.child_of(&path) {
+            let children = codebase.child_of(&path);
+
+            if let Some(child) = children {
                 path = child;
                 continue;
             } else {
