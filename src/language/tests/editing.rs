@@ -126,6 +126,87 @@ fn add_parent_node() {
 }
 
 #[test]
+fn add_parent_of_node_that_already_has_a_parent() {
+    // If a node already has a parent, then adding a parent should add the
+    // parent in between them, as a child of the previous parent.
+
+    #[derive(Clone, Copy, Eq, Ord, PartialEq, PartialOrd)]
+    enum TestFunction {
+        A,
+        AToB,
+        BToC,
+    }
+    impl Function for TestFunction {
+        fn name(&self) -> &str {
+            match self {
+                Self::A => "a",
+                Self::AToB => "a_to_b",
+                Self::BToC => "b_to_c",
+            }
+        }
+    }
+
+    let package = Package::new()
+        .with_function(TestFunction::A)
+        .with_function(TestFunction::AToB)
+        .with_function(TestFunction::BToC);
+
+    let mut language = Language::new();
+    language.with_package(&package);
+
+    language.enter_code("a b_to_c");
+    language.on_input(EditorInputEvent::MoveCursorUp);
+    language.on_input(EditorInputEvent::AddParent);
+    language.enter_code("a_to_b");
+
+    let output =
+        language.step_until_finished_and_handle_host_functions(|id, input| {
+            match package.function_by_id(id) {
+                TestFunction::A => Ok(Value::Opaque {
+                    id: 0,
+                    display: "a",
+                }),
+                TestFunction::AToB => {
+                    assert_eq!(
+                        input,
+                        Value::Opaque {
+                            id: 0,
+                            display: "a"
+                        }
+                    );
+
+                    Ok(Value::Opaque {
+                        id: 1,
+                        display: "b",
+                    })
+                }
+                TestFunction::BToC => {
+                    assert_eq!(
+                        input,
+                        Value::Opaque {
+                            id: 1,
+                            display: "b"
+                        }
+                    );
+
+                    Ok(Value::Opaque {
+                        id: 2,
+                        display: "c",
+                    })
+                }
+            }
+        });
+
+    assert_eq!(
+        output.map(|value| value.inner),
+        Ok(Value::Opaque {
+            id: 2,
+            display: "c",
+        }),
+    );
+}
+
+#[test]
 fn split_node_if_adding_parent_while_cursor_is_in_the_middle() {
     // If we add a parent while the cursor is in the middle of the current node,
     // we should split the node right there.
