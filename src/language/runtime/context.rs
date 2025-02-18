@@ -72,7 +72,9 @@ impl Context {
                         }
                         Literal::Integer { value } => Value::Integer { value },
                         Literal::Tuple => {
-                            let Some(child) = codebase.child_of(&path) else {
+                            let children = codebase.child_of(&path);
+
+                            let Some(child) = children else {
                                 unreachable!(
                                     "Tuple literal must have a child, or it \
                                     wouldn't have been resolved as a tuple \
