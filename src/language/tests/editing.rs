@@ -130,22 +130,6 @@ fn add_parent_of_node_that_already_has_a_parent() {
     // If a node already has a parent, then adding a parent should add the
     // parent in between them, as a child of the previous parent.
 
-    #[derive(Clone, Copy, Eq, Ord, PartialEq, PartialOrd)]
-    enum TestFunction {
-        A,
-        AToB,
-        BToC,
-    }
-    impl Function for TestFunction {
-        fn name(&self) -> &str {
-            match self {
-                Self::A => "a",
-                Self::AToB => "a_to_b",
-                Self::BToC => "b_to_c",
-            }
-        }
-    }
-
     let package = Package::new()
         .with_function(TestFunction::A)
         .with_function(TestFunction::AToB)
@@ -436,3 +420,19 @@ fn remove_right_merges_with_next_syntax_node() {
 //
 // Please refer to the test suite of `EditorInputBuffer` for more detailed
 // tests.
+
+#[derive(Clone, Copy, Eq, Ord, PartialEq, PartialOrd)]
+enum TestFunction {
+    A,
+    AToB,
+    BToC,
+}
+impl Function for TestFunction {
+    fn name(&self) -> &str {
+        match self {
+            Self::A => "a",
+            Self::AToB => "a_to_b",
+            Self::BToC => "b_to_c",
+        }
+    }
+}
