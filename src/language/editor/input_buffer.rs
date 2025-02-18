@@ -68,6 +68,9 @@ impl EditorInputBuffer {
             AddParent => {
                 return Some(self.add_parent());
             }
+            AddSibling => {
+                // Adding a sibling is not supported yet.
+            }
         }
 
         None
@@ -172,6 +175,7 @@ pub enum EditorInputEvent {
     RemoveLeft { whole_node: bool },
     RemoveRight { whole_node: bool },
     AddParent,
+    AddSibling,
 }
 
 #[cfg(test)]

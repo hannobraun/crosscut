@@ -123,7 +123,7 @@ impl TerminalInputEvent {
             Self::Up => Some(EditorInputEvent::MoveCursorUp),
             Self::Down => Some(EditorInputEvent::MoveCursorDown),
 
-            Self::Enter => Some(EditorInputEvent::AddParent),
+            Self::Enter => Some(EditorInputEvent::AddSibling),
 
             _ => None,
         }
