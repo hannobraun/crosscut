@@ -56,7 +56,9 @@ impl Context {
                 let value = {
                     match *literal {
                         Literal::Function => {
-                            let Some(child) = codebase.child_of(&path) else {
+                            let children = codebase.child_of(&path);
+
+                            let Some(child) = children else {
                                 unreachable!(
                                     "Function literal must have a child, or it \
                                     wouldn't have been resolved as a function \
