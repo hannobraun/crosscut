@@ -46,8 +46,8 @@ impl Codebase {
     }
 
     pub fn child_of(&self, path: &NodePath) -> Option<NodePath> {
-        let hash = *self.node_at(path).child()?;
-        Some(NodePath { hash })
+        let hash = self.node_at(path).child()?;
+        Some(NodePath { hash: *hash })
     }
 
     pub fn parent_of(&self, path: &NodePath) -> Option<NodePath> {
