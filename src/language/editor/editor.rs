@@ -94,6 +94,12 @@ impl Editor {
                     let child = Some(*self.editing.hash());
                     self.editing = codebase.insert_as_parent_of(
                         &self.editing,
+                        // Depending on where the cursor was, the input buffer
+                        // might already contain characters that should make up
+                        // the new node. So the empty node we insert here is
+                        // just a placeholder, which might get replaced by the
+                        // unconditional compilation of the current input buffer
+                        // contents below.
                         Node::Empty { child },
                     );
                 }
