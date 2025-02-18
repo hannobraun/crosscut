@@ -76,7 +76,7 @@ fn update_after_removing_all_characters() {
 }
 
 #[test]
-fn submitting_the_node_should_insert_a_new_one_after_the_current_one() {
+fn add_parent_node() {
     // When submitting a node, a new one should be inserted after the one we
     // just submitted.
 
