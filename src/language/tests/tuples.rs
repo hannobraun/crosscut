@@ -7,8 +7,8 @@ fn single_field() {
     let mut language = Language::new();
 
     language.enter_code("127 tuple");
-    let output = language.step_until_finished();
 
+    let output = language.step_until_finished();
     assert_eq!(
         output.map(|value| value.inner),
         Ok(Value::Tuple {
@@ -24,8 +24,8 @@ fn nested() {
     let mut language = Language::new();
 
     language.enter_code("127 tuple tuple");
-    let output = language.step_until_finished();
 
+    let output = language.step_until_finished();
     assert_eq!(
         output.map(|value| value.inner),
         Ok(Value::Tuple {
