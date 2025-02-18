@@ -4,8 +4,8 @@ use crate::language::{
     code::Node,
     editor::EditorInputEvent,
     instance::Language,
-    packages::{Function, Package},
-    runtime::Value,
+    packages::{Function, FunctionId, Package},
+    runtime::{Effect, Value},
 };
 
 #[test]
@@ -140,43 +140,8 @@ fn add_parent_of_node_that_already_has_a_parent() {
     language.on_input(EditorInputEvent::AddParent);
     language.enter_code("a_to_b");
 
-    let output =
-        language.step_until_finished_and_handle_host_functions(|id, input| {
-            match package.function_by_id(id) {
-                TestFunction::A => Ok(Value::Opaque {
-                    id: 0,
-                    display: "a",
-                }),
-                TestFunction::AToB => {
-                    assert_eq!(
-                        input,
-                        Value::Opaque {
-                            id: 0,
-                            display: "a"
-                        }
-                    );
-
-                    Ok(Value::Opaque {
-                        id: 1,
-                        display: "b",
-                    })
-                }
-                TestFunction::BToC => {
-                    assert_eq!(
-                        input,
-                        Value::Opaque {
-                            id: 1,
-                            display: "b"
-                        }
-                    );
-
-                    Ok(Value::Opaque {
-                        id: 2,
-                        display: "c",
-                    })
-                }
-            }
-        });
+    let output = language
+        .step_until_finished_and_handle_host_functions(handle_test_functions);
 
     assert_eq!(
         output.map(|value| value.inner),
@@ -439,4 +404,44 @@ fn test_package() -> Package<TestFunction> {
         .with_function(TestFunction::A)
         .with_function(TestFunction::AToB)
         .with_function(TestFunction::BToC)
+}
+
+fn handle_test_functions(
+    id: FunctionId,
+    input: Value,
+) -> Result<Value, Effect> {
+    match test_package().function_by_id(id) {
+        TestFunction::A => Ok(Value::Opaque {
+            id: 0,
+            display: "a",
+        }),
+        TestFunction::AToB => {
+            assert_eq!(
+                input,
+                Value::Opaque {
+                    id: 0,
+                    display: "a"
+                }
+            );
+
+            Ok(Value::Opaque {
+                id: 1,
+                display: "b",
+            })
+        }
+        TestFunction::BToC => {
+            assert_eq!(
+                input,
+                Value::Opaque {
+                    id: 1,
+                    display: "b"
+                }
+            );
+
+            Ok(Value::Opaque {
+                id: 2,
+                display: "c",
+            })
+        }
+    }
 }
