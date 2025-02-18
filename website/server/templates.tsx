@@ -51,11 +51,13 @@ export const singleDailyThoughtPage = (
             <h2>Daily Thought - {date}</h2>
             {dailyThoughtsExplainer()}
             {nameExplainer}
-            {link("/daily", "< back to list")}
+            <nav>
+                {link("/daily", "< back to list")}
+            </nav>
             <main class="prose">
                 {html}
             </main>
-            <div class="grid grid-cols-2">
+            <nav class="grid grid-cols-2">
                 {prev && (
                     <span class="col-1 justify-self-start">
                         {dailyThoughtLink(prev, "<< previous thought")}
@@ -66,7 +68,7 @@ export const singleDailyThoughtPage = (
                         {dailyThoughtLink(next, "next thought >>")}
                     </span>
                 )}
-            </div>
+            </nav>
             {subscribe()}
         </>,
     );
