@@ -130,10 +130,7 @@ fn add_parent_of_node_that_already_has_a_parent() {
     // If a node already has a parent, then adding a parent should add the
     // parent in between them, as a child of the previous parent.
 
-    let package = Package::new()
-        .with_function(TestFunction::A)
-        .with_function(TestFunction::AToB)
-        .with_function(TestFunction::BToC);
+    let package = test_package();
 
     let mut language = Language::new();
     language.with_package(&package);
@@ -435,4 +432,11 @@ impl Function for TestFunction {
             Self::BToC => "b_to_c",
         }
     }
+}
+
+fn test_package() -> Package<TestFunction> {
+    Package::new()
+        .with_function(TestFunction::A)
+        .with_function(TestFunction::AToB)
+        .with_function(TestFunction::BToC)
 }
