@@ -51,7 +51,7 @@ export const singleDailyThoughtPage = (
             <h2>Daily Thought - {date}</h2>
             {dailyThoughtsExplainer()}
             {nameExplainer}
-            <div>
+            <div class="my-8">
                 <nav>
                     {link("/daily", "< back to list")}
                 </nav>

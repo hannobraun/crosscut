@@ -80,6 +80,11 @@ address {
     margin-top: 1rem;
 }
 
+.my-8 {
+    margin-bottom: 2rem;
+    margin-top: 2rem;
+}
+
 .my-16 {
     margin-bottom: 4rem;
     margin-top: 4rem;
