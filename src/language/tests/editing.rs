@@ -126,7 +126,7 @@ fn add_parent_node() {
 }
 
 #[test]
-fn split_node_if_submitting_while_cursor_is_in_the_middle() {
+fn split_node_if_adding_parent_while_cursor_is_in_the_middle() {
     // If we submit the node we're currently editing, while the cursor is in the
     // middle of it, we should split the node right there.
 
