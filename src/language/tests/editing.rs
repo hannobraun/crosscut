@@ -77,8 +77,7 @@ fn update_after_removing_all_characters() {
 
 #[test]
 fn add_parent_node() {
-    // When submitting a node, a new one should be inserted after the one we
-    // just submitted.
+    // It's possible to add a parent node of the current node.
 
     #[derive(Clone, Copy, Eq, Ord, PartialEq, PartialOrd)]
     enum TestFunction {
