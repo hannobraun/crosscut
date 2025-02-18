@@ -66,7 +66,7 @@ impl Evaluator {
                 break;
             }
 
-            let mut children = codebase.child_of(&path);
+            let mut children = codebase.children_of(&path);
 
             if let Some(child) = children.next() {
                 assert_eq!(

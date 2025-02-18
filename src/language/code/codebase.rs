@@ -45,7 +45,7 @@ impl Codebase {
         NodePath { hash }
     }
 
-    pub fn child_of(
+    pub fn children_of(
         &self,
         path: &NodePath,
     ) -> impl Iterator<Item = NodePath> + '_ {
