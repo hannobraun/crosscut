@@ -79,49 +79,24 @@ fn update_after_removing_all_characters() {
 fn add_parent_node() {
     // It's possible to add a parent node of the current node.
 
-    #[derive(Clone, Copy, Eq, Ord, PartialEq, PartialOrd)]
-    enum TestFunction {
-        Zero,
-        IfZeroThen127,
-    }
-    impl Function for TestFunction {
-        fn name(&self) -> &str {
-            match self {
-                Self::Zero => "zero",
-                Self::IfZeroThen127 => "if_zero_then_127",
-            }
-        }
-    }
-
-    let package = Package::new()
-        .with_function(TestFunction::Zero)
-        .with_function(TestFunction::IfZeroThen127);
+    let package = test_package();
 
     let mut language = Language::new();
     language.with_package(&package);
 
-    language.enter_code("255 if_zero_then_127");
-    language.on_input(EditorInputEvent::MoveCursorUp);
+    language.enter_code("a");
     language.on_input(EditorInputEvent::AddParent);
-    language.enter_code("zero");
+    language.enter_code("a_to_b");
 
-    let output =
-        language.step_until_finished_and_handle_host_functions(|id, input| {
-            match package.function_by_id(id) {
-                TestFunction::Zero => Ok(Value::Integer { value: 0 }),
-                TestFunction::IfZeroThen127 => {
-                    if let Value::Integer { value: 0 } = input {
-                        Ok(Value::Integer { value: 127 })
-                    } else {
-                        Ok(input)
-                    }
-                }
-            }
-        });
+    let output = language
+        .step_until_finished_and_handle_host_functions(handle_test_functions);
 
     assert_eq!(
         output.map(|value| value.inner),
-        Ok(Value::Integer { value: 127 }),
+        Ok(Value::Opaque {
+            id: 1,
+            display: "b"
+        }),
     );
 }
 
