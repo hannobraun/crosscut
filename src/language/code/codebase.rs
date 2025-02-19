@@ -153,10 +153,10 @@ impl Codebase {
             if let Some(parent) = SyntaxTree::from_root(self.root)
                 .find_parent_of(&next_to_replace.hash, &self.nodes)
             {
-                next_to_replace = parent;
-
                 next_replacement = self.nodes.get(parent.hash()).clone();
                 next_replacement.replace_child(previous_replacement);
+
+                next_to_replace = parent;
 
                 continue;
             } else {
