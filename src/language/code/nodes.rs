@@ -175,6 +175,7 @@ pub enum NodeKind {
     Error { node: String },
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, udigest::Digestable)]
 pub struct Children {
     pub child: Option<NodeHash>,
 }
