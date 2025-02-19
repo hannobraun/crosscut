@@ -31,11 +31,11 @@ impl<'r> Compiler<'r> {
 
     pub fn replace(
         &mut self,
-        path: &NodePath,
+        to_replace: &NodePath,
         token: &str,
         packages: &Packages,
     ) -> NodePath {
-        let mut path = *path;
+        let mut path = *to_replace;
 
         let (node, maybe_error) =
             compile_token(token, &mut path, packages, self.codebase);
