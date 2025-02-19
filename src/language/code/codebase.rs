@@ -49,10 +49,11 @@ impl Codebase {
         &self,
         path: &NodePath,
     ) -> impl Iterator<Item = NodePath> + '_ {
-        let Some(hash) = self.node_at(path).child() else {
-            return None.into_iter();
-        };
-        Some(NodePath { hash: *hash }).into_iter()
+        self.node_at(path)
+            .child()
+            .copied()
+            .map(|hash| NodePath { hash })
+            .into_iter()
     }
 
     pub fn parent_of(&self, path: &NodePath) -> Option<NodePath> {
