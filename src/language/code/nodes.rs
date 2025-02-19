@@ -90,8 +90,8 @@ impl fmt::Display for NodeHash {
 
 #[derive(Clone, Debug, Eq, PartialEq, udigest::Digestable)]
 pub struct Node {
-    pub kind: NodeKind,
-    pub child: Option<NodeHash>,
+    kind: NodeKind,
+    child: Option<NodeHash>,
 }
 
 impl Node {
