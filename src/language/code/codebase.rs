@@ -62,7 +62,7 @@ impl Codebase {
         self.changes.latest_version_of(path)
     }
 
-    pub fn insert_as_child_of(
+    pub fn insert_node_as_child(
         &mut self,
         parent: &NodePath,
         node: Node,

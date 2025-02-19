@@ -62,7 +62,7 @@ fn resolve_keyword(
             // Every function must have a child. Other code assumes that.
             let child = if child.is_none() {
                 let child = codebase
-                    .insert_as_child_of(path, Node::Empty { child: None });
+                    .insert_node_as_child(path, Node::Empty { child: None });
                 *path = codebase.latest_version_of(*path);
 
                 Some(*child.hash())
