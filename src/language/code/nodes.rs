@@ -166,13 +166,13 @@ impl Node {
         }
     }
 
-    pub fn replace_child(&mut self, replacement: Option<NodeHash>) {
+    pub fn replace_child(&mut self, replacement: NodeHash) {
         match self {
             Self::Empty { child }
             | Self::Expression { child, .. }
             | Self::Recursion { child }
             | Self::Error { child, .. } => {
-                *child = replacement;
+                *child = Some(replacement);
             }
         }
     }
