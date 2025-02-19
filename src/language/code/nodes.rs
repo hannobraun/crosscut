@@ -174,11 +174,7 @@ impl Children {
         self.child = None;
     }
 
-    pub fn replace_child(
-        &mut self,
-        to_replace: &NodeHash,
-        replacement: NodeHash,
-    ) {
+    pub fn replace(&mut self, to_replace: &NodeHash, replacement: NodeHash) {
         assert_eq!(
             self.child.as_ref(),
             Some(to_replace),
