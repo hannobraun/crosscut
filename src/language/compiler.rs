@@ -32,13 +32,17 @@ impl<'r> Compiler<'r> {
     pub fn replace(
         &mut self,
         to_replace: &NodePath,
-        token: &str,
+        replacement_token: &str,
         packages: &Packages,
     ) -> NodePath {
         let mut path = *to_replace;
 
-        let (node, maybe_error) =
-            compile_token(token, &mut path, packages, self.codebase);
+        let (node, maybe_error) = compile_token(
+            replacement_token,
+            &mut path,
+            packages,
+            self.codebase,
+        );
 
         let path = self.codebase.replace_node(&path, node);
         if let Some(error) = maybe_error {
