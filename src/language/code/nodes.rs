@@ -91,12 +91,15 @@ impl fmt::Display for NodeHash {
 #[derive(Clone, Debug, Eq, PartialEq, udigest::Digestable)]
 pub struct Node {
     kind: NodeKind,
-    child: Option<NodeHash>,
+    child: Children,
 }
 
 impl Node {
     pub fn new(kind: NodeKind, child: Option<NodeHash>) -> Self {
-        Self { kind, child }
+        Self {
+            kind,
+            child: Children { child },
+        }
     }
 
     #[cfg(test)]
@@ -122,27 +125,27 @@ impl Node {
     }
 
     pub fn child(&self) -> Option<&NodeHash> {
-        self.child.as_ref()
+        self.child.child.as_ref()
     }
 
     pub fn add_child(&mut self, to_add: NodeHash) {
         assert!(
-            self.child.is_none(),
+            self.child.child.is_none(),
             "Attempting to add child to node with up to one, but child is \
             already present."
         );
 
-        self.child = Some(to_add);
+        self.child.child = Some(to_add);
     }
 
     pub fn remove_child(&mut self, to_remove: &NodeHash) {
         assert_eq!(
-            self.child.as_ref(),
+            self.child.child.as_ref(),
             Some(to_remove),
             "Trying to remove child that is not present.",
         );
 
-        self.child = None;
+        self.child.child = None;
     }
 
     pub fn replace_child(
@@ -151,12 +154,12 @@ impl Node {
         replacement: NodeHash,
     ) {
         assert_eq!(
-            self.child.as_ref(),
+            self.child.child.as_ref(),
             Some(to_replace),
             "Trying to replace child that is not present.",
         );
 
-        self.child = Some(replacement);
+        self.child.child = Some(replacement);
     }
 
     pub fn display<'r>(&'r self, packages: &'r Packages) -> NodeDisplay<'r> {
