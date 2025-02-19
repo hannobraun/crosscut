@@ -105,8 +105,8 @@ impl Node {
 
         use super::IntrinsicFunction;
 
-        Self {
-            kind: NodeKind::Expression {
+        Self::new(
+            NodeKind::Expression {
                 expression: Expression::IntrinsicFunction {
                     intrinsic: IntrinsicFunction::Literal {
                         literal: Literal::Integer { value },
@@ -114,7 +114,7 @@ impl Node {
                 },
             },
             child,
-        }
+        )
     }
 
     pub fn kind(&self) -> &NodeKind {
