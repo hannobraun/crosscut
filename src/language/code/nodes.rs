@@ -132,7 +132,7 @@ impl Node {
         }
     }
 
-    pub fn add_child(&mut self, added: NodeHash) {
+    pub fn add_child(&mut self, to_add: NodeHash) {
         match self {
             Self::Empty { child }
             | Self::Expression { child, .. }
@@ -144,7 +144,7 @@ impl Node {
                     is already present."
                 );
 
-                *child = Some(added);
+                *child = Some(to_add);
             }
         }
     }
