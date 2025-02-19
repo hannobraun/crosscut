@@ -167,17 +167,14 @@ pub enum NodeKind {
     Error { node: String },
 }
 
-pub enum Children {
-    UpToOne { child: Option<NodeHash> },
+pub struct Children {
+    pub child: Option<NodeHash>,
 }
 
 impl Children {
     pub fn into_paths(mut self) -> impl Iterator<Item = NodePath> {
         iter::from_fn(move || {
-            let hash = match &mut self {
-                Self::UpToOne { child } => child.take()?,
-            };
-
+            let hash = self.child.take()?;
             let path = NodePath { hash };
             Some(path)
         })

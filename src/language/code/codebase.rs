@@ -52,7 +52,7 @@ impl Codebase {
 
     pub fn children_of(&self, path: &NodePath) -> Children {
         let child = self.node_at(path).child().copied();
-        Children::UpToOne { child }
+        Children { child }
     }
 
     pub fn parent_of(&self, path: &NodePath) -> Option<NodePath> {
