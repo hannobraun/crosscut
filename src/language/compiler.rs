@@ -9,7 +9,7 @@ use super::{
 pub struct Compiler {}
 
 impl Compiler {
-    pub fn compile_and_replace(
+    pub fn replace(
         &mut self,
         token: &str,
         path: &mut NodePath,
