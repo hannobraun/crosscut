@@ -132,20 +132,6 @@ impl Node {
         &mut self.children
     }
 
-    pub fn replace_child(
-        &mut self,
-        to_replace: &NodeHash,
-        replacement: NodeHash,
-    ) {
-        assert_eq!(
-            self.children.child.as_ref(),
-            Some(to_replace),
-            "Trying to replace child that is not present.",
-        );
-
-        self.children.child = Some(replacement);
-    }
-
     pub fn display<'r>(&'r self, packages: &'r Packages) -> NodeDisplay<'r> {
         NodeDisplay {
             node: self,
@@ -186,6 +172,20 @@ impl Children {
         );
 
         self.child = None;
+    }
+
+    pub fn replace_child(
+        &mut self,
+        to_replace: &NodeHash,
+        replacement: NodeHash,
+    ) {
+        assert_eq!(
+            self.child.as_ref(),
+            Some(to_replace),
+            "Trying to replace child that is not present.",
+        );
+
+        self.child = Some(replacement);
     }
 
     pub fn into_paths(mut self) -> impl Iterator<Item = NodePath> {
