@@ -137,7 +137,9 @@ impl Node {
             Self::Empty { child }
             | Self::Expression { child, .. }
             | Self::Recursion { child }
-            | Self::Error { child, .. } => *child = replacement,
+            | Self::Error { child, .. } => {
+                *child = replacement;
+            }
         }
     }
 
