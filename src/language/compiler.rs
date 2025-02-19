@@ -9,7 +9,7 @@ use super::{
 };
 
 pub struct Compiler<'r> {
-    pub codebase: &'r mut Codebase,
+    codebase: &'r mut Codebase,
 }
 
 impl<'r> Compiler<'r> {
