@@ -35,10 +35,12 @@ impl<'r> Compiler<'r> {
         path: &mut NodePath,
         packages: &Packages,
     ) -> NodePath {
-        let (node, maybe_error) =
-            compile_token(token, path, packages, self.codebase);
+        let mut path = *path;
 
-        let path = self.codebase.replace_node(path, node);
+        let (node, maybe_error) =
+            compile_token(token, &mut path, packages, self.codebase);
+
+        let path = self.codebase.replace_node(&path, node);
         if let Some(error) = maybe_error {
             self.codebase.insert_error(path, error);
         }
