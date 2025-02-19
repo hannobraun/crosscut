@@ -134,10 +134,10 @@ impl Node {
 
     pub fn replace_child(&mut self, replacement: Option<NodeHash>) {
         match self {
-            Self::Empty { child } => *child = replacement,
-            Self::Expression { child, .. } => *child = replacement,
-            Self::Recursion { child } => *child = replacement,
-            Self::Error { child, .. } => *child = replacement,
+            Self::Empty { child }
+            | Self::Expression { child, .. }
+            | Self::Recursion { child }
+            | Self::Error { child, .. } => *child = replacement,
         }
     }
 
