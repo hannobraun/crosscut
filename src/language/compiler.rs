@@ -10,6 +10,7 @@ pub struct Compiler {}
 
 impl Compiler {
     pub fn compile_and_replace(
+        &mut self,
         token: &str,
         path: &mut NodePath,
         packages: &Packages,

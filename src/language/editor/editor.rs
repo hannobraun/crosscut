@@ -88,7 +88,7 @@ impl Editor {
                     }
                 }
                 UpdateAction::AddParent { previous } => {
-                    Compiler::compile_and_replace(
+                    Compiler {}.compile_and_replace(
                         &previous,
                         &mut self.editing,
                         packages,
@@ -110,7 +110,7 @@ impl Editor {
             }
         }
 
-        Compiler::compile_and_replace(
+        Compiler {}.compile_and_replace(
             self.input.buffer(),
             &mut self.editing,
             packages,
