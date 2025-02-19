@@ -88,7 +88,11 @@ impl Editor {
                     }
                 }
                 UpdateAction::AddParent { previous } => {
-                    compiler.replace(&previous, &mut self.editing, packages);
+                    self.editing = compiler.replace(
+                        &previous,
+                        &mut self.editing,
+                        packages,
+                    );
 
                     let child = Some(*self.editing.hash());
                     self.editing = compiler.insert_as_parent(
@@ -108,7 +112,8 @@ impl Editor {
             }
         }
 
-        compiler.replace(self.input.buffer(), &mut self.editing, packages);
+        self.editing =
+            compiler.replace(self.input.buffer(), &mut self.editing, packages);
 
         // Unconditionally resetting the interpreter like this, is not going to
         // work long-term. It should only be reset, if it's finished.

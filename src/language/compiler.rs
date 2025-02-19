@@ -34,14 +34,16 @@ impl<'r> Compiler<'r> {
         token: &str,
         path: &mut NodePath,
         packages: &Packages,
-    ) {
+    ) -> NodePath {
         let (node, maybe_error) =
             compile_token(token, path, packages, self.codebase);
 
-        *path = self.codebase.replace_node(path, node);
+        let path = self.codebase.replace_node(path, node);
         if let Some(error) = maybe_error {
-            self.codebase.insert_error(*path, error);
+            self.codebase.insert_error(path, error);
         }
+
+        path
     }
 }
 
