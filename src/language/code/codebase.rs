@@ -1,8 +1,8 @@
 use std::collections::BTreeMap;
 
 use super::{
-    Changes, CodeError, LocatedNode, Node, NodeHash, NodePath, Nodes,
-    SyntaxTree,
+    nodes::Children, Changes, CodeError, LocatedNode, Node, NodeHash, NodePath,
+    Nodes, SyntaxTree,
 };
 
 #[derive(Clone, Debug, Eq, PartialEq)]
@@ -45,15 +45,9 @@ impl Codebase {
         NodePath { hash }
     }
 
-    pub fn children_of(
-        &self,
-        path: &NodePath,
-    ) -> impl Iterator<Item = NodePath> + '_ {
-        self.node_at(path)
-            .child()
-            .copied()
-            .map(|hash| NodePath { hash })
-            .into_iter()
+    pub fn children_of(&self, path: &NodePath) -> Children {
+        let child = self.node_at(path).child().copied();
+        Children::UpToOne { child }
     }
 
     pub fn parent_of(&self, path: &NodePath) -> Option<NodePath> {
