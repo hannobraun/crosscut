@@ -178,7 +178,7 @@ pub struct Children {
 }
 
 impl Children {
-    pub fn add_child(&mut self, to_add: NodeHash) {
+    pub fn add(&mut self, to_add: NodeHash) {
         assert!(
             self.child.is_none(),
             "Attempting to add child to node with up to one, but child is \
