@@ -132,16 +132,6 @@ impl Node {
         &mut self.children
     }
 
-    pub fn remove_child(&mut self, to_remove: &NodeHash) {
-        assert_eq!(
-            self.children.child.as_ref(),
-            Some(to_remove),
-            "Trying to remove child that is not present.",
-        );
-
-        self.children.child = None;
-    }
-
     pub fn replace_child(
         &mut self,
         to_replace: &NodeHash,
@@ -186,6 +176,16 @@ impl Children {
         );
 
         self.child = Some(to_add);
+    }
+
+    pub fn remove_child(&mut self, to_remove: &NodeHash) {
+        assert_eq!(
+            self.child.as_ref(),
+            Some(to_remove),
+            "Trying to remove child that is not present.",
+        );
+
+        self.child = None;
     }
 
     pub fn into_paths(mut self) -> impl Iterator<Item = NodePath> {
