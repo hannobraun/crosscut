@@ -32,6 +32,7 @@ impl Editor {
     pub fn on_input(
         &mut self,
         event: EditorInputEvent,
+        compiler: &mut Compiler,
         codebase: &mut Codebase,
         evaluator: &mut Evaluator,
         packages: &Packages,
@@ -88,7 +89,7 @@ impl Editor {
                     }
                 }
                 UpdateAction::AddParent { previous } => {
-                    Compiler {}.replace(
+                    compiler.replace(
                         &previous,
                         &mut self.editing,
                         packages,
@@ -110,7 +111,7 @@ impl Editor {
             }
         }
 
-        Compiler {}.replace(
+        compiler.replace(
             self.input.buffer(),
             &mut self.editing,
             packages,
