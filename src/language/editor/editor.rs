@@ -92,7 +92,7 @@ impl Editor {
                         compiler.replace(&self.editing, &previous, packages);
 
                     let child = Some(*self.editing.hash());
-                    self.editing = compiler.insert_as_parent(
+                    self.editing = compiler.insert_parent(
                         &self.editing,
                         // Depending on where the cursor was, the input buffer
                         // might already contain characters that should make up

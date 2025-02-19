@@ -17,7 +17,7 @@ impl<'r> Compiler<'r> {
         Self { codebase }
     }
 
-    pub fn insert_as_parent(
+    pub fn insert_parent(
         &mut self,
         child: &NodePath,
         parent: Node,
