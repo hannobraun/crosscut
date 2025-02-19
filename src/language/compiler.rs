@@ -1,3 +1,5 @@
+use std::ops::Deref;
+
 use super::{
     code::{
         CodeError, Codebase, Expression, IntrinsicFunction, Literal, Node,
@@ -28,6 +30,14 @@ impl<'r> Compiler<'r> {
         if let Some(error) = maybe_error {
             self.codebase.insert_error(*path, error);
         }
+    }
+}
+
+impl Deref for Compiler<'_> {
+    type Target = Codebase;
+
+    fn deref(&self) -> &Self::Target {
+        self.codebase
     }
 }
 

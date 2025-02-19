@@ -42,34 +42,25 @@ impl Editor {
             // https://github.com/hannobraun/crosscut/issues/71
             match action {
                 UpdateAction::NavigateToPrevious => {
-                    if let Some(location) = compiler
-                        .codebase
-                        .children_of(&self.editing)
-                        .into_paths()
-                        .last()
+                    if let Some(location) =
+                        compiler.children_of(&self.editing).into_paths().last()
                     {
-                        self.navigate_to(location, compiler.codebase, packages);
+                        self.navigate_to(location, compiler, packages);
                         self.input.move_cursor_to_end();
                     }
                 }
                 UpdateAction::NavigateToNextNode => {
-                    if let Some(location) =
-                        compiler.codebase.parent_of(&self.editing)
-                    {
-                        self.navigate_to(location, compiler.codebase, packages);
+                    if let Some(location) = compiler.parent_of(&self.editing) {
+                        self.navigate_to(location, compiler, packages);
                     }
                 }
                 UpdateAction::MergeWithPrevious => {
-                    if let Some(to_remove) = compiler
-                        .codebase
-                        .children_of(&self.editing)
-                        .into_paths()
-                        .last()
+                    if let Some(to_remove) =
+                        compiler.children_of(&self.editing).into_paths().last()
                     {
                         let merged = [&to_remove, &self.editing]
                             .map(|path| {
                                 compiler
-                                    .codebase
                                     .node_at(path)
                                     .display(packages)
                                     .to_string()
@@ -78,18 +69,14 @@ impl Editor {
                         self.input = EditorInputBuffer::new(merged);
 
                         compiler.codebase.remove_node(&to_remove);
-                        self.editing =
-                            compiler.codebase.latest_version_of(self.editing);
+                        self.editing = compiler.latest_version_of(self.editing);
                     }
                 }
                 UpdateAction::MergeWithNext => {
-                    if let Some(to_remove) =
-                        compiler.codebase.parent_of(&self.editing)
-                    {
+                    if let Some(to_remove) = compiler.parent_of(&self.editing) {
                         let merged = [&self.editing, &to_remove]
                             .map(|path| {
                                 compiler
-                                    .codebase
                                     .node_at(path)
                                     .display(packages)
                                     .to_string()
@@ -126,7 +113,7 @@ impl Editor {
         // Right now, it doesn't seem to be practical to construct a high-level
         // test where this makes a difference though, and I don't want to fix
         // this until the behavior is covered by such a test.
-        evaluator.reset(compiler.codebase);
+        evaluator.reset(compiler);
     }
 
     pub fn on_command(
