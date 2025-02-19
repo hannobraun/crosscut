@@ -178,7 +178,7 @@ impl Children {
         self.child = Some(to_add);
     }
 
-    pub fn remove_child(&mut self, to_remove: &NodeHash) {
+    pub fn remove(&mut self, to_remove: &NodeHash) {
         assert_eq!(
             self.child.as_ref(),
             Some(to_remove),

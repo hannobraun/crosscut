@@ -123,7 +123,7 @@ impl Codebase {
             if let Some(child) = node_to_remove.child().copied() {
                 updated_parent.replace_child(to_remove.hash(), child);
             } else {
-                updated_parent.children_mut().remove_child(to_remove.hash());
+                updated_parent.children_mut().remove(to_remove.hash());
             }
 
             self.replace_node(&parent, updated_parent);
