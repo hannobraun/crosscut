@@ -6,17 +6,22 @@ use super::{
     packages::Packages,
 };
 
-pub fn compile_and_replace(
-    token: &str,
-    path: &mut NodePath,
-    packages: &Packages,
-    codebase: &mut Codebase,
-) {
-    let (node, maybe_error) = compile_token(token, path, packages, codebase);
+pub struct Compiler {}
 
-    *path = codebase.replace_node(path, node);
-    if let Some(error) = maybe_error {
-        codebase.insert_error(*path, error);
+impl Compiler {
+    pub fn compile_and_replace(
+        token: &str,
+        path: &mut NodePath,
+        packages: &Packages,
+        codebase: &mut Codebase,
+    ) {
+        let (node, maybe_error) =
+            compile_token(token, path, packages, codebase);
+
+        *path = codebase.replace_node(path, node);
+        if let Some(error) = maybe_error {
+            codebase.insert_error(*path, error);
+        }
     }
 }
 

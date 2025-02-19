@@ -1,6 +1,6 @@
 use crate::language::{
     code::{Codebase, Node, NodePath},
-    compiler::compile_and_replace,
+    compiler::Compiler,
     packages::Packages,
     runtime::Evaluator,
 };
@@ -88,7 +88,7 @@ impl Editor {
                     }
                 }
                 UpdateAction::AddParent { previous } => {
-                    compile_and_replace(
+                    Compiler::compile_and_replace(
                         &previous,
                         &mut self.editing,
                         packages,
@@ -110,7 +110,7 @@ impl Editor {
             }
         }
 
-        compile_and_replace(
+        Compiler::compile_and_replace(
             self.input.buffer(),
             &mut self.editing,
             packages,
