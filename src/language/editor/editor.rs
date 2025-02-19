@@ -96,7 +96,7 @@ impl Editor {
                     );
 
                     let child = Some(*self.editing.hash());
-                    self.editing = codebase.insert_as_parent_of(
+                    self.editing = codebase.insert_node_as_parent_of(
                         &self.editing,
                         // Depending on where the cursor was, the input buffer
                         // might already contain characters that should make up

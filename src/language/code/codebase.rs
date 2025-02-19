@@ -86,7 +86,7 @@ impl Codebase {
     /// ## Panics
     ///
     /// Panics, if the inserted node does not have its child node set correctly.
-    pub fn insert_as_parent_of(
+    pub fn insert_node_as_parent_of(
         &mut self,
         child: &NodePath,
         node: Node,
@@ -199,7 +199,7 @@ mod tests {
         let mut codebase = Codebase::new();
 
         let a = codebase.leaf();
-        let b = codebase.insert_as_parent_of(
+        let b = codebase.insert_node_as_parent_of(
             &a,
             Node::Empty {
                 child: Some(*a.hash()),
@@ -226,7 +226,7 @@ mod tests {
                 child: None,
             },
         );
-        let b = codebase.insert_as_parent_of(
+        let b = codebase.insert_node_as_parent_of(
             &a,
             Node::Error {
                 node: String::from("b"),
