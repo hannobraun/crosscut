@@ -128,14 +128,8 @@ impl Node {
         self.children.child.as_ref()
     }
 
-    pub fn add_child(&mut self, to_add: NodeHash) {
-        assert!(
-            self.children.child.is_none(),
-            "Attempting to add child to node with up to one, but child is \
-            already present."
-        );
-
-        self.children.child = Some(to_add);
+    pub fn children_mut(&mut self) -> &mut Children {
+        &mut self.children
     }
 
     pub fn remove_child(&mut self, to_remove: &NodeHash) {
@@ -184,6 +178,16 @@ pub struct Children {
 }
 
 impl Children {
+    pub fn add_child(&mut self, to_add: NodeHash) {
+        assert!(
+            self.child.is_none(),
+            "Attempting to add child to node with up to one, but child is \
+            already present."
+        );
+
+        self.child = Some(to_add);
+    }
+
     pub fn into_paths(mut self) -> impl Iterator<Item = NodePath> {
         iter::from_fn(move || {
             let hash = self.child.take()?;
