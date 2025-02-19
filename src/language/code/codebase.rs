@@ -155,8 +155,7 @@ impl Codebase {
             {
                 next_to_replace = parent;
 
-                next_replacement =
-                    self.nodes.get(next_to_replace.hash()).clone();
+                next_replacement = self.nodes.get(parent.hash()).clone();
                 next_replacement.replace_child(previous_replacement);
 
                 continue;
