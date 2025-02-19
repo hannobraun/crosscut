@@ -71,33 +71,23 @@ fn compile_token(
     let child = node.child().copied();
 
     let (node, maybe_error) = if token.is_empty() {
-        (
-            Node {
-                kind: NodeKind::Empty,
-                child,
-            },
-            None,
-        )
+        (Node::new(NodeKind::Empty, child), None)
     } else if let Some((node, maybe_err)) =
         resolve_keyword(token, path, child, codebase)
     {
         (node, maybe_err)
     } else {
         match resolve_function(token, packages) {
-            Ok(expression) => (
-                Node {
-                    kind: NodeKind::Expression { expression },
-                    child,
-                },
-                None,
-            ),
+            Ok(expression) => {
+                (Node::new(NodeKind::Expression { expression }, child), None)
+            }
             Err(candidates) => (
-                Node {
-                    kind: NodeKind::Error {
+                Node::new(
+                    NodeKind::Error {
                         node: token.to_string(),
                     },
                     child,
-                },
+                ),
                 Some(CodeError::UnresolvedIdentifier { candidates }),
             ),
         }
@@ -118,10 +108,7 @@ fn resolve_keyword(
             let child = if child.is_none() {
                 let child = codebase.insert_node_as_child(
                     path,
-                    Node {
-                        kind: NodeKind::Empty,
-                        child: None,
-                    },
+                    Node::new(NodeKind::Empty, None),
                 );
                 *path = codebase.latest_version_of(*path);
 
@@ -131,8 +118,8 @@ fn resolve_keyword(
             };
 
             Some((
-                Node {
-                    kind: NodeKind::Expression {
+                Node::new(
+                    NodeKind::Expression {
                         expression: Expression::IntrinsicFunction {
                             intrinsic: IntrinsicFunction::Literal {
                                 literal: Literal::Function,
@@ -140,17 +127,11 @@ fn resolve_keyword(
                         },
                     },
                     child,
-                },
+                ),
                 None,
             ))
         }
-        "self" => Some((
-            Node {
-                kind: NodeKind::Recursion,
-                child,
-            },
-            None,
-        )),
+        "self" => Some((Node::new(NodeKind::Recursion, child), None)),
         _ => None,
     }
 }

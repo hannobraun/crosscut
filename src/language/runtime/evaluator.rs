@@ -274,10 +274,7 @@ mod tests {
         let mut codebase = Codebase::new();
         codebase.insert_node_as_parent(
             &codebase.root().path,
-            Node {
-                kind: NodeKind::Recursion,
-                child: Some(*codebase.root().path.hash()),
-            },
+            Node::new(NodeKind::Recursion, Some(*codebase.root().path.hash())),
         );
 
         let mut evaluator = Evaluator::new(codebase.root().path, &codebase);
@@ -294,10 +291,7 @@ mod tests {
         let mut codebase = Codebase::new();
         codebase.insert_node_as_parent(
             &codebase.root().path,
-            Node {
-                kind: NodeKind::Recursion,
-                child: Some(*codebase.root().path.hash()),
-            },
+            Node::new(NodeKind::Recursion, Some(*codebase.root().path.hash())),
         );
 
         let mut evaluator = Evaluator::new(codebase.root().path, &codebase);

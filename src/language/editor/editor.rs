@@ -100,10 +100,7 @@ impl Editor {
                         // just a placeholder, which might get replaced by the
                         // unconditional compilation of the current input buffer
                         // contents below.
-                        Node {
-                            kind: NodeKind::Empty,
-                            child,
-                        },
+                        Node::new(NodeKind::Empty, child),
                     );
                 }
             }

@@ -266,13 +266,7 @@ fn remove_left_removes_previous_syntax_node_if_empty() {
     // Make sure the test setup worked as expected.
     let (empty, literal) =
         language.codebase().leaf_to_root().collect_tuple().unwrap();
-    assert_eq!(
-        empty.node,
-        &Node {
-            kind: NodeKind::Empty,
-            child: None
-        },
-    );
+    assert_eq!(empty.node, &Node::new(NodeKind::Empty, None));
     assert_eq!(
         literal.node,
         &Node::integer_literal(127, Some(*empty.path.hash())),
@@ -322,10 +316,7 @@ fn remove_right_removes_next_syntax_node_if_empty() {
     assert_eq!(literal.node, &Node::integer_literal(127, None));
     assert_eq!(
         empty.node,
-        &Node {
-            kind: NodeKind::Empty,
-            child: Some(*literal.path.hash()),
-        },
+        &Node::new(NodeKind::Empty, Some(*literal.path.hash())),
     );
 
     // Actual testing starts here.

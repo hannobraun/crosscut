@@ -97,12 +97,12 @@ mod tests {
         let mut nodes = Nodes::new();
 
         let [a, b] = ["a", "b"].map(|node| {
-            let node = Node {
-                kind: NodeKind::Error {
+            let node = Node::new(
+                NodeKind::Error {
                     node: String::from(node),
                 },
-                child: None,
-            };
+                None,
+            );
             let hash = nodes.insert(node);
             NodePath { hash }
         });

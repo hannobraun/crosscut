@@ -19,10 +19,7 @@ pub struct Codebase {
 impl Codebase {
     pub fn new() -> Self {
         let mut nodes = Nodes::new();
-        let empty = nodes.insert(Node {
-            kind: NodeKind::Empty,
-            child: None,
-        });
+        let empty = nodes.insert(Node::new(NodeKind::Empty, None));
 
         Self {
             root: empty,
@@ -206,10 +203,7 @@ mod tests {
         let a = codebase.leaf();
         let b = codebase.insert_node_as_parent(
             &a,
-            Node {
-                kind: NodeKind::Empty,
-                child: Some(*a.hash()),
-            },
+            Node::new(NodeKind::Empty, Some(*a.hash())),
         );
 
         assert_eq!(
@@ -227,21 +221,21 @@ mod tests {
 
         let a = codebase.replace_node(
             &codebase.leaf(),
-            Node {
-                kind: NodeKind::Error {
+            Node::new(
+                NodeKind::Error {
                     node: String::from("a"),
                 },
-                child: None,
-            },
+                None,
+            ),
         );
         let b = codebase.insert_node_as_parent(
             &a,
-            Node {
-                kind: NodeKind::Error {
+            Node::new(
+                NodeKind::Error {
                     node: String::from("b"),
                 },
-                child: Some(*a.hash()),
-            },
+                Some(*a.hash()),
+            ),
         );
 
         assert_eq!(codebase.root().path, b);
@@ -250,12 +244,6 @@ mod tests {
         assert_eq!(codebase.root().path, a);
 
         codebase.remove_node(&a);
-        assert_eq!(
-            codebase.root().node,
-            &Node {
-                kind: NodeKind::Empty,
-                child: None
-            },
-        );
+        assert_eq!(codebase.root().node, &Node::new(NodeKind::Empty, None));
     }
 }
