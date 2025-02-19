@@ -132,6 +132,23 @@ impl Node {
         }
     }
 
+    pub fn add_child(&mut self, added: NodeHash) {
+        match self {
+            Self::Empty { child }
+            | Self::Expression { child, .. }
+            | Self::Recursion { child }
+            | Self::Error { child, .. } => {
+                assert!(
+                    child.is_none(),
+                    "Attempting to add child to node with up to one, but child \
+                    is already present."
+                );
+
+                *child = Some(added);
+            }
+        }
+    }
+
     pub fn replace_child(&mut self, replacement: Option<NodeHash>) {
         match self {
             Self::Empty { child }
