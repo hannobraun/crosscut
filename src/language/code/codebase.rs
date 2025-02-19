@@ -121,7 +121,7 @@ impl Codebase {
             if let Some(child) = node_to_remove.child().copied() {
                 updated_parent.replace_child(Some(child));
             } else {
-                updated_parent.replace_child(None);
+                updated_parent.remove_child(to_remove.hash());
             }
 
             self.replace_node(&parent, updated_parent);

@@ -149,6 +149,23 @@ impl Node {
         }
     }
 
+    pub fn remove_child(&mut self, to_remove: &NodeHash) {
+        match self {
+            Self::Empty { child }
+            | Self::Expression { child, .. }
+            | Self::Recursion { child }
+            | Self::Error { child, .. } => {
+                assert_eq!(
+                    child.as_ref(),
+                    Some(to_remove),
+                    "Trying to remove child that is not present.",
+                );
+
+                *child = None;
+            }
+        }
+    }
+
     pub fn replace_child(&mut self, replacement: Option<NodeHash>) {
         match self {
             Self::Empty { child }
