@@ -68,7 +68,7 @@ impl Editor {
                             .join("");
                         self.input = EditorInputBuffer::new(merged);
 
-                        compiler.codebase.remove_node(&to_remove);
+                        compiler.remove(&to_remove);
                         self.editing = compiler.latest_version_of(self.editing);
                     }
                 }
@@ -84,7 +84,7 @@ impl Editor {
                             .join("");
                         self.input = EditorInputBuffer::new(merged);
 
-                        compiler.codebase.remove_node(&to_remove);
+                        compiler.remove(&to_remove);
                     }
                 }
                 UpdateAction::AddParent { previous } => {

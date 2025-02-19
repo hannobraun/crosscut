@@ -17,6 +17,10 @@ impl<'r> Compiler<'r> {
         Self { codebase }
     }
 
+    pub fn remove(&mut self, to_remove: &NodePath) {
+        self.codebase.remove_node(to_remove);
+    }
+
     pub fn replace(
         &mut self,
         token: &str,
