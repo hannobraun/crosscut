@@ -125,10 +125,10 @@ impl Node {
 
     pub fn child(&self) -> Option<&NodeHash> {
         match self {
-            Self::Empty { child } => child.as_ref(),
-            Self::Expression { child, .. } => child.as_ref(),
-            Self::Recursion { child } => child.as_ref(),
-            Self::Error { child, .. } => child.as_ref(),
+            Self::Empty { child }
+            | Self::Expression { child, .. }
+            | Self::Recursion { child }
+            | Self::Error { child, .. } => child.as_ref(),
         }
     }
 
