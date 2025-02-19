@@ -32,7 +32,7 @@ impl<'r> Compiler<'r> {
     pub fn replace(
         &mut self,
         token: &str,
-        path: &mut NodePath,
+        path: &NodePath,
         packages: &Packages,
     ) -> NodePath {
         let mut path = *path;
