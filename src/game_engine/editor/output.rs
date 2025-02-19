@@ -172,7 +172,7 @@ fn render_node<A: EditorOutputAdapter>(
             Some(adapter.cursor().move_right(context.editor.input().cursor()));
     }
 
-    let color = match &located_node.node.kind {
+    let color = match located_node.node.kind() {
         NodeKind::Expression { expression, .. } => match expression {
             Expression::HostFunction { .. } => Some(Color::DarkMagenta),
             Expression::IntrinsicFunction { .. } => Some(Color::DarkBlue),
@@ -235,7 +235,7 @@ fn render_help<A: EditorOutputAdapter>(
 
     writeln!(adapter)?;
 
-    match &node.kind {
+    match node.kind() {
         NodeKind::Empty { .. } => {
             writeln!(
                 adapter,

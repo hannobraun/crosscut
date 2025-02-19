@@ -58,7 +58,7 @@ impl Evaluator {
                             },
                     },
                 ..
-            } = codebase.node_at(&path).kind
+            } = codebase.node_at(&path).kind()
             {
                 // We have already pushed the function literal, which means
                 // we're going to evaluate it. But we need to stop here, since
@@ -196,7 +196,7 @@ impl Evaluator {
             return;
         };
 
-        match &codebase.node_at(&path).kind {
+        match codebase.node_at(&path).kind() {
             NodeKind::Empty { .. } => {
                 context.advance();
             }

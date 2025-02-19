@@ -113,6 +113,10 @@ impl Node {
         }
     }
 
+    pub fn kind(&self) -> &NodeKind {
+        &self.kind
+    }
+
     pub fn child(&self) -> Option<&NodeHash> {
         self.child.as_ref()
     }
