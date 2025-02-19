@@ -166,12 +166,22 @@ impl Node {
         }
     }
 
-    pub fn replace_child(&mut self, replacement: NodeHash) {
+    pub fn replace_child(
+        &mut self,
+        to_replace: &NodeHash,
+        replacement: NodeHash,
+    ) {
         match self {
             Self::Empty { child }
             | Self::Expression { child, .. }
             | Self::Recursion { child }
             | Self::Error { child, .. } => {
+                assert_eq!(
+                    child.as_ref(),
+                    Some(to_replace),
+                    "Trying to replace child that is not present.",
+                );
+
                 *child = Some(replacement);
             }
         }
