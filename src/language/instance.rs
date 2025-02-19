@@ -52,9 +52,7 @@ impl Language {
     pub fn on_input(&mut self, event: EditorInputEvent) {
         self.editor.on_input(
             event,
-            &mut Compiler {
-                codebase: &mut self.codebase,
-            },
+            &mut Compiler::new(&mut self.codebase),
             &mut self.evaluator,
             &self.packages,
         );

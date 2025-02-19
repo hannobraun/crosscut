@@ -10,7 +10,11 @@ pub struct Compiler<'r> {
     pub codebase: &'r mut Codebase,
 }
 
-impl Compiler<'_> {
+impl<'r> Compiler<'r> {
+    pub fn new(codebase: &'r mut Codebase) -> Self {
+        Self { codebase }
+    }
+
     pub fn replace(
         &mut self,
         token: &str,
