@@ -17,6 +17,14 @@ impl<'r> Compiler<'r> {
         Self { codebase }
     }
 
+    pub fn insert_as_parent(
+        &mut self,
+        child: &NodePath,
+        node: Node,
+    ) -> NodePath {
+        self.codebase.insert_node_as_parent(child, node)
+    }
+
     pub fn remove(&mut self, to_remove: &NodePath) {
         self.codebase.remove_node(to_remove);
     }

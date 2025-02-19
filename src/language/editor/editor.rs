@@ -91,7 +91,7 @@ impl Editor {
                     compiler.replace(&previous, &mut self.editing, packages);
 
                     let child = Some(*self.editing.hash());
-                    self.editing = compiler.codebase.insert_node_as_parent(
+                    self.editing = compiler.insert_as_parent(
                         &self.editing,
                         // Depending on where the cursor was, the input buffer
                         // might already contain characters that should make up
