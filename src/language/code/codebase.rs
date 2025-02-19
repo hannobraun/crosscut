@@ -117,7 +117,12 @@ impl Codebase {
 
         if let Some(parent) = self.parent_of(to_remove) {
             let mut updated_parent = self.nodes.get(parent.hash()).clone();
-            updated_parent.replace_child(node_to_remove.child().copied());
+
+            if let Some(child) = node_to_remove.child().copied() {
+                updated_parent.replace_child(Some(child));
+            } else {
+                updated_parent.replace_child(None);
+            }
 
             self.replace_node(&parent, updated_parent);
         } else {
