@@ -1,5 +1,7 @@
 use std::collections::BTreeMap;
 
+use crate::language::code::NodeKind;
+
 use super::{
     nodes::Children, Changes, CodeError, LocatedNode, Node, NodeHash, NodePath,
     Nodes, SyntaxTree,
@@ -17,7 +19,9 @@ pub struct Codebase {
 impl Codebase {
     pub fn new() -> Self {
         let mut nodes = Nodes::new();
-        let empty = nodes.insert(Node::Empty { child: None });
+        let empty = nodes.insert(Node {
+            kind: NodeKind::Empty { child: None },
+        });
 
         Self {
             root: empty,
@@ -190,7 +194,7 @@ impl Codebase {
 
 #[cfg(test)]
 mod tests {
-    use crate::language::code::Node;
+    use crate::language::code::{Node, NodeKind};
 
     use super::Codebase;
 
@@ -201,8 +205,10 @@ mod tests {
         let a = codebase.leaf();
         let b = codebase.insert_node_as_parent(
             &a,
-            Node::Empty {
-                child: Some(*a.hash()),
+            Node {
+                kind: NodeKind::Empty {
+                    child: Some(*a.hash()),
+                },
             },
         );
 
@@ -221,16 +227,20 @@ mod tests {
 
         let a = codebase.replace_node(
             &codebase.leaf(),
-            Node::Error {
-                node: String::from("a"),
-                child: None,
+            Node {
+                kind: NodeKind::Error {
+                    node: String::from("a"),
+                    child: None,
+                },
             },
         );
         let b = codebase.insert_node_as_parent(
             &a,
-            Node::Error {
-                node: String::from("b"),
-                child: Some(*a.hash()),
+            Node {
+                kind: NodeKind::Error {
+                    node: String::from("b"),
+                    child: Some(*a.hash()),
+                },
             },
         );
 
@@ -240,6 +250,11 @@ mod tests {
         assert_eq!(codebase.root().path, a);
 
         codebase.remove_node(&a);
-        assert_eq!(codebase.root().node, &Node::Empty { child: None });
+        assert_eq!(
+            codebase.root().node,
+            &Node {
+                kind: NodeKind::Empty { child: None },
+            },
+        );
     }
 }

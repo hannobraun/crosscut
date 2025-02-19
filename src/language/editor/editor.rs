@@ -1,5 +1,5 @@
 use crate::language::{
-    code::{Codebase, Node, NodePath},
+    code::{Codebase, Node, NodeKind, NodePath},
     compiler::Compiler,
     packages::Packages,
     runtime::Evaluator,
@@ -99,7 +99,9 @@ impl Editor {
                         // just a placeholder, which might get replaced by the
                         // unconditional compilation of the current input buffer
                         // contents below.
-                        Node::Empty { child },
+                        Node {
+                            kind: NodeKind::Empty { child },
+                        },
                     );
                 }
             }

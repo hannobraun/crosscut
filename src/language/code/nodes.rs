@@ -89,21 +89,8 @@ impl fmt::Display for NodeHash {
 }
 
 #[derive(Clone, Debug, Eq, PartialEq, udigest::Digestable)]
-pub enum Node {
-    Empty {
-        child: Option<NodeHash>,
-    },
-    Expression {
-        expression: Expression,
-        child: Option<NodeHash>,
-    },
-    Recursion {
-        child: Option<NodeHash>,
-    },
-    Error {
-        node: String,
-        child: Option<NodeHash>,
-    },
+pub struct Node {
+    pub kind: NodeKind,
 }
 
 impl Node {
@@ -113,31 +100,33 @@ impl Node {
 
         use super::IntrinsicFunction;
 
-        Self::Expression {
-            expression: Expression::IntrinsicFunction {
-                intrinsic: IntrinsicFunction::Literal {
-                    literal: Literal::Integer { value },
+        Self {
+            kind: NodeKind::Expression {
+                expression: Expression::IntrinsicFunction {
+                    intrinsic: IntrinsicFunction::Literal {
+                        literal: Literal::Integer { value },
+                    },
                 },
+                child,
             },
-            child,
         }
     }
 
     pub fn child(&self) -> Option<&NodeHash> {
-        match self {
-            Self::Empty { child }
-            | Self::Expression { child, .. }
-            | Self::Recursion { child }
-            | Self::Error { child, .. } => child.as_ref(),
+        match &self.kind {
+            NodeKind::Empty { child }
+            | NodeKind::Expression { child, .. }
+            | NodeKind::Recursion { child }
+            | NodeKind::Error { child, .. } => child.as_ref(),
         }
     }
 
     pub fn add_child(&mut self, to_add: NodeHash) {
-        match self {
-            Self::Empty { child }
-            | Self::Expression { child, .. }
-            | Self::Recursion { child }
-            | Self::Error { child, .. } => {
+        match &mut self.kind {
+            NodeKind::Empty { child }
+            | NodeKind::Expression { child, .. }
+            | NodeKind::Recursion { child }
+            | NodeKind::Error { child, .. } => {
                 assert!(
                     child.is_none(),
                     "Attempting to add child to node with up to one, but child \
@@ -150,11 +139,11 @@ impl Node {
     }
 
     pub fn remove_child(&mut self, to_remove: &NodeHash) {
-        match self {
-            Self::Empty { child }
-            | Self::Expression { child, .. }
-            | Self::Recursion { child }
-            | Self::Error { child, .. } => {
+        match &mut self.kind {
+            NodeKind::Empty { child }
+            | NodeKind::Expression { child, .. }
+            | NodeKind::Recursion { child }
+            | NodeKind::Error { child, .. } => {
                 assert_eq!(
                     child.as_ref(),
                     Some(to_remove),
@@ -171,11 +160,11 @@ impl Node {
         to_replace: &NodeHash,
         replacement: NodeHash,
     ) {
-        match self {
-            Self::Empty { child }
-            | Self::Expression { child, .. }
-            | Self::Recursion { child }
-            | Self::Error { child, .. } => {
+        match &mut self.kind {
+            NodeKind::Empty { child }
+            | NodeKind::Expression { child, .. }
+            | NodeKind::Recursion { child }
+            | NodeKind::Error { child, .. } => {
                 assert_eq!(
                     child.as_ref(),
                     Some(to_replace),
@@ -193,6 +182,24 @@ impl Node {
             packages,
         }
     }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, udigest::Digestable)]
+pub enum NodeKind {
+    Empty {
+        child: Option<NodeHash>,
+    },
+    Expression {
+        expression: Expression,
+        child: Option<NodeHash>,
+    },
+    Recursion {
+        child: Option<NodeHash>,
+    },
+    Error {
+        node: String,
+        child: Option<NodeHash>,
+    },
 }
 
 pub enum Children {
@@ -219,17 +226,17 @@ pub struct NodeDisplay<'r> {
 
 impl fmt::Display for NodeDisplay<'_> {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        match self.node {
-            Node::Empty { .. } => {
+        match &self.node.kind {
+            NodeKind::Empty { .. } => {
                 write!(f, "")
             }
-            Node::Expression { expression, .. } => {
+            NodeKind::Expression { expression, .. } => {
                 write!(f, "{}", expression.display(self.packages))
             }
-            Node::Recursion { .. } => {
+            NodeKind::Recursion { .. } => {
                 write!(f, "self")
             }
-            Node::Error { node, .. } => {
+            NodeKind::Error { node, .. } => {
                 write!(f, "{node}")
             }
         }

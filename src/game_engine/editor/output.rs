@@ -4,7 +4,8 @@ use crate::{
     io::editor::output::{Cursor, EditorOutputAdapter},
     language::{
         code::{
-            Codebase, Expression, IntrinsicFunction, Literal, LocatedNode, Node,
+            Codebase, Expression, IntrinsicFunction, Literal, LocatedNode,
+            NodeKind,
         },
         editor::Editor,
         instance::Language,
@@ -171,12 +172,12 @@ fn render_node<A: EditorOutputAdapter>(
             Some(adapter.cursor().move_right(context.editor.input().cursor()));
     }
 
-    let color = match located_node.node {
-        Node::Expression { expression, .. } => match expression {
+    let color = match &located_node.node.kind {
+        NodeKind::Expression { expression, .. } => match expression {
             Expression::HostFunction { .. } => Some(Color::DarkMagenta),
             Expression::IntrinsicFunction { .. } => Some(Color::DarkBlue),
         },
-        Node::Error { .. } => Some(ERROR_COLOR),
+        NodeKind::Error { .. } => Some(ERROR_COLOR),
         _ => None,
     };
 
@@ -234,8 +235,8 @@ fn render_help<A: EditorOutputAdapter>(
 
     writeln!(adapter)?;
 
-    match node {
-        Node::Empty { .. } => {
+    match &node.kind {
+        NodeKind::Empty { .. } => {
             writeln!(
                 adapter,
                 "You are editing an empty syntax node. Those get completely \
@@ -243,7 +244,7 @@ fn render_help<A: EditorOutputAdapter>(
                 making up your mind about what you want to type."
             )?;
         }
-        Node::Expression { expression, .. } => {
+        NodeKind::Expression { expression, .. } => {
             write!(adapter, "You are editing an expression. ")?;
 
             match expression {
@@ -321,7 +322,7 @@ fn render_help<A: EditorOutputAdapter>(
                 }
             }
         }
-        Node::Recursion { .. } => {
+        NodeKind::Recursion { .. } => {
             writeln!(
                 adapter,
                 "You are editing the `{}` keyword, which calls the current \
@@ -329,7 +330,7 @@ fn render_help<A: EditorOutputAdapter>(
                 node.display(context.packages),
             )?;
         }
-        Node::Error { .. } => {
+        NodeKind::Error { .. } => {
             writeln!(adapter, "You are editing an erroneous syntax node.",)?;
         }
     }

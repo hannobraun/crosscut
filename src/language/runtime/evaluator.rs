@@ -1,5 +1,5 @@
 use crate::language::code::{
-    Codebase, Expression, IntrinsicFunction, Literal, Node, NodePath,
+    Codebase, Expression, IntrinsicFunction, Literal, NodeKind, NodePath,
 };
 
 use super::{
@@ -49,7 +49,7 @@ impl Evaluator {
         loop {
             nodes_from_root.push(path);
 
-            if let Node::Expression {
+            if let NodeKind::Expression {
                 expression:
                     Expression::IntrinsicFunction {
                         intrinsic:
@@ -58,7 +58,7 @@ impl Evaluator {
                             },
                     },
                 ..
-            } = codebase.node_at(&path)
+            } = codebase.node_at(&path).kind
             {
                 // We have already pushed the function literal, which means
                 // we're going to evaluate it. But we need to stop here, since
@@ -196,18 +196,18 @@ impl Evaluator {
             return;
         };
 
-        match codebase.node_at(&path) {
-            Node::Empty { .. } => {
+        match &codebase.node_at(&path).kind {
+            NodeKind::Empty { .. } => {
                 context.advance();
             }
-            Node::Expression {
+            NodeKind::Expression {
                 expression: Expression::HostFunction { id },
                 ..
             } => {
                 let effect = context.evaluate_host_function(*id);
                 self.state = RuntimeState::Effect { effect, path };
             }
-            Node::Expression {
+            NodeKind::Expression {
                 expression: Expression::IntrinsicFunction { intrinsic },
                 ..
             } => {
@@ -231,7 +231,7 @@ impl Evaluator {
                 // because the code below would do it again.
                 return;
             }
-            Node::Recursion { .. } => {
+            NodeKind::Recursion { .. } => {
                 let active_value = context.active_value.inner.clone();
                 self.push_context(self.root, active_value, codebase);
 
@@ -242,7 +242,7 @@ impl Evaluator {
                 // This is tail call elimination.
                 return;
             }
-            Node::Error { .. } => {
+            NodeKind::Error { .. } => {
                 self.state = RuntimeState::Error { path };
             }
         };
@@ -260,7 +260,7 @@ impl Evaluator {
 #[cfg(test)]
 mod tests {
     use crate::language::{
-        code::{Codebase, Node},
+        code::{Codebase, Node, NodeKind},
         runtime::{Evaluator, Value},
     };
 
@@ -274,8 +274,10 @@ mod tests {
         let mut codebase = Codebase::new();
         codebase.insert_node_as_parent(
             &codebase.root().path,
-            Node::Recursion {
-                child: Some(*codebase.root().path.hash()),
+            Node {
+                kind: NodeKind::Recursion {
+                    child: Some(*codebase.root().path.hash()),
+                },
             },
         );
 
@@ -293,8 +295,10 @@ mod tests {
         let mut codebase = Codebase::new();
         codebase.insert_node_as_parent(
             &codebase.root().path,
-            Node::Recursion {
-                child: Some(*codebase.root().path.hash()),
+            Node {
+                kind: NodeKind::Recursion {
+                    child: Some(*codebase.root().path.hash()),
+                },
             },
         );
 

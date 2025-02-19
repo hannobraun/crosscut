@@ -87,7 +87,7 @@ impl ChangeSet {
 
 #[cfg(test)]
 mod tests {
-    use crate::language::code::{Node, NodePath, Nodes};
+    use crate::language::code::{Node, NodeKind, NodePath, Nodes};
 
     use super::Changes;
 
@@ -97,9 +97,11 @@ mod tests {
         let mut nodes = Nodes::new();
 
         let [a, b] = ["a", "b"].map(|node| {
-            let node = Node::Error {
-                node: String::from(node),
-                child: None,
+            let node = Node {
+                kind: NodeKind::Error {
+                    node: String::from(node),
+                    child: None,
+                },
             };
             let hash = nodes.insert(node);
             NodePath { hash }
