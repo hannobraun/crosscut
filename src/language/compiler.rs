@@ -40,8 +40,8 @@ impl<'r> Compiler<'r> {
         let (node, maybe_error) = compile_token(
             replacement_token,
             &mut path,
-            packages,
             self.codebase,
+            packages,
         );
 
         let path = self.codebase.replace_node(&path, node);
@@ -64,8 +64,8 @@ impl Deref for Compiler<'_> {
 fn compile_token(
     token: &str,
     path: &mut NodePath,
-    packages: &Packages,
     codebase: &mut Codebase,
+    packages: &Packages,
 ) -> (Node, Option<CodeError>) {
     let node = codebase.node_at(path);
     let child = node.child().copied();
