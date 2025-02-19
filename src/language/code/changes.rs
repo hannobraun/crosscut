@@ -100,8 +100,8 @@ mod tests {
             let node = Node {
                 kind: NodeKind::Error {
                     node: String::from(node),
-                    child: None,
                 },
+                child: None,
             };
             let hash = nodes.insert(node);
             NodePath { hash }

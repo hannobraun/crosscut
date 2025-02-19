@@ -65,7 +65,8 @@ fn compile_token(
     let (node, maybe_error) = if token.is_empty() {
         (
             Node {
-                kind: NodeKind::Empty { child },
+                kind: NodeKind::Empty,
+                child,
             },
             None,
         )
@@ -77,7 +78,8 @@ fn compile_token(
         match resolve_function(token, packages) {
             Ok(expression) => (
                 Node {
-                    kind: NodeKind::Expression { expression, child },
+                    kind: NodeKind::Expression { expression },
+                    child,
                 },
                 None,
             ),
@@ -85,8 +87,8 @@ fn compile_token(
                 Node {
                     kind: NodeKind::Error {
                         node: token.to_string(),
-                        child,
                     },
+                    child,
                 },
                 Some(CodeError::UnresolvedIdentifier { candidates }),
             ),
@@ -109,7 +111,8 @@ fn resolve_keyword(
                 let child = codebase.insert_node_as_child(
                     path,
                     Node {
-                        kind: NodeKind::Empty { child: None },
+                        kind: NodeKind::Empty,
+                        child: None,
                     },
                 );
                 *path = codebase.latest_version_of(*path);
@@ -127,15 +130,16 @@ fn resolve_keyword(
                                 literal: Literal::Function,
                             },
                         },
-                        child,
                     },
+                    child,
                 },
                 None,
             ))
         }
         "self" => Some((
             Node {
-                kind: NodeKind::Recursion { child },
+                kind: NodeKind::Recursion,
+                child,
             },
             None,
         )),

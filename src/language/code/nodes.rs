@@ -91,6 +91,7 @@ impl fmt::Display for NodeHash {
 #[derive(Clone, Debug, Eq, PartialEq, udigest::Digestable)]
 pub struct Node {
     pub kind: NodeKind,
+    pub child: Option<NodeHash>,
 }
 
 impl Node {
@@ -107,52 +108,33 @@ impl Node {
                         literal: Literal::Integer { value },
                     },
                 },
-                child,
             },
+            child,
         }
     }
 
     pub fn child(&self) -> Option<&NodeHash> {
-        match &self.kind {
-            NodeKind::Empty { child }
-            | NodeKind::Expression { child, .. }
-            | NodeKind::Recursion { child }
-            | NodeKind::Error { child, .. } => child.as_ref(),
-        }
+        self.child.as_ref()
     }
 
     pub fn add_child(&mut self, to_add: NodeHash) {
-        match &mut self.kind {
-            NodeKind::Empty { child }
-            | NodeKind::Expression { child, .. }
-            | NodeKind::Recursion { child }
-            | NodeKind::Error { child, .. } => {
-                assert!(
-                    child.is_none(),
-                    "Attempting to add child to node with up to one, but child \
-                    is already present."
-                );
+        assert!(
+            self.child.is_none(),
+            "Attempting to add child to node with up to one, but child is \
+            already present."
+        );
 
-                *child = Some(to_add);
-            }
-        }
+        self.child = Some(to_add);
     }
 
     pub fn remove_child(&mut self, to_remove: &NodeHash) {
-        match &mut self.kind {
-            NodeKind::Empty { child }
-            | NodeKind::Expression { child, .. }
-            | NodeKind::Recursion { child }
-            | NodeKind::Error { child, .. } => {
-                assert_eq!(
-                    child.as_ref(),
-                    Some(to_remove),
-                    "Trying to remove child that is not present.",
-                );
+        assert_eq!(
+            self.child.as_ref(),
+            Some(to_remove),
+            "Trying to remove child that is not present.",
+        );
 
-                *child = None;
-            }
-        }
+        self.child = None;
     }
 
     pub fn replace_child(
@@ -160,20 +142,13 @@ impl Node {
         to_replace: &NodeHash,
         replacement: NodeHash,
     ) {
-        match &mut self.kind {
-            NodeKind::Empty { child }
-            | NodeKind::Expression { child, .. }
-            | NodeKind::Recursion { child }
-            | NodeKind::Error { child, .. } => {
-                assert_eq!(
-                    child.as_ref(),
-                    Some(to_replace),
-                    "Trying to replace child that is not present.",
-                );
+        assert_eq!(
+            self.child.as_ref(),
+            Some(to_replace),
+            "Trying to replace child that is not present.",
+        );
 
-                *child = Some(replacement);
-            }
-        }
+        self.child = Some(replacement);
     }
 
     pub fn display<'r>(&'r self, packages: &'r Packages) -> NodeDisplay<'r> {
@@ -186,20 +161,10 @@ impl Node {
 
 #[derive(Clone, Debug, Eq, PartialEq, udigest::Digestable)]
 pub enum NodeKind {
-    Empty {
-        child: Option<NodeHash>,
-    },
-    Expression {
-        expression: Expression,
-        child: Option<NodeHash>,
-    },
-    Recursion {
-        child: Option<NodeHash>,
-    },
-    Error {
-        node: String,
-        child: Option<NodeHash>,
-    },
+    Empty,
+    Expression { expression: Expression },
+    Recursion,
+    Error { node: String },
 }
 
 pub enum Children {

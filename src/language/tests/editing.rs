@@ -269,7 +269,8 @@ fn remove_left_removes_previous_syntax_node_if_empty() {
     assert_eq!(
         empty.node,
         &Node {
-            kind: NodeKind::Empty { child: None },
+            kind: NodeKind::Empty,
+            child: None
         },
     );
     assert_eq!(
@@ -322,9 +323,8 @@ fn remove_right_removes_next_syntax_node_if_empty() {
     assert_eq!(
         empty.node,
         &Node {
-            kind: NodeKind::Empty {
-                child: Some(*literal.path.hash()),
-            },
+            kind: NodeKind::Empty,
+            child: Some(*literal.path.hash()),
         },
     );
 

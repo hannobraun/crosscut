@@ -20,7 +20,8 @@ impl Codebase {
     pub fn new() -> Self {
         let mut nodes = Nodes::new();
         let empty = nodes.insert(Node {
-            kind: NodeKind::Empty { child: None },
+            kind: NodeKind::Empty,
+            child: None,
         });
 
         Self {
@@ -206,9 +207,8 @@ mod tests {
         let b = codebase.insert_node_as_parent(
             &a,
             Node {
-                kind: NodeKind::Empty {
-                    child: Some(*a.hash()),
-                },
+                kind: NodeKind::Empty,
+                child: Some(*a.hash()),
             },
         );
 
@@ -230,8 +230,8 @@ mod tests {
             Node {
                 kind: NodeKind::Error {
                     node: String::from("a"),
-                    child: None,
                 },
+                child: None,
             },
         );
         let b = codebase.insert_node_as_parent(
@@ -239,8 +239,8 @@ mod tests {
             Node {
                 kind: NodeKind::Error {
                     node: String::from("b"),
-                    child: Some(*a.hash()),
                 },
+                child: Some(*a.hash()),
             },
         );
 
@@ -253,7 +253,8 @@ mod tests {
         assert_eq!(
             codebase.root().node,
             &Node {
-                kind: NodeKind::Empty { child: None },
+                kind: NodeKind::Empty,
+                child: None
             },
         );
     }
