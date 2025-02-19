@@ -33,7 +33,6 @@ impl Editor {
         &mut self,
         event: EditorInputEvent,
         compiler: &mut Compiler,
-        codebase: &mut Codebase,
         evaluator: &mut Evaluator,
         packages: &Packages,
     ) {
@@ -43,25 +42,34 @@ impl Editor {
             // https://github.com/hannobraun/crosscut/issues/71
             match action {
                 UpdateAction::NavigateToPrevious => {
-                    if let Some(location) =
-                        codebase.children_of(&self.editing).into_paths().last()
+                    if let Some(location) = compiler
+                        .codebase
+                        .children_of(&self.editing)
+                        .into_paths()
+                        .last()
                     {
-                        self.navigate_to(location, codebase, packages);
+                        self.navigate_to(location, compiler.codebase, packages);
                         self.input.move_cursor_to_end();
                     }
                 }
                 UpdateAction::NavigateToNextNode => {
-                    if let Some(location) = codebase.parent_of(&self.editing) {
-                        self.navigate_to(location, codebase, packages);
+                    if let Some(location) =
+                        compiler.codebase.parent_of(&self.editing)
+                    {
+                        self.navigate_to(location, compiler.codebase, packages);
                     }
                 }
                 UpdateAction::MergeWithPrevious => {
-                    if let Some(to_remove) =
-                        codebase.children_of(&self.editing).into_paths().last()
+                    if let Some(to_remove) = compiler
+                        .codebase
+                        .children_of(&self.editing)
+                        .into_paths()
+                        .last()
                     {
                         let merged = [&to_remove, &self.editing]
                             .map(|path| {
-                                codebase
+                                compiler
+                                    .codebase
                                     .node_at(path)
                                     .display(packages)
                                     .to_string()
@@ -69,15 +77,19 @@ impl Editor {
                             .join("");
                         self.input = EditorInputBuffer::new(merged);
 
-                        codebase.remove_node(&to_remove);
-                        self.editing = codebase.latest_version_of(self.editing);
+                        compiler.codebase.remove_node(&to_remove);
+                        self.editing =
+                            compiler.codebase.latest_version_of(self.editing);
                     }
                 }
                 UpdateAction::MergeWithNext => {
-                    if let Some(to_remove) = codebase.parent_of(&self.editing) {
+                    if let Some(to_remove) =
+                        compiler.codebase.parent_of(&self.editing)
+                    {
                         let merged = [&self.editing, &to_remove]
                             .map(|path| {
-                                codebase
+                                compiler
+                                    .codebase
                                     .node_at(path)
                                     .display(packages)
                                     .to_string()
@@ -85,19 +97,14 @@ impl Editor {
                             .join("");
                         self.input = EditorInputBuffer::new(merged);
 
-                        codebase.remove_node(&to_remove);
+                        compiler.codebase.remove_node(&to_remove);
                     }
                 }
                 UpdateAction::AddParent { previous } => {
-                    compiler.replace(
-                        &previous,
-                        &mut self.editing,
-                        packages,
-                        codebase,
-                    );
+                    compiler.replace(&previous, &mut self.editing, packages);
 
                     let child = Some(*self.editing.hash());
-                    self.editing = codebase.insert_node_as_parent(
+                    self.editing = compiler.codebase.insert_node_as_parent(
                         &self.editing,
                         // Depending on where the cursor was, the input buffer
                         // might already contain characters that should make up
@@ -111,12 +118,7 @@ impl Editor {
             }
         }
 
-        compiler.replace(
-            self.input.buffer(),
-            &mut self.editing,
-            packages,
-            codebase,
-        );
+        compiler.replace(self.input.buffer(), &mut self.editing, packages);
 
         // Unconditionally resetting the interpreter like this, is not going to
         // work long-term. It should only be reset, if it's finished.
@@ -124,7 +126,7 @@ impl Editor {
         // Right now, it doesn't seem to be practical to construct a high-level
         // test where this makes a difference though, and I don't want to fix
         // this until the behavior is covered by such a test.
-        evaluator.reset(codebase);
+        evaluator.reset(compiler.codebase);
     }
 
     pub fn on_command(
