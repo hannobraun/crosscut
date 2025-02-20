@@ -24,20 +24,20 @@ impl SyntaxTree {
         child: &NodeHash,
         nodes: &Nodes,
     ) -> Option<NodePath> {
-        let parent_of_node = |located_node: LocatedNode| {
-            (located_node.node.child() == Some(child))
-                .then_some(located_node.path)
-        };
+        let mut to_search = Vec::new();
+        to_search.push(self.root);
 
-        let mut leaf_to_root = self.leaf_to_root(nodes);
+        while let Some(hash) = to_search.pop() {
+            let node = nodes.get(&hash);
 
-        let maybe_parent = leaf_to_root.by_ref().find_map(parent_of_node);
-        assert!(
-            leaf_to_root.find_map(parent_of_node).is_none(),
-            "A node should never have multiple parents within a syntax tree.",
-        );
+            if node.child() == Some(child) {
+                return Some(NodePath { hash });
+            }
 
-        maybe_parent
+            to_search.extend(node.child());
+        }
+
+        None
     }
 
     pub fn leaf_to_root(
