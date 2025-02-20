@@ -41,11 +41,6 @@ impl Codebase {
         }
     }
 
-    pub fn leaf(&self) -> NodePath {
-        let hash = SyntaxTree::from_root(self.root).find_leaf(&self.nodes);
-        NodePath { hash }
-    }
-
     pub fn children_of(&self, path: &NodePath) -> Children {
         let child = self.node_at(path).child().copied();
         Children { child }

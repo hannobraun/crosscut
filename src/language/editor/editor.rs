@@ -17,7 +17,7 @@ impl Editor {
     pub fn new(codebase: &Codebase) -> Self {
         Self {
             input: EditorInputBuffer::empty(),
-            editing: codebase.leaf(),
+            editing: codebase.root().path,
         }
     }
 
