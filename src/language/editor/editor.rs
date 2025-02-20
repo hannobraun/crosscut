@@ -42,8 +42,11 @@ impl Editor {
             // https://github.com/hannobraun/crosscut/issues/71
             match action {
                 UpdateAction::NavigateToPrevious => {
-                    if let Some(location) =
-                        compiler.children_of(&self.editing).into_paths().last()
+                    if let Some(location) = compiler
+                        .children_of(&self.editing)
+                        .clone()
+                        .into_paths()
+                        .last()
                     {
                         self.navigate_to(location, compiler, packages);
                         self.input.move_cursor_to_end();
@@ -55,8 +58,11 @@ impl Editor {
                     }
                 }
                 UpdateAction::MergeWithPrevious => {
-                    if let Some(to_remove) =
-                        compiler.children_of(&self.editing).into_paths().last()
+                    if let Some(to_remove) = compiler
+                        .children_of(&self.editing)
+                        .clone()
+                        .into_paths()
+                        .last()
                     {
                         let merged = [&to_remove, &self.editing]
                             .map(|path| {
