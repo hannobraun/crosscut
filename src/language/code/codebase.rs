@@ -42,8 +42,7 @@ impl Codebase {
     }
 
     pub fn children_of(&self, path: &NodePath) -> Children {
-        let child = self.node_at(path).children().child;
-        Children { child }
+        self.node_at(path).children().clone()
     }
 
     pub fn parent_of(&self, path: &NodePath) -> Option<NodePath> {
