@@ -30,6 +30,11 @@ impl Codebase {
         }
     }
 
+    #[cfg(test)]
+    pub fn nodes(&self) -> &Nodes {
+        &self.nodes
+    }
+
     pub fn root(&self) -> LocatedNode {
         LocatedNode {
             node: self.nodes.get(&self.root),

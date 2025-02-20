@@ -1,0 +1,46 @@
+use crate::language::code::{
+    Expression, IntrinsicFunction, Literal, Node, NodeKind, Nodes,
+};
+
+pub trait NodeExt: Sized {
+    fn expect_empty(&self) -> Node;
+    fn expect_integer_literal(&self, value: i32) -> Node;
+    fn single_child(&self, nodes: &Nodes) -> Node;
+}
+
+impl NodeExt for Node {
+    fn expect_empty(&self) -> Node {
+        if let NodeKind::Empty = self.kind() {
+            self.clone()
+        } else {
+            panic!("Expected empty node.");
+        }
+    }
+
+    fn expect_integer_literal(&self, expected: i32) -> Node {
+        if let NodeKind::Expression {
+            expression:
+                Expression::IntrinsicFunction {
+                    intrinsic:
+                        IntrinsicFunction::Literal {
+                            literal: Literal::Integer { value },
+                        },
+                },
+        } = self.kind()
+        {
+            assert_eq!(value, &expected);
+            self.clone()
+        } else {
+            panic!("Expected integer literal.");
+        }
+    }
+
+    fn single_child(&self, nodes: &Nodes) -> Node {
+        let hash = self
+            .child()
+            .take()
+            .expect("Expected node to have single child");
+
+        nodes.get(&hash).clone()
+    }
+}
