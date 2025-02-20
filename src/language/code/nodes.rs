@@ -104,20 +104,7 @@ impl Node {
 
     #[cfg(test)]
     pub fn integer_literal(value: i32, child: Option<NodeHash>) -> Self {
-        use crate::language::code::Literal;
-
-        use super::IntrinsicFunction;
-
-        Self::new(
-            NodeKind::Expression {
-                expression: Expression::IntrinsicFunction {
-                    intrinsic: IntrinsicFunction::Literal {
-                        literal: Literal::Integer { value },
-                    },
-                },
-            },
-            child,
-        )
+        Self::new(NodeKind::integer_literal(value), child)
     }
 
     pub fn kind(&self) -> &NodeKind {
@@ -146,6 +133,22 @@ pub enum NodeKind {
     Expression { expression: Expression },
     Recursion,
     Error { node: String },
+}
+
+impl NodeKind {
+    #[cfg(test)]
+    pub fn integer_literal(value: i32) -> Self {
+        use super::IntrinsicFunction;
+        use crate::language::code::Literal;
+
+        Self::Expression {
+            expression: Expression::IntrinsicFunction {
+                intrinsic: IntrinsicFunction::Literal {
+                    literal: Literal::Integer { value },
+                },
+            },
+        }
+    }
 }
 
 #[derive(Clone, Debug, Eq, PartialEq, udigest::Digestable)]
