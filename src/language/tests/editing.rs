@@ -1,7 +1,7 @@
 use itertools::Itertools;
 
 use crate::language::{
-    code::{Node, NodeKind},
+    code::Node,
     editor::EditorInputEvent,
     instance::Language,
     packages::{Function, FunctionId, Package},
@@ -310,13 +310,13 @@ fn remove_right_removes_next_syntax_node_if_empty() {
     language.on_input(EditorInputEvent::MoveCursorLeft);
 
     // Make sure the test setup worked as expected.
-    let (literal, empty) =
-        language.codebase().leaf_to_root().collect_tuple().unwrap();
-    assert_eq!(literal.node, &Node::integer_literal(127, None));
-    assert_eq!(
-        empty.node,
-        &Node::new(NodeKind::Empty, Some(*literal.path.hash())),
-    );
+    language
+        .codebase()
+        .root()
+        .node
+        .expect_empty()
+        .single_child(language.codebase().nodes())
+        .expect_integer_literal(127);
 
     // Actual testing starts here.
     language.on_input(EditorInputEvent::RemoveRight { whole_node: false });
