@@ -41,12 +41,6 @@ impl Codebase {
         }
     }
 
-    /// # Iterate over nodes in the current version, from entry to root
-    #[cfg(test)]
-    pub fn leaf_to_root(&self) -> impl Iterator<Item = LocatedNode> {
-        SyntaxTree::from_root(self.root).leaf_to_root(&self.nodes)
-    }
-
     pub fn leaf(&self) -> NodePath {
         let hash = SyntaxTree::from_root(self.root).find_leaf(&self.nodes);
         NodePath { hash }
@@ -214,13 +208,7 @@ mod tests {
             Node::new(NodeKind::Empty, Some(*a.hash())),
         );
 
-        assert_eq!(
-            codebase
-                .leaf_to_root()
-                .map(|located_node| located_node.path)
-                .collect::<Vec<_>>(),
-            vec![a, b],
-        );
+        assert_eq!(codebase.root().path, b);
     }
 
     #[test]
