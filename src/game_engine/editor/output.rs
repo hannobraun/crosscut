@@ -4,8 +4,8 @@ use crate::{
     io::editor::output::{Cursor, EditorOutputAdapter},
     language::{
         code::{
-            Codebase, Expression, IntrinsicFunction, Literal, LocatedNode,
-            NodeKind, NodePath,
+            Codebase, Expression, IntrinsicFunction, Literal, NodeKind,
+            NodePath,
         },
         editor::Editor,
         instance::Language,
@@ -131,7 +131,7 @@ fn render_code<A: EditorOutputAdapter>(
     writeln!(adapter)?;
 
     for located_node in context.codebase.leaf_to_root() {
-        render_possibly_active_node(located_node, adapter, context)?;
+        render_possibly_active_node(&located_node.path, adapter, context)?;
     }
 
     writeln!(adapter)?;
@@ -140,21 +140,20 @@ fn render_code<A: EditorOutputAdapter>(
 }
 
 fn render_possibly_active_node<A: EditorOutputAdapter>(
-    located_node: LocatedNode,
+    path: &NodePath,
     adapter: &mut A,
     context: &mut RenderContext,
 ) -> anyhow::Result<()> {
-    let is_active_node =
-        context.evaluator.state().path() == Some(&located_node.path);
+    let is_active_node = context.evaluator.state().path() == Some(path);
 
     if is_active_node {
         adapter.attribute(Attribute::Bold, |adapter| {
             write!(adapter, " => ")?;
-            render_node(&located_node.path, adapter, context)
+            render_node(path, adapter, context)
         })?;
     } else {
         write!(adapter, "    ")?;
-        render_node(&located_node.path, adapter, context)?;
+        render_node(path, adapter, context)?;
     }
 
     writeln!(adapter)?;
