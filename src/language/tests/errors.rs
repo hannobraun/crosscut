@@ -74,7 +74,7 @@ fn syntax_node_that_could_resolve_to_multiple_functions_is_unresolved() {
 
     language.enter_code("identity");
 
-    let unresolved = language.codebase().leaf_to_root().next().unwrap().path;
+    let unresolved = language.codebase().root().path;
     assert_eq!(
         language.codebase().error_at(&unresolved),
         Some(&CodeError::UnresolvedIdentifier {
