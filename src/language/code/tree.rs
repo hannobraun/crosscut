@@ -20,7 +20,7 @@ impl SyntaxTree {
         while let Some(hash) = to_search.pop() {
             let node = nodes.get(&hash);
 
-            if node.children().child.as_ref() == Some(child) {
+            if node.children().contains(child) {
                 return Some(NodePath { hash });
             }
 

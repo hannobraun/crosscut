@@ -165,6 +165,10 @@ pub struct Children {
 }
 
 impl Children {
+    pub fn contains(&self, child: &NodeHash) -> bool {
+        self.child.as_ref() == Some(child)
+    }
+
     pub fn add(&mut self, to_add: NodeHash) {
         assert!(
             self.child.is_none(),

@@ -86,9 +86,8 @@ impl Codebase {
         child: &NodePath,
         node: Node,
     ) -> NodePath {
-        assert_eq!(
-            node.children().child.as_ref(),
-            Some(child.hash()),
+        assert!(
+            node.children().contains(child.hash()),
             "Inserting a node as the parent of another, but other node is not \
             the new parent's child.",
         );
