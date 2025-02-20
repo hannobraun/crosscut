@@ -1,5 +1,3 @@
-use itertools::Itertools;
-
 use crate::language::{
     code::{CodeError, Expression, IntrinsicFunction, Type},
     instance::Language,
@@ -120,12 +118,7 @@ fn pure_runtime_error_should_result_in_error_state() {
     );
     assert!(matches!(language.step(), RuntimeState::Effect { .. }));
 
-    let (_valid, invalid) = language
-        .codebase()
-        .leaf_to_root()
-        .map(|located_node| located_node.path)
-        .collect_tuple()
-        .unwrap();
+    let invalid = language.codebase().root().path;
     assert_eq!(
         language.evaluator().state(),
         &RuntimeState::Effect {
