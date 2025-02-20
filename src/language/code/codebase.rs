@@ -208,7 +208,7 @@ mod tests {
 
         let mut codebase = Codebase::new();
 
-        let a = codebase.leaf();
+        let a = codebase.root().path;
         let b = codebase.insert_node_as_parent(
             &a,
             Node::new(NodeKind::Empty, Some(*a.hash())),
