@@ -5,7 +5,7 @@ use crate::{
     language::{
         code::{
             Codebase, Expression, IntrinsicFunction, Literal, LocatedNode,
-            NodeKind,
+            NodeKind, NodePath,
         },
         editor::Editor,
         instance::Language,
@@ -150,11 +150,11 @@ fn render_possibly_active_node<A: EditorOutputAdapter>(
     if is_active_node {
         adapter.attribute(Attribute::Bold, |adapter| {
             write!(adapter, " => ")?;
-            render_node(located_node, adapter, context)
+            render_node(&located_node.path, adapter, context)
         })?;
     } else {
         write!(adapter, "    ")?;
-        render_node(located_node, adapter, context)?;
+        render_node(&located_node.path, adapter, context)?;
     }
 
     writeln!(adapter)?;
@@ -163,12 +163,11 @@ fn render_possibly_active_node<A: EditorOutputAdapter>(
 }
 
 fn render_node<A: EditorOutputAdapter>(
-    located_node: LocatedNode,
+    path: &NodePath,
     adapter: &mut A,
     context: &mut RenderContext,
 ) -> anyhow::Result<()> {
-    let path = &located_node.path;
-    let node = located_node.node;
+    let node = context.codebase.node_at(path);
 
     if context.editor.editing() == path {
         context.cursor =
