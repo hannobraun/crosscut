@@ -192,7 +192,7 @@ mod tests {
     use super::Codebase;
 
     #[test]
-    fn insert_node_after_update_root() {
+    fn insert_new_root_node() {
         // When inserting a node after the root node, the root should be
         // updated.
 
