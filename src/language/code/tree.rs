@@ -24,7 +24,7 @@ impl SyntaxTree {
                 return Some(NodePath { hash });
             }
 
-            to_search.extend(node.children().child);
+            to_search.extend(node.children());
         }
 
         None
