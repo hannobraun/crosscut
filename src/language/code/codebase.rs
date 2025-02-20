@@ -193,7 +193,8 @@ mod tests {
 
     #[test]
     fn insert_node_after_update_root() {
-        // If inserting a node after the root node, the root should be updated.
+        // When inserting a node after the root node, the root should be
+        // updated.
 
         let mut codebase = Codebase::new();
 
