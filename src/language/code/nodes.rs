@@ -177,9 +177,9 @@ impl Children {
     pub fn replace(
         &mut self,
         to_replace: &NodeHash,
-        replacement: impl IntoIterator<Item = NodeHash>,
+        replacements: impl IntoIterator<Item = NodeHash>,
     ) {
-        let mut replacements = replacement.into_iter();
+        let mut replacements = replacements.into_iter();
 
         assert_eq!(
             self.child.as_ref(),
