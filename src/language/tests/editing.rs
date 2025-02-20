@@ -276,9 +276,7 @@ fn remove_left_removes_previous_syntax_node_if_empty() {
     // Actual testing starts here.
     language.on_input(EditorInputEvent::RemoveLeft { whole_node: false });
 
-    let (literal,) =
-        language.codebase().leaf_to_root().collect_tuple().unwrap();
-    assert_eq!(literal.node, &Node::integer_literal(127, None));
+    language.codebase().root().node.expect_integer_literal(127);
 }
 
 #[test]
