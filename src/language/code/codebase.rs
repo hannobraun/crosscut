@@ -236,6 +236,25 @@ mod tests {
 
         codebase.remove_node(&b);
         assert_eq!(codebase.root().path, a);
+    }
+
+    #[test]
+    fn remove_root_node_with_no_child() {
+        // When removing a root node that has no child, an empty node should be
+        // left in its place.
+
+        let mut codebase = Codebase::new();
+
+        let a = codebase.replace_node(
+            &codebase.root().path,
+            Node::new(
+                NodeKind::Error {
+                    node: String::from("a"),
+                },
+                None,
+            ),
+        );
+        assert_eq!(codebase.root().path, a);
 
         codebase.remove_node(&a);
         assert_eq!(codebase.root().node, &Node::new(NodeKind::Empty, None));
