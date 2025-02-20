@@ -167,10 +167,10 @@ fn render_node<A: EditorOutputAdapter>(
     adapter: &mut A,
     context: &mut RenderContext,
 ) -> anyhow::Result<()> {
-    let path = located_node.path;
+    let path = &located_node.path;
     let node = located_node.node;
 
-    if context.editor.editing() == &path {
+    if context.editor.editing() == path {
         context.cursor =
             Some(adapter.cursor().move_right(context.editor.input().cursor()));
     }
@@ -191,7 +191,7 @@ fn render_node<A: EditorOutputAdapter>(
         write!(adapter, "{node_display}")?;
     }
 
-    if let Some(error) = context.codebase.error_at(&path) {
+    if let Some(error) = context.codebase.error_at(path) {
         adapter.color(ERROR_COLOR, |adapter| {
             write!(adapter, "    error: {error}")
         })?;
