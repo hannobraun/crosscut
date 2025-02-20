@@ -20,11 +20,11 @@ impl SyntaxTree {
         while let Some(hash) = to_search.pop() {
             let node = nodes.get(&hash);
 
-            if node.child() == Some(child) {
+            if node.child().child.as_ref() == Some(child) {
                 return Some(NodePath { hash });
             }
 
-            to_search.extend(node.child());
+            to_search.extend(node.child().child);
         }
 
         None

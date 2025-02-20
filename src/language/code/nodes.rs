@@ -119,8 +119,8 @@ impl Node {
         self.children.child.as_ref()
     }
 
-    pub fn child(&self) -> Option<&NodeHash> {
-        self.children.child.as_ref()
+    pub fn child(&self) -> &Children {
+        &self.children
     }
 
     pub fn children_mut(&mut self) -> &mut Children {
@@ -294,7 +294,7 @@ impl<'r> LocatedNode<'r> {
         &self,
         nodes: &'r Nodes,
     ) -> impl Iterator<Item = LocatedNode<'r>> {
-        self.node.child().into_iter().copied().map(move |hash| {
+        self.node.child().child.into_iter().map(move |hash| {
             let node = nodes.get(&hash);
             Self {
                 node,

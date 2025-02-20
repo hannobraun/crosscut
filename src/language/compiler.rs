@@ -68,7 +68,7 @@ fn compile_token(
     packages: &Packages,
 ) -> (Node, Option<CodeError>) {
     let node = codebase.node_at(path);
-    let child = node.child().copied();
+    let child = node.child().child;
 
     let (node, maybe_error) = if token.is_empty() {
         (Node::new(NodeKind::Empty, child), None)
