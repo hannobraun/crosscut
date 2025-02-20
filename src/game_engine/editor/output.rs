@@ -4,8 +4,8 @@ use crate::{
     io::editor::output::{Cursor, EditorOutputAdapter},
     language::{
         code::{
-            Codebase, Expression, IntrinsicFunction, Literal, NodeKind,
-            NodePath,
+            Codebase, Expression, IntrinsicFunction, Literal, LocatedNode,
+            NodeKind, NodePath, Nodes,
         },
         editor::Editor,
         instance::Language,
@@ -128,10 +128,17 @@ fn render_code<A: EditorOutputAdapter>(
     adapter: &mut A,
     context: &mut RenderContext,
 ) -> anyhow::Result<()> {
+    let mut nodes_from_root = Vec::new();
+    collect_nodes_from_root(
+        context.codebase.root(),
+        &mut nodes_from_root,
+        context.codebase.nodes(),
+    );
+
     writeln!(adapter)?;
 
-    for located_node in context.codebase.leaf_to_root() {
-        render_possibly_active_node(&located_node.path, adapter, context)?;
+    while let Some(path) = nodes_from_root.pop() {
+        render_possibly_active_node(&path, adapter, context)?;
     }
 
     writeln!(adapter)?;
@@ -348,3 +355,15 @@ struct RenderContext<'r> {
 }
 
 const ERROR_COLOR: Color = Color::DarkRed;
+
+fn collect_nodes_from_root(
+    node: LocatedNode,
+    nodes_from_root: &mut Vec<NodePath>,
+    nodes: &Nodes,
+) {
+    nodes_from_root.push(node.path);
+
+    for child in node.children(nodes) {
+        collect_nodes_from_root(child, nodes_from_root, nodes);
+    }
+}

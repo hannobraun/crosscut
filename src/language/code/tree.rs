@@ -1,4 +1,7 @@
-use super::{LocatedNode, NodeHash, NodePath, Nodes};
+use super::{NodeHash, NodePath, Nodes};
+
+#[cfg(test)]
+use super::LocatedNode;
 
 pub struct SyntaxTree {
     pub root: NodeHash,
@@ -40,6 +43,7 @@ impl SyntaxTree {
         None
     }
 
+    #[cfg(test)]
     pub fn leaf_to_root(
         self,
         nodes: &Nodes,

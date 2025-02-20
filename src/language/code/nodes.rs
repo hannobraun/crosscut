@@ -271,3 +271,18 @@ pub struct LocatedNode<'r> {
     pub node: &'r Node,
     pub path: NodePath,
 }
+
+impl<'r> LocatedNode<'r> {
+    pub fn children(
+        &self,
+        nodes: &'r Nodes,
+    ) -> impl Iterator<Item = LocatedNode<'r>> {
+        self.node.child().into_iter().copied().map(move |hash| {
+            let node = nodes.get(&hash);
+            Self {
+                node,
+                path: NodePath { hash },
+            }
+        })
+    }
+}

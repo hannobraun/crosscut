@@ -30,7 +30,6 @@ impl Codebase {
         }
     }
 
-    #[cfg(test)]
     pub fn nodes(&self) -> &Nodes {
         &self.nodes
     }
@@ -43,6 +42,7 @@ impl Codebase {
     }
 
     /// # Iterate over nodes in the current version, from entry to root
+    #[cfg(test)]
     pub fn leaf_to_root(&self) -> impl Iterator<Item = LocatedNode> {
         SyntaxTree::from_root(self.root).leaf_to_root(&self.nodes)
     }
