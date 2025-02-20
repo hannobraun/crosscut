@@ -36,7 +36,9 @@ impl NodeExt for Node {
     }
 
     fn expect_single_child(&self, nodes: &Nodes) -> Node {
-        let hash = self.child().expect("Expected node to have single child");
+        let hash = self
+            .single_child()
+            .expect("Expected node to have single child");
         nodes.get(hash).clone()
     }
 }

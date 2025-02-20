@@ -111,6 +111,14 @@ impl Node {
         &self.kind
     }
 
+    /// # Access the single child of this node
+    ///
+    /// Returns `None`, if the node has zero or more than one children.
+    #[cfg(test)]
+    pub fn single_child(&self) -> Option<&NodeHash> {
+        self.children.child.as_ref()
+    }
+
     pub fn child(&self) -> Option<&NodeHash> {
         self.children.child.as_ref()
     }
