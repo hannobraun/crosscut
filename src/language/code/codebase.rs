@@ -125,7 +125,7 @@ impl Codebase {
                     .children_mut()
                     .replace(to_remove.hash(), [child]);
             } else {
-                updated_parent.children_mut().remove(to_remove.hash());
+                updated_parent.children_mut().replace(to_remove.hash(), []);
             }
 
             self.replace_node(&parent, updated_parent);
