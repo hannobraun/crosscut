@@ -167,12 +167,14 @@ fn render_node<A: EditorOutputAdapter>(
     adapter: &mut A,
     context: &mut RenderContext,
 ) -> anyhow::Result<()> {
+    let node = located_node.node;
+
     if context.editor.editing() == &located_node.path {
         context.cursor =
             Some(adapter.cursor().move_right(context.editor.input().cursor()));
     }
 
-    let color = match located_node.node.kind() {
+    let color = match node.kind() {
         NodeKind::Expression { expression, .. } => match expression {
             Expression::HostFunction { .. } => Some(Color::DarkMagenta),
             Expression::IntrinsicFunction { .. } => Some(Color::DarkBlue),
@@ -181,7 +183,7 @@ fn render_node<A: EditorOutputAdapter>(
         _ => None,
     };
 
-    let node_display = located_node.node.display(context.packages);
+    let node_display = node.display(context.packages);
     if let Some(color) = color {
         adapter.color(color, |adapter| write!(adapter, "{node_display}"))?;
     } else {
