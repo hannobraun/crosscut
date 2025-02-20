@@ -232,7 +232,6 @@ mod tests {
                 Some(*a.hash()),
             ),
         );
-
         assert_eq!(codebase.root().path, b);
 
         codebase.remove_node(&b);
