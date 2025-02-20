@@ -1,4 +1,4 @@
-use std::{collections::BTreeMap, fmt, iter};
+use std::{collections::BTreeMap, fmt, iter, option};
 
 use base64::{Engine, prelude::BASE64_URL_SAFE_NO_PAD};
 
@@ -203,6 +203,15 @@ impl Children {
             let path = NodePath { hash };
             Some(path)
         })
+    }
+}
+
+impl IntoIterator for Children {
+    type Item = NodeHash;
+    type IntoIter = option::IntoIter<NodeHash>;
+
+    fn into_iter(self) -> Self::IntoIter {
+        self.child.into_iter()
     }
 }
 
