@@ -21,11 +21,11 @@ impl SyntaxTree {
 
     pub fn find_parent_of(
         self,
-        node: &NodeHash,
+        child: &NodeHash,
         nodes: &Nodes,
     ) -> Option<NodePath> {
         let parent_of_node = |located_node: LocatedNode| {
-            (located_node.node.child() == Some(node))
+            (located_node.node.child() == Some(child))
                 .then_some(located_node.path)
         };
 
