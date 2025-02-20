@@ -208,7 +208,7 @@ mod tests {
     }
 
     #[test]
-    fn remove_node_should_update_root_node() {
+    fn remove_root_node_with_single_child() {
         // When removing a root node that has a single child, that child should
         // become the new root node.
 
