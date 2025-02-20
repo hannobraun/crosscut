@@ -119,7 +119,7 @@ impl Node {
         self.children.child.as_ref()
     }
 
-    pub fn child(&self) -> &Children {
+    pub fn children(&self) -> &Children {
         &self.children
     }
 
@@ -294,7 +294,7 @@ impl<'r> LocatedNode<'r> {
         &self,
         nodes: &'r Nodes,
     ) -> impl Iterator<Item = LocatedNode<'r>> {
-        self.node.child().child.into_iter().map(move |hash| {
+        self.node.children().child.into_iter().map(move |hash| {
             let node = nodes.get(&hash);
             Self {
                 node,
