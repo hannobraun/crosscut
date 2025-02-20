@@ -5,7 +5,7 @@ use crate::language::code::{
 pub trait NodeExt: Sized {
     fn expect_empty(&self) -> Node;
     fn expect_integer_literal(&self, value: i32) -> Node;
-    fn single_child(&self, nodes: &Nodes) -> Node;
+    fn expect_single_child(&self, nodes: &Nodes) -> Node;
 }
 
 impl NodeExt for Node {
@@ -35,7 +35,7 @@ impl NodeExt for Node {
         }
     }
 
-    fn single_child(&self, nodes: &Nodes) -> Node {
+    fn expect_single_child(&self, nodes: &Nodes) -> Node {
         let hash = self.child().expect("Expected node to have single child");
         nodes.get(hash).clone()
     }

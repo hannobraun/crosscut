@@ -268,7 +268,7 @@ fn remove_left_removes_previous_syntax_node_if_empty() {
         .root()
         .node
         .expect_integer_literal(127)
-        .single_child(language.codebase().nodes())
+        .expect_single_child(language.codebase().nodes())
         .expect_empty();
 
     // Actual testing starts here.
@@ -313,7 +313,7 @@ fn remove_right_removes_next_syntax_node_if_empty() {
         .root()
         .node
         .expect_empty()
-        .single_child(language.codebase().nodes())
+        .expect_single_child(language.codebase().nodes())
         .expect_integer_literal(127);
 
     // Actual testing starts here.
