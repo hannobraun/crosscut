@@ -174,14 +174,26 @@ impl Children {
         self.child = None;
     }
 
-    pub fn replace(&mut self, to_replace: &NodeHash, replacement: NodeHash) {
+    pub fn replace(
+        &mut self,
+        to_replace: &NodeHash,
+        replacement: impl IntoIterator<Item = NodeHash>,
+    ) {
+        let mut replacements = replacement.into_iter();
+
         assert_eq!(
             self.child.as_ref(),
             Some(to_replace),
             "Trying to replace child that is not present.",
         );
 
-        self.child = Some(replacement);
+        self.child = replacements.next();
+
+        assert!(
+            replacements.next().is_none(),
+            "Replacing a child with multiple other children is not supported \
+            yet.",
+        );
     }
 
     pub fn into_paths(mut self) -> impl Iterator<Item = NodePath> {
