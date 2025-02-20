@@ -1,13 +1,13 @@
 use std::{
     fmt,
-    io::{self, stdout, Stdout, Write as _},
+    io::{self, Stdout, Write as _, stdout},
 };
 
 use crossterm::{
+    QueueableCommand,
     cursor::{self, MoveToNextLine},
     style::{Attribute, Color, ResetColor, SetAttribute, SetForegroundColor},
     terminal::{self, ClearType},
-    QueueableCommand,
 };
 
 pub trait EditorOutputAdapter: fmt::Write {

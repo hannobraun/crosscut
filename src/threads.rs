@@ -5,7 +5,7 @@ use std::{
     thread::{self, JoinHandle},
 };
 
-use crossbeam_channel::{select, SendError, TryRecvError};
+use crossbeam_channel::{SendError, TryRecvError, select};
 
 use crate::{
     game_engine::{GameEngine, GameInput, GameOutput, TerminalInputEvent},

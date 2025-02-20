@@ -1,6 +1,6 @@
 use std::{collections::BTreeMap, fmt, iter};
 
-use base64::{prelude::BASE64_URL_SAFE_NO_PAD, Engine};
+use base64::{Engine, prelude::BASE64_URL_SAFE_NO_PAD};
 
 use crate::language::packages::Packages;
 

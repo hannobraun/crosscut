@@ -3,8 +3,8 @@ use crate::language::code::{
 };
 
 use super::{
-    context::{Context, EvaluateUpdate},
     Effect, RuntimeState, Value, ValueWithSource,
+    context::{Context, EvaluateUpdate},
 };
 
 #[derive(Debug)]

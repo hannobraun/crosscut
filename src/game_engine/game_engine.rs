@@ -11,8 +11,8 @@ use crate::{
 };
 
 use super::{
-    editor::{input::TerminalEditorInput, output::TerminalEditorOutput},
     TerminalInputEvent,
+    editor::{input::TerminalEditorInput, output::TerminalEditorOutput},
 };
 
 #[derive(Debug)]
