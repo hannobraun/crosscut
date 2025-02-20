@@ -216,7 +216,7 @@ mod tests {
         let mut codebase = Codebase::new();
 
         let a = codebase.replace_node(
-            &codebase.leaf(),
+            &codebase.root().path,
             Node::new(
                 NodeKind::Error {
                     node: String::from("a"),
