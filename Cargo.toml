@@ -3,7 +3,7 @@ members = ["tools/daily", "tools/website"]
 
 [package]
 name = "crosscut"
-edition = "2021"
+edition = "2024"
 
 [dependencies]
 anyhow = "*"
