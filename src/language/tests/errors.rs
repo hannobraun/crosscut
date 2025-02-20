@@ -34,7 +34,7 @@ fn unresolved_syntax_node() {
     language.enter_code("identit");
 
     // The error should be registered in `Codebase`.
-    let unresolved = language.codebase().leaf_to_root().next().unwrap().path;
+    let unresolved = language.codebase().root().path;
     assert_eq!(
         language.codebase().error_at(&unresolved),
         Some(&CodeError::UnresolvedIdentifier { candidates: vec![] }),
@@ -46,7 +46,7 @@ fn unresolved_syntax_node() {
     // Once we resolve the error, it should no longer be there.
     language.enter_code("y");
 
-    let resolved = language.codebase().leaf_to_root().next().unwrap().path;
+    let resolved = language.codebase().root().path;
     assert_eq!(language.codebase().error_at(&resolved), None);
     assert_eq!(
         language.step_until_finished().map(|value| value.inner),
