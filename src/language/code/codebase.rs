@@ -145,9 +145,11 @@ impl Codebase {
 
                 self.root = child;
             } else {
-                panic!(
-                    "Nodes with multiple children are not fully supported yet."
-                );
+                let mut root = self.nodes.get(&self.empty).clone();
+                root.children_mut()
+                    .add(node_to_remove.children().into_iter().copied());
+
+                self.root = self.nodes.insert(root);
             }
         }
     }
@@ -258,6 +260,32 @@ mod tests {
 
         codebase.remove_node(&a);
         assert_eq!(codebase.root().node, &Node::new(NodeKind::Empty, []));
+    }
+
+    #[test]
+    fn remove_root_node_with_multiple_children() {
+        // When removing a root node that has multiple children, there still
+        // needs to be one root node after. An empty node can be created for
+        // this.
+
+        let [a, b, c] = test_nodes();
+        let mut codebase = Codebase::new();
+
+        let a = codebase
+            .insert_node_as_child(&codebase.root().path, Node::new(a, []));
+        let b = codebase
+            .insert_node_as_child(&codebase.root().path, Node::new(b, []));
+        let c = codebase.replace_node(
+            &codebase.root().path,
+            Node::new(c, [a.hash, b.hash]),
+        );
+
+        codebase.remove_node(&c);
+
+        assert_eq!(
+            codebase.root().node,
+            &Node::new(NodeKind::Empty, [a.hash, b.hash]),
+        );
     }
 
     fn test_nodes() -> [NodeKind; 3] {
