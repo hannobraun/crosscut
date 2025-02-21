@@ -99,17 +99,7 @@ impl Node {
         kind: NodeKind,
         children: impl IntoIterator<Item = NodeHash>,
     ) -> Self {
-        let mut children = children.into_iter();
-        let child = children.next();
-
-        assert!(
-            children.next().is_none(),
-            "Nodes with multiple children are not fully supported yet.",
-        );
-
-        let children = Children {
-            child: child.into_iter().collect(),
-        };
+        let children = Children::new(children);
         Self { kind, children }
     }
 
