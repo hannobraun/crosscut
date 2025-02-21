@@ -132,7 +132,14 @@ impl Codebase {
                 node.",
             );
 
-            self.root = node_to_remove.children().child.unwrap_or(self.empty);
+            if let Some(child) = node_to_remove.children().has_one().copied() {
+                // The root node we're removing has exactly one child, which can
+                // become the new root node.
+
+                self.root = child;
+            } else {
+                self.root = self.empty;
+            }
         }
     }
 
