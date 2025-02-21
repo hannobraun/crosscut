@@ -214,10 +214,8 @@ mod tests {
         let mut codebase = Codebase::new();
 
         let a = codebase.root().path;
-        let b = codebase.insert_node_as_parent(
-            &a,
-            Node::new(NodeKind::Empty, Some(*a.hash())),
-        );
+        let b = codebase
+            .insert_node_as_parent(&a, Node::new(NodeKind::Empty, [*a.hash()]));
 
         assert_eq!(codebase.root().path, b);
     }
@@ -230,10 +228,8 @@ mod tests {
         let [a, b, ..] = test_nodes();
         let mut codebase = Codebase::new();
 
-        let a =
-            codebase.replace_node(&codebase.root().path, Node::new(a, None));
-        let b =
-            codebase.insert_node_as_parent(&a, Node::new(b, Some(*a.hash())));
+        let a = codebase.replace_node(&codebase.root().path, Node::new(a, []));
+        let b = codebase.insert_node_as_parent(&a, Node::new(b, [*a.hash()]));
         assert_eq!(codebase.root().path, b);
 
         codebase.remove_node(&b);
@@ -248,12 +244,11 @@ mod tests {
         let [a, ..] = test_nodes();
         let mut codebase = Codebase::new();
 
-        let a =
-            codebase.replace_node(&codebase.root().path, Node::new(a, None));
+        let a = codebase.replace_node(&codebase.root().path, Node::new(a, []));
         assert_eq!(codebase.root().path, a);
 
         codebase.remove_node(&a);
-        assert_eq!(codebase.root().node, &Node::new(NodeKind::Empty, None));
+        assert_eq!(codebase.root().node, &Node::new(NodeKind::Empty, []));
     }
 
     fn test_nodes() -> [NodeKind; 3] {
