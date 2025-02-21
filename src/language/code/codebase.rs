@@ -256,8 +256,8 @@ mod tests {
         assert_eq!(codebase.root().node, &Node::new(NodeKind::Empty, None));
     }
 
-    fn test_nodes() -> [NodeKind; 2] {
-        ["a", "b"].map(|node| NodeKind::Error {
+    fn test_nodes() -> [NodeKind; 3] {
+        ["a", "b", "c"].map(|node| NodeKind::Error {
             node: String::from(node),
         })
     }
