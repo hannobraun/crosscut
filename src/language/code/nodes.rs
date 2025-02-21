@@ -154,7 +154,7 @@ impl NodeKind {
 
 #[derive(Clone, Debug, Eq, PartialEq, udigest::Digestable)]
 pub struct Children {
-    pub child: Vec<NodeHash>,
+    pub children: Vec<NodeHash>,
 }
 
 impl Children {
@@ -168,16 +168,16 @@ impl Children {
         );
 
         Self {
-            child: child.into_iter().collect(),
+            children: child.into_iter().collect(),
         }
     }
 
     pub fn is_empty(&self) -> bool {
-        self.child.is_empty()
+        self.children.is_empty()
     }
 
     pub fn contains(&self, child: &NodeHash) -> bool {
-        self.child.contains(child)
+        self.children.contains(child)
     }
 
     /// # Access the single child of this node
@@ -185,20 +185,20 @@ impl Children {
     /// Returns `None`, if the node has zero or more than one children.
     pub fn has_one(&self) -> Option<&NodeHash> {
         assert!(
-            self.child.len() <= 1,
+            self.children.len() <= 1,
             "Nodes with multiple children are not fully supported yet.",
         );
 
-        self.child.first()
+        self.children.first()
     }
 
     pub fn add(&mut self, to_add: NodeHash) {
         assert!(
-            self.child.is_empty(),
+            self.children.is_empty(),
             "Syntax nodes with multiple children are not fully supported yet.",
         );
 
-        self.child.push(to_add);
+        self.children.push(to_add);
     }
 
     pub fn replace(
@@ -209,17 +209,17 @@ impl Children {
         let mut replacements = replacements.into_iter();
 
         assert!(
-            self.child.len() <= 1,
+            self.children.len() <= 1,
             "Nodes with multiple children are not fully supported yet.",
         );
         assert_eq!(
-            self.child.first(),
+            self.children.first(),
             Some(to_replace),
             "Trying to replace child that is not present.",
         );
 
-        self.child.clear();
-        self.child.extend(replacements.next());
+        self.children.clear();
+        self.children.extend(replacements.next());
 
         assert!(
             replacements.next().is_none(),
@@ -229,7 +229,7 @@ impl Children {
     }
 
     pub fn to_paths(&self) -> impl Iterator<Item = NodePath> {
-        self.child.iter().copied().map(|hash| NodePath { hash })
+        self.children.iter().copied().map(|hash| NodePath { hash })
     }
 }
 
@@ -238,7 +238,7 @@ impl IntoIterator for Children {
     type IntoIter = vec::IntoIter<NodeHash>;
 
     fn into_iter(self) -> Self::IntoIter {
-        self.child.into_iter()
+        self.children.into_iter()
     }
 }
 
@@ -247,7 +247,7 @@ impl<'r> IntoIterator for &'r Children {
     type IntoIter = slice::Iter<'r, NodeHash>;
 
     fn into_iter(self) -> Self::IntoIter {
-        self.child.iter()
+        self.children.iter()
     }
 }
 
