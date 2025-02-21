@@ -131,13 +131,14 @@ fn render_code<A: EditorOutputAdapter>(
     let mut nodes_from_root = Vec::new();
     collect_nodes_from_root(
         context.codebase.root(),
+        0,
         &mut nodes_from_root,
         context.codebase.nodes(),
     );
 
     writeln!(adapter)?;
 
-    while let Some(path) = nodes_from_root.pop() {
+    while let Some((_, path)) = nodes_from_root.pop() {
         render_possibly_active_node(&path, 0, adapter, context)?;
     }
 
@@ -363,12 +364,18 @@ const ERROR_COLOR: Color = Color::DarkRed;
 
 fn collect_nodes_from_root(
     node: LocatedNode,
-    nodes_from_root: &mut Vec<NodePath>,
+    distance_from_root: u32,
+    nodes_from_root: &mut Vec<(u32, NodePath)>,
     nodes: &Nodes,
 ) {
-    nodes_from_root.push(node.path);
+    nodes_from_root.push((distance_from_root, node.path));
 
     for child in node.children(nodes) {
-        collect_nodes_from_root(child, nodes_from_root, nodes);
+        collect_nodes_from_root(
+            child,
+            distance_from_root + 1,
+            nodes_from_root,
+            nodes,
+        );
     }
 }
