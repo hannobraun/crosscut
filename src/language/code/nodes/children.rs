@@ -32,8 +32,8 @@ impl Children {
         }
     }
 
-    pub fn add(&mut self, to_add: NodeHash) {
-        self.children.push(to_add);
+    pub fn add(&mut self, to_add: impl IntoIterator<Item = NodeHash>) {
+        self.children.extend(to_add);
     }
 
     pub fn replace(

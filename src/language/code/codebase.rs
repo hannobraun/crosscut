@@ -65,7 +65,7 @@ impl Codebase {
         let hash = self.nodes.insert(node);
 
         let mut updated_parent = self.nodes.get(parent.hash()).clone();
-        updated_parent.children_mut().add(hash);
+        updated_parent.children_mut().add([hash]);
 
         self.replace_node(parent, updated_parent);
 
