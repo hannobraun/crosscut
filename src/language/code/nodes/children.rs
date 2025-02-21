@@ -25,12 +25,11 @@ impl Children {
     ///
     /// Returns `None`, if the node has zero or more than one children.
     pub fn has_one(&self) -> Option<&NodeHash> {
-        assert!(
-            self.children.len() <= 1,
-            "Nodes with multiple children are not fully supported yet.",
-        );
-
-        self.children.first()
+        if self.children.len() == 1 {
+            self.children.first()
+        } else {
+            None
+        }
     }
 
     pub fn add(&mut self, to_add: NodeHash) {
@@ -93,6 +92,15 @@ mod tests {
     use crate::language::code::{Node, NodeHash, NodeKind};
 
     use super::Children;
+
+    #[test]
+    fn has_one_should_indicate_whether_there_is_one_child() {
+        let [a, b, ..] = test_nodes();
+
+        assert!(Children::new([]).has_one().is_none());
+        assert!(Children::new([a]).has_one().is_some());
+        assert!(Children::new([a, b]).has_one().is_none());
+    }
 
     #[test]
     fn replace_should_insert_replacements_at_location_of_replaced() {
