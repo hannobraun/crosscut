@@ -68,25 +68,26 @@ fn compile_token(
     packages: &Packages,
 ) -> (Node, Option<CodeError>) {
     let node = codebase.node_at(path);
-    let child = node.children().child;
+    let child = node.children().clone();
 
     let (node, maybe_error) = if token.is_empty() {
-        (Node::new(NodeKind::Empty, child), None)
+        (Node::new(NodeKind::Empty, child.child), None)
     } else if let Some((node, maybe_err)) =
-        resolve_keyword(token, path, child, codebase)
+        resolve_keyword(token, path, child.child, codebase)
     {
         (node, maybe_err)
     } else {
         match resolve_function(token, packages) {
-            Ok(expression) => {
-                (Node::new(NodeKind::Expression { expression }, child), None)
-            }
+            Ok(expression) => (
+                Node::new(NodeKind::Expression { expression }, child.child),
+                None,
+            ),
             Err(candidates) => (
                 Node::new(
                     NodeKind::Error {
                         node: token.to_string(),
                     },
-                    child,
+                    child.child,
                 ),
                 Some(CodeError::UnresolvedIdentifier { candidates }),
             ),
