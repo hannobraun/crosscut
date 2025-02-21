@@ -33,11 +33,6 @@ impl Children {
     }
 
     pub fn add(&mut self, to_add: NodeHash) {
-        assert!(
-            self.children.is_empty(),
-            "Syntax nodes with multiple children are not fully supported yet.",
-        );
-
         self.children.push(to_add);
     }
 
