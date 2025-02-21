@@ -138,7 +138,7 @@ fn render_code<A: EditorOutputAdapter>(
     writeln!(adapter)?;
 
     while let Some(path) = nodes_from_root.pop() {
-        render_possibly_active_node(&path, adapter, context)?;
+        render_possibly_active_node(&path, 0, adapter, context)?;
     }
 
     writeln!(adapter)?;
@@ -148,10 +148,15 @@ fn render_code<A: EditorOutputAdapter>(
 
 fn render_possibly_active_node<A: EditorOutputAdapter>(
     path: &NodePath,
+    indentation_level: u32,
     adapter: &mut A,
     context: &mut RenderContext,
 ) -> anyhow::Result<()> {
     let is_active_node = context.evaluator.state().path() == Some(path);
+
+    for _ in 0..indentation_level {
+        write!(adapter, "    ")?;
+    }
 
     if is_active_node {
         adapter.attribute(Attribute::Bold, |adapter| {
