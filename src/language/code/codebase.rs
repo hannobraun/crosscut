@@ -125,6 +125,13 @@ impl Codebase {
             // The node we're removing has no parent, which means it is the root
             // node. We need to update that then.
 
+            assert_eq!(
+                &self.root,
+                to_remove.hash(),
+                "Removing a node that has no parent, but it's not the root \
+                node.",
+            );
+
             self.root = node_to_remove.children().child.unwrap_or(self.empty);
         }
     }
