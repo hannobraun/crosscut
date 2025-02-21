@@ -96,18 +96,22 @@ mod tests {
 
     #[test]
     fn replace_should_insert_replacements_at_location_of_replaced() {
-        let [a, b, c, d, e] = ["a", "b", "c", "d", "e"].map(|node| {
+        let [a, b, c, d, e] = test_nodes();
+
+        let mut children = Children::new([a, b, c]);
+        children.replace(&b, [d, e]);
+
+        assert_eq!(children, Children::new([a, d, e, c]));
+    }
+
+    fn test_nodes() -> [NodeHash; 5] {
+        ["a", "b", "c", "d", "e"].map(|node| {
             NodeHash::new(&Node::new(
                 NodeKind::Error {
                     node: node.to_string(),
                 },
                 [],
             ))
-        });
-
-        let mut children = Children::new([a, b, c]);
-        children.replace(&b, [d, e]);
-
-        assert_eq!(children, Children::new([a, d, e, c]));
+        })
     }
 }
