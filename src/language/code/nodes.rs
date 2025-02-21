@@ -216,6 +216,15 @@ impl Children {
     }
 }
 
+impl IntoIterator for Children {
+    type Item = NodeHash;
+    type IntoIter = option::IntoIter<NodeHash>;
+
+    fn into_iter(self) -> Self::IntoIter {
+        self.child.into_iter()
+    }
+}
+
 impl<'r> IntoIterator for &'r Children {
     type Item = &'r NodeHash;
     type IntoIter = option::Iter<'r, NodeHash>;
