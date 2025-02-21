@@ -201,7 +201,7 @@ impl Children {
     }
 
     pub fn to_paths(&self) -> impl Iterator<Item = NodePath> {
-        self.child.into_iter().map(|hash| NodePath { hash })
+        self.child.iter().copied().map(|hash| NodePath { hash })
     }
 }
 
