@@ -47,26 +47,22 @@ impl Children {
         to_replace: &NodeHash,
         replacements: impl IntoIterator<Item = NodeHash>,
     ) {
-        let mut replacements = replacements.into_iter();
+        let Some(index) = self
+            .children
+            .iter()
+            .enumerate()
+            .find_map(|(i, child)| (child == to_replace).then_some(i))
+        else {
+            panic!("Trying to replace child that is not present.");
+        };
 
-        assert!(
-            self.children.len() <= 1,
-            "Nodes with multiple children are not fully supported yet.",
-        );
-        assert_eq!(
-            self.children.first(),
-            Some(to_replace),
-            "Trying to replace child that is not present.",
-        );
+        self.children.remove(index);
 
-        self.children.clear();
-        self.children.extend(replacements.next());
-
-        assert!(
-            replacements.next().is_none(),
-            "Replacing a child with multiple other children is not supported \
-            yet.",
-        );
+        let mut index = index;
+        for replacement in replacements {
+            self.children.insert(index, replacement);
+            index += 1;
+        }
     }
 
     pub fn to_paths(&self) -> impl Iterator<Item = NodePath> {
@@ -89,5 +85,29 @@ impl<'r> IntoIterator for &'r Children {
 
     fn into_iter(self) -> Self::IntoIter {
         self.children.iter()
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use crate::language::code::{Node, NodeHash, NodeKind};
+
+    use super::Children;
+
+    #[test]
+    fn replace_should_insert_replacements_at_location_of_replaced() {
+        let [a, b, c, d, e] = ["a", "b", "c", "d", "e"].map(|node| {
+            NodeHash::new(&Node::new(
+                NodeKind::Error {
+                    node: node.to_string(),
+                },
+                [],
+            ))
+        });
+
+        let mut children = Children::new([a, b, c]);
+        children.replace(&b, [d, e]);
+
+        assert_eq!(children, Children::new([a, d, e, c]));
     }
 }
