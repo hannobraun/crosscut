@@ -1,40 +1,14 @@
-use std::{collections::BTreeMap, fmt, slice, vec};
+pub mod nodes;
+
+pub use self::nodes::Nodes;
+
+use std::{fmt, slice, vec};
 
 use base64::{Engine, prelude::BASE64_URL_SAFE_NO_PAD};
 
 use crate::language::packages::Packages;
 
 use super::Expression;
-
-#[derive(Clone, Debug, Eq, PartialEq)]
-pub struct Nodes {
-    inner: BTreeMap<NodeHash, Node>,
-}
-
-impl Nodes {
-    pub fn new() -> Self {
-        Self {
-            inner: BTreeMap::new(),
-        }
-    }
-
-    pub fn get(&self, hash: &NodeHash) -> &Node {
-        let Some(node) = self.inner.get(hash) else {
-            unreachable!(
-                "This is an append-only data structure. All hashes that were \
-                ever created must be valid."
-            );
-        };
-
-        node
-    }
-
-    pub fn insert(&mut self, node: Node) -> NodeHash {
-        let hash = NodeHash::new(&node);
-        self.inner.insert(hash, node);
-        hash
-    }
-}
 
 /// # The hash of a syntax node
 ///
