@@ -113,9 +113,11 @@ fn resolve_keyword(
                 );
                 *path = codebase.latest_version_of(*path);
 
-                Some(*child.hash())
+                Children {
+                    child: Some(*child.hash()),
+                }
             } else {
-                children.child
+                children.clone()
             };
 
             Some((
