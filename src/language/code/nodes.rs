@@ -198,7 +198,7 @@ impl Children {
     pub fn add(&mut self, to_add: NodeHash) {
         assert!(
             self.child.is_none(),
-            "Syntax nodes with multiple children are not fully supported yet."
+            "Syntax nodes with multiple children are not fully supported yet.",
         );
 
         self.child = Some(to_add);
