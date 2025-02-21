@@ -113,9 +113,7 @@ fn resolve_keyword(
                 );
                 *path = codebase.latest_version_of(*path);
 
-                Children {
-                    child: Some(*child.hash()),
-                }
+                Children::new(Some(*child.hash()))
             } else {
                 children.clone()
             };

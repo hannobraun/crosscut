@@ -168,6 +168,18 @@ pub struct Children {
 }
 
 impl Children {
+    pub fn new(children: impl IntoIterator<Item = NodeHash>) -> Self {
+        let mut children = children.into_iter();
+        let child = children.next();
+
+        assert!(
+            children.next().is_none(),
+            "Syntax nodes with multiple children are not fully supported yet.",
+        );
+
+        Self { child }
+    }
+
     pub fn is_empty(&self) -> bool {
         self.child.is_none()
     }
