@@ -107,12 +107,10 @@ impl Node {
             "Nodes with multiple children are not fully supported yet.",
         );
 
-        Self {
-            kind,
-            children: Children {
-                child: child.into_iter().collect(),
-            },
-        }
+        let children = Children {
+            child: child.into_iter().collect(),
+        };
+        Self { kind, children }
     }
 
     #[cfg(test)]
