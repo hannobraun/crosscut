@@ -131,7 +131,7 @@ fn render_code<A: EditorOutputAdapter>(
     context: &mut RenderContext,
 ) -> anyhow::Result<()> {
     let mut nodes_from_root = Vec::new();
-    collect_nodes_from_root(
+    let max_distance_from_root = collect_nodes_from_root(
         context.codebase.root(),
         0,
         &mut nodes_from_root,
@@ -140,8 +140,14 @@ fn render_code<A: EditorOutputAdapter>(
 
     writeln!(adapter)?;
 
-    while let Some((_, path)) = nodes_from_root.pop() {
-        render_possibly_active_node(&path, 0, adapter, context)?;
+    while let Some((distance_from_root, path)) = nodes_from_root.pop() {
+        let indendation_level = max_distance_from_root - distance_from_root;
+        render_possibly_active_node(
+            &path,
+            indendation_level,
+            adapter,
+            context,
+        )?;
     }
 
     writeln!(adapter)?;
