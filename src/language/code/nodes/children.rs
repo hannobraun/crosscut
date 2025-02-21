@@ -13,12 +13,12 @@ impl Children {
         Self { children }
     }
 
-    pub fn is_empty(&self) -> bool {
-        self.children.is_empty()
-    }
-
     pub fn contains(&self, child: &NodeHash) -> bool {
         self.children.contains(child)
+    }
+ 
+    pub fn is_empty(&self) -> bool {
+        self.children.is_empty()
     }
 
     /// # Access the single child of this node
