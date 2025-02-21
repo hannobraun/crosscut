@@ -133,6 +133,9 @@ impl Codebase {
             );
 
             if node_to_remove.children().has_none() {
+                // The root node we're removing has no children, but we still
+                // need a new root node.
+
                 self.root = self.empty;
             } else if let Some(child) =
                 node_to_remove.children().has_one().copied()
