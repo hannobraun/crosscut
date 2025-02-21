@@ -132,13 +132,19 @@ impl Codebase {
                 node.",
             );
 
-            if let Some(child) = node_to_remove.children().has_one().copied() {
+            if node_to_remove.children().has_none() {
+                self.root = self.empty;
+            } else if let Some(child) =
+                node_to_remove.children().has_one().copied()
+            {
                 // The root node we're removing has exactly one child, which can
                 // become the new root node.
 
                 self.root = child;
             } else {
-                self.root = self.empty;
+                panic!(
+                    "Nodes with multiple children are not fully supported yet."
+                );
             }
         }
     }
