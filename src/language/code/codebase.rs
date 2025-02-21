@@ -227,7 +227,7 @@ mod tests {
         // When removing a root node that has a single child, that child should
         // become the new root node.
 
-        let [a, b] = test_nodes();
+        let [a, b, ..] = test_nodes();
         let mut codebase = Codebase::new();
 
         let a =
