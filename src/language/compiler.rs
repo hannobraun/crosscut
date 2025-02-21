@@ -100,13 +100,13 @@ fn compile_token(
 fn resolve_keyword(
     name: &str,
     path: &mut NodePath,
-    child: &Children,
+    children: &Children,
     codebase: &mut Codebase,
 ) -> Option<(Node, Option<CodeError>)> {
     match name {
         "fn" => {
             // Every function must have a child. Other code assumes that.
-            let child = if child.child.is_none() {
+            let child = if children.child.is_none() {
                 let child = codebase.insert_node_as_child(
                     path,
                     Node::new(NodeKind::Empty, None),
@@ -115,7 +115,7 @@ fn resolve_keyword(
 
                 Some(*child.hash())
             } else {
-                child.child
+                children.child
             };
 
             Some((
@@ -132,7 +132,7 @@ fn resolve_keyword(
                 None,
             ))
         }
-        "self" => Some((Node::new(NodeKind::Recursion, child.child), None)),
+        "self" => Some((Node::new(NodeKind::Recursion, children.child), None)),
         _ => None,
     }
 }
