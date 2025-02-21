@@ -165,7 +165,7 @@ impl Children {
     ///
     /// Returns `None`, if the node has zero or more than one children.
     #[cfg(test)]
-    pub fn single_child(&self) -> Option<&NodeHash> {
+    pub fn has_one(&self) -> Option<&NodeHash> {
         self.child.as_ref()
     }
 
