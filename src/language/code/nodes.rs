@@ -97,9 +97,9 @@ pub struct Node {
 impl Node {
     pub fn new(
         kind: NodeKind,
-        child: impl IntoIterator<Item = NodeHash>,
+        children: impl IntoIterator<Item = NodeHash>,
     ) -> Self {
-        let mut children = child.into_iter();
+        let mut children = children.into_iter();
         let child = children.next();
 
         assert!(
