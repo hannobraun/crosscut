@@ -2,8 +2,8 @@ use std::ops::Deref;
 
 use super::{
     code::{
-        CodeError, Codebase, Expression, IntrinsicFunction, Literal, Node,
-        NodeHash, NodeKind, NodePath,
+        Children, CodeError, Codebase, Expression, IntrinsicFunction, Literal,
+        Node, NodeKind, NodePath,
     },
     packages::Packages,
 };
@@ -73,7 +73,7 @@ fn compile_token(
     let (node, maybe_error) = if token.is_empty() {
         (Node::new(NodeKind::Empty, children), None)
     } else if let Some((node, maybe_err)) =
-        resolve_keyword(token, path, children.child, codebase)
+        resolve_keyword(token, path, &children, codebase)
     {
         (node, maybe_err)
     } else {
@@ -100,13 +100,13 @@ fn compile_token(
 fn resolve_keyword(
     name: &str,
     path: &mut NodePath,
-    child: Option<NodeHash>,
+    child: &Children,
     codebase: &mut Codebase,
 ) -> Option<(Node, Option<CodeError>)> {
     match name {
         "fn" => {
             // Every function must have a child. Other code assumes that.
-            let child = if child.is_none() {
+            let child = if child.child.is_none() {
                 let child = codebase.insert_node_as_child(
                     path,
                     Node::new(NodeKind::Empty, None),
@@ -115,7 +115,7 @@ fn resolve_keyword(
 
                 Some(*child.hash())
             } else {
-                child
+                child.child
             };
 
             Some((
@@ -132,7 +132,7 @@ fn resolve_keyword(
                 None,
             ))
         }
-        "self" => Some((Node::new(NodeKind::Recursion, child), None)),
+        "self" => Some((Node::new(NodeKind::Recursion, child.child), None)),
         _ => None,
     }
 }
