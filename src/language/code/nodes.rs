@@ -95,7 +95,18 @@ pub struct Node {
 }
 
 impl Node {
-    pub fn new(kind: NodeKind, child: Option<NodeHash>) -> Self {
+    pub fn new(
+        kind: NodeKind,
+        child: impl IntoIterator<Item = NodeHash>,
+    ) -> Self {
+        let mut children = child.into_iter();
+        let child = children.next();
+
+        assert!(
+            children.next().is_none(),
+            "Nodes with multiple children are not fully supported yet.",
+        );
+
         Self {
             kind,
             children: Children { child },
