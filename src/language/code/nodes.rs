@@ -168,6 +168,10 @@ pub struct Children {
 }
 
 impl Children {
+    pub fn is_empty(&self) -> bool {
+        self.child.is_none()
+    }
+
     pub fn contains(&self, child: &NodeHash) -> bool {
         self.child.as_ref() == Some(child)
     }
