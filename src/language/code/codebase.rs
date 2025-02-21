@@ -110,6 +110,9 @@ impl Codebase {
         let node_to_remove = self.nodes.get(to_remove.hash());
 
         if let Some(parent) = self.parent_of(to_remove) {
+            // The node we're removing has a parent. We need to update the
+            // children of that node.
+
             let mut updated_parent = self.nodes.get(parent.hash()).clone();
 
             updated_parent.children_mut().replace(
@@ -119,6 +122,9 @@ impl Codebase {
 
             self.replace_node(&parent, updated_parent);
         } else {
+            // The node we're removing has no parent, which means it is the root
+            // node. We need to update that then.
+
             self.root = node_to_remove.children().child.unwrap_or(self.empty);
         }
     }
