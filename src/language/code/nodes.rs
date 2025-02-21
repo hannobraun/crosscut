@@ -1,4 +1,4 @@
-use std::{collections::BTreeMap, fmt, option};
+use std::{collections::BTreeMap, fmt, slice, vec};
 
 use base64::{Engine, prelude::BASE64_URL_SAFE_NO_PAD};
 
@@ -109,7 +109,9 @@ impl Node {
 
         Self {
             kind,
-            children: Children { child },
+            children: Children {
+                child: child.into_iter().collect(),
+            },
         }
     }
 
@@ -164,7 +166,7 @@ impl NodeKind {
 
 #[derive(Clone, Debug, Eq, PartialEq, udigest::Digestable)]
 pub struct Children {
-    pub child: Option<NodeHash>,
+    pub child: Vec<NodeHash>,
 }
 
 impl Children {
@@ -177,31 +179,38 @@ impl Children {
             "Syntax nodes with multiple children are not fully supported yet.",
         );
 
-        Self { child }
+        Self {
+            child: child.into_iter().collect(),
+        }
     }
 
     pub fn is_empty(&self) -> bool {
-        self.child.is_none()
+        self.child.is_empty()
     }
 
     pub fn contains(&self, child: &NodeHash) -> bool {
-        self.child.as_ref() == Some(child)
+        self.child.contains(child)
     }
 
     /// # Access the single child of this node
     ///
     /// Returns `None`, if the node has zero or more than one children.
     pub fn has_one(&self) -> Option<&NodeHash> {
-        self.child.as_ref()
+        assert!(
+            self.child.len() <= 1,
+            "Nodes with multiple children are not fully supported yet.",
+        );
+
+        self.child.first()
     }
 
     pub fn add(&mut self, to_add: NodeHash) {
         assert!(
-            self.child.is_none(),
+            self.child.is_empty(),
             "Syntax nodes with multiple children are not fully supported yet.",
         );
 
-        self.child = Some(to_add);
+        self.child.push(to_add);
     }
 
     pub fn replace(
@@ -211,13 +220,18 @@ impl Children {
     ) {
         let mut replacements = replacements.into_iter();
 
+        assert!(
+            self.child.len() <= 1,
+            "Nodes with multiple children are not fully supported yet.",
+        );
         assert_eq!(
-            self.child.as_ref(),
+            self.child.first(),
             Some(to_replace),
             "Trying to replace child that is not present.",
         );
 
-        self.child = replacements.next();
+        self.child.clear();
+        self.child.extend(replacements.next());
 
         assert!(
             replacements.next().is_none(),
@@ -233,7 +247,7 @@ impl Children {
 
 impl IntoIterator for Children {
     type Item = NodeHash;
-    type IntoIter = option::IntoIter<NodeHash>;
+    type IntoIter = vec::IntoIter<NodeHash>;
 
     fn into_iter(self) -> Self::IntoIter {
         self.child.into_iter()
@@ -242,7 +256,7 @@ impl IntoIterator for Children {
 
 impl<'r> IntoIterator for &'r Children {
     type Item = &'r NodeHash;
-    type IntoIter = option::Iter<'r, NodeHash>;
+    type IntoIter = slice::Iter<'r, NodeHash>;
 
     fn into_iter(self) -> Self::IntoIter {
         self.child.iter()
