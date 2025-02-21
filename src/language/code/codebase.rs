@@ -227,26 +227,13 @@ mod tests {
         // When removing a root node that has a single child, that child should
         // become the new root node.
 
+        let [a, b] = test_nodes();
         let mut codebase = Codebase::new();
 
-        let a = codebase.replace_node(
-            &codebase.root().path,
-            Node::new(
-                NodeKind::Error {
-                    node: String::from("a"),
-                },
-                None,
-            ),
-        );
-        let b = codebase.insert_node_as_parent(
-            &a,
-            Node::new(
-                NodeKind::Error {
-                    node: String::from("b"),
-                },
-                Some(*a.hash()),
-            ),
-        );
+        let a =
+            codebase.replace_node(&codebase.root().path, Node::new(a, None));
+        let b =
+            codebase.insert_node_as_parent(&a, Node::new(b, Some(*a.hash())));
         assert_eq!(codebase.root().path, b);
 
         codebase.remove_node(&b);
@@ -258,20 +245,20 @@ mod tests {
         // When removing a root node that has no child, an empty node should be
         // left in its place.
 
+        let [a, ..] = test_nodes();
         let mut codebase = Codebase::new();
 
-        let a = codebase.replace_node(
-            &codebase.root().path,
-            Node::new(
-                NodeKind::Error {
-                    node: String::from("a"),
-                },
-                None,
-            ),
-        );
+        let a =
+            codebase.replace_node(&codebase.root().path, Node::new(a, None));
         assert_eq!(codebase.root().path, a);
 
         codebase.remove_node(&a);
         assert_eq!(codebase.root().node, &Node::new(NodeKind::Empty, None));
+    }
+
+    fn test_nodes() -> [NodeKind; 2] {
+        ["a", "b"].map(|node| NodeKind::Error {
+            node: String::from(node),
+        })
     }
 }
