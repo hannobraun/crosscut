@@ -16,8 +16,8 @@ impl Children {
     pub fn contains(&self, child: &NodeHash) -> bool {
         self.children.contains(child)
     }
- 
-    pub fn is_empty(&self) -> bool {
+
+    pub fn has_none(&self) -> bool {
         self.children.is_empty()
     }
 

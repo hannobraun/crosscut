@@ -106,7 +106,7 @@ fn resolve_keyword(
     match name {
         "fn" => {
             // Every function must have a child. Other code assumes that.
-            let children = if children.is_empty() {
+            let children = if children.has_none() {
                 let child = codebase.insert_node_as_child(
                     path,
                     Node::new(NodeKind::Empty, None),
