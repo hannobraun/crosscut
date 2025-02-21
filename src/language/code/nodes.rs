@@ -198,8 +198,7 @@ impl Children {
     pub fn add(&mut self, to_add: NodeHash) {
         assert!(
             self.child.is_none(),
-            "Attempting to add child to node with up to one, but child is \
-            already present."
+            "Syntax nodes with multiple children are not fully supported yet."
         );
 
         self.child = Some(to_add);
