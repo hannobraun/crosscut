@@ -167,9 +167,8 @@ impl Children {
             "Syntax nodes with multiple children are not fully supported yet.",
         );
 
-        Self {
-            children: child.into_iter().collect(),
-        }
+        let children = child.into_iter().collect();
+        Self { children }
     }
 
     pub fn is_empty(&self) -> bool {
