@@ -154,7 +154,7 @@ impl NodeKind {
 
 #[derive(Clone, Debug, Eq, PartialEq, udigest::Digestable)]
 pub struct Children {
-    pub children: Vec<NodeHash>,
+    children: Vec<NodeHash>,
 }
 
 impl Children {
