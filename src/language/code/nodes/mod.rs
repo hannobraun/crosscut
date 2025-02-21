@@ -1,7 +1,7 @@
-pub mod children;
-pub mod hash;
-pub mod node;
-pub mod nodes;
+mod children;
+mod hash;
+mod node;
+mod nodes;
 
 pub use self::{
     children::Children,
