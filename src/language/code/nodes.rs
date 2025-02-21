@@ -111,14 +111,6 @@ impl Node {
         &self.kind
     }
 
-    /// # Access the single child of this node
-    ///
-    /// Returns `None`, if the node has zero or more than one children.
-    #[cfg(test)]
-    pub fn single_child(&self) -> Option<&NodeHash> {
-        self.children.child.as_ref()
-    }
-
     pub fn children(&self) -> &Children {
         &self.children
     }
@@ -167,6 +159,14 @@ pub struct Children {
 impl Children {
     pub fn contains(&self, child: &NodeHash) -> bool {
         self.child.as_ref() == Some(child)
+    }
+
+    /// # Access the single child of this node
+    ///
+    /// Returns `None`, if the node has zero or more than one children.
+    #[cfg(test)]
+    pub fn single_child(&self) -> Option<&NodeHash> {
+        self.child.as_ref()
     }
 
     pub fn add(&mut self, to_add: NodeHash) {
