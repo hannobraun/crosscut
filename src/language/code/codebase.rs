@@ -145,6 +145,9 @@ impl Codebase {
 
                 self.root = child;
             } else {
+                // The root node we're removing has multiple children, but we
+                // still need a single root node afterwards.
+
                 let mut root = self.nodes.get(&self.empty).clone();
                 root.children_mut()
                     .add(node_to_remove.children().into_iter().copied());
