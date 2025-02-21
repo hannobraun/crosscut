@@ -159,15 +159,7 @@ pub struct Children {
 
 impl Children {
     pub fn new(children: impl IntoIterator<Item = NodeHash>) -> Self {
-        let mut children = children.into_iter();
-        let child = children.next();
-
-        assert!(
-            children.next().is_none(),
-            "Syntax nodes with multiple children are not fully supported yet.",
-        );
-
-        let children = child.into_iter().collect();
+        let children = children.into_iter().collect();
         Self { children }
     }
 
