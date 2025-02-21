@@ -1,3 +1,5 @@
+use std::cmp::max;
+
 use crossterm::style::{Attribute, Color};
 
 use crate::{
@@ -367,15 +369,22 @@ fn collect_nodes_from_root(
     distance_from_root: u32,
     nodes_from_root: &mut Vec<(u32, NodePath)>,
     nodes: &Nodes,
-) {
+) -> u32 {
     nodes_from_root.push((distance_from_root, node.path));
 
+    let mut max_distance_from_root = distance_from_root;
+
     for child in node.children(nodes) {
-        collect_nodes_from_root(
+        let distance_from_root = collect_nodes_from_root(
             child,
             distance_from_root + 1,
             nodes_from_root,
             nodes,
         );
+
+        max_distance_from_root =
+            max(max_distance_from_root, distance_from_root);
     }
+
+    max_distance_from_root
 }
