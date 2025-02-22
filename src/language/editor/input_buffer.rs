@@ -70,7 +70,7 @@ impl EditorInputBuffer {
                 return Some(UpdateAction::AddParent { previous });
             }
             AddSibling => {
-                // Adding a sibling is not supported yet.
+                self.buffer.clear();
             }
         }
 
@@ -354,5 +354,16 @@ mod tests {
         input.update(MoveCursorLeft);
         input.update(AddParent);
         assert_eq!(input.buffer(), "2");
+    }
+
+    #[test]
+    fn add_sibling() {
+        let mut input = EditorInputBuffer::empty();
+
+        input.update(Insert { ch: '1' });
+        assert_eq!(input.buffer(), "1");
+
+        input.update(AddSibling);
+        assert_eq!(input.buffer(), "");
     }
 }
