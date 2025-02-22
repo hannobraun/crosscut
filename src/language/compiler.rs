@@ -133,7 +133,7 @@ fn resolve_keyword(
             ))
         }
         "self" => Some((
-            Node::new(NodeKind::Recursion, children.into_iter().copied()),
+            Node::new(NodeKind::Recursion, children.iter().copied()),
             None,
         )),
         _ => None,

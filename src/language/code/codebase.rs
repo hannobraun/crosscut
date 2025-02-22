@@ -117,7 +117,7 @@ impl Codebase {
 
             updated_parent.children_mut().replace(
                 to_remove.hash(),
-                node_to_remove.children().into_iter().copied(),
+                node_to_remove.children().iter().copied(),
             );
 
             self.replace_node(&parent, updated_parent);
@@ -150,7 +150,7 @@ impl Codebase {
 
                 let mut root = self.nodes.get(&self.empty).clone();
                 root.children_mut()
-                    .add(node_to_remove.children().into_iter().copied());
+                    .add(node_to_remove.children().iter().copied());
 
                 self.root = self.nodes.insert(root);
             }

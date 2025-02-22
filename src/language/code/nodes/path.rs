@@ -55,7 +55,7 @@ impl<'r> LocatedNode<'r> {
         &self,
         nodes: &'r Nodes,
     ) -> impl Iterator<Item = LocatedNode<'r>> {
-        self.node.children().into_iter().copied().map(move |hash| {
+        self.node.children().iter().copied().map(move |hash| {
             let node = nodes.get(&hash);
             Self {
                 node,

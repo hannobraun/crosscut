@@ -59,6 +59,10 @@ impl Children {
         }
     }
 
+    pub fn iter(&self) -> slice::Iter<NodeHash> {
+        self.children.iter()
+    }
+
     pub fn to_paths(&self) -> impl Iterator<Item = NodePath> {
         self.children.iter().copied().map(|hash| NodePath { hash })
     }
@@ -78,7 +82,7 @@ impl<'r> IntoIterator for &'r Children {
     type IntoIter = slice::Iter<'r, NodeHash>;
 
     fn into_iter(self) -> Self::IntoIter {
-        self.children.iter()
+        self.iter()
     }
 }
 
