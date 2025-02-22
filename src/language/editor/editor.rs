@@ -100,7 +100,7 @@ impl Editor {
                         // just a placeholder, which might get replaced by the
                         // unconditional compilation of the current input buffer
                         // contents below.
-                        Node::new(NodeKind::Empty, Some(child)),
+                        Node::new(NodeKind::Empty, [child]),
                     );
                 }
             }
