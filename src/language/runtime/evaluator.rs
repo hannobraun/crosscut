@@ -58,7 +58,8 @@ impl Evaluator {
                             },
                     },
                 ..
-            } = codebase.node_at(&path).kind()
+            }
+            | NodeKind::Error { .. } = codebase.node_at(&path).kind()
             {
                 // We have already pushed the function literal, which means
                 // we're going to evaluate it. But we need to stop here, since
