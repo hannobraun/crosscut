@@ -70,7 +70,7 @@ impl EditorInputBuffer {
                 return Some(UpdateAction::AddParent { previous });
             }
             AddSibling => {
-                self.buffer.clear();
+                self.add_parent();
             }
         }
 
@@ -365,5 +365,18 @@ mod tests {
 
         input.update(AddSibling);
         assert_eq!(input.buffer(), "");
+    }
+
+    #[test]
+    fn add_sibling_at_cursor() {
+        let mut input = EditorInputBuffer::empty();
+
+        input.update(Insert { ch: '1' });
+        input.update(Insert { ch: '2' });
+        assert_eq!(input.buffer(), "12");
+
+        input.update(MoveCursorLeft);
+        input.update(AddSibling);
+        assert_eq!(input.buffer(), "2");
     }
 }
