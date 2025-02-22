@@ -66,11 +66,11 @@ impl EditorInputBuffer {
                 return self.remove_right();
             }
             AddParent => {
-                let previous = self.add_parent();
+                let previous = self.add_parent_or_sibling();
                 return Some(UpdateAction::AddParent { previous });
             }
             AddSibling => {
-                self.add_parent();
+                self.add_parent_or_sibling();
             }
         }
 
@@ -146,7 +146,7 @@ impl EditorInputBuffer {
         }
     }
 
-    fn add_parent(&mut self) -> String {
+    fn add_parent_or_sibling(&mut self) -> String {
         let mut old_buffer = mem::take(&mut self.buffer);
         let new_buffer = old_buffer.split_off(self.cursor);
 
