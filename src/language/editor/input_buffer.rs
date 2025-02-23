@@ -71,6 +71,7 @@ impl EditorInputBuffer {
             }
             AddSibling => {
                 self.add_parent_or_sibling();
+                return Some(UpdateAction::AddSibling);
             }
         }
 
@@ -162,6 +163,7 @@ pub enum UpdateAction {
     MergeWithPrevious,
     MergeWithNext,
     AddParent { previous: String },
+    AddSibling,
 }
 
 #[derive(Debug)]

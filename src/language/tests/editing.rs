@@ -1,5 +1,7 @@
+use itertools::Itertools;
+
 use crate::language::{
-    code::Node,
+    code::{Node, NodeKind},
     editor::EditorInputEvent,
     instance::Language,
     packages::{Function, FunctionId, Package},
@@ -140,6 +142,46 @@ fn split_node_if_adding_parent_while_cursor_is_in_the_middle() {
     assert_eq!(
         language.step_until_finished().map(|value| value.inner),
         Ok(Value::Integer { value: 127 }),
+    );
+}
+
+#[test]
+fn add_sibling() {
+    // It is possible to add a sibling to a node.
+
+    let mut language = Language::new();
+
+    language.enter_code("a c");
+    language.on_input(EditorInputEvent::MoveCursorLeft);
+    language.on_input(EditorInputEvent::MoveCursorLeft);
+    language.on_input(EditorInputEvent::AddSibling);
+    language.enter_code("b");
+
+    let root = language.codebase().root().node;
+    assert_eq!(
+        root.kind(),
+        &NodeKind::Error {
+            node: "c".to_string(),
+        },
+    );
+
+    let [a, b] = root
+        .children()
+        .iter()
+        .map(|hash| language.codebase().nodes().get(hash))
+        .collect_array()
+        .unwrap();
+    assert_eq!(
+        a.kind(),
+        &NodeKind::Error {
+            node: "a".to_string(),
+        },
+    );
+    assert_eq!(
+        b.kind(),
+        &NodeKind::Error {
+            node: "b".to_string(),
+        },
     );
 }
 

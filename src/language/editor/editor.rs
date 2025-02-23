@@ -103,6 +103,14 @@ impl Editor {
                         Node::new(NodeKind::Empty, [child]),
                     );
                 }
+                UpdateAction::AddSibling => {
+                    if let Some(parent) = compiler.parent_of(&self.editing) {
+                        self.editing = compiler.insert_child(
+                            &parent,
+                            Node::new(NodeKind::Empty, []),
+                        );
+                    }
+                }
             }
         }
 
