@@ -104,12 +104,24 @@ impl Editor {
                     );
                 }
                 UpdateAction::AddSibling => {
-                    if let Some(parent) = compiler.parent_of(&self.editing) {
-                        self.editing = compiler.insert_child(
-                            &parent,
-                            Node::new(NodeKind::Empty, []),
-                        );
-                    }
+                    let parent = compiler
+                        .parent_of(&self.editing)
+                        .unwrap_or_else(|| {
+                            compiler.insert_parent(
+                                &self.editing,
+                                Node::new(
+                                    NodeKind::Error {
+                                        node: "".to_string(),
+                                    },
+                                    [self.editing.hash],
+                                ),
+                            )
+                        });
+
+                    self.editing = compiler.insert_child(
+                        &parent,
+                        Node::new(NodeKind::Empty, []),
+                    );
                 }
             }
         }

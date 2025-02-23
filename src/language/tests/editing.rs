@@ -186,6 +186,45 @@ fn add_sibling() {
 }
 
 #[test]
+fn add_sibling_to_root_node() {
+    // If adding a sibling to the root node, there still needs to be a single
+    // root node afterwards. So a new one is created automatically.
+
+    let mut language = Language::new();
+
+    language.enter_code("a");
+    language.on_input(EditorInputEvent::AddSibling);
+    language.enter_code("b");
+
+    let root = language.codebase().root().node;
+    assert_eq!(
+        root.kind(),
+        &NodeKind::Error {
+            node: "".to_string()
+        },
+    );
+
+    let [a, b] = root
+        .children()
+        .iter()
+        .map(|hash| language.codebase().nodes().get(hash))
+        .collect_array()
+        .unwrap();
+    assert_eq!(
+        a.kind(),
+        &NodeKind::Error {
+            node: "a".to_string(),
+        },
+    );
+    assert_eq!(
+        b.kind(),
+        &NodeKind::Error {
+            node: "b".to_string(),
+        },
+    );
+}
+
+#[test]
 fn moving_cursor_up_should_navigate_to_previous_node() {
     // It is possible to navigate to the previous node in the editor.
 
