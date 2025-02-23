@@ -225,6 +225,49 @@ fn add_sibling_to_root_node() {
 }
 
 #[test]
+fn split_node_if_adding_sibling_while_cursor_is_in_the_middle() {
+    // If adding a sibling while the cursor is in the middle of a node, that
+    // node should be split.
+
+    let mut language = Language::new();
+
+    language.enter_code("ab c");
+    for _ in 0..3 {
+        language.on_input(EditorInputEvent::MoveCursorLeft);
+    }
+    language.on_input(EditorInputEvent::AddSibling);
+
+    let root = language.codebase().root().node;
+    assert_eq!(
+        root.kind(),
+        &NodeKind::Error {
+            node: "c".to_string(),
+        },
+    );
+
+    let [a, b] = root
+        .children()
+        .iter()
+        .map(|hash| language.codebase().nodes().get(hash))
+        .collect_array()
+        .unwrap();
+    assert_eq!(
+        a.kind(),
+        &NodeKind::Error {
+            node: "a".to_string(),
+        },
+    );
+    assert_eq!(
+        b.kind(),
+        &NodeKind::Error {
+            node: "b".to_string(),
+        },
+    );
+}
+
+// TASK: Split node, if adding sibling while cursor is in the middle.
+
+#[test]
 fn moving_cursor_up_should_navigate_to_previous_node() {
     // It is possible to navigate to the previous node in the editor.
 

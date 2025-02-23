@@ -70,8 +70,8 @@ impl EditorInputBuffer {
                 return Some(UpdateAction::AddParent { previous });
             }
             AddSibling => {
-                self.add_parent_or_sibling();
-                return Some(UpdateAction::AddSibling);
+                let previous = self.add_parent_or_sibling();
+                return Some(UpdateAction::AddSibling { previous });
             }
         }
 
@@ -163,7 +163,7 @@ pub enum UpdateAction {
     MergeWithPrevious,
     MergeWithNext,
     AddParent { previous: String },
-    AddSibling,
+    AddSibling { previous: String },
 }
 
 #[derive(Debug)]

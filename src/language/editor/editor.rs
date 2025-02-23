@@ -103,7 +103,10 @@ impl Editor {
                         Node::new(NodeKind::Empty, [child]),
                     );
                 }
-                UpdateAction::AddSibling => {
+                UpdateAction::AddSibling { previous } => {
+                    self.editing =
+                        compiler.replace(&self.editing, &previous, packages);
+
                     let parent = compiler
                         .parent_of(&self.editing)
                         .unwrap_or_else(|| {
