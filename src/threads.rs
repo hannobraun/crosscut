@@ -174,28 +174,31 @@ fn channel<T>() -> (Sender<T>, Receiver<T>) {
     (Sender { inner: sender }, Receiver { inner: receiver })
 }
 
-fn spawn<F>(_: &str, mut f: F) -> anyhow::Result<ThreadHandle>
+fn spawn<F>(name: &str, mut f: F) -> anyhow::Result<ThreadHandle>
 where
     F: FnMut() -> Result<ControlFlow<()>, Error> + Send + 'static,
 {
-    let handle = thread::Builder::new().spawn(move || {
-        loop {
-            match f() {
-                Ok(ControlFlow::Continue(())) => {}
-                Ok(ControlFlow::Break(())) => {
-                    break;
+    let handle =
+        thread::Builder::new()
+            .name(name.to_string())
+            .spawn(move || {
+                loop {
+                    match f() {
+                        Ok(ControlFlow::Continue(())) => {}
+                        Ok(ControlFlow::Break(())) => {
+                            break;
+                        }
+                        Err(Error::ChannelDisconnected { .. }) => {
+                            break;
+                        }
+                        Err(Error::Other { err }) => {
+                            return Err(err);
+                        }
+                    }
                 }
-                Err(Error::ChannelDisconnected { .. }) => {
-                    break;
-                }
-                Err(Error::Other { err }) => {
-                    return Err(err);
-                }
-            }
-        }
 
-        Ok(())
-    })?;
+                Ok(())
+            })?;
 
     Ok(ThreadHandle::new(handle))
 }
