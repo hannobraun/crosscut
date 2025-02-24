@@ -54,7 +54,7 @@ impl<'r> LocatedNode<'r> {
     pub fn children(
         &self,
         nodes: &'r Nodes,
-    ) -> impl Iterator<Item = LocatedNode<'r>> {
+    ) -> impl DoubleEndedIterator<Item = LocatedNode<'r>> {
         self.node.children().iter().copied().map(move |hash| {
             let node = nodes.get(&hash);
             Self {
