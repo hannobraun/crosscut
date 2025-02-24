@@ -514,7 +514,7 @@ fn handle_test_functions(
                 &Value::Opaque {
                     id: 0,
                     display: "a"
-                }
+                },
             );
 
             Ok(Value::Opaque {
@@ -528,7 +528,7 @@ fn handle_test_functions(
                 &Value::Opaque {
                     id: 1,
                     display: "b"
-                }
+                },
             );
 
             Ok(Value::Opaque {
