@@ -1,10 +1,10 @@
 use std::{
     io,
     ops::ControlFlow,
-    panic,
     thread::{self, JoinHandle},
 };
 
+use anyhow::anyhow;
 use crossbeam_channel::{SendError, TryRecvError, select};
 
 use crate::{
@@ -98,7 +98,7 @@ impl ThreadHandle {
         match self.inner.join() {
             Ok(result) => result,
             Err(payload) => {
-                panic::resume_unwind(payload);
+                Err(anyhow!("{}", panic_message::panic_message(&payload)))
             }
         }
     }
