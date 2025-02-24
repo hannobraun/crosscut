@@ -31,7 +31,7 @@ pub fn start() -> anyhow::Result<Threads> {
             }
             Ok(ControlFlow::Break(())) => Ok(ControlFlow::Break(())),
             Err(err) => Err(Error::Other { err }),
-        });
+        })?;
 
     let game_engine = spawn("game engine", move || {
         let event = select! {
@@ -69,7 +69,7 @@ pub fn start() -> anyhow::Result<Threads> {
         }
 
         Ok(ControlFlow::Continue(()))
-    });
+    })?;
 
     Ok(Threads {
         handles: [editor_input, game_engine],
@@ -174,7 +174,7 @@ fn channel<T>() -> (Sender<T>, Receiver<T>) {
     (Sender { inner: sender }, Receiver { inner: receiver })
 }
 
-fn spawn<F>(_: &str, mut f: F) -> ThreadHandle
+fn spawn<F>(_: &str, mut f: F) -> anyhow::Result<ThreadHandle>
 where
     F: FnMut() -> Result<ControlFlow<()>, Error> + Send + 'static,
 {
@@ -197,7 +197,7 @@ where
         Ok(())
     });
 
-    ThreadHandle::new(handle)
+    Ok(ThreadHandle::new(handle))
 }
 
 #[derive(Debug)]
