@@ -115,27 +115,29 @@ impl Language {
         let mut i = 0;
 
         loop {
-            match self.step().clone() {
+            match self.step() {
                 RuntimeState::Running { .. } => {
                     // We're not concerned with intermediate results here.
                 }
-                RuntimeState::Effect { effect, path: _ } => match effect {
-                    Effect::ApplyHostFunction { id, input } => {
-                        match handler(id, input) {
-                            Ok(output) => {
-                                self.provide_host_function_output(output);
-                            }
-                            Err(effect) => {
-                                self.trigger_effect(effect);
+                RuntimeState::Effect { effect, path: _ } => {
+                    match effect.clone() {
+                        Effect::ApplyHostFunction { id, input } => {
+                            match handler(id, input) {
+                                Ok(output) => {
+                                    self.provide_host_function_output(output);
+                                }
+                                Err(effect) => {
+                                    self.trigger_effect(effect);
+                                }
                             }
                         }
+                        effect => {
+                            break Err(effect);
+                        }
                     }
-                    effect => {
-                        break Err(effect);
-                    }
-                },
+                }
                 RuntimeState::Finished { output } => {
-                    break Ok(output);
+                    break Ok(output.clone());
                 }
                 RuntimeState::Error { .. } => {
                     panic!("Unexpected runtime error.");
