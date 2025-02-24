@@ -99,8 +99,8 @@ fn host_functions_can_inject_opaque_value() {
         language.step_until_finished_and_handle_host_functions(|id, input| {
             match package.function_by_id(id) {
                 ObserveOpaqueValue => {
-                    value_observed = input == opaque_value;
-                    Ok(input)
+                    value_observed = input == &opaque_value;
+                    Ok(input.clone())
                 }
             }
         });

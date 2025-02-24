@@ -501,7 +501,7 @@ fn test_package() -> Package<TestFunction> {
 
 fn handle_test_functions(
     id: &FunctionId,
-    input: Value,
+    input: &Value,
 ) -> Result<Value, Effect> {
     match test_package().function_by_id(id) {
         TestFunction::A => Ok(Value::Opaque {
@@ -511,7 +511,7 @@ fn handle_test_functions(
         TestFunction::AToB => {
             assert_eq!(
                 input,
-                Value::Opaque {
+                &Value::Opaque {
                     id: 0,
                     display: "a"
                 }
@@ -525,7 +525,7 @@ fn handle_test_functions(
         TestFunction::BToC => {
             assert_eq!(
                 input,
-                Value::Opaque {
+                &Value::Opaque {
                     id: 1,
                     display: "b"
                 }
