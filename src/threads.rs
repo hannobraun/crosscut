@@ -23,16 +23,17 @@ pub fn start() -> anyhow::Result<Threads> {
 
     let mut game_engine = GameEngine::with_editor_ui()?;
 
-    let editor_input = spawn(move || match read_editor_event() {
-        Ok(ControlFlow::Continue(event)) => {
-            editor_input_tx.send(event)?;
-            Ok(ControlFlow::Continue(()))
-        }
-        Ok(ControlFlow::Break(())) => Ok(ControlFlow::Break(())),
-        Err(err) => Err(Error::Other { err }),
-    });
+    let editor_input =
+        spawn("editor input", move || match read_editor_event() {
+            Ok(ControlFlow::Continue(event)) => {
+                editor_input_tx.send(event)?;
+                Ok(ControlFlow::Continue(()))
+            }
+            Ok(ControlFlow::Break(())) => Ok(ControlFlow::Break(())),
+            Err(err) => Err(Error::Other { err }),
+        });
 
-    let game_engine = spawn(move || {
+    let game_engine = spawn("game engine", move || {
         let event = select! {
             recv(editor_input_rx.inner) -> result => {
                 result.map(|maybe_event|
@@ -173,7 +174,7 @@ fn channel<T>() -> (Sender<T>, Receiver<T>) {
     (Sender { inner: sender }, Receiver { inner: receiver })
 }
 
-fn spawn<F>(mut f: F) -> ThreadHandle
+fn spawn<F>(_: &str, mut f: F) -> ThreadHandle
 where
     F: FnMut() -> Result<ControlFlow<()>, Error> + Send + 'static,
 {
