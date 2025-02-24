@@ -73,7 +73,7 @@ impl Language {
 
     pub fn step(&mut self) -> &RuntimeState {
         self.evaluator.step(&self.codebase);
-        self.evaluator().state()
+        self.evaluator.state()
     }
 
     pub fn provide_host_function_output(&mut self, output: Value) {
