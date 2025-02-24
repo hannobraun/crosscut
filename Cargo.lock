@@ -394,6 +394,7 @@ dependencies = [
  "crossbeam-channel",
  "crossterm",
  "itertools",
+ "panic-message",
  "pollster",
  "thiserror 2.0.11",
  "udigest",
@@ -1234,6 +1235,12 @@ checksum = "22ec719bbf3b2a81c109a4e20b1f129b5566b7dce654bc3872f6a05abf82b2c4"
 dependencies = [
  "ttf-parser",
 ]
+
+[[package]]
+name = "panic-message"
+version = "0.3.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "384e52fd8fbd4cbe3c317e8216260c21a0f9134de108cea8a4dd4e7e152c472d"
 
 [[package]]
 name = "parking_lot"
