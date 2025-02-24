@@ -110,7 +110,7 @@ impl Language {
 
     pub fn step_until_finished_and_handle_host_functions(
         &mut self,
-        mut handler: impl FnMut(FunctionId, Value) -> Result<Value, Effect>,
+        mut handler: impl FnMut(&FunctionId, Value) -> Result<Value, Effect>,
     ) -> Result<ValueWithSource, Effect> {
         let mut i = 0;
 
@@ -122,7 +122,7 @@ impl Language {
                 RuntimeState::Effect { effect, path: _ } => {
                     match effect.clone() {
                         Effect::ApplyHostFunction { id, input } => {
-                            match handler(id, input) {
+                            match handler(&id, input) {
                                 Ok(output) => {
                                     self.provide_host_function_output(output);
                                 }
