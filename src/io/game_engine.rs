@@ -139,8 +139,20 @@ impl ApplicationHandler for Handler {
 }
 
 struct ApplicationResources {
-    window: Arc<Window>,
+    // The order of fields is a bit weird here, as it doesn't match the order in
+    // which those values are created, nor there importance.
+    //
+    // Putting them in this specific order is a workaround for this issue in
+    // wgpu:
+    // https://github.com/gfx-rs/wgpu/issues/4650
+    //
+    // Which has already been addressed in this pull request:
+    // https://github.com/gfx-rs/wgpu/pull/6997
+    //
+    // But that fix is not released yet, as of this writing (the current wgpu
+    // version is 24.0.1).
     renderer: Renderer,
+    window: Arc<Window>,
 }
 
 impl ApplicationResources {
