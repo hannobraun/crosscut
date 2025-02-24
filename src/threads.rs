@@ -178,7 +178,7 @@ fn spawn<F>(_: &str, mut f: F) -> anyhow::Result<ThreadHandle>
 where
     F: FnMut() -> Result<ControlFlow<()>, Error> + Send + 'static,
 {
-    let handle = thread::spawn(move || {
+    let handle = thread::Builder::new().spawn(move || {
         loop {
             match f() {
                 Ok(ControlFlow::Continue(())) => {}
@@ -195,7 +195,7 @@ where
         }
 
         Ok(())
-    });
+    })?;
 
     Ok(ThreadHandle::new(handle))
 }
