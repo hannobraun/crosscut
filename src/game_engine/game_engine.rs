@@ -155,7 +155,7 @@ where
     fn apply_host_function(&mut self, id: FunctionId, input: Value) {
         let display_type = Type::Opaque { name: "Display" };
 
-        match self.package.function_by_id(id) {
+        match self.package.function_by_id(&id) {
             GameEngineFunction::Dim => match input {
                 Value::Integer { value } => {
                     self.language.provide_host_function_output(

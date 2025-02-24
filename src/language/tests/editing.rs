@@ -503,7 +503,7 @@ fn handle_test_functions(
     id: FunctionId,
     input: Value,
 ) -> Result<Value, Effect> {
-    match test_package().function_by_id(id) {
+    match test_package().function_by_id(&id) {
         TestFunction::A => Ok(Value::Opaque {
             id: 0,
             display: "a",
