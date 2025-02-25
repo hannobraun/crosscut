@@ -1,7 +1,11 @@
 use std::{
+    backtrace::Backtrace,
+    collections::HashMap,
     io,
     ops::ControlFlow,
-    thread::{self, JoinHandle},
+    panic,
+    sync::{LazyLock, Mutex},
+    thread::{self, JoinHandle, ThreadId},
 };
 
 use anyhow::anyhow;
@@ -12,7 +16,27 @@ use crate::{
     io::editor::input::read_editor_event,
 };
 
+static PANICS: LazyLock<Mutex<HashMap<ThreadId, (String, Backtrace)>>> =
+    LazyLock::new(|| Mutex::new(HashMap::new()));
+
 pub fn start() -> anyhow::Result<Threads> {
+    // Since one of the threads puts the terminal into raw mode while it's
+    // running, the default panic handler won't work well. Let's register a hook
+    // that extracts all information we need, so we can later print it here,
+    // after all other threads have ended.
+    panic::set_hook(Box::new(|info| {
+        let backtrace = Backtrace::force_capture();
+        let message = panic_message::panic_info_message(info).to_string();
+
+        let thread_id = thread::current().id();
+
+        let Ok(mut panics) = PANICS.lock() else {
+            // Lock is poisoned. Nothing we can do about that, I think.
+            return;
+        };
+        panics.insert(thread_id, (message, backtrace));
+    }));
+
     // Need to specify the types of the channels explicitly, to work around this
     // bug in rust-analyzer:
     // https://github.com/rust-lang/rust-analyzer/issues/15984
@@ -95,10 +119,30 @@ impl ThreadHandle {
     }
 
     pub fn join(self) -> anyhow::Result<()> {
+        let thread_id = self.inner.thread().id();
+
         match self.inner.join() {
             Ok(result) => result,
-            Err(payload) => {
-                Err(anyhow!("{}", panic_message::panic_message(&payload)))
+            Err(_) => {
+                let Ok(panics) = PANICS.lock() else {
+                    return Err(anyhow!(
+                        "Could not acquire panic info, because lock is \
+                        poisoned."
+                    ));
+                };
+
+                let Some((message, backtrace)) = panics.get(&thread_id) else {
+                    unreachable!(
+                        "Thread panicked, but panic hook doesn't seem to have \
+                        run."
+                    );
+                };
+
+                Err(anyhow!(
+                    "{message}\n\
+                    \n\
+                    {backtrace}"
+                ))
             }
         }
     }
