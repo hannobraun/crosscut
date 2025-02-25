@@ -18,8 +18,13 @@ fn main() -> anyhow::Result<()> {
     // At this point, the shutdown should be in progress, and none of these
     // calls block for long, if at all. The purpose of still joining all threads
     // is just to get any error they might have produced.
-    for handle in threads.handles {
-        handle.join()?;
+    //
+    // And let's join all threads first before printing any errors. Just to make
+    // sure that they have ended, and the terminal is not still in raw mode or
+    // something, when we start printing here.
+    let results = threads.handles.map(|handle| handle.join());
+    for result in results {
+        result?;
     }
 
     Ok(())
