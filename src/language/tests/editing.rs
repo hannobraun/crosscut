@@ -300,7 +300,7 @@ fn moving_cursor_up_at_first_node_should_do_nothing() {
 }
 
 #[test]
-fn moving_cursor_down_should_navigate_to_next_node() {
+fn moving_cursor_down_should_navigate_to_parent_node() {
     // It is possible to navigate to the next node in the editor.
 
     let mut language = Language::new();
