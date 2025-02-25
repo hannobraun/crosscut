@@ -39,7 +39,6 @@ pub fn start() -> anyhow::Result<Threads> {
 
         let full_message = format!(
             "Thread `{thread_name}` panicked:\n\
-            \n\
             {message}\n\
             \n\
             {backtrace}"
