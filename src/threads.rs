@@ -16,7 +16,7 @@ use crate::{
     io::editor::input::read_editor_event,
 };
 
-static PANICS: LazyLock<Mutex<HashMap<ThreadId, (String, Backtrace)>>> =
+static PANICS: LazyLock<Mutex<HashMap<ThreadId, String>>> =
     LazyLock::new(|| Mutex::new(HashMap::new()));
 
 pub fn start() -> anyhow::Result<Threads> {
@@ -30,12 +30,21 @@ pub fn start() -> anyhow::Result<Threads> {
 
         let thread = thread::current();
         let thread_id = thread.id();
+        let thread_name = thread.name().unwrap_or("<unnamed>");
 
         let Ok(mut panics) = PANICS.lock() else {
             // Lock is poisoned. Nothing we can do about that, I think.
             return;
         };
-        panics.insert(thread_id, (message, backtrace));
+
+        let full_message = format!(
+            "Thread `{thread_name}` panicked:\n\
+            \n\
+            {message}\n\
+            \n\
+            {backtrace}"
+        );
+        panics.insert(thread_id, full_message);
     }));
 
     // Need to specify the types of the channels explicitly, to work around this
@@ -121,12 +130,6 @@ impl ThreadHandle {
 
     pub fn join(self) -> anyhow::Result<()> {
         let thread_id = self.inner.thread().id();
-        let thread_name = self
-            .inner
-            .thread()
-            .name()
-            .unwrap_or("<unnamed>")
-            .to_string();
 
         match self.inner.join() {
             Ok(result) => result,
@@ -138,20 +141,14 @@ impl ThreadHandle {
                     ));
                 };
 
-                let Some((message, backtrace)) = panics.get(&thread_id) else {
+                let Some(message) = panics.get(&thread_id) else {
                     unreachable!(
                         "Thread panicked, but panic hook doesn't seem to have \
                         run."
                     );
                 };
 
-                Err(anyhow!(
-                    "Thread `{thread_name}` panicked:\n\
-                    \n\
-                    {message}\n\
-                    \n\
-                    {backtrace}"
-                ))
+                Err(anyhow!("{message}"))
             }
         }
     }
