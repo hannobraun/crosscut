@@ -120,6 +120,12 @@ impl ThreadHandle {
 
     pub fn join(self) -> anyhow::Result<()> {
         let thread_id = self.inner.thread().id();
+        let thread_name = self
+            .inner
+            .thread()
+            .name()
+            .unwrap_or("<unnamed>")
+            .to_string();
 
         match self.inner.join() {
             Ok(result) => result,
@@ -139,7 +145,9 @@ impl ThreadHandle {
                 };
 
                 Err(anyhow!(
-                    "{message}\n\
+                    "Thread `{thread_name}` panicked:\n\
+                    \n\
+                    {message}\n\
                     \n\
                     {backtrace}"
                 ))
