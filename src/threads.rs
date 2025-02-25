@@ -26,7 +26,7 @@ pub fn start() -> anyhow::Result<Threads> {
     // after all other threads have ended.
     panic::set_hook(Box::new(|info| {
         let backtrace = Backtrace::force_capture();
-        let message = panic_message::panic_info_message(info).to_string();
+        let message = panic_message::panic_info_message(info);
 
         let thread = thread::current();
         let thread_id = thread.id();
