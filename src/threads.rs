@@ -25,8 +25,8 @@ pub fn start() -> anyhow::Result<Threads> {
     // that extracts all information we need, so we can later print it here,
     // after all other threads have ended.
     panic::set_hook(Box::new(|info| {
-        let backtrace = Backtrace::force_capture();
         let message = panic_message::panic_info_message(info);
+        let backtrace = Backtrace::force_capture();
 
         let thread = thread::current();
         let thread_id = thread.id();
