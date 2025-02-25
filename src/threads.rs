@@ -26,6 +26,7 @@ pub fn start() -> anyhow::Result<Threads> {
     // after all other threads have ended.
     panic::set_hook(Box::new(|info| {
         let message = panic_message::panic_info_message(info);
+        let location = info.location();
         let backtrace = Backtrace::force_capture();
 
         let thread = thread::current();
@@ -37,12 +38,18 @@ pub fn start() -> anyhow::Result<Threads> {
             return;
         };
 
+        let location = if let Some(location) = location {
+            format!(" at {location}")
+        } else {
+            String::new()
+        };
         let full_message = format!(
-            "Thread `{thread_name}` panicked:\n\
+            "Thread `{thread_name}` panicked{location}:\n\
             {message}\n\
             \n\
             {backtrace}"
         );
+
         panics.insert(thread_id, full_message);
     }));
 
