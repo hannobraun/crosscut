@@ -28,7 +28,8 @@ pub fn start() -> anyhow::Result<Threads> {
         let backtrace = Backtrace::force_capture();
         let message = panic_message::panic_info_message(info).to_string();
 
-        let thread_id = thread::current().id();
+        let thread = thread::current();
+        let thread_id = thread.id();
 
         let Ok(mut panics) = PANICS.lock() else {
             // Lock is poisoned. Nothing we can do about that, I think.
