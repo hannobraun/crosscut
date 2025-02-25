@@ -317,7 +317,7 @@ fn moving_cursor_down_should_navigate_to_parent_node() {
 }
 
 #[test]
-fn moving_cursor_down_at_last_node_should_do_nothing() {
+fn moving_cursor_down_at_root_node_should_do_nothing() {
     // If already at the last node, moving to the next one should do nothing.
 
     let mut language = Language::new();
