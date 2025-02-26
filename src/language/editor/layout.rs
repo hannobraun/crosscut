@@ -17,10 +17,10 @@ impl Layout {
 pub fn collect_nodes_from_root(
     node: LocatedNode,
     distance_from_root: u32,
-    layout: &mut Vec<(u32, NodePath)>,
+    nodes_from_root: &mut Vec<(u32, NodePath)>,
     nodes: &Nodes,
 ) -> u32 {
-    layout.push((distance_from_root, node.path));
+    nodes_from_root.push((distance_from_root, node.path));
 
     let mut max_distance_from_root = distance_from_root;
 
@@ -33,7 +33,7 @@ pub fn collect_nodes_from_root(
         let distance_from_root = collect_nodes_from_root(
             child,
             distance_from_root + 1,
-            layout,
+            nodes_from_root,
             nodes,
         );
 
