@@ -15,6 +15,7 @@ impl EditorLayout {
 
         let nodes_from_root = nodes_from_root
             .into_iter()
+            .rev()
             .map(|node| EditorLine { node })
             .collect();
 

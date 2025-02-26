@@ -136,7 +136,7 @@ fn render_layout<A: EditorOutputAdapter>(
 ) -> anyhow::Result<()> {
     writeln!(adapter)?;
 
-    for line in layout.nodes_from_root.into_iter().rev() {
+    for line in layout.nodes_from_root.into_iter() {
         let level_of_indentation =
             layout.max_distance_from_root - line.node.distance_from_root;
 
