@@ -10,10 +10,11 @@ pub struct Layout {
 impl Layout {
     pub fn new() -> Self {
         let nodes_from_root = Vec::new();
+        let max_distance_from_root = 0;
 
         Self {
             nodes_from_root,
-            max_distance_from_root: 0,
+            max_distance_from_root,
         }
     }
 }
