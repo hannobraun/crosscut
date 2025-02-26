@@ -7,7 +7,7 @@ use crate::{
             Codebase, Expression, IntrinsicFunction, Literal, NodeKind,
             NodePath,
         },
-        editor::{Editor, Layout, collect_nodes_from_root},
+        editor::{Editor, Layout},
         instance::Language,
         packages::Packages,
         runtime::{Effect, Evaluator, RuntimeState, Value},
@@ -130,12 +130,6 @@ fn render_code<A: EditorOutputAdapter>(
 ) -> anyhow::Result<()> {
     let mut layout =
         Layout::new(context.codebase.root(), context.codebase.nodes());
-    layout.max_distance_from_root = collect_nodes_from_root(
-        context.codebase.root(),
-        0,
-        &mut layout.nodes_from_root,
-        context.codebase.nodes(),
-    );
 
     writeln!(adapter)?;
 
