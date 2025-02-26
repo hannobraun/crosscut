@@ -7,7 +7,7 @@ use crate::{
             Codebase, Expression, IntrinsicFunction, Literal, NodeKind,
             NodePath,
         },
-        editor::{Editor, EditorLayout},
+        editor::{Editor, EditorLayout, EditorLine},
         instance::Language,
         packages::Packages,
         runtime::{Effect, Evaluator, RuntimeState, Value},
@@ -137,12 +137,7 @@ fn render_layout<A: EditorOutputAdapter>(
     writeln!(adapter)?;
 
     for line in layout.lines.iter() {
-        render_possibly_active_node(
-            &line.node.path,
-            line.level_of_indentation,
-            adapter,
-            context,
-        )?;
+        render_possibly_active_node(line, adapter, context)?;
     }
 
     writeln!(adapter)?;
@@ -151,11 +146,13 @@ fn render_layout<A: EditorOutputAdapter>(
 }
 
 fn render_possibly_active_node<A: EditorOutputAdapter>(
-    path: &NodePath,
-    indentation_level: u32,
+    line: &EditorLine,
     adapter: &mut A,
     context: &mut RenderContext,
 ) -> anyhow::Result<()> {
+    let path = &line.node.path;
+    let indentation_level = line.level_of_indentation;
+
     let is_active_node = context.evaluator.state().path() == Some(path);
 
     for _ in 0..indentation_level {
