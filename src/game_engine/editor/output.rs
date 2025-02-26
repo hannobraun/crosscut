@@ -132,7 +132,7 @@ fn render_code<A: EditorOutputAdapter>(
     let max_distance_from_root = collect_nodes_from_root(
         context.codebase.root(),
         0,
-        &mut layout,
+        &mut layout.nodes_from_root,
         context.codebase.nodes(),
     );
 
