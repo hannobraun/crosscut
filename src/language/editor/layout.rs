@@ -13,14 +13,14 @@ impl EditorLayout {
         let max_distance_from_root =
             collect_nodes_from_root(root, 0, &mut nodes_from_root, nodes);
 
-        let nodes_from_root = nodes_from_root
+        let lines = nodes_from_root
             .into_iter()
             .rev()
             .map(|node| EditorLine { node })
             .collect();
 
         Self {
-            lines: nodes_from_root,
+            lines,
             max_distance_from_root,
         }
     }
