@@ -4,12 +4,14 @@ use crate::language::code::{LocatedNode, NodePath, Nodes};
 
 pub struct Layout {
     pub nodes_from_root: Vec<(u32, NodePath)>,
+    pub max_distance_from_root: u32,
 }
 
 impl Layout {
     pub fn new() -> Self {
         Self {
             nodes_from_root: Vec::new(),
+            max_distance_from_root: 0,
         }
     }
 }
