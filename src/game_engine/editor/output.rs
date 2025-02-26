@@ -136,7 +136,10 @@ fn render_layout<A: EditorOutputAdapter>(
 ) -> anyhow::Result<()> {
     writeln!(adapter)?;
 
-    for (distance_from_root, path) in layout.nodes_from_root.into_iter().rev() {
+    for line in layout.nodes_from_root.into_iter().rev() {
+        let distance_from_root = line.distance_from_root;
+        let path = line.node;
+
         let indentation_level =
             layout.max_distance_from_root - distance_from_root;
         render_possibly_active_node(

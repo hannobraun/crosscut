@@ -20,7 +20,10 @@ impl EditorLayout {
     }
 }
 
-pub type EditorLine = (u32, NodePath);
+pub struct EditorLine {
+    pub distance_from_root: u32,
+    pub node: NodePath,
+}
 
 fn collect_nodes_from_root(
     node: LocatedNode,
@@ -28,7 +31,10 @@ fn collect_nodes_from_root(
     nodes_from_root: &mut Vec<EditorLine>,
     nodes: &Nodes,
 ) -> u32 {
-    nodes_from_root.push((distance_from_root, node.path));
+    nodes_from_root.push(EditorLine {
+        distance_from_root,
+        node: node.path,
+    });
 
     let mut max_distance_from_root = distance_from_root;
 
