@@ -136,7 +136,7 @@ fn render_layout<A: EditorOutputAdapter>(
 ) -> anyhow::Result<()> {
     writeln!(adapter)?;
 
-    for line in layout.lines.into_iter() {
+    for line in layout.lines.iter() {
         render_possibly_active_node(
             &line.node.path,
             line.level_of_indentation,
