@@ -20,7 +20,6 @@ address {
     font-style: unset;
 }
 
-
 /* Mostly Tailwind-compatible utility classes */
 
 .bg-slate-200 {
@@ -140,7 +139,6 @@ address {
     width: 50%;
 }
 
-
 /* Rules for tool-generated HTML code */
 
 .prose a {
@@ -150,8 +148,8 @@ address {
 }
 
 /* Applies to code produced by `code`, but not whole code blocks. */
-.prose p>code,
-.prose li>code {
+.prose p > code,
+.prose li > code {
     /* Tailwind's `bg-neutral-200` */
     background-color: rgb(229, 229, 229);
     padding: 0.125rem;
