@@ -7,7 +7,7 @@ use crate::{
             Codebase, Expression, IntrinsicFunction, Literal, NodeKind,
             NodePath,
         },
-        editor::{Editor, Layout},
+        editor::{Editor, EditorLayout},
         instance::Language,
         packages::Packages,
         runtime::{Effect, Evaluator, RuntimeState, Value},
@@ -42,8 +42,10 @@ where
             cursor: None,
         };
 
-        let layout =
-            Layout::new(context.codebase.root(), context.codebase.nodes());
+        let layout = EditorLayout::new(
+            context.codebase.root(),
+            context.codebase.nodes(),
+        );
 
         self.adapter.clear()?;
 
@@ -128,7 +130,7 @@ fn render_interpreter_state<A: EditorOutputAdapter>(
 }
 
 fn render_layout<A: EditorOutputAdapter>(
-    layout: Layout,
+    layout: EditorLayout,
     adapter: &mut A,
     context: &mut RenderContext,
 ) -> anyhow::Result<()> {
