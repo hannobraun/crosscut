@@ -4,7 +4,6 @@ use crate::language::code::{LocatedNode, NodePath, Nodes};
 
 pub struct EditorLayout {
     pub lines: Vec<EditorLine>,
-    pub max_distance_from_root: u32,
 }
 
 impl EditorLayout {
@@ -16,18 +15,24 @@ impl EditorLayout {
         let lines = nodes_from_root
             .into_iter()
             .rev()
-            .map(|node| EditorLine { node })
+            .map(|node| {
+                let level_of_indentation =
+                    max_distance_from_root - node.distance_from_root;
+
+                EditorLine {
+                    node,
+                    level_of_indentation,
+                }
+            })
             .collect();
 
-        Self {
-            lines,
-            max_distance_from_root,
-        }
+        Self { lines }
     }
 }
 
 pub struct EditorLine {
     pub node: NodeInLayout,
+    pub level_of_indentation: u32,
 }
 
 pub struct NodeInLayout {
