@@ -370,7 +370,7 @@ struct RenderContext<'r> {
 
 const ERROR_COLOR: Color = Color::DarkRed;
 
-fn collect_nodes_from_root(
+pub fn collect_nodes_from_root(
     node: LocatedNode,
     distance_from_root: u32,
     nodes_from_root: &mut Vec<(u32, NodePath)>,
