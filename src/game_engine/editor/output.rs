@@ -150,10 +150,10 @@ fn render_line<A: EditorOutputAdapter>(
     adapter: &mut A,
     context: &mut RenderContext,
 ) -> anyhow::Result<()> {
-    let path = &line.node.path;
     let indentation_level = line.level_of_indentation;
 
-    let is_active_node = context.evaluator.state().path() == Some(path);
+    let is_active_node =
+        context.evaluator.state().path() == Some(&line.node.path);
 
     for _ in 0..indentation_level {
         write!(adapter, "    ")?;
@@ -162,11 +162,11 @@ fn render_line<A: EditorOutputAdapter>(
     if is_active_node {
         adapter.attribute(Attribute::Bold, |adapter| {
             write!(adapter, " => ")?;
-            render_node(path, adapter, context)
+            render_node(&line.node.path, adapter, context)
         })?;
     } else {
         write!(adapter, "    ")?;
-        render_node(path, adapter, context)?;
+        render_node(&line.node.path, adapter, context)?;
     }
 
     writeln!(adapter)?;
