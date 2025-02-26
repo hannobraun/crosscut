@@ -13,6 +13,11 @@ impl EditorLayout {
         let max_distance_from_root =
             collect_nodes_from_root(root, 0, &mut nodes_from_root, nodes);
 
+        let nodes_from_root = nodes_from_root
+            .into_iter()
+            .map(|node| EditorLine { node })
+            .collect();
+
         Self {
             nodes_from_root,
             max_distance_from_root,
@@ -32,14 +37,12 @@ pub struct NodeInLayout {
 fn collect_nodes_from_root(
     node: LocatedNode,
     distance_from_root: u32,
-    nodes_from_root: &mut Vec<EditorLine>,
+    nodes_from_root: &mut Vec<NodeInLayout>,
     nodes: &Nodes,
 ) -> u32 {
-    nodes_from_root.push(EditorLine {
-        node: NodeInLayout {
-            path: node.path,
-            distance_from_root,
-        },
+    nodes_from_root.push(NodeInLayout {
+        path: node.path,
+        distance_from_root,
     });
 
     let mut max_distance_from_root = distance_from_root;
