@@ -37,8 +37,11 @@ pub struct EditorLine {
 
 impl EditorLine {
     pub fn width_of_indentation(&self) -> u32 {
-        self.level_of_indentation * 4
+        self.level_of_indentation
+            * Self::NUMBER_OF_SPACES_PER_LEVEL_OF_INDENTATION
     }
+
+    const NUMBER_OF_SPACES_PER_LEVEL_OF_INDENTATION: u32 = 4;
 }
 
 pub struct NodeInLayout {
