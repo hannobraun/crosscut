@@ -20,7 +20,7 @@ impl Layout {
     }
 }
 
-pub fn collect_nodes_from_root(
+fn collect_nodes_from_root(
     node: LocatedNode,
     distance_from_root: u32,
     nodes_from_root: &mut Vec<(u32, NodePath)>,
