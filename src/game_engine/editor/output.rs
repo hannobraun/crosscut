@@ -128,19 +128,17 @@ fn render_code<A: EditorOutputAdapter>(
     adapter: &mut A,
     context: &mut RenderContext,
 ) -> anyhow::Result<()> {
-    let mut nodes_from_root = Layout::new();
+    let mut layout = Layout::new();
     let max_distance_from_root = collect_nodes_from_root(
         context.codebase.root(),
         0,
-        &mut nodes_from_root,
+        &mut layout,
         context.codebase.nodes(),
     );
 
     writeln!(adapter)?;
 
-    while let Some((distance_from_root, path)) =
-        nodes_from_root.nodes_from_root.pop()
-    {
+    while let Some((distance_from_root, path)) = layout.nodes_from_root.pop() {
         let indentation_level = max_distance_from_root - distance_from_root;
         render_possibly_active_node(
             &path,
