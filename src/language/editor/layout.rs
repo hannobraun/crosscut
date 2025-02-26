@@ -35,6 +35,12 @@ pub struct EditorLine {
     pub level_of_indentation: u32,
 }
 
+impl EditorLine {
+    pub fn width_of_indentation(&self) -> u32 {
+        self.level_of_indentation * 4
+    }
+}
+
 pub struct NodeInLayout {
     pub path: NodePath,
     pub distance_from_root: u32,

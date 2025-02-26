@@ -153,7 +153,7 @@ fn render_line<A: EditorOutputAdapter>(
     let is_active_node =
         context.evaluator.state().path() == Some(&line.node.path);
 
-    for _ in 0..line.level_of_indentation * 4 {
+    for _ in 0..line.width_of_indentation() {
         write!(adapter, " ")?;
     }
 
