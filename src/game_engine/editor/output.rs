@@ -42,10 +42,13 @@ where
             cursor: None,
         };
 
+        let layout =
+            Layout::new(context.codebase.root(), context.codebase.nodes());
+
         self.adapter.clear()?;
 
         render_interpreter_state(&mut self.adapter, &context)?;
-        render_code(&mut self.adapter, &mut context)?;
+        render_code(layout, &mut self.adapter, &mut context)?;
         render_prompt(&mut self.adapter, editor_input, &mut context)?;
         render_help(&mut self.adapter, &context)?;
 
@@ -125,12 +128,10 @@ fn render_interpreter_state<A: EditorOutputAdapter>(
 }
 
 fn render_code<A: EditorOutputAdapter>(
+    mut layout: Layout,
     adapter: &mut A,
     context: &mut RenderContext,
 ) -> anyhow::Result<()> {
-    let mut layout =
-        Layout::new(context.codebase.root(), context.codebase.nodes());
-
     writeln!(adapter)?;
 
     while let Some((distance_from_root, path)) = layout.nodes_from_root.pop() {
