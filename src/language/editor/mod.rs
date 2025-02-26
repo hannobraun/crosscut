@@ -5,5 +5,5 @@ mod layout;
 pub use self::{
     editor::{Editor, EditorCommand},
     input_buffer::{EditorInputBuffer, EditorInputEvent},
-    layout::collect_nodes_from_root,
+    layout::{Layout, collect_nodes_from_root},
 };

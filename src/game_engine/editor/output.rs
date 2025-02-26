@@ -7,7 +7,7 @@ use crate::{
             Codebase, Expression, IntrinsicFunction, Literal, NodeKind,
             NodePath,
         },
-        editor::{Editor, collect_nodes_from_root},
+        editor::{Editor, Layout, collect_nodes_from_root},
         instance::Language,
         packages::Packages,
         runtime::{Effect, Evaluator, RuntimeState, Value},
@@ -128,7 +128,7 @@ fn render_code<A: EditorOutputAdapter>(
     adapter: &mut A,
     context: &mut RenderContext,
 ) -> anyhow::Result<()> {
-    let mut nodes_from_root = Vec::new();
+    let mut nodes_from_root = Layout::new();
     let max_distance_from_root = collect_nodes_from_root(
         context.codebase.root(),
         0,

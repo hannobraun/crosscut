@@ -2,10 +2,12 @@ use std::cmp::max;
 
 use crate::language::code::{LocatedNode, NodePath, Nodes};
 
+pub type Layout = Vec<(u32, NodePath)>;
+
 pub fn collect_nodes_from_root(
     node: LocatedNode,
     distance_from_root: u32,
-    nodes_from_root: &mut Vec<(u32, NodePath)>,
+    nodes_from_root: &mut Layout,
     nodes: &Nodes,
 ) -> u32 {
     nodes_from_root.push((distance_from_root, node.path));
