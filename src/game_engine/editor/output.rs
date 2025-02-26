@@ -128,13 +128,13 @@ fn render_interpreter_state<A: EditorOutputAdapter>(
 }
 
 fn render_layout<A: EditorOutputAdapter>(
-    mut layout: Layout,
+    layout: Layout,
     adapter: &mut A,
     context: &mut RenderContext,
 ) -> anyhow::Result<()> {
     writeln!(adapter)?;
 
-    while let Some((distance_from_root, path)) = layout.nodes_from_root.pop() {
+    for (distance_from_root, path) in layout.nodes_from_root.into_iter().rev() {
         let indentation_level =
             layout.max_distance_from_root - distance_from_root;
         render_possibly_active_node(
