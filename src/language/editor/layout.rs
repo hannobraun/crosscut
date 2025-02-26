@@ -8,7 +8,7 @@ pub struct Layout {
 }
 
 impl Layout {
-    pub fn new() -> Self {
+    pub fn new(_: LocatedNode) -> Self {
         let nodes_from_root = Vec::new();
         let max_distance_from_root = 0;
 

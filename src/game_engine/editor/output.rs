@@ -128,7 +128,7 @@ fn render_code<A: EditorOutputAdapter>(
     adapter: &mut A,
     context: &mut RenderContext,
 ) -> anyhow::Result<()> {
-    let mut layout = Layout::new();
+    let mut layout = Layout::new(context.codebase.root());
     layout.max_distance_from_root = collect_nodes_from_root(
         context.codebase.root(),
         0,
