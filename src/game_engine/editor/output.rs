@@ -141,10 +141,10 @@ fn render_code<A: EditorOutputAdapter>(
     writeln!(adapter)?;
 
     while let Some((distance_from_root, path)) = nodes_from_root.pop() {
-        let indendation_level = max_distance_from_root - distance_from_root;
+        let indentation_level = max_distance_from_root - distance_from_root;
         render_possibly_active_node(
             &path,
-            indendation_level,
+            indentation_level,
             adapter,
             context,
         )?;
