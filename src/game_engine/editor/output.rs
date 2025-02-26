@@ -137,11 +137,11 @@ fn render_layout<A: EditorOutputAdapter>(
     writeln!(adapter)?;
 
     for line in layout.nodes_from_root.into_iter().rev() {
-        let indentation_level =
+        let level_of_indentation =
             layout.max_distance_from_root - line.distance_from_root;
         render_possibly_active_node(
             &line.node,
-            indentation_level,
+            level_of_indentation,
             adapter,
             context,
         )?;
