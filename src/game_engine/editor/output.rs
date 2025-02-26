@@ -139,6 +139,7 @@ fn render_layout<A: EditorOutputAdapter>(
     for line in layout.nodes_from_root.into_iter().rev() {
         let level_of_indentation =
             layout.max_distance_from_root - line.distance_from_root;
+
         render_possibly_active_node(
             &line.node,
             level_of_indentation,
