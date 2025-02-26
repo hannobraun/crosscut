@@ -3,7 +3,7 @@ use std::cmp::max;
 use crate::language::code::{LocatedNode, NodePath, Nodes};
 
 pub struct EditorLayout {
-    pub nodes_from_root: Vec<EditorLine>,
+    pub lines: Vec<EditorLine>,
     pub max_distance_from_root: u32,
 }
 
@@ -20,7 +20,7 @@ impl EditorLayout {
             .collect();
 
         Self {
-            nodes_from_root,
+            lines: nodes_from_root,
             max_distance_from_root,
         }
     }
