@@ -290,6 +290,13 @@ fn render_help<A: EditorOutputAdapter>(
                     writeln!(adapter)?;
 
                     match intrinsic {
+                        IntrinsicFunction::Eval => {
+                            writeln!(
+                                adapter,
+                                "The `{intrinsic}` function expects a function \
+                                as an argument and evaluates that function.",
+                            )?;
+                        }
                         IntrinsicFunction::Identity => {
                             writeln!(
                                 adapter,

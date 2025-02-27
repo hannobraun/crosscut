@@ -2,6 +2,7 @@ use std::fmt;
 
 #[derive(Clone, Debug, Eq, PartialEq, udigest::Digestable)]
 pub enum IntrinsicFunction {
+    Eval,
     Identity,
     Literal { literal: Literal },
 }
@@ -14,6 +15,7 @@ impl IntrinsicFunction {
             })
         } else {
             match name {
+                "eval" => Some(Self::Eval),
                 "identity" => Some(Self::Identity),
                 "tuple" => Some(Self::Literal {
                     literal: Literal::Tuple,
@@ -27,6 +29,9 @@ impl IntrinsicFunction {
 impl fmt::Display for IntrinsicFunction {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match self {
+            Self::Eval => {
+                write!(f, "eval")?;
+            }
             Self::Identity => {
                 write!(f, "identity")?;
             }

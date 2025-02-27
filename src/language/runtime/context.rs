@@ -33,6 +33,12 @@ impl Context {
         codebase: &Codebase,
     ) -> EvaluateUpdate {
         match intrinsic {
+            IntrinsicFunction::Eval => {
+                todo!(
+                    "Evaluating the `{intrinsic}` function is not supported \
+                    yet."
+                );
+            }
             IntrinsicFunction::Identity => {
                 // Active value stays the same.
             }
