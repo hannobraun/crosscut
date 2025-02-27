@@ -6,7 +6,7 @@ use crate::language::{
     instance::Language,
     packages::{Function, FunctionId, Package},
     runtime::{Effect, Value},
-    tests::infra::NodeExt,
+    tests::infra::{NodeExt, NodesExt},
 };
 
 #[test]
@@ -279,6 +279,46 @@ fn moving_cursor_up_should_navigate_to_child_node() {
         language.step_until_finished().map(|value| value.inner),
         Ok(Value::Integer { value: 127 }),
     );
+}
+
+#[test]
+fn cursor_up_should_move_to_previous_sibling_if_node_has_no_children() {
+    // If a node has no children, then moving the cursor up should navigate to
+    // the previous sibling.
+
+    let mut language = Language::new();
+
+    language.enter_code("a");
+    language.on_input(EditorInputEvent::AddSibling);
+    language.enter_code("c");
+
+    // Verify that the test setup worked.
+    assert_eq!(
+        language
+            .codebase()
+            .root()
+            .children(language.codebase().nodes())
+            .expect_errors()
+            .collect_array::<2>()
+            .unwrap(),
+        ["a", "c"].map(|node| node.to_string()),
+    );
+
+    // Actual testing starts here.
+
+    language.on_input(EditorInputEvent::MoveCursorUp);
+    language.enter_code("b");
+
+    assert_eq!(
+        language
+            .codebase()
+            .root()
+            .children(language.codebase().nodes())
+            .expect_errors()
+            .next()
+            .unwrap(),
+        "ab".to_string(),
+    )
 }
 
 #[test]

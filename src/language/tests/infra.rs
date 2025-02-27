@@ -1,5 +1,7 @@
+use std::vec;
+
 use crate::language::code::{
-    Expression, IntrinsicFunction, Literal, Node, NodeKind, Nodes,
+    Expression, IntrinsicFunction, Literal, LocatedNode, Node, NodeKind, Nodes,
 };
 
 pub trait NodeExt: Sized {
@@ -41,5 +43,26 @@ impl NodeExt for Node {
             .has_one()
             .expect("Expected node to have single child");
         nodes.get(hash).clone()
+    }
+}
+
+pub trait NodesExt {
+    fn expect_errors(self) -> vec::IntoIter<String>;
+}
+
+impl<'r, T> NodesExt for T
+where
+    T: Iterator<Item = LocatedNode<'r>>,
+{
+    fn expect_errors(self) -> vec::IntoIter<String> {
+        self.map(|located_node| {
+            let NodeKind::Error { node } = located_node.node.kind() else {
+                panic!("Expected error, got {:?}", located_node.node.kind());
+            };
+
+            node.clone()
+        })
+        .collect::<Vec<_>>()
+        .into_iter()
     }
 }

@@ -28,6 +28,18 @@ impl EditorLayout {
 
         Self { lines }
     }
+
+    pub fn node_before(&self, path: &NodePath) -> Option<NodePath> {
+        let line_index =
+            self.lines.iter().enumerate().find_map(|(index, line)| {
+                (&line.node.path == path).then_some(index)
+            })?;
+
+        let line_index_before = line_index.checked_sub(1)?;
+        let line_before = self.lines.get(line_index_before)?;
+
+        Some(line_before.node.path)
+    }
 }
 
 pub struct EditorLine {

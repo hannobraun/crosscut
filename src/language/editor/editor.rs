@@ -35,7 +35,7 @@ impl Editor {
     pub fn on_input(
         &mut self,
         event: EditorInputEvent,
-        _: &EditorLayout,
+        layout: &EditorLayout,
         compiler: &mut Compiler,
         evaluator: &mut Evaluator,
         packages: &Packages,
@@ -46,9 +46,7 @@ impl Editor {
             // https://github.com/hannobraun/crosscut/issues/71
             match action {
                 UpdateAction::NavigateToPrevious => {
-                    if let Some(previous) =
-                        compiler.children_of(&self.editing).to_paths().last()
-                    {
+                    if let Some(previous) = layout.node_before(&self.editing) {
                         self.navigate_to(previous, compiler, packages);
                         self.input.move_cursor_to_end();
                     }
