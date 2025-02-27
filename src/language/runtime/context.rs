@@ -44,10 +44,6 @@ impl Context {
             }
             IntrinsicFunction::Literal { literal } => {
                 let Value::Nothing = self.active_value.inner else {
-                    // A literal is a function that takes `None`. If
-                    // that isn't what we currently have, that's an
-                    // error.
-
                     return self.unexpected_input(Type::Nothing, path);
                 };
 
