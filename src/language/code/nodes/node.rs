@@ -20,8 +20,8 @@ impl Node {
     }
 
     #[cfg(test)]
-    pub fn integer_literal(value: i32, child: Option<NodeHash>) -> Self {
-        Self::new(NodeKind::integer_literal(value), child)
+    pub fn integer_literal(value: i32) -> Self {
+        Self::new(NodeKind::integer_literal(value), None)
     }
 
     pub fn kind(&self) -> &NodeKind {

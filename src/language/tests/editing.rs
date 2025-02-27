@@ -481,10 +481,7 @@ fn remove_right_removes_next_syntax_node_if_empty() {
     // Actual testing starts here.
     language.on_input(EditorInputEvent::RemoveRight { whole_node: false });
 
-    assert_eq!(
-        language.codebase().root().node,
-        &Node::integer_literal(127, None),
-    );
+    assert_eq!(language.codebase().root().node, &Node::integer_literal(127));
 }
 
 #[test]
