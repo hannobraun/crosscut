@@ -46,10 +46,10 @@ impl Editor {
             // https://github.com/hannobraun/crosscut/issues/71
             match action {
                 UpdateAction::NavigateToPrevious => {
-                    if let Some(location) =
+                    if let Some(previous) =
                         compiler.children_of(&self.editing).to_paths().last()
                     {
-                        self.navigate_to(location, compiler, packages);
+                        self.navigate_to(previous, compiler, packages);
                         self.input.move_cursor_to_end();
                     }
                 }
