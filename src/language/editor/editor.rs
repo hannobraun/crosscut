@@ -39,8 +39,8 @@ impl Editor {
         evaluator: &mut Evaluator,
         packages: &Packages,
     ) {
+        let layout = EditorLayout::new(codebase.root(), codebase.nodes());
         let compiler = &mut Compiler::new(codebase);
-        let layout = EditorLayout::new(compiler.root(), compiler.nodes());
 
         if let Some(action) = self.input.update(event) {
             // This code results in non-intuitive cursor movement, if using the
