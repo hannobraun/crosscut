@@ -35,10 +35,11 @@ impl Editor {
     pub fn on_input(
         &mut self,
         event: EditorInputEvent,
-        compiler: &mut Compiler,
+        codebase: &mut Codebase,
         evaluator: &mut Evaluator,
         packages: &Packages,
     ) {
+        let compiler = &mut Compiler::new(codebase);
         let layout = EditorLayout::new(compiler.root(), compiler.nodes());
 
         if let Some(action) = self.input.update(event) {

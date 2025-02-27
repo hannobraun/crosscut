@@ -1,6 +1,5 @@
 use super::{
     code::{Codebase, NodePath},
-    compiler::Compiler,
     editor::{Editor, EditorCommand, EditorInputEvent},
     packages::{Function, Package, Packages},
     runtime::{Effect, Evaluator, RuntimeState, Value},
@@ -52,7 +51,7 @@ impl Language {
     pub fn on_input(&mut self, event: EditorInputEvent) {
         self.editor.on_input(
             event,
-            &mut Compiler::new(&mut self.codebase),
+            &mut self.codebase,
             &mut self.evaluator,
             &self.packages,
         );
