@@ -5,7 +5,10 @@ use crate::language::{
     runtime::Evaluator,
 };
 
-use super::{EditorInputBuffer, EditorInputEvent, input_buffer::UpdateAction};
+use super::{
+    EditorInputBuffer, EditorInputEvent, EditorLayout,
+    input_buffer::UpdateAction,
+};
 
 #[derive(Debug)]
 pub struct Editor {
@@ -32,6 +35,7 @@ impl Editor {
     pub fn on_input(
         &mut self,
         event: EditorInputEvent,
+        _: &EditorLayout,
         compiler: &mut Compiler,
         evaluator: &mut Evaluator,
         packages: &Packages,
