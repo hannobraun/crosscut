@@ -34,10 +34,16 @@ impl Context {
     ) -> EvaluateUpdate {
         match intrinsic {
             IntrinsicFunction::Eval => {
-                todo!(
-                    "Evaluating the `{intrinsic}` function is not supported \
-                    yet."
-                );
+                let Value::Function { body } = self.active_value.inner else {
+                    return self.unexpected_input(Type::Function, path);
+                };
+
+                return EvaluateUpdate::PushContext {
+                    root: NodePath { hash: body },
+                    // Right now, the `eval` function doesn't support passing an
+                    // argument to the function it evaluates.
+                    active_value: Value::Nothing,
+                };
             }
             IntrinsicFunction::Identity => {
                 // Active value stays the same.

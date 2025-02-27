@@ -42,3 +42,19 @@ fn identity_integer() {
         Ok(Value::Integer { value: 127 }),
     );
 }
+
+#[test]
+fn eval() {
+    // The `eval` function takes a function argument and evaluates that.
+    //
+    // So far, the `eval` function can only pass `nothing` to the evaluated
+    // function. Eventually, it should be able to pass any argument.
+
+    let mut language = Language::new();
+
+    language.enter_code("127 fn eval");
+    assert_eq!(
+        language.step_until_finished().map(|value| value.inner),
+        Ok(Value::Integer { value: 127 }),
+    );
+}

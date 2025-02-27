@@ -180,6 +180,12 @@ impl Evaluator {
 
             if let Some(context) = self.contexts.last_mut() {
                 match &mut context.active_value.inner {
+                    Value::Function { .. } => {
+                        // If the context was created from a function, that
+                        // means something has evaluated it.
+                        context.active_value = output;
+                        context.advance();
+                    }
                     Value::Tuple { elements } => {
                         elements.push(output.inner);
                     }
