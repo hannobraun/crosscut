@@ -1,7 +1,7 @@
 use super::{
     code::{Codebase, NodePath},
     compiler::Compiler,
-    editor::{Editor, EditorCommand, EditorInputEvent, EditorLayout},
+    editor::{Editor, EditorCommand, EditorInputEvent},
     packages::{Function, Package, Packages},
     runtime::{Effect, Evaluator, RuntimeState, Value},
 };
@@ -50,12 +50,8 @@ impl Language {
     }
 
     pub fn on_input(&mut self, event: EditorInputEvent) {
-        let layout =
-            EditorLayout::new(self.codebase.root(), self.codebase.nodes());
-
         self.editor.on_input(
             event,
-            &layout,
             &mut Compiler::new(&mut self.codebase),
             &mut self.evaluator,
             &self.packages,

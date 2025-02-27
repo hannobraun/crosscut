@@ -35,11 +35,12 @@ impl Editor {
     pub fn on_input(
         &mut self,
         event: EditorInputEvent,
-        layout: &EditorLayout,
         compiler: &mut Compiler,
         evaluator: &mut Evaluator,
         packages: &Packages,
     ) {
+        let layout = EditorLayout::new(compiler.root(), compiler.nodes());
+
         if let Some(action) = self.input.update(event) {
             // This code results in non-intuitive cursor movement, if using the
             // up and down keys. This is tracked here:
