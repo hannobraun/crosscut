@@ -48,15 +48,7 @@ impl Context {
                     // that isn't what we currently have, that's an
                     // error.
 
-                    return EvaluateUpdate::UpdateState {
-                        new_state: RuntimeState::Effect {
-                            effect: Effect::UnexpectedInput {
-                                expected: Type::Nothing,
-                                actual: self.active_value.inner.clone(),
-                            },
-                            path,
-                        },
-                    };
+                    return self.unexpected_input(Type::Nothing, path);
                 };
 
                 let value = {
@@ -138,6 +130,22 @@ impl Context {
 
     pub fn advance(&mut self) {
         self.nodes_from_root.pop();
+    }
+
+    fn unexpected_input(
+        &self,
+        expected: Type,
+        path: NodePath,
+    ) -> EvaluateUpdate {
+        EvaluateUpdate::UpdateState {
+            new_state: RuntimeState::Effect {
+                effect: Effect::UnexpectedInput {
+                    expected,
+                    actual: self.active_value.inner.clone(),
+                },
+                path,
+            },
+        }
     }
 }
 
