@@ -2,8 +2,8 @@ use crate::language::{instance::Language, runtime::Value};
 
 #[test]
 fn number_literal() {
-    // A number literal is a function that takes `None` and returns the number
-    // it represents.
+    // A number literal is a function that takes `nothing` and returns the
+    // number it represents.
 
     let mut language = Language::new();
 
@@ -17,7 +17,7 @@ fn number_literal() {
 #[test]
 fn identity_none() {
     // The `identity` function takes any argument and returns it unchanged. The
-    // initial value is `None`, so an `identity` with nothing else around,
+    // initial value is `nothing`, so an `identity` with nothing else around,
     // should return that.
 
     let mut language = Language::new();
