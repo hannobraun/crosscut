@@ -149,8 +149,8 @@ struct ApplicationResources {
     // Which has already been addressed in this pull request:
     // https://github.com/gfx-rs/wgpu/pull/6997
     //
-    // But that fix is not released yet, as of this writing (the current wgpu
-    // version is 24.0.2).
+    // But that fix is not released yet. (As of this writing, the current wgpu
+    // version is 24.0.2.)
     renderer: Renderer,
     window: Arc<Window>,
 }
