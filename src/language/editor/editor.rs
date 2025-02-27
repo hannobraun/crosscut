@@ -17,7 +17,7 @@ pub struct Editor {
 }
 
 impl Editor {
-    pub fn new(editing: NodePath, _: &Codebase) -> Self {
+    pub fn new(editing: NodePath) -> Self {
         Self {
             input: EditorInputBuffer::empty(),
             editing,
@@ -159,7 +159,7 @@ impl Editor {
         match command {
             EditorCommand::Clear => {
                 *codebase = Codebase::new();
-                *self = Self::new(codebase.root().path, codebase);
+                *self = Self::new(codebase.root().path);
                 evaluator.reset(codebase);
             }
         }
