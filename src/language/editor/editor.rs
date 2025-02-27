@@ -54,8 +54,8 @@ impl Editor {
                     }
                 }
                 UpdateAction::NavigateToNextNode => {
-                    if let Some(location) = compiler.parent_of(&self.editing) {
-                        self.navigate_to(location, compiler, packages);
+                    if let Some(next) = compiler.parent_of(&self.editing) {
+                        self.navigate_to(next, compiler, packages);
                     }
                 }
                 UpdateAction::MergeWithPrevious => {
