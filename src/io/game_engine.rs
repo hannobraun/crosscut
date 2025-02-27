@@ -150,7 +150,7 @@ struct ApplicationResources {
     // https://github.com/gfx-rs/wgpu/pull/6997
     //
     // But that fix is not released yet, as of this writing (the current wgpu
-    // version is 24.0.1).
+    // version is 24.0.2).
     renderer: Renderer,
     window: Arc<Window>,
 }
