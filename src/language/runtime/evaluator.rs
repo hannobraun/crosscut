@@ -287,7 +287,7 @@ mod tests {
         let mut evaluator = Evaluator::new(codebase.root().path, &codebase);
         evaluator.step(&codebase);
 
-        assert_eq!(evaluator.state().active_value(), Some(Value::Nothing));
+        assert_eq!(evaluator.state().active_value(), Some(&Value::Nothing));
     }
 
     #[test]

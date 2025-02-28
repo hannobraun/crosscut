@@ -48,7 +48,7 @@ fn self_recursion() {
     for _ in 0..3 {
         assert_eq!(
             language.step().active_value(),
-            Some(Value::Integer { value: 127 }),
+            Some(&Value::Integer { value: 127 }),
         );
     }
 }

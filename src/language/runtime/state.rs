@@ -22,9 +22,9 @@ pub enum RuntimeState {
 
 impl RuntimeState {
     #[cfg(test)]
-    pub fn active_value(&self) -> Option<Value> {
+    pub fn active_value(&self) -> Option<&Value> {
         if let Self::Running { active_value, .. } = self {
-            Some(active_value.clone())
+            Some(active_value)
         } else {
             None
         }

@@ -17,7 +17,7 @@ fn number_literal_wrong_input() {
 
     assert_eq!(
         language.step().active_value(),
-        Some(Value::Integer { value: 127 }),
+        Some(&Value::Integer { value: 127 }),
     );
     assert!(matches!(language.step(), RuntimeState::Effect { .. }));
 }
@@ -114,7 +114,7 @@ fn pure_runtime_error_should_result_in_error_state() {
 
     assert_eq!(
         language.step().active_value(),
-        Some(Value::Integer { value: 127 }),
+        Some(&Value::Integer { value: 127 }),
     );
     assert!(matches!(language.step(), RuntimeState::Effect { .. }));
 
