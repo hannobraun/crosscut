@@ -82,11 +82,7 @@ impl Evaluator {
         }
 
         self.state = RuntimeState::Running {
-            active_value: ValueWithSource {
-                inner: active_value.clone(),
-                source: None,
-            }
-            .inner,
+            active_value: active_value.clone(),
             path: None,
         };
         self.contexts.push(Context {
