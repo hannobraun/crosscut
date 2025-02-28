@@ -162,8 +162,10 @@ impl Evaluator {
         let Some(mut context) = self.contexts.pop() else {
             // No context is available, which means we're not running.
 
-            let output = Value::Nothing;
-            self.state = RuntimeState::Finished { output, path: None };
+            self.state = RuntimeState::Finished {
+                output: Value::Nothing,
+                path: None,
+            };
 
             return;
         };
