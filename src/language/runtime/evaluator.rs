@@ -9,7 +9,6 @@ use super::{
 
 #[derive(Debug)]
 pub struct Evaluator {
-    root: NodePath,
     contexts: Vec<Context>,
     state: RuntimeState,
 }
@@ -17,7 +16,6 @@ pub struct Evaluator {
 impl Evaluator {
     pub fn new(root: NodePath, codebase: &Codebase) -> Self {
         let mut evaluator = Self {
-            root,
             contexts: Vec::new(),
             state: RuntimeState::Running {
                 active_value: Value::Nothing,
@@ -40,7 +38,6 @@ impl Evaluator {
         active_value: Value,
         codebase: &Codebase,
     ) {
-        self.root = root;
         let mut nodes_from_root = Vec::new();
         let mut path = root;
 
@@ -86,6 +83,7 @@ impl Evaluator {
             path: None,
         };
         self.contexts.push(Context {
+            root,
             nodes_from_root,
             active_value,
         });
@@ -235,7 +233,7 @@ impl Evaluator {
             }
             NodeKind::Recursion { .. } => {
                 let active_value = context.active_value.clone();
-                self.push_context(self.root, active_value, codebase);
+                self.push_context(context.root, active_value, codebase);
 
                 // Return here, to bypass restoring the context. We already
                 // created a new one with the call above, and the old one has

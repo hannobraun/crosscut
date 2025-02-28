@@ -7,6 +7,8 @@ use super::{Effect, RuntimeState, Value};
 
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub struct Context {
+    pub root: NodePath,
+
     /// # The nodes to be evaluated, sorted from root to leaf
     ///
     /// This is a subset of the full syntax tree. But it is not a tree itself,
