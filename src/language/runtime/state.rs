@@ -35,7 +35,7 @@ impl RuntimeState {
 
     pub fn path(&self) -> Option<&NodePath> {
         match self {
-            Self::Running { active_value, .. } => active_value.source.as_ref(),
+            Self::Running { path, .. } => path.as_ref(),
             Self::Effect { path, .. } => Some(path),
             Self::Error { path } => Some(path),
             Self::Finished { .. } => None,
