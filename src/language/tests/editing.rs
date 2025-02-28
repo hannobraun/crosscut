@@ -90,7 +90,7 @@ fn add_parent_node() {
         .step_until_finished_and_handle_host_functions(handle_test_functions);
 
     assert_eq!(
-        output.map(|value| value.inner),
+        output,
         Ok(Value::Opaque {
             id: 1,
             display: "b"
@@ -115,7 +115,7 @@ fn add_parent_of_node_that_already_has_a_parent() {
         .step_until_finished_and_handle_host_functions(handle_test_functions);
 
     assert_eq!(
-        output.map(|value| value.inner),
+        output,
         Ok(Value::Opaque {
             id: 2,
             display: "c",

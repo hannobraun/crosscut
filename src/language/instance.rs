@@ -85,7 +85,7 @@ impl Language {
 }
 
 #[cfg(test)]
-use super::{packages::FunctionId, runtime::ValueWithSource};
+use super::packages::FunctionId;
 
 #[cfg(test)]
 impl Language {
@@ -105,13 +105,12 @@ impl Language {
         self.step_until_finished_and_handle_host_functions(|id, _| {
             unreachable!("Unexpected host function with ID `{id:?}`.")
         })
-        .map(|value| value.inner)
     }
 
     pub fn step_until_finished_and_handle_host_functions(
         &mut self,
         mut handler: impl FnMut(&FunctionId, &Value) -> Result<Value, Effect>,
-    ) -> Result<ValueWithSource, Effect> {
+    ) -> Result<Value, Effect> {
         let mut i = 0;
 
         loop {
@@ -135,7 +134,7 @@ impl Language {
                     }
                 },
                 RuntimeState::Finished { output, .. } => {
-                    break Ok(output.clone());
+                    break Ok(output.inner.clone());
                 }
                 RuntimeState::Error { .. } => {
                     panic!("Unexpected runtime error.");
