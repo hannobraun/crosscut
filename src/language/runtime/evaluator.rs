@@ -20,10 +20,7 @@ impl Evaluator {
             root,
             contexts: Vec::new(),
             state: RuntimeState::Running {
-                active_value: ValueWithSource {
-                    inner: Value::Nothing,
-                    source: None,
-                },
+                active_value: Value::Nothing,
                 path: None,
             },
         };
@@ -89,7 +86,7 @@ impl Evaluator {
             source: None,
         };
         self.state = RuntimeState::Running {
-            active_value: active_value.clone(),
+            active_value: active_value.inner.clone(),
             path: None,
         };
         self.contexts.push(Context {
@@ -128,7 +125,7 @@ impl Evaluator {
             source: Some(source),
         };
         self.state = RuntimeState::Running {
-            active_value: context.active_value.clone(),
+            active_value: context.active_value.inner.clone(),
             path: Some(source),
         };
 

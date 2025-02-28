@@ -1,14 +1,11 @@
 use crate::language::code::NodePath;
 
-use super::{Effect, ValueWithSource};
-
-#[cfg(test)]
-use super::Value;
+use super::{Effect, Value, ValueWithSource};
 
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub enum RuntimeState {
     Running {
-        active_value: ValueWithSource,
+        active_value: Value,
         path: Option<NodePath>,
     },
     Effect {
@@ -27,7 +24,7 @@ impl RuntimeState {
     #[cfg(test)]
     pub fn active_value(&self) -> Option<Value> {
         if let Self::Running { active_value, .. } = self {
-            Some(active_value.inner.clone())
+            Some(active_value.clone())
         } else {
             None
         }
