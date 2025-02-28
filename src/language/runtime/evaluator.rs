@@ -24,6 +24,7 @@ impl Evaluator {
                     inner: Value::Nothing,
                     source: None,
                 },
+                path: None,
             },
         };
 
@@ -89,6 +90,7 @@ impl Evaluator {
         };
         self.state = RuntimeState::Running {
             active_value: active_value.clone(),
+            path: None,
         };
         self.contexts.push(Context {
             nodes_from_root,
@@ -127,6 +129,7 @@ impl Evaluator {
         };
         self.state = RuntimeState::Running {
             active_value: context.active_value.clone(),
+            path: Some(source),
         };
 
         context.advance();

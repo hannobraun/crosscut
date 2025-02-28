@@ -126,6 +126,7 @@ impl Context {
         EvaluateUpdate::UpdateState {
             new_state: RuntimeState::Running {
                 active_value: self.active_value.clone(),
+                path: Some(path),
             },
         }
     }

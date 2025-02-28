@@ -7,10 +7,20 @@ use super::Value;
 
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub enum RuntimeState {
-    Running { active_value: ValueWithSource },
-    Effect { effect: Effect, path: NodePath },
-    Finished { output: ValueWithSource },
-    Error { path: NodePath },
+    Running {
+        active_value: ValueWithSource,
+        path: Option<NodePath>,
+    },
+    Effect {
+        effect: Effect,
+        path: NodePath,
+    },
+    Finished {
+        output: ValueWithSource,
+    },
+    Error {
+        path: NodePath,
+    },
 }
 
 impl RuntimeState {
@@ -25,7 +35,7 @@ impl RuntimeState {
 
     pub fn path(&self) -> Option<&NodePath> {
         match self {
-            Self::Running { active_value } => active_value.source.as_ref(),
+            Self::Running { active_value, .. } => active_value.source.as_ref(),
             Self::Effect { path, .. } => Some(path),
             Self::Error { path } => Some(path),
             Self::Finished { .. } => None,
