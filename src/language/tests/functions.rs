@@ -1,7 +1,7 @@
 use crate::language::{
     code::NodePath,
     instance::Language,
-    runtime::{Effect, Value, ValueWithSource},
+    runtime::{Effect, Value},
 };
 
 #[test]
@@ -79,13 +79,6 @@ pub trait IntoFunctionBody {
 }
 
 impl IntoFunctionBody for Result<Value, Effect> {
-    fn into_function_body(self) -> Result<NodePath, Self> {
-        self.map_err(Err)
-            .and_then(|value| value.into_function_body().map_err(Ok))
-    }
-}
-
-impl IntoFunctionBody for Result<ValueWithSource, Effect> {
     fn into_function_body(self) -> Result<NodePath, Self> {
         self.map_err(Err)
             .and_then(|value| value.into_function_body().map_err(Ok))
