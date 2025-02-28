@@ -47,8 +47,3 @@ impl fmt::Display for Value {
         Ok(())
     }
 }
-
-#[derive(Clone, Debug, Eq, PartialEq)]
-pub struct ValueWithSource {
-    pub inner: Value,
-}
