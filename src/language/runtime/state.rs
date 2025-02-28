@@ -14,6 +14,7 @@ pub enum RuntimeState {
     },
     Finished {
         output: ValueWithSource,
+        path: Option<NodePath>,
     },
     Error {
         path: NodePath,
