@@ -14,22 +14,19 @@ pub struct Evaluator {
 }
 
 impl Evaluator {
-    pub fn new(root: NodePath, codebase: &Codebase) -> Self {
-        let mut evaluator = Self {
+    pub fn new(_: NodePath, _: &Codebase) -> Self {
+        Self {
             contexts: Vec::new(),
             state: RuntimeState::Running {
                 active_value: Value::Nothing,
                 path: None,
             },
-        };
-
-        evaluator.push_context(root, Value::Nothing, codebase);
-
-        evaluator
+        }
     }
 
     pub fn reset(&mut self, codebase: &Codebase) {
         *self = Self::new(codebase.root().path, codebase);
+        self.push_context(codebase.root().path, Value::Nothing, codebase);
     }
 
     pub fn push_context(
@@ -278,6 +275,8 @@ mod tests {
         );
 
         let mut evaluator = Evaluator::new(codebase.root().path, &codebase);
+        evaluator.reset(&codebase);
+
         evaluator.step(&codebase);
 
         assert_eq!(evaluator.state().active_value(), Some(&Value::Nothing));
@@ -295,6 +294,7 @@ mod tests {
         );
 
         let mut evaluator = Evaluator::new(codebase.root().path, &codebase);
+        evaluator.reset(&codebase);
         assert_eq!(evaluator.contexts.len(), 1);
 
         evaluator.step(&codebase);
