@@ -5,8 +5,5 @@ mod state;
 mod value;
 
 pub use self::{
-    effect::Effect,
-    evaluator::Evaluator,
-    state::RuntimeState,
-    value::{Value, ValueWithSource},
+    effect::Effect, evaluator::Evaluator, state::RuntimeState, value::Value,
 };

@@ -3,7 +3,7 @@ use crate::language::{
     packages::FunctionId,
 };
 
-use super::{Effect, RuntimeState, Value, ValueWithSource};
+use super::{Effect, RuntimeState, Value};
 
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub struct Context {
@@ -15,14 +15,14 @@ pub struct Context {
     /// have caused a separate context to be created.
     pub nodes_from_root: Vec<NodePath>,
 
-    pub active_value: ValueWithSource,
+    pub active_value: Value,
 }
 
 impl Context {
     pub fn evaluate_host_function(&self, id: FunctionId) -> Effect {
         Effect::ApplyHostFunction {
             id,
-            input: self.active_value.inner.clone(),
+            input: self.active_value.clone(),
         }
     }
 
@@ -34,7 +34,7 @@ impl Context {
     ) -> EvaluateUpdate {
         match intrinsic {
             IntrinsicFunction::Eval => {
-                let Value::Function { body } = self.active_value.inner else {
+                let Value::Function { body } = self.active_value else {
                     return self.unexpected_input(Type::Function, path);
                 };
 
@@ -49,7 +49,7 @@ impl Context {
                 // Active value stays the same.
             }
             IntrinsicFunction::Literal { literal } => {
-                let Value::Nothing = self.active_value.inner else {
+                let Value::Nothing = self.active_value else {
                     return self.unexpected_input(Type::Nothing, path);
                 };
 
@@ -98,10 +98,8 @@ impl Context {
                                 this point.",
                             );
 
-                            self.active_value = ValueWithSource {
-                                inner: Value::Tuple {
-                                    elements: Vec::new(),
-                                },
+                            self.active_value = Value::Tuple {
+                                elements: Vec::new(),
                             };
                             self.advance();
 
@@ -113,7 +111,7 @@ impl Context {
                     }
                 };
 
-                self.active_value = ValueWithSource { inner: value };
+                self.active_value = value;
             }
         }
 
@@ -121,7 +119,7 @@ impl Context {
 
         EvaluateUpdate::UpdateState {
             new_state: RuntimeState::Running {
-                active_value: self.active_value.inner.clone(),
+                active_value: self.active_value.clone(),
                 path: Some(path),
             },
         }
@@ -140,7 +138,7 @@ impl Context {
             new_state: RuntimeState::Effect {
                 effect: Effect::UnexpectedInput {
                     expected,
-                    actual: self.active_value.inner.clone(),
+                    actual: self.active_value.clone(),
                 },
                 path,
             },

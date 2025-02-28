@@ -3,7 +3,7 @@ use crate::language::code::{
 };
 
 use super::{
-    Effect, RuntimeState, Value, ValueWithSource,
+    Effect, RuntimeState, Value,
     context::{Context, EvaluateUpdate},
 };
 
@@ -87,9 +87,7 @@ impl Evaluator {
         };
         self.contexts.push(Context {
             nodes_from_root,
-            active_value: ValueWithSource {
-                inner: active_value,
-            },
+            active_value,
         });
     }
 
@@ -118,9 +116,7 @@ impl Evaluator {
             );
         };
 
-        context.active_value = ValueWithSource {
-            inner: value.clone(),
-        };
+        context.active_value = value.clone();
         self.state = RuntimeState::Running {
             active_value: value,
             path: Some(source),
@@ -175,7 +171,7 @@ impl Evaluator {
             let output = context.active_value;
 
             if let Some(context) = self.contexts.last_mut() {
-                match &mut context.active_value.inner {
+                match &mut context.active_value {
                     Value::Function { .. } => {
                         // If the context was created from a function, that
                         // means something has evaluated it.
@@ -183,7 +179,7 @@ impl Evaluator {
                         context.advance();
                     }
                     Value::Tuple { elements } => {
-                        elements.push(output.inner);
+                        elements.push(output);
                     }
                     value => {
                         panic!(
@@ -194,7 +190,7 @@ impl Evaluator {
                 }
             } else {
                 self.state = RuntimeState::Finished {
-                    output: output.inner,
+                    output,
                     path: self.state.path().cloned(),
                 };
             }
@@ -238,7 +234,7 @@ impl Evaluator {
                 return;
             }
             NodeKind::Recursion { .. } => {
-                let active_value = context.active_value.inner.clone();
+                let active_value = context.active_value.clone();
                 self.push_context(self.root, active_value, codebase);
 
                 // Return here, to bypass restoring the context. We already
