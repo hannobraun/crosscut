@@ -11,6 +11,15 @@ pub enum Value {
     Tuple { elements: Vec<Value> },
 }
 
+impl Value {
+    pub fn into_function_body(self) -> Result<NodePath, Self> {
+        match self {
+            Value::Function { body } => Ok(NodePath { hash: body }),
+            _ => Err(self),
+        }
+    }
+}
+
 impl fmt::Display for Value {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match self {
@@ -47,8 +56,8 @@ pub struct ValueWithSource {
 
 impl ValueWithSource {
     pub fn into_function_body(self) -> Result<NodePath, Self> {
-        match self.inner {
-            Value::Function { body } => Ok(NodePath { hash: body }),
+        match self.inner.clone().into_function_body() {
+            Ok(body) => Ok(body),
             _ => Err(self),
         }
     }
