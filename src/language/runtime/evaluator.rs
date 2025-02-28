@@ -14,7 +14,7 @@ pub struct Evaluator {
 }
 
 impl Evaluator {
-    pub fn new(_: NodePath, _: &Codebase) -> Self {
+    pub fn new() -> Self {
         Self {
             contexts: Vec::new(),
             state: RuntimeState::Running {
@@ -25,7 +25,7 @@ impl Evaluator {
     }
 
     pub fn reset(&mut self, codebase: &Codebase) {
-        *self = Self::new(codebase.root().path, codebase);
+        *self = Self::new();
         self.push_context(codebase.root().path, Value::Nothing, codebase);
     }
 
@@ -274,7 +274,7 @@ mod tests {
             Node::new(NodeKind::Recursion, Some(*codebase.root().path.hash())),
         );
 
-        let mut evaluator = Evaluator::new(codebase.root().path, &codebase);
+        let mut evaluator = Evaluator::new();
         evaluator.reset(&codebase);
 
         evaluator.step(&codebase);
@@ -293,7 +293,7 @@ mod tests {
             Node::new(NodeKind::Recursion, Some(*codebase.root().path.hash())),
         );
 
-        let mut evaluator = Evaluator::new(codebase.root().path, &codebase);
+        let mut evaluator = Evaluator::new();
         evaluator.reset(&codebase);
         assert_eq!(evaluator.contexts.len(), 1);
 
