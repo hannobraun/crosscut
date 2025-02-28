@@ -119,7 +119,7 @@ where
                         break;
                     }
                 },
-                RuntimeState::Finished { output } => match output {
+                RuntimeState::Finished { output, .. } => match output {
                     ValueWithSource {
                         inner: Value::Integer { value },
                         ..

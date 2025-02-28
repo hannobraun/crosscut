@@ -133,7 +133,7 @@ impl Language {
                         break Err(effect.clone());
                     }
                 },
-                RuntimeState::Finished { output } => {
+                RuntimeState::Finished { output, .. } => {
                     break Ok(output.clone());
                 }
                 RuntimeState::Error { .. } => {
