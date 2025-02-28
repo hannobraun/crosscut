@@ -25,7 +25,7 @@ impl Evaluator {
             },
         };
 
-        evaluator.push_context(evaluator.root, Value::Nothing, codebase);
+        evaluator.push_context(root, Value::Nothing, codebase);
 
         evaluator
     }
