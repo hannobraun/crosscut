@@ -6,7 +6,7 @@ use crate::{
         code::Type,
         instance::Language,
         packages::{Function, FunctionId, Package},
-        runtime::{Effect, RuntimeState, Value, ValueWithSource},
+        runtime::{Effect, RuntimeState, Value},
     },
 };
 
@@ -120,10 +120,7 @@ where
                     }
                 },
                 RuntimeState::Finished { output, .. } => match output {
-                    ValueWithSource {
-                        inner: Value::Integer { value },
-                        ..
-                    } => {
+                    Value::Integer { value } => {
                         // If the program returns an integer, we use that to set
                         // the color.
 

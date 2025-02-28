@@ -118,7 +118,7 @@ fn render_interpreter_state<A: EditorOutputAdapter>(
             }
             RuntimeState::Finished { output, .. } => {
                 adapter.color(Color::DarkYellow, |adapter| {
-                    writeln!(adapter, "Finished: {}", output.inner)
+                    writeln!(adapter, "Finished: {}", output)
                 })?;
             }
         }

@@ -166,7 +166,10 @@ impl Evaluator {
                 inner: Value::Nothing,
                 source: None,
             };
-            self.state = RuntimeState::Finished { output, path: None };
+            self.state = RuntimeState::Finished {
+                output: output.inner,
+                path: None,
+            };
 
             return;
         };
@@ -197,7 +200,7 @@ impl Evaluator {
                 }
             } else {
                 self.state = RuntimeState::Finished {
-                    output,
+                    output: output.inner,
                     path: self.state.path().cloned(),
                 };
             }

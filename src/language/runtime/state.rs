@@ -1,6 +1,6 @@
 use crate::language::code::NodePath;
 
-use super::{Effect, Value, ValueWithSource};
+use super::{Effect, Value};
 
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub enum RuntimeState {
@@ -13,7 +13,7 @@ pub enum RuntimeState {
         path: NodePath,
     },
     Finished {
-        output: ValueWithSource,
+        output: Value,
         path: Option<NodePath>,
     },
     Error {

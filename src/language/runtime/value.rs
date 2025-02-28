@@ -53,12 +53,3 @@ pub struct ValueWithSource {
     pub inner: Value,
     pub source: Option<NodePath>,
 }
-
-impl ValueWithSource {
-    pub fn into_function_body(self) -> Result<NodePath, Self> {
-        match self.inner.clone().into_function_body() {
-            Ok(body) => Ok(body),
-            _ => Err(self),
-        }
-    }
-}

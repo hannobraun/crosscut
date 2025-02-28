@@ -134,7 +134,7 @@ impl Language {
                     }
                 },
                 RuntimeState::Finished { output, .. } => {
-                    break Ok(output.inner.clone());
+                    break Ok(output.clone());
                 }
                 RuntimeState::Error { .. } => {
                     panic!("Unexpected runtime error.");
