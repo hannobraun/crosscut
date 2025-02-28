@@ -102,7 +102,6 @@ impl Context {
                                 inner: Value::Tuple {
                                     elements: Vec::new(),
                                 },
-                                source: Some(path),
                             };
                             self.advance();
 
@@ -114,10 +113,7 @@ impl Context {
                     }
                 };
 
-                self.active_value = ValueWithSource {
-                    inner: value,
-                    source: Some(path),
-                };
+                self.active_value = ValueWithSource { inner: value };
             }
         }
 

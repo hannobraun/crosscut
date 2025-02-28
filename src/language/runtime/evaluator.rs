@@ -89,7 +89,6 @@ impl Evaluator {
             nodes_from_root,
             active_value: ValueWithSource {
                 inner: active_value,
-                source: None,
             },
         });
     }
@@ -121,7 +120,6 @@ impl Evaluator {
 
         context.active_value = ValueWithSource {
             inner: value.clone(),
-            source: Some(source),
         };
         self.state = RuntimeState::Running {
             active_value: value,

@@ -51,5 +51,4 @@ impl fmt::Display for Value {
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub struct ValueWithSource {
     pub inner: Value,
-    pub source: Option<NodePath>,
 }
