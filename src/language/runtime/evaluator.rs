@@ -278,7 +278,6 @@ mod tests {
         evaluator.reset(&codebase);
 
         evaluator.step(&codebase);
-
         assert_eq!(evaluator.state().active_value(), Some(&Value::Nothing));
     }
 
