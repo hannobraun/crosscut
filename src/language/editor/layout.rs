@@ -2,6 +2,7 @@ use std::cmp::max;
 
 use crate::language::code::{LocatedNode, NodePath, Nodes};
 
+#[derive(Debug)]
 pub struct EditorLayout {
     pub lines: Vec<EditorLine>,
 }
@@ -42,6 +43,7 @@ impl EditorLayout {
     }
 }
 
+#[derive(Debug)]
 pub struct EditorLine {
     pub node: NodeInLayout,
     pub level_of_indentation: u32,
@@ -56,6 +58,7 @@ impl EditorLine {
     const NUMBER_OF_SPACES_PER_LEVEL_OF_INDENTATION: u32 = 4;
 }
 
+#[derive(Debug)]
 pub struct NodeInLayout {
     pub path: NodePath,
     pub distance_from_root: u32,
