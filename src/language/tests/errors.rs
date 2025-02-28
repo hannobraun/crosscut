@@ -46,10 +46,7 @@ fn unresolved_syntax_node() {
 
     let resolved = language.codebase().root().path;
     assert_eq!(language.codebase().error_at(&resolved), None);
-    assert_eq!(
-        language.step_until_finished().map(|value| value.inner),
-        Ok(Value::Nothing),
-    );
+    assert_eq!(language.step_until_finished(), Ok(Value::Nothing));
 }
 
 #[test]

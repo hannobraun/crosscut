@@ -21,7 +21,7 @@ fn define_and_evaluate() {
 
     language.push_context(path, Value::Nothing);
     assert_eq!(
-        language.step_until_finished().map(|value| value.inner),
+        language.step_until_finished(),
         Ok(Value::Integer { value: 127 }),
     );
 }
@@ -69,10 +69,7 @@ fn empty_function() {
     };
 
     language.push_context(path, Value::Nothing);
-    assert_eq!(
-        language.step_until_finished().map(|value| value.inner),
-        Ok(Value::Nothing),
-    );
+    assert_eq!(language.step_until_finished(), Ok(Value::Nothing));
 }
 
 pub trait IntoFunctionBody {

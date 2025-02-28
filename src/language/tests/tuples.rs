@@ -10,7 +10,7 @@ fn single_field() {
 
     let output = language.step_until_finished();
     assert_eq!(
-        output.map(|value| value.inner),
+        output,
         Ok(Value::Tuple {
             elements: vec![Value::Integer { value: 127 }]
         })
@@ -27,7 +27,7 @@ fn nested() {
 
     let output = language.step_until_finished();
     assert_eq!(
-        output.map(|value| value.inner),
+        output,
         Ok(Value::Tuple {
             elements: vec![Value::Tuple {
                 elements: vec![Value::Integer { value: 127 }]
