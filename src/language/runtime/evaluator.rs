@@ -81,17 +81,20 @@ impl Evaluator {
             }
         }
 
-        let active_value = ValueWithSource {
-            inner: active_value,
-            source: None,
-        };
         self.state = RuntimeState::Running {
-            active_value: active_value.inner.clone(),
+            active_value: ValueWithSource {
+                inner: active_value.clone(),
+                source: None,
+            }
+            .inner,
             path: None,
         };
         self.contexts.push(Context {
             nodes_from_root,
-            active_value,
+            active_value: ValueWithSource {
+                inner: active_value,
+                source: None,
+            },
         });
     }
 
