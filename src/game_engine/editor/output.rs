@@ -36,7 +36,7 @@ where
     ) -> anyhow::Result<()> {
         let mut context = RenderContext {
             codebase: language.codebase(),
-            editor: language.editor(),
+            editor: Some(language.editor()),
             evaluator: language.evaluator(),
             packages: language.packages(),
             cursor: None,
@@ -179,10 +179,11 @@ fn render_node<A: EditorOutputAdapter>(
 ) -> anyhow::Result<()> {
     let node = context.codebase.node_at(path);
 
-    let editor = context.editor;
-    if editor.editing() == path {
-        context.cursor =
-            Some(adapter.cursor().move_right(editor.input().cursor()));
+    if let Some(editor) = context.editor {
+        if editor.editing() == path {
+            context.cursor =
+                Some(adapter.cursor().move_right(editor.input().cursor()));
+        }
     }
 
     let color = match node.kind() {
@@ -243,7 +244,9 @@ fn render_help<A: EditorOutputAdapter>(
     adapter: &mut A,
     context: &RenderContext,
 ) -> anyhow::Result<()> {
-    let editor = context.editor;
+    let Some(editor) = context.editor else {
+        return Ok(());
+    };
 
     let path = editor.editing();
     let node = context.codebase.node_at(path);
@@ -362,7 +365,7 @@ fn render_help<A: EditorOutputAdapter>(
 
 struct RenderContext<'r> {
     codebase: &'r Codebase,
-    editor: &'r Editor,
+    editor: Option<&'r Editor>,
     evaluator: &'r Evaluator,
     packages: &'r Packages,
     cursor: Option<Cursor>,
