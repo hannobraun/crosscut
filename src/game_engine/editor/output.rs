@@ -37,7 +37,7 @@ where
         let mut context = RenderContext {
             codebase: language.codebase(),
             editor: Some(language.editor()),
-            evaluator: language.evaluator(),
+            evaluator: Some(language.evaluator()),
             packages: language.packages(),
             cursor: None,
         };
@@ -68,7 +68,9 @@ fn render_runtime_state<A: EditorOutputAdapter>(
     adapter: &mut A,
     context: &RenderContext,
 ) -> anyhow::Result<()> {
-    let evaluator = context.evaluator;
+    let Some(evaluator) = context.evaluator else {
+        return Ok(());
+    };
 
     adapter.attribute(Attribute::Bold, |adapter| {
         match evaluator.state() {
@@ -152,9 +154,10 @@ fn render_line<A: EditorOutputAdapter>(
     adapter: &mut A,
     context: &mut RenderContext,
 ) -> anyhow::Result<()> {
-    let is_active_node = {
-        let evaluator = context.evaluator;
+    let is_active_node = if let Some(evaluator) = context.evaluator {
         evaluator.state().path() == Some(&line.node.path)
+    } else {
+        false
     };
 
     for _ in 0..line.width_of_indentation() {
@@ -370,7 +373,7 @@ fn render_help<A: EditorOutputAdapter>(
 struct RenderContext<'r> {
     codebase: &'r Codebase,
     editor: Option<&'r Editor>,
-    evaluator: &'r Evaluator,
+    evaluator: Option<&'r Evaluator>,
     packages: &'r Packages,
     cursor: Option<Cursor>,
 }
