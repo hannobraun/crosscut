@@ -152,8 +152,10 @@ fn render_line<A: EditorOutputAdapter>(
     adapter: &mut A,
     context: &mut RenderContext,
 ) -> anyhow::Result<()> {
-    let is_active_node =
-        context.evaluator.state().path() == Some(&line.node.path);
+    let is_active_node = {
+        let evaluator = context.evaluator;
+        evaluator.state().path() == Some(&line.node.path)
+    };
 
     for _ in 0..line.width_of_indentation() {
         write!(adapter, " ")?;
