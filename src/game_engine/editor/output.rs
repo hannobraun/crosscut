@@ -179,9 +179,10 @@ fn render_node<A: EditorOutputAdapter>(
 ) -> anyhow::Result<()> {
     let node = context.codebase.node_at(path);
 
-    if context.editor.editing() == path {
+    let editor = context.editor;
+    if editor.editing() == path {
         context.cursor =
-            Some(adapter.cursor().move_right(context.editor.input().cursor()));
+            Some(adapter.cursor().move_right(editor.input().cursor()));
     }
 
     let color = match node.kind() {
