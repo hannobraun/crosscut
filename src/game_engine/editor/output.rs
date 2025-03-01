@@ -49,7 +49,7 @@ where
 
         self.adapter.clear()?;
 
-        render_interpreter_state(&mut self.adapter, &context)?;
+        render_runtime_state(&mut self.adapter, &context)?;
         render_layout(&layout, &mut self.adapter, &mut context)?;
         render_prompt(&mut self.adapter, editor_input, &mut context)?;
         render_help(&mut self.adapter, &context)?;
@@ -64,7 +64,7 @@ where
     }
 }
 
-fn render_interpreter_state<A: EditorOutputAdapter>(
+fn render_runtime_state<A: EditorOutputAdapter>(
     adapter: &mut A,
     context: &RenderContext,
 ) -> anyhow::Result<()> {
