@@ -68,8 +68,10 @@ fn render_runtime_state<A: EditorOutputAdapter>(
     adapter: &mut A,
     context: &RenderContext,
 ) -> anyhow::Result<()> {
+    let evaluator = context.evaluator;
+
     adapter.attribute(Attribute::Bold, |adapter| {
-        match context.evaluator.state() {
+        match evaluator.state() {
             RuntimeState::Running { .. } => {
                 adapter.color(Color::DarkGreen, |adapter| {
                     writeln!(adapter, "Running")
