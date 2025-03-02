@@ -1,6 +1,6 @@
 use std::ops::Deref;
 
-use super::{
+use crate::language::{
     code::{
         Children, CodeError, Codebase, Expression, IntrinsicFunction, Literal,
         Node, NodeKind, NodePath,
