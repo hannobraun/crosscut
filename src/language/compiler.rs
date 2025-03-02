@@ -47,7 +47,10 @@ impl<'r> Compiler<'r> {
         parent: Node,
         packages: &Packages,
     ) -> NodePath {
-        let path = self.codebase.insert_node_as_parent(child, parent.clone());
+        let placeholder =
+            Node::new(NodeKind::Empty, parent.children().iter().copied());
+        let path = self.codebase.insert_node_as_parent(child, placeholder);
+
         self.replace(&path, &parent.display(packages).to_string(), packages)
     }
 
