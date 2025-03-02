@@ -76,7 +76,9 @@ fn compile_token(
 
     let (node, maybe_error) = if token.is_empty() {
         let kind = NodeKind::Empty;
-        (Node::new(kind, children), None)
+        let error = None;
+
+        (Node::new(kind, children), error)
     } else if let Some((node, maybe_err)) =
         resolve_keyword(token, path, &children, codebase)
     {
