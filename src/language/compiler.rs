@@ -81,8 +81,16 @@ fn compile_token(
     let children = node.children().clone();
 
     let (node, maybe_error) = if token.is_empty() {
-        let kind = NodeKind::Empty;
-        let error = None;
+        let (kind, error) = if children.has_multiple().is_none() {
+            (NodeKind::Empty, None)
+        } else {
+            (
+                NodeKind::Error {
+                    node: token.to_string(),
+                },
+                Some(CodeError::EmptyNodeWithMultipleChildren),
+            )
+        };
 
         (Node::new(kind, children), error)
     } else if let Some((node, maybe_err)) =

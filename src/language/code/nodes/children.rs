@@ -32,6 +32,14 @@ impl Children {
         }
     }
 
+    pub fn has_multiple(&self) -> Option<impl Iterator<Item = &NodeHash>> {
+        if self.children.len() > 1 {
+            Some(self.children.iter())
+        } else {
+            None
+        }
+    }
+
     pub fn add(&mut self, to_add: impl IntoIterator<Item = NodeHash>) {
         self.children.extend(to_add);
     }

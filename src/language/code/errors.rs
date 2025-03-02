@@ -4,12 +4,16 @@ use super::Expression;
 
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub enum CodeError {
+    EmptyNodeWithMultipleChildren,
     UnresolvedIdentifier { candidates: Vec<Expression> },
 }
 
 impl fmt::Display for CodeError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match self {
+            Self::EmptyNodeWithMultipleChildren => {
+                write!(f, "empty node with multiple children")?;
+            }
             Self::UnresolvedIdentifier { candidates } => {
                 write!(f, "unresolved syntax node")?;
 
