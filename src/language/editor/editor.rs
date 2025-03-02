@@ -97,12 +97,6 @@ impl Editor {
 
                     self.editing = compiler.insert_parent(
                         &self.editing,
-                        // Depending on where the cursor was, the input buffer
-                        // might already contain characters that should make up
-                        // the new node. So the empty node we insert here is
-                        // just a placeholder, which might get replaced by the
-                        // unconditional compilation of the current input buffer
-                        // contents below.
                         self.input.buffer(),
                         packages,
                     );
