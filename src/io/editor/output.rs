@@ -122,6 +122,11 @@ impl RawTerminalAdapter {
                 let mut buf = [0; 4];
                 self.w.write_all(ch.encode_utf8(&mut buf).as_bytes())?;
 
+                assert!(
+                    !ch.is_control(),
+                    "Terminal adapter does not support printing control \
+                    characters.",
+                );
                 self.cursor[0] += 1;
             }
         }
