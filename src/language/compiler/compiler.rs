@@ -17,6 +17,10 @@ impl<'r> Compiler<'r> {
         Self { codebase }
     }
 
+    pub fn codebase(&self) -> &Codebase {
+        self.codebase
+    }
+
     pub fn insert_child(
         &mut self,
         parent: &NodePath,

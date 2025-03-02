@@ -49,22 +49,32 @@ impl Editor {
             match action {
                 UpdateAction::NavigateToPrevious => {
                     if let Some(previous) = layout.node_before(&self.editing) {
-                        self.navigate_to(previous, compiler, packages);
+                        self.navigate_to(
+                            previous,
+                            compiler.codebase(),
+                            packages,
+                        );
                         self.input.move_cursor_to_end();
                     }
                 }
                 UpdateAction::NavigateToNextNode => {
-                    if let Some(next) = compiler.parent_of(&self.editing) {
-                        self.navigate_to(next, compiler, packages);
+                    if let Some(next) =
+                        compiler.codebase().parent_of(&self.editing)
+                    {
+                        self.navigate_to(next, compiler.codebase(), packages);
                     }
                 }
                 UpdateAction::MergeWithPrevious => {
-                    if let Some(to_remove) =
-                        compiler.children_of(&self.editing).to_paths().last()
+                    if let Some(to_remove) = compiler
+                        .codebase()
+                        .children_of(&self.editing)
+                        .to_paths()
+                        .last()
                     {
                         let merged = [&to_remove, &self.editing]
                             .map(|path| {
                                 compiler
+                                    .codebase()
                                     .node_at(path)
                                     .display(packages)
                                     .to_string()
@@ -73,14 +83,18 @@ impl Editor {
                         self.input = EditorInputBuffer::new(merged);
 
                         compiler.remove(&to_remove);
-                        self.editing = compiler.latest_version_of(self.editing);
+                        self.editing =
+                            compiler.codebase().latest_version_of(self.editing);
                     }
                 }
                 UpdateAction::MergeWithNext => {
-                    if let Some(to_remove) = compiler.parent_of(&self.editing) {
+                    if let Some(to_remove) =
+                        compiler.codebase().parent_of(&self.editing)
+                    {
                         let merged = [&self.editing, &to_remove]
                             .map(|path| {
                                 compiler
+                                    .codebase()
                                     .node_at(path)
                                     .display(packages)
                                     .to_string()
@@ -106,6 +120,7 @@ impl Editor {
                         compiler.replace(&self.editing, &previous, packages);
 
                     let parent = compiler
+                        .codebase()
                         .parent_of(&self.editing)
                         .unwrap_or_else(|| {
                             compiler.insert_parent(
@@ -139,7 +154,7 @@ impl Editor {
         // Right now, it doesn't seem to be practical to construct a high-level
         // test where this makes a difference though, and I don't want to fix
         // this until the behavior is covered by such a test.
-        evaluator.reset(compiler);
+        evaluator.reset(compiler.codebase());
     }
 
     pub fn on_command(
