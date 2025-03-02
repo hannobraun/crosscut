@@ -136,6 +136,7 @@ impl Editor {
                         // unconditional compilation of the current input buffer
                         // contents below.
                         Node::new(NodeKind::Empty, []),
+                        packages,
                     );
                 }
             }

@@ -17,7 +17,12 @@ impl<'r> Compiler<'r> {
         Self { codebase }
     }
 
-    pub fn insert_child(&mut self, parent: &NodePath, child: Node) -> NodePath {
+    pub fn insert_child(
+        &mut self,
+        parent: &NodePath,
+        child: Node,
+        _: &Packages,
+    ) -> NodePath {
         self.codebase.insert_node_as_child(parent, child)
     }
 
