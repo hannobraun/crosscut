@@ -127,6 +127,14 @@ impl RawTerminalAdapter {
                     "Terminal adapter does not support printing control \
                     characters.",
                 );
+
+                // Probably not every character meets the assumption made here,
+                // that the cursor should move one to the right after printing
+                // it. Unicode can do a lot of crazy stuff.
+                //
+                // I'm not sure what the check for though. Only supporting ASCII
+                // non-control characters would be a possibility, but also too
+                // restrictive.
                 self.cursor[0] += 1;
             }
         }
