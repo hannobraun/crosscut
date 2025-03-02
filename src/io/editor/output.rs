@@ -122,10 +122,6 @@ impl RawTerminalAdapter {
                 let mut buf = [0; 4];
                 self.w.write_all(ch.encode_utf8(&mut buf).as_bytes())?;
 
-                assert!(
-                    ch.is_ascii(),
-                    "Editor input adapter only accepts ASCII characters.",
-                );
                 self.cursor[0] += 1;
             }
         }
