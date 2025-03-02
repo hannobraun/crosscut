@@ -25,6 +25,7 @@ impl<'r> Compiler<'r> {
         &mut self,
         child: &NodePath,
         parent: Node,
+        _: &Packages,
     ) -> NodePath {
         self.codebase.insert_node_as_parent(child, parent)
     }

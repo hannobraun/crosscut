@@ -105,6 +105,7 @@ impl Editor {
                         // unconditional compilation of the current input buffer
                         // contents below.
                         Node::new(NodeKind::Empty, [child]),
+                        packages,
                     );
                 }
                 UpdateAction::AddSibling { previous } => {
@@ -122,6 +123,7 @@ impl Editor {
                                     },
                                     [self.editing.hash],
                                 ),
+                                packages,
                             )
                         });
 
