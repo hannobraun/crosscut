@@ -22,10 +22,10 @@ impl<'r> Compiler<'r> {
     pub fn insert_child(
         &mut self,
         parent: &NodePath,
-        child: Node,
+        child: &str,
         packages: &Packages,
     ) -> NodePath {
-        let child_token = &child.display(packages).to_string();
+        let child_token = child;
 
         let placeholder = Node::new(NodeKind::Empty, []);
         let child = self.codebase.insert_node_as_child(parent, placeholder);
