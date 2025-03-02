@@ -117,12 +117,7 @@ impl Editor {
                         .unwrap_or_else(|| {
                             compiler.insert_parent(
                                 &self.editing,
-                                Node::new(
-                                    NodeKind::Error {
-                                        node: "".to_string(),
-                                    },
-                                    [self.editing.hash],
-                                ),
+                                Node::new(NodeKind::Empty, [self.editing.hash]),
                                 packages,
                             )
                         });

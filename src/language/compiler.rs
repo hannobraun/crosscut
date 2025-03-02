@@ -21,9 +21,24 @@ impl<'r> Compiler<'r> {
         &mut self,
         parent: &NodePath,
         child: Node,
-        _: &Packages,
+        packages: &Packages,
     ) -> NodePath {
-        self.codebase.insert_node_as_child(parent, child)
+        let child = self.codebase.insert_node_as_child(parent, child);
+
+        let Some(parent) = self.codebase.parent_of(&child) else {
+            unreachable!(
+                "Just inserted `child` as child of a parent. So a parent must \
+                exist."
+            );
+        };
+
+        self.replace(
+            &parent,
+            &self.codebase.node_at(&parent).display(packages).to_string(),
+            packages,
+        );
+
+        child
     }
 
     pub fn insert_parent(
