@@ -1,5 +1,3 @@
-use std::ops::Deref;
-
 use crate::language::{
     code::{
         Children, CodeError, Codebase, Expression, IntrinsicFunction, Literal,
@@ -82,14 +80,6 @@ impl<'r> Compiler<'r> {
         }
 
         path
-    }
-}
-
-impl Deref for Compiler<'_> {
-    type Target = Codebase;
-
-    fn deref(&self) -> &Self::Target {
-        self.codebase
     }
 }
 
