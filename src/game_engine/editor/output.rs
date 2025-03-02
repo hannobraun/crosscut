@@ -160,21 +160,31 @@ fn render_possibly_active_line<A: EditorOutputAdapter>(
         false
     };
 
+    if is_active_node {
+        adapter.attribute(Attribute::Bold, |adapter| {
+            write!(adapter, " => ")?;
+            render_line(line, adapter, context)
+        })?;
+    } else {
+        write!(adapter, "    ")?;
+        render_line(line, adapter, context)?;
+    }
+
+    writeln!(adapter)?;
+
+    Ok(())
+}
+
+fn render_line<A: EditorOutputAdapter>(
+    line: &EditorLine,
+    adapter: &mut A,
+    context: &mut RenderContext,
+) -> anyhow::Result<()> {
     for _ in 0..line.width_of_indentation() {
         write!(adapter, " ")?;
     }
 
-    if is_active_node {
-        adapter.attribute(Attribute::Bold, |adapter| {
-            write!(adapter, " => ")?;
-            render_node(&line.node.path, adapter, context)
-        })?;
-    } else {
-        write!(adapter, "    ")?;
-        render_node(&line.node.path, adapter, context)?;
-    }
-
-    writeln!(adapter)?;
+    render_node(&line.node.path, adapter, context)?;
 
     Ok(())
 }
