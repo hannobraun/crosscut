@@ -141,7 +141,7 @@ fn render_layout<A: EditorOutputAdapter>(
     writeln!(adapter)?;
 
     for line in layout.lines.iter() {
-        render_line(line, adapter, context)?;
+        render_possibly_active_line(line, adapter, context)?;
     }
 
     writeln!(adapter)?;
@@ -149,7 +149,7 @@ fn render_layout<A: EditorOutputAdapter>(
     Ok(())
 }
 
-fn render_line<A: EditorOutputAdapter>(
+fn render_possibly_active_line<A: EditorOutputAdapter>(
     line: &EditorLine,
     adapter: &mut A,
     context: &mut RenderContext,
