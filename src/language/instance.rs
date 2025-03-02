@@ -93,6 +93,8 @@ impl Language {
         for ch in code.chars() {
             let event = if ch == ' ' {
                 EditorInputEvent::AddParent
+            } else if ch == '\n' {
+                EditorInputEvent::AddSibling
             } else {
                 EditorInputEvent::Insert { ch }
             };
