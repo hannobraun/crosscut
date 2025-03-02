@@ -91,7 +91,7 @@ use super::packages::FunctionId;
 impl Language {
     pub fn enter_code(&mut self, code: &str) {
         for ch in code.chars() {
-            let event = if ch.is_whitespace() {
+            let event = if ch == ' ' {
                 EditorInputEvent::AddParent
             } else {
                 EditorInputEvent::Insert { ch }
