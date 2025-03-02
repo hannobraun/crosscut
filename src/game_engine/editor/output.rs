@@ -16,6 +16,34 @@ use crate::{
 
 use super::input::{EditorMode, TerminalEditorInput};
 
+#[cfg(test)]
+pub fn render_code(codebase: &Codebase) {
+    use crate::io::editor::output::DebugOutputAdapter;
+
+    let layout = EditorLayout::new(codebase.root(), codebase.nodes());
+
+    let mut adapter = DebugOutputAdapter;
+
+    // Creating an empty `Packages` placeholder here, means this function can't
+    // be used to render host functions. This is only being used sporadically in
+    // tests, so for now, that's good enough.
+    //
+    // Once it's no longer good enough, that is going to be pretty obvious, I
+    // think, because the render code below is going to panic.
+    let packages = Packages::new();
+
+    let mut context = RenderContext {
+        codebase,
+        editor: None,
+        evaluator: None,
+        packages: &packages,
+        cursor: None,
+    };
+
+    render_layout(&layout, &mut adapter, &mut context)
+        .expect("Failed to render code")
+}
+
 #[derive(Debug)]
 pub struct TerminalEditorOutput<A> {
     adapter: A,
