@@ -75,7 +75,8 @@ fn compile_token(
     let children = node.children().clone();
 
     let (node, maybe_error) = if token.is_empty() {
-        (Node::new(NodeKind::Empty, children), None)
+        let kind = NodeKind::Empty;
+        (Node::new(kind, children), None)
     } else if let Some((node, maybe_err)) =
         resolve_keyword(token, path, &children, codebase)
     {
