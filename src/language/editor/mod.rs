@@ -7,3 +7,6 @@ pub use self::{
     input_buffer::{EditorInputBuffer, EditorInputEvent},
     layout::{EditorLayout, EditorLine},
 };
+
+#[cfg(test)]
+mod tests;

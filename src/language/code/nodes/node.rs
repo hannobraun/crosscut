@@ -24,6 +24,11 @@ impl Node {
         Self::new(NodeKind::integer_literal(value), None)
     }
 
+    #[cfg(test)]
+    pub fn error(node: impl Into<String>) -> Self {
+        Self::new(NodeKind::Error { node: node.into() }, None)
+    }
+
     pub fn kind(&self) -> &NodeKind {
         &self.kind
     }
