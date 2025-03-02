@@ -45,9 +45,10 @@ impl<'r> Compiler<'r> {
         &mut self,
         child: &NodePath,
         parent: Node,
-        _: &Packages,
+        packages: &Packages,
     ) -> NodePath {
-        self.codebase.insert_node_as_parent(child, parent)
+        let path = self.codebase.insert_node_as_parent(child, parent.clone());
+        self.replace(&path, &parent.display(packages).to_string(), packages)
     }
 
     pub fn remove(&mut self, to_remove: &NodePath) {
