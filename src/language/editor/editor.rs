@@ -95,7 +95,6 @@ impl Editor {
                     self.editing =
                         compiler.replace(&self.editing, &previous, packages);
 
-                    let child = *self.editing.hash();
                     self.editing = compiler.insert_parent(
                         &self.editing,
                         // Depending on where the cursor was, the input buffer
@@ -104,7 +103,7 @@ impl Editor {
                         // just a placeholder, which might get replaced by the
                         // unconditional compilation of the current input buffer
                         // contents below.
-                        Node::new(NodeKind::Empty, [child]),
+                        self.input.buffer(),
                         packages,
                     );
                 }
@@ -117,7 +116,7 @@ impl Editor {
                         .unwrap_or_else(|| {
                             compiler.insert_parent(
                                 &self.editing,
-                                Node::new(NodeKind::Empty, [self.editing.hash]),
+                                self.input.buffer(),
                                 packages,
                             )
                         });

@@ -44,13 +44,13 @@ impl<'r> Compiler<'r> {
     pub fn insert_parent(
         &mut self,
         child: &NodePath,
-        parent: Node,
+        parent: &str,
         packages: &Packages,
     ) -> NodePath {
         let placeholder = Node::new(NodeKind::Empty, [child.hash]);
         let path = self.codebase.insert_node_as_parent(child, placeholder);
 
-        self.replace(&path, &parent.display(packages).to_string(), packages)
+        self.replace(&path, parent, packages)
     }
 
     pub fn remove(&mut self, to_remove: &NodePath) {
