@@ -1,6 +1,6 @@
 use std::collections::{BTreeMap, BTreeSet};
 
-use super::{NodePath, Nodes};
+use super::{Node, NodeHash, NodePath, Nodes};
 
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub struct Changes {
@@ -54,6 +54,11 @@ impl Changes {
 pub struct NewChangeSet<'r> {
     pub nodes: &'r mut Nodes,
     pub change_set: &'r mut ChangeSet,
+}
+impl NewChangeSet<'_> {
+    pub fn insert(&mut self, node: Node) -> NodeHash {
+        self.nodes.insert(node)
+    }
 }
 
 #[derive(Clone, Debug, Eq, PartialEq)]
