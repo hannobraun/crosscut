@@ -16,9 +16,10 @@ pub struct Language {
 impl Language {
     pub fn new() -> Self {
         let codebase = Codebase::new();
-        let editor = Editor::new(codebase.root().path);
         let evaluator = Evaluator::new();
         let packages = Packages::new();
+
+        let editor = Editor::new(codebase.root().path);
 
         Self {
             codebase,
