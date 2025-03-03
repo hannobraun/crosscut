@@ -1,5 +1,5 @@
 use crate::language::{
-    code::{CodeError, Codebase, NodeKind},
+    code::{CodeError, Codebase, NodeKind, NodePath},
     compiler::Compiler,
     packages::Packages,
 };
@@ -35,4 +35,49 @@ fn empty_node_with_multiple_children_is_an_error() {
         compiler.codebase().error_at(&error),
         Some(&CodeError::EmptyNodeWithMultipleChildren),
     );
+}
+
+#[test]
+#[should_panic] // known bug; being worked on
+fn updating_child_updates_parent() {
+    // If the child of a parent node is being updated, the parent node should be
+    // updated as well.
+
+    let packages = Packages::new();
+
+    let mut codebase = Codebase::new();
+    let mut compiler = Compiler::new(&mut codebase);
+
+    let child =
+        compiler.replace(&compiler.codebase().root().path, "12", &packages);
+    let parent = compiler.insert_parent(&child, "unresolved", &packages);
+
+    // Verify our baseline assumptions about what the parent node should be.
+    check_parent(&parent, compiler.codebase());
+
+    let child = compiler
+        .codebase()
+        .root()
+        .children(compiler.codebase().nodes())
+        .next()
+        .unwrap();
+    compiler.replace(&child.path, "127", &packages);
+
+    // After editing the child, the new parent node should be the same as the
+    // old one.
+    let parent = compiler.codebase().root().path;
+    check_parent(&parent, &codebase);
+
+    fn check_parent(parent: &NodePath, codebase: &Codebase) {
+        assert_eq!(
+            codebase.node_at(parent).kind(),
+            &NodeKind::Error {
+                node: "unresolved".to_string(),
+            },
+        );
+        assert_eq!(
+            codebase.error_at(parent),
+            Some(&CodeError::UnresolvedIdentifier { candidates: vec![] }),
+        );
+    }
 }
