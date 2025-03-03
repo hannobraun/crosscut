@@ -23,6 +23,7 @@ impl Editor {
         packages: &Packages,
     ) -> Self {
         let mut editor = Self {
+            // This is just a placeholder value, to be updated below.
             input: EditorInputBuffer::empty(),
             editing,
         };
