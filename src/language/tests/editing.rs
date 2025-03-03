@@ -508,12 +508,6 @@ fn remove_right_merges_with_next_syntax_node() {
     );
 }
 
-// There is lots of editing behavior that's not tested here, as this test suite
-// focuses on high-level behavior that affects the whole `language` module.
-//
-// Please refer to the test suite of `EditorInputBuffer` for more detailed
-// tests.
-
 #[derive(Clone, Copy, Eq, Ord, PartialEq, PartialOrd)]
 enum TestFunction {
     A,
