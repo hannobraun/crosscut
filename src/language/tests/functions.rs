@@ -11,7 +11,7 @@ fn define_and_evaluate() {
 
     let mut language = Language::new();
 
-    language.enter_code("127 fn");
+    language.on_code("127 fn");
     let path = match language.step_until_finished().into_function_body() {
         Ok(path) => path,
         output => {
@@ -32,7 +32,7 @@ fn self_recursion() {
 
     let mut language = Language::new();
 
-    language.enter_code("identity self fn");
+    language.on_code("identity self fn");
     let path = match language.step_until_finished().into_function_body() {
         Ok(path) => path,
         output => {
@@ -60,7 +60,7 @@ fn empty_function() {
 
     let mut language = Language::new();
 
-    language.enter_code("fn");
+    language.on_code("fn");
     let path = match language.step_until_finished().into_function_body() {
         Ok(path) => path,
         output => {

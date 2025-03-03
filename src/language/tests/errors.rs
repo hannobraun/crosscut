@@ -13,7 +13,7 @@ fn number_literal_wrong_input() {
 
     let mut language = Language::new();
 
-    language.enter_code("127 255");
+    language.on_code("127 255");
 
     assert_eq!(
         language.step().active_value(),
@@ -29,7 +29,7 @@ fn unresolved_syntax_node() {
 
     let mut language = Language::new();
 
-    language.enter_code("identit");
+    language.on_code("identit");
 
     // The error should be registered in `Codebase`.
     let unresolved = language.codebase().root().path;
@@ -42,7 +42,7 @@ fn unresolved_syntax_node() {
     assert!(matches!(language.step(), RuntimeState::Error { .. }));
 
     // Once we resolve the error, it should no longer be there.
-    language.enter_code("y");
+    language.on_code("y");
 
     let resolved = language.codebase().root().path;
     assert_eq!(language.codebase().error_at(&resolved), None);
@@ -67,7 +67,7 @@ fn syntax_node_that_could_resolve_to_multiple_functions_is_unresolved() {
     let mut language = Language::new();
     language.with_package(&package);
 
-    language.enter_code("identity");
+    language.on_code("identity");
 
     let unresolved = language.codebase().root().path;
     assert_eq!(
@@ -92,7 +92,7 @@ fn do_not_step_beyond_errors() {
 
     let mut language = Language::new();
 
-    language.enter_code("error");
+    language.on_code("error");
 
     assert!(matches!(language.step(), RuntimeState::Error { .. }));
     assert!(matches!(language.step(), RuntimeState::Error { .. }));
@@ -107,7 +107,7 @@ fn pure_runtime_error_should_result_in_error_state() {
 
     // The compiler doesn't do type checking at this point, so it doesn't know
     // that the second number literal gets an invalid input.
-    language.enter_code("127 127");
+    language.on_code("127 127");
 
     assert_eq!(
         language.step().active_value(),

@@ -17,13 +17,13 @@ fn update_on_every_character() {
 
     let mut language = Language::new();
 
-    language.enter_code("1");
+    language.on_code("1");
     assert_eq!(
         language.step_until_finished(),
         Ok(Value::Integer { value: 1 }),
     );
 
-    language.enter_code("2");
+    language.on_code("2");
     assert_eq!(
         language.step_until_finished(),
         Ok(Value::Integer { value: 12 }),
@@ -37,7 +37,7 @@ fn update_after_removing_character() {
 
     let mut language = Language::new();
 
-    language.enter_code("127");
+    language.on_code("127");
     assert_eq!(
         language.step_until_finished(),
         Ok(Value::Integer { value: 127 }),
@@ -63,7 +63,7 @@ fn update_after_removing_all_characters() {
 
     let mut language = Language::new();
 
-    language.enter_code("1");
+    language.on_code("1");
     assert_eq!(
         language.step_until_finished(),
         Ok(Value::Integer { value: 1 }),
@@ -82,9 +82,9 @@ fn add_parent_node() {
     let mut language = Language::new();
     language.with_package(&package);
 
-    language.enter_code("a");
+    language.on_code("a");
     language.on_input(EditorInputEvent::AddParent);
-    language.enter_code("a_to_b");
+    language.on_code("a_to_b");
 
     let output = language
         .step_until_finished_and_handle_host_functions(handle_test_functions);
@@ -106,10 +106,10 @@ fn add_parent_of_node_that_already_has_a_parent() {
     let mut language = Language::new();
     language.with_package(&test_package());
 
-    language.enter_code("a b_to_c");
+    language.on_code("a b_to_c");
     language.on_input(EditorInputEvent::MoveCursorUp);
     language.on_input(EditorInputEvent::AddParent);
-    language.enter_code("a_to_b");
+    language.on_code("a_to_b");
 
     let output = language
         .step_until_finished_and_handle_host_functions(handle_test_functions);
@@ -130,7 +130,7 @@ fn split_node_if_adding_parent_while_cursor_is_in_the_middle() {
 
     let mut language = Language::new();
 
-    language.enter_code("127identity");
+    language.on_code("127identity");
     for _ in "identity".chars() {
         language.on_input(EditorInputEvent::MoveCursorLeft);
     }
@@ -148,11 +148,11 @@ fn add_sibling() {
 
     let mut language = Language::new();
 
-    language.enter_code("a c");
+    language.on_code("a c");
     language.on_input(EditorInputEvent::MoveCursorLeft);
     language.on_input(EditorInputEvent::MoveCursorLeft);
     language.on_input(EditorInputEvent::AddSibling);
-    language.enter_code("b");
+    language.on_code("b");
 
     let root = language.codebase().root().node;
     assert_eq!(
@@ -189,9 +189,9 @@ fn add_sibling_to_root_node() {
 
     let mut language = Language::new();
 
-    language.enter_code("a");
+    language.on_code("a");
     language.on_input(EditorInputEvent::AddSibling);
-    language.enter_code("b");
+    language.on_code("b");
 
     let root = language.codebase().root().node;
     assert_eq!(
@@ -228,7 +228,7 @@ fn split_node_if_adding_sibling_while_cursor_is_in_the_middle() {
 
     let mut language = Language::new();
 
-    language.enter_code("ab c");
+    language.on_code("ab c");
     for _ in 0..3 {
         language.on_input(EditorInputEvent::MoveCursorLeft);
     }
@@ -268,9 +268,9 @@ fn moving_cursor_up_should_navigate_to_child_node() {
 
     let mut language = Language::new();
 
-    language.enter_code("12 identity");
+    language.on_code("12 identity");
     language.on_input(EditorInputEvent::MoveCursorUp);
-    language.enter_code("7");
+    language.on_code("7");
 
     assert_eq!(
         language.step_until_finished(),
@@ -285,9 +285,9 @@ fn cursor_up_should_move_to_previous_sibling_if_node_has_no_children() {
 
     let mut language = Language::new();
 
-    language.enter_code("a");
+    language.on_code("a");
     language.on_input(EditorInputEvent::AddSibling);
-    language.enter_code("c");
+    language.on_code("c");
 
     // Verify that the test setup worked.
     assert_eq!(
@@ -304,7 +304,7 @@ fn cursor_up_should_move_to_previous_sibling_if_node_has_no_children() {
     // Actual testing starts here.
 
     language.on_input(EditorInputEvent::MoveCursorUp);
-    language.enter_code("b");
+    language.on_code("b");
 
     assert_eq!(
         language
@@ -325,10 +325,10 @@ fn moving_cursor_up_at_first_node_should_do_nothing() {
 
     let mut language = Language::new();
 
-    language.enter_code("17");
+    language.on_code("17");
     language.on_input(EditorInputEvent::MoveCursorLeft);
     language.on_input(EditorInputEvent::MoveCursorUp);
-    language.enter_code("2");
+    language.on_code("2");
 
     assert_eq!(
         language.step_until_finished(),
@@ -342,10 +342,10 @@ fn moving_cursor_down_should_navigate_to_parent_node() {
 
     let mut language = Language::new();
 
-    language.enter_code("identity dentity");
+    language.on_code("identity dentity");
     language.on_input(EditorInputEvent::MoveCursorUp);
     language.on_input(EditorInputEvent::MoveCursorDown);
-    language.enter_code("i");
+    language.on_code("i");
 
     assert_eq!(language.step_until_finished(), Ok(Value::Nothing));
 }
@@ -356,9 +356,9 @@ fn moving_cursor_down_at_root_node_should_do_nothing() {
 
     let mut language = Language::new();
 
-    language.enter_code("12");
+    language.on_code("12");
     language.on_input(EditorInputEvent::MoveCursorDown);
-    language.enter_code("7");
+    language.on_code("7");
 
     assert_eq!(
         language.step_until_finished(),
@@ -373,13 +373,13 @@ fn moving_cursor_left_at_start_of_node_should_move_to_previous_node() {
 
     let mut language = Language::new();
 
-    language.enter_code("12 identity");
+    language.on_code("12 identity");
     for _ in "identity".chars() {
         language.on_input(EditorInputEvent::MoveCursorLeft);
     }
 
     language.on_input(EditorInputEvent::MoveCursorLeft);
-    language.enter_code("7");
+    language.on_code("7");
 
     assert_eq!(
         language.step_until_finished(),
@@ -394,11 +394,11 @@ fn moving_cursor_right_at_end_of_node_should_move_to_next_node() {
 
     let mut language = Language::new();
 
-    language.enter_code("127 dentity");
+    language.on_code("127 dentity");
     language.on_input(EditorInputEvent::MoveCursorUp);
 
     language.on_input(EditorInputEvent::MoveCursorRight);
-    language.enter_code("i");
+    language.on_code("i");
 
     assert_eq!(
         language.step_until_finished(),
@@ -413,7 +413,7 @@ fn remove_left_removes_previous_syntax_node_if_empty() {
 
     let mut language = Language::new();
 
-    language.enter_code(" 127");
+    language.on_code(" 127");
     for _ in "127".chars() {
         language.on_input(EditorInputEvent::MoveCursorLeft);
     }
@@ -440,7 +440,7 @@ fn remove_left_merges_with_previous_syntax_node() {
 
     let mut language = Language::new();
 
-    language.enter_code("1 27");
+    language.on_code("1 27");
     for _ in "27".chars() {
         language.on_input(EditorInputEvent::MoveCursorLeft);
     }
@@ -460,7 +460,7 @@ fn remove_right_removes_next_syntax_node_if_empty() {
 
     let mut language = Language::new();
 
-    language.enter_code("127 ");
+    language.on_code("127 ");
     language.on_input(EditorInputEvent::MoveCursorLeft);
 
     // Make sure the test setup worked as expected.
@@ -485,7 +485,7 @@ fn remove_right_merges_with_next_syntax_node() {
 
     let mut language = Language::new();
 
-    language.enter_code("1 27");
+    language.on_code("1 27");
     for _ in "27".chars() {
         language.on_input(EditorInputEvent::MoveCursorLeft);
     }

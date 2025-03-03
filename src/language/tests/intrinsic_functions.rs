@@ -7,7 +7,7 @@ fn number_literal() {
 
     let mut language = Language::new();
 
-    language.enter_code("127");
+    language.on_code("127");
     assert_eq!(
         language.step_until_finished(),
         Ok(Value::Integer { value: 127 }),
@@ -22,7 +22,7 @@ fn identity_none() {
 
     let mut language = Language::new();
 
-    language.enter_code("identity");
+    language.on_code("identity");
     assert_eq!(language.step_until_finished(), Ok(Value::Nothing));
 }
 
@@ -33,7 +33,7 @@ fn identity_integer() {
 
     let mut language = Language::new();
 
-    language.enter_code("127 identity");
+    language.on_code("127 identity");
     assert_eq!(
         language.step_until_finished(),
         Ok(Value::Integer { value: 127 }),
@@ -49,7 +49,7 @@ fn eval() {
 
     let mut language = Language::new();
 
-    language.enter_code("127 fn eval");
+    language.on_code("127 fn eval");
     assert_eq!(
         language.step_until_finished(),
         Ok(Value::Integer { value: 127 }),
