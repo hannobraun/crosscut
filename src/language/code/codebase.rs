@@ -172,9 +172,6 @@ impl Codebase {
 
         loop {
             let hash = change_set.replace(next_to_replace, next_replacement);
-            change_set
-                .change_set
-                .add(next_to_replace, NodePath { hash });
 
             initial_replacement = initial_replacement.or(Some(hash));
             previous_replacement = hash;
