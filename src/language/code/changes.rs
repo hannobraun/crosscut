@@ -1,6 +1,6 @@
 use std::collections::{BTreeMap, BTreeSet};
 
-use super::NodePath;
+use super::{NodePath, Nodes};
 
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub struct Changes {
@@ -14,7 +14,7 @@ impl Changes {
         }
     }
 
-    pub fn new_change_set(&mut self) -> NewChangeSet {
+    pub fn new_change_set(&mut self, _: &mut Nodes) -> NewChangeSet {
         self.change_sets.push(ChangeSet {
             changes_by_old_version: BTreeMap::new(),
         });
@@ -111,8 +111,8 @@ mod tests {
             NodePath { hash }
         });
 
-        changes.new_change_set().change_set.add(a, b);
-        changes.new_change_set().change_set.add(b, a);
+        changes.new_change_set(&mut nodes).change_set.add(a, b);
+        changes.new_change_set(&mut nodes).change_set.add(b, a);
 
         assert_eq!(changes.latest_version_of(a), a);
         assert_eq!(changes.latest_version_of(b), a);

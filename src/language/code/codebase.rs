@@ -162,7 +162,7 @@ impl Codebase {
         to_replace: &NodePath,
         replacement: Node,
     ) -> NodePath {
-        let change_set = self.changes.new_change_set();
+        let change_set = self.changes.new_change_set(&mut self.nodes);
 
         let mut next_to_replace = *to_replace;
         let mut next_replacement = replacement;
