@@ -1,10 +1,41 @@
 use crate::language::{
-    code::{Codebase, Node},
+    code::{Codebase, Node, NodeKind},
+    compiler::Compiler,
     packages::Packages,
     runtime::Evaluator,
 };
 
 use super::{Editor, EditorInputEvent};
+
+#[test]
+fn edit_initial_node() {
+    // The editor is initialized with a specific node it is currently editing.
+    // That initialization should be correct, so editing that node actually
+    // works.
+
+    let packages = Packages::new();
+
+    let mut codebase = Codebase::new();
+    let mut evaluator = Evaluator::new();
+
+    {
+        let root = codebase.root().path;
+        Compiler::new(&mut codebase).replace(&root, "12", &packages);
+    }
+
+    let mut editor = Editor::new(codebase.root().path, &codebase, &packages);
+    editor.on_input(
+        EditorInputEvent::Insert { ch: '7' },
+        &mut codebase,
+        &mut evaluator,
+        &packages,
+    );
+
+    assert_eq!(
+        codebase.node_at(editor.editing()).kind(),
+        &NodeKind::integer_literal(127),
+    );
+}
 
 #[test]
 #[should_panic] // missing feature that is being worked on

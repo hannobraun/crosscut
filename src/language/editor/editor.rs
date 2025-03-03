@@ -17,11 +17,20 @@ pub struct Editor {
 }
 
 impl Editor {
-    pub fn new(editing: NodePath, _: &Codebase, _: &Packages) -> Self {
-        Self {
+    pub fn new(
+        editing: NodePath,
+        codebase: &Codebase,
+        packages: &Packages,
+    ) -> Self {
+        let mut editor = Self {
             input: EditorInputBuffer::empty(),
             editing,
-        }
+        };
+
+        editor.navigate_to(editor.editing, codebase, packages);
+        editor.input.move_cursor_to_end();
+
+        editor
     }
 
     pub fn input(&self) -> &EditorInputBuffer {
