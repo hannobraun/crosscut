@@ -9,6 +9,15 @@ use crate::language::{
     tests::infra::{NodeExt, NodesExt},
 };
 
+// Some tests in this suite have gotten a bit too detailed, as indicated by
+// setup code which is sophisticated enough to need its own testing.
+//
+// There are other, lower-level test suites now, which are more suited to this
+// kind of detailed test. If you're working on adding a new test here, which
+// turns out too cumbersome, consider adding it somewhere else. If you're
+// modifying a test that is already here, consider porting it to one of the
+// other test suites first.
+
 #[test]
 fn update_on_every_character() {
     // The editor should compile the code on every new character. If the program
