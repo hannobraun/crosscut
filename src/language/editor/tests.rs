@@ -33,7 +33,6 @@ fn edit_initial_node() {
 }
 
 #[test]
-#[should_panic] // missing feature that is being worked on
 fn navigate_to_next_sibling() {
     // Moving the cursor down should navigate to the next sibling.
 

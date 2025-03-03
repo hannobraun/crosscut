@@ -68,9 +68,7 @@ impl Editor {
                     }
                 }
                 UpdateAction::NavigateToNextNode => {
-                    if let Some(next) =
-                        compiler.codebase().parent_of(&self.editing)
-                    {
+                    if let Some(next) = layout.node_after(&self.editing) {
                         self.navigate_to(next, compiler.codebase(), packages);
                     }
                 }
