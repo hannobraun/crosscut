@@ -56,6 +56,10 @@ pub struct NewChangeSet<'r> {
     pub change_set: &'r mut ChangeSet,
 }
 impl NewChangeSet<'_> {
+    pub fn nodes(&self) -> &Nodes {
+        self.nodes
+    }
+
     pub fn insert(&mut self, node: Node) -> NodeHash {
         self.nodes.insert(node)
     }

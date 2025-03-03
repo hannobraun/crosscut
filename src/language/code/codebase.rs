@@ -180,9 +180,10 @@ impl Codebase {
             previous_replacement = hash;
 
             if let Some(parent) = SyntaxTree::from_root(self.root)
-                .find_parent_of(&next_to_replace.hash, change_set.nodes)
+                .find_parent_of(&next_to_replace.hash, change_set.nodes())
             {
-                next_replacement = change_set.nodes.get(parent.hash()).clone();
+                next_replacement =
+                    change_set.nodes().get(parent.hash()).clone();
                 next_replacement
                     .children_mut()
                     .replace(next_to_replace.hash(), [previous_replacement]);
