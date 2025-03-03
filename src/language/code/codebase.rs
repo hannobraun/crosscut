@@ -171,7 +171,7 @@ impl Codebase {
         let mut initial_replacement = None;
 
         loop {
-            let hash = change_set.insert(next_to_replace, next_replacement);
+            let hash = change_set.replace(next_to_replace, next_replacement);
             change_set
                 .change_set
                 .add(next_to_replace, NodePath { hash });

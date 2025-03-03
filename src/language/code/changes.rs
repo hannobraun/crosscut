@@ -60,7 +60,7 @@ impl NewChangeSet<'_> {
         self.nodes
     }
 
-    pub fn insert(
+    pub fn replace(
         &mut self,
         _to_replace: NodePath,
         replacement: Node,
