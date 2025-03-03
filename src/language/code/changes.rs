@@ -52,7 +52,7 @@ impl Changes {
 }
 
 pub struct NewChangeSet<'r> {
-    pub nodes: &'r mut Nodes,
+    nodes: &'r mut Nodes,
     pub change_set: &'r mut ChangeSet,
 }
 impl NewChangeSet<'_> {
