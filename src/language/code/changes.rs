@@ -14,7 +14,10 @@ impl Changes {
         }
     }
 
-    pub fn new_change_set(&mut self, _: &mut Nodes) -> NewChangeSet {
+    pub fn new_change_set<'r>(
+        &'r mut self,
+        nodes: &'r mut Nodes,
+    ) -> NewChangeSet<'r> {
         self.change_sets.push(ChangeSet {
             changes_by_old_version: BTreeMap::new(),
         });
@@ -23,7 +26,7 @@ impl Changes {
             unreachable!("Just pushed a change set. One _must_ be available.");
         };
 
-        NewChangeSet { change_set }
+        NewChangeSet { nodes, change_set }
     }
 
     pub fn latest_version_of(&self, path: NodePath) -> NodePath {
@@ -49,6 +52,7 @@ impl Changes {
 }
 
 pub struct NewChangeSet<'r> {
+    pub nodes: &'r mut Nodes,
     pub change_set: &'r mut ChangeSet,
 }
 

@@ -171,7 +171,7 @@ impl Codebase {
         let mut initial_replacement = None;
 
         loop {
-            let hash = self.nodes.insert(next_replacement);
+            let hash = change_set.nodes.insert(next_replacement);
             change_set
                 .change_set
                 .add(next_to_replace, NodePath { hash });
@@ -180,9 +180,9 @@ impl Codebase {
             previous_replacement = hash;
 
             if let Some(parent) = SyntaxTree::from_root(self.root)
-                .find_parent_of(&next_to_replace.hash, &self.nodes)
+                .find_parent_of(&next_to_replace.hash, change_set.nodes)
             {
-                next_replacement = self.nodes.get(parent.hash()).clone();
+                next_replacement = change_set.nodes.get(parent.hash()).clone();
                 next_replacement
                     .children_mut()
                     .replace(next_to_replace.hash(), [previous_replacement]);
