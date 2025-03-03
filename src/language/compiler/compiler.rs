@@ -25,10 +25,12 @@ impl<'r> Compiler<'r> {
         child_token: &str,
         packages: &Packages,
     ) -> NodePath {
-        let placeholder = Node::new(NodeKind::Empty, []);
-        let child = self.codebase.insert_node_as_child(parent, placeholder);
+        let child = {
+            let placeholder = Node::new(NodeKind::Empty, []);
+            let child = self.codebase.insert_node_as_child(parent, placeholder);
 
-        let child = self.replace(&child, child_token, packages);
+            self.replace(&child, child_token, packages)
+        };
 
         let Some(parent) = self.codebase.parent_of(&child) else {
             unreachable!(
