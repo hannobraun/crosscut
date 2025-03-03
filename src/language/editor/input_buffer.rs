@@ -29,7 +29,7 @@ impl EditorInputBuffer {
         self.cursor
     }
 
-    pub fn update(&mut self, event: EditorInputEvent) -> Option<UpdateAction> {
+    pub fn update(&mut self, event: EditorInputEvent) -> Option<NodeAction> {
         use EditorInputEvent::*;
 
         match event {
@@ -49,10 +49,10 @@ impl EditorInputBuffer {
                 return self.move_cursor_right();
             }
             MoveCursorUp => {
-                return Some(UpdateAction::NavigateToPrevious);
+                return Some(NodeAction::NavigateToPrevious);
             }
             MoveCursorDown => {
-                return Some(UpdateAction::NavigateToNext);
+                return Some(NodeAction::NavigateToNext);
             }
             RemoveLeft { whole_node } => {
                 if whole_node {
@@ -67,11 +67,11 @@ impl EditorInputBuffer {
             }
             AddParent => {
                 let previous = self.add_parent_or_sibling();
-                return Some(UpdateAction::AddParent { previous });
+                return Some(NodeAction::AddParent { previous });
             }
             AddSibling => {
                 let previous = self.add_parent_or_sibling();
-                return Some(UpdateAction::AddSibling { previous });
+                return Some(NodeAction::AddSibling { previous });
             }
         }
 
@@ -83,12 +83,12 @@ impl EditorInputBuffer {
         self.move_cursor_right();
     }
 
-    fn move_cursor_left(&mut self) -> Option<UpdateAction> {
+    fn move_cursor_left(&mut self) -> Option<NodeAction> {
         loop {
             if self.cursor > 0 {
                 self.cursor -= 1;
             } else {
-                return Some(UpdateAction::NavigateToPrevious);
+                return Some(NodeAction::NavigateToPrevious);
             }
 
             if self.buffer.is_char_boundary(self.cursor) {
@@ -99,12 +99,12 @@ impl EditorInputBuffer {
         None
     }
 
-    fn move_cursor_right(&mut self) -> Option<UpdateAction> {
+    fn move_cursor_right(&mut self) -> Option<NodeAction> {
         loop {
             self.cursor = self.cursor.saturating_add(1);
             if self.cursor > self.buffer.len() {
                 self.cursor = self.buffer.len();
-                return Some(UpdateAction::NavigateToNext);
+                return Some(NodeAction::NavigateToNext);
             }
             self.cursor = min(self.cursor, self.buffer.len());
 
@@ -123,12 +123,12 @@ impl EditorInputBuffer {
         None
     }
 
-    fn remove_left(&mut self) -> Option<UpdateAction> {
+    fn remove_left(&mut self) -> Option<NodeAction> {
         if self.move_cursor_left().is_none() {
             self.buffer.remove(self.cursor);
             None
         } else {
-            Some(UpdateAction::MergeWithPrevious)
+            Some(NodeAction::MergeWithPrevious)
         }
     }
 
@@ -138,12 +138,12 @@ impl EditorInputBuffer {
         }
     }
 
-    fn remove_right(&mut self) -> Option<UpdateAction> {
+    fn remove_right(&mut self) -> Option<NodeAction> {
         if self.cursor < self.buffer.len() {
             self.buffer.remove(self.cursor);
             None
         } else {
-            Some(UpdateAction::MergeWithNext)
+            Some(NodeAction::MergeWithNext)
         }
     }
 
@@ -157,7 +157,7 @@ impl EditorInputBuffer {
     }
 }
 
-pub enum UpdateAction {
+pub enum NodeAction {
     NavigateToPrevious,
     NavigateToNext,
     MergeWithPrevious,

@@ -6,8 +6,7 @@ use crate::language::{
 };
 
 use super::{
-    EditorInputBuffer, EditorInputEvent, EditorLayout,
-    input_buffer::UpdateAction,
+    EditorInputBuffer, EditorInputEvent, EditorLayout, input_buffer::NodeAction,
 };
 
 #[derive(Debug)]
@@ -57,7 +56,7 @@ impl Editor {
             // up and down keys. This is tracked here:
             // https://github.com/hannobraun/crosscut/issues/71
             match action {
-                UpdateAction::NavigateToPrevious => {
+                NodeAction::NavigateToPrevious => {
                     if let Some(previous) = layout.node_before(&self.editing) {
                         self.navigate_to(
                             previous,
@@ -67,12 +66,12 @@ impl Editor {
                         self.input.move_cursor_to_end();
                     }
                 }
-                UpdateAction::NavigateToNext => {
+                NodeAction::NavigateToNext => {
                     if let Some(next) = layout.node_after(&self.editing) {
                         self.navigate_to(next, compiler.codebase(), packages);
                     }
                 }
-                UpdateAction::MergeWithPrevious => {
+                NodeAction::MergeWithPrevious => {
                     if let Some(to_remove) = compiler
                         .codebase()
                         .children_of(&self.editing)
@@ -95,7 +94,7 @@ impl Editor {
                             compiler.codebase().latest_version_of(self.editing);
                     }
                 }
-                UpdateAction::MergeWithNext => {
+                NodeAction::MergeWithNext => {
                     if let Some(to_remove) =
                         compiler.codebase().parent_of(&self.editing)
                     {
@@ -113,7 +112,7 @@ impl Editor {
                         compiler.remove(&to_remove);
                     }
                 }
-                UpdateAction::AddParent { previous } => {
+                NodeAction::AddParent { previous } => {
                     self.editing =
                         compiler.replace(&self.editing, &previous, packages);
 
@@ -123,7 +122,7 @@ impl Editor {
                         packages,
                     );
                 }
-                UpdateAction::AddSibling { previous } => {
+                NodeAction::AddSibling { previous } => {
                     self.editing =
                         compiler.replace(&self.editing, &previous, packages);
 
