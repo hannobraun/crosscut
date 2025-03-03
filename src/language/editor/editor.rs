@@ -133,6 +133,17 @@ impl Editor {
                         .codebase()
                         .parent_of(&self.editing)
                         .unwrap_or_else(|| {
+                            // The node we're adding a sibling for has no
+                            // parent, meaning it is the root of the syntax
+                            // tree.
+                            //
+                            // The syntax tree always needs a single root. So we
+                            // can't add a sibling to the root node, without a
+                            // new root node that can serve as both of their
+                            // parent.
+                            //
+                            // Adding this new root node is what we're doing
+                            // here.
                             compiler.insert_parent(&self.editing, "", packages)
                         });
 
