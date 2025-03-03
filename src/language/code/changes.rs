@@ -72,7 +72,7 @@ impl NewChangeSet<'_> {
 }
 
 #[derive(Clone, Debug, Eq, PartialEq)]
-pub struct ChangeSet {
+struct ChangeSet {
     changes_by_old_version: BTreeMap<NodePath, NodePath>,
 }
 
