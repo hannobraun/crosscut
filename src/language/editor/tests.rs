@@ -56,3 +56,48 @@ fn navigate_to_next_sibling() {
 
     assert_eq!(editor.editing(), &b);
 }
+
+#[test]
+fn split_node_to_create_sibling() {
+    // When adding a sibling while the cursor is in the middle of a node, the
+    // node should be split.
+
+    let packages = Packages::new();
+
+    let mut codebase = Codebase::new();
+    let mut evaluator = Evaluator::new();
+
+    {
+        let root = codebase.root().path;
+        Compiler::new(&mut codebase).replace(&root, "127255", &packages);
+    }
+
+    let mut editor = Editor::new(codebase.root().path, &codebase, &packages);
+
+    for _ in "255".chars() {
+        editor.on_input(
+            EditorInputEvent::MoveCursorLeft,
+            &mut codebase,
+            &mut evaluator,
+            &packages,
+        );
+    }
+    editor.on_input(
+        EditorInputEvent::AddSibling,
+        &mut codebase,
+        &mut evaluator,
+        &packages,
+    );
+
+    assert_eq!(
+        codebase
+            .root()
+            .children(codebase.nodes())
+            .map(|located_node| located_node.node.kind())
+            .collect::<Vec<_>>(),
+        vec![
+            &NodeKind::integer_literal(127),
+            &NodeKind::integer_literal(255),
+        ],
+    );
+}

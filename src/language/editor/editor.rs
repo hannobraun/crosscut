@@ -133,11 +133,7 @@ impl Editor {
                         .codebase()
                         .parent_of(&self.editing)
                         .unwrap_or_else(|| {
-                            compiler.insert_parent(
-                                &self.editing,
-                                self.input.buffer(),
-                                packages,
-                            )
+                            compiler.insert_parent(&self.editing, "", packages)
                         });
 
                     self.editing = compiler.insert_child(
