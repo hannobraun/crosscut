@@ -190,6 +190,29 @@ impl Editor {
     }
 }
 
+#[cfg(test)]
+impl Editor {
+    pub fn on_code(
+        &mut self,
+        code: &str,
+        codebase: &mut Codebase,
+        evaluator: &mut Evaluator,
+        packages: &Packages,
+    ) {
+        for ch in code.chars() {
+            let event = if ch == ' ' {
+                EditorInputEvent::AddParent
+            } else if ch == '\n' {
+                EditorInputEvent::AddSibling
+            } else {
+                EditorInputEvent::Insert { ch }
+            };
+
+            self.on_input(event, codebase, evaluator, packages);
+        }
+    }
+}
+
 pub enum EditorCommand {
     Clear,
 }

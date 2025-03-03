@@ -92,17 +92,12 @@ use super::packages::FunctionId;
 #[cfg(test)]
 impl Language {
     pub fn on_code(&mut self, code: &str) {
-        for ch in code.chars() {
-            let event = if ch == ' ' {
-                EditorInputEvent::AddParent
-            } else if ch == '\n' {
-                EditorInputEvent::AddSibling
-            } else {
-                EditorInputEvent::Insert { ch }
-            };
-
-            self.on_input(event);
-        }
+        self.editor.on_code(
+            code,
+            &mut self.codebase,
+            &mut self.evaluator,
+            &self.packages,
+        );
     }
 
     pub fn step_until_finished(&mut self) -> Result<Value, Effect> {
