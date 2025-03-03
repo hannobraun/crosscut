@@ -24,12 +24,7 @@ fn edit_initial_node() {
     }
 
     let mut editor = Editor::new(codebase.root().path, &codebase, &packages);
-    editor.on_input(
-        EditorInputEvent::Insert { ch: '7' },
-        &mut codebase,
-        &mut evaluator,
-        &packages,
-    );
+    editor.on_code("7", &mut codebase, &mut evaluator, &packages);
 
     assert_eq!(
         codebase.node_at(editor.editing()).kind(),
