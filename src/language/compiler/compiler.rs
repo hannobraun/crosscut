@@ -27,9 +27,10 @@ impl<'r> Compiler<'r> {
     ) -> NodePath {
         let child = {
             let placeholder = Node::new(NodeKind::Empty, []);
-            let child = self.codebase.insert_node_as_child(parent, placeholder);
+            let placeholder =
+                self.codebase.insert_node_as_child(parent, placeholder);
 
-            self.replace(&child, child_token, packages)
+            self.replace(&placeholder, child_token, packages)
         };
 
         let Some(parent) = self.codebase.parent_of(&child) else {
