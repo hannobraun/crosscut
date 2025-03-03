@@ -67,7 +67,7 @@ impl Editor {
                         self.input.move_cursor_to_end();
                     }
                 }
-                UpdateAction::NavigateToNextNode => {
+                UpdateAction::NavigateToNext => {
                     if let Some(next) = layout.node_after(&self.editing) {
                         self.navigate_to(next, compiler.codebase(), packages);
                     }

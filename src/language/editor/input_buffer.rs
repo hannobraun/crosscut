@@ -52,7 +52,7 @@ impl EditorInputBuffer {
                 return Some(UpdateAction::NavigateToPrevious);
             }
             MoveCursorDown => {
-                return Some(UpdateAction::NavigateToNextNode);
+                return Some(UpdateAction::NavigateToNext);
             }
             RemoveLeft { whole_node } => {
                 if whole_node {
@@ -104,7 +104,7 @@ impl EditorInputBuffer {
             self.cursor = self.cursor.saturating_add(1);
             if self.cursor > self.buffer.len() {
                 self.cursor = self.buffer.len();
-                return Some(UpdateAction::NavigateToNextNode);
+                return Some(UpdateAction::NavigateToNext);
             }
             self.cursor = min(self.cursor, self.buffer.len());
 
@@ -159,7 +159,7 @@ impl EditorInputBuffer {
 
 pub enum UpdateAction {
     NavigateToPrevious,
-    NavigateToNextNode,
+    NavigateToNext,
     MergeWithPrevious,
     MergeWithNext,
     AddParent { previous: String },
