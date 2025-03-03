@@ -60,8 +60,8 @@ impl NewChangeSet<'_> {
         self.nodes
     }
 
-    pub fn insert(&mut self, node: Node) -> NodeHash {
-        self.nodes.insert(node)
+    pub fn insert(&mut self, replacement: Node) -> NodeHash {
+        self.nodes.insert(replacement)
     }
 }
 
