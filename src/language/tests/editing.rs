@@ -346,7 +346,7 @@ fn moving_cursor_up_at_first_node_should_do_nothing() {
 }
 
 #[test]
-fn moving_cursor_down_should_navigate_to_parent_node() {
+fn move_cursor_to_parent_node() {
     // If moving the cursor down, and there is no next sibling, the cursor
     // should move to the parent node instead.
 
