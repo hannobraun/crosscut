@@ -14,7 +14,7 @@ impl Changes {
         }
     }
 
-    pub fn new_change_set(&mut self) -> &mut ChangeSet {
+    pub fn new_change_set(&mut self) -> NewChangeSet {
         self.change_sets.push(ChangeSet {
             changes_by_old_version: BTreeMap::new(),
         });
@@ -23,7 +23,7 @@ impl Changes {
             unreachable!("Just pushed a change set. One _must_ be available.");
         };
 
-        change_set
+        NewChangeSet { change_set }
     }
 
     pub fn latest_version_of(&self, path: NodePath) -> NodePath {
@@ -46,6 +46,10 @@ impl Changes {
 
         latest_known
     }
+}
+
+pub struct NewChangeSet<'r> {
+    pub change_set: &'r mut ChangeSet,
 }
 
 #[derive(Clone, Debug, Eq, PartialEq)]
@@ -107,8 +111,8 @@ mod tests {
             NodePath { hash }
         });
 
-        changes.new_change_set().add(a, b);
-        changes.new_change_set().add(b, a);
+        changes.new_change_set().change_set.add(a, b);
+        changes.new_change_set().change_set.add(b, a);
 
         assert_eq!(changes.latest_version_of(a), a);
         assert_eq!(changes.latest_version_of(b), a);
