@@ -62,11 +62,11 @@ impl NewChangeSet<'_> {
 
     pub fn replace(
         &mut self,
-        _to_replace: NodePath,
+        to_replace: NodePath,
         replacement: Node,
     ) -> NodeHash {
         let hash = self.nodes.insert(replacement);
-        self.change_set.add(_to_replace, NodePath { hash });
+        self.change_set.add(to_replace, NodePath { hash });
         hash
     }
 }
