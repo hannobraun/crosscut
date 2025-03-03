@@ -11,6 +11,8 @@ use super::{Editor, EditorInputEvent};
 fn navigate_to_next_sibling() {
     // Moving the cursor down should navigate to the next sibling.
 
+    let packages = Packages::new();
+
     let mut codebase = Codebase::new();
     let mut evaluator = Evaluator::new();
 
@@ -18,7 +20,7 @@ fn navigate_to_next_sibling() {
         codebase.insert_node_as_child(&codebase.root().path, Node::error(node))
     });
 
-    let mut editor = Editor::new(a);
+    let mut editor = Editor::new(a, &codebase, &packages);
     editor.on_input(
         EditorInputEvent::MoveCursorDown,
         &mut codebase,
