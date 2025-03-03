@@ -1,5 +1,5 @@
 use crate::language::{
-    code::{Codebase, Node, NodeKind},
+    code::{Codebase, NodeKind},
     compiler::Compiler,
     packages::Packages,
     runtime::Evaluator,
@@ -42,9 +42,22 @@ fn navigate_to_next_sibling() {
     let mut codebase = Codebase::new();
     let mut evaluator = Evaluator::new();
 
-    let [a, b] = ["a", "b"].map(|node| {
-        codebase.insert_node_as_child(&codebase.root().path, Node::error(node))
-    });
+    let [a, b] = {
+        let mut compiler = Compiler::new(&mut codebase);
+
+        let a = compiler.insert_child(
+            &compiler.codebase().root().path,
+            "a",
+            &packages,
+        );
+        let b = compiler.insert_child(
+            &compiler.codebase().root().path,
+            "b",
+            &packages,
+        );
+
+        [a, b]
+    };
 
     let mut editor = Editor::new(a, &codebase, &packages);
     editor.on_input(
