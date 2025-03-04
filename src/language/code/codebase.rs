@@ -210,7 +210,7 @@ mod tests {
     use super::Codebase;
 
     #[test]
-    fn insert_new_root_node() {
+    fn replace_root_node() {
         // When replacing the root node, the replacement should become the new
         // root node.
 
