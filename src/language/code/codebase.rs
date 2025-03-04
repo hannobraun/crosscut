@@ -266,8 +266,8 @@ mod tests {
         let [a, b, c] = test_nodes();
         let mut codebase = Codebase::new();
 
-        let a = codebase
-            .insert_node_as_child(&codebase.root().path, Node::new(a, []));
+        let root = codebase.root().path;
+        let a = codebase.insert_node_as_child(&root, Node::new(a, []));
         let b = codebase
             .insert_node_as_child(&codebase.root().path, Node::new(b, []));
         let c = codebase.replace_node(
