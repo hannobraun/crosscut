@@ -2,6 +2,9 @@ use std::collections::{BTreeMap, BTreeSet};
 
 use super::{Node, NodePath, Nodes};
 
+#[cfg(test)]
+use super::NodeHash;
+
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub struct Changes {
     change_sets: Vec<ChangeSet>,
@@ -63,6 +66,11 @@ impl NewChangeSet<'_> {
 
     pub fn change_set(&self) -> &ChangeSet {
         self.change_set
+    }
+
+    #[cfg(test)]
+    pub fn add(&mut self, to_add: Node) -> NodeHash {
+        self.nodes.insert(to_add)
     }
 
     pub fn remove(&mut self, to_remove: NodePath) {
