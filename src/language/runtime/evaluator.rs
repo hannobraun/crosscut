@@ -258,7 +258,7 @@ impl Evaluator {
 mod tests {
     use crate::language::{
         code::{Codebase, Node, NodeKind},
-        runtime::{Evaluator, Value},
+        runtime::{Evaluator, RuntimeState, Value},
     };
 
     #[test]
@@ -297,6 +297,7 @@ mod tests {
         assert_eq!(evaluator.contexts.len(), 1);
 
         evaluator.step(&codebase);
+        assert!(matches!(evaluator.state(), RuntimeState::Running { .. }));
         assert_eq!(evaluator.contexts.len(), 1);
     }
 }
