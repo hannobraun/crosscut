@@ -234,7 +234,9 @@ mod tests {
         let mut codebase = Codebase::new();
 
         let root = codebase.root().path;
-        let a = codebase.replace_node(&root, Node::new(a, []));
+        let a = codebase.make_change(|change_set| {
+            change_set.replace(root, Node::new(a, []))
+        });
         assert_eq!(codebase.root().path, a);
 
         codebase.make_change(|change_set| {
