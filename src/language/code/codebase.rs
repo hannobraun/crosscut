@@ -87,16 +87,7 @@ impl Codebase {
             );
 
             self.replace_node(&parent, updated_parent);
-        } else {
-            // The node we're removing has no parent, which means it is the root
-            // node. We need to update that then.
-
-            assert_eq!(
-                &self.root,
-                to_remove.hash(),
-                "Removing a node that has no parent, but it's not the root \
-                node.",
-            );
+        } else if to_remove.hash == self.root {
             let root = node_to_remove;
 
             if root.children().has_none() {
