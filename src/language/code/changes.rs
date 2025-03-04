@@ -1,6 +1,6 @@
 use std::collections::{BTreeMap, BTreeSet};
 
-use super::{Node, NodeHash, NodePath, Nodes};
+use super::{Node, NodePath, Nodes};
 
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub struct Changes {
@@ -64,14 +64,14 @@ impl NewChangeSet<'_> {
         &mut self,
         to_replace: NodePath,
         replacement: Node,
-    ) -> NodeHash {
+    ) -> NodePath {
         let replacement = NodePath {
             hash: self.nodes.insert(replacement),
             // Once `NodePath` gets more fields, we can just copy those from
             // `to_replace`.
         };
         self.change_set.add(to_replace, replacement);
-        replacement.hash
+        replacement
     }
 }
 

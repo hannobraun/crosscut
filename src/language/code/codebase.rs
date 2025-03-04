@@ -138,8 +138,8 @@ impl Codebase {
             let hash =
                 new_change_set.replace(next_to_replace, next_replacement);
 
-            initial_replacement = initial_replacement.or(Some(hash));
-            previous_replacement = hash;
+            initial_replacement = initial_replacement.or(Some(hash.hash));
+            previous_replacement = hash.hash;
 
             if let Some(parent) = SyntaxTree::from_root(self.root)
                 .find_parent_of(&next_to_replace.hash, new_change_set.nodes())
