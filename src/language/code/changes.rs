@@ -133,15 +133,12 @@ mod tests {
             )
         });
         let path_a = {
-            let hash = nodes.insert(node_a);
+            let hash = nodes.insert(node_a.clone());
             NodePath { hash }
         };
 
         let path_b = changes.new_change_set(&mut nodes).replace(path_a, node_b);
-        changes
-            .new_change_set(&mut nodes)
-            .change_set
-            .add(path_b, path_a);
+        let path_a = changes.new_change_set(&mut nodes).replace(path_b, node_a);
 
         assert_eq!(changes.latest_version_of(path_a), path_a);
         assert_eq!(changes.latest_version_of(path_b), path_a);
