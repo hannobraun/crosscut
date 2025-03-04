@@ -20,8 +20,8 @@ fn empty_node_with_multiple_children_is_an_error() {
     // Verify the assumptions this tests makes about the default root node.
     assert_eq!(compiler.codebase().root().node.kind(), &NodeKind::Empty);
 
-    compiler.insert_child(&compiler.codebase().root().path, "", &packages);
-    compiler.insert_child(&compiler.codebase().root().path, "", &packages);
+    compiler.insert_child(compiler.codebase().root().path, "", &packages);
+    compiler.insert_child(compiler.codebase().root().path, "", &packages);
 
     assert_eq!(
         compiler.codebase().root().node.kind(),

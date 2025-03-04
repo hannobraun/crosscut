@@ -45,12 +45,12 @@ fn navigate_to_next_sibling() {
         let mut compiler = Compiler::new(&mut codebase);
 
         let a = compiler.insert_child(
-            &compiler.codebase().root().path,
+            compiler.codebase().root().path,
             "a",
             &packages,
         );
         let b = compiler.insert_child(
-            &compiler.codebase().root().path,
+            compiler.codebase().root().path,
             "b",
             &packages,
         );

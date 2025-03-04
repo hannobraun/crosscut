@@ -21,7 +21,7 @@ impl<'r> Compiler<'r> {
 
     pub fn insert_child(
         &mut self,
-        parent: &NodePath,
+        parent: NodePath,
         child_token: &str,
         packages: &Packages,
     ) -> NodePath {
@@ -33,7 +33,7 @@ impl<'r> Compiler<'r> {
                     change_set.nodes().get(parent.hash()).clone();
                 updated_parent.children_mut().add([child]);
 
-                change_set.replace(*parent, updated_parent);
+                change_set.replace(parent, updated_parent);
 
                 NodePath { hash: child }
             });

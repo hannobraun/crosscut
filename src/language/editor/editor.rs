@@ -145,7 +145,7 @@ impl Editor {
                         });
 
                     self.editing = compiler.insert_child(
-                        &parent,
+                        parent,
                         self.input.buffer(),
                         packages,
                     );
