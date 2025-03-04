@@ -288,10 +288,9 @@ mod tests {
         // tail-recursive.
 
         let mut codebase = Codebase::new();
-        codebase.replace_node(
-            &codebase.root().path,
-            Node::new(NodeKind::Recursion, []),
-        );
+
+        let root = codebase.root().path;
+        codebase.replace_node(&root, Node::new(NodeKind::Recursion, []));
 
         let mut evaluator = Evaluator::new();
         evaluator.reset(&codebase);
