@@ -67,6 +67,8 @@ impl NewChangeSet<'_> {
     ) -> NodeHash {
         let replacement = NodePath {
             hash: self.nodes.insert(replacement),
+            // Once `NodePath` gets more fields, we can just copy those from
+            // `to_replace`.
         };
         self.change_set.add(to_replace, replacement);
         replacement.hash
