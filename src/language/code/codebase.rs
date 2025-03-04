@@ -193,10 +193,9 @@ mod tests {
 
         let mut codebase = Codebase::new();
 
-        let new_root = codebase.replace_node(
-            &codebase.root().path,
-            Node::new(NodeKind::Empty, []),
-        );
+        let old_root = codebase.root().path;
+        let new_root =
+            codebase.replace_node(&old_root, Node::new(NodeKind::Empty, []));
 
         assert_eq!(codebase.root().path, new_root);
     }
