@@ -120,7 +120,7 @@ mod tests {
         let mut changes = Changes::new();
         let mut nodes = Nodes::new();
 
-        let [path_a, b] = ["a", "b"].map(|node| {
+        let [path_a, path_b] = ["a", "b"].map(|node| {
             let node = Node::new(
                 NodeKind::Error {
                     node: String::from(node),
@@ -131,10 +131,16 @@ mod tests {
             NodePath { hash }
         });
 
-        changes.new_change_set(&mut nodes).change_set.add(path_a, b);
-        changes.new_change_set(&mut nodes).change_set.add(b, path_a);
+        changes
+            .new_change_set(&mut nodes)
+            .change_set
+            .add(path_a, path_b);
+        changes
+            .new_change_set(&mut nodes)
+            .change_set
+            .add(path_b, path_a);
 
         assert_eq!(changes.latest_version_of(path_a), path_a);
-        assert_eq!(changes.latest_version_of(b), path_a);
+        assert_eq!(changes.latest_version_of(path_b), path_a);
     }
 }
