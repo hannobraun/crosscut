@@ -60,6 +60,10 @@ impl NewChangeSet<'_> {
         self.nodes
     }
 
+    pub fn change_set(&self) -> &ChangeSet {
+        self.change_set
+    }
+
     pub fn replace(
         &mut self,
         to_replace: NodePath,
@@ -80,6 +84,12 @@ impl NewChangeSet<'_> {
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub struct ChangeSet {
     replacements_by_replaced: BTreeMap<NodePath, NodePath>,
+}
+
+impl ChangeSet {
+    pub fn was_replaced(&self, replaced: &NodePath) -> Option<&NodePath> {
+        self.replacements_by_replaced.get(replaced)
+    }
 }
 
 impl ChangeSet {

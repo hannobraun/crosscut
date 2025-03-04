@@ -158,7 +158,12 @@ impl Codebase {
             };
         }
 
-        self.root = previous_replacement;
+        if let Some(replacement) = new_change_set
+            .change_set()
+            .was_replaced(&NodePath { hash: self.root })
+        {
+            self.root = replacement.hash;
+        }
 
         if let Some(path) = initial_replacement {
             path
