@@ -132,15 +132,12 @@ mod tests {
                 None,
             )
         });
-        let [path_a, path_b] = [node_a, node_b].map(|node| {
-            let hash = nodes.insert(node);
+        let path_a = {
+            let hash = nodes.insert(node_a);
             NodePath { hash }
-        });
+        };
 
-        changes
-            .new_change_set(&mut nodes)
-            .change_set
-            .add(path_a, path_b);
+        let path_b = changes.new_change_set(&mut nodes).replace(path_a, node_b);
         changes
             .new_change_set(&mut nodes)
             .change_set
