@@ -267,21 +267,19 @@ mod tests {
         let mut codebase = Codebase::new();
 
         let root = codebase.root().path;
-        let a = codebase.insert_node_as_child(&root, Node::new(a, []));
-        let b = codebase
-            .insert_node_as_child(&codebase.root().path, Node::new(b, []));
-        let c = codebase.replace_node(
-            &codebase.root().path,
-            Node::new(c, [a.hash, b.hash]),
-        );
+        let (a, b, c) = codebase.make_change(|change_set| {
+            let a = change_set.add(Node::new(a, []));
+            let b = change_set.add(Node::new(b, []));
+
+            let c = change_set.replace(root, Node::new(c, [a, b]));
+
+            (a, b, c)
+        });
 
         codebase.make_change(|change_set| {
             change_set.remove(c);
         });
-        assert_eq!(
-            codebase.root().node,
-            &Node::new(NodeKind::Empty, [a.hash, b.hash]),
-        );
+        assert_eq!(codebase.root().node, &Node::new(NodeKind::Empty, [a, b]),);
     }
 
     fn test_nodes() -> [NodeKind; 3] {
