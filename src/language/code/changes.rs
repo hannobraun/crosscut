@@ -65,9 +65,10 @@ impl NewChangeSet<'_> {
         to_replace: NodePath,
         replacement: Node,
     ) -> NodeHash {
-        let hash = self.nodes.insert(replacement);
-        self.change_set.add(to_replace, NodePath { hash });
-        hash
+        let replacement = self.nodes.insert(replacement);
+        self.change_set
+            .add(to_replace, NodePath { hash: replacement });
+        replacement
     }
 }
 
