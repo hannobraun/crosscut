@@ -89,7 +89,7 @@ impl Editor {
                             .join("");
                         self.input = EditorInputBuffer::new(merged);
 
-                        compiler.remove(&to_remove);
+                        compiler.remove(to_remove);
                         self.editing =
                             compiler.codebase().latest_version_of(self.editing);
                     }
@@ -109,7 +109,7 @@ impl Editor {
                             .join("");
                         self.input = EditorInputBuffer::new(merged);
 
-                        compiler.remove(&to_remove);
+                        compiler.remove(to_remove);
                     }
                 }
                 NodeAction::AddParent { previous } => {

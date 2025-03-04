@@ -61,10 +61,10 @@ impl<'r> Compiler<'r> {
         self.replace(&path, parent_token, packages)
     }
 
-    pub fn remove(&mut self, to_remove: &NodePath) {
+    pub fn remove(&mut self, to_remove: NodePath) {
         let node_to_remove = self.codebase.nodes().get(to_remove.hash());
 
-        if let Some(parent) = self.codebase.parent_of(to_remove) {
+        if let Some(parent) = self.codebase.parent_of(&to_remove) {
             // The node we're removing has a parent. We need to remove the
             // reference from that parent to the node.
 
@@ -79,7 +79,7 @@ impl<'r> Compiler<'r> {
             self.codebase.replace_node(&parent, updated_parent);
         } else {
             self.codebase.make_change(|change_set| {
-                change_set.remove(*to_remove);
+                change_set.remove(to_remove);
             });
         }
     }
