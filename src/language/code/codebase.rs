@@ -84,15 +84,15 @@ impl Codebase {
     pub fn insert_node_as_parent(
         &mut self,
         child: &NodePath,
-        node: Node,
+        new_parent: Node,
     ) -> NodePath {
         assert!(
-            node.children().contains(child.hash()),
+            new_parent.children().contains(child.hash()),
             "Inserting a node as the parent of another, but other node is not \
             the new parent's child.",
         );
 
-        let hash = self.nodes.insert(node);
+        let hash = self.nodes.insert(new_parent);
 
         if let Some(parent) = self.parent_of(child) {
             let mut updated_parent = self.nodes.get(parent.hash()).clone();
