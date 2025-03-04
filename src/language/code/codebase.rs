@@ -193,7 +193,8 @@ mod tests {
         let b = codebase.replace_node(&codebase.root().path, Node::new(b, []));
         let a = codebase.insert_node_as_child(&b, Node::new(a, []));
 
-        codebase.remove_node(&codebase.root().path);
+        let root = codebase.root().path;
+        codebase.remove_node(&root);
         assert_eq!(codebase.root().path, a);
     }
 
