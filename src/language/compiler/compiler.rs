@@ -162,8 +162,7 @@ fn resolve_keyword(
         "fn" => {
             // Every function must have a child. Other code assumes that.
             let children = if children.has_none() {
-                let child = codebase
-                    .insert_node_as_child(path, Node::new(NodeKind::Empty, []));
+                let child = insert_empty_child(*path, codebase);
                 *path = codebase.latest_version_of(*path);
 
                 Children::new(Some(*child.hash()))

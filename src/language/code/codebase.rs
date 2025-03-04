@@ -108,21 +108,6 @@ impl Codebase {
         value
     }
 
-    pub fn insert_node_as_child(
-        &mut self,
-        parent: &NodePath,
-        node: Node,
-    ) -> NodePath {
-        let hash = self.nodes.insert(node);
-
-        let mut updated_parent = self.nodes.get(parent.hash()).clone();
-        updated_parent.children_mut().add([hash]);
-
-        self.replace_node(parent, updated_parent);
-
-        NodePath { hash }
-    }
-
     pub fn replace_node(
         &mut self,
         to_replace: &NodePath,
