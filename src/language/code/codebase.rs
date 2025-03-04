@@ -9,7 +9,7 @@ use super::{
 
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub struct Codebase {
-    root: NodeHash,
+    root: Root,
     empty: NodeHash,
     nodes: Nodes,
     changes: Changes,
@@ -22,7 +22,7 @@ impl Codebase {
         let empty = nodes.insert(Node::new(NodeKind::Empty, None));
 
         Self {
-            root: empty,
+            root: Root { hash: empty },
             empty,
             nodes,
             changes: Changes::new(),
@@ -36,8 +36,10 @@ impl Codebase {
 
     pub fn root(&self) -> LocatedNode {
         LocatedNode {
-            node: self.nodes.get(&self.root),
-            path: NodePath { hash: self.root },
+            node: self.nodes.get(&self.root.hash),
+            path: NodePath {
+                hash: self.root.hash,
+            },
         }
     }
 
@@ -46,7 +48,8 @@ impl Codebase {
     }
 
     pub fn parent_of(&self, path: &NodePath) -> Option<NodePath> {
-        SyntaxTree::from_root(self.root).find_parent_of(&path.hash, &self.nodes)
+        SyntaxTree::from_root(self.root.hash)
+            .find_parent_of(&path.hash, &self.nodes)
     }
 
     pub fn node_at(&self, path: &NodePath) -> &Node {
@@ -73,19 +76,19 @@ impl Codebase {
     }
 
     pub fn remove_node(&mut self, to_remove: &NodePath) {
-        if to_remove.hash == self.root {
+        if to_remove.hash == self.root.hash {
             let root = self.root().node;
 
             if root.children().has_none() {
                 // The root node we're removing has no children, but we still
                 // need a new root node.
 
-                self.root = self.empty;
+                self.root.hash = self.empty;
             } else if let Some(child) = root.children().has_one().copied() {
                 // The root node we're removing has exactly one child, which can
                 // become the new root node.
 
-                self.root = child;
+                self.root.hash = child;
             } else {
                 // The root node we're removing has multiple children, but we
                 // still need a single root node afterwards.
@@ -93,7 +96,7 @@ impl Codebase {
                 let mut new_root = self.nodes.get(&self.empty).clone();
                 new_root.children_mut().add(root.children().iter().copied());
 
-                self.root = self.nodes.insert(new_root);
+                self.root.hash = self.nodes.insert(new_root);
             }
         }
     }
@@ -118,7 +121,7 @@ impl Codebase {
             initial_replacement = initial_replacement.or(Some(path));
             previous_replacement = path.hash;
 
-            if let Some(parent) = SyntaxTree::from_root(self.root)
+            if let Some(parent) = SyntaxTree::from_root(self.root.hash)
                 .find_parent_of(&next_to_replace.hash, new_change_set.nodes())
             {
                 next_replacement =
@@ -135,11 +138,12 @@ impl Codebase {
             };
         }
 
-        if let Some(replacement) = new_change_set
-            .change_set()
-            .was_replaced(&NodePath { hash: self.root })
+        if let Some(replacement) =
+            new_change_set.change_set().was_replaced(&NodePath {
+                hash: self.root.hash,
+            })
         {
-            self.root = replacement.hash;
+            self.root.hash = replacement.hash;
         }
 
         if let Some(path) = initial_replacement {
@@ -159,6 +163,11 @@ impl Codebase {
     pub fn insert_error(&mut self, path: NodePath, error: CodeError) {
         self.errors.insert(path, error);
     }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq)]
+struct Root {
+    hash: NodeHash,
 }
 
 #[cfg(test)]
