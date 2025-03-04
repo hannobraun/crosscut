@@ -271,7 +271,7 @@ mod tests {
         let mut codebase = Codebase::new();
         codebase.replace_node(
             &codebase.root().path,
-            Node::new(NodeKind::Recursion, Some(*codebase.root().path.hash())),
+            Node::new(NodeKind::Recursion, []),
         );
 
         let mut evaluator = Evaluator::new();
@@ -289,7 +289,7 @@ mod tests {
         let mut codebase = Codebase::new();
         codebase.replace_node(
             &codebase.root().path,
-            Node::new(NodeKind::Recursion, Some(*codebase.root().path.hash())),
+            Node::new(NodeKind::Recursion, []),
         );
 
         let mut evaluator = Evaluator::new();
