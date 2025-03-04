@@ -76,8 +76,8 @@ impl Codebase {
         let node_to_remove = self.nodes.get(to_remove.hash());
 
         if let Some(parent) = self.parent_of(to_remove) {
-            // The node we're removing has a parent. We need to update the
-            // children of that node.
+            // The node we're removing has a parent. We need to remove the
+            // reference from that parent to the node.
 
             let mut updated_parent = self.nodes.get(parent.hash()).clone();
 
