@@ -236,7 +236,7 @@ mod tests {
         let b = codebase.insert_node_as_parent(&a, Node::new(b, [*a.hash()]));
         assert_eq!(codebase.root().path, b);
 
-        codebase.remove_node(&b);
+        codebase.remove_node(&codebase.root().path);
         assert_eq!(codebase.root().path, a);
     }
 
