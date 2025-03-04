@@ -97,15 +97,14 @@ impl Codebase {
                 "Removing a node that has no parent, but it's not the root \
                 node.",
             );
+            let root = node_to_remove;
 
-            if node_to_remove.children().has_none() {
+            if root.children().has_none() {
                 // The root node we're removing has no children, but we still
                 // need a new root node.
 
                 self.root = self.empty;
-            } else if let Some(child) =
-                node_to_remove.children().has_one().copied()
-            {
+            } else if let Some(child) = root.children().has_one().copied() {
                 // The root node we're removing has exactly one child, which can
                 // become the new root node.
 
@@ -115,9 +114,7 @@ impl Codebase {
                 // still need a single root node afterwards.
 
                 let mut new_root = self.nodes.get(&self.empty).clone();
-                new_root
-                    .children_mut()
-                    .add(node_to_remove.children().iter().copied());
+                new_root.children_mut().add(root.children().iter().copied());
 
                 self.root = self.nodes.insert(new_root);
             }
