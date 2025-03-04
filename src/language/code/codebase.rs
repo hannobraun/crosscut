@@ -67,6 +67,17 @@ impl Codebase {
 
         let root_was_removed =
             new_change_set.change_set().was_removed(&self.root.path());
+        let root_was_replaced =
+            new_change_set.change_set().was_replaced(&self.root.path());
+
+        // I'm not even sure this can even happen. Maybe this should become an
+        // `unreachable!`. But for now, it's probably good enough to make sure
+        // that this precondition doesn't slip through the cracks somehow.
+        assert!(
+            !(root_was_removed && root_was_replaced.is_some()),
+            "Both removing and replacing the root in the same change set is \
+            not supported.",
+        );
 
         if root_was_removed {
             let root = self.root().node;
@@ -90,6 +101,8 @@ impl Codebase {
 
                 self.root.hash = self.nodes.insert(new_root);
             }
+        } else if let Some(new_root) = root_was_replaced {
+            self.root.hash = new_root.hash;
         }
 
         value
@@ -198,7 +211,9 @@ mod tests {
         let mut codebase = Codebase::new();
 
         let old_root = codebase.root().path;
-        let new_root = codebase.replace_node(&old_root, Node::new(a, []));
+        let new_root = codebase.make_change(|change_set| {
+            change_set.replace(old_root, Node::new(a, []))
+        });
 
         assert_eq!(codebase.root().path, new_root);
     }
