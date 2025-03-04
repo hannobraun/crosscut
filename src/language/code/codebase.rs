@@ -72,30 +72,6 @@ impl Codebase {
         NodePath { hash }
     }
 
-    /// # Insert a node as the parent of another
-    ///
-    /// The new node takes the place of the other node in the syntax tree. The
-    /// other node's parent (and its parents, recursively) are updated
-    /// accordingly.
-    ///
-    /// ## Panics
-    ///
-    /// Panics, if the inserted node does not have its child node set correctly.
-    #[cfg(test)]
-    pub fn insert_node_as_parent(
-        &mut self,
-        child: &NodePath,
-        new_parent: Node,
-    ) -> NodePath {
-        assert!(
-            new_parent.children().contains(child.hash()),
-            "Inserting a node as the parent of another, but other node is not \
-            the new parent's child.",
-        );
-
-        self.replace_node(child, new_parent)
-    }
-
     pub fn remove_node(&mut self, to_remove: &NodePath) {
         let node_to_remove = self.nodes.get(to_remove.hash());
 

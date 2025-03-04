@@ -269,7 +269,7 @@ mod tests {
         // did.
 
         let mut codebase = Codebase::new();
-        codebase.insert_node_as_parent(
+        codebase.replace_node(
             &codebase.root().path,
             Node::new(NodeKind::Recursion, Some(*codebase.root().path.hash())),
         );
@@ -287,7 +287,7 @@ mod tests {
         // tail-recursive.
 
         let mut codebase = Codebase::new();
-        codebase.insert_node_as_parent(
+        codebase.replace_node(
             &codebase.root().path,
             Node::new(NodeKind::Recursion, Some(*codebase.root().path.hash())),
         );
