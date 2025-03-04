@@ -19,7 +19,7 @@ impl Changes {
         nodes: &'r mut Nodes,
     ) -> NewChangeSet<'r> {
         self.change_sets.push(ChangeSet {
-            changes_by_old_version: BTreeMap::new(),
+            replacements_by_replaced: BTreeMap::new(),
         });
 
         let Some(change_set) = self.change_sets.last_mut() else {
@@ -33,7 +33,7 @@ impl Changes {
         let Some(i) = self.change_sets.iter().enumerate().rev().find_map(
             |(i, change_set)| {
                 change_set
-                    .changes_by_old_version
+                    .replacements_by_replaced
                     .contains_key(&path)
                     .then_some(i)
             },
@@ -73,12 +73,12 @@ impl NewChangeSet<'_> {
 
 #[derive(Clone, Debug, Eq, PartialEq)]
 struct ChangeSet {
-    changes_by_old_version: BTreeMap<NodePath, NodePath>,
+    replacements_by_replaced: BTreeMap<NodePath, NodePath>,
 }
 
 impl ChangeSet {
     pub fn add(&mut self, old: NodePath, new: NodePath) -> &mut Self {
-        self.changes_by_old_version.insert(old, new);
+        self.replacements_by_replaced.insert(old, new);
         self
     }
 
@@ -86,7 +86,8 @@ impl ChangeSet {
         let mut already_seen = BTreeSet::new();
         let mut latest_known = path;
 
-        while let Some(later) = self.changes_by_old_version.get(&latest_known) {
+        while let Some(later) = self.replacements_by_replaced.get(&latest_known)
+        {
             already_seen.insert(latest_known);
 
             if already_seen.contains(later) {
