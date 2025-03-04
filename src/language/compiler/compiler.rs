@@ -53,7 +53,7 @@ impl<'r> Compiler<'r> {
         packages: &Packages,
     ) -> NodePath {
         let placeholder = Node::new(NodeKind::Empty, [child.hash]);
-        let path = self.codebase.replace_node(child, placeholder);
+        let path = replace_node(child, placeholder, self.codebase);
 
         self.replace(&path, parent_token, packages)
     }
@@ -73,7 +73,7 @@ impl<'r> Compiler<'r> {
                 node_to_remove.children().iter().copied(),
             );
 
-            self.codebase.replace_node(&parent, updated_parent);
+            replace_node(&parent, updated_parent, self.codebase);
         } else {
             self.codebase.make_change(|change_set| {
                 change_set.remove(to_remove);
@@ -96,7 +96,7 @@ impl<'r> Compiler<'r> {
             packages,
         );
 
-        let path = self.codebase.replace_node(&path, node);
+        let path = replace_node(&path, node, self.codebase);
         if let Some(error) = maybe_error {
             self.codebase.insert_error(path, error);
         }
@@ -229,4 +229,12 @@ fn insert_empty_child(parent: NodePath, codebase: &mut Codebase) -> NodePath {
 
         NodePath { hash: child }
     })
+}
+
+fn replace_node(
+    to_replace: &NodePath,
+    replacement: Node,
+    codebase: &mut Codebase,
+) -> NodePath {
+    codebase.replace_node(to_replace, replacement)
 }
