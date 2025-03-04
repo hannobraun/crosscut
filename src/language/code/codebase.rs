@@ -92,19 +92,23 @@ impl Codebase {
             the new parent's child.",
         );
 
-        let hash = self.nodes.insert(new_parent);
+        let new_parent_hash = self.nodes.insert(new_parent);
 
         if let Some(existing_parent) = self.parent_of(child) {
             let mut updated_parent =
                 self.nodes.get(existing_parent.hash()).clone();
-            updated_parent.children_mut().replace(child.hash(), [hash]);
+            updated_parent
+                .children_mut()
+                .replace(child.hash(), [new_parent_hash]);
 
             self.replace_node(&existing_parent, updated_parent);
         } else {
-            self.root = hash;
+            self.root = new_parent_hash;
         }
 
-        NodePath { hash }
+        NodePath {
+            hash: new_parent_hash,
+        }
     }
 
     pub fn remove_node(&mut self, to_remove: &NodePath) {
