@@ -78,7 +78,9 @@ impl<'r> Compiler<'r> {
 
             self.codebase.replace_node(&parent, updated_parent);
         } else {
-            self.codebase.remove_node(to_remove);
+            self.codebase.make_change(|change_set| {
+                change_set.remove(*to_remove);
+            });
         }
     }
 

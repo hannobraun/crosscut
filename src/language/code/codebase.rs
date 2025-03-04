@@ -4,7 +4,7 @@ use crate::language::code::NodeKind;
 
 use super::{
     Changes, Children, CodeError, LocatedNode, Node, NodeHash, NodePath, Nodes,
-    SyntaxTree,
+    SyntaxTree, changes::NewChangeSet,
 };
 
 #[derive(Clone, Debug, Eq, PartialEq)]
@@ -58,24 +58,9 @@ impl Codebase {
         self.changes.latest_version_of(path)
     }
 
-    pub fn insert_node_as_child(
-        &mut self,
-        parent: &NodePath,
-        node: Node,
-    ) -> NodePath {
-        let hash = self.nodes.insert(node);
-
-        let mut updated_parent = self.nodes.get(parent.hash()).clone();
-        updated_parent.children_mut().add([hash]);
-
-        self.replace_node(parent, updated_parent);
-
-        NodePath { hash }
-    }
-
-    pub fn remove_node(&mut self, to_remove: &NodePath) {
+    pub fn make_change(&mut self, f: impl FnOnce(&mut NewChangeSet)) {
         let mut new_change_set = self.changes.new_change_set(&mut self.nodes);
-        new_change_set.remove(*to_remove);
+        f(&mut new_change_set);
 
         if new_change_set.change_set().was_removed(&self.root.path()) {
             let root = self.root().node;
@@ -100,6 +85,21 @@ impl Codebase {
                 self.root.hash = self.nodes.insert(new_root);
             }
         }
+    }
+
+    pub fn insert_node_as_child(
+        &mut self,
+        parent: &NodePath,
+        node: Node,
+    ) -> NodePath {
+        let hash = self.nodes.insert(node);
+
+        let mut updated_parent = self.nodes.get(parent.hash()).clone();
+        updated_parent.children_mut().add([hash]);
+
+        self.replace_node(parent, updated_parent);
+
+        NodePath { hash }
     }
 
     pub fn replace_node(
@@ -208,7 +208,9 @@ mod tests {
         let a = codebase.insert_node_as_child(&b, Node::new(a, []));
 
         let root = codebase.root().path;
-        codebase.remove_node(&root);
+        codebase.make_change(|change_set| {
+            change_set.remove(root);
+        });
         assert_eq!(codebase.root().path, a);
     }
 
@@ -223,7 +225,9 @@ mod tests {
         let a = codebase.replace_node(&codebase.root().path, Node::new(a, []));
         assert_eq!(codebase.root().path, a);
 
-        codebase.remove_node(&a);
+        codebase.make_change(|change_set| {
+            change_set.remove(a);
+        });
         assert_eq!(codebase.root().node, &Node::new(NodeKind::Empty, []));
     }
 
@@ -245,7 +249,9 @@ mod tests {
             Node::new(c, [a.hash, b.hash]),
         );
 
-        codebase.remove_node(&c);
+        codebase.make_change(|change_set| {
+            change_set.remove(c);
+        });
         assert_eq!(
             codebase.root().node,
             &Node::new(NodeKind::Empty, [a.hash, b.hash]),
