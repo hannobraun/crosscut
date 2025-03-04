@@ -211,8 +211,8 @@ mod tests {
 
     #[test]
     fn insert_new_root_node() {
-        // When inserting a node as parent of the root node, it should become
-        // the new root node.
+        // When replacing the root node, the replacement should become the new
+        // root node.
 
         let mut codebase = Codebase::new();
 
