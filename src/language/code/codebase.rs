@@ -232,8 +232,8 @@ mod tests {
         let [a, b, ..] = test_nodes();
         let mut codebase = Codebase::new();
 
-        let a = codebase.replace_node(&codebase.root().path, Node::new(a, []));
-        codebase.insert_node_as_parent(&a, Node::new(b, [*a.hash()]));
+        let b = codebase.replace_node(&codebase.root().path, Node::new(b, []));
+        let a = codebase.insert_node_as_child(&b, Node::new(a, []));
 
         codebase.remove_node(&codebase.root().path);
         assert_eq!(codebase.root().path, a);
