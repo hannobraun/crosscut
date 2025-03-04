@@ -37,9 +37,7 @@ impl Codebase {
     pub fn root(&self) -> LocatedNode {
         LocatedNode {
             node: self.nodes.get(&self.root.hash),
-            path: NodePath {
-                hash: self.root.hash,
-            },
+            path: self.root.path(),
         }
     }
 
@@ -139,9 +137,7 @@ impl Codebase {
         }
 
         if let Some(replacement) =
-            new_change_set.change_set().was_replaced(&NodePath {
-                hash: self.root.hash,
-            })
+            new_change_set.change_set().was_replaced(&self.root.path())
         {
             self.root.hash = replacement.hash;
         }
@@ -168,6 +164,12 @@ impl Codebase {
 #[derive(Clone, Debug, Eq, PartialEq)]
 struct Root {
     hash: NodeHash,
+}
+
+impl Root {
+    fn path(&self) -> NodePath {
+        NodePath { hash: self.hash }
+    }
 }
 
 #[cfg(test)]
