@@ -74,7 +74,10 @@ impl Codebase {
     }
 
     pub fn remove_node(&mut self, to_remove: &NodePath) {
-        if to_remove.hash == self.root.hash {
+        let mut new_change_set = self.changes.new_change_set(&mut self.nodes);
+        new_change_set.remove(*to_remove);
+
+        if new_change_set.change_set().was_removed(&self.root.path()) {
             let root = self.root().node;
 
             if root.children().has_none() {
