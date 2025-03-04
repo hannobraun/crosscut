@@ -108,59 +108,6 @@ impl Codebase {
         value
     }
 
-    pub fn replace_node(
-        &mut self,
-        to_replace: &NodePath,
-        replacement: Node,
-    ) -> NodePath {
-        let mut new_change_set = self.changes.new_change_set(&mut self.nodes);
-
-        let mut next_to_replace = *to_replace;
-        let mut next_replacement = replacement;
-
-        let mut previous_replacement;
-        let mut initial_replacement = None;
-
-        loop {
-            let path =
-                new_change_set.replace(next_to_replace, next_replacement);
-
-            initial_replacement = initial_replacement.or(Some(path));
-            previous_replacement = path.hash;
-
-            if let Some(parent) = SyntaxTree::from_root(self.root.hash)
-                .find_parent_of(&next_to_replace.hash, new_change_set.nodes())
-            {
-                next_replacement =
-                    new_change_set.nodes().get(parent.hash()).clone();
-                next_replacement
-                    .children_mut()
-                    .replace(next_to_replace.hash(), [previous_replacement]);
-
-                next_to_replace = parent;
-
-                continue;
-            } else {
-                break;
-            };
-        }
-
-        if let Some(replacement) =
-            new_change_set.change_set().was_replaced(&self.root.path())
-        {
-            self.root.hash = replacement.hash;
-        }
-
-        if let Some(path) = initial_replacement {
-            path
-        } else {
-            unreachable!(
-                "The loop above is executed at least once. The variable must \
-                have been set."
-            );
-        }
-    }
-
     pub fn error_at(&self, path: &NodePath) -> Option<&CodeError> {
         self.errors.get(path)
     }

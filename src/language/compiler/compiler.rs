@@ -1,7 +1,7 @@
 use crate::language::{
     code::{
         Children, CodeError, Codebase, Expression, IntrinsicFunction, Literal,
-        Node, NodeKind, NodePath,
+        Node, NodeKind, NodePath, SyntaxTree,
     },
     packages::Packages,
 };
@@ -236,5 +236,46 @@ fn replace_node(
     replacement: Node,
     codebase: &mut Codebase,
 ) -> NodePath {
-    codebase.replace_node(to_replace, replacement)
+    let root = codebase.root().path;
+
+    codebase.make_change(|new_change_set| {
+        let mut next_to_replace = *to_replace;
+        let mut next_replacement = replacement;
+
+        let mut previous_replacement;
+        let mut initial_replacement = None;
+
+        loop {
+            let path =
+                new_change_set.replace(next_to_replace, next_replacement);
+
+            initial_replacement = initial_replacement.or(Some(path));
+            previous_replacement = path.hash;
+
+            if let Some(parent) = SyntaxTree::from_root(root.hash)
+                .find_parent_of(&next_to_replace.hash, new_change_set.nodes())
+            {
+                next_replacement =
+                    new_change_set.nodes().get(parent.hash()).clone();
+                next_replacement
+                    .children_mut()
+                    .replace(next_to_replace.hash(), [previous_replacement]);
+
+                next_to_replace = parent;
+
+                continue;
+            } else {
+                break;
+            };
+        }
+
+        if let Some(path) = initial_replacement {
+            path
+        } else {
+            unreachable!(
+                "The loop above is executed at least once. The variable must \
+                have been set."
+            );
+        }
+    })
 }
