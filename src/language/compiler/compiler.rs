@@ -238,7 +238,7 @@ fn replace_node(
 ) -> NodePath {
     let root = codebase.root().path;
 
-    codebase.make_change(|new_change_set| {
+    codebase.make_change(|change_set| {
         let mut next_to_replace = *to_replace;
         let mut next_replacement = replacement;
 
@@ -246,17 +246,16 @@ fn replace_node(
         let mut initial_replacement = None;
 
         loop {
-            let path =
-                new_change_set.replace(next_to_replace, next_replacement);
+            let path = change_set.replace(next_to_replace, next_replacement);
 
             initial_replacement = initial_replacement.or(Some(path));
             previous_replacement = path.hash;
 
             if let Some(parent) = SyntaxTree::from_root(root.hash)
-                .find_parent_of(&next_to_replace.hash, new_change_set.nodes())
+                .find_parent_of(&next_to_replace.hash, change_set.nodes())
             {
                 next_replacement =
-                    new_change_set.nodes().get(parent.hash()).clone();
+                    change_set.nodes().get(parent.hash()).clone();
                 next_replacement
                     .children_mut()
                     .replace(next_to_replace.hash(), [previous_replacement]);
