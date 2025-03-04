@@ -58,9 +58,12 @@ impl Codebase {
         self.changes.latest_version_of(path)
     }
 
-    pub fn make_change(&mut self, f: impl FnOnce(&mut NewChangeSet)) {
+    pub fn make_change<R>(
+        &mut self,
+        f: impl FnOnce(&mut NewChangeSet) -> R,
+    ) -> R {
         let mut new_change_set = self.changes.new_change_set(&mut self.nodes);
-        f(&mut new_change_set);
+        let value = f(&mut new_change_set);
 
         if new_change_set.change_set().was_removed(&self.root.path()) {
             let root = self.root().node;
@@ -85,6 +88,8 @@ impl Codebase {
                 self.root.hash = self.nodes.insert(new_root);
             }
         }
+
+        value
     }
 
     pub fn insert_node_as_child(
