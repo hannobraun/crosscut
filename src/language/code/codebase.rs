@@ -114,11 +114,12 @@ impl Codebase {
                 // The root node we're removing has multiple children, but we
                 // still need a single root node afterwards.
 
-                let mut root = self.nodes.get(&self.empty).clone();
-                root.children_mut()
+                let mut new_root = self.nodes.get(&self.empty).clone();
+                new_root
+                    .children_mut()
                     .add(node_to_remove.children().iter().copied());
 
-                self.root = self.nodes.insert(root);
+                self.root = self.nodes.insert(new_root);
             }
         }
     }
