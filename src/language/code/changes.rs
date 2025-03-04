@@ -120,10 +120,10 @@ mod tests {
         let mut changes = Changes::new();
         let mut nodes = Nodes::new();
 
-        let [node_a, node_b] = ["a", "b"].map(|node| {
+        let [node_a, node_b] = ["a", "b"].map(|name| {
             Node::new(
                 NodeKind::Error {
-                    node: String::from(node),
+                    node: String::from(name),
                 },
                 None,
             )
