@@ -90,9 +90,7 @@ impl ChangeSet {
     pub fn was_replaced(&self, replaced: &NodePath) -> Option<&NodePath> {
         self.replacements_by_replaced.get(replaced)
     }
-}
 
-impl ChangeSet {
     fn latest_version_of(&self, path: NodePath) -> NodePath {
         let mut already_seen = BTreeSet::new();
         let mut latest_known = path;
