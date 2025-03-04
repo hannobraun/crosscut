@@ -231,7 +231,6 @@ mod tests {
         );
 
         codebase.remove_node(&c);
-
         assert_eq!(
             codebase.root().node,
             &Node::new(NodeKind::Empty, [a.hash, b.hash]),
