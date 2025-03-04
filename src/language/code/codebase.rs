@@ -88,7 +88,7 @@ impl Codebase {
 
             self.replace_node(&parent, updated_parent);
         } else if to_remove.hash == self.root {
-            let root = node_to_remove;
+            let root = self.root().node;
 
             if root.children().has_none() {
                 // The root node we're removing has no children, but we still
