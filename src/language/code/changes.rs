@@ -120,13 +120,15 @@ mod tests {
         let mut changes = Changes::new();
         let mut nodes = Nodes::new();
 
-        let [path_a, path_b] = ["a", "b"].map(|node| {
-            let node = Node::new(
+        let [node_a, node_b] = ["a", "b"].map(|node| {
+            Node::new(
                 NodeKind::Error {
                     node: String::from(node),
                 },
                 None,
-            );
+            )
+        });
+        let [path_a, path_b] = [node_a, node_b].map(|node| {
             let hash = nodes.insert(node);
             NodePath { hash }
         });
