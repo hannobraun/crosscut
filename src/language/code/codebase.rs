@@ -135,11 +135,11 @@ impl Codebase {
         let mut initial_replacement = None;
 
         loop {
-            let hash =
+            let path =
                 new_change_set.replace(next_to_replace, next_replacement);
 
-            initial_replacement = initial_replacement.or(Some(hash.hash));
-            previous_replacement = hash.hash;
+            initial_replacement = initial_replacement.or(Some(path.hash));
+            previous_replacement = path.hash;
 
             if let Some(parent) = SyntaxTree::from_root(self.root)
                 .find_parent_of(&next_to_replace.hash, new_change_set.nodes())
