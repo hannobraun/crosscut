@@ -138,7 +138,7 @@ impl Codebase {
             let path =
                 new_change_set.replace(next_to_replace, next_replacement);
 
-            initial_replacement = initial_replacement.or(Some(path.hash));
+            initial_replacement = initial_replacement.or(Some(path));
             previous_replacement = path.hash;
 
             if let Some(parent) = SyntaxTree::from_root(self.root)
@@ -161,7 +161,7 @@ impl Codebase {
         self.root = previous_replacement;
 
         if let Some(hash) = initial_replacement {
-            NodePath { hash }
+            hash
         } else {
             unreachable!(
                 "The loop above is executed at least once. The variable must \
