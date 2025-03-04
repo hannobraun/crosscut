@@ -70,7 +70,9 @@ impl NewChangeSet<'_> {
             // Once `NodePath` gets more fields, we can just copy those from
             // `to_replace`.
         };
-        self.change_set.add(to_replace, replacement);
+        self.change_set
+            .replacements_by_replaced
+            .insert(to_replace, replacement);
         replacement
     }
 }
@@ -81,11 +83,6 @@ struct ChangeSet {
 }
 
 impl ChangeSet {
-    pub fn add(&mut self, old: NodePath, new: NodePath) -> &mut Self {
-        self.replacements_by_replaced.insert(old, new);
-        self
-    }
-
     fn latest_version_of(&self, path: NodePath) -> NodePath {
         let mut already_seen = BTreeSet::new();
         let mut latest_known = path;
