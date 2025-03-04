@@ -216,11 +216,12 @@ mod tests {
 
         let mut codebase = Codebase::new();
 
-        let a = codebase.root().path;
-        let b = codebase
-            .insert_node_as_parent(&a, Node::new(NodeKind::Empty, [*a.hash()]));
+        let root = codebase.replace_node(
+            &codebase.root().path,
+            Node::new(NodeKind::Empty, []),
+        );
 
-        assert_eq!(codebase.root().path, b);
+        assert_eq!(codebase.root().path, root);
     }
 
     #[test]
