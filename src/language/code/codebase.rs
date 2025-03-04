@@ -94,11 +94,12 @@ impl Codebase {
 
         let hash = self.nodes.insert(new_parent);
 
-        if let Some(parent) = self.parent_of(child) {
-            let mut updated_parent = self.nodes.get(parent.hash()).clone();
+        if let Some(existing_parent) = self.parent_of(child) {
+            let mut updated_parent =
+                self.nodes.get(existing_parent.hash()).clone();
             updated_parent.children_mut().replace(child.hash(), [hash]);
 
-            self.replace_node(&parent, updated_parent);
+            self.replace_node(&existing_parent, updated_parent);
         } else {
             self.root = hash;
         }
