@@ -73,21 +73,7 @@ impl Codebase {
     }
 
     pub fn remove_node(&mut self, to_remove: &NodePath) {
-        let node_to_remove = self.nodes.get(to_remove.hash());
-
-        if let Some(parent) = self.parent_of(to_remove) {
-            // The node we're removing has a parent. We need to remove the
-            // reference from that parent to the node.
-
-            let mut updated_parent = self.nodes.get(parent.hash()).clone();
-
-            updated_parent.children_mut().replace(
-                to_remove.hash(),
-                node_to_remove.children().iter().copied(),
-            );
-
-            self.replace_node(&parent, updated_parent);
-        } else if to_remove.hash == self.root {
+        if to_remove.hash == self.root {
             let root = self.root().node;
 
             if root.children().has_none() {
