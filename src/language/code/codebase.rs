@@ -191,11 +191,11 @@ mod tests {
         // When replacing the root node, the replacement should become the new
         // root node.
 
+        let [a, ..] = test_nodes();
         let mut codebase = Codebase::new();
 
         let old_root = codebase.root().path;
-        let new_root =
-            codebase.replace_node(&old_root, Node::new(NodeKind::Empty, []));
+        let new_root = codebase.replace_node(&old_root, Node::new(a, []));
 
         assert_eq!(codebase.root().path, new_root);
     }
