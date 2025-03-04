@@ -160,8 +160,8 @@ impl Codebase {
 
         self.root = previous_replacement;
 
-        if let Some(hash) = initial_replacement {
-            hash
+        if let Some(path) = initial_replacement {
+            path
         } else {
             unreachable!(
                 "The loop above is executed at least once. The variable must \
