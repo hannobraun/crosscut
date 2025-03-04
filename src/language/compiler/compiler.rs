@@ -56,7 +56,7 @@ impl<'r> Compiler<'r> {
         packages: &Packages,
     ) -> NodePath {
         let placeholder = Node::new(NodeKind::Empty, [child.hash]);
-        let path = self.codebase.insert_node_as_parent(child, placeholder);
+        let path = self.codebase.replace_node(child, placeholder);
 
         self.replace(&path, parent_token, packages)
     }

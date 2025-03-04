@@ -81,6 +81,7 @@ impl Codebase {
     /// ## Panics
     ///
     /// Panics, if the inserted node does not have its child node set correctly.
+    #[cfg(test)]
     pub fn insert_node_as_parent(
         &mut self,
         child: &NodePath,
