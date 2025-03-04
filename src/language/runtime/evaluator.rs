@@ -290,7 +290,9 @@ mod tests {
         let mut codebase = Codebase::new();
 
         let root = codebase.root().path;
-        codebase.replace_node(&root, Node::new(NodeKind::Recursion, []));
+        codebase.make_change(|change_set| {
+            change_set.replace(root, Node::new(NodeKind::Recursion, []))
+        });
 
         let mut evaluator = Evaluator::new();
         evaluator.reset(&codebase);
