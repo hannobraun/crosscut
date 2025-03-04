@@ -65,7 +65,10 @@ impl Codebase {
         let mut new_change_set = self.changes.new_change_set(&mut self.nodes);
         let value = f(&mut new_change_set);
 
-        if new_change_set.change_set().was_removed(&self.root.path()) {
+        let root_was_removed =
+            new_change_set.change_set().was_removed(&self.root.path());
+
+        if root_was_removed {
             let root = self.root().node;
 
             if root.children().has_none() {
