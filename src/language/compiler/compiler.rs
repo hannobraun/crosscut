@@ -89,9 +89,13 @@ impl<'r> Compiler<'r> {
     ) -> NodePath {
         let mut path = *to_replace;
 
+        let node = self.codebase.node_at(&path);
+        let children = node.children().clone();
+
         let (node, maybe_error) = compile_token(
             replacement_token,
             &mut path,
+            children,
             self.codebase,
             packages,
         );
@@ -108,12 +112,10 @@ impl<'r> Compiler<'r> {
 fn compile_token(
     token: &str,
     path: &mut NodePath,
+    children: Children,
     codebase: &mut Codebase,
     packages: &Packages,
 ) -> (Node, Option<CodeError>) {
-    let node = codebase.node_at(path);
-    let children = node.children().clone();
-
     let (node, maybe_error) = if token.is_empty() {
         let (kind, error) = if children.has_multiple().is_none() {
             (NodeKind::Empty, None)
