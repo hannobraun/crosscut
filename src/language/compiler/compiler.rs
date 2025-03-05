@@ -111,17 +111,15 @@ impl<'r> Compiler<'r> {
         children: impl Into<Children>,
         packages: &Packages,
     ) -> NodePath {
-        let (node, maybe_error) = self.codebase.make_change(|change_set| {
-            compile_token(
+        let root = self.codebase.root().path;
+        let path = self.codebase.make_change_with_errors(|change_set, errors| {
+            let (node, maybe_error) = compile_token(
                 replacement_token,
                 children.into(),
                 change_set,
                 packages,
-            )
-        });
+            );
 
-        let root = self.codebase.root().path;
-        let path = self.codebase.make_change_with_errors(|change_set, errors| {
             let mut next_to_replace = *to_replace;
             let mut next_replacement = node;
 
