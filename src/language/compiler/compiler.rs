@@ -87,6 +87,15 @@ impl<'r> Compiler<'r> {
         replacement_token: &str,
         packages: &Packages,
     ) -> NodePath {
+        self.replace_inner(to_replace, replacement_token, packages)
+    }
+
+    fn replace_inner(
+        &mut self,
+        to_replace: &NodePath,
+        replacement_token: &str,
+        packages: &Packages,
+    ) -> NodePath {
         let mut path = *to_replace;
 
         let node = self.codebase.node_at(&path);
