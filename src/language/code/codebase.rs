@@ -107,7 +107,7 @@ impl Codebase {
     }
 
     pub fn error_at(&self, path: &NodePath) -> Option<&CodeError> {
-        self.errors.inner.get(path)
+        self.errors.error_at(path)
     }
 
     pub fn insert_error(&mut self, path: NodePath, error: CodeError) {

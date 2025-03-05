@@ -13,6 +13,10 @@ impl Errors {
             inner: BTreeMap::new(),
         }
     }
+
+    pub fn error_at(&self, path: &NodePath) -> Option<&CodeError> {
+        self.inner.get(path)
+    }
 }
 
 #[derive(Clone, Debug, Eq, PartialEq)]
