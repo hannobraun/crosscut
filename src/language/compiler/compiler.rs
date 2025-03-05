@@ -50,7 +50,7 @@ impl<'r> Compiler<'r> {
 
         self.replace(
             &parent,
-            &self.codebase.node_at(&parent).display(packages).to_string(),
+            &self.codebase.node_at(&parent).to_token(packages),
             packages,
         );
 

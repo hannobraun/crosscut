@@ -42,6 +42,10 @@ impl Node {
             packages,
         }
     }
+
+    pub fn to_token(&self, packages: &Packages) -> String {
+        self.display(packages).to_string()
+    }
 }
 
 #[derive(Clone, Debug, Eq, PartialEq, udigest::Digestable)]

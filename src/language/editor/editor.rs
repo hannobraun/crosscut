@@ -190,7 +190,7 @@ impl Editor {
         self.editing = path;
 
         let node = codebase.node_at(&path);
-        self.input = EditorInputBuffer::new(node.display(packages).to_string());
+        self.input = EditorInputBuffer::new(node.to_token(packages));
     }
 }
 
