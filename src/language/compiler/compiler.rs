@@ -74,7 +74,6 @@ impl<'r> Compiler<'r> {
             // reference from that parent to the node.
 
             let mut updated_parent = self.codebase.node_at(&parent).clone();
-
             updated_parent.children_mut().replace(
                 to_remove.hash(),
                 node_to_remove.children().iter().copied(),
