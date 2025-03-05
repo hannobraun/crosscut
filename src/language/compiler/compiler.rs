@@ -1,7 +1,7 @@
 use crate::language::{
     code::{
         Children, CodeError, Codebase, Expression, IntrinsicFunction, Literal,
-        Node, NodeKind, NodePath, SyntaxTree,
+        NewChangeSet, Node, NodeKind, NodePath, SyntaxTree,
     },
     packages::Packages,
 };
@@ -188,8 +188,8 @@ fn compile_token(
         };
 
         (Node::new(kind, children), error)
-    } else if let Some((node, maybe_err)) =
-        resolve_keyword(token, &children, codebase)
+    } else if let Some((node, maybe_err)) = codebase
+        .make_change(|change_set| resolve_keyword(token, &children, change_set))
     {
         (node, maybe_err)
     } else {
@@ -216,15 +216,13 @@ fn compile_token(
 fn resolve_keyword(
     name: &str,
     children: &Children,
-    codebase: &mut Codebase,
+    change_set: &mut NewChangeSet,
 ) -> Option<(Node, Option<CodeError>)> {
     match name {
         "fn" => {
             // Every function must have a child. Other code assumes that.
             let children = if children.has_none() {
-                let child = codebase.make_change(|change_set| {
-                    change_set.add(Node::new(NodeKind::Empty, []))
-                });
+                let child = change_set.add(Node::new(NodeKind::Empty, []));
                 Children::new(Some(child))
             } else {
                 children.clone()
