@@ -111,7 +111,7 @@ impl Codebase {
     }
 
     pub fn insert_error(&mut self, path: NodePath, error: CodeError) {
-        self.errors.inner.insert(path, error);
+        self.errors.insert(path, error);
     }
 }
 

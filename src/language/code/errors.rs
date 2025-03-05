@@ -17,6 +17,10 @@ impl Errors {
     pub fn error_at(&self, path: &NodePath) -> Option<&CodeError> {
         self.inner.get(path)
     }
+
+    pub fn insert(&mut self, path: NodePath, error: CodeError) {
+        self.inner.insert(path, error);
+    }
 }
 
 #[derive(Clone, Debug, Eq, PartialEq)]
