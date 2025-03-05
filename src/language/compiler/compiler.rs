@@ -153,14 +153,14 @@ impl<'r> Compiler<'r> {
                 };
             }
 
-            if let Some(path) = initial_replacement {
-                path
-            } else {
+            let Some(path) = initial_replacement else {
                 unreachable!(
                     "The loop above is executed at least once. The variable \
                     must have been set."
                 );
-            }
+            };
+
+            path
         });
 
         if let Some(error) = maybe_error {
