@@ -119,7 +119,7 @@ impl<'r> Compiler<'r> {
 
 fn compile_token(
     token: &str,
-    path: &mut NodePath,
+    _: &mut NodePath,
     children: Children,
     codebase: &mut Codebase,
     packages: &Packages,
@@ -140,7 +140,6 @@ fn compile_token(
     } else if let Some((node, maybe_err)) =
         resolve_keyword(token, &children, codebase)
     {
-        *path = codebase.latest_version_of(*path);
         (node, maybe_err)
     } else {
         match resolve_function(token, packages) {
