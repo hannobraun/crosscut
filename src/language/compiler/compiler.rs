@@ -121,7 +121,7 @@ impl<'r> Compiler<'r> {
         });
 
         let root = self.codebase.root().path;
-        let path = self.codebase.make_change(|change_set| {
+        let path = self.codebase.make_change_with_errors(|change_set, _| {
             let mut next_to_replace = *to_replace;
             let mut next_replacement = node;
 
