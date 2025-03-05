@@ -64,8 +64,15 @@ impl Codebase {
         &mut self,
         f: impl FnOnce(&mut NewChangeSet) -> R,
     ) -> R {
+        self.make_change_with_errors(|change_set, _| f(change_set))
+    }
+
+    pub fn make_change_with_errors<R>(
+        &mut self,
+        f: impl FnOnce(&mut NewChangeSet, &mut Errors) -> R,
+    ) -> R {
         let mut new_change_set = self.changes.new_change_set(&mut self.nodes);
-        let value = f(&mut new_change_set);
+        let value = f(&mut new_change_set, &mut self.errors);
 
         let root_was_removed =
             new_change_set.change_set().was_removed(&self.root.path());
