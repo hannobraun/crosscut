@@ -64,9 +64,9 @@ impl<'r> Compiler<'r> {
         packages: &Packages,
     ) -> NodePath {
         let placeholder = Node::new(NodeKind::Empty, [child.hash]);
-        let path = replace_node(child, placeholder, self.codebase);
+        let parent_path = replace_node(child, placeholder, self.codebase);
 
-        self.replace(&path, parent_token, packages)
+        self.replace(&parent_path, parent_token, packages)
     }
 
     pub fn remove(&mut self, to_remove: NodePath) {
