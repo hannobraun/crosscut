@@ -38,7 +38,6 @@ fn empty_node_with_multiple_children_is_an_error() {
 }
 
 #[test]
-#[should_panic] // known bug; being worked on
 fn updating_child_updates_parent() {
     // If the child of a parent node is being updated, the parent node should be
     // updated as well.

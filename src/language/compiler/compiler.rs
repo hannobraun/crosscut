@@ -135,17 +135,24 @@ fn replace_node_and_update_parents(
     change_set: &mut NewChangeSet,
     errors: &mut Errors,
 ) -> NodePath {
-    let (node, maybe_error) =
-        compile_token(replacement_token, children, change_set, packages);
-
     let mut next_to_replace = *to_replace;
-    let mut next_replacement = node;
+    let mut next_replacement;
+
+    let mut next_token = replacement_token.to_string();
+    let mut next_children = children;
 
     let mut previous_replacement;
     let mut initial_replacement = None;
 
     loop {
-        let path = change_set.replace(next_to_replace, next_replacement);
+        let (node, maybe_error) =
+            compile_token(&next_token, next_children, change_set, packages);
+
+        let path = change_set.replace(next_to_replace, node);
+
+        if let Some(error) = maybe_error {
+            errors.insert(path, error);
+        }
 
         initial_replacement = initial_replacement.or(Some(path));
         previous_replacement = path.hash;
@@ -157,6 +164,9 @@ fn replace_node_and_update_parents(
             next_replacement
                 .children_mut()
                 .replace(next_to_replace.hash(), [previous_replacement]);
+
+            next_token = next_replacement.to_token(packages);
+            next_children = next_replacement.children().clone();
 
             next_to_replace = parent;
 
@@ -172,10 +182,6 @@ fn replace_node_and_update_parents(
                     must have been set."
         );
     };
-
-    if let Some(error) = maybe_error {
-        errors.insert(path, error);
-    }
 
     path
 }
