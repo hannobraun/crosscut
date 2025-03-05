@@ -106,11 +106,15 @@ impl<'r> Compiler<'r> {
         &mut self,
         to_replace: &NodePath,
         replacement_token: &str,
-        children: Children,
+        children: impl Into<Children>,
         packages: &Packages,
     ) -> NodePath {
-        let (node, maybe_error) =
-            compile_token(replacement_token, children, self.codebase, packages);
+        let (node, maybe_error) = compile_token(
+            replacement_token,
+            children.into(),
+            self.codebase,
+            packages,
+        );
 
         let path = replace_node(to_replace, node, self.codebase);
         if let Some(error) = maybe_error {
