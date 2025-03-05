@@ -34,7 +34,7 @@ fn unresolved_syntax_node() {
     // The error should be registered in `Codebase`.
     let unresolved = language.codebase().root().path;
     assert_eq!(
-        language.codebase().error_at(&unresolved),
+        language.codebase().errors().get(&unresolved),
         Some(&CodeError::UnresolvedIdentifier { candidates: vec![] }),
     );
 
@@ -45,7 +45,7 @@ fn unresolved_syntax_node() {
     language.on_code("y");
 
     let resolved = language.codebase().root().path;
-    assert_eq!(language.codebase().error_at(&resolved), None);
+    assert_eq!(language.codebase().errors().get(&resolved), None);
     assert_eq!(language.step_until_finished(), Ok(Value::Nothing));
 }
 
@@ -71,7 +71,7 @@ fn syntax_node_that_could_resolve_to_multiple_functions_is_unresolved() {
 
     let unresolved = language.codebase().root().path;
     assert_eq!(
-        language.codebase().error_at(&unresolved),
+        language.codebase().errors().get(&unresolved),
         Some(&CodeError::UnresolvedIdentifier {
             candidates: vec![
                 Expression::HostFunction {

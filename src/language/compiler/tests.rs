@@ -32,7 +32,7 @@ fn empty_node_with_multiple_children_is_an_error() {
 
     let error = compiler.codebase().root().path;
     assert_eq!(
-        compiler.codebase().error_at(&error),
+        compiler.codebase().errors().get(&error),
         Some(&CodeError::EmptyNodeWithMultipleChildren),
     );
 }
@@ -76,7 +76,7 @@ fn updating_child_updates_parent() {
             },
         );
         assert_eq!(
-            codebase.error_at(parent),
+            codebase.errors().get(parent),
             Some(&CodeError::UnresolvedIdentifier { candidates: vec![] }),
         );
     }

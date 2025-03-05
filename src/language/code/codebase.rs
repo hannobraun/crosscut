@@ -56,6 +56,10 @@ impl Codebase {
         self.changes.latest_version_of(path)
     }
 
+    pub fn errors(&self) -> &Errors {
+        &self.errors
+    }
+
     pub fn make_change<R>(
         &mut self,
         f: impl FnOnce(&mut NewChangeSet) -> R,
@@ -104,10 +108,6 @@ impl Codebase {
         }
 
         value
-    }
-
-    pub fn error_at(&self, path: &NodePath) -> Option<&CodeError> {
-        self.errors.get(path)
     }
 
     pub fn insert_error(&mut self, path: NodePath, error: CodeError) {
