@@ -165,7 +165,7 @@ fn compile_token(
 
 fn resolve_keyword(
     name: &str,
-    path: &NodePath,
+    _: &NodePath,
     children: &Children,
     codebase: &mut Codebase,
 ) -> Option<(Node, Option<CodeError>)> {
@@ -173,8 +173,10 @@ fn resolve_keyword(
         "fn" => {
             // Every function must have a child. Other code assumes that.
             let children = if children.has_none() {
-                let child = insert_empty_child(*path, codebase);
-                Children::new(Some(*child.hash()))
+                let child = codebase.make_change(|change_set| {
+                    change_set.add(Node::new(NodeKind::Empty, []))
+                });
+                Children::new(Some(child))
             } else {
                 children.clone()
             };
