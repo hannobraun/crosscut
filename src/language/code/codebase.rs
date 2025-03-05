@@ -26,7 +26,9 @@ impl Codebase {
             empty,
             nodes,
             changes: Changes::new(),
-            errors: BTreeMap::new(),
+            errors: Errors {
+                inner: BTreeMap::new(),
+            },
         }
     }
 
@@ -109,11 +111,11 @@ impl Codebase {
     }
 
     pub fn error_at(&self, path: &NodePath) -> Option<&CodeError> {
-        self.errors.get(path)
+        self.errors.inner.get(path)
     }
 
     pub fn insert_error(&mut self, path: NodePath, error: CodeError) {
-        self.errors.insert(path, error);
+        self.errors.inner.insert(path, error);
     }
 }
 

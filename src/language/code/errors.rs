@@ -2,7 +2,10 @@ use std::{collections::BTreeMap, fmt};
 
 use super::{Expression, NodePath};
 
-pub type Errors = BTreeMap<NodePath, CodeError>;
+#[derive(Clone, Debug, Eq, PartialEq)]
+pub struct Errors {
+    pub inner: BTreeMap<NodePath, CodeError>,
+}
 
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub enum CodeError {
