@@ -115,7 +115,7 @@ impl ChangeSet {
 
             if already_seen.contains(later) {
                 unreachable!(
-                    "Detected endless loop while searching for latest version
+                    "Detected endless loop while searching for latest version \
                     of node within change set.\n\
                     \n\
                     This should never happen, unless a caller puts a circular \
