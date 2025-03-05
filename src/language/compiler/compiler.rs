@@ -69,17 +69,18 @@ impl<'r> Compiler<'r> {
     pub fn remove(&mut self, to_remove: NodePath) {
         let node_to_remove = self.codebase.nodes().get(to_remove.hash());
 
-        if let Some(parent) = self.codebase.parent_of(&to_remove) {
+        if let Some(parent_path) = self.codebase.parent_of(&to_remove) {
             // The node we're removing has a parent. We need to remove the
             // reference from that parent to the node.
 
-            let mut updated_parent = self.codebase.node_at(&parent).clone();
+            let mut updated_parent =
+                self.codebase.node_at(&parent_path).clone();
             updated_parent.children_mut().replace(
                 to_remove.hash(),
                 node_to_remove.children().iter().copied(),
             );
 
-            replace_node(&parent, updated_parent, self.codebase);
+            replace_node(&parent_path, updated_parent, self.codebase);
         } else {
             self.codebase.make_change(|change_set| {
                 change_set.remove(to_remove);
