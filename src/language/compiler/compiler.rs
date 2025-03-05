@@ -138,7 +138,7 @@ fn compile_token(
 
         (Node::new(kind, children), error)
     } else if let Some((node, maybe_err)) =
-        resolve_keyword(token, path, &children, codebase)
+        resolve_keyword(token, &children, codebase)
     {
         *path = codebase.latest_version_of(*path);
         (node, maybe_err)
@@ -165,7 +165,6 @@ fn compile_token(
 
 fn resolve_keyword(
     name: &str,
-    _: &NodePath,
     children: &Children,
     codebase: &mut Codebase,
 ) -> Option<(Node, Option<CodeError>)> {
