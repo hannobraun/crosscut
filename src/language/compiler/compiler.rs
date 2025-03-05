@@ -98,12 +98,10 @@ impl<'r> Compiler<'r> {
         children: Children,
         packages: &Packages,
     ) -> NodePath {
-        let path = *to_replace;
-
         let (node, maybe_error) =
             compile_token(replacement_token, children, self.codebase, packages);
 
-        let path = replace_node(&path, node, self.codebase);
+        let path = replace_node(to_replace, node, self.codebase);
         if let Some(error) = maybe_error {
             self.codebase.insert_error(path, error);
         }
