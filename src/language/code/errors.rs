@@ -4,7 +4,7 @@ use super::{Expression, NodePath};
 
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub struct Errors {
-    pub inner: BTreeMap<NodePath, CodeError>,
+    inner: BTreeMap<NodePath, CodeError>,
 }
 
 impl Errors {
