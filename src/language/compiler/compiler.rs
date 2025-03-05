@@ -118,7 +118,48 @@ impl<'r> Compiler<'r> {
             packages,
         );
 
-        let path = replace_node(to_replace, node, self.codebase);
+        let root = self.codebase.root().path;
+        let path = self.codebase.make_change(|change_set| {
+            let mut next_to_replace = *to_replace;
+            let mut next_replacement = node;
+
+            let mut previous_replacement;
+            let mut initial_replacement = None;
+
+            loop {
+                let path =
+                    change_set.replace(next_to_replace, next_replacement);
+
+                initial_replacement = initial_replacement.or(Some(path));
+                previous_replacement = path.hash;
+
+                if let Some(parent) = SyntaxTree::from_root(root.hash)
+                    .find_parent_of(&next_to_replace.hash, change_set.nodes())
+                {
+                    next_replacement =
+                        change_set.nodes().get(parent.hash()).clone();
+                    next_replacement.children_mut().replace(
+                        next_to_replace.hash(),
+                        [previous_replacement],
+                    );
+
+                    next_to_replace = parent;
+
+                    continue;
+                } else {
+                    break;
+                };
+            }
+
+            if let Some(path) = initial_replacement {
+                path
+            } else {
+                unreachable!(
+                    "The loop above is executed at least once. The variable \
+                    must have been set."
+                );
+            }
+        });
 
         if let Some(error) = maybe_error {
             self.codebase.insert_error(path, error);
@@ -235,52 +276,4 @@ fn resolve_function(
             Err(candidates)
         }
     }
-}
-
-fn replace_node(
-    to_replace: &NodePath,
-    replacement: Node,
-    codebase: &mut Codebase,
-) -> NodePath {
-    let root = codebase.root().path;
-
-    codebase.make_change(|change_set| {
-        let mut next_to_replace = *to_replace;
-        let mut next_replacement = replacement;
-
-        let mut previous_replacement;
-        let mut initial_replacement = None;
-
-        loop {
-            let path = change_set.replace(next_to_replace, next_replacement);
-
-            initial_replacement = initial_replacement.or(Some(path));
-            previous_replacement = path.hash;
-
-            if let Some(parent) = SyntaxTree::from_root(root.hash)
-                .find_parent_of(&next_to_replace.hash, change_set.nodes())
-            {
-                next_replacement =
-                    change_set.nodes().get(parent.hash()).clone();
-                next_replacement
-                    .children_mut()
-                    .replace(next_to_replace.hash(), [previous_replacement]);
-
-                next_to_replace = parent;
-
-                continue;
-            } else {
-                break;
-            };
-        }
-
-        if let Some(path) = initial_replacement {
-            path
-        } else {
-            unreachable!(
-                "The loop above is executed at least once. The variable must \
-                have been set."
-            );
-        }
-    })
 }
