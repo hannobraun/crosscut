@@ -4,7 +4,7 @@ use crate::language::code::NodeKind;
 
 use super::{
     Changes, Children, CodeError, LocatedNode, NewChangeSet, Node, NodeHash,
-    NodePath, Nodes, SyntaxTree,
+    NodePath, Nodes, SyntaxTree, errors::Errors,
 };
 
 #[derive(Clone, Debug, Eq, PartialEq)]
@@ -13,7 +13,7 @@ pub struct Codebase {
     empty: NodeHash,
     nodes: Nodes,
     changes: Changes,
-    errors: BTreeMap<NodePath, CodeError>,
+    errors: Errors,
 }
 
 impl Codebase {
