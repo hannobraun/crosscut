@@ -83,9 +83,11 @@ impl NewChangeSet<'_> {
             // Once `NodePath` gets more fields, we can just copy those from
             // `to_replace`.
         };
+
         self.change_set
             .replacements_by_replaced
             .insert(to_replace, replacement);
+
         replacement
     }
 }
