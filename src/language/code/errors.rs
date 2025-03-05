@@ -7,6 +7,14 @@ pub struct Errors {
     pub inner: BTreeMap<NodePath, CodeError>,
 }
 
+impl Errors {
+    pub fn new() -> Self {
+        Self {
+            inner: BTreeMap::new(),
+        }
+    }
+}
+
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub enum CodeError {
     EmptyNodeWithMultipleChildren,

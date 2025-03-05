@@ -1,5 +1,3 @@
-use std::collections::BTreeMap;
-
 use crate::language::code::NodeKind;
 
 use super::{
@@ -26,9 +24,7 @@ impl Codebase {
             empty,
             nodes,
             changes: Changes::new(),
-            errors: Errors {
-                inner: BTreeMap::new(),
-            },
+            errors: Errors::new(),
         }
     }
 
