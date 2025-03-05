@@ -1,7 +1,7 @@
 use crate::language::{
     code::{
-        Children, CodeError, Codebase, Expression, IntrinsicFunction, Literal,
-        NewChangeSet, Node, NodeKind, NodePath, SyntaxTree,
+        Children, CodeError, Codebase, Errors, Expression, IntrinsicFunction,
+        Literal, NewChangeSet, Node, NodeKind, NodePath, SyntaxTree,
     },
     packages::Packages,
 };
@@ -112,61 +112,72 @@ impl<'r> Compiler<'r> {
         packages: &Packages,
     ) -> NodePath {
         let root = self.codebase.root().path;
-        let path = self.codebase.make_change_with_errors(|change_set, errors| {
-            let (node, maybe_error) = compile_token(
+        self.codebase.make_change_with_errors(|change_set, errors| {
+            replace_node_and_update_parents(
+                to_replace,
                 replacement_token,
                 children.into(),
-                change_set,
                 packages,
-            );
-
-            let mut next_to_replace = *to_replace;
-            let mut next_replacement = node;
-
-            let mut previous_replacement;
-            let mut initial_replacement = None;
-
-            loop {
-                let path =
-                    change_set.replace(next_to_replace, next_replacement);
-
-                initial_replacement = initial_replacement.or(Some(path));
-                previous_replacement = path.hash;
-
-                if let Some(parent) = SyntaxTree::from_root(root.hash)
-                    .find_parent_of(&next_to_replace.hash, change_set.nodes())
-                {
-                    next_replacement =
-                        change_set.nodes().get(parent.hash()).clone();
-                    next_replacement.children_mut().replace(
-                        next_to_replace.hash(),
-                        [previous_replacement],
-                    );
-
-                    next_to_replace = parent;
-
-                    continue;
-                } else {
-                    break;
-                };
-            }
-
-            let Some(path) = initial_replacement else {
-                unreachable!(
-                    "The loop above is executed at least once. The variable \
-                    must have been set."
-                );
-            };
-
-            if let Some(error) = maybe_error {
-                errors.insert(path, error);
-            }
-
-            path
-        });
-
-        path
+                root,
+                change_set,
+                errors,
+            )
+        })
     }
+}
+
+fn replace_node_and_update_parents(
+    to_replace: &NodePath,
+    replacement_token: &str,
+    children: Children,
+    packages: &Packages,
+    root: NodePath,
+    change_set: &mut NewChangeSet,
+    errors: &mut Errors,
+) -> NodePath {
+    let (node, maybe_error) =
+        compile_token(replacement_token, children, change_set, packages);
+
+    let mut next_to_replace = *to_replace;
+    let mut next_replacement = node;
+
+    let mut previous_replacement;
+    let mut initial_replacement = None;
+
+    loop {
+        let path = change_set.replace(next_to_replace, next_replacement);
+
+        initial_replacement = initial_replacement.or(Some(path));
+        previous_replacement = path.hash;
+
+        if let Some(parent) = SyntaxTree::from_root(root.hash)
+            .find_parent_of(&next_to_replace.hash, change_set.nodes())
+        {
+            next_replacement = change_set.nodes().get(parent.hash()).clone();
+            next_replacement
+                .children_mut()
+                .replace(next_to_replace.hash(), [previous_replacement]);
+
+            next_to_replace = parent;
+
+            continue;
+        } else {
+            break;
+        };
+    }
+
+    let Some(path) = initial_replacement else {
+        unreachable!(
+            "The loop above is executed at least once. The variable \
+                    must have been set."
+        );
+    };
+
+    if let Some(error) = maybe_error {
+        errors.insert(path, error);
+    }
+
+    path
 }
 
 fn compile_token(
