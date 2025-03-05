@@ -45,7 +45,10 @@ impl Changes {
         let mut latest_known = path;
 
         for change_set in &self.change_sets[i..] {
-            let latest = change_set.latest_version_of(latest_known);
+            let Ok(latest) = change_set.latest_version_of(latest_known) else {
+                panic!("Detected circular update path in change set.");
+            };
+
             latest_known = latest;
         }
 
@@ -108,7 +111,10 @@ impl ChangeSet {
         self.replacements_by_replaced.get(replaced)
     }
 
-    fn latest_version_of(&self, path: NodePath) -> NodePath {
+    fn latest_version_of(
+        &self,
+        path: NodePath,
+    ) -> Result<NodePath, CircularDependency> {
         let mut already_seen = BTreeSet::new();
         let mut latest_known = path;
 
@@ -131,9 +137,11 @@ impl ChangeSet {
             }
         }
 
-        latest_known
+        Ok(latest_known)
     }
 }
+
+struct CircularDependency;
 
 #[cfg(test)]
 mod tests {
