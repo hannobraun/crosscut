@@ -88,7 +88,6 @@ impl<'r> Compiler<'r> {
         packages: &Packages,
     ) -> NodePath {
         let children = self.codebase.node_at(to_replace).children().clone();
-
         self.replace_inner(to_replace, replacement_token, children, packages)
     }
 
