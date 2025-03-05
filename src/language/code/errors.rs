@@ -14,7 +14,7 @@ impl Errors {
         }
     }
 
-    pub fn error_at(&self, path: &NodePath) -> Option<&CodeError> {
+    pub fn get(&self, path: &NodePath) -> Option<&CodeError> {
         self.inner.get(path)
     }
 
