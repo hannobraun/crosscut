@@ -111,12 +111,14 @@ impl<'r> Compiler<'r> {
         children: impl Into<Children>,
         packages: &Packages,
     ) -> NodePath {
-        let (node, maybe_error) = compile_token(
-            replacement_token,
-            children.into(),
-            self.codebase,
-            packages,
-        );
+        let (node, maybe_error) = self.codebase.make_change(|change_set| {
+            compile_token(
+                replacement_token,
+                children.into(),
+                change_set,
+                packages,
+            )
+        });
 
         let root = self.codebase.root().path;
         let path = self.codebase.make_change(|change_set| {
@@ -172,7 +174,7 @@ impl<'r> Compiler<'r> {
 fn compile_token(
     token: &str,
     children: Children,
-    codebase: &mut Codebase,
+    change_set: &mut NewChangeSet,
     packages: &Packages,
 ) -> (Node, Option<CodeError>) {
     let (node, maybe_error) = if token.is_empty() {
@@ -188,8 +190,8 @@ fn compile_token(
         };
 
         (Node::new(kind, children), error)
-    } else if let Some((node, maybe_err)) = codebase
-        .make_change(|change_set| resolve_keyword(token, &children, change_set))
+    } else if let Some((node, maybe_err)) =
+        resolve_keyword(token, &children, change_set)
     {
         (node, maybe_err)
     } else {
