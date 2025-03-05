@@ -63,8 +63,8 @@ impl<'r> Compiler<'r> {
         parent_token: &str,
         packages: &Packages,
     ) -> NodePath {
-        let placeholder = Node::new(NodeKind::Empty, [child.hash]);
-        let parent_path = replace_node(child, placeholder, self.codebase);
+        let parent_path =
+            self.replace_inner(child, parent_token, [child.hash], packages);
 
         self.replace(&parent_path, parent_token, packages)
     }
