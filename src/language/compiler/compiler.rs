@@ -98,15 +98,10 @@ impl<'r> Compiler<'r> {
         children: Children,
         packages: &Packages,
     ) -> NodePath {
-        let mut path = *to_replace;
+        let path = *to_replace;
 
-        let (node, maybe_error) = compile_token(
-            replacement_token,
-            &mut path,
-            children,
-            self.codebase,
-            packages,
-        );
+        let (node, maybe_error) =
+            compile_token(replacement_token, children, self.codebase, packages);
 
         let path = replace_node(&path, node, self.codebase);
         if let Some(error) = maybe_error {
@@ -119,7 +114,6 @@ impl<'r> Compiler<'r> {
 
 fn compile_token(
     token: &str,
-    _: &mut NodePath,
     children: Children,
     codebase: &mut Codebase,
     packages: &Packages,
