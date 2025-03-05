@@ -76,6 +76,14 @@ impl Children {
     }
 }
 
+impl<const N: usize> From<[NodeHash; N]> for Children {
+    fn from(children: [NodeHash; N]) -> Self {
+        Self {
+            children: children.into(),
+        }
+    }
+}
+
 impl IntoIterator for Children {
     type Item = NodeHash;
     type IntoIter = vec::IntoIter<NodeHash>;
