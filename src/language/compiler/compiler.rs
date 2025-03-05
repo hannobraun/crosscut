@@ -66,7 +66,7 @@ impl<'r> Compiler<'r> {
         self.replace_inner(child, parent_token, [child.hash], packages)
     }
 
-    pub fn remove(&mut self, to_remove: NodePath) {
+    pub fn remove(&mut self, to_remove: NodePath, _: &Packages) {
         let node_to_remove = self.codebase.nodes().get(to_remove.hash());
 
         if let Some(parent_path) = self.codebase.parent_of(&to_remove) {
