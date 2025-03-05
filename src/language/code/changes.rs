@@ -90,9 +90,19 @@ impl NewChangeSet<'_> {
             // `to_replace`.
         };
 
-        self.change_set
-            .replacements_by_replaced
-            .insert(to_replace, replacement);
+        if replacement != to_replace {
+            // Nodes are "replaced" by identical ones all the time. Making the
+            // caller responsible for checking that would be onerous.
+            //
+            // And that is generally not a problem. But inserting such a
+            // replacement into the change set, would confuse the code that
+            // looks for the latest version of a node.
+
+            self.change_set
+                .replacements_by_replaced
+                .insert(to_replace, replacement);
+        }
+
 
         replacement
     }
