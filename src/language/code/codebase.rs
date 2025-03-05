@@ -1,8 +1,8 @@
 use crate::language::code::NodeKind;
 
 use super::{
-    Changes, Children, CodeError, Errors, LocatedNode, NewChangeSet, Node,
-    NodeHash, NodePath, Nodes, SyntaxTree,
+    Changes, Children, Errors, LocatedNode, NewChangeSet, Node, NodeHash,
+    NodePath, Nodes, SyntaxTree,
 };
 
 #[derive(Clone, Debug, Eq, PartialEq)]
@@ -115,10 +115,6 @@ impl Codebase {
         }
 
         value
-    }
-
-    pub fn insert_error(&mut self, path: NodePath, error: CodeError) {
-        self.errors.insert(path, error);
     }
 }
 
