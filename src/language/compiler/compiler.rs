@@ -87,19 +87,20 @@ impl<'r> Compiler<'r> {
         replacement_token: &str,
         packages: &Packages,
     ) -> NodePath {
-        self.replace_inner(to_replace, replacement_token, packages)
+        let node = self.codebase.node_at(to_replace);
+        let children = node.children().clone();
+
+        self.replace_inner(to_replace, replacement_token, children, packages)
     }
 
     fn replace_inner(
         &mut self,
         to_replace: &NodePath,
         replacement_token: &str,
+        children: Children,
         packages: &Packages,
     ) -> NodePath {
         let mut path = *to_replace;
-
-        let node = self.codebase.node_at(&path);
-        let children = node.children().clone();
 
         let (node, maybe_error) = compile_token(
             replacement_token,
