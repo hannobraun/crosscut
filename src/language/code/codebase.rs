@@ -3,8 +3,8 @@ use std::collections::BTreeMap;
 use crate::language::code::NodeKind;
 
 use super::{
-    Changes, Children, CodeError, LocatedNode, Node, NodeHash, NodePath, Nodes,
-    SyntaxTree, changes::NewChangeSet,
+    Changes, Children, CodeError, LocatedNode, NewChangeSet, Node, NodeHash,
+    NodePath, Nodes, SyntaxTree,
 };
 
 #[derive(Clone, Debug, Eq, PartialEq)]

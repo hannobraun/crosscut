@@ -8,7 +8,7 @@ mod tree;
 mod types;
 
 pub use self::{
-    changes::Changes,
+    changes::{Changes, NewChangeSet},
     codebase::Codebase,
     errors::CodeError,
     expressions::Expression,
