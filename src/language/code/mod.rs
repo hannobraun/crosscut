@@ -10,7 +10,7 @@ mod types;
 pub use self::{
     changes::{Changes, NewChangeSet},
     codebase::Codebase,
-    errors::CodeError,
+    errors::{CodeError, Errors},
     expressions::Expression,
     intrinsics::{IntrinsicFunction, Literal},
     nodes::{Children, LocatedNode, Node, NodeHash, NodeKind, NodePath, Nodes},
