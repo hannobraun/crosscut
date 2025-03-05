@@ -26,7 +26,18 @@ impl<'r> Compiler<'r> {
         packages: &Packages,
     ) -> NodePath {
         let child = {
-            let placeholder = insert_empty_child(parent, self.codebase);
+            let placeholder = self.codebase.make_change(|change_set| {
+                let child = change_set.add(Node::new(NodeKind::Empty, []));
+
+                let mut updated_parent =
+                    change_set.nodes().get(parent.hash()).clone();
+                updated_parent.children_mut().add([child]);
+
+                change_set.replace(parent, updated_parent);
+
+                NodePath { hash: child }
+            });
+
             self.replace(&placeholder, child_token, packages)
         };
 
@@ -217,19 +228,6 @@ fn resolve_function(
             Err(candidates)
         }
     }
-}
-
-fn insert_empty_child(parent: NodePath, codebase: &mut Codebase) -> NodePath {
-    codebase.make_change(|change_set| {
-        let child = change_set.add(Node::new(NodeKind::Empty, []));
-
-        let mut updated_parent = change_set.nodes().get(parent.hash()).clone();
-        updated_parent.children_mut().add([child]);
-
-        change_set.replace(parent, updated_parent);
-
-        NodePath { hash: child }
-    })
 }
 
 fn replace_node(
