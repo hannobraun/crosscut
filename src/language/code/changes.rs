@@ -103,6 +103,12 @@ impl NewChangeSet<'_> {
                 .insert(to_replace, replacement);
         }
 
+        if self.change_set.latest_version_of(replacement).is_err() {
+            panic!(
+                "You must not create a circle of replacements within a single \
+                change set."
+            );
+        }
 
         replacement
     }
