@@ -46,7 +46,11 @@ impl Changes {
 
         for change_set in &self.change_sets[i..] {
             let Ok(latest) = change_set.latest_version_of(latest_known) else {
-                panic!("Detected circular update path in change set.");
+                unreachable!(
+                    "Detected circular replacement path in change set. This \
+                    should be impossible, as this case is checked below, when \
+                    making the replacement."
+                );
             };
 
             latest_known = latest;
