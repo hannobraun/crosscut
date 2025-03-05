@@ -140,6 +140,7 @@ fn compile_token(
     } else if let Some((node, maybe_err)) =
         resolve_keyword(token, path, &children, codebase)
     {
+        *path = codebase.latest_version_of(*path);
         (node, maybe_err)
     } else {
         match resolve_function(token, packages) {
@@ -173,8 +174,6 @@ fn resolve_keyword(
             // Every function must have a child. Other code assumes that.
             let children = if children.has_none() {
                 let child = insert_empty_child(*path, codebase);
-                *path = codebase.latest_version_of(*path);
-
                 Children::new(Some(*child.hash()))
             } else {
                 children.clone()
