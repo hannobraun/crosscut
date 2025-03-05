@@ -136,7 +136,6 @@ fn replace_node_and_update_parents(
     errors: &mut Errors,
 ) -> NodePath {
     let mut next_to_replace = *to_replace;
-    let mut next_replacement;
 
     let mut next_token = replacement_token.to_string();
     let mut next_children = children;
@@ -160,14 +159,14 @@ fn replace_node_and_update_parents(
         if let Some(parent_path) = SyntaxTree::from_root(root.hash)
             .find_parent_of(&next_to_replace.hash, change_set.nodes())
         {
-            next_replacement =
+            let mut parent_node =
                 change_set.nodes().get(parent_path.hash()).clone();
-            next_replacement
+            parent_node
                 .children_mut()
                 .replace(next_to_replace.hash(), [previous_replacement]);
 
-            next_token = next_replacement.to_token(packages);
-            next_children = next_replacement.children().clone();
+            next_token = parent_node.to_token(packages);
+            next_children = parent_node.children().clone();
 
             next_to_replace = parent_path;
 
