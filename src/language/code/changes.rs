@@ -45,7 +45,8 @@ impl Changes {
         let mut latest_known = path;
 
         for change_set in &self.change_sets[i..] {
-            latest_known = change_set.latest_version_of(latest_known);
+            let latest = change_set.latest_version_of(latest_known);
+            latest_known = latest;
         }
 
         latest_known
