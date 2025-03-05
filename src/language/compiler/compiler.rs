@@ -157,10 +157,11 @@ fn replace_node_and_update_parents(
         initial_replacement = initial_replacement.or(Some(path));
         previous_replacement = path.hash;
 
-        if let Some(parent) = SyntaxTree::from_root(root.hash)
+        if let Some(parent_path) = SyntaxTree::from_root(root.hash)
             .find_parent_of(&next_to_replace.hash, change_set.nodes())
         {
-            next_replacement = change_set.nodes().get(parent.hash()).clone();
+            next_replacement =
+                change_set.nodes().get(parent_path.hash()).clone();
             next_replacement
                 .children_mut()
                 .replace(next_to_replace.hash(), [previous_replacement]);
@@ -168,7 +169,7 @@ fn replace_node_and_update_parents(
             next_token = next_replacement.to_token(packages);
             next_children = next_replacement.children().clone();
 
-            next_to_replace = parent;
+            next_to_replace = parent_path;
 
             continue;
         } else {
