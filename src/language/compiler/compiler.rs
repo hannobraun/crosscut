@@ -165,7 +165,7 @@ fn compile_token(
 
 fn resolve_keyword(
     name: &str,
-    path: &mut NodePath,
+    path: &NodePath,
     children: &Children,
     codebase: &mut Codebase,
 ) -> Option<(Node, Option<CodeError>)> {
