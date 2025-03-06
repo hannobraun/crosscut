@@ -1,6 +1,6 @@
 use crate::language::{
     code::Type,
-    instance::Language,
+    language::Language,
     packages::{Function, Package},
     runtime::{Effect, RuntimeState, Value},
     tests::functions::IntoFunctionBody,

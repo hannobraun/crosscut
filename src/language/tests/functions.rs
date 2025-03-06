@@ -1,6 +1,6 @@
 use crate::language::{
     code::NodePath,
-    instance::Language,
+    language::Language,
     runtime::{Effect, Value},
 };
 

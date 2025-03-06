@@ -1,6 +1,6 @@
 use crate::language::{
     code::{CodeError, Expression, IntrinsicFunction, Type},
-    instance::Language,
+    language::Language,
     packages::{Function, FunctionId, Package},
     runtime::{Effect, RuntimeState, Value},
 };

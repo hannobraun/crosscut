@@ -1,4 +1,4 @@
-use crate::language::{instance::Language, runtime::Value};
+use crate::language::{language::Language, runtime::Value};
 
 #[test]
 fn eval() {

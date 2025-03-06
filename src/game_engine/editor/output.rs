@@ -8,7 +8,7 @@ use crate::{
             NodePath,
         },
         editor::{Editor, EditorLayout, EditorLine},
-        instance::Language,
+        language::Language,
         packages::Packages,
         runtime::{Effect, Evaluator, RuntimeState, Value},
     },

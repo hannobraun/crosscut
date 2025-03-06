@@ -4,7 +4,7 @@ use crate::{
     },
     language::{
         code::Type,
-        instance::Language,
+        language::Language,
         packages::{Function, FunctionId, Package},
         runtime::{Effect, RuntimeState, Value},
     },

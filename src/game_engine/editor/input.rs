@@ -2,7 +2,7 @@ use std::collections::BTreeSet;
 
 use crate::language::{
     editor::{EditorCommand, EditorInputBuffer, EditorInputEvent},
-    instance::Language,
+    language::Language,
 };
 
 #[derive(Debug)]
