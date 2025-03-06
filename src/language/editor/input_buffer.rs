@@ -66,10 +66,8 @@ impl EditorInputBuffer {
                 return self.remove_right();
             }
             AddParent => {
-                let previous = self.add_parent_or_sibling();
-                return Some(NodeAction::AddParent {
-                    existing_child: previous,
-                });
+                let existing_child = self.add_parent_or_sibling();
+                return Some(NodeAction::AddParent { existing_child });
             }
             AddSibling => {
                 let previous = self.add_parent_or_sibling();
