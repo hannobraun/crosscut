@@ -9,9 +9,7 @@ fn define_and_evaluate() {
     // It is possible to define a function using a function literal, return that
     // function from the program, then tell the language to evaluate it.
 
-    let mut language = Language::new();
-
-    language.on_code("127 fn");
+    let mut language = Language::from_code("127 fn");
     let path = match language.step_until_finished().into_function_body() {
         Ok(path) => path,
         output => {
@@ -30,9 +28,7 @@ fn define_and_evaluate() {
 fn self_recursion() {
     // A function can recurse using the `self` keyword.
 
-    let mut language = Language::new();
-
-    language.on_code("identity self fn");
+    let mut language = Language::from_code("identity self fn");
     let path = match language.step_until_finished().into_function_body() {
         Ok(path) => path,
         output => {
@@ -58,9 +54,7 @@ fn empty_function() {
     // If an `fn` node doesn't have a child, an empty syntax node should be
     // created as a child for it.
 
-    let mut language = Language::new();
-
-    language.on_code("fn");
+    let mut language = Language::from_code("fn");
     let path = match language.step_until_finished().into_function_body() {
         Ok(path) => path,
         output => {
