@@ -9,7 +9,7 @@ use super::{Effect, RuntimeState, Value};
 pub struct Context {
     pub root: NodePath,
 
-    /// # The nodes to be evaluated, sorted from root to leaf
+    /// # The remaining nodes to be evaluated, sorted from root to leaf
     ///
     /// This is a subset of the full syntax tree. But it is not a tree itself,
     /// just a sequence of syntax nodes. If any of the nodes had multiple
