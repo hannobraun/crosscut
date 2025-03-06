@@ -35,6 +35,9 @@ impl Context {
         codebase: &Codebase,
     ) -> EvaluateUpdate {
         match intrinsic {
+            IntrinsicFunction::Drop => {
+                self.active_value = Value::Nothing;
+            }
             IntrinsicFunction::Eval => {
                 let Value::Function { body } = self.active_value else {
                     return self.unexpected_input(Type::Function, path);

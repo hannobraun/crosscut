@@ -1,6 +1,14 @@
 use crate::language::{language::Language, runtime::Value};
 
 #[test]
+fn drop() {
+    // The `drop` function takes any argument and returns `nothing`.
+
+    let mut language = Language::from_code("127 drop");
+    assert_eq!(language.step_until_finished(), Ok(Value::Nothing));
+}
+
+#[test]
 fn eval() {
     // The `eval` function takes a function argument and evaluates that.
     //

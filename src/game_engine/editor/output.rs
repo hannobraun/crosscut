@@ -358,6 +358,13 @@ fn render_help<A: EditorOutputAdapter>(
                     writeln!(adapter)?;
 
                     match intrinsic {
+                        IntrinsicFunction::Drop => {
+                            writeln!(
+                                adapter,
+                                "The `{intrinsic}` function takes any argument \
+                                and returns `nothing`.",
+                            )?;
+                        }
                         IntrinsicFunction::Eval => {
                             writeln!(
                                 adapter,
