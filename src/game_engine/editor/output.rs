@@ -100,7 +100,7 @@ where
         render_help(&mut self.adapter, &context)?;
 
         if let Some(Cursor { inner: [x, y] }) = context.cursor {
-            self.adapter.move_cursor_to(x, y)?;
+            self.adapter.move_cursor_to([x, y])?;
         }
 
         self.adapter.flush()?;

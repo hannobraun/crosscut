@@ -19,7 +19,7 @@ pub trait EditorOutputAdapter: fmt::Write {
         Cursor { inner: [0; 2] }
     }
 
-    fn move_cursor_to(&mut self, x: u16, y: u16) -> io::Result<()> {
+    fn move_cursor_to(&mut self, [x, y]: [u16; 2]) -> io::Result<()> {
         let [_, _] = [x, y];
         Ok(())
     }
@@ -142,7 +142,7 @@ impl RawTerminalAdapter {
 impl EditorOutputAdapter for RawTerminalAdapter {
     fn clear(&mut self) -> io::Result<()> {
         self.w.queue(terminal::Clear(ClearType::All))?;
-        self.move_cursor_to(0, 0)?;
+        self.move_cursor_to([0, 0])?;
 
         Ok(())
     }
@@ -151,7 +151,7 @@ impl EditorOutputAdapter for RawTerminalAdapter {
         Cursor { inner: self.cursor }
     }
 
-    fn move_cursor_to(&mut self, x: u16, y: u16) -> io::Result<()> {
+    fn move_cursor_to(&mut self, [x, y]: [u16; 2]) -> io::Result<()> {
         self.w.queue(cursor::MoveTo(x, y))?;
         self.cursor = [x, y];
         Ok(())
