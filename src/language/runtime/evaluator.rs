@@ -17,8 +17,8 @@ impl Evaluator {
     pub fn new() -> Self {
         Self {
             contexts: Vec::new(),
-            state: RuntimeState::Running {
-                active_value: Value::Nothing,
+            state: RuntimeState::Finished {
+                output: Value::Nothing,
                 path: None,
             },
         }
