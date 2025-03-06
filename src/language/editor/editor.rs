@@ -125,11 +125,12 @@ impl Editor {
                         packages,
                     );
                 }
-                NodeAction::AddSibling {
-                    existing_sibling: previous,
-                } => {
-                    self.editing =
-                        compiler.replace(&self.editing, &previous, packages);
+                NodeAction::AddSibling { existing_sibling } => {
+                    self.editing = compiler.replace(
+                        &self.editing,
+                        &existing_sibling,
+                        packages,
+                    );
 
                     let parent = compiler
                         .codebase()
