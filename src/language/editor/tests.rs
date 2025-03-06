@@ -117,6 +117,45 @@ fn merge_with_previous_sibling() {
 }
 
 #[test]
+fn merge_with_next_sibling() {
+    // When removing right, while the cursor is at the end of a node, that
+    // node should get merged with its next sibling.
+
+    let packages = Packages::new();
+
+    let mut codebase = Codebase::new();
+    let mut evaluator = Evaluator::new();
+
+    let mut editor = Editor::new(codebase.root().path, &codebase, &packages);
+
+    editor.on_code("12\n7", &mut codebase, &mut evaluator, &packages);
+    for _ in 1..=2 {
+        editor.on_input(
+            EditorInputEvent::MoveCursorLeft,
+            &mut codebase,
+            &mut evaluator,
+            &packages,
+        );
+    }
+
+    editor.on_input(
+        EditorInputEvent::RemoveRight { whole_node: false },
+        &mut codebase,
+        &mut evaluator,
+        &packages,
+    );
+
+    assert_eq!(
+        codebase
+            .root()
+            .children(codebase.nodes())
+            .map(|located_node| located_node.node.kind())
+            .collect::<Vec<_>>(),
+        vec![&NodeKind::integer_literal(127)],
+    );
+}
+
+#[test]
 fn split_node_to_create_sibling() {
     // When adding a sibling while the cursor is in the middle of a node, the
     // node should be split.
