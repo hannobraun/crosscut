@@ -8,7 +8,7 @@ pub use self::{
 
 #[cfg(test)]
 #[allow(unused)] // used only intermittently, to debug tests
-pub use self::editor::output::render_code;
+pub use self::editor::output::codebase_to_stdout;
 
 #[cfg(test)]
 mod tests;

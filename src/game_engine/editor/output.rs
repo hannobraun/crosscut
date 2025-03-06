@@ -17,7 +17,7 @@ use crate::{
 use super::input::{EditorMode, TerminalEditorInput};
 
 #[cfg(test)]
-pub fn render_code(codebase: &Codebase) {
+pub fn codebase_to_stdout(codebase: &Codebase) {
     use crate::io::editor::output::DebugOutputAdapter;
 
     let layout = EditorLayout::new(codebase.root(), codebase.nodes());
