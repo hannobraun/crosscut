@@ -151,7 +151,7 @@ impl Context {
     }
 }
 
-#[derive(Clone, Copy, Debug, Eq, PartialEq)]
+#[derive(Clone, Debug, Eq, PartialEq)]
 pub struct RuntimeNode {
     pub syntax_node: NodePath,
 }
