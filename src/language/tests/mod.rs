@@ -3,7 +3,7 @@ mod editing;
 mod errors;
 mod functions;
 mod host;
-mod intrinsic_functions;
+mod intrinsics;
 mod tuples;
 
 mod infra;
