@@ -143,7 +143,7 @@ impl Evaluator {
         }
 
         // Take the current context. Depending on how things will go, we'll
-        // restore it below, or do nothing, if it turns out we actually need to
+        // restore it below; or do nothing, if it turns out we actually need to
         // remove it.
         //
         // Doing it this way makes some of the code below simpler or more
