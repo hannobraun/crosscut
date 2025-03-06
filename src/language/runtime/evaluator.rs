@@ -123,8 +123,7 @@ impl Evaluator {
     pub fn trigger_effect(&mut self, effect: Effect) {
         let Some(context) = self.contexts.last_mut() else {
             panic!(
-                "Not allowed to trigger effect, if there is no context it \
-                could come from."
+                "There is no active context. Not allowed to trigger effect."
             );
         };
         let Some(path) = context.nodes_from_root.last().copied() else {
