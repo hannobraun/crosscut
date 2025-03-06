@@ -11,31 +11,6 @@ use crossterm::{
 };
 
 pub trait EditorOutputAdapter: fmt::Write {
-    fn clear(&mut self) -> io::Result<()>;
-
-    fn cursor(&self) -> Cursor;
-
-    fn move_cursor_to(&mut self, x: u16, y: u16) -> io::Result<()>;
-
-    fn color(
-        &mut self,
-        color: Color,
-        f: impl FnOnce(&mut Self) -> fmt::Result,
-    ) -> anyhow::Result<()>;
-
-    fn attribute(
-        &mut self,
-        attribute: Attribute,
-        f: impl FnOnce(&mut Self) -> anyhow::Result<()>,
-    ) -> anyhow::Result<()>;
-
-    fn flush(&mut self) -> io::Result<()>;
-}
-
-#[derive(Debug)]
-pub struct DebugOutputAdapter;
-
-impl EditorOutputAdapter for DebugOutputAdapter {
     fn clear(&mut self) -> io::Result<()> {
         Ok(())
     }
@@ -44,24 +19,27 @@ impl EditorOutputAdapter for DebugOutputAdapter {
         Cursor { inner: [0; 2] }
     }
 
-    fn move_cursor_to(&mut self, _: u16, _: u16) -> io::Result<()> {
+    fn move_cursor_to(&mut self, x: u16, y: u16) -> io::Result<()> {
+        let [_, _] = [x, y];
         Ok(())
     }
 
     fn color(
         &mut self,
-        _: Color,
+        color: Color,
         f: impl FnOnce(&mut Self) -> fmt::Result,
     ) -> anyhow::Result<()> {
+        let _ = color;
         f(self)?;
         Ok(())
     }
 
     fn attribute(
         &mut self,
-        _: Attribute,
+        attribute: Attribute,
         f: impl FnOnce(&mut Self) -> anyhow::Result<()>,
     ) -> anyhow::Result<()> {
+        let _ = attribute;
         f(self)?;
         Ok(())
     }
@@ -70,6 +48,11 @@ impl EditorOutputAdapter for DebugOutputAdapter {
         Ok(())
     }
 }
+
+#[derive(Debug)]
+pub struct DebugOutputAdapter;
+
+impl EditorOutputAdapter for DebugOutputAdapter {}
 
 impl fmt::Write for DebugOutputAdapter {
     fn write_str(&mut self, s: &str) -> fmt::Result {
@@ -82,41 +65,7 @@ pub struct StringOutputAdapter {
     pub output: String,
 }
 
-impl EditorOutputAdapter for StringOutputAdapter {
-    fn clear(&mut self) -> io::Result<()> {
-        Ok(())
-    }
-
-    fn cursor(&self) -> Cursor {
-        Cursor { inner: [0; 2] }
-    }
-
-    fn move_cursor_to(&mut self, _: u16, _: u16) -> io::Result<()> {
-        Ok(())
-    }
-
-    fn color(
-        &mut self,
-        _: Color,
-        f: impl FnOnce(&mut Self) -> fmt::Result,
-    ) -> anyhow::Result<()> {
-        f(self)?;
-        Ok(())
-    }
-
-    fn attribute(
-        &mut self,
-        _: Attribute,
-        f: impl FnOnce(&mut Self) -> anyhow::Result<()>,
-    ) -> anyhow::Result<()> {
-        f(self)?;
-        Ok(())
-    }
-
-    fn flush(&mut self) -> io::Result<()> {
-        Ok(())
-    }
-}
+impl EditorOutputAdapter for StringOutputAdapter {}
 
 impl fmt::Write for StringOutputAdapter {
     fn write_str(&mut self, s: &str) -> fmt::Result {
