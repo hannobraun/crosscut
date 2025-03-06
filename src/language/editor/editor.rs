@@ -112,11 +112,12 @@ impl Editor {
                         compiler.remove(to_remove, packages);
                     }
                 }
-                NodeAction::AddParent {
-                    existing_child: previous,
-                } => {
-                    self.editing =
-                        compiler.replace(&self.editing, &previous, packages);
+                NodeAction::AddParent { existing_child } => {
+                    self.editing = compiler.replace(
+                        &self.editing,
+                        &existing_child,
+                        packages,
+                    );
 
                     self.editing = compiler.insert_parent(
                         &self.editing,
