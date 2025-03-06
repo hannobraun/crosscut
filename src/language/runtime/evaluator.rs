@@ -126,7 +126,7 @@ impl Evaluator {
                 "There is no active context. Not allowed to trigger effect."
             );
         };
-        let Some(source) = context.nodes_from_root.last().copied() else {
+        let Some(source) = context.nodes_from_root.last() else {
             panic!(
                 "Not allowed to trigger effect, if there is no active syntax \
                 node that could trigger it."
