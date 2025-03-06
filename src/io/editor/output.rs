@@ -16,7 +16,7 @@ pub trait EditorOutputAdapter: fmt::Write {
     }
 
     fn cursor(&self) -> Cursor {
-        Cursor { inner: [0; 2] }
+        Cursor { position: [0; 2] }
     }
 
     fn move_cursor_to(&mut self, [x, y]: [u16; 2]) -> io::Result<()> {
@@ -148,7 +148,9 @@ impl EditorOutputAdapter for RawTerminalAdapter {
     }
 
     fn cursor(&self) -> Cursor {
-        Cursor { inner: self.cursor }
+        Cursor {
+            position: self.cursor,
+        }
     }
 
     fn move_cursor_to(&mut self, [x, y]: [u16; 2]) -> io::Result<()> {
@@ -208,12 +210,12 @@ impl Drop for RawTerminalAdapter {
 }
 
 pub struct Cursor {
-    pub inner: [u16; 2],
+    pub position: [u16; 2],
 }
 
 impl Cursor {
     pub fn move_right(self, offset: usize) -> Self {
-        let [x, y] = self.inner;
+        let [x, y] = self.position;
 
         let x = {
             let x: usize = x.into();
@@ -222,6 +224,6 @@ impl Cursor {
             x
         };
 
-        Cursor { inner: [x, y] }
+        Cursor { position: [x, y] }
     }
 }
