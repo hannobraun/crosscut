@@ -161,7 +161,7 @@ impl Evaluator {
             return;
         };
 
-        let Some(path) = context.nodes_from_root.last().copied() else {
+        let Some(next) = context.nodes_from_root.last().copied() else {
             // The context has no syntax tree remaining, which means we're done
             // with it.
 
@@ -195,7 +195,7 @@ impl Evaluator {
             return;
         };
 
-        match codebase.node_at(&path).kind() {
+        match codebase.node_at(&next).kind() {
             NodeKind::Empty { .. } => {
                 context.advance();
             }
@@ -204,14 +204,14 @@ impl Evaluator {
                 ..
             } => {
                 let effect = context.evaluate_host_function(*id);
-                self.state = RuntimeState::Effect { effect, path };
+                self.state = RuntimeState::Effect { effect, path: next };
             }
             NodeKind::Expression {
                 expression: Expression::IntrinsicFunction { intrinsic },
                 ..
             } => {
                 let update = context
-                    .evaluate_intrinsic_function(intrinsic, path, codebase);
+                    .evaluate_intrinsic_function(intrinsic, next, codebase);
                 self.contexts.push(context);
 
                 // The context is now restored. This means we can apply the
@@ -242,7 +242,7 @@ impl Evaluator {
                 return;
             }
             NodeKind::Error { .. } => {
-                self.state = RuntimeState::Error { path };
+                self.state = RuntimeState::Error { path: next };
             }
         };
 
