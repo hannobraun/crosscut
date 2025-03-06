@@ -28,18 +28,10 @@ fn number_literal() {
 
 #[test]
 fn identity_none() {
-    // The `identity` function takes any argument and returns it unchanged. The
-    // initial value is `nothing`, so an `identity` with nothing else around,
-    // should return that.
+    // The `identity` function takes any argument and returns it unchanged.
 
     let mut language = Language::from_code("identity");
     assert_eq!(language.step_until_finished(), Ok(Value::Nothing));
-}
-
-#[test]
-fn identity_integer() {
-    // The `identity` function takes any argument and returns it unchanged. This
-    // works with integers, as it does with any other value.
 
     let mut language = Language::from_code("127 identity");
     assert_eq!(
