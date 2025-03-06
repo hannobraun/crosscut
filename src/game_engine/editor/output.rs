@@ -99,8 +99,8 @@ where
         render_prompt(&mut self.adapter, editor_input, &mut context)?;
         render_help(&mut self.adapter, &context)?;
 
-        if let Some(Cursor { inner: [x, y] }) = context.cursor {
-            self.adapter.move_cursor_to([x, y])?;
+        if let Some(Cursor { inner }) = context.cursor {
+            self.adapter.move_cursor_to(inner)?;
         }
 
         self.adapter.flush()?;
