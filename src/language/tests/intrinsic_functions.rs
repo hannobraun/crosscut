@@ -7,9 +7,7 @@ fn eval() {
     // So far, the `eval` function can only pass `nothing` to the evaluated
     // function. Eventually, it should be able to pass any argument.
 
-    let mut language = Language::new();
-
-    language.on_code("127 fn eval");
+    let mut language = Language::from_code("127 fn eval");
     assert_eq!(
         language.step_until_finished(),
         Ok(Value::Integer { value: 127 }),
@@ -21,9 +19,7 @@ fn number_literal() {
     // A number literal is a function that takes `nothing` and returns the
     // number it represents.
 
-    let mut language = Language::new();
-
-    language.on_code("127");
+    let mut language = Language::from_code("127");
     assert_eq!(
         language.step_until_finished(),
         Ok(Value::Integer { value: 127 }),
@@ -36,9 +32,7 @@ fn identity_none() {
     // initial value is `nothing`, so an `identity` with nothing else around,
     // should return that.
 
-    let mut language = Language::new();
-
-    language.on_code("identity");
+    let mut language = Language::from_code("identity");
     assert_eq!(language.step_until_finished(), Ok(Value::Nothing));
 }
 
@@ -47,9 +41,7 @@ fn identity_integer() {
     // The `identity` function takes any argument and returns it unchanged. This
     // works with integers, as it does with any other value.
 
-    let mut language = Language::new();
-
-    language.on_code("127 identity");
+    let mut language = Language::from_code("127 identity");
     assert_eq!(
         language.step_until_finished(),
         Ok(Value::Integer { value: 127 }),
