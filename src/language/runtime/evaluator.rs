@@ -99,9 +99,9 @@ impl Evaluator {
         };
         let Some(context) = self.contexts.last_mut() else {
             unreachable!(
-                "Host function is being applied, but no context is available. \
-                This should not be possible, because without a context, what \
-                would have triggered the effect?"
+                "Host function is being applied, but there is no active \
+                context. This should not be possible, because without a \
+                context, what could have triggered the effect?"
             );
         };
         let Some(source) = context.nodes_from_root.last().copied() else {
