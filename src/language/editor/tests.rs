@@ -32,6 +32,16 @@ fn edit_initial_node() {
     );
 }
 
+// There are some test cases missing right around here, about navigating to the
+// previous node, and probably more detail on navigating to the next node.
+//
+// Those test cases exist, as part of the higher-level `editing` suite. They are
+// probably misplaced there. See comment in that module.
+//
+// In case those test cases need to be changed in a significant way, it probably
+// makes more sense to port them here first. But as long as they stay the same,
+// that might not be worth the effort.
+
 #[test]
 fn navigate_to_next_sibling() {
     // Moving the cursor down should navigate to the next sibling.
