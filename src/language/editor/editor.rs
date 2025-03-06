@@ -125,7 +125,9 @@ impl Editor {
                         packages,
                     );
                 }
-                NodeAction::AddSibling { previous } => {
+                NodeAction::AddSibling {
+                    existing_sibling: previous,
+                } => {
                     self.editing =
                         compiler.replace(&self.editing, &previous, packages);
 

@@ -71,7 +71,9 @@ impl EditorInputBuffer {
             }
             AddSibling => {
                 let previous = self.add_parent_or_sibling();
-                return Some(NodeAction::AddSibling { previous });
+                return Some(NodeAction::AddSibling {
+                    existing_sibling: previous,
+                });
             }
         }
 
@@ -163,7 +165,7 @@ pub enum NodeAction {
     MergeWithPrevious,
     MergeWithNext,
     AddParent { existing_child: String },
-    AddSibling { previous: String },
+    AddSibling { existing_sibling: String },
 }
 
 #[derive(Debug)]
