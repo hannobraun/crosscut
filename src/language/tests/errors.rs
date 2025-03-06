@@ -86,7 +86,7 @@ fn do_not_step_beyond_errors() {
     // If there's an error in the code, the interpreter should never step beyond
     // that, if it encounters it.
 
-    let mut language = Language::from_code("error");
+    let mut language = Language::from_code("unresolved");
 
     assert!(matches!(language.step(), RuntimeState::Error { .. }));
     assert!(matches!(language.step(), RuntimeState::Error { .. }));
