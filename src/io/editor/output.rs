@@ -78,6 +78,53 @@ impl fmt::Write for DebugOutputAdapter {
     }
 }
 
+pub struct StringOutputAdapter {
+    pub output: String,
+}
+
+impl EditorOutputAdapter for StringOutputAdapter {
+    fn clear(&mut self) -> io::Result<()> {
+        Ok(())
+    }
+
+    fn cursor(&self) -> Cursor {
+        Cursor { inner: [0; 2] }
+    }
+
+    fn move_cursor_to(&mut self, _: u16, _: u16) -> io::Result<()> {
+        Ok(())
+    }
+
+    fn color(
+        &mut self,
+        _: Color,
+        f: impl FnOnce(&mut Self) -> fmt::Result,
+    ) -> anyhow::Result<()> {
+        f(self)?;
+        Ok(())
+    }
+
+    fn attribute(
+        &mut self,
+        _: Attribute,
+        f: impl FnOnce(&mut Self) -> anyhow::Result<()>,
+    ) -> anyhow::Result<()> {
+        f(self)?;
+        Ok(())
+    }
+
+    fn flush(&mut self) -> io::Result<()> {
+        Ok(())
+    }
+}
+
+impl fmt::Write for StringOutputAdapter {
+    fn write_str(&mut self, s: &str) -> fmt::Result {
+        write!(self.output, "{s}")?;
+        Ok(())
+    }
+}
+
 /// # Adapter between the renderer and the terminal
 ///
 /// Unfortunately, terminals are an ancient technology and suck very badly. As a

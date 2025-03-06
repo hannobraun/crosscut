@@ -11,4 +11,7 @@ pub use self::{
 pub use self::editor::output::codebase_to_stdout;
 
 #[cfg(test)]
+pub use self::editor::output::codebase_to_string;
+
+#[cfg(test)]
 mod tests;

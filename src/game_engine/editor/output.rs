@@ -23,6 +23,18 @@ pub fn codebase_to_stdout(codebase: &Codebase) {
 }
 
 #[cfg(test)]
+pub fn codebase_to_string(codebase: &Codebase) -> String {
+    use crate::io::editor::output::StringOutputAdapter;
+
+    let mut adapter = StringOutputAdapter {
+        output: String::new(),
+    };
+    codebase_to_adapter(codebase, &mut adapter);
+
+    adapter.output
+}
+
+#[cfg(test)]
 fn codebase_to_adapter(
     codebase: &Codebase,
     adapter: &mut impl EditorOutputAdapter,
