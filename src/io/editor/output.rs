@@ -19,8 +19,8 @@ pub trait EditorOutputAdapter: fmt::Write {
         Cursor { position: [0; 2] }
     }
 
-    fn move_cursor_to(&mut self, [x, y]: [u16; 2]) -> io::Result<()> {
-        let [_, _] = [x, y];
+    fn move_cursor_to(&mut self, position: [u16; 2]) -> io::Result<()> {
+        let _ = position;
         Ok(())
     }
 
