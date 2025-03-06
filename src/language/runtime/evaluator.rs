@@ -104,7 +104,7 @@ impl Evaluator {
                 context, what could have triggered the effect?"
             );
         };
-        let Some(source) = context.nodes_from_root.last().copied() else {
+        let Some(source) = context.nodes_from_root.last() else {
             unreachable!(
                 "Host function is being applied, but there doesn't seem to be \
                 a syntax node that could have triggered it."
