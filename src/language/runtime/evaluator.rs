@@ -4,7 +4,7 @@ use crate::language::code::{
 
 use super::{
     Effect, RuntimeState, Value,
-    context::{Context, EvaluateUpdate},
+    context::{Context, EvaluateUpdate, RuntimeNode},
 };
 
 #[derive(Debug)]
@@ -39,7 +39,7 @@ impl Evaluator {
         let mut path = root;
 
         loop {
-            nodes_from_root.push(path);
+            nodes_from_root.push(RuntimeNode { syntax_node: path });
 
             if let NodeKind::Expression {
                 expression:
@@ -114,7 +114,7 @@ impl Evaluator {
         context.active_value = value.clone();
         self.state = RuntimeState::Running {
             active_value: value,
-            path: Some(source),
+            path: Some(source.syntax_node),
         };
 
         context.advance();
@@ -135,7 +135,7 @@ impl Evaluator {
 
         self.state = RuntimeState::Effect {
             effect,
-            path: source,
+            path: source.syntax_node,
         };
     }
 
@@ -195,7 +195,7 @@ impl Evaluator {
             return;
         };
 
-        match codebase.node_at(&next).kind() {
+        match codebase.node_at(&next.syntax_node).kind() {
             NodeKind::Empty { .. } => {
                 context.advance();
             }
@@ -204,14 +204,20 @@ impl Evaluator {
                 ..
             } => {
                 let effect = context.evaluate_host_function(*id);
-                self.state = RuntimeState::Effect { effect, path: next };
+                self.state = RuntimeState::Effect {
+                    effect,
+                    path: next.syntax_node,
+                };
             }
             NodeKind::Expression {
                 expression: Expression::IntrinsicFunction { intrinsic },
                 ..
             } => {
-                let update = context
-                    .evaluate_intrinsic_function(intrinsic, next, codebase);
+                let update = context.evaluate_intrinsic_function(
+                    intrinsic,
+                    next.syntax_node,
+                    codebase,
+                );
                 self.contexts.push(context);
 
                 // The context is now restored. This means we can apply the
@@ -242,7 +248,9 @@ impl Evaluator {
                 return;
             }
             NodeKind::Error { .. } => {
-                self.state = RuntimeState::Error { path: next };
+                self.state = RuntimeState::Error {
+                    path: next.syntax_node,
+                };
             }
         };
 

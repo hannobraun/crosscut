@@ -15,7 +15,7 @@ pub struct Context {
     /// just a sequence of syntax nodes. If any of the nodes had multiple
     /// children (which would turn the sequence into a sub-tree), this would
     /// have caused a separate context to be created.
-    pub nodes_from_root: Vec<NodePath>,
+    pub nodes_from_root: Vec<RuntimeNode>,
 
     pub active_value: Value,
 }
@@ -149,6 +149,11 @@ impl Context {
             },
         }
     }
+}
+
+#[derive(Clone, Copy, Debug, Eq, PartialEq)]
+pub struct RuntimeNode {
+    pub syntax_node: NodePath,
 }
 
 #[derive(Debug, Eq, PartialEq)]
