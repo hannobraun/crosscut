@@ -72,12 +72,7 @@ impl Editor {
                     }
                 }
                 NodeAction::MergeWithPrevious => {
-                    if let Some(to_remove) = compiler
-                        .codebase()
-                        .children_of(&self.editing)
-                        .to_paths()
-                        .last()
-                    {
+                    if let Some(to_remove) = layout.node_before(&self.editing) {
                         let merged = [&to_remove, &self.editing]
                             .map(|path| {
                                 compiler
