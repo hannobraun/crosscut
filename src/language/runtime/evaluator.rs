@@ -126,14 +126,17 @@ impl Evaluator {
                 "There is no active context. Not allowed to trigger effect."
             );
         };
-        let Some(path) = context.nodes_from_root.last().copied() else {
+        let Some(source) = context.nodes_from_root.last().copied() else {
             panic!(
                 "Not allowed to trigger effect, if there is no active syntax \
                 node that could trigger it."
             );
         };
 
-        self.state = RuntimeState::Effect { effect, path };
+        self.state = RuntimeState::Effect {
+            effect,
+            path: source,
+        };
     }
 
     pub fn step(&mut self, codebase: &Codebase) {
