@@ -227,7 +227,7 @@ impl Evaluator {
                 // because the code below would do it again.
                 return;
             }
-            NodeKind::Recursion { .. } => {
+            NodeKind::Recursion => {
                 let active_value = context.active_value.clone();
                 self.push_context(context.root, active_value, codebase);
 
