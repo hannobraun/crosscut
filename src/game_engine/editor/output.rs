@@ -19,10 +19,15 @@ use super::input::{EditorMode, TerminalEditorInput};
 #[cfg(test)]
 pub fn codebase_to_stdout(codebase: &Codebase) {
     use crate::io::editor::output::DebugOutputAdapter;
+    codebase_to_adapter(codebase, &mut DebugOutputAdapter);
+}
 
+#[cfg(test)]
+fn codebase_to_adapter(
+    codebase: &Codebase,
+    adapter: &mut impl EditorOutputAdapter,
+) {
     let layout = EditorLayout::new(codebase.root(), codebase.nodes());
-
-    let mut adapter = DebugOutputAdapter;
 
     // Creating an empty `Packages` placeholder here, means this function can't
     // be used to render host functions. This is only being used sporadically in
@@ -40,7 +45,7 @@ pub fn codebase_to_stdout(codebase: &Codebase) {
         cursor: None,
     };
 
-    render_layout(&layout, &mut adapter, &mut context)
+    render_layout(&layout, adapter, &mut context)
         .expect("Failed to render code")
 }
 
