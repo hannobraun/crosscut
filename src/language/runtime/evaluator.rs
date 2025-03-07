@@ -39,7 +39,8 @@ impl Evaluator {
         let mut path = root;
 
         loop {
-            nodes_from_root.push(RuntimeNode { syntax_node: path });
+            let node = RuntimeNode { syntax_node: path };
+            nodes_from_root.push(node);
 
             if let NodeKind::Expression {
                 expression:
