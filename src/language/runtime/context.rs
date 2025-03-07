@@ -8,6 +8,7 @@ use super::{Effect, RuntimeState, Value};
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub struct Context {
     pub root: NodePath,
+    pub next: Option<RuntimeNode>,
 
     /// # The remaining nodes to be evaluated, sorted from root to leaf
     ///

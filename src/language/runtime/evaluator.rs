@@ -87,6 +87,7 @@ impl Evaluator {
         };
         self.contexts.push(Context {
             root,
+            next: previous,
             nodes_from_root,
             active_value,
         });
