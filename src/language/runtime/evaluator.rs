@@ -41,7 +41,7 @@ impl Evaluator {
         loop {
             previous = Some(RuntimeNode {
                 syntax_node: path,
-                child: previous.map(Box::new),
+                parent: previous.map(Box::new),
             });
 
             if let NodeKind::Expression {

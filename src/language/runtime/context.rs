@@ -126,7 +126,7 @@ impl Context {
         self.next = self
             .next
             .take()
-            .and_then(|next| next.child.map(|child| *child));
+            .and_then(|next| next.parent.map(|child| *child));
     }
 
     fn unexpected_input(
@@ -149,7 +149,7 @@ impl Context {
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub struct RuntimeNode {
     pub syntax_node: NodePath,
-    pub child: Option<Box<RuntimeNode>>,
+    pub parent: Option<Box<RuntimeNode>>,
 }
 
 #[derive(Debug, Eq, PartialEq)]
