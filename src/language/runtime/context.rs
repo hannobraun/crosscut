@@ -9,15 +9,6 @@ use super::{Effect, RuntimeState, Value};
 pub struct Context {
     pub root: NodePath,
     pub next: Option<RuntimeNode>,
-
-    /// # The remaining nodes to be evaluated, sorted from root to leaf
-    ///
-    /// This is a subset of the full syntax tree. But it is not a tree itself,
-    /// just a sequence of syntax nodes. If any of the nodes had multiple
-    /// children (which would turn the sequence into a sub-tree), this would
-    /// have caused a separate context to be created.
-    pub nodes_from_root: Vec<RuntimeNode>,
-
     pub active_value: Value,
 }
 
@@ -132,7 +123,10 @@ impl Context {
     }
 
     pub fn advance(&mut self) {
-        self.nodes_from_root.pop();
+        self.next = self
+            .next
+            .take()
+            .and_then(|next| next.child.map(|child| *child));
     }
 
     fn unexpected_input(

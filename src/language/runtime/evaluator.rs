@@ -88,7 +88,6 @@ impl Evaluator {
         self.contexts.push(Context {
             root,
             next: previous,
-            nodes_from_root,
             active_value,
         });
     }
@@ -111,7 +110,7 @@ impl Evaluator {
                 context, what could have triggered the effect?"
             );
         };
-        let Some(source) = context.nodes_from_root.last() else {
+        let Some(source) = &context.next else {
             unreachable!(
                 "Host function is being applied, but there doesn't seem to be \
                 a syntax node that could have triggered it."
@@ -133,7 +132,7 @@ impl Evaluator {
                 "There is no active context. Not allowed to trigger effect."
             );
         };
-        let Some(source) = context.nodes_from_root.last() else {
+        let Some(source) = &context.next else {
             panic!(
                 "Not allowed to trigger effect, if there is no active syntax \
                 node that could trigger it."
@@ -168,7 +167,7 @@ impl Evaluator {
             return;
         };
 
-        let Some(next) = context.nodes_from_root.last() else {
+        let Some(next) = &context.next else {
             // The context has no syntax tree remaining, which means we're done
             // with it.
 
