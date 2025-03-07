@@ -39,11 +39,10 @@ impl Evaluator {
         let mut previous = None;
 
         loop {
-            let node = RuntimeNode {
+            previous = Some(RuntimeNode {
                 syntax_node: path,
                 child: previous.map(Box::new),
-            };
-            previous = Some(node);
+            });
 
             if let NodeKind::Expression {
                 expression:
