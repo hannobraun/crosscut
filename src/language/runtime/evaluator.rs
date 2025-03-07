@@ -42,10 +42,10 @@ impl Evaluator {
         loop {
             let node = RuntimeNode {
                 syntax_node: path,
-                child: previous,
+                child: previous.map(Box::new),
             };
             nodes_from_root.push(node.clone());
-            previous = Some(Box::new(node));
+            previous = Some(node);
 
             if let NodeKind::Expression {
                 expression:
