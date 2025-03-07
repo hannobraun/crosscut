@@ -154,6 +154,7 @@ impl Context {
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub struct RuntimeNode {
     pub syntax_node: NodePath,
+    pub child: Option<Box<RuntimeNode>>,
 }
 
 #[derive(Debug, Eq, PartialEq)]

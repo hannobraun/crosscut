@@ -37,10 +37,15 @@ impl Evaluator {
     ) {
         let mut nodes_from_root = Vec::new();
         let mut path = root;
+        let mut previous = None;
 
         loop {
-            let node = RuntimeNode { syntax_node: path };
-            nodes_from_root.push(node);
+            let node = RuntimeNode {
+                syntax_node: path,
+                child: previous,
+            };
+            nodes_from_root.push(node.clone());
+            previous = Some(Box::new(node));
 
             if let NodeKind::Expression {
                 expression:
