@@ -35,7 +35,6 @@ impl Evaluator {
         active_value: Value,
         codebase: &Codebase,
     ) {
-        let mut nodes_from_root = Vec::new();
         let mut path = root;
         let mut previous = None;
 
@@ -44,7 +43,6 @@ impl Evaluator {
                 syntax_node: path,
                 child: previous.map(Box::new),
             };
-            nodes_from_root.push(node.clone());
             previous = Some(node);
 
             if let NodeKind::Expression {
