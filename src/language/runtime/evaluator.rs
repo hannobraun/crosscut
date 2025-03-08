@@ -4,7 +4,7 @@ use crate::language::code::{
 
 use super::{
     Effect, RuntimeState, Value,
-    context::{Context, EvaluateUpdate, RuntimeNode},
+    context::{Context, ContextNode, EvaluateUpdate},
 };
 
 #[derive(Debug)]
@@ -39,7 +39,7 @@ impl Evaluator {
         let mut previous = None;
 
         loop {
-            previous = Some(RuntimeNode {
+            previous = Some(ContextNode {
                 syntax_node: path,
                 parent: previous.map(Box::new),
             });

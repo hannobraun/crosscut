@@ -8,7 +8,7 @@ use super::{Effect, RuntimeState, Value};
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub struct Context {
     pub root: NodePath,
-    pub next: Option<RuntimeNode>,
+    pub next: Option<ContextNode>,
     pub active_value: Value,
 }
 
@@ -147,9 +147,9 @@ impl Context {
 }
 
 #[derive(Clone, Debug, Eq, PartialEq)]
-pub struct RuntimeNode {
+pub struct ContextNode {
     pub syntax_node: NodePath,
-    pub parent: Option<Box<RuntimeNode>>,
+    pub parent: Option<Box<ContextNode>>,
 }
 
 #[derive(Debug, Eq, PartialEq)]
