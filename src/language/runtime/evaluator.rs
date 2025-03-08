@@ -9,6 +9,7 @@ use super::{
 
 #[derive(Debug)]
 pub struct Evaluator {
+    call_stack: Vec<NodePath>,
     contexts: Vec<Context>,
     state: RuntimeState,
 }
@@ -16,6 +17,7 @@ pub struct Evaluator {
 impl Evaluator {
     pub fn new() -> Self {
         Self {
+            call_stack: Vec::new(),
             contexts: Vec::new(),
             state: RuntimeState::Finished {
                 output: Value::Nothing,
@@ -82,8 +84,8 @@ impl Evaluator {
             active_value: active_value.clone(),
             path: None,
         };
+        self.call_stack.push(root);
         self.contexts.push(Context {
-            root,
             next: previous,
             active_value,
         });
@@ -240,8 +242,13 @@ impl Evaluator {
                 return;
             }
             NodeKind::Recursion => {
+                let path = self
+                    .call_stack
+                    .pop()
+                    .unwrap_or_else(|| codebase.root().path);
+
                 let active_value = context.active_value.clone();
-                self.push_context(context.root, active_value, codebase);
+                self.push_context(path, active_value, codebase);
 
                 // Return here, to bypass restoring the context. We already
                 // created a new one with the call above, and the old one has
@@ -309,10 +316,12 @@ mod tests {
 
         let mut evaluator = Evaluator::new();
         evaluator.reset(&codebase);
+        assert_eq!(evaluator.call_stack.len(), 1);
         assert_eq!(evaluator.contexts.len(), 1);
 
         evaluator.step(&codebase);
         assert!(matches!(evaluator.state(), RuntimeState::Running { .. }));
+        assert_eq!(evaluator.call_stack.len(), 1);
         assert_eq!(evaluator.contexts.len(), 1);
     }
 }

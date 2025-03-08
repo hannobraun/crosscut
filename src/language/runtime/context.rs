@@ -7,7 +7,6 @@ use super::{Effect, RuntimeState, Value};
 
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub struct Context {
-    pub root: NodePath,
     pub next: Option<ContextNode>,
     pub active_value: Value,
 }
