@@ -27,7 +27,7 @@ fn edit_initial_node() {
     editor.on_code("7", &mut codebase, &mut evaluator, &packages);
 
     assert_eq!(
-        codebase.node_at(editor.editing()).kind(),
+        codebase.node_at(editor.editing()).node.kind(),
         &NodeKind::integer_literal(127),
     );
 }
