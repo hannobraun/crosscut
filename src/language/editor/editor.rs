@@ -73,11 +73,11 @@ impl Editor {
                 }
                 NodeAction::MergeWithPrevious => {
                     if let Some(to_remove) = layout.node_before(&self.editing) {
-                        let merged = [&to_remove, &self.editing]
+                        let merged = [to_remove, self.editing]
                             .map(|path| {
                                 compiler
                                     .codebase()
-                                    .node_at(*path)
+                                    .node_at(path)
                                     .node
                                     .display(packages)
                                     .to_string()
