@@ -76,8 +76,8 @@ impl Context {
                         }
                         Literal::Integer { value } => Value::Integer { value },
                         Literal::Tuple => {
-                            let node = codebase.node_at(path).node;
-                            let mut children = node.children().to_paths();
+                            let node = codebase.node_at(path);
+                            let mut children = node.children(codebase.nodes());
 
                             let Some(child) = children.next() else {
                                 unreachable!(
@@ -100,7 +100,7 @@ impl Context {
                             self.advance();
 
                             return EvaluateUpdate::PushContext {
-                                root: child,
+                                root: child.path,
                                 active_value: Value::Nothing,
                             };
                         }
