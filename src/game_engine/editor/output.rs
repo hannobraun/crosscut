@@ -229,20 +229,20 @@ fn render_line<A: EditorOutputAdapter>(
         adapter.color(Color::Grey, |adapter| write!(adapter, "·"))?;
     }
 
-    render_node(&line.node.path, adapter, context)?;
+    render_node(line.node.path, adapter, context)?;
 
     Ok(())
 }
 
 fn render_node<A: EditorOutputAdapter>(
-    path: &NodePath,
+    path: NodePath,
     adapter: &mut A,
     context: &mut RenderContext,
 ) -> anyhow::Result<()> {
-    let node = context.codebase.node_at(*path).node;
+    let node = context.codebase.node_at(path).node;
 
     if let Some(editor) = context.editor {
-        if editor.editing() == path {
+        if editor.editing() == &path {
             context.cursor =
                 Some(adapter.cursor().move_right(editor.input().cursor()));
         }
@@ -264,7 +264,7 @@ fn render_node<A: EditorOutputAdapter>(
         write!(adapter, "{node_display}")?;
     }
 
-    if let Some(error) = context.codebase.errors().get(path) {
+    if let Some(error) = context.codebase.errors().get(&path) {
         adapter.color(ERROR_COLOR, |adapter| {
             write!(adapter, "    error: {error}")
         })?;
