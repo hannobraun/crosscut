@@ -64,8 +64,8 @@ impl Evaluator {
                 break;
             }
 
-            let mut children =
-                codebase.node_at(path).node.children().to_paths();
+            let node = codebase.node_at(path).node;
+            let mut children = node.children().to_paths();
 
             if let Some(child) = children.next() {
                 assert_eq!(
