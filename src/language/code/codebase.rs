@@ -1,8 +1,8 @@
 use crate::language::code::NodeKind;
 
 use super::{
-    Changes, Children, Errors, LocatedNode, NewChangeSet, Node, NodeHash,
-    NodePath, Nodes, SyntaxTree,
+    Changes, Errors, LocatedNode, NewChangeSet, Node, NodeHash, NodePath,
+    Nodes, SyntaxTree,
 };
 
 #[derive(Clone, Debug, Eq, PartialEq)]
@@ -37,10 +37,6 @@ impl Codebase {
             node: self.nodes.get(&self.root.hash),
             path: self.root.path(),
         }
-    }
-
-    pub fn children_of(&self, path: &NodePath) -> &Children {
-        self.node_at(*path).node.children()
     }
 
     pub fn parent_of(&self, path: &NodePath) -> Option<NodePath> {

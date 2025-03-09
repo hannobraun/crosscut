@@ -52,8 +52,11 @@ impl Context {
                 let value = {
                     match *literal {
                         Literal::Function => {
-                            let mut children =
-                                codebase.children_of(&path).to_paths();
+                            let mut children = codebase
+                                .node_at(path)
+                                .node
+                                .children()
+                                .to_paths();
 
                             let Some(child) = children.next() else {
                                 unreachable!(
@@ -74,8 +77,11 @@ impl Context {
                         }
                         Literal::Integer { value } => Value::Integer { value },
                         Literal::Tuple => {
-                            let mut children =
-                                codebase.children_of(&path).to_paths();
+                            let mut children = codebase
+                                .node_at(path)
+                                .node
+                                .children()
+                                .to_paths();
 
                             let Some(child) = children.next() else {
                                 unreachable!(
