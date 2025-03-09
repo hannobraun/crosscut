@@ -70,9 +70,7 @@ impl Context {
                                 this point.",
                             );
 
-                            Value::Function {
-                                body: *child.hash(),
-                            }
+                            Value::Function { body: child.hash }
                         }
                         Literal::Integer { value } => Value::Integer { value },
                         Literal::Tuple => {
