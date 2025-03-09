@@ -52,7 +52,7 @@ fn updating_child_updates_parent() {
     let parent = compiler.insert_parent(&child, "unresolved", &packages);
 
     // Verify our baseline assumptions about what the parent node should be.
-    check_parent(&parent, compiler.codebase());
+    check_parent(parent, compiler.codebase());
 
     let child = compiler
         .codebase()
@@ -65,17 +65,17 @@ fn updating_child_updates_parent() {
     // After editing the child, the new parent node should be the same as the
     // old one.
     let parent = compiler.codebase().root().path;
-    check_parent(&parent, &codebase);
+    check_parent(parent, &codebase);
 
-    fn check_parent(parent: &NodePath, codebase: &Codebase) {
+    fn check_parent(parent: NodePath, codebase: &Codebase) {
         assert_eq!(
-            codebase.node_at(*parent).node.kind(),
+            codebase.node_at(parent).node.kind(),
             &NodeKind::Error {
                 node: "unresolved".to_string(),
             },
         );
         assert_eq!(
-            codebase.errors().get(parent),
+            codebase.errors().get(&parent),
             Some(&CodeError::UnresolvedIdentifier { candidates: vec![] }),
         );
     }
