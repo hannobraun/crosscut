@@ -40,7 +40,7 @@ impl Codebase {
     }
 
     pub fn children_of(&self, path: &NodePath) -> &Children {
-        self.node_at(path).node.children()
+        self.node_at(*path).node.children()
     }
 
     pub fn parent_of(&self, path: &NodePath) -> Option<NodePath> {
@@ -48,10 +48,10 @@ impl Codebase {
             .find_parent_of(&path.hash, &self.nodes)
     }
 
-    pub fn node_at(&self, path: &NodePath) -> LocatedNode {
+    pub fn node_at(&self, path: NodePath) -> LocatedNode {
         LocatedNode {
             node: self.nodes.get(path.hash()),
-            path: *path,
+            path,
         }
     }
 

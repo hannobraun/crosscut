@@ -69,7 +69,7 @@ fn updating_child_updates_parent() {
 
     fn check_parent(parent: &NodePath, codebase: &Codebase) {
         assert_eq!(
-            codebase.node_at(parent).node.kind(),
+            codebase.node_at(*parent).node.kind(),
             &NodeKind::Error {
                 node: "unresolved".to_string(),
             },

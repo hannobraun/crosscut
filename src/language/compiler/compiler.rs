@@ -50,7 +50,7 @@ impl<'r> Compiler<'r> {
 
         self.replace(
             &parent,
-            &self.codebase.node_at(&parent).node.to_token(packages),
+            &self.codebase.node_at(parent).node.to_token(packages),
             packages,
         );
 
@@ -73,7 +73,7 @@ impl<'r> Compiler<'r> {
             // The node we're removing has a parent. We need to remove the
             // reference from that parent to the node.
 
-            let parent_node = self.codebase.node_at(&parent_path).node.clone();
+            let parent_node = self.codebase.node_at(parent_path).node.clone();
 
             let mut children = parent_node.children().clone();
             children.replace(
@@ -101,7 +101,7 @@ impl<'r> Compiler<'r> {
         packages: &Packages,
     ) -> NodePath {
         let children =
-            self.codebase.node_at(to_replace).node.children().clone();
+            self.codebase.node_at(*to_replace).node.children().clone();
         self.replace_inner(to_replace, replacement_token, children, packages)
     }
 
