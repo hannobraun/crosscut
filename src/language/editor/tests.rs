@@ -20,7 +20,7 @@ fn edit_initial_node() {
 
     {
         let root = codebase.root().path;
-        Compiler::new(&mut codebase).replace(&root, "12", &packages);
+        Compiler::new(&mut codebase).replace(root, "12", &packages);
     }
 
     let mut editor = Editor::new(codebase.root().path, &codebase, &packages);
@@ -167,7 +167,7 @@ fn split_node_to_create_sibling() {
 
     {
         let root = codebase.root().path;
-        Compiler::new(&mut codebase).replace(&root, "127255", &packages);
+        Compiler::new(&mut codebase).replace(root, "127255", &packages);
     }
 
     let mut editor = Editor::new(codebase.root().path, &codebase, &packages);

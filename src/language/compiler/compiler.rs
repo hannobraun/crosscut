@@ -38,7 +38,7 @@ impl<'r> Compiler<'r> {
                 NodePath { hash: child }
             });
 
-            self.replace(&placeholder, child_token, packages)
+            self.replace(placeholder, child_token, packages)
         };
 
         let Some(parent) = self.codebase.parent_of(&child) else {
@@ -49,7 +49,7 @@ impl<'r> Compiler<'r> {
         };
 
         self.replace(
-            &parent,
+            parent,
             &self.codebase.node_at(parent).node.to_token(packages),
             packages,
         );
@@ -96,13 +96,13 @@ impl<'r> Compiler<'r> {
 
     pub fn replace(
         &mut self,
-        to_replace: &NodePath,
+        to_replace: NodePath,
         replacement_token: &str,
         packages: &Packages,
     ) -> NodePath {
         let children =
-            self.codebase.node_at(*to_replace).node.children().clone();
-        self.replace_inner(to_replace, replacement_token, children, packages)
+            self.codebase.node_at(to_replace).node.children().clone();
+        self.replace_inner(&to_replace, replacement_token, children, packages)
     }
 
     fn replace_inner(
