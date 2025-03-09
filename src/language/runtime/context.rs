@@ -52,8 +52,8 @@ impl Context {
                 let value = {
                     match *literal {
                         Literal::Function => {
-                            let node = codebase.node_at(path).node;
-                            let mut children = node.children().to_paths();
+                            let node = codebase.node_at(path);
+                            let mut children = node.children(codebase.nodes());
 
                             let Some(child) = children.next() else {
                                 unreachable!(
@@ -70,7 +70,9 @@ impl Context {
                                 this point.",
                             );
 
-                            Value::Function { body: child.hash }
+                            Value::Function {
+                                body: child.path.hash,
+                            }
                         }
                         Literal::Integer { value } => Value::Integer { value },
                         Literal::Tuple => {
