@@ -35,14 +35,14 @@ impl Evaluator {
 
     pub fn push_context(
         &mut self,
-        root: NodePath,
+        root_path: NodePath,
         active_value: Value,
         codebase: &Codebase,
     ) {
-        let root_node = codebase.node_at(root);
+        let root_node = codebase.node_at(root_path);
 
         self.eval_stack.push(RuntimeNode {
-            syntax_node: root,
+            syntax_node: root_path,
             active_value: active_value.clone(),
             children_to_evaluate: root_node
                 .children(codebase.nodes())
@@ -52,7 +52,7 @@ impl Evaluator {
             evaluated_children: Vec::new(),
         });
 
-        let mut path = root;
+        let mut path = root_path;
         let mut previous = None;
 
         loop {
@@ -100,7 +100,7 @@ impl Evaluator {
             active_value: active_value.clone(),
             path: None,
         };
-        self.call_stack.push(root);
+        self.call_stack.push(root_path);
         self.contexts.push(Context {
             next: previous,
             active_value,
