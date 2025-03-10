@@ -39,18 +39,11 @@ impl Evaluator {
         active_value: Value,
         codebase: &Codebase,
     ) {
-        let root_node = codebase.node_at(root_path);
-
-        self.eval_stack.push(RuntimeNode {
-            syntax_node: root_path,
-            active_value: active_value.clone(),
-            children_to_evaluate: root_node
-                .children(codebase.nodes())
-                .map(|located_node| located_node.path)
-                .rev()
-                .collect(),
-            evaluated_children: Vec::new(),
-        });
+        self.eval_stack.push(RuntimeNode::from_syntax_node(
+            root_path,
+            active_value.clone(),
+            codebase,
+        ));
 
         let mut path = root_path;
         let mut previous = None;
@@ -314,6 +307,27 @@ pub struct RuntimeNode {
     pub active_value: Value,
     pub children_to_evaluate: Vec<NodePath>,
     pub evaluated_children: Vec<Value>,
+}
+
+impl RuntimeNode {
+    fn from_syntax_node(
+        path: NodePath,
+        active_value: Value,
+        codebase: &Codebase,
+    ) -> Self {
+        let root_node = codebase.node_at(path);
+
+        Self {
+            syntax_node: path,
+            active_value,
+            children_to_evaluate: root_node
+                .children(codebase.nodes())
+                .map(|located_node| located_node.path)
+                .rev()
+                .collect(),
+            evaluated_children: Vec::new(),
+        }
+    }
 }
 
 #[cfg(test)]
