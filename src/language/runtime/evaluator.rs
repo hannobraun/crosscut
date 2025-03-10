@@ -9,6 +9,7 @@ use super::{
 
 #[derive(Debug)]
 pub struct Evaluator {
+    eval_stack: Vec<RuntimeNode>,
     call_stack: Vec<NodePath>,
     contexts: Vec<Context>,
     state: RuntimeState,
@@ -17,6 +18,7 @@ pub struct Evaluator {
 impl Evaluator {
     pub fn new() -> Self {
         Self {
+            eval_stack: Vec::new(),
             call_stack: Vec::new(),
             contexts: Vec::new(),
             state: RuntimeState::Finished {
@@ -37,6 +39,19 @@ impl Evaluator {
         active_value: Value,
         codebase: &Codebase,
     ) {
+        let root_node = codebase.node_at(root);
+
+        self.eval_stack.push(RuntimeNode {
+            syntax_node: root,
+            active_value: active_value.clone(),
+            children_to_evaluate: root_node
+                .children(codebase.nodes())
+                .map(|located_node| located_node.path)
+                .rev()
+                .collect(),
+            evaluated_children: Vec::new(),
+        });
+
         let mut path = root;
         let mut previous = None;
 
@@ -149,6 +164,24 @@ impl Evaluator {
         if let RuntimeState::Effect { .. } = &self.state {
             return;
         }
+
+        let Some(node) = self.eval_stack.pop() else {
+            // Evaluation stack is empty, which means we're not running.
+
+            self.state = RuntimeState::Finished {
+                output: Value::Nothing,
+                path: None,
+            };
+
+            return;
+        };
+
+        dbg!(&node.syntax_node);
+        dbg!(&node.active_value);
+        dbg!(&node.children_to_evaluate);
+        dbg!(&node.evaluated_children);
+
+        self.eval_stack.push(node);
 
         // Take the current context. Depending on how things will go, we'll
         // restore it below; or do nothing, if it turns out we actually need to
@@ -273,6 +306,14 @@ impl Evaluator {
     pub fn state(&self) -> &RuntimeState {
         &self.state
     }
+}
+
+#[derive(Debug)]
+pub struct RuntimeNode {
+    pub syntax_node: NodePath,
+    pub active_value: Value,
+    pub children_to_evaluate: Vec<NodePath>,
+    pub evaluated_children: Vec<Value>,
 }
 
 #[cfg(test)]
