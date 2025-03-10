@@ -158,7 +158,7 @@ impl Evaluator {
             return;
         }
 
-        let Some(node) = self.eval_stack.pop() else {
+        let Some(mut node) = self.eval_stack.pop() else {
             // Evaluation stack is empty, which means we're not running.
 
             self.state = RuntimeState::Finished {
@@ -174,7 +174,16 @@ impl Evaluator {
         dbg!(&node.children_to_evaluate);
         dbg!(&node.evaluated_children);
 
-        self.eval_stack.push(node);
+        loop {
+            let child = node.children_to_evaluate.pop();
+            self.eval_stack.push(node);
+
+            let Some(child) = child else {
+                break;
+            };
+            node =
+                RuntimeNode::from_syntax_node(child, Value::Nothing, codebase);
+        }
 
         // Take the current context. Depending on how things will go, we'll
         // restore it below; or do nothing, if it turns out we actually need to
