@@ -176,15 +176,17 @@ impl Evaluator {
 
         loop {
             let child = node.children_to_evaluate.pop();
-            self.eval_stack.push(node);
 
             let Some(child) = child else {
                 break;
             };
 
+            self.eval_stack.push(node);
             node =
                 RuntimeNode::from_syntax_node(child, Value::Nothing, codebase);
         }
+
+        self.eval_stack.push(node);
 
         // Take the current context. Depending on how things will go, we'll
         // restore it below; or do nothing, if it turns out we actually need to
