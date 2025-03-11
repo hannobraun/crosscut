@@ -174,6 +174,10 @@ impl Evaluator {
         dbg!(&node.children_to_evaluate);
         dbg!(&node.evaluated_children);
 
+        // For the most part, we need to evaluate a node's children before we
+        // can evaluate the node itself. This loop makes sure that `node` is a
+        // node that can be evaluated, and that all its parents are on the
+        // evaluation stack, so they can be evaluated later.
         loop {
             if let NodeKind::Expression {
                 expression:
