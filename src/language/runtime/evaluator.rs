@@ -175,9 +175,7 @@ impl Evaluator {
         dbg!(&node.evaluated_children);
 
         loop {
-            let child = node.children_to_evaluate.pop();
-
-            let Some(child) = child else {
+            let Some(child) = node.children_to_evaluate.pop() else {
                 break;
             };
 
