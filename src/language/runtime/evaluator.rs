@@ -181,6 +181,7 @@ impl Evaluator {
             let Some(child) = child else {
                 break;
             };
+
             node =
                 RuntimeNode::from_syntax_node(child, Value::Nothing, codebase);
         }
