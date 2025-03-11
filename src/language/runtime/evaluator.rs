@@ -175,6 +175,22 @@ impl Evaluator {
         dbg!(&node.evaluated_children);
 
         loop {
+            if let NodeKind::Expression {
+                expression:
+                    Expression::IntrinsicFunction {
+                        intrinsic:
+                            IntrinsicFunction::Literal {
+                                literal: Literal::Function,
+                            },
+                    },
+            } = codebase.node_at(node.syntax_node).node.kind()
+            {
+                // If this were any other node, we'd need to evaluate its
+                // children first. But function nodes are different. Their child
+                // should only be evaluated, when the function is applied.
+                break;
+            }
+
             let Some(child) = node.children_to_evaluate.pop() else {
                 break;
             };
