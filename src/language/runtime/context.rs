@@ -1,6 +1,5 @@
-use crate::language::{
-    code::{Codebase, IntrinsicFunction, Literal, NodePath, Type},
-    packages::FunctionId,
+use crate::language::code::{
+    Codebase, IntrinsicFunction, Literal, NodePath, Type,
 };
 
 use super::{Effect, RuntimeState, Value};
@@ -12,13 +11,6 @@ pub struct Context {
 }
 
 impl Context {
-    pub fn evaluate_host_function(&self, id: FunctionId) -> Effect {
-        Effect::ApplyHostFunction {
-            id,
-            input: self.active_value.clone(),
-        }
-    }
-
     pub fn evaluate_intrinsic_function(
         &mut self,
         intrinsic: &IntrinsicFunction,

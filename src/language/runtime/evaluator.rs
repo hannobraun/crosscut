@@ -265,7 +265,10 @@ impl Evaluator {
                 expression: Expression::HostFunction { id },
                 ..
             } => {
-                let effect = context.evaluate_host_function(*id);
+                let effect = Effect::ApplyHostFunction {
+                    id: *id,
+                    input: context.active_value.clone(),
+                };
                 self.state = RuntimeState::Effect {
                     effect,
                     path: next.syntax_node,
