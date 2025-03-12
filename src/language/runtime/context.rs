@@ -1,6 +1,6 @@
-use crate::language::code::{NodePath, Type};
+use crate::language::code::NodePath;
 
-use super::{Effect, RuntimeState, Value};
+use super::{RuntimeState, Value};
 
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub struct Context {
@@ -14,19 +14,6 @@ impl Context {
             .next
             .take()
             .and_then(|next| next.parent.map(|child| *child));
-    }
-
-    pub fn unexpected_input(
-        expected: Type,
-        actual: Value,
-        path: NodePath,
-    ) -> EvaluateUpdate {
-        EvaluateUpdate::UpdateState {
-            new_state: RuntimeState::Effect {
-                effect: Effect::UnexpectedInput { expected, actual },
-                path,
-            },
-        }
     }
 }
 

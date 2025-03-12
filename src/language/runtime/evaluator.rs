@@ -286,7 +286,7 @@ impl Evaluator {
                         IntrinsicFunction::Eval => {
                             let Value::Function { body } = context.active_value
                             else {
-                                break 'update Context::unexpected_input(
+                                break 'update unexpected_input(
                                     Type::Function,
                                     context.active_value.clone(),
                                     path,
@@ -305,7 +305,7 @@ impl Evaluator {
                         }
                         IntrinsicFunction::Literal { literal } => {
                             let Value::Nothing = context.active_value else {
-                                break 'update Context::unexpected_input(
+                                break 'update unexpected_input(
                                     Type::Nothing,
                                     context.active_value.clone(),
                                     path,
@@ -468,6 +468,19 @@ impl RuntimeNode {
                 .collect(),
             evaluated_children: Vec::new(),
         }
+    }
+}
+
+pub fn unexpected_input(
+    expected: Type,
+    actual: Value,
+    path: NodePath,
+) -> EvaluateUpdate {
+    EvaluateUpdate::UpdateState {
+        new_state: RuntimeState::Effect {
+            effect: Effect::UnexpectedInput { expected, actual },
+            path,
+        },
     }
 }
 
