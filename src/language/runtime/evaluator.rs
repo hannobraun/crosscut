@@ -295,8 +295,9 @@ impl Evaluator {
 
                             break 'update EvaluateUpdate::PushContext {
                                 root: NodePath { hash: body },
-                                // Right now, the `eval` function doesn't support passing an
-                                // argument to the function it evaluates.
+                                // Right now, the `eval` function doesn't
+                                // support passing an argument to the function
+                                // it evaluates.
                                 active_value: Value::Nothing,
                             };
                         }
