@@ -471,7 +471,7 @@ impl RuntimeNode {
     }
 }
 
-pub fn unexpected_input(
+fn unexpected_input(
     expected: Type,
     actual: Value,
     path: NodePath,
