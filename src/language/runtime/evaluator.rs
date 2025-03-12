@@ -286,7 +286,7 @@ impl Evaluator {
                         IntrinsicFunction::Eval => {
                             let Value::Function { body } = context.active_value
                             else {
-                                break 'update context.unexpected_input(
+                                break 'update Context::unexpected_input(
                                     Type::Function,
                                     context.active_value.clone(),
                                     path,
@@ -305,7 +305,7 @@ impl Evaluator {
                         }
                         IntrinsicFunction::Literal { literal } => {
                             let Value::Nothing = context.active_value else {
-                                break 'update context.unexpected_input(
+                                break 'update Context::unexpected_input(
                                     Type::Nothing,
                                     context.active_value.clone(),
                                     path,

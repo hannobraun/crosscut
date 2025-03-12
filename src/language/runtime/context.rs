@@ -17,7 +17,6 @@ impl Context {
     }
 
     pub fn unexpected_input(
-        &self,
         expected: Type,
         actual: Value,
         path: NodePath,
