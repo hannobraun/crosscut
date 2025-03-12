@@ -120,7 +120,7 @@ impl Context {
             .and_then(|next| next.parent.map(|child| *child));
     }
 
-    fn unexpected_input(
+    pub fn unexpected_input(
         &self,
         expected: Type,
         path: NodePath,
