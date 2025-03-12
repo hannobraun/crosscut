@@ -1,5 +1,5 @@
 use crate::language::code::{
-    Codebase, Expression, IntrinsicFunction, Literal, NodeKind, NodePath,
+    Codebase, Expression, IntrinsicFunction, Literal, NodeKind, NodePath, Type,
 };
 
 use super::{
@@ -277,11 +277,114 @@ impl Evaluator {
                 expression: Expression::IntrinsicFunction { intrinsic },
                 ..
             } => {
-                let update = context.evaluate_intrinsic_function(
-                    intrinsic,
-                    next.syntax_node,
-                    codebase,
-                );
+                let path = next.syntax_node;
+                let update = 'update: {
+                    match intrinsic {
+                        IntrinsicFunction::Drop => {
+                            context.active_value = Value::Nothing;
+                        }
+                        IntrinsicFunction::Eval => {
+                            let Value::Function { body } = context.active_value
+                            else {
+                                break 'update context
+                                    .unexpected_input(Type::Function, path);
+                            };
+
+                            break 'update EvaluateUpdate::PushContext {
+                                root: NodePath { hash: body },
+                                // Right now, the `eval` function doesn't support passing an
+                                // argument to the function it evaluates.
+                                active_value: Value::Nothing,
+                            };
+                        }
+                        IntrinsicFunction::Identity => {
+                            // Active value stays the same.
+                        }
+                        IntrinsicFunction::Literal { literal } => {
+                            let Value::Nothing = context.active_value else {
+                                break 'update context
+                                    .unexpected_input(Type::Nothing, path);
+                            };
+
+                            let value = {
+                                match *literal {
+                                    Literal::Function => {
+                                        let node = codebase.node_at(path);
+                                        let mut children =
+                                            node.children(codebase.nodes());
+
+                                        let Some(child) = children.next()
+                                        else {
+                                            unreachable!(
+                                                "Function literal must have a \
+                                                child, or it wouldn't have \
+                                                been resolved as a function \
+                                                literal."
+                                            );
+                                        };
+
+                                        assert_eq!(
+                                            children.count(),
+                                            0,
+                                            "Only nodes with one child can be \
+                                            evaluated at this point.",
+                                        );
+
+                                        Value::Function {
+                                            body: child.path.hash,
+                                        }
+                                    }
+                                    Literal::Integer { value } => {
+                                        Value::Integer { value }
+                                    }
+                                    Literal::Tuple => {
+                                        let node = codebase.node_at(path);
+                                        let mut children =
+                                            node.children(codebase.nodes());
+
+                                        let Some(child) = children.next()
+                                        else {
+                                            unreachable!(
+                                                "Tuple literal must have a \
+                                                child, or it wouldn't have \
+                                                been resolved as a tuple \
+                                                literal."
+                                            );
+                                        };
+
+                                        assert_eq!(
+                                            children.count(),
+                                            0,
+                                            "Only nodes with one child can be \
+                                            evaluated at this point.",
+                                        );
+
+                                        context.active_value = Value::Tuple {
+                                            elements: Vec::new(),
+                                        };
+                                        context.advance();
+
+                                        break 'update EvaluateUpdate::PushContext {
+                                            root: child.path,
+                                            active_value: Value::Nothing,
+                                        };
+                                    }
+                                }
+                            };
+
+                            context.active_value = value;
+                        }
+                    }
+
+                    context.advance();
+
+                    EvaluateUpdate::UpdateState {
+                        new_state: RuntimeState::Running {
+                            active_value: context.active_value.clone(),
+                            path: Some(path),
+                        },
+                    }
+                };
                 self.contexts.push(context);
 
                 // The context is now restored. This means we can apply the
