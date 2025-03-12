@@ -265,12 +265,11 @@ impl Evaluator {
                 expression: Expression::HostFunction { id },
                 ..
             } => {
-                let effect = Effect::ApplyHostFunction {
-                    id: *id,
-                    input: context.active_value.clone(),
-                };
                 self.state = RuntimeState::Effect {
-                    effect,
+                    effect: Effect::ApplyHostFunction {
+                        id: *id,
+                        input: context.active_value.clone(),
+                    },
                     path: next.syntax_node,
                 };
             }
