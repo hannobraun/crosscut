@@ -19,14 +19,12 @@ impl Context {
     pub fn unexpected_input(
         &self,
         expected: Type,
+        actual: Value,
         path: NodePath,
     ) -> EvaluateUpdate {
         EvaluateUpdate::UpdateState {
             new_state: RuntimeState::Effect {
-                effect: Effect::UnexpectedInput {
-                    expected,
-                    actual: self.active_value.clone(),
-                },
+                effect: Effect::UnexpectedInput { expected, actual },
                 path,
             },
         }
