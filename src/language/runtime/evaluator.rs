@@ -283,15 +283,17 @@ impl Evaluator {
                 expression: Expression::IntrinsicFunction { intrinsic },
                 ..
             } => {
-                self.eval_stack.push(node);
-
                 let path = next.syntax_node;
                 let update = 'update: {
                     match intrinsic {
                         IntrinsicFunction::Drop => {
+                            self.eval_stack.push(node);
+
                             context.active_value = Value::Nothing;
                         }
                         IntrinsicFunction::Eval => {
+                            self.eval_stack.push(node);
+
                             let Value::Function { body } = context.active_value
                             else {
                                 break 'update unexpected_input(
@@ -310,9 +312,13 @@ impl Evaluator {
                             };
                         }
                         IntrinsicFunction::Identity => {
+                            self.eval_stack.push(node);
+
                             // Active value stays the same.
                         }
                         IntrinsicFunction::Literal { literal } => {
+                            self.eval_stack.push(node);
+
                             let Value::Nothing = context.active_value else {
                                 break 'update unexpected_input(
                                     Type::Nothing,
