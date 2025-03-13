@@ -24,6 +24,4 @@ pub struct ContextNode {
 }
 
 #[derive(Debug, Eq, PartialEq)]
-pub enum EvaluateUpdate {
-    PushContext { root: NodePath, active_value: Value },
-}
+pub enum EvaluateUpdate {}

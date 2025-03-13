@@ -395,12 +395,12 @@ impl Evaluator {
                                         context.advance();
 
                                         self.contexts.push(context);
-                                        break 'update Some(
-                                            EvaluateUpdate::PushContext {
-                                                root: child.path,
-                                                active_value: Value::Nothing,
-                                            },
+                                        self.push_context(
+                                            child.path,
+                                            Value::Nothing,
+                                            codebase,
                                         );
+                                        break 'update None;
                                     }
                                 }
                             };
@@ -423,12 +423,6 @@ impl Evaluator {
                 // update from the evaluation now.
 
                 match update {
-                    Some(EvaluateUpdate::PushContext {
-                        root,
-                        active_value,
-                    }) => {
-                        self.push_context(root, active_value, codebase);
-                    }
                     None => {}
                 }
 
