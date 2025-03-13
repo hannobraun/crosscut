@@ -284,139 +284,135 @@ impl Evaluator {
                 ..
             } => {
                 let path = next.syntax_node;
-                {
-                    match intrinsic {
-                        IntrinsicFunction::Drop => {
-                            context.active_value = Value::Nothing;
-                        }
-                        IntrinsicFunction::Eval => {
+                match intrinsic {
+                    IntrinsicFunction::Drop => {
+                        context.active_value = Value::Nothing;
+                    }
+                    IntrinsicFunction::Eval => {
+                        self.eval_stack.push(node);
+
+                        let Value::Function { body } = context.active_value
+                        else {
+                            self.unexpected_input(
+                                Type::Function,
+                                context.active_value.clone(),
+                                path,
+                            );
+                            self.contexts.push(context);
+                            return;
+                        };
+
+                        self.contexts.push(context);
+                        self.push_context(
+                            NodePath { hash: body },
+                            // Right now, the `eval` function doesn't
+                            // support passing an argument to the function
+                            // it evaluates.
+                            Value::Nothing,
+                            codebase,
+                        );
+                        return;
+                    }
+                    IntrinsicFunction::Identity => {
+                        // Active value stays the same.
+                    }
+                    IntrinsicFunction::Literal { literal } => {
+                        let Value::Nothing = context.active_value else {
                             self.eval_stack.push(node);
 
-                            let Value::Function { body } = context.active_value
-                            else {
-                                self.unexpected_input(
-                                    Type::Function,
-                                    context.active_value.clone(),
-                                    path,
-                                );
-                                self.contexts.push(context);
-                                return;
-                            };
-
-                            self.contexts.push(context);
-                            self.push_context(
-                                NodePath { hash: body },
-                                // Right now, the `eval` function doesn't
-                                // support passing an argument to the function
-                                // it evaluates.
-                                Value::Nothing,
-                                codebase,
+                            self.unexpected_input(
+                                Type::Nothing,
+                                context.active_value.clone(),
+                                path,
                             );
+                            self.contexts.push(context);
                             return;
-                        }
-                        IntrinsicFunction::Identity => {
-                            // Active value stays the same.
-                        }
-                        IntrinsicFunction::Literal { literal } => {
-                            let Value::Nothing = context.active_value else {
-                                self.eval_stack.push(node);
+                        };
 
-                                self.unexpected_input(
-                                    Type::Nothing,
-                                    context.active_value.clone(),
-                                    path,
-                                );
-                                self.contexts.push(context);
-                                return;
-                            };
+                        let value = {
+                            match *literal {
+                                Literal::Function => {
+                                    self.eval_stack.push(node);
 
-                            let value = {
-                                match *literal {
-                                    Literal::Function => {
-                                        self.eval_stack.push(node);
+                                    let node = codebase.node_at(path);
+                                    let mut children =
+                                        node.children(codebase.nodes());
 
-                                        let node = codebase.node_at(path);
-                                        let mut children =
-                                            node.children(codebase.nodes());
-
-                                        let Some(child) = children.next()
-                                        else {
-                                            unreachable!(
-                                                "Function literal must have a \
-                                                child, or it wouldn't have \
-                                                been resolved as a function \
-                                                literal."
-                                            );
-                                        };
-
-                                        assert_eq!(
-                                            children.count(),
-                                            0,
-                                            "Only nodes with one child can be \
-                                            evaluated at this point.",
+                                    let Some(child) = children.next() else {
+                                        unreachable!(
+                                            "Function literal must have a \
+                                            child, or it wouldn't have \
+                                            been resolved as a function \
+                                            literal."
                                         );
+                                    };
 
-                                        Value::Function {
-                                            body: child.path.hash,
-                                        }
-                                    }
-                                    Literal::Integer { value } => {
-                                        self.eval_stack.push(node);
+                                    assert_eq!(
+                                        children.count(),
+                                        0,
+                                        "Only nodes with one child can be \
+                                        evaluated at this point.",
+                                    );
 
-                                        Value::Integer { value }
-                                    }
-                                    Literal::Tuple => {
-                                        self.eval_stack.push(node);
-
-                                        let node = codebase.node_at(path);
-                                        let mut children =
-                                            node.children(codebase.nodes());
-
-                                        let Some(child) = children.next()
-                                        else {
-                                            unreachable!(
-                                                "Tuple literal must have a \
-                                                child, or it wouldn't have \
-                                                been resolved as a tuple \
-                                                literal."
-                                            );
-                                        };
-
-                                        assert_eq!(
-                                            children.count(),
-                                            0,
-                                            "Only nodes with one child can be \
-                                            evaluated at this point.",
-                                        );
-
-                                        context.active_value = Value::Tuple {
-                                            elements: Vec::new(),
-                                        };
-                                        context.advance();
-
-                                        self.contexts.push(context);
-                                        self.push_context(
-                                            child.path,
-                                            Value::Nothing,
-                                            codebase,
-                                        );
-                                        return;
+                                    Value::Function {
+                                        body: child.path.hash,
                                     }
                                 }
-                            };
+                                Literal::Integer { value } => {
+                                    self.eval_stack.push(node);
 
-                            context.active_value = value;
-                        }
+                                    Value::Integer { value }
+                                }
+                                Literal::Tuple => {
+                                    self.eval_stack.push(node);
+
+                                    let node = codebase.node_at(path);
+                                    let mut children =
+                                        node.children(codebase.nodes());
+
+                                    let Some(child) = children.next() else {
+                                        unreachable!(
+                                            "Tuple literal must have a \
+                                            child, or it wouldn't have \
+                                            been resolved as a tuple \
+                                            literal."
+                                        );
+                                    };
+
+                                    assert_eq!(
+                                        children.count(),
+                                        0,
+                                        "Only nodes with one child can be \
+                                        evaluated at this point.",
+                                    );
+
+                                    context.active_value = Value::Tuple {
+                                        elements: Vec::new(),
+                                    };
+                                    context.advance();
+
+                                    self.contexts.push(context);
+                                    self.push_context(
+                                        child.path,
+                                        Value::Nothing,
+                                        codebase,
+                                    );
+                                    return;
+                                }
+                            }
+                        };
+
+                        context.active_value = value;
                     }
-
-                    context.advance();
-
-                    self.state = RuntimeState::Running {
-                        active_value: context.active_value.clone(),
-                        path: Some(path),
-                    };
-                    self.contexts.push(context);
                 }
+
+                context.advance();
+
+                self.state = RuntimeState::Running {
+                    active_value: context.active_value.clone(),
+                    path: Some(path),
+                };
+                self.contexts.push(context);
 
                 // We already restored the context. So we have to return now,
                 // because the code below would do it again.
