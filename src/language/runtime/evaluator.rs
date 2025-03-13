@@ -305,9 +305,8 @@ impl Evaluator {
                         self.contexts.push(context);
                         self.push_context(
                             NodePath { hash: body },
-                            // Right now, the `eval` function doesn't
-                            // support passing an argument to the function
-                            // it evaluates.
+                            // Right now, the `eval` function doesn't support
+                            // passing an argument to the function it evaluates.
                             Value::Nothing,
                             codebase,
                         );
