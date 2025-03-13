@@ -419,9 +419,6 @@ impl Evaluator {
                     None
                 };
 
-                // The context is now restored. This means we can apply the
-                // update from the evaluation now.
-
                 match update {
                     None => {}
                 }
