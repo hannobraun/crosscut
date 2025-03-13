@@ -284,7 +284,7 @@ impl Evaluator {
                 ..
             } => {
                 let path = next.syntax_node;
-                'update: {
+                {
                     match intrinsic {
                         IntrinsicFunction::Drop => {
                             context.active_value = Value::Nothing;
@@ -300,7 +300,7 @@ impl Evaluator {
                                     path,
                                 );
                                 self.contexts.push(context);
-                                break 'update;
+                                return;
                             };
 
                             self.contexts.push(context);
@@ -312,7 +312,7 @@ impl Evaluator {
                                 Value::Nothing,
                                 codebase,
                             );
-                            break 'update;
+                            return;
                         }
                         IntrinsicFunction::Identity => {
                             // Active value stays the same.
@@ -327,7 +327,7 @@ impl Evaluator {
                                     path,
                                 );
                                 self.contexts.push(context);
-                                break 'update;
+                                return;
                             };
 
                             let value = {
@@ -400,7 +400,7 @@ impl Evaluator {
                                             Value::Nothing,
                                             codebase,
                                         );
-                                        break 'update;
+                                        return;
                                     }
                                 }
                             };
