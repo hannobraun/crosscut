@@ -416,7 +416,7 @@ impl Evaluator {
                         path: Some(path),
                     };
                     self.contexts.push(context);
-                };
+                }
 
                 // We already restored the context. So we have to return now,
                 // because the code below would do it again.
