@@ -287,8 +287,6 @@ impl Evaluator {
                 let update = 'update: {
                     match intrinsic {
                         IntrinsicFunction::Drop => {
-                            self.eval_stack.push(node);
-
                             context.active_value = Value::Nothing;
                         }
                         IntrinsicFunction::Eval => {
