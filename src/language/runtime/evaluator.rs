@@ -313,9 +313,9 @@ impl Evaluator {
                             // Active value stays the same.
                         }
                         IntrinsicFunction::Literal { literal } => {
-                            self.eval_stack.push(node);
-
                             let Value::Nothing = context.active_value else {
+                                self.eval_stack.push(node);
+
                                 break 'update unexpected_input(
                                     Type::Nothing,
                                     context.active_value.clone(),
@@ -326,6 +326,8 @@ impl Evaluator {
                             let value = {
                                 match *literal {
                                     Literal::Function => {
+                                        self.eval_stack.push(node);
+
                                         let node = codebase.node_at(path);
                                         let mut children =
                                             node.children(codebase.nodes());
@@ -352,9 +354,13 @@ impl Evaluator {
                                         }
                                     }
                                     Literal::Integer { value } => {
+                                        self.eval_stack.push(node);
+
                                         Value::Integer { value }
                                     }
                                     Literal::Tuple => {
+                                        self.eval_stack.push(node);
+
                                         let node = codebase.node_at(path);
                                         let mut children =
                                             node.children(codebase.nodes());
