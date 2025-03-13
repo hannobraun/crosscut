@@ -370,10 +370,9 @@ impl Evaluator {
 
                                     let Some(child) = children.next() else {
                                         unreachable!(
-                                            "Tuple literal must have a \
-                                            child, or it wouldn't have \
-                                            been resolved as a tuple \
-                                            literal."
+                                            "Tuple literal must have a child, \
+                                            or it wouldn't have been resolved \
+                                            as a tuple literal."
                                         );
                                     };
 
