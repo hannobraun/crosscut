@@ -263,8 +263,6 @@ impl Evaluator {
 
         match kind_from_context {
             NodeKind::Empty { .. } => {
-                self.eval_stack.push(node);
-
                 context.advance();
             }
             NodeKind::Expression {
