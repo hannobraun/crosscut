@@ -284,7 +284,7 @@ impl Evaluator {
                 ..
             } => {
                 let path = next.syntax_node;
-                let update = 'update: {
+                let update: Option<EvaluateUpdate> = 'update: {
                     match intrinsic {
                         IntrinsicFunction::Drop => {
                             context.active_value = Value::Nothing;
