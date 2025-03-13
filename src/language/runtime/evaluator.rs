@@ -299,9 +299,11 @@ impl Evaluator {
                                     context.active_value.clone(),
                                     path,
                                 );
+                                self.contexts.push(context);
                                 break 'update None;
                             };
 
+                            self.contexts.push(context);
                             break 'update Some(EvaluateUpdate::PushContext {
                                 root: NodePath { hash: body },
                                 // Right now, the `eval` function doesn't
@@ -322,6 +324,7 @@ impl Evaluator {
                                     context.active_value.clone(),
                                     path,
                                 );
+                                self.contexts.push(context);
                                 break 'update None;
                             };
 
@@ -389,6 +392,7 @@ impl Evaluator {
                                         };
                                         context.advance();
 
+                                        self.contexts.push(context);
                                         break 'update Some(
                                             EvaluateUpdate::PushContext {
                                                 root: child.path,
@@ -409,9 +413,9 @@ impl Evaluator {
                         active_value: context.active_value.clone(),
                         path: Some(path),
                     };
+                    self.contexts.push(context);
                     None
                 };
-                self.contexts.push(context);
 
                 // The context is now restored. This means we can apply the
                 // update from the evaluation now.
