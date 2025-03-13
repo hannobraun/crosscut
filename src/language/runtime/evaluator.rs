@@ -255,8 +255,11 @@ impl Evaluator {
             return;
         };
 
-        let [kind_from_context] =
-            [next.syntax_node].map(|path| codebase.node_at(path).node.kind());
+        let [kind_from_runtime_node, kind_from_context] =
+            [node.syntax_node, next.syntax_node]
+                .map(|path| codebase.node_at(path).node.kind());
+
+        dbg!(kind_from_runtime_node);
 
         self.eval_stack.push(node);
 
