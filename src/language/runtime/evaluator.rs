@@ -257,7 +257,9 @@ impl Evaluator {
             return;
         };
 
-        match codebase.node_at(next.syntax_node).node.kind() {
+        let kind_from_context = codebase.node_at(next.syntax_node).node.kind();
+
+        match kind_from_context {
             NodeKind::Empty { .. } => {
                 context.advance();
             }
