@@ -22,6 +22,3 @@ pub struct ContextNode {
     pub syntax_node: NodePath,
     pub parent: Option<Box<ContextNode>>,
 }
-
-#[derive(Debug, Eq, PartialEq)]
-pub enum EvaluateUpdate {}
