@@ -4,7 +4,7 @@ use crate::language::code::{
 
 use super::{
     Effect, RuntimeState, Value,
-    context::{Context, ContextNode, EvaluateUpdate},
+    context::{Context, ContextNode},
 };
 
 #[derive(Debug)]
@@ -284,7 +284,7 @@ impl Evaluator {
                 ..
             } => {
                 let path = next.syntax_node;
-                let update: Option<EvaluateUpdate> = 'update: {
+                'update: {
                     match intrinsic {
                         IntrinsicFunction::Drop => {
                             context.active_value = Value::Nothing;
@@ -300,7 +300,7 @@ impl Evaluator {
                                     path,
                                 );
                                 self.contexts.push(context);
-                                break 'update None;
+                                break 'update;
                             };
 
                             self.contexts.push(context);
@@ -312,7 +312,7 @@ impl Evaluator {
                                 Value::Nothing,
                                 codebase,
                             );
-                            break 'update None;
+                            break 'update;
                         }
                         IntrinsicFunction::Identity => {
                             // Active value stays the same.
@@ -327,7 +327,7 @@ impl Evaluator {
                                     path,
                                 );
                                 self.contexts.push(context);
-                                break 'update None;
+                                break 'update;
                             };
 
                             let value = {
@@ -400,7 +400,7 @@ impl Evaluator {
                                             Value::Nothing,
                                             codebase,
                                         );
-                                        break 'update None;
+                                        break 'update;
                                     }
                                 }
                             };
@@ -416,12 +416,7 @@ impl Evaluator {
                         path: Some(path),
                     };
                     self.contexts.push(context);
-                    None
                 };
-
-                match update {
-                    None => {}
-                }
 
                 // We already restored the context. So we have to return now,
                 // because the code below would do it again.
