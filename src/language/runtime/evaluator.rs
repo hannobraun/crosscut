@@ -294,11 +294,12 @@ impl Evaluator {
 
                             let Value::Function { body } = context.active_value
                             else {
-                                break 'update Some(self.unexpected_input(
+                                let update = self.unexpected_input(
                                     Type::Function,
                                     context.active_value.clone(),
                                     path,
-                                ));
+                                );
+                                break 'update Some(update);
                             };
 
                             break 'update Some(EvaluateUpdate::PushContext {
