@@ -403,12 +403,11 @@ impl Evaluator {
 
                     context.advance();
 
-                    Some(EvaluateUpdate::UpdateState {
-                        new_state: RuntimeState::Running {
-                            active_value: context.active_value.clone(),
-                            path: Some(path),
-                        },
-                    })
+                    self.state = RuntimeState::Running {
+                        active_value: context.active_value.clone(),
+                        path: Some(path),
+                    };
+                    None
                 };
                 self.contexts.push(context);
 
