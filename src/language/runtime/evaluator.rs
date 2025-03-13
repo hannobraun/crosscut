@@ -294,12 +294,12 @@ impl Evaluator {
 
                             let Value::Function { body } = context.active_value
                             else {
-                                let update = self.unexpected_input(
+                                self.unexpected_input(
                                     Type::Function,
                                     context.active_value.clone(),
                                     path,
                                 );
-                                break 'update Some(update);
+                                break 'update None;
                             };
 
                             break 'update Some(EvaluateUpdate::PushContext {
@@ -317,12 +317,12 @@ impl Evaluator {
                             let Value::Nothing = context.active_value else {
                                 self.eval_stack.push(node);
 
-                                let update = self.unexpected_input(
+                                self.unexpected_input(
                                     Type::Nothing,
                                     context.active_value.clone(),
                                     path,
                                 );
-                                break 'update Some(update);
+                                break 'update None;
                             };
 
                             let value = {
@@ -417,9 +417,6 @@ impl Evaluator {
                 // update from the evaluation now.
 
                 match update {
-                    Some(EvaluateUpdate::UpdateState { new_state }) => {
-                        self.state = new_state;
-                    }
                     Some(EvaluateUpdate::PushContext {
                         root,
                         active_value,
@@ -470,13 +467,11 @@ impl Evaluator {
         expected: Type,
         actual: Value,
         path: NodePath,
-    ) -> EvaluateUpdate {
-        EvaluateUpdate::UpdateState {
-            new_state: RuntimeState::Effect {
-                effect: Effect::UnexpectedInput { expected, actual },
-                path,
-            },
-        }
+    ) {
+        self.state = RuntimeState::Effect {
+            effect: Effect::UnexpectedInput { expected, actual },
+            path,
+        };
     }
 
     pub fn state(&self) -> &RuntimeState {

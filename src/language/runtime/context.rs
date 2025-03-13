@@ -1,6 +1,6 @@
 use crate::language::code::NodePath;
 
-use super::{RuntimeState, Value};
+use super::Value;
 
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub struct Context {
@@ -25,6 +25,5 @@ pub struct ContextNode {
 
 #[derive(Debug, Eq, PartialEq)]
 pub enum EvaluateUpdate {
-    UpdateState { new_state: RuntimeState },
     PushContext { root: NodePath, active_value: Value },
 }
