@@ -310,8 +310,6 @@ impl Evaluator {
                             };
                         }
                         IntrinsicFunction::Identity => {
-                            self.eval_stack.push(node);
-
                             // Active value stays the same.
                         }
                         IntrinsicFunction::Literal { literal } => {
