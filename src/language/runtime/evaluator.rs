@@ -304,13 +304,15 @@ impl Evaluator {
                             };
 
                             self.contexts.push(context);
-                            break 'update Some(EvaluateUpdate::PushContext {
-                                root: NodePath { hash: body },
+                            self.push_context(
+                                NodePath { hash: body },
                                 // Right now, the `eval` function doesn't
                                 // support passing an argument to the function
                                 // it evaluates.
-                                active_value: Value::Nothing,
-                            });
+                                Value::Nothing,
+                                codebase,
+                            );
+                            break 'update None;
                         }
                         IntrinsicFunction::Identity => {
                             // Active value stays the same.
