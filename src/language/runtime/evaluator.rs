@@ -340,9 +340,8 @@ impl Evaluator {
                                     let Some(child) = children.next() else {
                                         unreachable!(
                                             "Function literal must have a \
-                                            child, or it wouldn't have \
-                                            been resolved as a function \
-                                            literal."
+                                            child, or it wouldn't have been \
+                                            resolved as a function literal."
                                         );
                                     };
 
