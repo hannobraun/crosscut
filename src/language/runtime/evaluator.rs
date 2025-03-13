@@ -294,7 +294,7 @@ impl Evaluator {
 
                             let Value::Function { body } = context.active_value
                             else {
-                                break 'update Some(Self::unexpected_input(
+                                break 'update Some(self.unexpected_input(
                                     Type::Function,
                                     context.active_value.clone(),
                                     path,
@@ -316,7 +316,7 @@ impl Evaluator {
                             let Value::Nothing = context.active_value else {
                                 self.eval_stack.push(node);
 
-                                break 'update Some(Self::unexpected_input(
+                                break 'update Some(self.unexpected_input(
                                     Type::Nothing,
                                     context.active_value.clone(),
                                     path,
@@ -464,6 +464,7 @@ impl Evaluator {
     }
 
     fn unexpected_input(
+        &mut self,
         expected: Type,
         actual: Value,
         path: NodePath,
