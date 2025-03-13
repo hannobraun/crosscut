@@ -294,20 +294,20 @@ impl Evaluator {
 
                             let Value::Function { body } = context.active_value
                             else {
-                                break 'update unexpected_input(
+                                break 'update Some(unexpected_input(
                                     Type::Function,
                                     context.active_value.clone(),
                                     path,
-                                );
+                                ));
                             };
 
-                            break 'update EvaluateUpdate::PushContext {
+                            break 'update Some(EvaluateUpdate::PushContext {
                                 root: NodePath { hash: body },
                                 // Right now, the `eval` function doesn't
                                 // support passing an argument to the function
                                 // it evaluates.
                                 active_value: Value::Nothing,
-                            };
+                            });
                         }
                         IntrinsicFunction::Identity => {
                             // Active value stays the same.
@@ -316,11 +316,11 @@ impl Evaluator {
                             let Value::Nothing = context.active_value else {
                                 self.eval_stack.push(node);
 
-                                break 'update unexpected_input(
+                                break 'update Some(unexpected_input(
                                     Type::Nothing,
                                     context.active_value.clone(),
                                     path,
-                                );
+                                ));
                             };
 
                             let value = {
@@ -387,10 +387,12 @@ impl Evaluator {
                                         };
                                         context.advance();
 
-                                        break 'update EvaluateUpdate::PushContext {
-                                            root: child.path,
-                                            active_value: Value::Nothing,
-                                        };
+                                        break 'update Some(
+                                            EvaluateUpdate::PushContext {
+                                                root: child.path,
+                                                active_value: Value::Nothing,
+                                            },
+                                        );
                                     }
                                 }
                             };
@@ -401,12 +403,12 @@ impl Evaluator {
 
                     context.advance();
 
-                    EvaluateUpdate::UpdateState {
+                    Some(EvaluateUpdate::UpdateState {
                         new_state: RuntimeState::Running {
                             active_value: context.active_value.clone(),
                             path: Some(path),
                         },
-                    }
+                    })
                 };
                 self.contexts.push(context);
 
@@ -414,12 +416,16 @@ impl Evaluator {
                 // update from the evaluation now.
 
                 match update {
-                    EvaluateUpdate::UpdateState { new_state } => {
+                    Some(EvaluateUpdate::UpdateState { new_state }) => {
                         self.state = new_state;
                     }
-                    EvaluateUpdate::PushContext { root, active_value } => {
+                    Some(EvaluateUpdate::PushContext {
+                        root,
+                        active_value,
+                    }) => {
                         self.push_context(root, active_value, codebase);
                     }
+                    None => {}
                 }
 
                 // We already restored the context. So we have to return now,
