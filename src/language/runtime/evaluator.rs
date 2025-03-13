@@ -316,11 +316,12 @@ impl Evaluator {
                             let Value::Nothing = context.active_value else {
                                 self.eval_stack.push(node);
 
-                                break 'update Some(self.unexpected_input(
+                                let update = self.unexpected_input(
                                     Type::Nothing,
                                     context.active_value.clone(),
                                     path,
-                                ));
+                                );
+                                break 'update Some(update);
                             };
 
                             let value = {
