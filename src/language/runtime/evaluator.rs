@@ -261,16 +261,18 @@ impl Evaluator {
 
         dbg!(kind_from_runtime_node);
 
-        self.eval_stack.push(node);
-
         match kind_from_context {
             NodeKind::Empty { .. } => {
+                self.eval_stack.push(node);
+
                 context.advance();
             }
             NodeKind::Expression {
                 expression: Expression::HostFunction { id },
                 ..
             } => {
+                self.eval_stack.push(node);
+
                 self.state = RuntimeState::Effect {
                     effect: Effect::ApplyHostFunction {
                         id: *id,
@@ -283,6 +285,8 @@ impl Evaluator {
                 expression: Expression::IntrinsicFunction { intrinsic },
                 ..
             } => {
+                self.eval_stack.push(node);
+
                 let path = next.syntax_node;
                 let update = 'update: {
                     match intrinsic {
@@ -417,6 +421,8 @@ impl Evaluator {
                 return;
             }
             NodeKind::Recursion => {
+                self.eval_stack.push(node);
+
                 let path = self
                     .call_stack
                     .pop()
@@ -433,6 +439,8 @@ impl Evaluator {
                 return;
             }
             NodeKind::Error { .. } => {
+                self.eval_stack.push(node);
+
                 self.state = RuntimeState::Error {
                     path: next.syntax_node,
                 };
