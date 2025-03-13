@@ -294,7 +294,7 @@ impl Evaluator {
 
                             let Value::Function { body } = context.active_value
                             else {
-                                break 'update Some(unexpected_input(
+                                break 'update Some(Self::unexpected_input(
                                     Type::Function,
                                     context.active_value.clone(),
                                     path,
@@ -316,7 +316,7 @@ impl Evaluator {
                             let Value::Nothing = context.active_value else {
                                 self.eval_stack.push(node);
 
-                                break 'update Some(unexpected_input(
+                                break 'update Some(Self::unexpected_input(
                                     Type::Nothing,
                                     context.active_value.clone(),
                                     path,
@@ -463,6 +463,19 @@ impl Evaluator {
         self.contexts.push(context);
     }
 
+    fn unexpected_input(
+        expected: Type,
+        actual: Value,
+        path: NodePath,
+    ) -> EvaluateUpdate {
+        EvaluateUpdate::UpdateState {
+            new_state: RuntimeState::Effect {
+                effect: Effect::UnexpectedInput { expected, actual },
+                path,
+            },
+        }
+    }
+
     pub fn state(&self) -> &RuntimeState {
         &self.state
     }
@@ -494,19 +507,6 @@ impl RuntimeNode {
                 .collect(),
             evaluated_children: Vec::new(),
         }
-    }
-}
-
-fn unexpected_input(
-    expected: Type,
-    actual: Value,
-    path: NodePath,
-) -> EvaluateUpdate {
-    EvaluateUpdate::UpdateState {
-        new_state: RuntimeState::Effect {
-            effect: Effect::UnexpectedInput { expected, actual },
-            path,
-        },
     }
 }
 
