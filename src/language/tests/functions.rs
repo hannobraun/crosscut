@@ -30,10 +30,9 @@ fn self_recursion() {
 
     language.call_function(path, Value::Nothing);
 
-    // To verify we are actually recursing, we need to see at least two values.
-    // But evaluating `self` could result in its own iterator step. We need to
-    // account for that.
-    for _ in 0..3 {
+    // This is a rather large number of steps, given the length of the program.
+    // Should be proof enough, that it's recursing.
+    for _ in 0..1024 {
         assert_eq!(language.step().active_value(), Some(&Value::Nothing));
     }
 }
