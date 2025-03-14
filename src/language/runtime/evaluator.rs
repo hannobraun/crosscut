@@ -414,6 +414,9 @@ impl Evaluator {
                 return;
             }
             NodeKind::Error { .. } => {
+                // We don't want to advance the execution in any way when
+                // encountering an error. So let's restore the node we pulled
+                // from the evaluation stack earlier to where it was.
                 self.eval_stack.push(node);
 
                 self.state = RuntimeState::Error {
