@@ -386,7 +386,8 @@ impl Evaluator {
                             }
                         };
 
-                        context.active_value = value;
+                        context.active_value = value.clone();
+                        self.advance(value, node.syntax_node);
                     }
                 }
 
