@@ -261,7 +261,10 @@ impl Evaluator {
         match kind_from_context {
             NodeKind::Empty { .. } => {
                 context.advance();
-                self.advance(node.active_value(), node.syntax_node);
+                self.advance(
+                    node.evaluated_children.into_active_value(),
+                    node.syntax_node,
+                );
             }
             NodeKind::Expression {
                 expression: Expression::HostFunction { id },
@@ -311,7 +314,10 @@ impl Evaluator {
                         return;
                     }
                     IntrinsicFunction::Identity => {
-                        self.advance(node.active_value(), node.syntax_node);
+                        self.advance(
+                            node.evaluated_children.into_active_value(),
+                            node.syntax_node,
+                        );
                     }
                     IntrinsicFunction::Literal { literal } => {
                         let Value::Nothing = context.active_value else {
@@ -509,16 +515,19 @@ impl RuntimeNode {
             evaluated_children: EvaluatedChildren { inner: Vec::new() },
         }
     }
+}
 
-    fn active_value(&mut self) -> Value {
-        let value = self
-            .evaluated_children
-            .inner
-            .pop()
-            .unwrap_or(Value::Nothing);
+#[derive(Debug)]
+struct EvaluatedChildren {
+    inner: Vec<Value>,
+}
+
+impl EvaluatedChildren {
+    pub fn into_active_value(mut self) -> Value {
+        let value = self.inner.pop().unwrap_or(Value::Nothing);
 
         assert!(
-            self.evaluated_children.inner.is_empty(),
+            self.inner.is_empty(),
             "Expected a node to have zero or one children, but it has \
             multiple. This is a bug. Specifically, it is a mismatch of \
             expectations between compiler and evaluator.",
@@ -526,11 +535,6 @@ impl RuntimeNode {
 
         value
     }
-}
-
-#[derive(Debug)]
-struct EvaluatedChildren {
-    inner: Vec<Value>,
 }
 
 #[derive(Debug)]
