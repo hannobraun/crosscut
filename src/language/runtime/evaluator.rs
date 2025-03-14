@@ -341,8 +341,6 @@ impl Evaluator {
                                     Value::Integer { value }
                                 }
                                 Literal::Tuple => {
-                                    self.eval_stack.push(node);
-
                                     let node2 = codebase.node_at(path);
                                     let mut children =
                                         node2.children(codebase.nodes());
@@ -368,6 +366,7 @@ impl Evaluator {
                                     context.advance();
 
                                     self.contexts.push(context);
+                                    self.eval_stack.push(node);
                                     self.push_context(
                                         child.path,
                                         Value::Nothing,
