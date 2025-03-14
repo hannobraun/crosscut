@@ -503,7 +503,7 @@ impl RuntimeNode {
             self.evaluated_children.is_empty(),
             "Expected a node to have zero or one children, but it has \
             multiple. This is a bug. Specifically, it is a mismatch of \
-            expectations between compiler and evaluator."
+            expectations between compiler and evaluator.",
         );
 
         value
