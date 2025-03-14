@@ -210,7 +210,7 @@ impl Evaluator {
         };
 
         let Some(mut node) = self.eval_stack.pop() else {
-            // Evaluation stack is empty, which means we're not running.
+            // Evaluation stack is empty, which means there's nothing we can do.
             return;
         };
 
