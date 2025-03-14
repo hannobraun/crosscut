@@ -314,7 +314,6 @@ impl Evaluator {
                         return;
                     }
                     IntrinsicFunction::Identity => {
-                        // Active value stays the same.
                         self.advance(node.active_value, node.syntax_node);
                     }
                     IntrinsicFunction::Literal { literal } => {
