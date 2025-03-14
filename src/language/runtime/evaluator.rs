@@ -366,7 +366,6 @@ impl Evaluator {
                                     context.advance();
 
                                     self.contexts.push(context);
-                                    self.eval_stack.push(node);
                                     self.push_context(
                                         child.path,
                                         Value::Nothing,
