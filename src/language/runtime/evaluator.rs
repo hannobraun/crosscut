@@ -322,8 +322,6 @@ impl Evaluator {
                         let value = {
                             match *literal {
                                 Literal::Function => {
-                                    self.eval_stack.push(node);
-
                                     let node = codebase.node_at(path);
                                     let mut children =
                                         node.children(codebase.nodes());
