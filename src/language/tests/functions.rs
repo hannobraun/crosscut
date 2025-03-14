@@ -1,7 +1,7 @@
 use crate::language::{
     code::NodePath,
     language::Language,
-    runtime::{Effect, Value},
+    runtime::{Effect, RuntimeState, Value},
 };
 
 #[test]
@@ -33,7 +33,7 @@ fn self_recursion() {
     // This is a rather large number of steps, given the length of the program.
     // Should be proof enough, that it's recursing.
     for _ in 0..1024 {
-        assert_eq!(language.step().active_value(), Some(&Value::Nothing));
+        assert!(matches!(language.step(), RuntimeState::Running { .. }));
     }
 }
 
