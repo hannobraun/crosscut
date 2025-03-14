@@ -5,7 +5,6 @@ use super::{Effect, Value};
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub enum RuntimeState {
     Running {
-        active_value: Value,
         path: Option<NodePath>,
     },
     Effect {

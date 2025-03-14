@@ -47,10 +47,7 @@ impl Evaluator {
             argument: argument.clone(),
         });
 
-        self.state = RuntimeState::Running {
-            active_value: argument.clone(),
-            path: None,
-        };
+        self.state = RuntimeState::Running { path: None };
 
         let mut path = root_path;
         let mut previous = None;
@@ -129,7 +126,6 @@ impl Evaluator {
 
         context.active_value = value.clone();
         self.state = RuntimeState::Running {
-            active_value: value,
             path: Some(source.syntax_node),
         };
 
@@ -414,10 +410,7 @@ impl Evaluator {
 
                 context.advance();
 
-                self.state = RuntimeState::Running {
-                    active_value: context.active_value.clone(),
-                    path: Some(path),
-                };
+                self.state = RuntimeState::Running { path: Some(path) };
                 self.contexts.push(context);
 
                 // We already restored the context. So we have to return now,
@@ -475,10 +468,7 @@ impl Evaluator {
         // the stack.
 
         if let Some(parent) = self.eval_stack.last_mut() {
-            self.state = RuntimeState::Running {
-                active_value: active_value.clone(),
-                path: Some(path),
-            };
+            self.state = RuntimeState::Running { path: Some(path) };
             parent.evaluated_children.push(active_value);
         } else {
             self.state = RuntimeState::Finished {
