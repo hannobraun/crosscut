@@ -501,8 +501,9 @@ impl RuntimeNode {
 
         assert!(
             self.evaluated_children.is_empty(),
-            "Empty node can't have multiple children, or it would have been an \
-            error node."
+            "Expected a node to have zero or one children, but it has \
+            multiple. This is a bug. Specifically, it is a mismatch of \
+            expectations between compiler and evaluator."
         );
 
         value
