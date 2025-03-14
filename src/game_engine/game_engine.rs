@@ -129,6 +129,11 @@ where
                     value => {
                         match value.into_function_body() {
                             Ok(path) => {
+                                // If the program returns a function, we call
+                                // that function, passing it a display value.
+                                // Using that display value, the function can
+                                // set the color.
+
                                 self.language
                                     .push_context(path, self.display.clone());
                                 continue;
