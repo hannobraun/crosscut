@@ -11,6 +11,8 @@ fn number_literal_wrong_input() {
     // So having two in a row means, that the second one does not get the
     // expected input.
 
+    // The compiler doesn't do type checking at this point, so it doesn't know
+    // that the second number literal gets an invalid input.
     let mut language = Language::from_code("127 255");
 
     assert!(language.step().is_running().is_some());
