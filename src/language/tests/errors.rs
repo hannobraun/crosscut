@@ -15,8 +15,19 @@ fn number_literal_wrong_input() {
     // that the second number literal gets an invalid input.
     let mut language = Language::from_code("127 255");
 
+    let invalid = language.codebase().root().path;
+
     assert!(language.step().is_running().is_some());
-    assert!(language.step().is_effect());
+    assert_eq!(
+        language.step(),
+        &RuntimeState::Effect {
+            effect: Effect::UnexpectedInput {
+                expected: Type::Nothing,
+                actual: Value::Integer { value: 127 },
+            },
+            path: invalid,
+        },
+    );
 }
 
 #[test]
