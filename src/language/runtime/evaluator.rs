@@ -346,8 +346,6 @@ impl Evaluator {
                                     }
                                 }
                                 Literal::Integer { value } => {
-                                    self.eval_stack.push(node);
-
                                     Value::Integer { value }
                                 }
                                 Literal::Tuple => {
