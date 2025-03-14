@@ -264,6 +264,7 @@ impl Evaluator {
         match kind_from_context {
             NodeKind::Empty { .. } => {
                 context.advance();
+                self.advance(node.active_value, node.syntax_node);
             }
             NodeKind::Expression {
                 expression: Expression::HostFunction { id },
@@ -457,6 +458,17 @@ impl Evaluator {
             effect: Effect::UnexpectedInput { expected, actual },
             path,
         };
+    }
+
+    fn advance(&mut self, active_value: Value, path: NodePath) {
+        if let Some(parent) = self.eval_stack.last_mut() {
+            parent.active_value = active_value;
+        } else {
+            self.state = RuntimeState::Finished {
+                output: active_value,
+                path: Some(path),
+            };
+        }
     }
 
     pub fn state(&self) -> &RuntimeState {
