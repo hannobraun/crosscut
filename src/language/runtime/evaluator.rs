@@ -257,10 +257,7 @@ impl Evaluator {
         match kind_from_context {
             NodeKind::Empty { .. } => {
                 context.advance();
-                self.advance(
-                    node.evaluated_children.into_active_value(),
-                    node.syntax_node,
-                );
+                self.advance(node.evaluated_children.into_active_value());
             }
             NodeKind::Expression {
                 expression: Expression::HostFunction { id },
@@ -282,7 +279,7 @@ impl Evaluator {
                 match intrinsic {
                     IntrinsicFunction::Drop => {
                         context.active_value = Value::Nothing;
-                        self.advance(Value::Nothing, node.syntax_node);
+                        self.advance(Value::Nothing);
                     }
                     IntrinsicFunction::Eval => {
                         let body = match context.active_value {
@@ -312,7 +309,6 @@ impl Evaluator {
                     IntrinsicFunction::Identity => {
                         self.advance(
                             node.evaluated_children.into_active_value(),
-                            node.syntax_node,
                         );
                     }
                     IntrinsicFunction::Literal { literal } => {
@@ -369,14 +365,9 @@ impl Evaluator {
                                         evaluated by now.",
                                     );
 
-                                    self.advance(
-                                        Value::Tuple {
-                                            elements: node
-                                                .evaluated_children
-                                                .inner,
-                                        },
-                                        node.syntax_node,
-                                    );
+                                    self.advance(Value::Tuple {
+                                        elements: node.evaluated_children.inner,
+                                    });
 
                                     let node2 = codebase.node_at(path);
                                     let mut children =
@@ -414,7 +405,7 @@ impl Evaluator {
                         };
 
                         context.active_value = value.clone();
-                        self.advance(value, node.syntax_node);
+                        self.advance(value);
                     }
                 }
 
@@ -473,7 +464,7 @@ impl Evaluator {
         };
     }
 
-    fn advance(&mut self, active_value: Value, _: NodePath) {
+    fn advance(&mut self, active_value: Value) {
         // When this is called, the current node has already been removed from
         // the stack.
 
