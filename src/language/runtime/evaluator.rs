@@ -39,11 +39,8 @@ impl Evaluator {
         active_value: Value,
         codebase: &Codebase,
     ) {
-        self.eval_stack.push(RuntimeNode::from_syntax_node(
-            root_path,
-            active_value.clone(),
-            codebase,
-        ));
+        self.eval_stack
+            .push(RuntimeNode::from_syntax_node(root_path, codebase));
 
         let mut path = root_path;
         let mut previous = None;
@@ -240,8 +237,7 @@ impl Evaluator {
             };
 
             self.eval_stack.push(node);
-            node =
-                RuntimeNode::from_syntax_node(child, Value::Nothing, codebase);
+            node = RuntimeNode::from_syntax_node(child, codebase);
         }
 
         let [kind_from_runtime_node, kind_from_context] =
@@ -476,11 +472,7 @@ struct RuntimeNode {
 }
 
 impl RuntimeNode {
-    fn from_syntax_node(
-        path: NodePath,
-        _: Value,
-        codebase: &Codebase,
-    ) -> Self {
+    fn from_syntax_node(path: NodePath, codebase: &Codebase) -> Self {
         let root_node = codebase.node_at(path);
 
         Self {
