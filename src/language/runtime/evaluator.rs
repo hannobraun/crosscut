@@ -36,7 +36,7 @@ impl Evaluator {
     pub fn call_function(
         &mut self,
         root_path: NodePath,
-        active_value: Value,
+        argument: Value,
         codebase: &Codebase,
     ) {
         let root_node = RuntimeNode::from_syntax_node(root_path, codebase);
@@ -44,11 +44,11 @@ impl Evaluator {
 
         self.call_stack.push(StackFrame {
             root: root_path,
-            argument: active_value.clone(),
+            argument: argument.clone(),
         });
 
         self.state = RuntimeState::Running {
-            active_value: active_value.clone(),
+            active_value: argument.clone(),
             path: None,
         };
 
@@ -98,7 +98,7 @@ impl Evaluator {
 
         self.contexts.push(Context {
             next: previous,
-            active_value,
+            active_value: argument,
         });
     }
 
