@@ -291,8 +291,6 @@ impl Evaluator {
                         self.advance(Value::Nothing, node.syntax_node);
                     }
                     IntrinsicFunction::Eval => {
-                        self.eval_stack.push(node);
-
                         let Value::Function { body } = context.active_value
                         else {
                             self.unexpected_input(
@@ -305,6 +303,7 @@ impl Evaluator {
                         };
 
                         self.contexts.push(context);
+                        self.eval_stack.push(node);
                         self.push_context(
                             NodePath { hash: body },
                             // Right now, the `eval` function doesn't support
