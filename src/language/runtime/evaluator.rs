@@ -288,6 +288,7 @@ impl Evaluator {
                 match intrinsic {
                     IntrinsicFunction::Drop => {
                         context.active_value = Value::Nothing;
+                        self.advance(Value::Nothing, node.syntax_node);
                     }
                     IntrinsicFunction::Eval => {
                         self.eval_stack.push(node);
