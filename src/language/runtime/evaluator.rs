@@ -320,16 +320,19 @@ impl Evaluator {
                         );
                     }
                     IntrinsicFunction::Literal { literal } => {
-                        let Value::Nothing = context.active_value else {
-                            self.unexpected_input(
-                                Type::Nothing,
-                                context.active_value.clone(),
-                                path,
-                            );
-                            self.eval_stack.push(node);
-                            self.contexts.push(context);
-                            return;
-                        };
+                        match &context.active_value {
+                            Value::Nothing => {}
+                            active_value => {
+                                self.unexpected_input(
+                                    Type::Nothing,
+                                    active_value.clone(),
+                                    path,
+                                );
+                                self.eval_stack.push(node);
+                                self.contexts.push(context);
+                                return;
+                            }
+                        }
 
                         let value = {
                             match *literal {
