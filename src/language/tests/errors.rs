@@ -14,7 +14,7 @@ fn number_literal_wrong_input() {
     let mut language = Language::from_code("127 255");
 
     assert_eq!(
-        language.step().active_value(),
+        language.step().is_running(),
         Some(&Value::Integer { value: 127 }),
     );
     assert!(matches!(language.step(), RuntimeState::Effect { .. }));
@@ -102,7 +102,7 @@ fn pure_runtime_error_should_result_in_error_state() {
     let mut language = Language::from_code("127 127");
 
     assert_eq!(
-        language.step().active_value(),
+        language.step().is_running(),
         Some(&Value::Integer { value: 127 }),
     );
     assert!(matches!(language.step(), RuntimeState::Effect { .. }));
