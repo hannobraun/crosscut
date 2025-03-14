@@ -110,6 +110,7 @@ impl Evaluator {
                 is currently being applied."
             );
         };
+
         let Some(context) = self.contexts.last_mut() else {
             unreachable!(
                 "Host function is being applied, but there is no active \
