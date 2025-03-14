@@ -10,7 +10,7 @@ use super::{
 #[derive(Debug)]
 pub struct Evaluator {
     eval_stack: Vec<RuntimeNode>,
-    call_stack: Vec<NodePath>,
+    call_stack: Vec<StackFrame>,
     contexts: Vec<Context>,
     state: RuntimeState,
 }
@@ -90,7 +90,7 @@ impl Evaluator {
             active_value: active_value.clone(),
             path: None,
         };
-        self.call_stack.push(root_path);
+        self.call_stack.push(StackFrame { root: root_path });
         self.contexts.push(Context {
             next: previous,
             active_value,
@@ -413,6 +413,7 @@ impl Evaluator {
                 let path = self
                     .call_stack
                     .pop()
+                    .map(|stack_frame| stack_frame.root)
                     .unwrap_or_else(|| codebase.root().path);
 
                 let active_value = context.active_value.clone();
@@ -511,6 +512,11 @@ impl RuntimeNode {
 
         value
     }
+}
+
+#[derive(Debug)]
+struct StackFrame {
+    root: NodePath,
 }
 
 #[cfg(test)]
