@@ -398,8 +398,6 @@ impl Evaluator {
                 return;
             }
             NodeKind::Recursion => {
-                self.eval_stack.push(node);
-
                 let path = self
                     .call_stack
                     .pop()
