@@ -255,8 +255,6 @@ impl Evaluator {
                 expression: Expression::HostFunction { id },
                 ..
             } => {
-                self.eval_stack.push(node);
-
                 self.state = RuntimeState::Effect {
                     effect: Effect::ApplyHostFunction {
                         id: *id,
