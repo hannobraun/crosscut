@@ -42,6 +42,11 @@ impl Evaluator {
         let root_node = RuntimeNode::from_syntax_node(root_path, codebase);
         self.eval_stack.push(root_node);
 
+        self.call_stack.push(StackFrame {
+            root: root_path,
+            argument: active_value.clone(),
+        });
+
         let mut path = root_path;
         let mut previous = None;
 
@@ -90,10 +95,6 @@ impl Evaluator {
             active_value: active_value.clone(),
             path: None,
         };
-        self.call_stack.push(StackFrame {
-            root: root_path,
-            argument: active_value.clone(),
-        });
         self.contexts.push(Context {
             next: previous,
             active_value,
