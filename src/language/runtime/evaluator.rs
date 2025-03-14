@@ -90,7 +90,10 @@ impl Evaluator {
             active_value: active_value.clone(),
             path: None,
         };
-        self.call_stack.push(StackFrame { root: root_path });
+        self.call_stack.push(StackFrame {
+            root: root_path,
+            argument: active_value.clone(),
+        });
         self.contexts.push(Context {
             next: previous,
             active_value,
@@ -233,6 +236,16 @@ impl Evaluator {
             }
 
             let Some(child) = node.children_to_evaluate.pop() else {
+                // Seed all leaf nodes of a function with the function argument.
+                // This is a weird thing to do, but it's how function arguments
+                // work right now. We'll have real parameters in due time.
+                if node.evaluated_children.is_empty() {
+                    if let Some(stack_frame) = self.call_stack.last() {
+                        node.evaluated_children
+                            .push(stack_frame.argument.clone());
+                    }
+                }
+
                 break;
             };
 
@@ -517,6 +530,7 @@ impl RuntimeNode {
 #[derive(Debug)]
 struct StackFrame {
     root: NodePath,
+    argument: Value,
 }
 
 #[cfg(test)]
