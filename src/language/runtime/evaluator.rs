@@ -237,9 +237,10 @@ impl Evaluator {
                 // Seed all leaf nodes of a function with the function argument.
                 // This is a weird thing to do, but it's how function arguments
                 // work right now. We'll have real parameters in due time.
-                if node.evaluated_children.is_empty() {
+                if node.evaluated_children.inner.is_empty() {
                     if let Some(stack_frame) = self.call_stack.last() {
                         node.evaluated_children
+                            .inner
                             .push(stack_frame.argument.clone());
                     }
                 }
@@ -365,7 +366,9 @@ impl Evaluator {
 
                                     self.advance(
                                         Value::Tuple {
-                                            elements: node.evaluated_children,
+                                            elements: node
+                                                .evaluated_children
+                                                .inner,
                                         },
                                         node.syntax_node,
                                     );
@@ -471,7 +474,7 @@ impl Evaluator {
 
         if let Some(parent) = self.eval_stack.last_mut() {
             self.state = RuntimeState::Running { path: Some(path) };
-            parent.evaluated_children.push(active_value);
+            parent.evaluated_children.inner.push(active_value);
         } else {
             self.state = RuntimeState::Finished {
                 output: active_value,
@@ -489,7 +492,7 @@ impl Evaluator {
 struct RuntimeNode {
     syntax_node: NodePath,
     children_to_evaluate: Vec<NodePath>,
-    evaluated_children: Vec<Value>,
+    evaluated_children: EvaluatedChildren,
 }
 
 impl RuntimeNode {
@@ -503,15 +506,19 @@ impl RuntimeNode {
                 .map(|located_node| located_node.path)
                 .rev()
                 .collect(),
-            evaluated_children: Vec::new(),
+            evaluated_children: EvaluatedChildren { inner: Vec::new() },
         }
     }
 
     fn active_value(&mut self) -> Value {
-        let value = self.evaluated_children.pop().unwrap_or(Value::Nothing);
+        let value = self
+            .evaluated_children
+            .inner
+            .pop()
+            .unwrap_or(Value::Nothing);
 
         assert!(
-            self.evaluated_children.is_empty(),
+            self.evaluated_children.inner.is_empty(),
             "Expected a node to have zero or one children, but it has \
             multiple. This is a bug. Specifically, it is a mismatch of \
             expectations between compiler and evaluator.",
@@ -519,6 +526,11 @@ impl RuntimeNode {
 
         value
     }
+}
+
+#[derive(Debug)]
+struct EvaluatedChildren {
+    inner: Vec<Value>,
 }
 
 #[derive(Debug)]
