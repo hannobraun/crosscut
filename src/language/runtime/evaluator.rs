@@ -39,8 +39,8 @@ impl Evaluator {
         active_value: Value,
         codebase: &Codebase,
     ) {
-        self.eval_stack
-            .push(RuntimeNode::from_syntax_node(root_path, codebase));
+        let root_node = RuntimeNode::from_syntax_node(root_path, codebase);
+        self.eval_stack.push(root_node);
 
         let mut path = root_path;
         let mut previous = None;
