@@ -285,15 +285,17 @@ impl Evaluator {
                         self.advance(Value::Nothing, node.syntax_node);
                     }
                     IntrinsicFunction::Eval => {
-                        let Value::Function { body } = context.active_value
-                        else {
-                            self.unexpected_input(
-                                Type::Function,
-                                context.active_value.clone(),
-                                path,
-                            );
-                            self.contexts.push(context);
-                            return;
+                        let body = match context.active_value {
+                            Value::Function { body } => body,
+                            ref active_value => {
+                                self.unexpected_input(
+                                    Type::Function,
+                                    active_value.clone(),
+                                    path,
+                                );
+                                self.contexts.push(context);
+                                return;
+                            }
                         };
 
                         self.contexts.push(context);
