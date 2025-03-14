@@ -517,7 +517,7 @@ impl RuntimeNode {
     }
 }
 
-#[derive(Debug)]
+#[derive(Clone, Debug)]
 struct EvaluatedChildren {
     inner: Vec<Value>,
 }
