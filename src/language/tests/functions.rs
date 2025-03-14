@@ -28,16 +28,13 @@ fn self_recursion() {
         }
     };
 
-    language.call_function(path, Value::Integer { value: 127 });
+    language.call_function(path, Value::Nothing);
 
     // To verify we are actually recursing, we need to see at least two values.
     // But evaluating `self` could result in its own iterator step. We need to
     // account for that.
     for _ in 0..3 {
-        assert_eq!(
-            language.step().active_value(),
-            Some(&Value::Integer { value: 127 }),
-        );
+        assert_eq!(language.step().active_value(), Some(&Value::Nothing));
     }
 }
 
