@@ -462,6 +462,10 @@ impl Evaluator {
 
     fn advance(&mut self, active_value: Value, path: NodePath) {
         if let Some(parent) = self.eval_stack.last_mut() {
+            self.state = RuntimeState::Running {
+                active_value: active_value.clone(),
+                path: Some(path),
+            };
             parent.active_value = active_value;
         } else {
             self.state = RuntimeState::Finished {
