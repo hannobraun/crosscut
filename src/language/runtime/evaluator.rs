@@ -158,52 +158,6 @@ impl Evaluator {
             return;
         }
 
-        let Some(mut node) = self.eval_stack.pop() else {
-            // Evaluation stack is empty, which means we're not running.
-
-            self.state = RuntimeState::Finished {
-                output: Value::Nothing,
-                path: None,
-            };
-
-            return;
-        };
-
-        dbg!(&node.syntax_node);
-        dbg!(&node.active_value);
-        dbg!(&node.children_to_evaluate);
-        dbg!(&node.evaluated_children);
-
-        // For the most part, we need to evaluate a node's children before we
-        // can evaluate the node itself. This loop makes sure that `node` is a
-        // node that can be evaluated, and that all its parents are on the
-        // evaluation stack, so they can be evaluated later.
-        loop {
-            if let NodeKind::Expression {
-                expression:
-                    Expression::IntrinsicFunction {
-                        intrinsic:
-                            IntrinsicFunction::Literal {
-                                literal: Literal::Function,
-                            },
-                    },
-            } = codebase.node_at(node.syntax_node).node.kind()
-            {
-                // If this were any other node, we'd need to evaluate its
-                // children first. But function nodes are different. Their child
-                // should only be evaluated, when the function is applied.
-                break;
-            }
-
-            let Some(child) = node.children_to_evaluate.pop() else {
-                break;
-            };
-
-            self.eval_stack.push(node);
-            node =
-                RuntimeNode::from_syntax_node(child, Value::Nothing, codebase);
-        }
-
         // Take the current context. Depending on how things will go, we'll
         // restore it below; or do nothing, if it turns out we actually need to
         // remove it.
@@ -254,6 +208,52 @@ impl Evaluator {
 
             return;
         };
+
+        let Some(mut node) = self.eval_stack.pop() else {
+            // Evaluation stack is empty, which means we're not running.
+
+            self.state = RuntimeState::Finished {
+                output: Value::Nothing,
+                path: None,
+            };
+
+            return;
+        };
+
+        dbg!(&node.syntax_node);
+        dbg!(&node.active_value);
+        dbg!(&node.children_to_evaluate);
+        dbg!(&node.evaluated_children);
+
+        // For the most part, we need to evaluate a node's children before we
+        // can evaluate the node itself. This loop makes sure that `node` is a
+        // node that can be evaluated, and that all its parents are on the
+        // evaluation stack, so they can be evaluated later.
+        loop {
+            if let NodeKind::Expression {
+                expression:
+                    Expression::IntrinsicFunction {
+                        intrinsic:
+                            IntrinsicFunction::Literal {
+                                literal: Literal::Function,
+                            },
+                    },
+            } = codebase.node_at(node.syntax_node).node.kind()
+            {
+                // If this were any other node, we'd need to evaluate its
+                // children first. But function nodes are different. Their child
+                // should only be evaluated, when the function is applied.
+                break;
+            }
+
+            let Some(child) = node.children_to_evaluate.pop() else {
+                break;
+            };
+
+            self.eval_stack.push(node);
+            node =
+                RuntimeNode::from_syntax_node(child, Value::Nothing, codebase);
+        }
 
         let [kind_from_runtime_node, kind_from_context] =
             [node.syntax_node, next.syntax_node]
