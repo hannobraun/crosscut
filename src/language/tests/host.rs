@@ -2,7 +2,7 @@ use crate::language::{
     code::Type,
     language::Language,
     packages::{Function, Package},
-    runtime::{Effect, RuntimeState, Value},
+    runtime::{Effect, Value},
     tests::functions::IntoFunctionBody,
 };
 
@@ -63,7 +63,7 @@ fn host_functions_can_trigger_effects() {
         });
 
     assert_eq!(output.as_ref(), Err(&effect));
-    assert!(matches!(language.step(), RuntimeState::Effect { .. }));
+    assert!(language.step().is_effect());
 }
 
 #[test]

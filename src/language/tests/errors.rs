@@ -17,7 +17,7 @@ fn number_literal_wrong_input() {
         language.step().is_running(),
         Some(&Value::Integer { value: 127 }),
     );
-    assert!(matches!(language.step(), RuntimeState::Effect { .. }));
+    assert!(language.step().is_effect());
 }
 
 #[test]
@@ -105,7 +105,7 @@ fn pure_runtime_error_should_result_in_error_state() {
         language.step().is_running(),
         Some(&Value::Integer { value: 127 }),
     );
-    assert!(matches!(language.step(), RuntimeState::Effect { .. }));
+    assert!(language.step().is_effect());
 
     let invalid = language.codebase().root().path;
     assert_eq!(
