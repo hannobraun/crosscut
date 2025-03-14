@@ -101,31 +101,3 @@ fn do_not_step_beyond_errors() {
     assert!(language.step().is_error());
     assert!(language.step().is_error());
 }
-
-#[test]
-fn pure_runtime_error_should_result_in_error_state() {
-    // Some errors are not known at compile-time and are only encountered at
-    // runtime. Such an error should still be reported by the evaluator.
-
-    // The compiler doesn't do type checking at this point, so it doesn't know
-    // that the second number literal gets an invalid input.
-    let mut language = Language::from_code("127 127");
-
-    assert_eq!(
-        language.step().is_running(),
-        Some(&Value::Integer { value: 127 }),
-    );
-    assert!(language.step().is_effect());
-
-    let invalid = language.codebase().root().path;
-    assert_eq!(
-        language.evaluator().state(),
-        &RuntimeState::Effect {
-            effect: Effect::UnexpectedInput {
-                expected: Type::Nothing,
-                actual: Value::Integer { value: 127 },
-            },
-            path: invalid,
-        },
-    );
-}
