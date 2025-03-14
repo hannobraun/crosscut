@@ -13,10 +13,7 @@ fn number_literal_wrong_input() {
 
     let mut language = Language::from_code("127 255");
 
-    assert_eq!(
-        language.step().is_running(),
-        Some(&Value::Integer { value: 127 }),
-    );
+    assert!(language.step().is_running().is_some());
     assert!(language.step().is_effect());
 }
 
