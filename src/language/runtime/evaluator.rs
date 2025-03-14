@@ -220,9 +220,6 @@ impl Evaluator {
             return;
         };
 
-        dbg!(&node.syntax_node);
-        dbg!(&node.active_value);
-        dbg!(&node.children_to_evaluate);
         dbg!(&node.evaluated_children);
 
         // For the most part, we need to evaluate a node's children before we
