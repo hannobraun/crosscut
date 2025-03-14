@@ -469,7 +469,7 @@ impl Evaluator {
 }
 
 #[derive(Debug)]
-pub struct RuntimeNode {
+struct RuntimeNode {
     pub syntax_node: NodePath,
     pub active_value: Value,
     pub children_to_evaluate: Vec<NodePath>,
