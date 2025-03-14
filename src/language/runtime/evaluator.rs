@@ -343,9 +343,9 @@ impl Evaluator {
                                 Literal::Tuple => {
                                     self.eval_stack.push(node);
 
-                                    let node = codebase.node_at(path);
+                                    let node2 = codebase.node_at(path);
                                     let mut children =
-                                        node.children(codebase.nodes());
+                                        node2.children(codebase.nodes());
 
                                     let Some(child) = children.next() else {
                                         unreachable!(
