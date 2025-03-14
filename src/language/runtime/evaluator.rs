@@ -456,7 +456,7 @@ impl Evaluator {
                 active_value: active_value.clone(),
                 path: Some(path),
             };
-            parent.active_value = active_value;
+            parent.evaluated_children.push(active_value);
         } else {
             self.state = RuntimeState::Finished {
                 output: active_value,
