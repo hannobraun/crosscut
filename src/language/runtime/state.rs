@@ -4,20 +4,10 @@ use super::{Effect, Value};
 
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub enum RuntimeState {
-    Running {
-        path: Option<NodePath>,
-    },
-    Effect {
-        effect: Effect,
-        path: NodePath,
-    },
-    Finished {
-        output: Value,
-        path: Option<NodePath>,
-    },
-    Error {
-        path: NodePath,
-    },
+    Running { path: Option<NodePath> },
+    Effect { effect: Effect, path: NodePath },
+    Finished { output: Value },
+    Error { path: NodePath },
 }
 
 impl RuntimeState {

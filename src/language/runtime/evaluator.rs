@@ -23,7 +23,6 @@ impl Evaluator {
             contexts: Vec::new(),
             state: RuntimeState::Finished {
                 output: Value::Nothing,
-                path: None,
             },
         }
     }
@@ -168,7 +167,6 @@ impl Evaluator {
 
             self.state = RuntimeState::Finished {
                 output: Value::Nothing,
-                path: None,
             };
 
             return;
@@ -199,10 +197,7 @@ impl Evaluator {
                     }
                 }
             } else {
-                self.state = RuntimeState::Finished {
-                    output,
-                    path: self.state.path().cloned(),
-                };
+                self.state = RuntimeState::Finished { output };
             }
 
             return;
@@ -488,7 +483,6 @@ impl Evaluator {
         } else {
             self.state = RuntimeState::Finished {
                 output: active_value,
-                path: Some(path),
             };
         }
     }
