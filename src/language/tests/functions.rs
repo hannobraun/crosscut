@@ -9,15 +9,7 @@ fn define_and_evaluate() {
     // It is possible to define a function using a function literal, return that
     // function from the program, then tell the language to evaluate it.
 
-    let mut language = Language::from_code("127 fn");
-    let path = match language.step_until_finished().into_function_body() {
-        Ok(path) => path,
-        output => {
-            panic!("Unexpected output: {output:?}");
-        }
-    };
-
-    language.call_function(path, Value::Nothing);
+    let mut language = Language::from_code("127 fn eval");
     assert_eq!(
         language.step_until_finished(),
         Ok(Value::Integer { value: 127 }),
