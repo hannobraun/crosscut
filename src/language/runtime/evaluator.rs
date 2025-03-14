@@ -156,7 +156,7 @@ impl Evaluator {
     }
 
     pub fn step(&mut self, codebase: &Codebase) {
-        if let RuntimeState::Effect { .. } = &self.state {
+        if self.state.is_effect() {
             return;
         }
 
