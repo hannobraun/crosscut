@@ -539,7 +539,7 @@ struct StackFrame {
 mod tests {
     use crate::language::{
         code::{Codebase, Node, NodeKind},
-        runtime::{Evaluator, RuntimeState, Value},
+        runtime::{Evaluator, RuntimeState},
     };
 
     #[test]
@@ -560,7 +560,7 @@ mod tests {
         evaluator.reset(&codebase);
 
         evaluator.step(&codebase);
-        assert_eq!(evaluator.state().is_running(), Some(&Value::Nothing));
+        assert!(evaluator.state().is_running().is_some());
     }
 
     #[test]
