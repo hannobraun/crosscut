@@ -341,6 +341,22 @@ impl Evaluator {
                                     Value::Integer { value }
                                 }
                                 Literal::Tuple => {
+                                    assert!(
+                                        node.children_to_evaluate.is_empty(),
+                                        "Due to the loop above, which puts all \
+                                        children of a node on the evaluation \
+                                        stack, on top of that node, all \
+                                        children of the tuple must be \
+                                        evaluated by now.",
+                                    );
+
+                                    self.advance(
+                                        Value::Tuple {
+                                            elements: node.evaluated_children,
+                                        },
+                                        node.syntax_node,
+                                    );
+
                                     let node2 = codebase.node_at(path);
                                     let mut children =
                                         node2.children(codebase.nodes());
