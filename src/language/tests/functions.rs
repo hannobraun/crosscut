@@ -20,7 +20,7 @@ fn define_and_evaluate() {
 fn self_recursion() {
     // A function can recurse using the `self` keyword.
 
-    let mut language = Language::from_code("identity self fn");
+    let mut language = Language::from_code("self fn");
     let path = match language.step_until_finished().into_function_body() {
         Ok(path) => path,
         output => {
