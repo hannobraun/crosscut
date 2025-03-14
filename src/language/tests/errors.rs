@@ -35,7 +35,7 @@ fn unresolved_syntax_node() {
     );
 
     // And it should also result in a runtime error when stepping.
-    assert!(matches!(language.step(), RuntimeState::Error { .. }));
+    assert!(language.step().is_error());
 
     // Once we resolve the error, it should no longer be there.
     language.on_code("y");
@@ -88,8 +88,8 @@ fn do_not_step_beyond_errors() {
 
     let mut language = Language::from_code("unresolved");
 
-    assert!(matches!(language.step(), RuntimeState::Error { .. }));
-    assert!(matches!(language.step(), RuntimeState::Error { .. }));
+    assert!(language.step().is_error());
+    assert!(language.step().is_error());
 }
 
 #[test]

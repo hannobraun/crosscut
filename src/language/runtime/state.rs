@@ -35,6 +35,11 @@ impl RuntimeState {
         matches!(self, Self::Effect { .. })
     }
 
+    #[cfg(test)]
+    pub fn is_error(&self) -> bool {
+        matches!(self, Self::Error { .. })
+    }
+
     pub fn path(&self) -> Option<&NodePath> {
         match self {
             Self::Running { path, .. } => path.as_ref(),
