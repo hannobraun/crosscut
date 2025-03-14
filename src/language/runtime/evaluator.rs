@@ -303,7 +303,7 @@ impl Evaluator {
                         return;
                     }
                     IntrinsicFunction::Identity => {
-                        self.advance(node.active_value, node.syntax_node);
+                        self.advance(node.active_value(), node.syntax_node);
                     }
                     IntrinsicFunction::Literal { literal } => {
                         let Value::Nothing = context.active_value else {
@@ -471,7 +471,6 @@ impl Evaluator {
 #[derive(Debug)]
 struct RuntimeNode {
     syntax_node: NodePath,
-    active_value: Value,
     children_to_evaluate: Vec<NodePath>,
     evaluated_children: Vec<Value>,
 }
@@ -479,14 +478,13 @@ struct RuntimeNode {
 impl RuntimeNode {
     fn from_syntax_node(
         path: NodePath,
-        active_value: Value,
+        _: Value,
         codebase: &Codebase,
     ) -> Self {
         let root_node = codebase.node_at(path);
 
         Self {
             syntax_node: path,
-            active_value,
             children_to_evaluate: root_node
                 .children(codebase.nodes())
                 .map(|located_node| located_node.path)
