@@ -30,10 +30,10 @@ impl Evaluator {
 
     pub fn reset(&mut self, codebase: &Codebase) {
         *self = Self::new();
-        self.push_context(codebase.root().path, Value::Nothing, codebase);
+        self.call_function(codebase.root().path, Value::Nothing, codebase);
     }
 
-    pub fn push_context(
+    pub fn call_function(
         &mut self,
         root_path: NodePath,
         active_value: Value,
@@ -302,7 +302,7 @@ impl Evaluator {
 
                         self.contexts.push(context);
                         self.eval_stack.push(node);
-                        self.push_context(
+                        self.call_function(
                             NodePath { hash: body },
                             // Right now, the `eval` function doesn't support
                             // passing an argument to the function it evaluates.
@@ -397,7 +397,7 @@ impl Evaluator {
                                     context.advance();
 
                                     self.contexts.push(context);
-                                    self.push_context(
+                                    self.call_function(
                                         child.path,
                                         Value::Nothing,
                                         codebase,
@@ -432,7 +432,7 @@ impl Evaluator {
                     .unwrap_or_else(|| codebase.root().path);
 
                 let active_value = context.active_value.clone();
-                self.push_context(path, active_value, codebase);
+                self.call_function(path, active_value, codebase);
 
                 // Return here, to bypass restoring the context. We already
                 // created a new one with the call above, and the old one has
