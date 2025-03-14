@@ -461,6 +461,9 @@ impl Evaluator {
     }
 
     fn advance(&mut self, active_value: Value, path: NodePath) {
+        // When this is called, the current node has already been removed from
+        // the stack.
+
         if let Some(parent) = self.eval_stack.last_mut() {
             self.state = RuntimeState::Running {
                 active_value: active_value.clone(),
