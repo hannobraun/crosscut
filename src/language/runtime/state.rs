@@ -23,12 +23,8 @@ pub enum RuntimeState {
 
 impl RuntimeState {
     #[cfg(test)]
-    pub fn is_running(&self) -> Option<&Value> {
-        if let Self::Running { active_value, .. } = self {
-            Some(active_value)
-        } else {
-            None
-        }
+    pub fn is_running(&self) -> bool {
+        matches!(self, Self::Running { .. })
     }
 
     pub fn is_effect(&self) -> bool {

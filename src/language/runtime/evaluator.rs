@@ -560,7 +560,7 @@ mod tests {
         evaluator.reset(&codebase);
 
         evaluator.step(&codebase);
-        assert!(evaluator.state().is_running().is_some());
+        assert!(evaluator.state().is_running());
     }
 
     #[test]

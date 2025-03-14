@@ -17,7 +17,7 @@ fn number_literal_wrong_input() {
 
     let invalid = language.codebase().root().path;
 
-    assert!(language.step().is_running().is_some());
+    assert!(language.step().is_running());
     assert_eq!(
         language.step(),
         &RuntimeState::Effect {

@@ -25,7 +25,7 @@ fn self_recursion() {
     // This is a rather large number of steps, given the length of the program.
     // Should be proof enough, that it's recursing.
     for _ in 0..1024 {
-        assert!(language.step().is_running().is_some());
+        assert!(language.step().is_running());
     }
 }
 
