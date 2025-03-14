@@ -253,7 +253,17 @@ impl Evaluator {
         match kind_from_context {
             NodeKind::Empty { .. } => {
                 context.advance();
-                self.advance(node.active_value, node.syntax_node);
+
+                let value =
+                    node.evaluated_children.pop().unwrap_or(Value::Nothing);
+
+                assert!(
+                    node.evaluated_children.is_empty(),
+                    "Empty node can't have multiple children, or it would have \
+                    been an error node."
+                );
+
+                self.advance(value, node.syntax_node);
             }
             NodeKind::Expression {
                 expression: Expression::HostFunction { id },
