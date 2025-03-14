@@ -47,6 +47,11 @@ impl Evaluator {
             argument: active_value.clone(),
         });
 
+        self.state = RuntimeState::Running {
+            active_value: active_value.clone(),
+            path: None,
+        };
+
         let mut path = root_path;
         let mut previous = None;
 
@@ -91,10 +96,6 @@ impl Evaluator {
             }
         }
 
-        self.state = RuntimeState::Running {
-            active_value: active_value.clone(),
-            path: None,
-        };
         self.contexts.push(Context {
             next: previous,
             active_value,
