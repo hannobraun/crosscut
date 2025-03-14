@@ -17,7 +17,7 @@ fn define_and_evaluate() {
         }
     };
 
-    language.push_context(path, Value::Nothing);
+    language.call_function(path, Value::Nothing);
     assert_eq!(
         language.step_until_finished(),
         Ok(Value::Integer { value: 127 }),
@@ -36,7 +36,7 @@ fn self_recursion() {
         }
     };
 
-    language.push_context(path, Value::Integer { value: 127 });
+    language.call_function(path, Value::Integer { value: 127 });
 
     // To verify we are actually recursing, we need to see at least two values.
     // But evaluating `self` could result in its own iterator step. We need to
@@ -62,7 +62,7 @@ fn empty_function() {
         }
     };
 
-    language.push_context(path, Value::Nothing);
+    language.call_function(path, Value::Nothing);
     assert_eq!(language.step_until_finished(), Ok(Value::Nothing));
 }
 
