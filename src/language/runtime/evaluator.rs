@@ -312,23 +312,23 @@ impl Evaluator {
                         );
                     }
                     IntrinsicFunction::Literal { literal } => {
-                        match &context.active_value {
-                            Value::Nothing => {}
-                            active_value => {
-                                self.unexpected_input(
-                                    Type::Nothing,
-                                    active_value.clone(),
-                                    path,
-                                );
-                                self.eval_stack.push(node);
-                                self.contexts.push(context);
-                                return;
-                            }
-                        }
-
                         let value = {
                             match *literal {
                                 Literal::Function => {
+                                    match &context.active_value {
+                                        Value::Nothing => {}
+                                        active_value => {
+                                            self.unexpected_input(
+                                                Type::Nothing,
+                                                active_value.clone(),
+                                                path,
+                                            );
+                                            self.eval_stack.push(node);
+                                            self.contexts.push(context);
+                                            return;
+                                        }
+                                    }
+
                                     let node = codebase.node_at(path);
                                     let mut children =
                                         node.children(codebase.nodes());
@@ -353,9 +353,37 @@ impl Evaluator {
                                     }
                                 }
                                 Literal::Integer { value } => {
+                                    match &context.active_value {
+                                        Value::Nothing => {}
+                                        active_value => {
+                                            self.unexpected_input(
+                                                Type::Nothing,
+                                                active_value.clone(),
+                                                path,
+                                            );
+                                            self.eval_stack.push(node);
+                                            self.contexts.push(context);
+                                            return;
+                                        }
+                                    }
+
                                     Value::Integer { value }
                                 }
                                 Literal::Tuple => {
+                                    match &context.active_value {
+                                        Value::Nothing => {}
+                                        active_value => {
+                                            self.unexpected_input(
+                                                Type::Nothing,
+                                                active_value.clone(),
+                                                path,
+                                            );
+                                            self.eval_stack.push(node);
+                                            self.contexts.push(context);
+                                            return;
+                                        }
+                                    }
+
                                     assert!(
                                         node.children_to_evaluate.is_empty(),
                                         "Due to the loop above, which puts all \
