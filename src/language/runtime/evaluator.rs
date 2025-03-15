@@ -297,7 +297,6 @@ impl Evaluator {
                         };
 
                         self.contexts.push(context);
-                        self.eval_stack.push(node);
                         self.call_function(
                             NodePath { hash: body },
                             // Right now, the `eval` function doesn't support
