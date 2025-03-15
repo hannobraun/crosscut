@@ -130,6 +130,7 @@ impl Evaluator {
         };
 
         context.advance();
+        self.advance(value);
     }
 
     pub fn trigger_effect(&mut self, effect: Effect) {
