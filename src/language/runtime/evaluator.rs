@@ -411,7 +411,6 @@ impl Evaluator {
 
                 context.advance();
 
-                self.state = RuntimeState::Running { path: Some(path) };
                 self.contexts.push(context);
 
                 // We already restored the context. So we have to return now,
