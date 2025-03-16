@@ -110,6 +110,10 @@ impl Evaluator {
             );
         };
 
+        // Now that its output has been provided, the host function is fully
+        // handled. We can drop the node that triggered it.
+        self.eval_stack.pop();
+
         self.advance(value);
     }
 
@@ -200,6 +204,11 @@ impl Evaluator {
                     },
                     path: node.syntax_node,
                 };
+
+                // A host function is not fully handled, until the handler has
+                // provided its output. It might also trigger an effect, and
+                // then we still need the node.
+                self.eval_stack.push(node);
             }
             NodeKind::Expression {
                 expression: Expression::IntrinsicFunction { intrinsic },
