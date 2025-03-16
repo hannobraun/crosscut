@@ -331,10 +331,9 @@ impl Evaluator {
                                         evaluated by now.",
                                     );
 
-                                    self.advance(Value::Tuple {
+                                    Value::Tuple {
                                         elements: node.evaluated_children.inner,
-                                    });
-                                    return;
+                                    }
                                 }
                             }
                         };
