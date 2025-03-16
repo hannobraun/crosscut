@@ -38,7 +38,7 @@ impl Evaluator {
 
         self.call_stack.push(StackFrame {
             root: root_path,
-            argument: argument.clone(),
+            argument,
         });
 
         self.state = RuntimeState::Running { path: None };
