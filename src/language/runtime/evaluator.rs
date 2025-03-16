@@ -123,7 +123,14 @@ impl Evaluator {
                 "There is no active context. Not allowed to trigger effect."
             );
         };
-        let Some(source) = &context.next else {
+        let Some(_) = &context.next else {
+            panic!(
+                "Not allowed to trigger effect, if there is no active syntax \
+                node that could trigger it."
+            );
+        };
+
+        let Some(node) = self.eval_stack.last() else {
             panic!(
                 "Not allowed to trigger effect, if there is no active syntax \
                 node that could trigger it."
@@ -132,7 +139,7 @@ impl Evaluator {
 
         self.state = RuntimeState::Effect {
             effect,
-            path: source.syntax_node,
+            path: node.syntax_node,
         };
     }
 
