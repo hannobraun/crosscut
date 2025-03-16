@@ -2,16 +2,12 @@ use crate::language::code::{
     Codebase, Expression, IntrinsicFunction, Literal, NodeKind, NodePath, Type,
 };
 
-use super::{
-    Effect, RuntimeState, Value,
-    context::{Context, ContextNode},
-};
+use super::{Effect, RuntimeState, Value, context::ContextNode};
 
 #[derive(Debug)]
 pub struct Evaluator {
     eval_stack: Vec<RuntimeNode>,
     call_stack: Vec<StackFrame>,
-    contexts: Vec<Context>,
     state: RuntimeState,
 }
 
@@ -20,7 +16,6 @@ impl Evaluator {
         Self {
             eval_stack: Vec::new(),
             call_stack: Vec::new(),
-            contexts: Vec::new(),
             state: RuntimeState::Finished {
                 output: Value::Nothing,
             },
@@ -91,11 +86,6 @@ impl Evaluator {
                 break;
             }
         }
-
-        self.contexts.push(Context {
-            next: previous,
-            active_value: argument,
-        });
     }
 
     pub fn provide_host_function_output(&mut self, value: Value) {
