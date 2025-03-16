@@ -157,53 +157,6 @@ impl Evaluator {
             return;
         }
 
-        // Take the current context. Depending on how things will go, we'll
-        // restore it below; or do nothing, if it turns out we actually need to
-        // remove it.
-        //
-        // Doing it this way makes some of the code below simpler or more
-        // efficient, for lifetime or cloning reasons.
-        let Some(mut context) = self.contexts.pop() else {
-            // No context is available, which means we're not running.
-
-            self.state = RuntimeState::Finished {
-                output: Value::Nothing,
-            };
-
-            return;
-        };
-
-        let Some(next) = &context.next else {
-            // The context has no syntax tree remaining, which means we're done
-            // with it.
-
-            let output = context.active_value;
-
-            if let Some(context) = self.contexts.last_mut() {
-                match &mut context.active_value {
-                    Value::Function { .. } => {
-                        // If the context was created from a function, that
-                        // means something has evaluated it.
-                        context.active_value = output;
-                        context.advance();
-                    }
-                    Value::Tuple { elements } => {
-                        elements.push(output);
-                    }
-                    value => {
-                        panic!(
-                            "Expected value that would have created a context, \
-                            got `{value}`."
-                        );
-                    }
-                }
-            } else {
-                self.state = RuntimeState::Finished { output };
-            }
-
-            return;
-        };
-
         let Some(mut node) = self.eval_stack.pop() else {
             // Evaluation stack is empty, which means there's nothing we can do.
             return;
@@ -249,15 +202,13 @@ impl Evaluator {
             node = RuntimeNode::from_syntax_node(child, codebase);
         }
 
-        let [kind_from_runtime_node, kind_from_context] =
-            [node.syntax_node, next.syntax_node]
-                .map(|path| codebase.node_at(path).node.kind());
+        let [kind_from_runtime_node] =
+            [node.syntax_node].map(|path| codebase.node_at(path).node.kind());
 
         dbg!(kind_from_runtime_node);
 
-        match kind_from_context {
+        match kind_from_runtime_node {
             NodeKind::Empty { .. } => {
-                context.advance();
                 self.advance(node.evaluated_children.into_active_value());
             }
             NodeKind::Expression {
@@ -267,23 +218,26 @@ impl Evaluator {
                 self.state = RuntimeState::Effect {
                     effect: Effect::ApplyHostFunction {
                         id: *id,
-                        input: context.active_value.clone(),
+                        input: node.evaluated_children.into_active_value(),
                     },
-                    path: next.syntax_node,
+                    path: node.syntax_node,
                 };
             }
             NodeKind::Expression {
                 expression: Expression::IntrinsicFunction { intrinsic },
                 ..
             } => {
-                let path = next.syntax_node;
+                let path = node.syntax_node;
                 match intrinsic {
                     IntrinsicFunction::Drop => {
-                        context.active_value = Value::Nothing;
                         self.advance(Value::Nothing);
                     }
                     IntrinsicFunction::Eval => {
-                        let body = match context.active_value {
+                        let body = match node
+                            .evaluated_children
+                            .clone()
+                            .into_active_value()
+                        {
                             Value::Function { body } => body,
                             ref active_value => {
                                 self.unexpected_input(
@@ -291,12 +245,10 @@ impl Evaluator {
                                     active_value.clone(),
                                     path,
                                 );
-                                self.contexts.push(context);
                                 return;
                             }
                         };
 
-                        self.contexts.push(context);
                         self.call_function(
                             NodePath { hash: body },
                             // Right now, the `eval` function doesn't support
@@ -304,7 +256,6 @@ impl Evaluator {
                             Value::Nothing,
                             codebase,
                         );
-                        return;
                     }
                     IntrinsicFunction::Identity => {
                         self.advance(
@@ -315,7 +266,11 @@ impl Evaluator {
                         let value = {
                             match *literal {
                                 Literal::Function => {
-                                    match &context.active_value {
+                                    match node
+                                        .evaluated_children
+                                        .clone()
+                                        .into_active_value()
+                                    {
                                         Value::Nothing => {}
                                         active_value => {
                                             self.unexpected_input(
@@ -324,7 +279,6 @@ impl Evaluator {
                                                 path,
                                             );
                                             self.eval_stack.push(node);
-                                            self.contexts.push(context);
                                             return;
                                         }
                                     }
@@ -353,7 +307,11 @@ impl Evaluator {
                                     }
                                 }
                                 Literal::Integer { value } => {
-                                    match &context.active_value {
+                                    match node
+                                        .evaluated_children
+                                        .clone()
+                                        .into_active_value()
+                                    {
                                         Value::Nothing => {}
                                         active_value => {
                                             self.unexpected_input(
@@ -362,7 +320,6 @@ impl Evaluator {
                                                 path,
                                             );
                                             self.eval_stack.push(node);
-                                            self.contexts.push(context);
                                             return;
                                         }
                                     }
@@ -370,20 +327,6 @@ impl Evaluator {
                                     Value::Integer { value }
                                 }
                                 Literal::Tuple => {
-                                    match &context.active_value {
-                                        Value::Nothing => {}
-                                        active_value => {
-                                            self.unexpected_input(
-                                                Type::Nothing,
-                                                active_value.clone(),
-                                                path,
-                                            );
-                                            self.eval_stack.push(node);
-                                            self.contexts.push(context);
-                                            return;
-                                        }
-                                    }
-
                                     assert!(
                                         node.children_to_evaluate.is_empty(),
                                         "Due to the loop above, which puts all \
@@ -396,54 +339,14 @@ impl Evaluator {
                                     self.advance(Value::Tuple {
                                         elements: node.evaluated_children.inner,
                                     });
-
-                                    let node2 = codebase.node_at(path);
-                                    let mut children =
-                                        node2.children(codebase.nodes());
-
-                                    let Some(child) = children.next() else {
-                                        unreachable!(
-                                            "Tuple literal must have a child, \
-                                            or it wouldn't have been resolved \
-                                            as a tuple literal."
-                                        );
-                                    };
-
-                                    assert_eq!(
-                                        children.count(),
-                                        0,
-                                        "Only nodes with one child can be \
-                                        evaluated at this point.",
-                                    );
-
-                                    context.active_value = Value::Tuple {
-                                        elements: Vec::new(),
-                                    };
-                                    context.advance();
-
-                                    self.contexts.push(context);
-                                    self.call_function(
-                                        child.path,
-                                        Value::Nothing,
-                                        codebase,
-                                    );
                                     return;
                                 }
                             }
                         };
 
-                        context.active_value = value.clone();
                         self.advance(value);
                     }
                 }
-
-                context.advance();
-
-                self.contexts.push(context);
-
-                // We already restored the context. So we have to return now,
-                // because the code below would do it again.
-                return;
             }
             NodeKind::Recursion => {
                 let path = self
@@ -452,19 +355,12 @@ impl Evaluator {
                     .map(|stack_frame| stack_frame.root)
                     .unwrap_or_else(|| codebase.root().path);
 
-                let active_value = context.active_value.clone();
+                let active_value = node.evaluated_children.into_active_value();
                 self.call_function(path, active_value, codebase);
-
-                // Return here, to bypass restoring the context. We already
-                // created a new one with the call above, and the old one has
-                // become redundant.
-                //
-                // This is tail call elimination.
-                return;
             }
             NodeKind::Error { .. } => {
                 self.state = RuntimeState::Error {
-                    path: next.syntax_node,
+                    path: node.syntax_node,
                 };
 
                 // We don't want to advance the execution in any way when
@@ -473,10 +369,6 @@ impl Evaluator {
                 self.eval_stack.push(node);
             }
         };
-
-        // Restore the context that we took above. If that wasn't the right
-        // thing to do, we'd have returned already.
-        self.contexts.push(context);
     }
 
     fn unexpected_input(
@@ -604,11 +496,9 @@ mod tests {
         let mut evaluator = Evaluator::new();
         evaluator.reset(&codebase);
         assert_eq!(evaluator.call_stack.len(), 1);
-        assert_eq!(evaluator.contexts.len(), 1);
 
         evaluator.step(&codebase);
         assert!(matches!(evaluator.state(), RuntimeState::Running { .. }));
         assert_eq!(evaluator.call_stack.len(), 1);
-        assert_eq!(evaluator.contexts.len(), 1);
     }
 }
