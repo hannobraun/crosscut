@@ -234,7 +234,7 @@ impl Evaluator {
                             .into_active_value()
                         {
                             Value::Function { body } => body,
-                            ref active_value => {
+                            active_value => {
                                 self.unexpected_input(
                                     Type::Function,
                                     active_value.clone(),
