@@ -270,7 +270,7 @@ impl Evaluator {
                                         active_value => {
                                             self.unexpected_input(
                                                 Type::Nothing,
-                                                active_value.clone(),
+                                                active_value,
                                                 path,
                                             );
                                             self.eval_stack.push(node);
