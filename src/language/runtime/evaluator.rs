@@ -237,7 +237,7 @@ impl Evaluator {
                             active_value => {
                                 self.unexpected_input(
                                     Type::Function,
-                                    active_value.clone(),
+                                    active_value,
                                     path,
                                 );
                                 return;
