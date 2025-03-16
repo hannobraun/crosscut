@@ -1,4 +1,3 @@
-mod context;
 mod effect;
 mod evaluator;
 mod state;
