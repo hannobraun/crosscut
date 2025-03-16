@@ -202,8 +202,8 @@ impl Evaluator {
             node = RuntimeNode::from_syntax_node(child, codebase);
         }
 
-        let [kind_from_runtime_node] =
-            [node.syntax_node].map(|path| codebase.node_at(path).node.kind());
+        let kind_from_runtime_node =
+            codebase.node_at(node.syntax_node).node.kind();
 
         match kind_from_runtime_node {
             NodeKind::Empty { .. } => {
