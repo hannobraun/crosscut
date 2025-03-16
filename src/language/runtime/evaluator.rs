@@ -118,18 +118,6 @@ impl Evaluator {
     }
 
     pub fn trigger_effect(&mut self, effect: Effect) {
-        let Some(context) = self.contexts.last_mut() else {
-            panic!(
-                "There is no active context. Not allowed to trigger effect."
-            );
-        };
-        let Some(_) = &context.next else {
-            panic!(
-                "Not allowed to trigger effect, if there is no active syntax \
-                node that could trigger it."
-            );
-        };
-
         let Some(node) = self.eval_stack.last() else {
             panic!(
                 "Not allowed to trigger effect, if there is no active syntax \
