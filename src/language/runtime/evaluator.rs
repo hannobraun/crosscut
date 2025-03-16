@@ -2,7 +2,7 @@ use crate::language::code::{
     Codebase, Expression, IntrinsicFunction, Literal, NodeKind, NodePath, Type,
 };
 
-use super::{Effect, RuntimeState, Value, context::ContextNode};
+use super::{Effect, RuntimeState, Value};
 
 #[derive(Debug)]
 pub struct Evaluator {
@@ -42,50 +42,6 @@ impl Evaluator {
         });
 
         self.state = RuntimeState::Running { path: None };
-
-        let mut path = root_path;
-        let mut previous = None;
-
-        loop {
-            previous = Some(ContextNode {
-                syntax_node: path,
-                parent: previous.map(Box::new),
-            });
-
-            if let NodeKind::Expression {
-                expression:
-                    Expression::IntrinsicFunction {
-                        intrinsic:
-                            IntrinsicFunction::Literal {
-                                literal: Literal::Function | Literal::Tuple,
-                            },
-                    },
-                ..
-            }
-            | NodeKind::Error { .. } = codebase.node_at(path).node.kind()
-            {
-                // We have already pushed the function literal, which means
-                // we're going to evaluate it. But we need to stop here, since
-                // we don't want to evaluate the function itself right now.
-                break;
-            }
-
-            let node = codebase.node_at(path);
-            let mut children = node.children(codebase.nodes());
-
-            if let Some(child) = children.next() {
-                assert_eq!(
-                    children.count(),
-                    0,
-                    "Only nodes with one child can be evaluated at this point.",
-                );
-
-                path = child.path;
-                continue;
-            } else {
-                break;
-            }
-        }
     }
 
     pub fn provide_host_function_output(&mut self, value: Value) {
