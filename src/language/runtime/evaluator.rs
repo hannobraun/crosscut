@@ -193,7 +193,10 @@ impl Evaluator {
                 self.state = RuntimeState::Effect {
                     effect: Effect::ApplyHostFunction {
                         id: *id,
-                        input: node.evaluated_children.into_active_value(),
+                        input: node
+                            .evaluated_children
+                            .clone()
+                            .into_active_value(),
                     },
                     path: node.syntax_node,
                 };
