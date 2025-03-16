@@ -110,26 +110,6 @@ impl Evaluator {
             );
         };
 
-        let Some(context) = self.contexts.last_mut() else {
-            unreachable!(
-                "Host function is being applied, but there is no active \
-                context. This should not be possible, because without a \
-                context, what could have triggered the effect?"
-            );
-        };
-        let Some(source) = &context.next else {
-            unreachable!(
-                "Host function is being applied, but there doesn't seem to be \
-                a syntax node that could have triggered it."
-            );
-        };
-
-        context.active_value = value.clone();
-        self.state = RuntimeState::Running {
-            path: Some(source.syntax_node),
-        };
-
-        context.advance();
         self.advance(value);
     }
 

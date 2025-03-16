@@ -8,15 +8,6 @@ pub struct Context {
     pub active_value: Value,
 }
 
-impl Context {
-    pub fn advance(&mut self) {
-        self.next = self
-            .next
-            .take()
-            .and_then(|next| next.parent.map(|child| *child));
-    }
-}
-
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub struct ContextNode {
     pub syntax_node: NodePath,
