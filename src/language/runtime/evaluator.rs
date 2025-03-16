@@ -205,8 +205,6 @@ impl Evaluator {
         let [kind_from_runtime_node] =
             [node.syntax_node].map(|path| codebase.node_at(path).node.kind());
 
-        dbg!(kind_from_runtime_node);
-
         match kind_from_runtime_node {
             NodeKind::Empty { .. } => {
                 self.advance(node.evaluated_children.into_active_value());
