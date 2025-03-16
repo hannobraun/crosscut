@@ -295,7 +295,7 @@ impl Evaluator {
                 // from the evaluation stack earlier to where it was.
                 self.eval_stack.push(node);
             }
-        };
+        }
     }
 
     fn unexpected_input(
