@@ -1,8 +1,4 @@
-use crate::language::{
-    code::NodeHash,
-    language::Language,
-    runtime::{Effect, Value},
-};
+use crate::language::{language::Language, runtime::Value};
 
 #[test]
 fn define_and_evaluate() {
@@ -36,17 +32,4 @@ fn empty_function() {
 
     let mut language = Language::from_code("fn eval");
     assert_eq!(language.step_until_finished(), Ok(Value::Nothing));
-}
-
-pub trait StepUntilFinishedResultExt {
-    fn into_function_body(self) -> Result<NodeHash, Self>
-    where
-        Self: Sized;
-}
-
-impl StepUntilFinishedResultExt for Result<Value, Effect> {
-    fn into_function_body(self) -> Result<NodeHash, Self> {
-        self.map_err(Err)
-            .and_then(|value| value.into_function_body().map_err(Ok))
-    }
 }

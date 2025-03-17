@@ -1,7 +1,11 @@
 use std::vec;
 
-use crate::language::code::{
-    Expression, IntrinsicFunction, Literal, LocatedNode, Node, NodeKind, Nodes,
+use crate::language::{
+    code::{
+        Expression, IntrinsicFunction, Literal, LocatedNode, Node, NodeHash,
+        NodeKind, Nodes,
+    },
+    runtime::{Effect, Value},
 };
 
 pub trait NodeExt: Sized {
@@ -64,5 +68,18 @@ where
         })
         .collect::<Vec<_>>()
         .into_iter()
+    }
+}
+
+pub trait StepUntilFinishedResultExt {
+    fn into_function_body(self) -> Result<NodeHash, Self>
+    where
+        Self: Sized;
+}
+
+impl StepUntilFinishedResultExt for Result<Value, Effect> {
+    fn into_function_body(self) -> Result<NodeHash, Self> {
+        self.map_err(Err)
+            .and_then(|value| value.into_function_body().map_err(Ok))
     }
 }

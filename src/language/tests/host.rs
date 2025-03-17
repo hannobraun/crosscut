@@ -3,7 +3,7 @@ use crate::language::{
     language::Language,
     packages::{Function, Package},
     runtime::{Effect, Value},
-    tests::functions::StepUntilFinishedResultExt,
+    tests::infra::StepUntilFinishedResultExt,
 };
 
 #[test]
