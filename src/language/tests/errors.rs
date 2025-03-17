@@ -92,6 +92,38 @@ fn syntax_node_that_could_resolve_to_multiple_functions_is_unresolved() {
 }
 
 #[test]
+fn evaluate_code_up_until_an_error() {
+    // Despite the presence of an error in the code, any valid code leading up
+    // to it should still get evaluated.
+
+    #[derive(Clone, Copy, Eq, Ord, PartialEq, PartialOrd)]
+    struct Ping;
+    impl Function for Ping {
+        fn name(&self) -> &str {
+            "ping"
+        }
+    }
+
+    let package = Package::new().with_function(Ping);
+
+    let mut language = Language::new();
+    language.with_package(&package);
+
+    language.on_code("ping unresolved");
+
+    assert!(matches!(
+        language.step(),
+        RuntimeState::Effect {
+            effect: Effect::ApplyHostFunction { .. },
+            ..
+        },
+    ));
+    language.provide_host_function_output(Value::Nothing);
+
+    assert!(matches!(language.step(), RuntimeState::Error { .. }));
+}
+
+#[test]
 fn do_not_step_beyond_errors() {
     // If there's an error in the code, the interpreter should never step beyond
     // that, if it encounters it.
