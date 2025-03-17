@@ -131,7 +131,7 @@ impl Evaluator {
         }
 
         self.state = RuntimeState::Running {
-            path: Some(node.syntax_node.clone()),
+            path: node.syntax_node.clone(),
         };
 
         match codebase.node_at(&node.syntax_node).node.kind() {
@@ -353,7 +353,7 @@ impl Evaluator {
 
         if let Some(parent) = self.eval_stack.last_mut() {
             self.state = RuntimeState::Running {
-                path: Some(parent.syntax_node.clone()),
+                path: parent.syntax_node.clone(),
             };
             parent
                 .evaluated_children
