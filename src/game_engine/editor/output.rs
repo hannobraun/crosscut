@@ -165,7 +165,7 @@ fn render_runtime_state<A: EditorOutputAdapter>(
                     Ok(())
                 })?;
             }
-            RuntimeState::Finished { output } => {
+            RuntimeState::Finished { output, .. } => {
                 adapter.color(Color::DarkYellow, |adapter| {
                     writeln!(adapter, "Finished: {}", output)
                 })?;
