@@ -39,8 +39,6 @@ impl Evaluator {
             root: root_path,
             argument,
         });
-
-        self.state = RuntimeState::Running { path: None };
     }
 
     pub fn provide_host_function_output(&mut self, value: Value) {
@@ -131,6 +129,10 @@ impl Evaluator {
             self.eval_stack.push(node);
             node = RuntimeNode::from_syntax_node(child, codebase);
         }
+
+        self.state = RuntimeState::Running {
+            path: Some(node.syntax_node.clone()),
+        };
 
         match codebase.node_at(&node.syntax_node).node.kind() {
             NodeKind::Empty { .. } => {
