@@ -177,8 +177,8 @@ fn replace_node_and_update_parents(
             errors.insert(path, error);
         }
 
-        initial_replacement = initial_replacement.or(Some(path));
         previous_replacement = path.hash;
+        initial_replacement = initial_replacement.or(Some(path));
 
         if let Some(parent_path) = SyntaxTree::from_root(root.hash)
             .find_parent_of(&next_to_replace.hash, change_set.nodes())
