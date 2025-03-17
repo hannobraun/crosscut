@@ -12,8 +12,8 @@ fn single_field() {
     assert_eq!(
         output,
         Ok(Value::Tuple {
-            elements: vec![Value::Integer { value: 127 }]
-        })
+            elements: vec![Value::Integer { value: 127 }],
+        }),
     );
 }
 
@@ -30,9 +30,9 @@ fn nested() {
         output,
         Ok(Value::Tuple {
             elements: vec![Value::Tuple {
-                elements: vec![Value::Integer { value: 127 }]
-            }]
-        })
+                elements: vec![Value::Integer { value: 127 }],
+            }],
+        }),
     );
 }
 
