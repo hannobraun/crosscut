@@ -35,3 +35,21 @@ fn nested() {
         })
     );
 }
+
+#[test]
+fn multi_field() {
+    // It is possible to define a tuple with multiple fields.
+
+    let mut language = Language::from_code("127\n255 tuple");
+
+    let output = language.step_until_finished();
+    assert_eq!(
+        output,
+        Ok(Value::Tuple {
+            elements: vec![
+                Value::Integer { value: 127 },
+                Value::Integer { value: 255 },
+            ],
+        }),
+    );
+}
