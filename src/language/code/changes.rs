@@ -79,8 +79,8 @@ impl NewChangeSet<'_> {
         self.nodes.insert(to_add)
     }
 
-    pub fn remove(&mut self, to_remove: NodePath) {
-        self.change_set.removed.insert(to_remove);
+    pub fn remove(&mut self, to_remove: &NodePath) {
+        self.change_set.removed.insert(*to_remove);
     }
 
     pub fn replace(

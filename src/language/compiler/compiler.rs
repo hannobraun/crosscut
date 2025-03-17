@@ -112,7 +112,7 @@ impl<'r> Compiler<'r> {
             );
         } else {
             self.codebase.make_change(|change_set| {
-                change_set.remove(to_remove);
+                change_set.remove(&to_remove);
             });
         }
     }

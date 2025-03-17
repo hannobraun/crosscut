@@ -172,7 +172,7 @@ mod tests {
 
         let root = codebase.root().path;
         codebase.make_change(|change_set| {
-            change_set.remove(root);
+            change_set.remove(&root);
         });
         assert_eq!(codebase.root().path.hash, a);
     }
@@ -192,7 +192,7 @@ mod tests {
         assert_eq!(codebase.root().path, a);
 
         codebase.make_change(|change_set| {
-            change_set.remove(a);
+            change_set.remove(&a);
         });
         assert_eq!(codebase.root().node, &Node::new(NodeKind::Empty, []));
     }
@@ -217,7 +217,7 @@ mod tests {
         });
 
         codebase.make_change(|change_set| {
-            change_set.remove(c);
+            change_set.remove(&c);
         });
         assert_eq!(codebase.root().node, &Node::new(NodeKind::Empty, [a, b]),);
     }
