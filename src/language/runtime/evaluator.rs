@@ -178,10 +178,19 @@ impl Evaluator {
                             .evaluated_children
                             .clone()
                             .into_active_value()
-                            .1
                         {
-                            Value::Function { body } => body,
-                            active_value => {
+                            (path, Value::Function { body }) => {
+                                let Some(_) = path else {
+                                    unreachable!(
+                                        "`path` can only be `None`, if the \
+                                        active value is `Nothing`, but here we \
+                                        just verified that it is `Function`."
+                                    );
+                                };
+
+                                body
+                            }
+                            (_, active_value) => {
                                 self.unexpected_input(
                                     Type::Function,
                                     active_value,
