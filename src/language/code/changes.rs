@@ -42,10 +42,10 @@ impl Changes {
             return path;
         };
 
-        let mut latest_known = path;
+        let mut latest_known = &path;
 
         for change_set in &self.change_sets[i..] {
-            let Ok(latest) = change_set.latest_version_of(&latest_known) else {
+            let Ok(latest) = change_set.latest_version_of(latest_known) else {
                 unreachable!(
                     "Detected circular replacement path in change set. This \
                     should be impossible, as this case is checked below, when \
@@ -53,10 +53,10 @@ impl Changes {
                 );
             };
 
-            latest_known = *latest;
+            latest_known = latest;
         }
 
-        latest_known
+        *latest_known
     }
 }
 
