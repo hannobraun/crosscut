@@ -49,7 +49,7 @@ impl Editor {
         packages: &Packages,
     ) {
         let layout = EditorLayout::new(codebase.root(), codebase.nodes());
-        let compiler = &mut Compiler::new(codebase);
+        let mut compiler = Compiler::new(codebase);
 
         if let Some(action) = self.input.update(event) {
             // This code results in non-intuitive cursor movement, if using the
