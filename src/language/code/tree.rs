@@ -5,8 +5,8 @@ pub struct SyntaxTree {
 }
 
 impl SyntaxTree {
-    pub fn from_root(root: NodeHash) -> Self {
-        Self { root }
+    pub fn from_root(root: NodePath) -> Self {
+        Self { root: root.hash }
     }
 
     pub fn find_parent_of(

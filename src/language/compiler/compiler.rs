@@ -180,7 +180,7 @@ fn replace_node_and_update_parents(
             errors.insert(path, error);
         }
 
-        if let Some(parent_path) = SyntaxTree::from_root(root.hash)
+        if let Some(parent_path) = SyntaxTree::from_root(root.clone())
             .find_parent_of(&next_to_replace, change_set.nodes())
         {
             let parent_node = change_set.nodes().get(parent_path.hash());
