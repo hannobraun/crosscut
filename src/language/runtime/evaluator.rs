@@ -120,9 +120,10 @@ impl Evaluator {
                 // work right now. We'll have real parameters in due time.
                 if node.evaluated_children.inner.is_empty() {
                     if let Some(stack_frame) = self.call_stack.last() {
-                        node.evaluated_children
-                            .inner
-                            .push(stack_frame.argument.clone());
+                        node.evaluated_children.inner.push((
+                            stack_frame.root.clone(),
+                            stack_frame.argument.clone(),
+                        ));
                     }
                 }
 
@@ -278,7 +279,12 @@ impl Evaluator {
                                     );
 
                                     Value::Tuple {
-                                        elements: node.evaluated_children.inner,
+                                        elements: node
+                                            .evaluated_children
+                                            .inner
+                                            .into_iter()
+                                            .map(|(_, value)| value)
+                                            .collect(),
                                     }
                                 }
                             }
@@ -337,7 +343,10 @@ impl Evaluator {
             self.state = RuntimeState::Running {
                 path: Some(parent.syntax_node.clone()),
             };
-            parent.evaluated_children.inner.push(output);
+            parent
+                .evaluated_children
+                .inner
+                .push((evaluated_node, output));
         } else {
             self.state = RuntimeState::Finished { output };
         }
@@ -373,12 +382,16 @@ impl RuntimeNode {
 
 #[derive(Clone, Debug)]
 struct EvaluatedChildren {
-    inner: Vec<Value>,
+    inner: Vec<(NodePath, Value)>,
 }
 
 impl EvaluatedChildren {
     pub fn into_active_value(mut self) -> Value {
-        let value = self.inner.pop().unwrap_or(Value::Nothing);
+        let value = self
+            .inner
+            .pop()
+            .map(|(_, value)| value)
+            .unwrap_or(Value::Nothing);
 
         assert!(
             self.inner.is_empty(),
