@@ -201,8 +201,8 @@ fn replace_node_and_update_parents(
 
     let Some(path) = initial_replacement else {
         unreachable!(
-            "The loop above is executed at least once. The variable \
-                    must have been set."
+            "The loop above is executed at least once. The variable must have \
+            been set."
         );
     };
 
