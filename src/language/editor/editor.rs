@@ -118,7 +118,18 @@ impl Editor {
                         .codebase()
                         .parent_of(&self.editing)
                         .filter(|parent| {
-                            matches!(parent.node.kind(), NodeKind::Empty)
+                            let parent_is_empty =
+                                matches!(parent.node.kind(), NodeKind::Empty);
+                            let parent_is_error_but_empty =
+                                if let NodeKind::Error { node } =
+                                    parent.node.kind()
+                                {
+                                    node.is_empty()
+                                } else {
+                                    false
+                                };
+
+                            parent_is_empty || parent_is_error_but_empty
                         });
 
                     self.editing = if let Some(parent) = empty_parent {

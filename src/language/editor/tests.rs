@@ -229,3 +229,43 @@ fn reuse_empty_node_for_parent() {
 
     assert_eq!(editor.editing(), &root);
 }
+
+#[test]
+fn reuse_empty_error_node_for_parent() {
+    // If the parent of a node is empty, that node is re-used when adding a
+    // parent, instead of creating a new parent node. The same should be true
+    // for error nodes that happen to be empty.
+
+    let packages = Packages::new();
+
+    let mut codebase = Codebase::new();
+    let mut evaluator = Evaluator::new();
+
+    let (a, b) = {
+        let mut compiler = Compiler::new(&mut codebase);
+
+        let a =
+            compiler.replace(compiler.codebase().root().path, "a", &packages);
+        let b = compiler.insert_sibling(&a, "b", &packages);
+
+        (a, b)
+    };
+
+    // Two siblings created at what was previously the root level. An empty node
+    // has been created automatically as the new root node.
+    assert_eq!(
+        codebase.root().node.kind(),
+        &NodeKind::Error {
+            node: "".to_string()
+        }
+    );
+
+    let mut editor = Editor::new(b, &codebase, &packages);
+
+    // Now tell the editor to create a parent node.
+    editor.on_code(" ", &mut codebase, &mut evaluator, &packages);
+
+    // And check that it has actually re-used the root node.
+    assert_eq!(codebase.parent_of(&a), Some(codebase.root()));
+    assert_eq!(codebase.parent_of(&b), Some(codebase.root()));
+}
