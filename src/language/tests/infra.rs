@@ -76,13 +76,14 @@ pub trait StepUntilFinishedResultExt {
     fn expect_function_body(self) -> NodePath;
 }
 
-impl StepUntilFinishedResultExt for Result<Value, Effect> {
+impl StepUntilFinishedResultExt for Result<(Value, NodePath), Effect> {
     fn expect_value(self) -> Value {
-        self.unwrap()
+        let (value, _) = self.unwrap();
+        value
     }
 
     fn expect_function_body(self) -> NodePath {
-        let value = self.unwrap();
+        let (value, _) = self.unwrap();
         let body = value.into_function_body().unwrap();
         NodePath { hash: body }
     }

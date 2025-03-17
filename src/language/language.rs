@@ -106,11 +106,10 @@ impl Language {
         );
     }
 
-    pub fn step_until_finished(&mut self) -> Result<Value, Effect> {
+    pub fn step_until_finished(&mut self) -> Result<(Value, NodePath), Effect> {
         self.step_until_finished_and_handle_host_functions(|id, _| {
             unreachable!("Unexpected host function with ID `{id:?}`.")
         })
-        .map(|(value, _)| value)
     }
 
     pub fn step_until_finished_and_handle_host_functions(
