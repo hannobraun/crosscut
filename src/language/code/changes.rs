@@ -30,7 +30,7 @@ impl Changes {
         NewChangeSet { nodes, change_set }
     }
 
-    pub fn latest_version_of(&self, path: &NodePath) -> NodePath {
+    pub fn latest_version_of<'r>(&'r self, path: &'r NodePath) -> &'r NodePath {
         let Some(i) = self.change_sets.iter().enumerate().rev().find_map(
             |(i, change_set)| {
                 change_set
@@ -39,7 +39,7 @@ impl Changes {
                     .then_some(i)
             },
         ) else {
-            return *path;
+            return path;
         };
 
         let mut latest_known = path;
@@ -56,7 +56,7 @@ impl Changes {
             latest_known = latest;
         }
 
-        *latest_known
+        latest_known
     }
 }
 
@@ -184,7 +184,7 @@ mod tests {
         let path_b = changes.new_change_set(&mut nodes).replace(path_a, node_b);
         let path_a = changes.new_change_set(&mut nodes).replace(path_b, node_a);
 
-        assert_eq!(changes.latest_version_of(&path_a), path_a);
-        assert_eq!(changes.latest_version_of(&path_b), path_a);
+        assert_eq!(changes.latest_version_of(&path_a), &path_a);
+        assert_eq!(changes.latest_version_of(&path_b), &path_a);
     }
 }
