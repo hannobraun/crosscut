@@ -360,7 +360,10 @@ impl Evaluator {
                 .inner
                 .push((evaluated_node, output));
         } else {
-            self.state = RuntimeState::Finished { output };
+            self.state = RuntimeState::Finished {
+                output,
+                path: evaluated_node,
+            };
         }
     }
 
