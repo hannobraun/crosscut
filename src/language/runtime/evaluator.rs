@@ -16,9 +16,7 @@ impl Evaluator {
         Self {
             eval_stack: Vec::new(),
             call_stack: Vec::new(),
-            state: RuntimeState::Finished {
-                output: Value::Nothing,
-            },
+            state: RuntimeState::Started,
         }
     }
 

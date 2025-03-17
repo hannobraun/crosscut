@@ -122,7 +122,7 @@ impl Language {
 
         loop {
             match self.step() {
-                RuntimeState::Running { .. } => {
+                RuntimeState::Started | RuntimeState::Running { .. } => {
                     // We're not concerned with intermediate results here.
                 }
                 RuntimeState::Effect { effect, path: _ } => match effect {

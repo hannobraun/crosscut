@@ -105,7 +105,7 @@ where
             }
 
             match self.language.step().clone() {
-                RuntimeState::Running { .. } => {
+                RuntimeState::Started | RuntimeState::Running { .. } => {
                     // We're not interested in intermediate values here.
                     continue;
                 }

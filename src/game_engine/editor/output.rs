@@ -119,7 +119,7 @@ fn render_runtime_state<A: EditorOutputAdapter>(
 
     adapter.attribute(Attribute::Bold, |adapter| {
         match evaluator.state() {
-            RuntimeState::Running { .. } => {
+            RuntimeState::Started | RuntimeState::Running { .. } => {
                 adapter.color(Color::DarkGreen, |adapter| {
                     writeln!(adapter, "Running")
                 })?;
