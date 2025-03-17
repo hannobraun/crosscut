@@ -85,7 +85,7 @@ impl NewChangeSet<'_> {
 
     pub fn replace(
         &mut self,
-        to_replace: NodePath,
+        to_replace: &NodePath,
         replacement: Node,
     ) -> NodePath {
         let replacement = NodePath {
@@ -94,7 +94,7 @@ impl NewChangeSet<'_> {
             // `to_replace`.
         };
 
-        if replacement != to_replace {
+        if &replacement != to_replace {
             // Nodes are "replaced" by identical ones all the time. Making the
             // caller responsible for checking that would be onerous.
             //
@@ -104,7 +104,7 @@ impl NewChangeSet<'_> {
 
             self.change_set
                 .replacements_by_replaced
-                .insert(to_replace, replacement);
+                .insert(*to_replace, replacement);
         }
 
         if self.change_set.latest_version_of(&replacement).is_err() {
@@ -181,8 +181,10 @@ mod tests {
             NodePath { hash }
         };
 
-        let path_b = changes.new_change_set(&mut nodes).replace(path_a, node_b);
-        let path_a = changes.new_change_set(&mut nodes).replace(path_b, node_a);
+        let path_b =
+            changes.new_change_set(&mut nodes).replace(&path_a, node_b);
+        let path_a =
+            changes.new_change_set(&mut nodes).replace(&path_b, node_a);
 
         assert_eq!(changes.latest_version_of(&path_a), &path_a);
         assert_eq!(changes.latest_version_of(&path_b), &path_a);
