@@ -78,7 +78,7 @@ pub trait StepUntilFinishedResultExt {
 
 impl StepUntilFinishedResultExt for Result<Value, Effect> {
     fn expect_value(self) -> Value {
-        self.expect("Expected value")
+        self.unwrap()
     }
 
     fn expect_function_body(self) -> NodePath {
