@@ -130,6 +130,7 @@ impl Editor {
                     let parent = compiler
                         .codebase()
                         .parent_of(&self.editing)
+                        .map(|located_node| located_node.path)
                         .unwrap_or_else(|| {
                             // The node we're adding a sibling for has no
                             // parent, meaning it is the root of the syntax
