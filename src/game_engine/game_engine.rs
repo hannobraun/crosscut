@@ -128,13 +128,13 @@ where
                     }
                     value => {
                         match value.into_function_body() {
-                            Ok(path) => {
+                            Ok(body) => {
                                 // If the program returns a function, we call
                                 // that function, passing it a display value.
                                 // Using that display value, the function can
                                 // set the color.
 
-                                let path = NodePath { hash: path };
+                                let path = NodePath { hash: body };
                                 self.language
                                     .call_function(path, self.display.clone());
                                 continue;
