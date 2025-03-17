@@ -82,7 +82,7 @@ fn host_functions_can_inject_opaque_value() {
     language.on_code("observe_opaque_value fn");
 
     let path = match language.step_until_finished().into_function_body() {
-        Ok(body) => body,
+        Ok(path) => path,
         output => {
             panic!("Unexpected output: {output:?}");
         }
