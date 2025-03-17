@@ -45,7 +45,7 @@ impl Changes {
         let mut latest_known = path;
 
         for change_set in &self.change_sets[i..] {
-            let Ok(latest) = change_set.latest_version_of(latest_known) else {
+            let Ok(latest) = change_set.latest_version_of(&latest_known) else {
                 unreachable!(
                     "Detected circular replacement path in change set. This \
                     should be impossible, as this case is checked below, when \
@@ -107,7 +107,7 @@ impl NewChangeSet<'_> {
                 .insert(to_replace, replacement);
         }
 
-        if self.change_set.latest_version_of(replacement).is_err() {
+        if self.change_set.latest_version_of(&replacement).is_err() {
             panic!(
                 "You must not create a circle of replacements within a single \
                 change set."
@@ -135,23 +135,23 @@ impl ChangeSet {
 
     fn latest_version_of(
         &self,
-        path: NodePath,
+        path: &NodePath,
     ) -> Result<NodePath, CircularDependency> {
         let mut already_seen = BTreeSet::new();
         let mut latest_known = path;
 
-        while let Some(later) = self.replacements_by_replaced.get(&latest_known)
+        while let Some(later) = self.replacements_by_replaced.get(latest_known)
         {
             already_seen.insert(latest_known);
 
             if already_seen.contains(later) {
                 return Err(CircularDependency);
             } else {
-                latest_known = *later;
+                latest_known = later;
             }
         }
 
-        Ok(latest_known)
+        Ok(*latest_known)
     }
 }
 
