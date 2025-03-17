@@ -17,11 +17,11 @@ impl SyntaxTree {
         let mut to_search = Vec::new();
         to_search.push(self.root);
 
-        while let Some(hash) = to_search.pop() {
-            let node = nodes.get(&hash.hash);
+        while let Some(path) = to_search.pop() {
+            let node = nodes.get(&path.hash);
 
             if node.children().contains(&child.hash) {
-                return Some(hash);
+                return Some(path);
             }
 
             to_search.extend(
