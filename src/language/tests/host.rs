@@ -1,5 +1,5 @@
 use crate::language::{
-    code::Type,
+    code::{NodePath, Type},
     language::Language,
     packages::{Function, Package},
     runtime::{Effect, Value},
@@ -79,7 +79,7 @@ fn host_functions_can_inject_opaque_value() {
     language.on_code("observe_opaque_value fn");
 
     let path = match language.step_until_finished().into_function_body() {
-        Ok(path) => path,
+        Ok(path) => NodePath { hash: path },
         output => {
             panic!("Unexpected output: {output:?}");
         }

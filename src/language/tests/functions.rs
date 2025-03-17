@@ -1,5 +1,5 @@
 use crate::language::{
-    code::NodePath,
+    code::NodeHash,
     language::Language,
     runtime::{Effect, Value},
 };
@@ -39,14 +39,15 @@ fn empty_function() {
 }
 
 pub trait IntoFunctionBody {
-    fn into_function_body(self) -> Result<NodePath, Self>
+    fn into_function_body(self) -> Result<NodeHash, Self>
     where
         Self: Sized;
 }
 
 impl IntoFunctionBody for Result<Value, Effect> {
-    fn into_function_body(self) -> Result<NodePath, Self> {
-        self.map_err(Err)
-            .and_then(|value| value.into_function_body().map_err(Ok))
+    fn into_function_body(self) -> Result<NodeHash, Self> {
+        self.map_err(Err).and_then(|value| {
+            value.into_function_body().map(|path| path.hash).map_err(Ok)
+        })
     }
 }
