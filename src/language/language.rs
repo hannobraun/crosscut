@@ -110,12 +110,13 @@ impl Language {
         self.step_until_finished_and_handle_host_functions(|id, _| {
             unreachable!("Unexpected host function with ID `{id:?}`.")
         })
+        .map(|(value, _)| value)
     }
 
     pub fn step_until_finished_and_handle_host_functions(
         &mut self,
         mut handler: impl FnMut(&FunctionId, &Value) -> Result<Value, Effect>,
-    ) -> Result<Value, Effect> {
+    ) -> Result<(Value, NodePath), Effect> {
         use crate::game_engine::codebase_to_string;
 
         let mut i = 0;
@@ -140,8 +141,8 @@ impl Language {
                         break Err(effect.clone());
                     }
                 },
-                RuntimeState::Finished { output, .. } => {
-                    break Ok(output.clone());
+                RuntimeState::Finished { output, path } => {
+                    break Ok((output.clone(), path.clone()));
                 }
                 RuntimeState::Error { .. } => {
                     panic!(
