@@ -46,8 +46,7 @@ pub trait IntoFunctionBody {
 
 impl IntoFunctionBody for Result<Value, Effect> {
     fn into_function_body(self) -> Result<NodeHash, Self> {
-        self.map_err(Err).and_then(|value| {
-            value.into_function_body().map(|path| path.hash).map_err(Ok)
-        })
+        self.map_err(Err)
+            .and_then(|value| value.into_function_body().map_err(Ok))
     }
 }

@@ -3,7 +3,7 @@ use crate::{
         DebugOutputAdapter, EditorOutputAdapter, RawTerminalAdapter,
     },
     language::{
-        code::Type,
+        code::{NodePath, Type},
         language::Language,
         packages::{Function, FunctionId, Package},
         runtime::{Effect, RuntimeState, Value},
@@ -134,6 +134,7 @@ where
                                 // Using that display value, the function can
                                 // set the color.
 
+                                let path = NodePath { hash: path };
                                 self.language
                                     .call_function(path, self.display.clone());
                                 continue;
