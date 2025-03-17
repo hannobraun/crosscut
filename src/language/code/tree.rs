@@ -1,12 +1,12 @@
-use super::{NodeHash, NodePath, Nodes};
+use super::{NodePath, Nodes};
 
 pub struct SyntaxTree {
-    pub root: NodeHash,
+    pub root: NodePath,
 }
 
 impl SyntaxTree {
     pub fn from_root(root: NodePath) -> Self {
-        Self { root: root.hash }
+        Self { root }
     }
 
     pub fn find_parent_of(
@@ -15,7 +15,7 @@ impl SyntaxTree {
         nodes: &Nodes,
     ) -> Option<NodePath> {
         let mut to_search = Vec::new();
-        to_search.push(self.root);
+        to_search.push(self.root.hash);
 
         while let Some(hash) = to_search.pop() {
             let node = nodes.get(&hash);
