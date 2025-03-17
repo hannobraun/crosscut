@@ -2,8 +2,8 @@ use std::vec;
 
 use crate::language::{
     code::{
-        Expression, IntrinsicFunction, Literal, LocatedNode, Node, NodeHash,
-        NodeKind, Nodes,
+        Expression, IntrinsicFunction, Literal, LocatedNode, Node, NodeKind,
+        NodePath, Nodes,
     },
     runtime::{Effect, Value},
 };
@@ -72,14 +72,18 @@ where
 }
 
 pub trait StepUntilFinishedResultExt {
-    fn into_function_body(self) -> Result<NodeHash, Self>
+    fn into_function_body(self) -> Result<NodePath, Self>
     where
         Self: Sized;
 }
 
 impl StepUntilFinishedResultExt for Result<Value, Effect> {
-    fn into_function_body(self) -> Result<NodeHash, Self> {
-        self.map_err(Err)
-            .and_then(|value| value.into_function_body().map_err(Ok))
+    fn into_function_body(self) -> Result<NodePath, Self> {
+        self.map_err(Err).and_then(|value| {
+            value
+                .into_function_body()
+                .map(|body| NodePath { hash: body })
+                .map_err(Ok)
+        })
     }
 }
