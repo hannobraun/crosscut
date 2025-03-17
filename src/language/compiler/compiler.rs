@@ -73,9 +73,7 @@ impl<'r> Compiler<'r> {
             // The node we're removing has a parent. We need to remove the
             // reference from that parent to the node.
 
-            let parent_node = parent.node;
-
-            let mut children = parent_node.children().clone();
+            let mut children = parent.node.children().clone();
             children.replace(
                 to_remove.hash(),
                 node_to_remove.children().iter().copied(),
@@ -83,7 +81,7 @@ impl<'r> Compiler<'r> {
 
             self.replace_inner(
                 &parent.path,
-                &parent_node.to_token(packages),
+                &parent.node.to_token(packages),
                 children,
                 packages,
             );
