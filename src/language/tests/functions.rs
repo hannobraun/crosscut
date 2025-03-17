@@ -1,4 +1,7 @@
-use crate::language::{language::Language, runtime::Value};
+use crate::language::{
+    language::Language, runtime::Value,
+    tests::infra::StepUntilFinishedResultExt,
+};
 
 #[test]
 fn define_and_evaluate() {
@@ -7,8 +10,8 @@ fn define_and_evaluate() {
 
     let mut language = Language::from_code("127 fn eval");
     assert_eq!(
-        language.step_until_finished(),
-        Ok(Value::Integer { value: 127 }),
+        language.step_until_finished().expect_value(),
+        Value::Integer { value: 127 },
     );
 }
 
@@ -31,5 +34,8 @@ fn empty_function() {
     // created as a child for it.
 
     let mut language = Language::from_code("fn eval");
-    assert_eq!(language.step_until_finished(), Ok(Value::Nothing));
+    assert_eq!(
+        language.step_until_finished().expect_value(),
+        Value::Nothing,
+    );
 }

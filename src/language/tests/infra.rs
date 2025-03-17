@@ -72,12 +72,18 @@ where
 }
 
 pub trait StepUntilFinishedResultExt {
+    fn expect_value(self) -> Value;
+
     fn into_function_body(self) -> Result<NodePath, Self>
     where
         Self: Sized;
 }
 
 impl StepUntilFinishedResultExt for Result<Value, Effect> {
+    fn expect_value(self) -> Value {
+        self.expect("Expected value")
+    }
+
     fn into_function_body(self) -> Result<NodePath, Self> {
         self.map_err(Err).and_then(|value| {
             value

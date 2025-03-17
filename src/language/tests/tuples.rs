@@ -1,4 +1,7 @@
-use crate::language::{language::Language, runtime::Value};
+use crate::language::{
+    language::Language, runtime::Value,
+    tests::infra::StepUntilFinishedResultExt,
+};
 
 #[test]
 fn single_field() {
@@ -9,10 +12,10 @@ fn single_field() {
     language.on_code("127 tuple");
 
     assert_eq!(
-        language.step_until_finished(),
-        Ok(Value::Tuple {
+        language.step_until_finished().expect_value(),
+        Value::Tuple {
             elements: vec![Value::Integer { value: 127 }],
-        }),
+        },
     );
 }
 
@@ -25,12 +28,12 @@ fn nested() {
     language.on_code("127 tuple tuple");
 
     assert_eq!(
-        language.step_until_finished(),
-        Ok(Value::Tuple {
+        language.step_until_finished().expect_value(),
+        Value::Tuple {
             elements: vec![Value::Tuple {
                 elements: vec![Value::Integer { value: 127 }],
             }],
-        }),
+        },
     );
 }
 
@@ -41,12 +44,12 @@ fn multi_field() {
     let mut language = Language::from_code("127\n255 tuple");
 
     assert_eq!(
-        language.step_until_finished(),
-        Ok(Value::Tuple {
+        language.step_until_finished().expect_value(),
+        Value::Tuple {
             elements: vec![
                 Value::Integer { value: 127 },
                 Value::Integer { value: 255 },
             ],
-        }),
+        },
     );
 }
