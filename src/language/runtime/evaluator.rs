@@ -100,7 +100,7 @@ impl Evaluator {
                                 literal: Literal::Function,
                             },
                     },
-            } = codebase.node_at(node.syntax_node).node.kind()
+            } = codebase.node_at(&node.syntax_node).node.kind()
             {
                 // If this were any other node, we'd need to evaluate its
                 // children first. But function nodes are different. Their child
@@ -127,7 +127,7 @@ impl Evaluator {
             node = RuntimeNode::from_syntax_node(child, codebase);
         }
 
-        match codebase.node_at(node.syntax_node).node.kind() {
+        match codebase.node_at(&node.syntax_node).node.kind() {
             NodeKind::Empty { .. } => {
                 self.advance(node.evaluated_children.into_active_value());
             }
@@ -211,7 +211,7 @@ impl Evaluator {
                                         }
                                     }
 
-                                    let node = codebase.node_at(path);
+                                    let node = codebase.node_at(&path);
                                     let mut children =
                                         node.children(codebase.nodes());
 
@@ -340,7 +340,7 @@ struct RuntimeNode {
 
 impl RuntimeNode {
     fn from_syntax_node(path: NodePath, codebase: &Codebase) -> Self {
-        let root_node = codebase.node_at(path);
+        let root_node = codebase.node_at(&path);
 
         Self {
             syntax_node: path,

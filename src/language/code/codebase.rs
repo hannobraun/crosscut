@@ -49,10 +49,10 @@ impl Codebase {
         })
     }
 
-    pub fn node_at(&self, path: NodePath) -> LocatedNode {
+    pub fn node_at(&self, path: &NodePath) -> LocatedNode {
         LocatedNode {
             node: self.nodes.get(path.hash()),
-            path,
+            path: *path,
         }
     }
 

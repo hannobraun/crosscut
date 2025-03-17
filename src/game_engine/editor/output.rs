@@ -239,7 +239,7 @@ fn render_node<A: EditorOutputAdapter>(
     adapter: &mut A,
     context: &mut RenderContext,
 ) -> anyhow::Result<()> {
-    let node = context.codebase.node_at(path).node;
+    let node = context.codebase.node_at(&path).node;
 
     if let Some(editor) = context.editor {
         if editor.editing() == &path {
@@ -311,7 +311,7 @@ fn render_help<A: EditorOutputAdapter>(
     };
 
     let path = *editor.editing();
-    let node = context.codebase.node_at(path).node;
+    let node = context.codebase.node_at(&path).node;
 
     writeln!(adapter)?;
 

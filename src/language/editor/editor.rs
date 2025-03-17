@@ -77,7 +77,7 @@ impl Editor {
                             .map(|path| {
                                 compiler
                                     .codebase()
-                                    .node_at(path)
+                                    .node_at(&path)
                                     .node
                                     .display(packages)
                                     .to_string()
@@ -96,7 +96,7 @@ impl Editor {
                             .map(|path| {
                                 compiler
                                     .codebase()
-                                    .node_at(path)
+                                    .node_at(&path)
                                     .node
                                     .display(packages)
                                     .to_string()
@@ -202,7 +202,7 @@ impl Editor {
     ) {
         self.editing = path;
 
-        let node = codebase.node_at(path).node;
+        let node = codebase.node_at(&path).node;
         self.input = EditorInputBuffer::new(node.to_token(packages));
     }
 }

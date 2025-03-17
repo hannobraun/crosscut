@@ -27,7 +27,7 @@ fn edit_initial_node() {
     editor.on_code("7", &mut codebase, &mut evaluator, &packages);
 
     assert_eq!(
-        codebase.node_at(*editor.editing()).node.kind(),
+        codebase.node_at(editor.editing()).node.kind(),
         &NodeKind::integer_literal(127),
     );
 }
@@ -222,7 +222,7 @@ fn reuse_empty_node_for_parent() {
     };
 
     // Make sure the test setup worked as expected.
-    assert_eq!(codebase.node_at(root).node.kind(), &NodeKind::Empty);
+    assert_eq!(codebase.node_at(&root).node.kind(), &NodeKind::Empty);
 
     let mut editor = Editor::new(leaf, &codebase, &packages);
     editor.on_code(" ", &mut codebase, &mut evaluator, &packages);

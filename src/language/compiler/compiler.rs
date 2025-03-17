@@ -50,7 +50,7 @@ impl<'r> Compiler<'r> {
 
         self.replace(
             parent.path,
-            &self.codebase.node_at(parent.path).node.to_token(packages),
+            &self.codebase.node_at(&parent.path).node.to_token(packages),
             packages,
         );
 
@@ -124,7 +124,7 @@ impl<'r> Compiler<'r> {
         packages: &Packages,
     ) -> NodePath {
         let children =
-            self.codebase.node_at(to_replace).node.children().clone();
+            self.codebase.node_at(&to_replace).node.children().clone();
         self.replace_inner(&to_replace, replacement_token, children, packages)
     }
 
