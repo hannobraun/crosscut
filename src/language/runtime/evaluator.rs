@@ -59,7 +59,12 @@ impl Evaluator {
 
         // Now that its output has been provided, the host function is fully
         // handled. We can drop the node that triggered it.
-        self.eval_stack.pop();
+        let Some(_) = self.eval_stack.pop() else {
+            unreachable!(
+                "Effect has been triggered, but no node that could have \
+                triggered it is available."
+            );
+        };
 
         self.finish_evaluating_node(value);
     }
