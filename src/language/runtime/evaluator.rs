@@ -334,8 +334,6 @@ impl Evaluator {
         evaluated_node: NodePath,
         output: Value,
     ) {
-        let _ = evaluated_node;
-
         // When this is called, the current node has already been removed from
         // the stack.
 
