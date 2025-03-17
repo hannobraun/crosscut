@@ -167,7 +167,10 @@ impl Evaluator {
                 let path = node.syntax_node.clone();
                 match intrinsic {
                     IntrinsicFunction::Drop => {
-                        self.finish_evaluating_node(path, Value::Nothing);
+                        self.finish_evaluating_node(
+                            node.syntax_node,
+                            Value::Nothing,
+                        );
                     }
                     IntrinsicFunction::Eval => {
                         let body = match node
@@ -180,7 +183,7 @@ impl Evaluator {
                                 self.unexpected_input(
                                     Type::Function,
                                     active_value,
-                                    path,
+                                    node.syntax_node,
                                 );
                                 return;
                             }
@@ -196,7 +199,7 @@ impl Evaluator {
                     }
                     IntrinsicFunction::Identity => {
                         self.finish_evaluating_node(
-                            path,
+                            node.syntax_node,
                             node.evaluated_children.into_active_value(),
                         );
                     }
@@ -221,7 +224,8 @@ impl Evaluator {
                                         }
                                     }
 
-                                    let node = codebase.node_at(&path);
+                                    let node =
+                                        codebase.node_at(&node.syntax_node);
                                     let mut children =
                                         node.children(codebase.nodes());
 
@@ -281,7 +285,7 @@ impl Evaluator {
                             }
                         };
 
-                        self.finish_evaluating_node(path, value);
+                        self.finish_evaluating_node(node.syntax_node, value);
                     }
                 }
             }
