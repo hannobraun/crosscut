@@ -68,7 +68,7 @@ impl Editor {
                 }
                 NodeAction::NavigateToNext => {
                     if let Some(next) = layout.node_after(&self.editing) {
-                        self.navigate_to(next, compiler.codebase(), packages);
+                        self.navigate_to(*next, compiler.codebase(), packages);
                     }
                 }
                 NodeAction::MergeWithPrevious => {
@@ -93,7 +93,7 @@ impl Editor {
                 }
                 NodeAction::MergeWithNext => {
                     if let Some(to_remove) = layout.node_after(&self.editing) {
-                        let merged = [&self.editing, &to_remove]
+                        let merged = [&self.editing, to_remove]
                             .map(|path| {
                                 compiler
                                     .codebase()
@@ -105,7 +105,7 @@ impl Editor {
                             .join("");
                         self.input = EditorInputBuffer::new(merged);
 
-                        compiler.remove(&to_remove, packages);
+                        compiler.remove(to_remove, packages);
                     }
                 }
                 NodeAction::AddParent { existing_child } => {
