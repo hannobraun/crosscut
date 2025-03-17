@@ -74,9 +74,7 @@ where
 pub trait StepUntilFinishedResultExt {
     fn expect_value(self) -> Value;
 
-    fn expect_function_body(self) -> NodePath
-    where
-        Self: Sized;
+    fn expect_function_body(self) -> NodePath;
 }
 
 impl StepUntilFinishedResultExt for Result<Value, Effect> {
