@@ -85,11 +85,9 @@ impl StepUntilFinishedResultExt for Result<Value, Effect> {
     }
 
     fn into_function_body(self) -> Result<NodePath, Self> {
-        self.map_err(Err).and_then(|value| {
-            value
-                .into_function_body()
-                .map(|body| NodePath { hash: body })
-                .map_err(Ok)
+        self.map_err(Err).map(|value| {
+            let body = value.into_function_body().unwrap();
+            NodePath { hash: body }
         })
     }
 }
