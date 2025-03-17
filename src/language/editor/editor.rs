@@ -86,8 +86,9 @@ impl Editor {
                         self.input = EditorInputBuffer::new(merged);
 
                         compiler.remove(to_remove, packages);
-                        self.editing =
-                            compiler.codebase().latest_version_of(self.editing);
+                        self.editing = compiler
+                            .codebase()
+                            .latest_version_of(&self.editing);
                     }
                 }
                 NodeAction::MergeWithNext => {

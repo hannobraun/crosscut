@@ -56,8 +56,8 @@ impl Codebase {
         }
     }
 
-    pub fn latest_version_of(&self, path: NodePath) -> NodePath {
-        self.changes.latest_version_of(&path)
+    pub fn latest_version_of(&self, path: &NodePath) -> NodePath {
+        self.changes.latest_version_of(path)
     }
 
     pub fn errors(&self) -> &Errors {
