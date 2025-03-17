@@ -164,7 +164,6 @@ impl Evaluator {
                 expression: Expression::IntrinsicFunction { intrinsic },
                 ..
             } => {
-                let path = node.syntax_node.clone();
                 match intrinsic {
                     IntrinsicFunction::Drop => {
                         self.finish_evaluating_node(
@@ -217,7 +216,7 @@ impl Evaluator {
                                             self.unexpected_input(
                                                 Type::Nothing,
                                                 active_value,
-                                                path,
+                                                node.syntax_node.clone(),
                                             );
                                             self.eval_stack.push(node);
                                             return;
@@ -259,7 +258,7 @@ impl Evaluator {
                                             self.unexpected_input(
                                                 Type::Nothing,
                                                 active_value,
-                                                path,
+                                                node.syntax_node.clone(),
                                             );
                                             self.eval_stack.push(node);
                                             return;
