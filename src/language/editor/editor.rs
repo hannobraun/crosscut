@@ -109,7 +109,7 @@ impl Editor {
                 }
                 NodeAction::AddParent { existing_child } => {
                     self.editing = compiler.replace(
-                        self.editing,
+                        &self.editing,
                         &existing_child,
                         packages,
                     );
@@ -138,7 +138,7 @@ impl Editor {
                         // smoother editing experience.
 
                         compiler.replace(
-                            parent.path,
+                            &parent.path,
                             self.input.buffer(),
                             packages,
                         )
@@ -152,7 +152,7 @@ impl Editor {
                 }
                 NodeAction::AddSibling { existing_sibling } => {
                     self.editing = compiler.replace(
-                        self.editing,
+                        &self.editing,
                         &existing_sibling,
                         packages,
                     );
@@ -167,7 +167,7 @@ impl Editor {
         }
 
         self.editing =
-            compiler.replace(self.editing, self.input.buffer(), packages);
+            compiler.replace(&self.editing, self.input.buffer(), packages);
 
         // Unconditionally resetting the interpreter like this, is not going to
         // work long-term. It should only be reset, if it's finished.

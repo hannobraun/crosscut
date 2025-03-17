@@ -20,7 +20,7 @@ fn edit_initial_node() {
 
     {
         let root = codebase.root().path;
-        Compiler::new(&mut codebase).replace(root, "12", &packages);
+        Compiler::new(&mut codebase).replace(&root, "12", &packages);
     }
 
     let mut editor = Editor::new(codebase.root().path, &codebase, &packages);
@@ -167,7 +167,7 @@ fn split_node_to_create_sibling() {
 
     {
         let root = codebase.root().path;
-        Compiler::new(&mut codebase).replace(root, "127255", &packages);
+        Compiler::new(&mut codebase).replace(&root, "127255", &packages);
     }
 
     let mut editor = Editor::new(codebase.root().path, &codebase, &packages);
@@ -214,8 +214,11 @@ fn reuse_empty_node_for_parent() {
     let (leaf, root) = {
         let mut compiler = Compiler::new(&mut codebase);
 
-        let leaf =
-            compiler.replace(compiler.codebase().root().path, "127", &packages);
+        let leaf = compiler.replace(
+            &compiler.codebase().root().path,
+            "127",
+            &packages,
+        );
         let root = compiler.insert_parent(&leaf, "", &packages);
 
         (leaf, root)
@@ -245,7 +248,7 @@ fn reuse_empty_error_node_for_parent() {
         let mut compiler = Compiler::new(&mut codebase);
 
         let a =
-            compiler.replace(compiler.codebase().root().path, "a", &packages);
+            compiler.replace(&compiler.codebase().root().path, "a", &packages);
         let b = compiler.insert_sibling(&a, "b", &packages);
 
         (a, b)

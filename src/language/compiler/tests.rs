@@ -48,7 +48,7 @@ fn updating_child_updates_parent() {
     let mut compiler = Compiler::new(&mut codebase);
 
     let child =
-        compiler.replace(compiler.codebase().root().path, "12", &packages);
+        compiler.replace(&compiler.codebase().root().path, "12", &packages);
     let parent = compiler.insert_parent(&child, "unresolved", &packages);
 
     // Verify our baseline assumptions about what the parent node should be.
@@ -60,7 +60,7 @@ fn updating_child_updates_parent() {
         .children(compiler.codebase().nodes())
         .next()
         .unwrap();
-    compiler.replace(child.path, "127", &packages);
+    compiler.replace(&child.path, "127", &packages);
 
     // After editing the child, the new parent node should be the same as the
     // old one.
