@@ -173,12 +173,12 @@ fn replace_node_and_update_parents(
 
         let path = change_set.replace(&next_to_replace, node);
 
+        previous_replacement = path.hash;
+        initial_replacement = initial_replacement.or(Some(path));
+
         if let Some(error) = maybe_error {
             errors.insert(path, error);
         }
-
-        previous_replacement = path.hash;
-        initial_replacement = initial_replacement.or(Some(path));
 
         if let Some(parent_path) = SyntaxTree::from_root(root.hash)
             .find_parent_of(&next_to_replace.hash, change_set.nodes())
