@@ -11,7 +11,7 @@ impl SyntaxTree {
 
     pub fn find_parent_of(
         self,
-        child: &NodeHash,
+        child: &NodePath,
         nodes: &Nodes,
     ) -> Option<NodePath> {
         let mut to_search = Vec::new();
@@ -20,7 +20,7 @@ impl SyntaxTree {
         while let Some(hash) = to_search.pop() {
             let node = nodes.get(&hash);
 
-            if node.children().contains(child) {
+            if node.children().contains(&child.hash) {
                 return Some(NodePath { hash });
             }
 

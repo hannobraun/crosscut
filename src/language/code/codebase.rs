@@ -41,7 +41,7 @@ impl Codebase {
 
     pub fn parent_of(&self, path: &NodePath) -> Option<LocatedNode> {
         let path = SyntaxTree::from_root(self.root.hash)
-            .find_parent_of(&path.hash, &self.nodes)?;
+            .find_parent_of(path, &self.nodes)?;
 
         Some(LocatedNode {
             node: self.nodes.get(&path.hash),

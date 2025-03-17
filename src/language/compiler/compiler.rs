@@ -181,7 +181,7 @@ fn replace_node_and_update_parents(
         }
 
         if let Some(parent_path) = SyntaxTree::from_root(root.hash)
-            .find_parent_of(&next_to_replace.hash, change_set.nodes())
+            .find_parent_of(&next_to_replace, change_set.nodes())
         {
             let parent_node = change_set.nodes().get(parent_path.hash());
 
