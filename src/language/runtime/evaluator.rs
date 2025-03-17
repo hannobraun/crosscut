@@ -61,7 +61,7 @@ impl Evaluator {
         // handled. We can drop the node that triggered it.
         self.eval_stack.pop();
 
-        self.advance(value);
+        self.finish_evaluating_node(value);
     }
 
     pub fn trigger_effect(&mut self, effect: Effect) {
@@ -130,7 +130,9 @@ impl Evaluator {
 
         match codebase.node_at(&node.syntax_node).node.kind() {
             NodeKind::Empty { .. } => {
-                self.advance(node.evaluated_children.into_active_value());
+                self.finish_evaluating_node(
+                    node.evaluated_children.into_active_value(),
+                );
             }
             NodeKind::Expression {
                 expression: Expression::HostFunction { id },
@@ -159,7 +161,7 @@ impl Evaluator {
                 let path = node.syntax_node.clone();
                 match intrinsic {
                     IntrinsicFunction::Drop => {
-                        self.advance(Value::Nothing);
+                        self.finish_evaluating_node(Value::Nothing);
                     }
                     IntrinsicFunction::Eval => {
                         let body = match node
@@ -187,7 +189,7 @@ impl Evaluator {
                         );
                     }
                     IntrinsicFunction::Identity => {
-                        self.advance(
+                        self.finish_evaluating_node(
                             node.evaluated_children.into_active_value(),
                         );
                     }
@@ -272,7 +274,7 @@ impl Evaluator {
                             }
                         };
 
-                        self.advance(value);
+                        self.finish_evaluating_node(value);
                     }
                 }
             }
@@ -311,7 +313,7 @@ impl Evaluator {
         };
     }
 
-    fn advance(&mut self, active_value: Value) {
+    fn finish_evaluating_node(&mut self, active_value: Value) {
         // When this is called, the current node has already been removed from
         // the stack.
 
