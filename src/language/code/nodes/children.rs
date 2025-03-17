@@ -1,6 +1,6 @@
 use std::{slice, vec};
 
-use super::{NodeHash, NodePath};
+use super::NodeHash;
 
 #[derive(Clone, Debug, Eq, PartialEq, udigest::Digestable)]
 pub struct Children {
@@ -69,10 +69,6 @@ impl Children {
 
     pub fn iter(&self) -> slice::Iter<NodeHash> {
         self.children.iter()
-    }
-
-    pub fn to_paths(&self) -> impl Iterator<Item = NodePath> {
-        self.children.iter().copied().map(|hash| NodePath { hash })
     }
 }
 
