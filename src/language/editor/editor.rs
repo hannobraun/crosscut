@@ -85,7 +85,7 @@ impl Editor {
                             .join("");
                         self.input = EditorInputBuffer::new(merged);
 
-                        compiler.remove(to_remove, packages);
+                        compiler.remove(&to_remove, packages);
                         self.editing = compiler
                             .codebase()
                             .latest_version_of(&self.editing);
@@ -105,7 +105,7 @@ impl Editor {
                             .join("");
                         self.input = EditorInputBuffer::new(merged);
 
-                        compiler.remove(to_remove, packages);
+                        compiler.remove(&to_remove, packages);
                     }
                 }
                 NodeAction::AddParent { existing_child } => {
