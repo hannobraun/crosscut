@@ -201,10 +201,10 @@ impl Editor {
         codebase: &Codebase,
         packages: &Packages,
     ) {
-        self.editing = path;
-
         let node = codebase.node_at(&path).node;
         self.input = EditorInputBuffer::new(node.to_token(packages));
+
+        self.editing = path;
     }
 }
 
