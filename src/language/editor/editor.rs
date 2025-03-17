@@ -1,5 +1,5 @@
 use crate::language::{
-    code::{Codebase, NodePath},
+    code::{Codebase, NodeKind, NodePath},
     compiler::Compiler,
     packages::Packages,
     runtime::Evaluator,
@@ -114,11 +114,30 @@ impl Editor {
                         packages,
                     );
 
-                    self.editing = compiler.insert_parent(
-                        &self.editing,
-                        self.input.buffer(),
-                        packages,
-                    );
+                    let empty_parent = compiler
+                        .codebase()
+                        .parent_of(&self.editing)
+                        .filter(|parent| {
+                            matches!(parent.node.kind(), NodeKind::Empty)
+                        });
+
+                    self.editing = if let Some(parent) = empty_parent {
+                        // If the parent node is empty, we re-use it instead of
+                        // adding a new parent in between. This leads to a
+                        // smoother editing experience.
+
+                        compiler.replace(
+                            parent.path,
+                            self.input.buffer(),
+                            packages,
+                        )
+                    } else {
+                        compiler.insert_parent(
+                            &self.editing,
+                            self.input.buffer(),
+                            packages,
+                        )
+                    };
                 }
                 NodeAction::AddSibling { existing_sibling } => {
                     self.editing = compiler.replace(

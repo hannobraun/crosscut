@@ -199,3 +199,33 @@ fn split_node_to_create_sibling() {
         ],
     );
 }
+
+#[test]
+fn reuse_empty_node_for_parent() {
+    // There is probably no good reason to create a new parent node, if there
+    // already is an empty node as the parent. In that case, let's just reuse it
+    // to make editing smoother.
+
+    let packages = Packages::new();
+
+    let mut codebase = Codebase::new();
+    let mut evaluator = Evaluator::new();
+
+    let (leaf, root) = {
+        let mut compiler = Compiler::new(&mut codebase);
+
+        let leaf =
+            compiler.replace(compiler.codebase().root().path, "127", &packages);
+        let root = compiler.insert_parent(&leaf, "", &packages);
+
+        (leaf, root)
+    };
+
+    // Make sure the test setup worked as expected.
+    assert_eq!(codebase.node_at(root).node.kind(), &NodeKind::Empty);
+
+    let mut editor = Editor::new(leaf, &codebase, &packages);
+    editor.on_code(" ", &mut codebase, &mut evaluator, &packages);
+
+    assert_eq!(editor.editing(), &root);
+}
