@@ -24,7 +24,7 @@ impl Editor {
         let mut editor = Self {
             // This is just a placeholder value, to be updated below.
             input: EditorInputBuffer::empty(),
-            editing,
+            editing: editing.clone(),
         };
 
         editor.navigate_to(editing, codebase, packages);
@@ -59,7 +59,7 @@ impl Editor {
                 NodeAction::NavigateToPrevious => {
                     if let Some(previous) = layout.node_before(&self.editing) {
                         self.navigate_to(
-                            *previous,
+                            previous.clone(),
                             compiler.codebase(),
                             packages,
                         );
@@ -68,7 +68,11 @@ impl Editor {
                 }
                 NodeAction::NavigateToNext => {
                     if let Some(next) = layout.node_after(&self.editing) {
-                        self.navigate_to(*next, compiler.codebase(), packages);
+                        self.navigate_to(
+                            next.clone(),
+                            compiler.codebase(),
+                            packages,
+                        );
                     }
                 }
                 NodeAction::MergeWithPrevious => {

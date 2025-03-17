@@ -263,7 +263,7 @@ fn reuse_empty_error_node_for_parent() {
         }
     );
 
-    let mut editor = Editor::new(b, &codebase, &packages);
+    let mut editor = Editor::new(b.clone(), &codebase, &packages);
 
     // Now tell the editor to create a parent node.
     editor.on_code(" ", &mut codebase, &mut evaluator, &packages);

@@ -80,7 +80,7 @@ impl NewChangeSet<'_> {
     }
 
     pub fn remove(&mut self, to_remove: &NodePath) {
-        self.change_set.removed.insert(*to_remove);
+        self.change_set.removed.insert(to_remove.clone());
     }
 
     pub fn replace(
@@ -104,7 +104,7 @@ impl NewChangeSet<'_> {
 
             self.change_set
                 .replacements_by_replaced
-                .insert(*to_replace, replacement);
+                .insert(to_replace.clone(), replacement.clone());
         }
 
         if self.change_set.latest_version_of(&replacement).is_err() {

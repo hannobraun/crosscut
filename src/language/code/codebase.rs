@@ -52,12 +52,12 @@ impl Codebase {
     pub fn node_at(&self, path: &NodePath) -> LocatedNode {
         LocatedNode {
             node: self.nodes.get(path.hash()),
-            path: *path,
+            path: path.clone(),
         }
     }
 
     pub fn latest_version_of(&self, path: &NodePath) -> NodePath {
-        *self.changes.latest_version_of(path)
+        self.changes.latest_version_of(path).clone()
     }
 
     pub fn errors(&self) -> &Errors {

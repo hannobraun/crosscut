@@ -25,7 +25,7 @@ use super::{Node, NodeHash, Nodes};
 ///
 /// - The location of the parent node.
 /// - The index of the child node, within the parent node's children.
-#[derive(Clone, Copy, Debug, Eq, Ord, PartialEq, PartialOrd)]
+#[derive(Clone, Debug, Eq, Ord, PartialEq, PartialOrd)]
 pub struct NodePath {
     /// # The hash of the node that this path uniquely identifies
     ///

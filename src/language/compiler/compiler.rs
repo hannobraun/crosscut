@@ -159,7 +159,7 @@ fn replace_node_and_update_parents(
     change_set: &mut NewChangeSet,
     errors: &mut Errors,
 ) -> NodePath {
-    let mut next_to_replace = *to_replace;
+    let mut next_to_replace = to_replace.clone();
 
     let mut next_token = replacement_token.to_string();
     let mut next_children = children;
@@ -174,7 +174,7 @@ fn replace_node_and_update_parents(
         let path = change_set.replace(&next_to_replace, node);
 
         previous_replacement = path.hash;
-        initial_replacement = initial_replacement.or(Some(path));
+        initial_replacement = initial_replacement.or(Some(path.clone()));
 
         if let Some(error) = maybe_error {
             errors.insert(path, error);

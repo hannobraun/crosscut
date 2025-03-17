@@ -33,7 +33,8 @@ impl Evaluator {
         argument: Value,
         codebase: &Codebase,
     ) {
-        let root_node = RuntimeNode::from_syntax_node(root_path, codebase);
+        let root_node =
+            RuntimeNode::from_syntax_node(root_path.clone(), codebase);
         self.eval_stack.push(root_node);
 
         self.call_stack.push(StackFrame {
@@ -73,7 +74,7 @@ impl Evaluator {
 
         self.state = RuntimeState::Effect {
             effect,
-            path: node.syntax_node,
+            path: node.syntax_node.clone(),
         };
     }
 
@@ -143,7 +144,7 @@ impl Evaluator {
                             .clone()
                             .into_active_value(),
                     },
-                    path: node.syntax_node,
+                    path: node.syntax_node.clone(),
                 };
 
                 // A host function is not fully handled, until the handler has
@@ -155,7 +156,7 @@ impl Evaluator {
                 expression: Expression::IntrinsicFunction { intrinsic },
                 ..
             } => {
-                let path = node.syntax_node;
+                let path = node.syntax_node.clone();
                 match intrinsic {
                     IntrinsicFunction::Drop => {
                         self.advance(Value::Nothing);
@@ -287,7 +288,7 @@ impl Evaluator {
             }
             NodeKind::Error { .. } => {
                 self.state = RuntimeState::Error {
-                    path: node.syntax_node,
+                    path: node.syntax_node.clone(),
                 };
 
                 // We don't want to advance the execution in any way when
@@ -316,7 +317,7 @@ impl Evaluator {
 
         if let Some(parent) = self.eval_stack.last_mut() {
             self.state = RuntimeState::Running {
-                path: Some(parent.syntax_node),
+                path: Some(parent.syntax_node.clone()),
             };
             parent.evaluated_children.inner.push(active_value);
         } else {

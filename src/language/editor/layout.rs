@@ -83,7 +83,7 @@ fn collect_nodes_from_root(
     nodes: &Nodes,
 ) -> u32 {
     nodes_from_root.push(NodeInLayout {
-        path: node.path,
+        path: node.path.clone(),
         distance_from_root,
     });
 
