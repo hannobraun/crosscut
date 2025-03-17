@@ -27,7 +27,7 @@ impl Editor {
             editing,
         };
 
-        editor.navigate_to(editor.editing, codebase, packages);
+        editor.navigate_to(editing, codebase, packages);
         editor.input.move_cursor_to_end();
 
         editor
