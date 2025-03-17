@@ -310,8 +310,7 @@ fn render_help<A: EditorOutputAdapter>(
         return Ok(());
     };
 
-    let path = *editor.editing();
-    let node = context.codebase.node_at(&path).node;
+    let node = context.codebase.node_at(editor.editing()).node;
 
     writeln!(adapter)?;
 
