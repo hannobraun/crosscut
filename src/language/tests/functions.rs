@@ -38,13 +38,13 @@ fn empty_function() {
     assert_eq!(language.step_until_finished(), Ok(Value::Nothing));
 }
 
-pub trait IntoFunctionBody {
+pub trait StepUntilFinishedResultExt {
     fn into_function_body(self) -> Result<NodeHash, Self>
     where
         Self: Sized;
 }
 
-impl IntoFunctionBody for Result<Value, Effect> {
+impl StepUntilFinishedResultExt for Result<Value, Effect> {
     fn into_function_body(self) -> Result<NodeHash, Self> {
         self.map_err(Err)
             .and_then(|value| value.into_function_body().map_err(Ok))
