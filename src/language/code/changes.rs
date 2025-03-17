@@ -53,7 +53,7 @@ impl Changes {
                 );
             };
 
-            latest_known = latest;
+            latest_known = *latest;
         }
 
         latest_known
@@ -133,10 +133,10 @@ impl ChangeSet {
         self.replacements_by_replaced.get(replaced)
     }
 
-    fn latest_version_of(
-        &self,
-        path: &NodePath,
-    ) -> Result<NodePath, CircularDependency> {
+    fn latest_version_of<'r>(
+        &'r self,
+        path: &'r NodePath,
+    ) -> Result<&'r NodePath, CircularDependency> {
         let mut already_seen = BTreeSet::new();
         let mut latest_known = path;
 
@@ -151,7 +151,7 @@ impl ChangeSet {
             }
         }
 
-        Ok(*latest_known)
+        Ok(latest_known)
     }
 }
 
