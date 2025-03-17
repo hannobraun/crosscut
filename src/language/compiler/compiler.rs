@@ -73,7 +73,7 @@ impl<'r> Compiler<'r> {
             // The node we're removing has a parent. We need to remove the
             // reference from that parent to the node.
 
-            let parent_node = self.codebase.node_at(parent.path).node.clone();
+            let parent_node = parent.node;
 
             let mut children = parent_node.children().clone();
             children.replace(
