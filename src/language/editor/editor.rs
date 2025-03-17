@@ -59,7 +59,7 @@ impl Editor {
                 NodeAction::NavigateToPrevious => {
                     if let Some(previous) = layout.node_before(&self.editing) {
                         self.navigate_to(
-                            previous,
+                            *previous,
                             compiler.codebase(),
                             packages,
                         );
@@ -73,7 +73,7 @@ impl Editor {
                 }
                 NodeAction::MergeWithPrevious => {
                     if let Some(to_remove) = layout.node_before(&self.editing) {
-                        let merged = [&to_remove, &self.editing]
+                        let merged = [to_remove, &self.editing]
                             .map(|path| {
                                 compiler
                                     .codebase()
@@ -85,7 +85,7 @@ impl Editor {
                             .join("");
                         self.input = EditorInputBuffer::new(merged);
 
-                        compiler.remove(&to_remove, packages);
+                        compiler.remove(to_remove, packages);
                         self.editing = compiler
                             .codebase()
                             .latest_version_of(&self.editing);
