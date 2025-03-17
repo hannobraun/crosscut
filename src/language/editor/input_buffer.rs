@@ -157,6 +157,7 @@ impl EditorInputBuffer {
     }
 }
 
+#[derive(Debug)]
 pub enum NodeAction {
     NavigateToPrevious,
     NavigateToNext,
