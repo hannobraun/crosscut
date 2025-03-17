@@ -66,6 +66,31 @@ impl<'r> Compiler<'r> {
         self.replace_inner(child, parent_token, [child.hash], packages)
     }
 
+    pub fn insert_sibling(
+        &mut self,
+        existing_sibling: &NodePath,
+        new_sibling_token: &str,
+        packages: &Packages,
+    ) -> NodePath {
+        let parent = self
+            .codebase()
+            .parent_of(existing_sibling)
+            .map(|located_node| located_node.path)
+            .unwrap_or_else(|| {
+                // The node we're adding a sibling for has no parent, meaning it
+                // is the root of the syntax tree.
+                //
+                // The syntax tree always needs a single root. So we can't add a
+                // sibling to the root node, without a new root node that can
+                // serve as both of their parent.
+                //
+                // Adding this new root node is what we're doing here.
+                self.insert_parent(existing_sibling, "", packages)
+            });
+
+        self.insert_child(parent, new_sibling_token, packages)
+    }
+
     pub fn remove(&mut self, to_remove: NodePath, packages: &Packages) {
         let node_to_remove = self.codebase.nodes().get(to_remove.hash());
 
