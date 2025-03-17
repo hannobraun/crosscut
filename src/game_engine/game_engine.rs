@@ -134,9 +134,10 @@ where
                                 // Using that display value, the function can
                                 // set the color.
 
-                                let path = NodePath { hash: body };
-                                self.language
-                                    .call_function(path, self.display.clone());
+                                self.language.call_function(
+                                    NodePath { hash: body },
+                                    self.display.clone(),
+                                );
                                 continue;
                             }
                             Err(_) => {
