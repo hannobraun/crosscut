@@ -211,8 +211,8 @@ mod tests {
 
         let path_b = {
             let mut change_set = changes.new_change_set(&mut nodes);
-            let node_b = change_set.add(node_b);
-            change_set.replace(&path_a, node_b)
+            let hash_b = change_set.add(node_b);
+            change_set.replace(&path_a, hash_b)
         };
         let path_a = {
             let mut change_set = changes.new_change_set(&mut nodes);
