@@ -149,7 +149,8 @@ mod tests {
 
         let old_root = codebase.root().path;
         let new_root = codebase.make_change(|change_set| {
-            change_set.replace(&old_root, Node::new(a, []))
+            let a = Node::new(a, []);
+            change_set.replace(&old_root, a)
         });
 
         assert_eq!(codebase.root().path, new_root);
