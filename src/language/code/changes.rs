@@ -116,11 +116,7 @@ impl NewChangeSet<'_> {
         to_replace: &NodePath,
         replacement: NodeHash,
     ) -> NodePath {
-        let replacement = NodePath {
-            hash: replacement,
-            // Once `NodePath` gets more fields, we can just copy those from
-            // `to_replace`.
-        };
+        let replacement = NodePath { hash: replacement };
 
         if &replacement != to_replace {
             // Nodes are "replaced" by identical ones all the time. Making the
