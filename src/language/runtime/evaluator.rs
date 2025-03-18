@@ -443,7 +443,8 @@ mod tests {
 
         let root = codebase.root().path;
         codebase.make_change(|change_set| {
-            change_set.replace(&root, Node::new(NodeKind::Recursion, []))
+            let node = Node::new(NodeKind::Recursion, []);
+            change_set.replace(&root, node)
         });
 
         let mut evaluator = Evaluator::new();
