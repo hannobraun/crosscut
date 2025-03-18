@@ -216,8 +216,8 @@ mod tests {
         };
         let path_a = {
             let mut change_set = changes.new_change_set(&mut nodes);
-            let node_a = change_set.add(node_a);
-            change_set.replace(&path_b, node_a)
+            let hash_a = change_set.add(node_a);
+            change_set.replace(&path_b, hash_a)
         };
 
         assert_eq!(changes.latest_version_of(&path_a), &path_a);
