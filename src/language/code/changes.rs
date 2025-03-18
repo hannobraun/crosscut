@@ -213,8 +213,10 @@ mod tests {
             let mut change_set = changes.new_change_set(&mut nodes);
             change_set.replace(&path_a, node_b)
         };
-        let path_a =
-            changes.new_change_set(&mut nodes).replace(&path_b, node_a);
+        let path_a = {
+            let mut change_set = changes.new_change_set(&mut nodes);
+            change_set.replace(&path_b, node_a)
+        };
 
         assert_eq!(changes.latest_version_of(&path_a), &path_a);
         assert_eq!(changes.latest_version_of(&path_b), &path_a);
