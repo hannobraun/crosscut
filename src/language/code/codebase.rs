@@ -214,7 +214,8 @@ mod tests {
             let a = change_set.add(Node::new(a, []));
             let b = change_set.add(Node::new(b, []));
 
-            let c = change_set.replace(&root, Node::new(c, [a, b]));
+            let c = Node::new(c, [a, b]);
+            let c = change_set.replace(&root, c);
 
             (a, b, c)
         });
