@@ -114,10 +114,10 @@ impl NewChangeSet<'_> {
     pub fn replace(
         &mut self,
         to_replace: &NodePath,
-        replacement: Node,
+        replacement: NodeHash,
     ) -> NodePath {
         let replacement = NodePath {
-            hash: self.nodes.insert(replacement),
+            hash: replacement,
             // Once `NodePath` gets more fields, we can just copy those from
             // `to_replace`.
         };
@@ -211,10 +211,12 @@ mod tests {
 
         let path_b = {
             let mut change_set = changes.new_change_set(&mut nodes);
+            let node_b = change_set.add(node_b);
             change_set.replace(&path_a, node_b)
         };
         let path_a = {
             let mut change_set = changes.new_change_set(&mut nodes);
+            let node_a = change_set.add(node_a);
             change_set.replace(&path_b, node_a)
         };
 

@@ -149,7 +149,7 @@ mod tests {
 
         let old_root = codebase.root().path;
         let new_root = codebase.make_change(|change_set| {
-            let a = Node::new(a, []);
+            let a = change_set.add(Node::new(a, []));
             change_set.replace(&old_root, a)
         });
 
@@ -167,7 +167,7 @@ mod tests {
         let root = codebase.root().path;
         let a = codebase.make_change(|change_set| {
             let a = change_set.add(Node::new(a, []));
-            let b = Node::new(b, [a]);
+            let b = change_set.add(Node::new(b, [a]));
             change_set.replace(&root, b);
             a
         });
@@ -189,7 +189,7 @@ mod tests {
 
         let root = codebase.root().path;
         let a = codebase.make_change(|change_set| {
-            let a = Node::new(a, []);
+            let a = change_set.add(Node::new(a, []));
             change_set.replace(&root, a)
         });
         assert_eq!(codebase.root().path, a);
@@ -214,7 +214,7 @@ mod tests {
             let a = change_set.add(Node::new(a, []));
             let b = change_set.add(Node::new(b, []));
 
-            let c = Node::new(c, [a, b]);
+            let c = change_set.add(Node::new(c, [a, b]));
             let c = change_set.replace(&root, c);
 
             (a, b, c)

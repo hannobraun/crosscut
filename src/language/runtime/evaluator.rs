@@ -443,7 +443,7 @@ mod tests {
 
         let root = codebase.root().path;
         codebase.make_change(|change_set| {
-            let node = Node::new(NodeKind::Recursion, []);
+            let node = change_set.add(Node::new(NodeKind::Recursion, []));
             change_set.replace(&root, node)
         });
 
@@ -463,7 +463,7 @@ mod tests {
 
         let root = codebase.root().path;
         codebase.make_change(|change_set| {
-            let node = Node::new(NodeKind::Recursion, []);
+            let node = change_set.add(Node::new(NodeKind::Recursion, []));
             change_set.replace(&root, node)
         });
 

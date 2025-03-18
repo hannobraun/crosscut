@@ -33,6 +33,7 @@ impl<'r> Compiler<'r> {
                     change_set.nodes().get(parent.hash()).clone();
                 updated_parent.children_mut().add([child]);
 
+                let updated_parent = change_set.add(updated_parent);
                 change_set.replace(&parent, updated_parent);
 
                 NodePath { hash: child }
@@ -171,6 +172,7 @@ fn replace_node_and_update_parents(
         let (node, maybe_error) =
             compile_token(&next_token, next_children, change_set, packages);
 
+        let node = change_set.add(node);
         let path = change_set.replace(&next_to_replace, node);
 
         previous_replacement = path.hash;
