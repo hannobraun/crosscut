@@ -209,8 +209,10 @@ mod tests {
             NodePath { hash }
         };
 
-        let path_b =
-            changes.new_change_set(&mut nodes).replace(&path_a, node_b);
+        let path_b = {
+            let mut change_set = changes.new_change_set(&mut nodes);
+            change_set.replace(&path_a, node_b)
+        };
         let path_a =
             changes.new_change_set(&mut nodes).replace(&path_b, node_a);
 
