@@ -167,7 +167,8 @@ mod tests {
         let root = codebase.root().path;
         let a = codebase.make_change(|change_set| {
             let a = change_set.add(Node::new(a, []));
-            change_set.replace(&root, Node::new(b, [a]));
+            let b = Node::new(b, [a]);
+            change_set.replace(&root, b);
             a
         });
 
