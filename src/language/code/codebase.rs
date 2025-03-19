@@ -135,7 +135,7 @@ impl Root {
 
 #[cfg(test)]
 mod tests {
-    use crate::language::code::{Node, NodeKind};
+    use crate::language::code::{Node, NodeKind, NodePath};
 
     use super::Codebase;
 
@@ -150,7 +150,7 @@ mod tests {
         let old_root = codebase.root().path;
         let new_root = codebase.make_change(|change_set| {
             let a = change_set.add(Node::new(a, []));
-            change_set.replace(&old_root, a)
+            change_set.replace(&old_root, NodePath { hash: a })
         });
 
         assert_eq!(codebase.root().path, new_root);
@@ -169,7 +169,7 @@ mod tests {
             let a = change_set.add(Node::new(a, []));
             let b = change_set.add(Node::new(b, [a]));
 
-            change_set.replace(&root, b);
+            change_set.replace(&root, NodePath { hash: b });
 
             a
         });
@@ -192,7 +192,7 @@ mod tests {
         let root = codebase.root().path;
         let a = codebase.make_change(|change_set| {
             let a = change_set.add(Node::new(a, []));
-            change_set.replace(&root, a)
+            change_set.replace(&root, NodePath { hash: a })
         });
         assert_eq!(codebase.root().path, a);
 
@@ -217,7 +217,7 @@ mod tests {
             let b = change_set.add(Node::new(b, []));
             let c = change_set.add(Node::new(c, [a, b]));
 
-            let c = change_set.replace(&root, c);
+            let c = change_set.replace(&root, NodePath { hash: c });
 
             (a, b, c)
         });

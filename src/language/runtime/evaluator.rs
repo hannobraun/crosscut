@@ -428,7 +428,7 @@ struct StackFrame {
 #[cfg(test)]
 mod tests {
     use crate::language::{
-        code::{Codebase, Node, NodeKind},
+        code::{Codebase, Node, NodeKind, NodePath},
         runtime::{Evaluator, RuntimeState},
     };
 
@@ -444,7 +444,7 @@ mod tests {
         let root = codebase.root().path;
         codebase.make_change(|change_set| {
             let hash = change_set.add(Node::new(NodeKind::Recursion, []));
-            change_set.replace(&root, hash)
+            change_set.replace(&root, NodePath { hash })
         });
 
         let mut evaluator = Evaluator::new();
@@ -464,7 +464,7 @@ mod tests {
         let root = codebase.root().path;
         codebase.make_change(|change_set| {
             let hash = change_set.add(Node::new(NodeKind::Recursion, []));
-            change_set.replace(&root, hash)
+            change_set.replace(&root, NodePath { hash })
         });
 
         let mut evaluator = Evaluator::new();

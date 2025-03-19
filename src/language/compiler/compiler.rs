@@ -34,7 +34,12 @@ impl<'r> Compiler<'r> {
                 updated_parent.children_mut().add([child]);
 
                 let updated_parent = change_set.add(updated_parent);
-                change_set.replace(&parent, updated_parent);
+                change_set.replace(
+                    &parent,
+                    NodePath {
+                        hash: updated_parent,
+                    },
+                );
 
                 NodePath { hash: child }
             });
@@ -173,7 +178,7 @@ fn replace_node_and_update_parents(
             compile_token(&next_token, next_children, change_set, packages);
 
         let hash = change_set.add(node);
-        let path = change_set.replace(&next_to_replace, hash);
+        let path = change_set.replace(&next_to_replace, NodePath { hash });
 
         previous_replacement = path.hash;
         initial_replacement = initial_replacement.or(Some(path.clone()));

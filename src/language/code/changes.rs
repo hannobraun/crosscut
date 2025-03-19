@@ -114,10 +114,8 @@ impl NewChangeSet<'_> {
     pub fn replace(
         &mut self,
         to_replace: &NodePath,
-        replacement: NodeHash,
+        replacement: NodePath,
     ) -> NodePath {
-        let replacement = NodePath { hash: replacement };
-
         if &replacement != to_replace {
             // Nodes are "replaced" by identical ones all the time. Making the
             // caller responsible for checking that would be onerous.
@@ -210,14 +208,14 @@ mod tests {
 
             let hash_b = change_set.add(node_b);
 
-            change_set.replace(&path_a, hash_b)
+            change_set.replace(&path_a, NodePath { hash: hash_b })
         };
         let path_a = {
             let mut change_set = changes.new_change_set(&mut nodes);
 
             let hash_a = change_set.add(node_a);
 
-            change_set.replace(&path_b, hash_a)
+            change_set.replace(&path_b, NodePath { hash: hash_a })
         };
 
         assert_eq!(changes.latest_version_of(&path_a), &path_a);
