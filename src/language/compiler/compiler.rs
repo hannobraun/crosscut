@@ -190,7 +190,7 @@ fn replace_node_and_update_parents(
         let hash = change_set.add(node);
         let path = change_set.replace(&next_to_replace, NodePath { hash });
 
-        previous_replacement = path.hash;
+        previous_replacement = hash;
         initial_replacement = initial_replacement.or(Some(path.clone()));
 
         if let Some(error) = maybe_error {
