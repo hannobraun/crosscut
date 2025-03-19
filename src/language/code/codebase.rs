@@ -152,7 +152,9 @@ mod tests {
             let a = NodePath {
                 hash: change_set.add(Node::new(a, [])),
             };
-            change_set.replace(&old_root, a)
+            change_set.replace(&old_root, a.clone());
+
+            a
         });
 
         assert_eq!(codebase.root().path, new_root);
