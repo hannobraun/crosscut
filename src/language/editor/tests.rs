@@ -1,3 +1,5 @@
+use itertools::Itertools;
+
 use crate::language::{
     code::{Codebase, NodeKind},
     compiler::Compiler,
@@ -51,22 +53,19 @@ fn navigate_to_next_sibling() {
     let mut codebase = Codebase::new();
     let mut evaluator = Evaluator::new();
 
-    let [a, b] = {
+    {
         let mut compiler = Compiler::new(&mut codebase);
 
-        let a = compiler.insert_child(
-            compiler.codebase().root().path,
-            "a",
-            &packages,
-        );
-        let b = compiler.insert_child(
-            compiler.codebase().root().path,
-            "b",
-            &packages,
-        );
-
-        [a, b]
+        compiler.insert_child(compiler.codebase().root().path, "a", &packages);
+        compiler.insert_child(compiler.codebase().root().path, "b", &packages);
     };
+
+    let (a, b) = codebase
+        .root()
+        .children(codebase.nodes())
+        .map(|located_node| located_node.path)
+        .collect_tuple()
+        .unwrap();
 
     let mut editor = Editor::new(a, &codebase, &packages);
     editor.on_input(
