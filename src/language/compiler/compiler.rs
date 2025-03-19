@@ -25,29 +25,24 @@ impl<'r> Compiler<'r> {
         child_token: &str,
         packages: &Packages,
     ) -> NodePath {
-        let child = {
-            let placeholder = self.codebase.make_change(|change_set| {
-                let child = change_set.add(Node::new(NodeKind::Empty, []));
+        let placeholder = self.codebase.make_change(|change_set| {
+            let child = change_set.add(Node::new(NodeKind::Empty, []));
 
-                let updated_parent = {
-                    let mut node =
-                        change_set.nodes().get(parent.hash()).clone();
-                    node.children_mut().add([child]);
+            let updated_parent = {
+                let mut node = change_set.nodes().get(parent.hash()).clone();
+                node.children_mut().add([child]);
 
-                    let mut path = parent.clone();
-                    path.hash = change_set.add(node);
+                let mut path = parent.clone();
+                path.hash = change_set.add(node);
 
-                    path
-                };
-                change_set.replace(&parent, updated_parent);
+                path
+            };
+            change_set.replace(&parent, updated_parent);
 
-                NodePath { hash: child }
-            });
+            NodePath { hash: child }
+        });
 
-            self.replace(&placeholder, child_token, packages)
-        };
-
-        child
+        self.replace(&placeholder, child_token, packages)
     }
 
     pub fn insert_parent(
