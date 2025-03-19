@@ -210,7 +210,9 @@ mod tests {
             let path_a = NodePath {
                 hash: change_set.add(node_a),
             };
-            change_set.replace(&path_b, path_a)
+            change_set.replace(&path_b, path_a.clone());
+
+            path_a
         };
 
         assert_eq!(changes.latest_version_of(&path_a), &path_a);
