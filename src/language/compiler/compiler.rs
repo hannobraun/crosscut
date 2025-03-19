@@ -107,7 +107,16 @@ impl<'r> Compiler<'r> {
         self.insert_child(parent, new_sibling_token, packages)
     }
 
-    pub fn remove(&mut self, to_remove: &NodePath, packages: &Packages) {
+    pub fn remove(
+        &mut self,
+        to_remove: &NodePath,
+        to_update: &mut NodePath,
+        packages: &Packages,
+    ) {
+        // There's nothing to update yet, as long as `NodePath` doesn't have a
+        // `parent` field.
+        let _ = to_update;
+
         let node_to_remove = self.codebase.nodes().get(to_remove.hash());
 
         if let Some(parent) = self.codebase.parent_of(to_remove) {
