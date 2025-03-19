@@ -29,12 +29,14 @@ impl<'r> Compiler<'r> {
             let placeholder = self.codebase.make_change(|change_set| {
                 let child = change_set.add(Node::new(NodeKind::Empty, []));
 
-                let mut updated_parent =
-                    change_set.nodes().get(parent.hash()).clone();
-                updated_parent.children_mut().add([child]);
+                let updated_parent = {
+                    let mut updated_parent =
+                        change_set.nodes().get(parent.hash()).clone();
+                    updated_parent.children_mut().add([child]);
 
-                let updated_parent = NodePath {
-                    hash: change_set.add(updated_parent),
+                    NodePath {
+                        hash: change_set.add(updated_parent),
+                    }
                 };
                 change_set.replace(&parent, updated_parent);
 
