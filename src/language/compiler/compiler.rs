@@ -30,12 +30,12 @@ impl<'r> Compiler<'r> {
                 let child = change_set.add(Node::new(NodeKind::Empty, []));
 
                 let updated_parent = {
-                    let mut updated_parent =
+                    let mut node =
                         change_set.nodes().get(parent.hash()).clone();
-                    updated_parent.children_mut().add([child]);
+                    node.children_mut().add([child]);
 
                     NodePath {
-                        hash: change_set.add(updated_parent),
+                        hash: change_set.add(node),
                     }
                 };
                 change_set.replace(&parent, updated_parent);
