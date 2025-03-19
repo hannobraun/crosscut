@@ -185,7 +185,7 @@ mod tests {
         });
         let path_a = {
             let hash = nodes.insert(node_a.clone());
-            NodePath { hash }
+            NodePath { hash, parent: None }
         };
 
         let path_b = {
@@ -193,6 +193,7 @@ mod tests {
 
             let path_b = NodePath {
                 hash: change_set.add(node_b),
+                parent: None,
             };
             change_set.replace(&path_a, &path_b);
 
@@ -203,6 +204,7 @@ mod tests {
 
             let path_a = NodePath {
                 hash: change_set.add(node_a),
+                parent: None,
             };
             change_set.replace(&path_b, &path_a);
 

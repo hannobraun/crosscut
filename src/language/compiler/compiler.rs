@@ -55,7 +55,10 @@ impl<'r> Compiler<'r> {
             };
             change_set.replace(&parent, &updated_parent);
 
-            NodePath { hash: child }
+            NodePath {
+                hash: child,
+                parent: Some(Box::new(updated_parent)),
+            }
         });
 
         let children = []; // just created this node with no children
@@ -117,9 +120,31 @@ impl<'r> Compiler<'r> {
         // `parent` field.
         let _ = to_update;
 
+        let mut update_stack = Vec::new();
+        let mut path_to_update = to_update.clone();
+
+        let need_to_update = loop {
+            let parent = path_to_update.parent.clone();
+
+            update_stack.push(path_to_update);
+
+            if let Some(parent) = parent {
+                let parent = *parent;
+
+                if &parent == to_remove {
+                    break true;
+                } else {
+                    path_to_update = parent;
+                    continue;
+                }
+            } else {
+                break false;
+            }
+        };
+
         let node_to_remove = self.codebase.nodes().get(to_remove.hash());
 
-        if let Some(parent) = self.codebase.parent_of(to_remove) {
+        let parent = if let Some(parent) = self.codebase.parent_of(to_remove) {
             // The node we're removing has a parent. We need to remove the
             // reference from that parent to the node.
 
@@ -129,16 +154,31 @@ impl<'r> Compiler<'r> {
                 node_to_remove.children().iter().copied(),
             );
 
-            self.replace_inner(
+            let parent = self.replace_inner(
                 &parent.path,
                 &parent.node.to_token(packages),
                 children,
                 packages,
             );
+
+            Some(parent)
         } else {
             self.codebase.make_change(|change_set| {
                 change_set.remove(to_remove);
             });
+
+            None
+        };
+
+        if need_to_update {
+            let mut parent = parent;
+
+            while let Some(mut path) = update_stack.pop() {
+                path.parent = parent.map(Box::new);
+                *to_update = path.clone();
+
+                parent = Some(path);
+            }
         }
     }
 
@@ -221,9 +261,12 @@ fn replace_node_and_update_parents(
     }
 
     let mut initial_replacement = None;
+    let mut parent = None;
 
     while let Some((replaced, hash, maybe_error)) = added_nodes.pop() {
-        let path = NodePath { hash };
+        let path = NodePath { hash, parent };
+        parent = Some(Box::new(path.clone()));
+
         change_set.replace(&replaced, &path);
 
         initial_replacement = Some(path.clone());

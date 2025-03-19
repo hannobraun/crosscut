@@ -129,7 +129,10 @@ struct Root {
 
 impl Root {
     fn path(&self) -> NodePath {
-        NodePath { hash: self.hash }
+        NodePath {
+            hash: self.hash,
+            parent: None,
+        }
     }
 }
 
@@ -151,6 +154,7 @@ mod tests {
         let new_root = codebase.make_change(|change_set| {
             let a = NodePath {
                 hash: change_set.add(Node::new(a, [])),
+                parent: None,
             };
             change_set.replace(&old_root, &a);
 
@@ -173,7 +177,13 @@ mod tests {
             let a = change_set.add(Node::new(a, []));
             let b = change_set.add(Node::new(b, [a]));
 
-            change_set.replace(&root, &NodePath { hash: b });
+            change_set.replace(
+                &root,
+                &NodePath {
+                    hash: b,
+                    parent: None,
+                },
+            );
 
             a
         });
@@ -197,6 +207,7 @@ mod tests {
         let a = codebase.make_change(|change_set| {
             let a = NodePath {
                 hash: change_set.add(Node::new(a, [])),
+                parent: None,
             };
             change_set.replace(&root, &a);
 
@@ -225,7 +236,10 @@ mod tests {
             let b = change_set.add(Node::new(b, []));
             let c = change_set.add(Node::new(c, [a, b]));
 
-            let c = NodePath { hash: c };
+            let c = NodePath {
+                hash: c,
+                parent: None,
+            };
             change_set.replace(&root, &c);
 
             (a, b, c)

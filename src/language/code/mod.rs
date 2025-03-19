@@ -17,3 +17,6 @@ pub use self::{
     tree::SyntaxTree,
     types::Type,
 };
+
+#[cfg(test)]
+mod tests;

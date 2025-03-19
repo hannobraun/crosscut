@@ -24,12 +24,12 @@ impl SyntaxTree {
                 return Some(path);
             }
 
-            to_search.extend(
-                node.children()
-                    .iter()
-                    .copied()
-                    .map(|hash| NodePath { hash }),
-            );
+            to_search.extend(node.children().iter().copied().map(|hash| {
+                NodePath {
+                    hash,
+                    parent: Some(Box::new(path.clone())),
+                }
+            }));
         }
 
         None

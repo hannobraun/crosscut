@@ -174,7 +174,7 @@ impl Evaluator {
                         );
                     }
                     IntrinsicFunction::Eval => {
-                        let (_, body) = match node
+                        let (path, body) = match node
                             .evaluated_children
                             .clone()
                             .into_active_value()
@@ -201,7 +201,10 @@ impl Evaluator {
                         };
 
                         self.call_function(
-                            NodePath { hash: body },
+                            NodePath {
+                                hash: body,
+                                parent: Some(Box::new(path)),
+                            },
                             // Right now, the `eval` function doesn't support
                             // passing an argument to the function it evaluates.
                             Value::Nothing,
@@ -444,7 +447,7 @@ mod tests {
         let root = codebase.root().path;
         codebase.make_change(|change_set| {
             let hash = change_set.add(Node::new(NodeKind::Recursion, []));
-            change_set.replace(&root, &NodePath { hash })
+            change_set.replace(&root, &NodePath { hash, parent: None })
         });
 
         let mut evaluator = Evaluator::new();
@@ -464,7 +467,7 @@ mod tests {
         let root = codebase.root().path;
         codebase.make_change(|change_set| {
             let hash = change_set.add(Node::new(NodeKind::Recursion, []));
-            change_set.replace(&root, &NodePath { hash })
+            change_set.replace(&root, &NodePath { hash, parent: None })
         });
 
         let mut evaluator = Evaluator::new();

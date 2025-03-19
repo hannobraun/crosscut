@@ -36,6 +36,24 @@ pub struct NodePath {
     /// But this hash actually is required to identify to identify the node
     /// _uniquely_, which includes the node's version.
     pub hash: NodeHash,
+
+    /// # The path of the node's parent
+    ///
+    /// This is required to distinguish between identical nodes whose hash is
+    /// the same, but that have different parents.
+    ///
+    /// ## Implementation Note
+    ///
+    /// The `Box` is required here for indirection, but is both potentially
+    /// expensive (in terms of performance, due to memory allocations) and
+    /// inconvenient (as it prevents this type from being `Copy`).
+    ///
+    /// I decided this is the right trade-off for now. But if the performance
+    /// turns into a problem, it should be possible to replace this with an
+    /// `Option<NonNull<*const Node>>`, or something along those lines. Since
+    /// `Node`s are stored in `Nodes`, which is append-only, the un-safety
+    /// should be minimal.
+    pub parent: Option<Box<NodePath>>,
 }
 
 impl NodePath {
@@ -59,7 +77,10 @@ impl<'r> LocatedNode<'r> {
             let node = nodes.get(&hash);
             Self {
                 node,
-                path: NodePath { hash },
+                path: NodePath {
+                    hash,
+                    parent: Some(Box::new(self.path.clone())),
+                },
             }
         })
     }

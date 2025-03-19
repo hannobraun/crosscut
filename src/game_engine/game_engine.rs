@@ -119,7 +119,7 @@ where
                         break;
                     }
                 },
-                RuntimeState::Finished { output, .. } => match output {
+                RuntimeState::Finished { output, path } => match output {
                     Value::Integer { value } => {
                         // If the program returns an integer, we use that to set
                         // the color.
@@ -135,7 +135,10 @@ where
                                 // set the color.
 
                                 self.language.call_function(
-                                    NodePath { hash: body },
+                                    NodePath {
+                                        hash: body,
+                                        parent: Some(Box::new(path)),
+                                    },
                                     self.display.clone(),
                                 );
                                 continue;
