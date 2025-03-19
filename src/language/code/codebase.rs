@@ -149,8 +149,9 @@ mod tests {
 
         let old_root = codebase.root().path;
         let new_root = codebase.make_change(|change_set| {
-            let a = change_set.add(Node::new(a, []));
-            let a = NodePath { hash: a };
+            let a = NodePath {
+                hash: change_set.add(Node::new(a, [])),
+            };
             change_set.replace(&old_root, a)
         });
 
