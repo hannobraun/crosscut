@@ -201,7 +201,9 @@ mod tests {
                 hash: change_set.add(node_b),
             };
 
-            change_set.replace(&path_a, path_b)
+            change_set.replace(&path_a, path_b.clone());
+
+            path_b
         };
         let path_a = {
             let mut change_set = changes.new_change_set(&mut nodes);
