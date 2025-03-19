@@ -33,13 +33,10 @@ impl<'r> Compiler<'r> {
                     change_set.nodes().get(parent.hash()).clone();
                 updated_parent.children_mut().add([child]);
 
-                let updated_parent = change_set.add(updated_parent);
-                change_set.replace(
-                    &parent,
-                    NodePath {
-                        hash: updated_parent,
-                    },
-                );
+                let updated_parent = NodePath {
+                    hash: change_set.add(updated_parent),
+                };
+                change_set.replace(&parent, updated_parent);
 
                 NodePath { hash: child }
             });
