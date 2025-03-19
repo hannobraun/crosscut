@@ -208,8 +208,8 @@ mod tests {
             let mut change_set = changes.new_change_set(&mut nodes);
 
             let hash_a = change_set.add(node_a);
-
-            change_set.replace(&path_b, NodePath { hash: hash_a })
+            let path_a = NodePath { hash: hash_a };
+            change_set.replace(&path_b, path_a)
         };
 
         assert_eq!(changes.latest_version_of(&path_a), &path_a);
