@@ -43,7 +43,18 @@ impl<'r> Compiler<'r> {
         });
 
         let children = []; // just created this node with no children
-        self.replace_inner(&placeholder, child_token, children, packages)
+        let root = self.codebase.root().path;
+        self.codebase.make_change_with_errors(|change_set, errors| {
+            replace_node_and_update_parents(
+                &placeholder,
+                child_token,
+                children.into(),
+                packages,
+                root,
+                change_set,
+                errors,
+            )
+        })
     }
 
     pub fn insert_parent(
