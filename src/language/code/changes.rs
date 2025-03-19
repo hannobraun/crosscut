@@ -200,7 +200,6 @@ mod tests {
             let path_b = NodePath {
                 hash: change_set.add(node_b),
             };
-
             change_set.replace(&path_a, path_b.clone());
 
             path_b
