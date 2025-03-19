@@ -188,7 +188,9 @@ fn replace_node_and_update_parents(
             compile_token(&next_token, next_children, change_set, packages);
 
         let hash = change_set.add(node);
-        let path = change_set.replace(&next_to_replace, NodePath { hash });
+
+        let path = NodePath { hash };
+        let path = change_set.replace(&next_to_replace, path);
 
         previous_replacement = hash;
         initial_replacement = initial_replacement.or(Some(path.clone()));
