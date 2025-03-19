@@ -42,8 +42,7 @@ impl<'r> Compiler<'r> {
             NodePath { hash: child }
         });
 
-        let children =
-            self.codebase.node_at(&placeholder).node.children().clone();
+        let children = []; // just created this node with no children
         self.replace_inner(&placeholder, child_token, children, packages)
     }
 
