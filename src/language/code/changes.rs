@@ -83,7 +83,25 @@ impl NewChangeSet<'_> {
         self.change_set.removed.insert(to_remove.clone());
     }
 
-    /// # Replace a node in the change set with another
+    /// # Mark a node in the change set as replacing another
+    ///
+    /// This method must be used in conjunction with `add`, to insert the node
+    /// in the first place. This method only tracks the replacement of nodes,
+    /// and doesn't insert them itself.
+    ///
+    /// Since `add` can only provide a [`NodeHash`], not a full [`NodePath`], it
+    /// is the responsibility of the caller to construct a [`NodePath`] based on
+    /// the contextual information it has access to.
+    ///
+    /// ## Panics
+    ///
+    /// Panics, if this replacement would create a cycle of replacements within
+    /// this change set. For example if `A` was marked as being replaced by `B`,
+    /// then `B` as being replaced by `A`.
+    ///
+    /// While such a cycle is perfectly fine, if spread over multiple change
+    /// sets, it must not occur within a single change set. This case would be
+    /// considered a bug in the caller of this method.
     pub fn replace(
         &mut self,
         to_replace: &NodePath,
