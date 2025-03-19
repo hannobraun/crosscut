@@ -181,23 +181,16 @@ fn replace_node_and_update_parents(
     let mut next_children = children;
 
     let mut previous_replacement;
-    let mut initial_replacement = None;
+    let mut added_nodes = Vec::new();
 
     loop {
         let (node, maybe_error) =
             compile_token(&next_token, next_children, change_set, packages);
 
         let hash = change_set.add(node);
-
-        let path = NodePath { hash };
-        change_set.replace(&next_to_replace, &path);
-
         previous_replacement = hash;
-        initial_replacement = initial_replacement.or(Some(path.clone()));
 
-        if let Some(error) = maybe_error {
-            errors.insert(path, error);
-        }
+        added_nodes.push((next_to_replace.clone(), hash, maybe_error));
 
         if let Some(parent_path) = SyntaxTree::from_root(root.clone())
             .find_parent_of(&next_to_replace, change_set.nodes())
@@ -216,6 +209,19 @@ fn replace_node_and_update_parents(
         } else {
             break;
         };
+    }
+
+    let mut initial_replacement = None;
+
+    while let Some((replaced, hash, maybe_error)) = added_nodes.pop() {
+        let path = NodePath { hash };
+        change_set.replace(&replaced, &path);
+
+        initial_replacement = Some(path.clone());
+
+        if let Some(error) = maybe_error {
+            errors.insert(path, error);
+        }
     }
 
     let Some(path) = initial_replacement else {
