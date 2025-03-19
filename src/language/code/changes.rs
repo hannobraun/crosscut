@@ -84,33 +84,6 @@ impl NewChangeSet<'_> {
     }
 
     /// # Replace a node in the change set with another
-    ///
-    /// ## Implementation Note
-    ///
-    /// This API can't actually work as designed. The reason that it works right
-    /// now, is due to the limitations that [`NodePath`] still has. (See
-    /// implementation note there.)
-    ///
-    /// The end result that we expect from this function, is a mapping from
-    /// replaced `NodePath` to replacement `NodePath`. But once you need a
-    /// parent `NodePath` to construct a `NodePath`, this function can no longer
-    /// provide that.
-    ///
-    /// Because any replacement will result in a replacement of the parent. So
-    /// when this is called, the information on what the parent will be, won't
-    /// be available yet. The best we can do with the current design, is create
-    /// a `NodePath` with a parent that will be outdated immediately.
-    ///
-    /// So what we probably need to do, is to somehow split a replacement into
-    /// two steps:
-    ///
-    /// 1. Creating and storing the replacement nodes, from the bottom up until
-    ///    the root is reached, creating a `NodeHash` for each.
-    /// 2. Then, from the root down, construct the `NodePath`s, and finalize the
-    ///    mapping.
-    ///
-    /// While this seems clear to me in principle, it's not clear to me yet, how
-    /// to actually do this in practice.
     pub fn replace(
         &mut self,
         to_replace: &NodePath,
