@@ -226,7 +226,7 @@ mod tests {
             let c = change_set.add(Node::new(c, [a, b]));
 
             let c = NodePath { hash: c };
-            let c = change_set.replace(&root, c);
+            change_set.replace(&root, c.clone());
 
             (a, b, c)
         });
