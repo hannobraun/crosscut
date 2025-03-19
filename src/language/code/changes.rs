@@ -102,11 +102,7 @@ impl NewChangeSet<'_> {
     /// While such a cycle is perfectly fine, if spread over multiple change
     /// sets, it must not occur within a single change set. This case would be
     /// considered a bug in the caller of this method.
-    pub fn replace(
-        &mut self,
-        to_replace: &NodePath,
-        replacement: NodePath,
-    ) -> NodePath {
+    pub fn replace(&mut self, to_replace: &NodePath, replacement: NodePath) {
         if &replacement != to_replace {
             // Nodes are "replaced" by identical ones all the time. Making the
             // caller responsible for checking that would be onerous.
@@ -126,8 +122,6 @@ impl NewChangeSet<'_> {
                 change set."
             );
         }
-
-        replacement
     }
 }
 
