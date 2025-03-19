@@ -152,7 +152,7 @@ mod tests {
             let a = NodePath {
                 hash: change_set.add(Node::new(a, [])),
             };
-            change_set.replace(&old_root, a.clone());
+            change_set.replace(&old_root, &a);
 
             a
         });
@@ -173,7 +173,7 @@ mod tests {
             let a = change_set.add(Node::new(a, []));
             let b = change_set.add(Node::new(b, [a]));
 
-            change_set.replace(&root, NodePath { hash: b });
+            change_set.replace(&root, &NodePath { hash: b });
 
             a
         });
@@ -198,7 +198,7 @@ mod tests {
             let a = NodePath {
                 hash: change_set.add(Node::new(a, [])),
             };
-            change_set.replace(&root, a.clone());
+            change_set.replace(&root, &a);
 
             a
         });
@@ -226,7 +226,7 @@ mod tests {
             let c = change_set.add(Node::new(c, [a, b]));
 
             let c = NodePath { hash: c };
-            change_set.replace(&root, c.clone());
+            change_set.replace(&root, &c);
 
             (a, b, c)
         });

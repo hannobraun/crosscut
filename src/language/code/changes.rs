@@ -102,8 +102,8 @@ impl NewChangeSet<'_> {
     /// While such a cycle is perfectly fine, if spread over multiple change
     /// sets, it must not occur within a single change set. This case would be
     /// considered a bug in the caller of this method.
-    pub fn replace(&mut self, to_replace: &NodePath, replacement: NodePath) {
-        if &replacement != to_replace {
+    pub fn replace(&mut self, to_replace: &NodePath, replacement: &NodePath) {
+        if replacement != to_replace {
             // Nodes are "replaced" by identical ones all the time. Making the
             // caller responsible for checking that would be onerous.
             //
@@ -116,7 +116,7 @@ impl NewChangeSet<'_> {
                 .insert(to_replace.clone(), replacement.clone());
         }
 
-        if self.change_set.latest_version_of(&replacement).is_err() {
+        if self.change_set.latest_version_of(replacement).is_err() {
             panic!(
                 "You must not create a cycle of replacements within a single \
                 change set."
@@ -194,7 +194,7 @@ mod tests {
             let path_b = NodePath {
                 hash: change_set.add(node_b),
             };
-            change_set.replace(&path_a, path_b.clone());
+            change_set.replace(&path_a, &path_b);
 
             path_b
         };
@@ -204,7 +204,7 @@ mod tests {
             let path_a = NodePath {
                 hash: change_set.add(node_a),
             };
-            change_set.replace(&path_b, path_a.clone());
+            change_set.replace(&path_b, &path_a);
 
             path_a
         };

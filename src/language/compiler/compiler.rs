@@ -53,7 +53,7 @@ impl<'r> Compiler<'r> {
 
                 path
             };
-            change_set.replace(&parent, updated_parent);
+            change_set.replace(&parent, &updated_parent);
 
             NodePath { hash: child }
         });
@@ -190,7 +190,7 @@ fn replace_node_and_update_parents(
         let hash = change_set.add(node);
 
         let path = NodePath { hash };
-        change_set.replace(&next_to_replace, path.clone());
+        change_set.replace(&next_to_replace, &path);
 
         previous_replacement = hash;
         initial_replacement = initial_replacement.or(Some(path.clone()));
