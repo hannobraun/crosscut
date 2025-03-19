@@ -42,7 +42,9 @@ impl<'r> Compiler<'r> {
             NodePath { hash: child }
         });
 
-        self.replace(&placeholder, child_token, packages)
+        let children =
+            self.codebase.node_at(&placeholder).node.children().clone();
+        self.replace_inner(&placeholder, child_token, children, packages)
     }
 
     pub fn insert_parent(
