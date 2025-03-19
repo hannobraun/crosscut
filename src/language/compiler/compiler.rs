@@ -25,6 +25,22 @@ impl<'r> Compiler<'r> {
         child_token: &str,
         packages: &Packages,
     ) -> NodePath {
+        // In principle, tt should be possible to merge these two change sets
+        // into a single one. In practice, that fails because we expect `root`
+        // to be current for the second change set, but the changes in the first
+        // message that up.
+        //
+        // This is not easy to fix. Due to lifetime issues, we can't read the
+        // root from within the change set.
+        //
+        // However, the only reason the root is needed in the first place, is to
+        // find the parents, for the replacement operation. And soon, this is
+        // not going to be required any more, because it will be possible to
+        // read the parent from `NodePath`.
+        //
+        // Once that change has been made, it should be straight-forward to
+        // unify these change sets.
+
         let placeholder = self.codebase.make_change(|change_set| {
             let child = change_set.add(Node::new(NodeKind::Empty, []));
 
