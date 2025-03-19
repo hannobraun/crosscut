@@ -47,19 +47,6 @@ impl<'r> Compiler<'r> {
             self.replace(&placeholder, child_token, packages)
         };
 
-        let Some(parent) = self.codebase.parent_of(&child) else {
-            unreachable!(
-                "Just inserted `child` as child of a parent. So a parent must \
-                exist."
-            );
-        };
-
-        self.replace(
-            &parent.path,
-            &self.codebase.node_at(&parent.path).node.to_token(packages),
-            packages,
-        );
-
         child
     }
 
