@@ -116,10 +116,6 @@ impl<'r> Compiler<'r> {
         to_update: &mut NodePath,
         packages: &Packages,
     ) {
-        // There's nothing to update yet, as long as `NodePath` doesn't have a
-        // `parent` field.
-        let _ = to_update;
-
         let mut update_stack = Vec::new();
         let mut path_to_update = to_update.clone();
 
