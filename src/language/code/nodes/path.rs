@@ -48,11 +48,11 @@ pub struct NodePath {
     /// expensive (in terms of performance, due to memory allocations) and
     /// inconvenient (as it prevents this type from being `Copy`).
     ///
-    /// I decided this is the right trade-off for now. But if the performance
-    /// turns into a problem, it should be possible to replace this with an
-    /// `Option<NonNull<*const Node>>`, or something along those lines. Since
-    /// `Node`s are stored in `Nodes`, which is append-only, the un-safety
-    /// should be minimal.
+    /// I initially considered this to be the right trade-off, but I've had a
+    /// new idea since then: Use a hash here, let's call it `ParentHash`, that
+    /// includes both the parent's `NodeHash` and an `Option<ParentHash>`, for
+    /// the grandparent (which would then recursively include the whole
+    /// lineage).
     pub parent: Option<Box<NodePath>>,
 }
 
