@@ -2,7 +2,8 @@ use super::{Node, NodeHash, Nodes};
 
 /// # A unique and versioned path to a [`Node`]
 ///
-/// Builds on top of [`NodeHash`] to uniquely identify any syntax node.
+/// Builds on top of [`NodeHash`] to uniquely identify any syntax node within
+/// the syntax tree.
 ///
 /// [`NodePath`] is versioned, meaning that it will always point to the exact
 /// same syntax node. If a newer version of that node exists, the same instance
