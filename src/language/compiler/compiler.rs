@@ -171,7 +171,7 @@ impl<'r> Compiler<'r> {
 
             while let Some(mut path) = update_stack.pop() {
                 path.parent = parent.map(Box::new);
-                *to_update = path.clone();
+                to_update.parent = path.parent.clone();
 
                 parent = Some(path);
             }
