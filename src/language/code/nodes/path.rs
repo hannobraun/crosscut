@@ -11,21 +11,9 @@ use super::{Node, NodeHash, Nodes};
 ///
 /// ## Implementation Note
 ///
-/// Right now, this struct only contains a [`NodeHash`], and is thus redundant.
-/// But at some point, it will become possible to build identical expressions in
-/// different parts of the syntax tree. That's when we're going to need this
-/// struct.
-///
-/// And I want to already distinguish between this and [`NodeHash`] right now,
-/// to make the API more clear, and to not require an eventual transition.
-///
-/// The specific change that will make this struct necessary, is supporting
-/// syntax nodes with multiple children. (Thus turning the syntax tree into an
-/// actual tree.) Once that is possible, we'll need two additional pieces of
-/// data here, to uniquely identity a syntax node:
-///
-/// - The location of the parent node.
-/// - The index of the child node, within the parent node's children.
+/// At this point, [`NodePath`] can't distinguish between identical siblings of
+/// the same parent. To do that, the index of the node withing the parent's
+/// children needs to be added here.
 #[derive(Clone, Debug, Eq, Ord, PartialEq, PartialOrd)]
 pub struct NodePath {
     /// # The hash of the node that this path uniquely identifies
