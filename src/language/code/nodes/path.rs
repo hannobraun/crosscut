@@ -48,12 +48,6 @@ pub struct NodePath {
     pub parent: Option<Box<NodePath>>,
 }
 
-impl NodePath {
-    pub fn hash(&self) -> &NodeHash {
-        &self.hash
-    }
-}
-
 #[derive(Debug, Eq, PartialEq)]
 pub struct LocatedNode<'r> {
     pub node: &'r Node,
