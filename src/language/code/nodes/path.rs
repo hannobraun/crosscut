@@ -54,6 +54,9 @@ pub struct NodePath {
     /// includes both the parent's `NodeHash` and an `Option<ParentHash>`, for
     /// the grandparent (which would then recursively include the whole
     /// lineage).
+    ///
+    /// This would remove the need for heap allocation here, as well as allow
+    /// [`NodePath`] to be `Copy` again.
     pub parent: Option<Box<NodePath>>,
 }
 
