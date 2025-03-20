@@ -140,7 +140,7 @@ impl ApplicationHandler for Handler {
 
 struct ApplicationResources {
     // The order of fields is a bit weird here, as it doesn't match the order in
-    // which those values are created, nor there importance.
+    // which those values are created, nor their importance.
     //
     // Putting them in this specific order is a workaround for this issue in
     // wgpu:
