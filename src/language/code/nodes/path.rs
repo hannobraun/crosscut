@@ -31,10 +31,10 @@ pub struct NodePath {
     ///
     /// This hash isn't actually required to identify a node's position. The
     /// path to its parent and the index of the node within the parent's
-    /// children, is actually enough to do that.
+    /// children would actually be enough to do that.
     ///
-    /// But this hash actually is required to identify to identify the node
-    /// _uniquely_, which includes the node's version.
+    /// But this hash is required to identify the node _uniquely_, including its
+    /// version.
     pub hash: NodeHash,
 
     /// # The path of the node's parent
