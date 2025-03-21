@@ -38,7 +38,7 @@ pub struct NodePath {
     /// This would remove the need for heap allocation here, as well as allow
     /// [`NodePath`] to be `Copy` again. On the other hand, it would make it
     /// more complicated to find the parent of a node, given its `NodePath`.
-    pub parent: Option<Box<NodePath>>,
+    parent: Option<Box<NodePath>>,
 }
 
 impl NodePath {
