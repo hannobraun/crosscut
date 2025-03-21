@@ -48,11 +48,15 @@ impl<'r> Compiler<'r> {
                 let mut node = change_set.nodes().get(parent.hash()).clone();
                 node.children_mut().add([child]);
 
-                NodePath::new(change_set.add(node), parent.parent().cloned())
+                NodePath::new(
+                    change_set.add(node),
+                    parent.parent().cloned(),
+                    change_set.nodes(),
+                )
             };
             change_set.replace(&parent, &updated_parent);
 
-            NodePath::new(child, Some(updated_parent))
+            NodePath::new(child, Some(updated_parent), change_set.nodes())
         });
 
         let children = []; // just created this node with no children
@@ -162,8 +166,16 @@ impl<'r> Compiler<'r> {
             let mut parent = parent;
 
             while let Some(path) = update_stack.pop() {
-                *to_update = NodePath::new(*to_update.hash(), parent.clone());
-                parent = Some(NodePath::new(*path.hash(), parent));
+                *to_update = NodePath::new(
+                    *to_update.hash(),
+                    parent.clone(),
+                    self.codebase.nodes(),
+                );
+                parent = Some(NodePath::new(
+                    *path.hash(),
+                    parent,
+                    self.codebase.nodes(),
+                ));
             }
         }
     }
@@ -250,7 +262,7 @@ fn replace_node_and_update_parents(
     let mut parent = None;
 
     while let Some((replaced, hash, maybe_error)) = added_nodes.pop() {
-        let path = NodePath::new(hash, parent);
+        let path = NodePath::new(hash, parent, change_set.nodes());
         parent = Some(path.clone());
 
         change_set.replace(&replaced, &path);

@@ -135,7 +135,11 @@ where
                                 // set the color.
 
                                 self.language.call_function(
-                                    NodePath::new(body, Some(path)),
+                                    NodePath::new(
+                                        body,
+                                        Some(path),
+                                        self.language.codebase().nodes(),
+                                    ),
                                     self.display.clone(),
                                 );
                                 continue;

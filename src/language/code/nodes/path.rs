@@ -39,7 +39,7 @@ pub struct NodePath {
 }
 
 impl NodePath {
-    pub fn new(hash: NodeHash, parent: Option<NodePath>) -> Self {
+    pub fn new(hash: NodeHash, parent: Option<NodePath>, _: &Nodes) -> Self {
         let parent = parent.map(Box::new);
         Self { hash, parent }
     }
@@ -84,7 +84,7 @@ impl<'r> LocatedNode<'r> {
             let node = nodes.get(&hash);
             Self {
                 node,
-                path: NodePath::new(hash, Some(self.path.clone())),
+                path: NodePath::new(hash, Some(self.path.clone()), nodes),
             }
         })
     }

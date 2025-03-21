@@ -28,7 +28,7 @@ impl SyntaxTree {
                 node.children()
                     .iter()
                     .copied()
-                    .map(|hash| NodePath::new(hash, Some(path.clone()))),
+                    .map(|hash| NodePath::new(hash, Some(path.clone()), nodes)),
             );
         }
 
