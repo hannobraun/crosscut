@@ -48,13 +48,10 @@ impl<'r> Compiler<'r> {
                 let mut node = change_set.nodes().get(&parent.hash).clone();
                 node.children_mut().add([child]);
 
-                let mut path = parent.clone();
-                path = NodePath::new(
+                NodePath::new(
                     change_set.add(node),
-                    path.parent.map(|parent| *parent),
-                );
-
-                path
+                    parent.parent.clone().map(|parent| *parent),
+                )
             };
             change_set.replace(&parent, &updated_parent);
 
