@@ -17,7 +17,7 @@ pub struct Codebase {
 impl Codebase {
     pub fn new() -> Self {
         let mut nodes = Nodes::new();
-        let empty = nodes.insert(Node::new(NodeKind::Empty, None));
+        let empty = nodes.insert(Node::new(NodeKind::Empty, []));
 
         Self {
             root: Root { hash: empty },
