@@ -78,6 +78,44 @@ fn insert_child_should_update_errors() {
 }
 
 #[test]
+fn remove_node_and_update_path_of_descendent() {
+    // Removing a node (like any change to a node) results in all of its
+    // ancestors in the syntax tree being updated, up to the root node.
+    //
+    // While descendants are not affected by this update, any `NodePath` that
+    // refers to a descendant would no longer refer to the current version of
+    // it, since the `NodePath` also includes a node's ancestors. And those have
+    // change, since the original update went up to the root node, which is the
+    // ancestor of all nodes in the syntax tree.
+    //
+    // So any existing `NodePath` that is required to refer to the current
+    // version of the same node after the update, must be updated itself.
+
+    let packages = Packages::new();
+
+    let mut codebase = Codebase::new();
+    let mut compiler = Compiler::new(&mut codebase);
+
+    let parent =
+        compiler.insert_child(compiler.codebase().root().path, "", &packages);
+    let to_update = compiler.insert_child(parent, "", &packages);
+
+    let [to_remove] = compiler
+        .codebase()
+        .root()
+        .children(compiler.codebase().nodes())
+        .collect_array()
+        .unwrap();
+
+    let mut updated = to_update.clone();
+    compiler.remove(&to_remove.path, &mut updated, &packages);
+
+    let root = compiler.codebase().root().path;
+    assert!(!root.is_ancestor_of(&to_update));
+    assert!(root.is_ancestor_of(&updated));
+}
+
+#[test]
 fn empty_node_with_multiple_children_is_an_error() {
     // An empty node has rather obvious runtime semantics: Do nothing and just
     // pass on the active value unchanged.

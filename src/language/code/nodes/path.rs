@@ -81,6 +81,23 @@ impl NodePath {
     }
 }
 
+impl NodePath {
+    #[cfg(test)]
+    pub fn is_ancestor_of(&self, possible_descendant: &NodePath) -> bool {
+        let mut maybe_parent = possible_descendant.parent.as_deref();
+
+        while let Some(parent) = maybe_parent {
+            if parent == self {
+                return true;
+            }
+
+            maybe_parent = parent.parent.as_deref();
+        }
+
+        false
+    }
+}
+
 #[derive(Debug, Eq, PartialEq)]
 pub struct LocatedNode<'r> {
     pub node: &'r Node,
