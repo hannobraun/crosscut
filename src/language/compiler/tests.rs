@@ -1,8 +1,32 @@
+use itertools::Itertools;
+
 use crate::language::{
     code::{CodeError, Codebase, NodeKind, NodePath},
     compiler::Compiler,
     packages::Packages,
 };
+
+#[test]
+fn insert_child() {
+    // The compiler can insert a child node.
+
+    let packages = Packages::new();
+
+    let mut codebase = Codebase::new();
+    let mut compiler = Compiler::new(&mut codebase);
+
+    let a =
+        compiler.insert_child(compiler.codebase().root().path, "a", &packages);
+
+    let [child_of_root] = compiler
+        .codebase()
+        .root()
+        .children(compiler.codebase().nodes())
+        .map(|located_node| located_node.path)
+        .collect_array()
+        .unwrap();
+    assert_eq!(child_of_root, a);
+}
 
 #[test]
 fn empty_node_with_multiple_children_is_an_error() {
