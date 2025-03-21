@@ -58,6 +58,10 @@ impl NodePath {
     pub fn hash(&self) -> &NodeHash {
         &self.hash
     }
+
+    pub fn parent(&self) -> Option<&NodePath> {
+        self.parent.as_deref()
+    }
 }
 
 #[derive(Debug, Eq, PartialEq)]

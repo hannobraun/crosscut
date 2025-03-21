@@ -48,10 +48,7 @@ impl<'r> Compiler<'r> {
                 let mut node = change_set.nodes().get(parent.hash()).clone();
                 node.children_mut().add([child]);
 
-                NodePath::new(
-                    change_set.add(node),
-                    parent.parent.clone().map(|parent| *parent),
-                )
+                NodePath::new(change_set.add(node), parent.parent().cloned())
             };
             change_set.replace(&parent, &updated_parent);
 
@@ -117,13 +114,11 @@ impl<'r> Compiler<'r> {
         let mut path_to_update = to_update.clone();
 
         let need_to_update = loop {
-            let parent = path_to_update.parent.clone();
+            let parent = path_to_update.parent().cloned();
 
             update_stack.push(path_to_update);
 
             if let Some(parent) = parent {
-                let parent = *parent;
-
                 if &parent == to_remove {
                     break true;
                 } else {
