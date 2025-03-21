@@ -81,7 +81,9 @@ fn host_functions_can_inject_opaque_value() {
 
     language.on_code("observe_opaque_value fn");
 
-    let path = language.step_until_finished().expect_function_body();
+    let path = language
+        .step_until_finished()
+        .expect_function_body(language.codebase().nodes());
 
     let opaque_value = Value::Opaque {
         id: 0,
