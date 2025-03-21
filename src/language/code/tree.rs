@@ -25,9 +25,10 @@ impl SyntaxTree {
             }
 
             to_search.extend(
-                node.children().iter().copied().map(|hash| {
-                    NodePath::new(hash, Some(Box::new(path.clone())))
-                }),
+                node.children()
+                    .iter()
+                    .copied()
+                    .map(|hash| NodePath::new(hash, Some(path.clone()))),
             );
         }
 

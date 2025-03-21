@@ -201,7 +201,7 @@ impl Evaluator {
                         };
 
                         self.call_function(
-                            NodePath::new(body, Some(Box::new(path))),
+                            NodePath::new(body, Some(path)),
                             // Right now, the `eval` function doesn't support
                             // passing an argument to the function it evaluates.
                             Value::Nothing,
