@@ -49,7 +49,10 @@ impl<'r> Compiler<'r> {
                 node.children_mut().add([child]);
 
                 let mut path = parent.clone();
-                path.hash = change_set.add(node);
+                path = NodePath::new(
+                    change_set.add(node),
+                    path.parent.map(|parent| *parent),
+                );
 
                 path
             };
