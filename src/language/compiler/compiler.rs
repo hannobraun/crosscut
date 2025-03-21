@@ -168,7 +168,6 @@ impl<'r> Compiler<'r> {
 
             while let Some(path) = update_stack.pop() {
                 *to_update = NodePath::new(*to_update.hash(), parent.clone());
-
                 parent = Some(NodePath::new(*path.hash(), parent));
             }
         }
