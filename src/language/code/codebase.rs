@@ -180,7 +180,7 @@ mod tests {
         codebase.make_change(|change_set| {
             change_set.remove(&root);
         });
-        assert_eq!(*codebase.root().path.hash(), a);
+        assert_eq!(codebase.root().path.hash(), &a);
     }
 
     #[test]
