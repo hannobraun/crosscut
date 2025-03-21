@@ -135,10 +135,7 @@ where
                                 // set the color.
 
                                 self.language.call_function(
-                                    NodePath {
-                                        hash: body,
-                                        parent: Some(Box::new(path)),
-                                    },
+                                    NodePath::new(body, Some(Box::new(path))),
                                     self.display.clone(),
                                 );
                                 continue;

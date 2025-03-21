@@ -185,16 +185,13 @@ mod tests {
         });
         let path_a = {
             let hash = nodes.insert(node_a.clone());
-            NodePath { hash, parent: None }
+            NodePath::new(hash, None)
         };
 
         let path_b = {
             let mut change_set = changes.new_change_set(&mut nodes);
 
-            let path_b = NodePath {
-                hash: change_set.add(node_b),
-                parent: None,
-            };
+            let path_b = NodePath::new(change_set.add(node_b), None);
             change_set.replace(&path_a, &path_b);
 
             path_b
@@ -202,10 +199,7 @@ mod tests {
         let path_a = {
             let mut change_set = changes.new_change_set(&mut nodes);
 
-            let path_a = NodePath {
-                hash: change_set.add(node_a),
-                parent: None,
-            };
+            let path_a = NodePath::new(change_set.add(node_a), None);
             change_set.replace(&path_b, &path_a);
 
             path_a

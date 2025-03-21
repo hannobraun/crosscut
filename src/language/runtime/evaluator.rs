@@ -201,10 +201,7 @@ impl Evaluator {
                         };
 
                         self.call_function(
-                            NodePath {
-                                hash: body,
-                                parent: Some(Box::new(path)),
-                            },
+                            NodePath::new(body, Some(Box::new(path))),
                             // Right now, the `eval` function doesn't support
                             // passing an argument to the function it evaluates.
                             Value::Nothing,
@@ -447,7 +444,7 @@ mod tests {
         let root = codebase.root().path;
         codebase.make_change(|change_set| {
             let hash = change_set.add(Node::new(NodeKind::Recursion, []));
-            change_set.replace(&root, &NodePath { hash, parent: None })
+            change_set.replace(&root, &NodePath::new(hash, None))
         });
 
         let mut evaluator = Evaluator::new();
@@ -467,7 +464,7 @@ mod tests {
         let root = codebase.root().path;
         codebase.make_change(|change_set| {
             let hash = change_set.add(Node::new(NodeKind::Recursion, []));
-            change_set.replace(&root, &NodePath { hash, parent: None })
+            change_set.replace(&root, &NodePath::new(hash, None))
         });
 
         let mut evaluator = Evaluator::new();

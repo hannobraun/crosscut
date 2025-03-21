@@ -55,10 +55,7 @@ impl<'r> Compiler<'r> {
             };
             change_set.replace(&parent, &updated_parent);
 
-            NodePath {
-                hash: child,
-                parent: Some(Box::new(updated_parent)),
-            }
+            NodePath::new(child, Some(Box::new(updated_parent)))
         });
 
         let children = []; // just created this node with no children
@@ -260,7 +257,7 @@ fn replace_node_and_update_parents(
     let mut parent = None;
 
     while let Some((replaced, hash, maybe_error)) = added_nodes.pop() {
-        let path = NodePath { hash, parent };
+        let path = NodePath::new(hash, parent);
         parent = Some(Box::new(path.clone()));
 
         change_set.replace(&replaced, &path);

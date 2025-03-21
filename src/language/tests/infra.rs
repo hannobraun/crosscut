@@ -86,9 +86,6 @@ impl StepUntilFinishedResultExt for Result<(Value, NodePath), Effect> {
         let (value, path) = self.unwrap();
         let body = value.into_function_body().unwrap();
 
-        NodePath {
-            hash: body,
-            parent: Some(Box::new(path)),
-        }
+        NodePath::new(body, Some(Box::new(path)))
     }
 }
