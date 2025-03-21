@@ -57,6 +57,27 @@ fn insert_child_with_grandparent() {
 }
 
 #[test]
+fn insert_child_should_update_errors() {
+    // Inserting an erroneous child should insert an error into the codebase.
+
+    let packages = Packages::new();
+
+    let mut codebase = Codebase::new();
+    let mut compiler = Compiler::new(&mut codebase);
+
+    let unresolved = compiler.insert_child(
+        compiler.codebase().root().path,
+        "unresolved",
+        &packages,
+    );
+
+    assert_eq!(
+        compiler.codebase().errors().get(&unresolved),
+        Some(&CodeError::UnresolvedIdentifier { candidates: vec![] }),
+    );
+}
+
+#[test]
 fn empty_node_with_multiple_children_is_an_error() {
     // An empty node has rather obvious runtime semantics: Do nothing and just
     // pass on the active value unchanged.

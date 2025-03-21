@@ -53,9 +53,7 @@ impl<'r> Compiler<'r> {
                 NodePath::new(child, Some(parent_path), change_set.nodes());
 
             if let Some(error) = maybe_error {
-                // It is straight-forward to add the error now, but I don't have
-                // a test case that covers this yet.
-                let _ = error;
+                errors.insert(child_path.clone(), error);
             }
 
             child_path
