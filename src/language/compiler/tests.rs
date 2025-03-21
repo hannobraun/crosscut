@@ -29,6 +29,34 @@ fn insert_child() {
 }
 
 #[test]
+fn insert_child_with_grandparent() {
+    // Inserting a child still works, if that child's parent has a parent
+    // itself.
+
+    let packages = Packages::new();
+
+    let mut codebase = Codebase::new();
+    let mut compiler = Compiler::new(&mut codebase);
+
+    let a =
+        compiler.insert_child(compiler.codebase().root().path, "a", &packages);
+    let b = compiler.insert_child(a.clone(), "b", &packages);
+
+    let [child_of_root] = compiler
+        .codebase()
+        .root()
+        .children(compiler.codebase().nodes())
+        .collect_array()
+        .unwrap();
+    let [grandchild_of_root] = child_of_root
+        .children(compiler.codebase().nodes())
+        .map(|located_node| located_node.path)
+        .collect_array()
+        .unwrap();
+    assert_eq!(grandchild_of_root, b);
+}
+
+#[test]
 fn empty_node_with_multiple_children_is_an_error() {
     // An empty node has rather obvious runtime semantics: Do nothing and just
     // pass on the active value unchanged.

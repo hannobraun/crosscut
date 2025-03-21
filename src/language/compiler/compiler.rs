@@ -25,52 +25,40 @@ impl<'r> Compiler<'r> {
         child_token: &str,
         packages: &Packages,
     ) -> NodePath {
-        // In principle, tt should be possible to merge these two change sets
-        // into a single one. In practice, that fails because we expect `root`
-        // to be current for the second change set, but the changes in the first
-        // message that up.
-        //
-        // This is not easy to fix. Due to lifetime issues, we can't read the
-        // root from within the change set.
-        //
-        // However, the only reason the root is needed in the first place, is to
-        // find the parents, for the replacement operation. And soon, this is
-        // not going to be required any more, because it will be possible to
-        // read the parent from `NodePath`.
-        //
-        // Once that change has been made, it should be straight-forward to
-        // unify these change sets.
-
-        let placeholder = self.codebase.make_change(|change_set| {
-            let child = change_set.add(Node::new(NodeKind::Empty, []));
-
-            let updated_parent = {
-                let mut node = change_set.nodes().get(parent.hash()).clone();
-                node.children_mut().add([child]);
-
-                NodePath::new(
-                    change_set.add(node),
-                    parent.parent().cloned(),
-                    change_set.nodes(),
-                )
-            };
-            change_set.replace(&parent, &updated_parent);
-
-            NodePath::new(child, Some(updated_parent), change_set.nodes())
-        });
-
-        let children = []; // just created this node with no children
         let root = self.codebase.root().path;
         self.codebase.make_change_with_errors(|change_set, errors| {
-            replace_node_and_update_parents(
-                &placeholder,
+            let (child, maybe_error) = compile_token(
                 child_token,
-                children.into(),
+                Children::new([]),
+                change_set,
+                packages,
+            );
+            let child = change_set.add(child);
+
+            let mut siblings =
+                change_set.nodes().get(parent.hash()).children().clone();
+            siblings.add([child]);
+
+            let parent_path = replace_node_and_update_parents(
+                &parent,
+                &change_set.nodes().get(parent.hash()).to_token(packages),
+                siblings,
                 packages,
                 root,
                 change_set,
                 errors,
-            )
+            );
+
+            let child_path =
+                NodePath::new(child, Some(parent_path), change_set.nodes());
+
+            if let Some(error) = maybe_error {
+                // It is straight-forward to add the error now, but I don't have
+                // a test case that covers this yet.
+                let _ = error;
+            }
+
+            child_path
         })
     }
 
