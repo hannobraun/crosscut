@@ -16,7 +16,7 @@ use super::{Node, NodeHash, Nodes};
 /// children needs to be added here.
 #[derive(Clone, Debug, Eq, Ord, PartialEq, PartialOrd)]
 pub struct NodePath {
-    pub hash: NodeHash,
+    hash: NodeHash,
 
     /// # The path of the node's parent
     ///
