@@ -22,7 +22,7 @@ fn uniquely_identify_identical_children_of_different_parents() {
         let c = change_set.add(Node::new(c, [a]));
         let d = change_set.add(Node::new(d, [b, c]));
 
-        let d = NodePath::new(d, None);
+        let d = NodePath::for_root(d);
         change_set.replace(&root, &d);
 
         d

@@ -44,6 +44,10 @@ impl NodePath {
         Self { hash, parent }
     }
 
+    pub fn for_root(hash: NodeHash) -> Self {
+        Self { hash, parent: None }
+    }
+
     /// # The hash of the node that this path uniquely identifies
     ///
     /// This hash isn't actually required to identify a node's position. The
