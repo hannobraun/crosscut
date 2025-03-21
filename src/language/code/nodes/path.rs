@@ -20,9 +20,6 @@ pub struct NodePath {
 
     /// # The path of the node's parent
     ///
-    /// This is required to distinguish between identical nodes whose hash is
-    /// the same, but that have different parents.
-    ///
     /// ## Implementation Note
     ///
     /// The `Box` is required here for indirection, but is both potentially
@@ -59,6 +56,10 @@ impl NodePath {
         &self.hash
     }
 
+    /// # The path of the node's parent
+    ///
+    /// This is required to distinguish between identical nodes whose hash is
+    /// the same, but that have different parents.
     pub fn parent(&self) -> Option<&NodePath> {
         self.parent.as_deref()
     }
