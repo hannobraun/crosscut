@@ -39,7 +39,19 @@ pub struct NodePath {
 }
 
 impl NodePath {
-    pub fn new(hash: NodeHash, parent: Option<NodePath>, _: &Nodes) -> Self {
+    pub fn new(
+        hash: NodeHash,
+        parent: Option<NodePath>,
+        nodes: &Nodes,
+    ) -> Self {
+        if let Some(parent) = &parent {
+            assert!(
+                nodes.get(&parent.hash).children().contains(&hash),
+                "Attempting to construct invalid `NodePath`: Node being \
+                referred to is not among its purported children.",
+            );
+        }
+
         let parent = parent.map(Box::new);
         Self { hash, parent }
     }
