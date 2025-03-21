@@ -44,14 +44,14 @@ impl Codebase {
             .find_parent_of(path, &self.nodes)?;
 
         Some(LocatedNode {
-            node: self.nodes.get(&path.hash),
+            node: self.nodes.get(path.hash()),
             path,
         })
     }
 
     pub fn node_at(&self, path: &NodePath) -> LocatedNode {
         LocatedNode {
-            node: self.nodes.get(&path.hash),
+            node: self.nodes.get(path.hash()),
             path: path.clone(),
         }
     }
@@ -115,7 +115,7 @@ impl Codebase {
                 self.root.hash = self.nodes.insert(new_root);
             }
         } else if let Some(new_root) = root_was_replaced {
-            self.root.hash = new_root.hash;
+            self.root.hash = *new_root.hash();
         }
 
         value
@@ -180,7 +180,7 @@ mod tests {
         codebase.make_change(|change_set| {
             change_set.remove(&root);
         });
-        assert_eq!(codebase.root().path.hash, a);
+        assert_eq!(*codebase.root().path.hash(), a);
     }
 
     #[test]

@@ -45,7 +45,7 @@ impl<'r> Compiler<'r> {
             let child = change_set.add(Node::new(NodeKind::Empty, []));
 
             let updated_parent = {
-                let mut node = change_set.nodes().get(&parent.hash).clone();
+                let mut node = change_set.nodes().get(parent.hash()).clone();
                 node.children_mut().add([child]);
 
                 NodePath::new(
@@ -79,7 +79,7 @@ impl<'r> Compiler<'r> {
         parent_token: &str,
         packages: &Packages,
     ) -> NodePath {
-        self.replace_inner(child, parent_token, [child.hash], packages)
+        self.replace_inner(child, parent_token, [*child.hash()], packages)
     }
 
     pub fn insert_sibling(
@@ -135,7 +135,7 @@ impl<'r> Compiler<'r> {
             }
         };
 
-        let node_to_remove = self.codebase.nodes().get(&to_remove.hash);
+        let node_to_remove = self.codebase.nodes().get(to_remove.hash());
 
         let parent = if let Some(parent) = self.codebase.parent_of(to_remove) {
             // The node we're removing has a parent. We need to remove the
@@ -143,7 +143,7 @@ impl<'r> Compiler<'r> {
 
             let mut children = parent.node.children().clone();
             children.replace(
-                &to_remove.hash,
+                to_remove.hash(),
                 node_to_remove.children().iter().copied(),
             );
 
@@ -237,13 +237,13 @@ fn replace_node_and_update_parents(
         if let Some(parent_path) = SyntaxTree::from_root(root.clone())
             .find_parent_of(&next_to_replace, change_set.nodes())
         {
-            let parent_node = change_set.nodes().get(&parent_path.hash);
+            let parent_node = change_set.nodes().get(parent_path.hash());
 
             next_token = parent_node.to_token(packages);
             next_children = parent_node.children().clone();
 
             next_children
-                .replace(&next_to_replace.hash, [previous_replacement]);
+                .replace(next_to_replace.hash(), [previous_replacement]);
 
             next_to_replace = parent_path;
 

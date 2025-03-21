@@ -16,14 +16,6 @@ use super::{Node, NodeHash, Nodes};
 /// children needs to be added here.
 #[derive(Clone, Debug, Eq, Ord, PartialEq, PartialOrd)]
 pub struct NodePath {
-    /// # The hash of the node that this path uniquely identifies
-    ///
-    /// This hash isn't actually required to identify a node's position. The
-    /// path to its parent and the index of the node within the parent's
-    /// children would actually be enough to do that.
-    ///
-    /// But this hash is required to identify the node _uniquely_, including its
-    /// version.
     pub hash: NodeHash,
 
     /// # The path of the node's parent
@@ -53,6 +45,18 @@ impl NodePath {
     pub fn new(hash: NodeHash, parent: Option<NodePath>) -> Self {
         let parent = parent.map(Box::new);
         Self { hash, parent }
+    }
+
+    /// # The hash of the node that this path uniquely identifies
+    ///
+    /// This hash isn't actually required to identify a node's position. The
+    /// path to its parent and the index of the node within the parent's
+    /// children would actually be enough to do that.
+    ///
+    /// But this hash is required to identify the node _uniquely_, including its
+    /// version.
+    pub fn hash(&self) -> &NodeHash {
+        &self.hash
     }
 }
 

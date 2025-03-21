@@ -257,7 +257,7 @@ impl Evaluator {
                                     );
 
                                     Value::Function {
-                                        body: child.path.hash,
+                                        body: *child.path.hash(),
                                     }
                                 }
                                 Literal::Integer { value } => {

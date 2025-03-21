@@ -18,9 +18,9 @@ impl SyntaxTree {
         to_search.push(self.root);
 
         while let Some(path) = to_search.pop() {
-            let node = nodes.get(&path.hash);
+            let node = nodes.get(path.hash());
 
-            if node.children().contains(&child.hash) {
+            if node.children().contains(child.hash()) {
                 return Some(path);
             }
 
