@@ -73,21 +73,17 @@ impl<'r> Compiler<'r> {
         new_sibling_token: &str,
         packages: &Packages,
     ) -> NodePath {
-        let parent = self
-            .codebase()
-            .parent_of(existing_sibling)
-            .map(|located_node| located_node.path)
-            .unwrap_or_else(|| {
-                // The node we're adding a sibling for has no parent, meaning it
-                // is the root of the syntax tree.
-                //
-                // The syntax tree always needs a single root. So we can't add a
-                // sibling to the root node, without a new root node that can
-                // serve as both of their parent.
-                //
-                // Adding this new root node is what we're doing here.
-                self.insert_parent(existing_sibling, "", packages)
-            });
+        let parent = existing_sibling.parent().cloned().unwrap_or_else(|| {
+            // The node we're adding a sibling for has no parent, meaning it is
+            // the root of the syntax tree.
+            //
+            // The syntax tree always needs a single root. So we can't add a
+            // sibling to the root node, without a new root node that can serve
+            // as both of their parent.
+            //
+            // Adding this new root node is what we're doing here.
+            self.insert_parent(existing_sibling, "", packages)
+        });
 
         self.insert_child(parent, new_sibling_token, packages)
     }
