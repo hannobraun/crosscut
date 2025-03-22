@@ -85,7 +85,7 @@ fn remove_node_and_update_path_of_descendent() {
     // While descendants are not affected by this update, any `NodePath` that
     // refers to a descendant would no longer refer to the current version of
     // it, since the `NodePath` also includes a node's ancestors. And those have
-    // change, since the original update went up to the root node, which is the
+    // changed, since the original update went up to the root node, which is the
     // ancestor of all nodes in the syntax tree.
     //
     // So any existing `NodePath` that is required to refer to the current
