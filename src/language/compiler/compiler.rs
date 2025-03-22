@@ -149,9 +149,16 @@ impl<'r> Compiler<'r> {
         };
 
         let update_node_is_ancestor = to_update.is_ancestor_of(to_remove);
+        let update_node_is_lateral_relation =
+            !update_node_is_descendent && !update_node_is_ancestor;
 
-        if update_node_is_descendent {
-            let mut parent = parent;
+        if update_node_is_descendent || update_node_is_lateral_relation {
+            let mut parent = if update_node_is_descendent {
+                parent
+            } else {
+                update_stack.pop();
+                Some(self.codebase.root().path)
+            };
 
             while let Some(path) = update_stack.pop() {
                 *to_update = NodePath::new(

@@ -152,6 +152,46 @@ fn remove_node_and_update_path_of_descendent() {
 }
 
 #[test]
+fn remove_node_and_update_path_of_lateral_relation() {
+    // Removing a node (like any change to a node) results in all of its
+    // ancestors in the syntax tree being updated, up to the root node.
+    //
+    // While laterally related nodes (those that are neither ancestor nor
+    // descendant, but share a common ancestor) are not affected by this update,
+    // any `NodePath` that refers to such a node would no longer refer to the
+    // current version of it, since the `NodePath` also includes a node's
+    // ancestors. And those have changed, since the original update went up to
+    // the root node, which is the ancestor of all nodes in the syntax tree.
+    //
+    // So any existing `NodePath` that points to a lateral relation of the
+    // removed node and is required to refer to the current version of the same
+    // node after the update, must be updated itself.
+
+    let packages = Packages::new();
+
+    let mut codebase = Codebase::new();
+    let mut compiler = Compiler::new(&mut codebase);
+
+    compiler.insert_child(compiler.codebase().root().path, "a", &packages);
+    compiler.insert_child(compiler.codebase().root().path, "b", &packages);
+
+    let [to_remove, to_update] = compiler
+        .codebase()
+        .root()
+        .children(compiler.codebase().nodes())
+        .map(|located_node| located_node.path)
+        .collect_array()
+        .unwrap();
+
+    let mut updated = to_update.clone();
+    compiler.remove(&to_remove, &mut updated, &packages);
+
+    let root = compiler.codebase().root().path;
+    assert!(!root.is_ancestor_of(&to_update));
+    assert!(root.is_ancestor_of(&updated));
+}
+
+#[test]
 fn empty_node_with_multiple_children_is_an_error() {
     // An empty node has rather obvious runtime semantics: Do nothing and just
     // pass on the active value unchanged.
