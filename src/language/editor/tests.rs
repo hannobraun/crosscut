@@ -243,15 +243,13 @@ fn reuse_empty_error_node_for_parent() {
     let mut codebase = Codebase::new();
     let mut evaluator = Evaluator::new();
 
-    let (a, b) = {
+    {
         let mut compiler = Compiler::new(&mut codebase);
 
         let a =
             compiler.replace(&compiler.codebase().root().path, "a", &packages);
-        let b = compiler.insert_sibling(&a, "b", &packages);
-
-        (a, b)
-    };
+        compiler.insert_sibling(&a, "b", &packages);
+    }
 
     // Two siblings created at what was previously the root level. An empty node
     // has been created automatically as the new root node.
@@ -261,6 +259,13 @@ fn reuse_empty_error_node_for_parent() {
             node: "".to_string()
         }
     );
+
+    let [a, b] = codebase
+        .root()
+        .children(codebase.nodes())
+        .map(|located_node| located_node.path)
+        .collect_array()
+        .unwrap();
 
     let mut editor = Editor::new(b.clone(), &codebase, &packages);
 
