@@ -14,7 +14,7 @@ pub use self::{
     expressions::Expression,
     intrinsics::{IntrinsicFunction, Literal},
     nodes::{Children, LocatedNode, Node, NodeHash, NodeKind, NodePath, Nodes},
-    tree::SyntaxTree,
+    tree::find_parent_of,
     types::Type,
 };
 
