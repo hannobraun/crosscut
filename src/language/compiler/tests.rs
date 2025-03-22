@@ -78,6 +78,40 @@ fn insert_child_should_update_errors() {
 }
 
 #[test]
+fn remove_node_and_update_path_of_ancestor() {
+    // Removing a node (like any change to a node) results in all of its
+    // ancestors in the syntax tree being updated.
+    //
+    // So any existing `NodePath` that points to an ancestor of the removed node
+    // and is required to refer to the current version of the same node after
+    // the update, must be updated itself.
+
+    let packages = Packages::new();
+
+    let mut codebase = Codebase::new();
+    let mut compiler = Compiler::new(&mut codebase);
+
+    let parent =
+        compiler.insert_child(compiler.codebase().root().path, "", &packages);
+    let to_remove = compiler.insert_child(parent, "", &packages);
+
+    let [to_update] = compiler
+        .codebase()
+        .root()
+        .children(compiler.codebase().nodes())
+        .map(|located_node| located_node.path)
+        .collect_array()
+        .unwrap();
+
+    let mut updated = to_update.clone();
+    compiler.remove(&to_remove, &mut updated, &packages);
+
+    let root = compiler.codebase().root().path;
+    assert!(!root.is_ancestor_of(&to_update));
+    assert!(root.is_ancestor_of(&updated));
+}
+
+#[test]
 fn remove_node_and_update_path_of_descendent() {
     // Removing a node (like any change to a node) results in all of its
     // ancestors in the syntax tree being updated, up to the root node.

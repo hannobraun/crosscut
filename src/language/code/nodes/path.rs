@@ -80,7 +80,6 @@ impl NodePath {
         self.parent.as_deref()
     }
 
-    #[cfg(test)]
     pub fn is_ancestor_of(&self, possible_descendant: &NodePath) -> bool {
         let mut maybe_parent = possible_descendant.parent.as_deref();
 

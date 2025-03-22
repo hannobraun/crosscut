@@ -164,6 +164,10 @@ impl<'r> Compiler<'r> {
                 ));
             }
         }
+
+        if to_update.is_ancestor_of(to_remove) {
+            *to_update = self.codebase.latest_version_of(to_update);
+        }
     }
 
     pub fn replace(
