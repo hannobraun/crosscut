@@ -3,7 +3,7 @@ use super::NodePath;
 pub struct SyntaxTree {}
 
 impl SyntaxTree {
-    pub fn from_root(_: NodePath) -> Self {
+    pub fn from_root() -> Self {
         Self {}
     }
 
