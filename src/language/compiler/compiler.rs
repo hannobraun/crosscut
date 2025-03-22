@@ -103,7 +103,7 @@ impl<'r> Compiler<'r> {
         let mut update_stack = Vec::new();
         let mut path_to_update = to_update.clone();
 
-        let update_node_is_ancestor = loop {
+        let update_node_is_descendent = loop {
             let parent = path_to_update.parent().cloned();
 
             update_stack.push(path_to_update);
@@ -148,7 +148,7 @@ impl<'r> Compiler<'r> {
             None
         };
 
-        if update_node_is_ancestor {
+        if update_node_is_descendent {
             let mut parent = parent;
 
             while let Some(path) = update_stack.pop() {
