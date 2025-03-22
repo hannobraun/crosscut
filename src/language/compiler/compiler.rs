@@ -1,7 +1,7 @@
 use crate::language::{
     code::{
         Children, CodeError, Codebase, Errors, Expression, IntrinsicFunction,
-        Literal, NewChangeSet, Node, NodeKind, NodePath, find_parent_of,
+        Literal, NewChangeSet, Node, NodeKind, NodePath,
     },
     packages::Packages,
 };
@@ -236,7 +236,7 @@ fn replace_node_and_update_parents(
 
         added_nodes.push((next_to_replace.clone(), hash, maybe_error));
 
-        if let Some(parent_path) = find_parent_of(&next_to_replace) {
+        if let Some(parent_path) = next_to_replace.parent().cloned() {
             let parent_node = change_set.nodes().get(parent_path.hash());
 
             next_token = parent_node.to_token(packages);

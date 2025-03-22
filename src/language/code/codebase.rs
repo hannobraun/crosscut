@@ -2,7 +2,7 @@ use crate::language::code::NodeKind;
 
 use super::{
     Changes, Errors, LocatedNode, NewChangeSet, Node, NodeHash, NodePath,
-    Nodes, find_parent_of,
+    Nodes,
 };
 
 #[derive(Clone, Debug, Eq, PartialEq)]
@@ -40,7 +40,7 @@ impl Codebase {
     }
 
     pub fn parent_of(&self, path: &NodePath) -> Option<LocatedNode> {
-        let path = find_parent_of(path)?;
+        let path = path.parent().cloned()?;
 
         Some(LocatedNode {
             node: self.nodes.get(path.hash()),

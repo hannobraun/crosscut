@@ -4,7 +4,6 @@ mod errors;
 mod expressions;
 mod intrinsics;
 mod nodes;
-mod tree;
 mod types;
 
 pub use self::{
@@ -14,7 +13,6 @@ pub use self::{
     expressions::Expression,
     intrinsics::{IntrinsicFunction, Literal},
     nodes::{Children, LocatedNode, Node, NodeHash, NodeKind, NodePath, Nodes},
-    tree::find_parent_of,
     types::Type,
 };
 
