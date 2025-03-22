@@ -105,11 +105,12 @@ fn remove_node_and_update_path_of_descendent() {
         .codebase()
         .root()
         .children(compiler.codebase().nodes())
+        .map(|located_node| located_node.path)
         .collect_array()
         .unwrap();
 
     let mut updated = to_update.clone();
-    compiler.remove(&to_remove.path, &mut updated, &packages);
+    compiler.remove(&to_remove, &mut updated, &packages);
 
     let root = compiler.codebase().root().path;
     assert!(!root.is_ancestor_of(&to_update));
