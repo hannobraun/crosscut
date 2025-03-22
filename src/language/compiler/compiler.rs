@@ -148,6 +148,8 @@ impl<'r> Compiler<'r> {
             None
         };
 
+        let update_node_is_ancestor = to_update.is_ancestor_of(to_remove);
+
         if update_node_is_descendent {
             let mut parent = parent;
 
@@ -163,7 +165,7 @@ impl<'r> Compiler<'r> {
                     self.codebase.nodes(),
                 ));
             }
-        } else if to_update.is_ancestor_of(to_remove) {
+        } else if update_node_is_ancestor {
             *to_update = self.codebase.latest_version_of(to_update);
         }
     }
