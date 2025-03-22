@@ -116,9 +116,11 @@ impl<'r> Compiler<'r> {
 
         let node_to_remove = self.codebase.nodes().get(to_remove.hash());
 
-        let parent = if let Some(parent) = self.codebase.parent_of(to_remove) {
+        let parent = if let Some(parent) = to_remove.parent() {
             // The node we're removing has a parent. We need to remove the
             // reference from that parent to the node.
+
+            let parent = self.codebase.node_at(parent);
 
             let mut children = parent.node.children().clone();
             children.replace(
