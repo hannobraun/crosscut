@@ -25,7 +25,6 @@ impl<'r> Compiler<'r> {
         child_token: &str,
         packages: &Packages,
     ) -> NodePath {
-        let root = self.codebase.root().path;
         self.codebase.make_change_with_errors(|change_set, errors| {
             let (child, maybe_error) = compile_token(
                 child_token,
@@ -44,7 +43,6 @@ impl<'r> Compiler<'r> {
                 &change_set.nodes().get(parent.hash()).to_token(packages),
                 siblings,
                 packages,
-                root,
                 change_set,
                 errors,
             );
@@ -195,14 +193,12 @@ impl<'r> Compiler<'r> {
         children: impl Into<Children>,
         packages: &Packages,
     ) -> NodePath {
-        let root = self.codebase.root().path;
         self.codebase.make_change_with_errors(|change_set, errors| {
             replace_node_and_update_parents(
                 to_replace,
                 replacement_token,
                 children.into(),
                 packages,
-                root,
                 change_set,
                 errors,
             )
@@ -215,7 +211,6 @@ fn replace_node_and_update_parents(
     replacement_token: &str,
     children: Children,
     packages: &Packages,
-    _: NodePath,
     change_set: &mut NewChangeSet,
     errors: &mut Errors,
 ) -> NodePath {
