@@ -163,9 +163,7 @@ impl<'r> Compiler<'r> {
                     self.codebase.nodes(),
                 ));
             }
-        }
-
-        if to_update.is_ancestor_of(to_remove) {
+        } else if to_update.is_ancestor_of(to_remove) {
             *to_update = self.codebase.latest_version_of(to_update);
         }
     }
