@@ -39,8 +39,7 @@ impl Codebase {
     }
 
     pub fn parent_of(&self, path: &NodePath) -> Option<LocatedNode> {
-        let path = path.parent()?;
-        Some(self.node_at(path))
+        Some(self.node_at(path.parent()?))
     }
 
     pub fn node_at(&self, path: &NodePath) -> LocatedNode {
