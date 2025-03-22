@@ -1,4 +1,4 @@
-use super::{NodePath, Nodes};
+use super::NodePath;
 
 pub struct SyntaxTree {}
 
@@ -7,11 +7,7 @@ impl SyntaxTree {
         Self {}
     }
 
-    pub fn find_parent_of(
-        self,
-        child: &NodePath,
-        _: &Nodes,
-    ) -> Option<NodePath> {
+    pub fn find_parent_of(self, child: &NodePath) -> Option<NodePath> {
         child.parent().cloned()
     }
 }

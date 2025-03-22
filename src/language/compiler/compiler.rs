@@ -236,8 +236,8 @@ fn replace_node_and_update_parents(
 
         added_nodes.push((next_to_replace.clone(), hash, maybe_error));
 
-        if let Some(parent_path) = SyntaxTree::from_root(root.clone())
-            .find_parent_of(&next_to_replace, change_set.nodes())
+        if let Some(parent_path) =
+            SyntaxTree::from_root(root.clone()).find_parent_of(&next_to_replace)
         {
             let parent_node = change_set.nodes().get(parent_path.hash());
 
