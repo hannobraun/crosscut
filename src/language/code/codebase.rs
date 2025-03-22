@@ -1,8 +1,7 @@
 use crate::language::code::NodeKind;
 
 use super::{
-    Changes, Errors, LocatedNode, NewChangeSet, Node, NodeHash, NodePath,
-    Nodes,
+    Changes, Errors, LocatedNode, NewChangeSet, Node, NodeHash, NodePath, Nodes,
 };
 
 #[derive(Clone, Debug, Eq, PartialEq)]
@@ -41,11 +40,7 @@ impl Codebase {
 
     pub fn parent_of(&self, path: &NodePath) -> Option<LocatedNode> {
         let path = path.parent().cloned()?;
-
-        Some(LocatedNode {
-            node: self.nodes.get(path.hash()),
-            path,
-        })
+        Some(self.node_at(&path))
     }
 
     pub fn node_at(&self, path: &NodePath) -> LocatedNode {
