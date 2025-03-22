@@ -88,8 +88,9 @@ fn remove_node_and_update_path_of_descendent() {
     // changed, since the original update went up to the root node, which is the
     // ancestor of all nodes in the syntax tree.
     //
-    // So any existing `NodePath` that is required to refer to the current
-    // version of the same node after the update, must be updated itself.
+    // So any existing `NodePath` that points to a descendent of the removed
+    // node and is required to refer to the current version of the same node
+    // after the update, must be updated itself.
 
     let packages = Packages::new();
 
