@@ -116,10 +116,10 @@ impl Editor {
                         packages,
                     );
 
-                    let empty_parent = compiler
-                        .codebase()
-                        .parent_of(&self.editing)
-                        .filter(|parent| {
+                    let empty_parent =
+                        self.editing.parent().and_then(|parent| {
+                            let parent = compiler.codebase().node_at(parent);
+
                             let parent_is_empty =
                                 matches!(parent.node.kind(), NodeKind::Empty);
                             let parent_is_error_but_empty =
@@ -131,7 +131,8 @@ impl Editor {
                                     false
                                 };
 
-                            parent_is_empty || parent_is_error_but_empty
+                            (parent_is_empty || parent_is_error_but_empty)
+                                .then_some(parent)
                         });
 
                     self.editing = if let Some(parent) = empty_parent {
