@@ -36,7 +36,7 @@ impl<'r> Compiler<'r> {
 
             let mut siblings =
                 change_set.nodes().get(parent.hash()).children().clone();
-            siblings.add([child]);
+            siblings.add(child);
 
             let parent_path = replace_node_and_update_parents(
                 &parent,
