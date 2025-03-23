@@ -40,8 +40,10 @@ impl Children {
         }
     }
 
-    pub fn add(&mut self, to_add: NodeHash) {
+    pub fn add(&mut self, to_add: NodeHash) -> usize {
+        let index = self.children.len();
         self.children.push(to_add);
+        index
     }
 
     pub fn replace(
