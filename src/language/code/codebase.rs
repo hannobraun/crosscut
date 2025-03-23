@@ -38,11 +38,6 @@ impl Codebase {
         }
     }
 
-    #[cfg(test)]
-    pub fn parent_of(&self, path: &NodePath) -> Option<LocatedNode> {
-        Some(self.node_at(path.parent()?))
-    }
-
     pub fn node_at(&self, path: &NodePath) -> LocatedNode {
         LocatedNode {
             node: self.nodes.get(path.hash()),

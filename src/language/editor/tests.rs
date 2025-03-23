@@ -273,6 +273,6 @@ fn reuse_empty_error_node_for_parent() {
     editor.on_code(" ", &mut codebase, &mut evaluator, &packages);
 
     // And check that it has actually re-used the root node.
-    assert_eq!(codebase.parent_of(&a), Some(codebase.root()));
-    assert_eq!(codebase.parent_of(&b), Some(codebase.root()));
+    assert_eq!(a.parent(), Some(&codebase.root().path));
+    assert_eq!(b.parent(), Some(&codebase.root().path));
 }
