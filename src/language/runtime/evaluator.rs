@@ -351,20 +351,22 @@ impl Evaluator {
         // When this is called, the current node has already been removed from
         // the stack.
 
-        if let Some(parent) = self.eval_stack.last_mut() {
+        let new_state = if let Some(parent) = self.eval_stack.last_mut() {
             parent
                 .evaluated_children
                 .inner
                 .push((evaluated_node, output));
-            self.state = RuntimeState::Running {
+            RuntimeState::Running {
                 path: parent.syntax_node.clone(),
-            };
+            }
         } else {
-            self.state = RuntimeState::Finished {
+            RuntimeState::Finished {
                 output,
                 path: evaluated_node,
-            };
-        }
+            }
+        };
+
+        self.state = new_state;
     }
 
     pub fn state(&self) -> &RuntimeState {
