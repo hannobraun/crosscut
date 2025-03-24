@@ -174,22 +174,12 @@ impl Evaluator {
                         );
                     }
                     IntrinsicFunction::Eval => {
-                        let (_, body) = match node
+                        let body = match node
                             .evaluated_children
                             .clone()
                             .into_active_value()
                         {
-                            (path, Value::Function { body }) => {
-                                let Some(path) = path else {
-                                    unreachable!(
-                                        "`path` can only be `None`, if the \
-                                        active value is `Nothing`, but here we \
-                                        just verified that it is `Function`."
-                                    );
-                                };
-
-                                (path, body)
-                            }
+                            (_, Value::Function { body }) => body,
                             (_, active_value) => {
                                 self.unexpected_input(
                                     Type::Function,
