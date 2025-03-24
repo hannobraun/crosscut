@@ -3,7 +3,7 @@ use crate::{
         DebugOutputAdapter, EditorOutputAdapter, RawTerminalAdapter,
     },
     language::{
-        code::{NodePath, Type},
+        code::Type,
         language::Language,
         packages::{Function, FunctionId, Package},
         runtime::{Effect, RuntimeState, Value},
@@ -119,7 +119,7 @@ where
                         break;
                     }
                 },
-                RuntimeState::Finished { output, path } => match output {
+                RuntimeState::Finished { output, path: _ } => match output {
                     Value::Integer { value } => {
                         // If the program returns an integer, we use that to set
                         // the color.
@@ -134,14 +134,8 @@ where
                                 // Using that display value, the function can
                                 // set the color.
 
-                                self.language.call_function(
-                                    NodePath::new(
-                                        *body.hash(),
-                                        Some(path),
-                                        self.language.codebase().nodes(),
-                                    ),
-                                    self.display.clone(),
-                                );
+                                self.language
+                                    .call_function(body, self.display.clone());
                                 continue;
                             }
                             Err(_) => {
