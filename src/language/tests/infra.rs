@@ -73,7 +73,7 @@ where
 
 pub trait StepUntilFinishedResultExt {
     fn expect_value(self) -> Value;
-    fn expect_function_body(self, nodes: &Nodes) -> NodePath;
+    fn expect_function_body(self) -> NodePath;
 }
 
 impl StepUntilFinishedResultExt for Result<(Value, NodePath), Effect> {
@@ -82,7 +82,7 @@ impl StepUntilFinishedResultExt for Result<(Value, NodePath), Effect> {
         value
     }
 
-    fn expect_function_body(self, _: &Nodes) -> NodePath {
+    fn expect_function_body(self) -> NodePath {
         let (value, _) = self.unwrap();
         value.into_function_body().unwrap()
     }
