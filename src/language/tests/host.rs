@@ -30,10 +30,7 @@ fn host_functions() {
             }
         });
 
-    assert_eq!(
-        output.map(|(value, _)| value),
-        Ok(Value::Integer { value: 32 }),
-    );
+    assert_eq!(output, Ok(Value::Integer { value: 32 }));
 }
 
 #[test]
@@ -104,7 +101,7 @@ fn host_functions_can_inject_opaque_value() {
         });
 
     assert!(value_observed);
-    assert_eq!(output.map(|(value, _)| value), Ok(opaque_value));
+    assert_eq!(output, Ok(opaque_value));
 }
 
 #[derive(Clone, Copy, Eq, Ord, PartialEq, PartialOrd)]
