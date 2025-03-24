@@ -1,6 +1,6 @@
 use std::fmt;
 
-use crate::language::code::{NodeHash, NodePath};
+use crate::language::code::NodePath;
 
 #[derive(Clone, Debug, Eq, PartialEq, udigest::Digestable)]
 pub enum Value {
@@ -12,9 +12,9 @@ pub enum Value {
 }
 
 impl Value {
-    pub fn into_function_body(self) -> Result<NodeHash, Self> {
+    pub fn into_function_body(self) -> Result<NodePath, Self> {
         match self {
-            Value::Function { body } => Ok(*body.hash()),
+            Value::Function { body } => Ok(body),
             _ => Err(self),
         }
     }

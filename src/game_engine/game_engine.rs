@@ -136,7 +136,7 @@ where
 
                                 self.language.call_function(
                                     NodePath::new(
-                                        body,
+                                        *body.hash(),
                                         Some(path),
                                         self.language.codebase().nodes(),
                                     ),
