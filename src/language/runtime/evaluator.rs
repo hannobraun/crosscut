@@ -356,6 +356,7 @@ impl Evaluator {
                 .evaluated_children
                 .inner
                 .push((evaluated_node, output));
+
             RuntimeState::Running {
                 path: parent.syntax_node.clone(),
             }
