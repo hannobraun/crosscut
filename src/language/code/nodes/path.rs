@@ -14,7 +14,7 @@ use super::{Node, NodeHash, Nodes};
 /// At this point, [`NodePath`] can't distinguish between identical siblings of
 /// the same parent. To do that, the index of the node withing the parent's
 /// children needs to be added here.
-#[derive(Clone, Debug, Eq, Ord, PartialEq, PartialOrd)]
+#[derive(Clone, Debug, Eq, Ord, PartialEq, PartialOrd, udigest::Digestable)]
 pub struct NodePath {
     hash: NodeHash,
 
