@@ -116,10 +116,9 @@ impl Evaluator {
                 // work right now. We'll have real parameters in due time.
                 if node.evaluated_children.inner.is_empty() {
                     if let Some(stack_frame) = self.call_stack.last() {
-                        node.evaluated_children.inner.push((
-                            stack_frame.root.clone(),
-                            stack_frame.argument.clone(),
-                        ));
+                        node.evaluated_children
+                            .inner
+                            .push(stack_frame.argument.clone());
                     }
                 }
 
@@ -281,7 +280,6 @@ impl Evaluator {
                                             .evaluated_children
                                             .inner
                                             .into_iter()
-                                            .map(|(_, value)| value)
                                             .collect(),
                                     }
                                 }
@@ -336,10 +334,7 @@ impl Evaluator {
         // the stack.
 
         let new_state = if let Some(parent) = self.eval_stack.last_mut() {
-            parent
-                .evaluated_children
-                .inner
-                .push((evaluated_node, output));
+            parent.evaluated_children.inner.push(output);
 
             RuntimeState::Running {
                 path: parent.syntax_node.clone(),
@@ -384,16 +379,12 @@ impl RuntimeNode {
 
 #[derive(Clone, Debug)]
 struct EvaluatedChildren {
-    inner: Vec<(NodePath, Value)>,
+    inner: Vec<Value>,
 }
 
 impl EvaluatedChildren {
     pub fn into_active_value(mut self) -> Value {
-        let value = self
-            .inner
-            .pop()
-            .map(|(_, value)| (value))
-            .unwrap_or(Value::Nothing);
+        let value = self.inner.pop().unwrap_or(Value::Nothing);
 
         assert!(
             self.inner.is_empty(),
