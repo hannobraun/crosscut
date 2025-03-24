@@ -201,7 +201,11 @@ impl Evaluator {
                         };
 
                         self.call_function(
-                            NodePath::new(body, Some(path), codebase.nodes()),
+                            NodePath::new(
+                                *body.hash(),
+                                Some(path),
+                                codebase.nodes(),
+                            ),
                             // Right now, the `eval` function doesn't support
                             // passing an argument to the function it evaluates.
                             Value::Nothing,
@@ -256,9 +260,7 @@ impl Evaluator {
                                         evaluated at this point.",
                                     );
 
-                                    Value::Function {
-                                        body: *child.path.hash(),
-                                    }
+                                    Value::Function { body: child.path }
                                 }
                                 Literal::Integer { value } => {
                                     match node

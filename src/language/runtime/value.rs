@@ -1,11 +1,11 @@
 use std::fmt;
 
-use crate::language::code::NodeHash;
+use crate::language::code::{NodeHash, NodePath};
 
 #[derive(Clone, Debug, Eq, PartialEq, udigest::Digestable)]
 pub enum Value {
     Nothing,
-    Function { body: NodeHash },
+    Function { body: NodePath },
     Integer { value: i32 },
     Opaque { id: u32, display: &'static str },
     Tuple { elements: Vec<Value> },
@@ -14,7 +14,7 @@ pub enum Value {
 impl Value {
     pub fn into_function_body(self) -> Result<NodeHash, Self> {
         match self {
-            Value::Function { body } => Ok(body),
+            Value::Function { body } => Ok(*body.hash()),
             _ => Err(self),
         }
     }
@@ -28,7 +28,7 @@ impl fmt::Display for Value {
             }
             Self::Function { body } => {
                 write!(f, "fn ")?;
-                write!(f, "{}", body)?;
+                write!(f, "{}", body.hash())?;
             }
             Self::Integer { value } => {
                 write!(f, "{value}")?;
