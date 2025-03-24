@@ -325,11 +325,7 @@ impl Evaluator {
         };
     }
 
-    fn finish_evaluating_node(
-        &mut self,
-        evaluated_node: NodePath,
-        output: Value,
-    ) {
+    fn finish_evaluating_node(&mut self, _: NodePath, output: Value) {
         // When this is called, the current node has already been removed from
         // the stack.
 
@@ -340,10 +336,7 @@ impl Evaluator {
                 path: parent.syntax_node.clone(),
             }
         } else {
-            RuntimeState::Finished {
-                output,
-                path: evaluated_node,
-            }
+            RuntimeState::Finished { output }
         };
 
         self.state = new_state;

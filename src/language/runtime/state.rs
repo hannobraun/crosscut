@@ -7,7 +7,7 @@ pub enum RuntimeState {
     Started,
     Running { path: NodePath },
     Effect { effect: Effect, path: NodePath },
-    Finished { output: Value, path: NodePath },
+    Finished { output: Value },
     Error { path: NodePath },
 }
 

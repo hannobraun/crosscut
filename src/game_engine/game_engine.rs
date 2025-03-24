@@ -119,7 +119,7 @@ where
                         break;
                     }
                 },
-                RuntimeState::Finished { output, path: _ } => match output {
+                RuntimeState::Finished { output } => match output {
                     Value::Integer { value } => {
                         // If the program returns an integer, we use that to set
                         // the color.
