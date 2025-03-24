@@ -138,7 +138,7 @@ impl Evaluator {
             NodeKind::Empty { .. } => {
                 self.finish_evaluating_node(
                     node.syntax_node,
-                    node.evaluated_children.into_active_value().1,
+                    node.evaluated_children.into_active_value(),
                 );
             }
             NodeKind::Expression {
@@ -151,8 +151,7 @@ impl Evaluator {
                         input: node
                             .evaluated_children
                             .clone()
-                            .into_active_value()
-                            .1,
+                            .into_active_value(),
                     },
                     path: node.syntax_node.clone(),
                 };
@@ -179,8 +178,8 @@ impl Evaluator {
                             .clone()
                             .into_active_value()
                         {
-                            (_, Value::Function { body }) => body,
-                            (_, active_value) => {
+                            Value::Function { body } => body,
+                            active_value => {
                                 self.unexpected_input(
                                     Type::Function,
                                     active_value,
@@ -201,7 +200,7 @@ impl Evaluator {
                     IntrinsicFunction::Identity => {
                         self.finish_evaluating_node(
                             node.syntax_node,
-                            node.evaluated_children.into_active_value().1,
+                            node.evaluated_children.into_active_value(),
                         );
                     }
                     IntrinsicFunction::Literal { literal } => {
@@ -212,7 +211,6 @@ impl Evaluator {
                                         .evaluated_children
                                         .clone()
                                         .into_active_value()
-                                        .1
                                     {
                                         Value::Nothing => {}
                                         active_value => {
@@ -253,7 +251,6 @@ impl Evaluator {
                                         .evaluated_children
                                         .clone()
                                         .into_active_value()
-                                        .1
                                     {
                                         Value::Nothing => {}
                                         active_value => {
@@ -302,8 +299,7 @@ impl Evaluator {
                     .map(|stack_frame| stack_frame.root)
                     .unwrap_or_else(|| codebase.root().path);
 
-                let active_value =
-                    node.evaluated_children.into_active_value().1;
+                let active_value = node.evaluated_children.into_active_value();
                 self.call_function(path, active_value, codebase);
             }
             NodeKind::Error { .. } => {
@@ -392,12 +388,12 @@ struct EvaluatedChildren {
 }
 
 impl EvaluatedChildren {
-    pub fn into_active_value(mut self) -> (Option<NodePath>, Value) {
-        let (path, value) = self
+    pub fn into_active_value(mut self) -> Value {
+        let value = self
             .inner
             .pop()
-            .map(|(path, value)| (Some(path), value))
-            .unwrap_or((None, Value::Nothing));
+            .map(|(_, value)| (value))
+            .unwrap_or(Value::Nothing);
 
         assert!(
             self.inner.is_empty(),
@@ -406,7 +402,7 @@ impl EvaluatedChildren {
             expectations between compiler and evaluator.",
         );
 
-        (path, value)
+        value
     }
 }
 
