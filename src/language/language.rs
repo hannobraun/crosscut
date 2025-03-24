@@ -125,7 +125,7 @@ impl Language {
                 RuntimeState::Started | RuntimeState::Running { .. } => {
                     // We're not concerned with intermediate results here.
                 }
-                RuntimeState::Effect { effect, path: _ } => match effect {
+                RuntimeState::Effect { effect, .. } => match effect {
                     Effect::ApplyHostFunction { id, input } => {
                         match handler(id, input) {
                             Ok(output) => {
