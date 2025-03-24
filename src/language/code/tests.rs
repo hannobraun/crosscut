@@ -45,3 +45,40 @@ fn uniquely_identify_identical_children_of_different_parents() {
 
     assert_ne!(a1, a2);
 }
+
+#[test]
+fn uniquely_identify_identical_siblings() {
+    // Nodes that are identical siblings should be uniquely identified.
+
+    let mut codebase = Codebase::new();
+
+    let a = NodeKind::Error {
+        node: "a".to_string(),
+    };
+
+    let root = codebase.root().path;
+    let root = codebase.make_change(|change_set| {
+        let a = change_set.add(Node::new(a, []));
+
+        let parent = {
+            let mut node = change_set.nodes().get(root.hash()).clone();
+            node.children_mut().add(a);
+            node.children_mut().add(a);
+
+            change_set.add(node)
+        };
+
+        let parent = NodePath::for_root(parent);
+        change_set.replace(&root, &parent);
+
+        parent
+    });
+
+    let [a1, a2] = codebase
+        .node_at(&root)
+        .children(codebase.nodes())
+        .collect_array()
+        .unwrap();
+
+    assert_ne!(a1, a2);
+}

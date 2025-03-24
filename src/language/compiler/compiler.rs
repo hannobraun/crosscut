@@ -36,7 +36,7 @@ impl<'r> Compiler<'r> {
 
             let mut siblings =
                 change_set.nodes().get(parent.hash()).children().clone();
-            siblings.add(child);
+            let sibling_index = siblings.add(child);
 
             let parent_path = replace_node_and_update_parents(
                 &parent,
@@ -47,8 +47,12 @@ impl<'r> Compiler<'r> {
                 errors,
             );
 
-            let child_path =
-                NodePath::new(child, Some(parent_path), change_set.nodes());
+            let child_path = NodePath::new(
+                child,
+                Some(parent_path),
+                sibling_index,
+                change_set.nodes(),
+            );
 
             if let Some(error) = maybe_error {
                 errors.insert(child_path.clone(), error);
@@ -160,11 +164,13 @@ impl<'r> Compiler<'r> {
                 *to_update = NodePath::new(
                     *to_update.hash(),
                     parent.clone(),
+                    to_update.sibling_index(),
                     self.codebase.nodes(),
                 );
                 parent = Some(NodePath::new(
                     *path.hash(),
                     parent,
+                    path.sibling_index(),
                     self.codebase.nodes(),
                 ));
             }
@@ -250,7 +256,12 @@ fn replace_node_and_update_parents(
     let mut parent = None;
 
     while let Some((replaced, hash, maybe_error)) = added_nodes.pop() {
-        let path = NodePath::new(hash, parent, change_set.nodes());
+        let path = NodePath::new(
+            hash,
+            parent,
+            replaced.sibling_index(),
+            change_set.nodes(),
+        );
         parent = Some(path.clone());
 
         change_set.replace(&replaced, &path);

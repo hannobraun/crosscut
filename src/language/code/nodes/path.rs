@@ -36,12 +36,26 @@ pub struct NodePath {
     /// [`NodePath`] to be `Copy` again. On the other hand, it would make it
     /// more complicated to find the parent of a node, given its `NodePath`.
     parent: Option<Box<NodePath>>,
+
+    /// # The index of the node among its siblings
+    ///
+    /// ## Implementation Note
+    ///
+    /// I'm a bit concerned with using `usize` here, as it could lead to
+    /// problems when serializing `Codebase`. But using something else makes
+    /// some other code much harder to write. I'd basically have to re-implement
+    /// `iter::Enumerate`, including its implementation of `DoubleEndedIterator,
+    /// for `u32` or whatever.
+    ///
+    /// For now, this works. But it might have to change going forward.
+    sibling_index: usize,
 }
 
 impl NodePath {
     pub fn new(
         hash: NodeHash,
         parent: Option<NodePath>,
+        sibling_index: usize,
         nodes: &Nodes,
     ) -> Self {
         if let Some(parent) = &parent {
@@ -53,11 +67,19 @@ impl NodePath {
         }
 
         let parent = parent.map(Box::new);
-        Self { hash, parent }
+        Self {
+            hash,
+            parent,
+            sibling_index,
+        }
     }
 
     pub fn for_root(hash: NodeHash) -> Self {
-        Self { hash, parent: None }
+        Self {
+            hash,
+            parent: None,
+            sibling_index: 0,
+        }
     }
 
     /// # The hash of the node that this path uniquely identifies
@@ -78,6 +100,10 @@ impl NodePath {
     /// the same, but that have different parents.
     pub fn parent(&self) -> Option<&NodePath> {
         self.parent.as_deref()
+    }
+
+    pub fn sibling_index(&self) -> usize {
+        self.sibling_index
     }
 
     pub fn is_ancestor_of(&self, possible_descendant: &NodePath) -> bool {
@@ -106,12 +132,19 @@ impl<'r> LocatedNode<'r> {
         &self,
         nodes: &'r Nodes,
     ) -> impl DoubleEndedIterator<Item = LocatedNode<'r>> {
-        self.node.children().iter().copied().map(move |hash| {
-            let node = nodes.get(&hash);
-            Self {
-                node,
-                path: NodePath::new(hash, Some(self.path.clone()), nodes),
-            }
-        })
+        self.node.children().iter().copied().enumerate().map(
+            move |(index, hash)| {
+                let node = nodes.get(&hash);
+                Self {
+                    node,
+                    path: NodePath::new(
+                        hash,
+                        Some(self.path.clone()),
+                        index,
+                        nodes,
+                    ),
+                }
+            },
+        )
     }
 }
