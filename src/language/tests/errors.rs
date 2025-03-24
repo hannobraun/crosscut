@@ -3,7 +3,6 @@ use crate::language::{
     language::Language,
     packages::{Function, FunctionId, Package},
     runtime::{Effect, RuntimeState, Value},
-    tests::infra::StepUntilFinishedResultExt,
 };
 
 #[test]
@@ -53,10 +52,7 @@ fn unresolved_syntax_node() {
 
     let resolved = language.codebase().root().path;
     assert_eq!(language.codebase().errors().get(&resolved), None);
-    assert_eq!(
-        language.step_until_finished().expect_value(),
-        Value::Nothing,
-    );
+    assert_eq!(language.step_until_finished().unwrap(), Value::Nothing);
 }
 
 #[test]

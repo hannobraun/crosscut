@@ -3,7 +3,6 @@ use crate::language::{
     language::Language,
     packages::{Function, Package},
     runtime::{Effect, Value},
-    tests::infra::StepUntilFinishedResultExt,
 };
 
 #[test]
@@ -81,7 +80,11 @@ fn host_functions_can_inject_opaque_value() {
 
     language.on_code("observe_opaque_value fn");
 
-    let path = language.step_until_finished().expect_function_body();
+    let path = language
+        .step_until_finished()
+        .unwrap()
+        .into_function_body()
+        .unwrap();
 
     let opaque_value = Value::Opaque {
         id: 0,

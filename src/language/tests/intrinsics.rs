@@ -1,17 +1,11 @@
-use crate::language::{
-    language::Language, runtime::Value,
-    tests::infra::StepUntilFinishedResultExt,
-};
+use crate::language::{language::Language, runtime::Value};
 
 #[test]
 fn drop() {
     // The `drop` function takes any argument and returns `nothing`.
 
     let mut language = Language::from_code("127 drop");
-    assert_eq!(
-        language.step_until_finished().expect_value(),
-        Value::Nothing,
-    );
+    assert_eq!(language.step_until_finished().unwrap(), Value::Nothing);
 }
 
 #[test]
@@ -23,7 +17,7 @@ fn eval() {
 
     let mut language = Language::from_code("127 fn eval");
     assert_eq!(
-        language.step_until_finished().expect_value(),
+        language.step_until_finished().unwrap(),
         Value::Integer { value: 127 },
     );
 }
@@ -35,7 +29,7 @@ fn number_literal() {
 
     let mut language = Language::from_code("127");
     assert_eq!(
-        language.step_until_finished().expect_value(),
+        language.step_until_finished().unwrap(),
         Value::Integer { value: 127 },
     );
 }
@@ -45,14 +39,11 @@ fn identity_none() {
     // The `identity` function takes any argument and returns it unchanged.
 
     let mut language = Language::from_code("identity");
-    assert_eq!(
-        language.step_until_finished().expect_value(),
-        Value::Nothing,
-    );
+    assert_eq!(language.step_until_finished().unwrap(), Value::Nothing);
 
     let mut language = Language::from_code("127 identity");
     assert_eq!(
-        language.step_until_finished().expect_value(),
+        language.step_until_finished().unwrap(),
         Value::Integer { value: 127 },
     );
 }

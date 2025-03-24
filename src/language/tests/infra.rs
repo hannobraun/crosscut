@@ -1,11 +1,7 @@
 use std::vec;
 
-use crate::language::{
-    code::{
-        Expression, IntrinsicFunction, Literal, LocatedNode, Node, NodeKind,
-        NodePath, Nodes,
-    },
-    runtime::{Effect, Value},
+use crate::language::code::{
+    Expression, IntrinsicFunction, Literal, LocatedNode, Node, NodeKind, Nodes,
 };
 
 pub trait NodeExt: Sized {
@@ -68,22 +64,5 @@ where
         })
         .collect::<Vec<_>>()
         .into_iter()
-    }
-}
-
-pub trait StepUntilFinishedResultExt {
-    fn expect_value(self) -> Value;
-    fn expect_function_body(self) -> NodePath;
-}
-
-impl StepUntilFinishedResultExt for Result<(Value, NodePath), Effect> {
-    fn expect_value(self) -> Value {
-        let (value, _) = self.unwrap();
-        value
-    }
-
-    fn expect_function_body(self) -> NodePath {
-        let (value, _) = self.unwrap();
-        value.into_function_body().unwrap()
     }
 }
