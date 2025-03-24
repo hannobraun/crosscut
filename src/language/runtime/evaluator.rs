@@ -174,7 +174,7 @@ impl Evaluator {
                         );
                     }
                     IntrinsicFunction::Eval => {
-                        let (path, body) = match node
+                        let (_, body) = match node
                             .evaluated_children
                             .clone()
                             .into_active_value()
@@ -201,11 +201,7 @@ impl Evaluator {
                         };
 
                         self.call_function(
-                            NodePath::new(
-                                *body.hash(),
-                                Some(path),
-                                codebase.nodes(),
-                            ),
+                            body,
                             // Right now, the `eval` function doesn't support
                             // passing an argument to the function it evaluates.
                             Value::Nothing,
