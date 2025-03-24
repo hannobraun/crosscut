@@ -172,6 +172,12 @@ impl Editor {
         self.editing =
             compiler.replace(&self.editing, self.input.buffer(), packages);
 
+        let root = compiler.codebase().root().path;
+        assert!(
+            self.editing == root || root.is_ancestor_of(self.editing()),
+            "Editor is no longer editing a current node after update.",
+        );
+
         // Unconditionally resetting the interpreter like this, is not going to
         // work long-term. It should only be reset, if it's finished.
         //
