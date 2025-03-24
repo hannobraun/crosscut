@@ -82,10 +82,8 @@ impl StepUntilFinishedResultExt for Result<(Value, NodePath), Effect> {
         value
     }
 
-    fn expect_function_body(self, nodes: &Nodes) -> NodePath {
-        let (value, path) = self.unwrap();
-        let body = value.into_function_body().unwrap();
-
-        NodePath::new(*body.hash(), Some(path), nodes)
+    fn expect_function_body(self, _: &Nodes) -> NodePath {
+        let (value, _) = self.unwrap();
+        value.into_function_body().unwrap()
     }
 }
