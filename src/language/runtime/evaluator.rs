@@ -352,13 +352,13 @@ impl Evaluator {
         // the stack.
 
         if let Some(parent) = self.eval_stack.last_mut() {
-            self.state = RuntimeState::Running {
-                path: parent.syntax_node.clone(),
-            };
             parent
                 .evaluated_children
                 .inner
                 .push((evaluated_node, output));
+            self.state = RuntimeState::Running {
+                path: parent.syntax_node.clone(),
+            };
         } else {
             self.state = RuntimeState::Finished {
                 output,
