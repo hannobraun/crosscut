@@ -192,6 +192,36 @@ fn remove_node_and_update_path_of_lateral_relation() {
 }
 
 #[test]
+fn remove_node_and_update_path_of_sibling() {
+    // Removing a node might result in the indices of its siblings being
+    // affected. So any existing `NodePath` that points to a sibling of the
+    // removed node and is required to refer to the current version of the same
+    // node after the update, must be updated itself.
+
+    let packages = Packages::new();
+
+    let mut codebase = Codebase::new();
+    let mut compiler = Compiler::new(&mut codebase);
+
+    compiler.insert_child(compiler.codebase().root().path, "", &packages);
+    compiler.insert_child(compiler.codebase().root().path, "", &packages);
+
+    let [to_remove, to_update] = compiler
+        .codebase()
+        .root()
+        .children(compiler.codebase().nodes())
+        .map(|located_node| located_node.path)
+        .collect_array()
+        .unwrap();
+
+    let mut updated = to_update.clone();
+    compiler.remove(&to_remove, &mut updated, &packages);
+
+    assert_eq!(to_update.sibling_index(), 1);
+    assert_eq!(updated.sibling_index(), 0);
+}
+
+#[test]
 fn empty_node_with_multiple_children_is_an_error() {
     // An empty node has rather obvious runtime semantics: Do nothing and just
     // pass on the active value unchanged.

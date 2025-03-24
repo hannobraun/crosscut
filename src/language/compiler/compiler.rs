@@ -153,7 +153,14 @@ impl<'r> Compiler<'r> {
             !update_node_is_descendent && !update_node_is_ancestor;
 
         if update_node_is_descendent || update_node_is_lateral_relation {
-            let to_update_new_sibling_index = to_update.sibling_index();
+            let to_update_new_sibling_index = if to_update.parent()
+                == to_remove.parent()
+                && to_update.sibling_index() > to_remove.sibling_index()
+            {
+                to_update.sibling_index() - 1
+            } else {
+                to_update.sibling_index()
+            };
 
             let mut parent = if update_node_is_descendent {
                 parent
