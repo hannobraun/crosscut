@@ -55,14 +55,14 @@ impl Evaluator {
 
         // Now that its output has been provided, the host function is fully
         // handled. We can drop the node that triggered it.
-        let Some(evaluated_node) = self.eval_stack.pop() else {
+        let Some(_) = self.eval_stack.pop() else {
             unreachable!(
                 "Effect has been triggered, but no node that could have \
                 triggered it is available."
             );
         };
 
-        self.finish_evaluating_node(evaluated_node.syntax_node, value);
+        self.finish_evaluating_node(value);
     }
 
     pub fn trigger_effect(&mut self, effect: Effect) {
@@ -136,7 +136,6 @@ impl Evaluator {
         match codebase.node_at(&node.syntax_node).node.kind() {
             NodeKind::Empty { .. } => {
                 self.finish_evaluating_node(
-                    node.syntax_node,
                     node.evaluated_children.into_active_value(),
                 );
             }
@@ -166,10 +165,7 @@ impl Evaluator {
             } => {
                 match intrinsic {
                     IntrinsicFunction::Drop => {
-                        self.finish_evaluating_node(
-                            node.syntax_node,
-                            Value::Nothing,
-                        );
+                        self.finish_evaluating_node(Value::Nothing);
                     }
                     IntrinsicFunction::Eval => {
                         let body = match node
@@ -198,7 +194,6 @@ impl Evaluator {
                     }
                     IntrinsicFunction::Identity => {
                         self.finish_evaluating_node(
-                            node.syntax_node,
                             node.evaluated_children.into_active_value(),
                         );
                     }
@@ -286,7 +281,7 @@ impl Evaluator {
                             }
                         };
 
-                        self.finish_evaluating_node(node.syntax_node, value);
+                        self.finish_evaluating_node(value);
                     }
                 }
             }
@@ -325,7 +320,7 @@ impl Evaluator {
         };
     }
 
-    fn finish_evaluating_node(&mut self, _: NodePath, output: Value) {
+    fn finish_evaluating_node(&mut self, output: Value) {
         // When this is called, the current node has already been removed from
         // the stack.
 
