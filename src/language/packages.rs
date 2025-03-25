@@ -14,11 +14,13 @@ impl<T: Function> Package<T> {
         }
     }
 
-    pub fn add_function(&mut self, function: T) {
+    pub fn add_function(&mut self, function: T) -> FunctionId {
         let id = self.next_id;
         self.next_id = FunctionId { id: id.id + 1 };
 
         self.functions_by_id.insert(id, function);
+
+        id
     }
 
     pub fn function_by_id(&self, id: &FunctionId) -> &T {
