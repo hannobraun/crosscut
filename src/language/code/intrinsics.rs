@@ -34,18 +34,7 @@ impl Function for IntrinsicFunction {
 
 impl fmt::Display for IntrinsicFunction {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        match self {
-            Self::Drop => {
-                write!(f, "drop")?;
-            }
-            Self::Eval => {
-                write!(f, "eval")?;
-            }
-            Self::Identity => {
-                write!(f, "identity")?;
-            }
-        }
-
+        write!(f, "{}", self.name())?;
         Ok(())
     }
 }
