@@ -33,10 +33,7 @@ impl Packages {
         }
     }
 
-    pub fn register_package<T: Function>(
-        &mut self,
-        _: &Package<T>,
-    ) -> PackageId {
+    pub fn register_package<T>(&mut self, _: &Package<T>) -> PackageId {
         let id = self.next_id;
         self.next_id.id += 1;
 
