@@ -86,9 +86,9 @@ fn update_after_removing_all_characters() {
 fn add_parent_node() {
     // It's possible to add a parent node of the current node.
 
-    let package = test_package();
-
     let mut language = Language::new();
+
+    let package = test_package();
     language.packages_mut().register_package(&package);
 
     language.on_code("a");
