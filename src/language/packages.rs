@@ -1,15 +1,15 @@
-use std::collections::BTreeMap;
+use std::collections::{BTreeMap, btree_map};
 
 #[derive(Debug)]
 pub struct Packages {
-    inner: Vec<RegisteredPackage>,
+    inner: BTreeMap<PackageId, RegisteredPackage>,
     next_id: u32,
 }
 
 impl Packages {
     pub fn new() -> Self {
         Self {
-            inner: Vec::new(),
+            inner: BTreeMap::new(),
             next_id: 0,
         }
     }
@@ -26,13 +26,15 @@ impl Packages {
             PackageId { id }
         };
 
-        self.inner.push(RegisteredPackage::default());
-
-        let Some(package) = self.inner.last_mut() else {
+        let btree_map::Entry::Vacant(entry) = self.inner.entry(package_id)
+        else {
             unreachable!(
-                "Just pushed a package, so a last package must exist."
+                "Duplicate package IDs are not possible. Above, we increment \
+                the ID every time we create a new package, and we don't allow \
+                the ID to wrap."
             );
         };
+        let package = entry.insert(RegisteredPackage::default());
 
         PackageBuilder {
             functions_by_id: BTreeMap::new(),
@@ -44,14 +46,14 @@ impl Packages {
 
     pub fn resolve_function(&self, name: &str) -> Option<FunctionId> {
         self.inner
-            .iter()
+            .values()
             .find_map(|package| package.function_ids_by_name.get(name).copied())
     }
 
     pub fn function_name_by_id(&self, id: &FunctionId) -> &str {
         let Some(name) = self
             .inner
-            .iter()
+            .values()
             .find_map(|package| package.function_names_by_id.get(id))
         else {
             panic!("Expected function ID `{id:?}` to be valid.");
