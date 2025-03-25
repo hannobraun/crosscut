@@ -3,20 +3,20 @@ use std::collections::BTreeMap;
 #[derive(Debug)]
 pub struct Packages {
     inner: Vec<RegisteredPackage>,
-    next_id: PackageId,
+    next_id: u32,
 }
 
 impl Packages {
     pub fn new() -> Self {
         Self {
             inner: Vec::new(),
-            next_id: PackageId { id: 0 },
+            next_id: 0,
         }
     }
 
     pub fn new_package<T>(&mut self) -> PackageBuilder<T> {
         let id = self.next_id;
-        self.next_id.id += 1;
+        self.next_id += 1;
 
         self.inner.push(RegisteredPackage::default());
 
@@ -30,7 +30,7 @@ impl Packages {
             functions_by_id: BTreeMap::new(),
             registered: package,
             next_id: 0,
-            package: id,
+            package: PackageId { id },
         }
     }
 
