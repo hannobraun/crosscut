@@ -15,7 +15,7 @@ impl Packages {
     }
 
     pub fn new_package<T>(&mut self) -> PackageBuilder<T> {
-        let id = {
+        let package_id = {
             let id = self.next_id;
 
             let Some(next_id) = self.next_id.checked_add(1) else {
@@ -38,7 +38,7 @@ impl Packages {
             functions_by_id: BTreeMap::new(),
             registered: package,
             next_id: 0,
-            package: PackageId { id },
+            package: PackageId { id: package_id },
         }
     }
 
