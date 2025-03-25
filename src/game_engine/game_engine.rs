@@ -157,8 +157,8 @@ where
     fn apply_host_function(&mut self, id: FunctionId, input: Value) {
         let display_type = Type::Opaque { name: "Display" };
 
-        match self.package.function_by_id(&id).unwrap() {
-            GameEngineFunction::Dim => match input {
+        match self.package.function_by_id(&id) {
+            Some(GameEngineFunction::Dim) => match input {
                 Value::Integer { value } => {
                     self.language.provide_host_function_output(
                         Value::Integer { value: value / 2 },
@@ -171,7 +171,7 @@ where
                     });
                 }
             },
-            GameEngineFunction::Black => {
+            Some(GameEngineFunction::Black) => {
                 if input == self.display {
                     self.output_color(0);
                     self.language.provide_host_function_output(input);
@@ -182,7 +182,7 @@ where
                     });
                 }
             }
-            GameEngineFunction::White => {
+            Some(GameEngineFunction::White) => {
                 if input == self.display {
                     self.output_color(255);
                     self.language.provide_host_function_output(input);
@@ -192,6 +192,9 @@ where
                         actual: input,
                     });
                 }
+            }
+            None => {
+                panic!("Unexpected function: {id:?}");
             }
         }
     }
