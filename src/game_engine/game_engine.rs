@@ -56,7 +56,7 @@ where
         package.add_function(GameEngineFunction::Black);
         package.add_function(GameEngineFunction::White);
         let package = package.build();
-        language.packages_mut().register_package(&package);
+        language.packages_mut().register_package();
 
         let mut game_engine = Self {
             language,
