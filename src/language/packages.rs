@@ -23,7 +23,7 @@ impl Packages {
             };
             self.next_id = next_id;
 
-            id
+            PackageId { id }
         };
 
         self.inner.push(RegisteredPackage::default());
@@ -38,7 +38,7 @@ impl Packages {
             functions_by_id: BTreeMap::new(),
             registered: package,
             next_id: 0,
-            package: PackageId { id: package_id },
+            package: package_id,
         }
     }
 
