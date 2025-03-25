@@ -400,11 +400,16 @@ fn resolve_function(
             let candidates = Vec::new();
             Err(candidates)
         }
-        (Some(id), Some(intrinsic)) => {
-            let candidates = vec![
-                Expression::HostFunction { id },
-                Expression::IntrinsicFunction { intrinsic },
-            ];
+        (host_function, intrinsic_function) => {
+            let mut candidates = Vec::new();
+
+            if let Some(id) = host_function {
+                candidates.push(Expression::HostFunction { id });
+            }
+            if let Some(intrinsic) = intrinsic_function {
+                candidates.push(Expression::IntrinsicFunction { intrinsic });
+            }
+
             Err(candidates)
         }
     }
