@@ -31,7 +31,7 @@ impl Packages {
         PackageBuilder {
             functions_by_id: BTreeMap::new(),
             registered: package,
-            next_id: FunctionId { id: 0 },
+            next_id: 0,
         }
     }
 
@@ -61,7 +61,7 @@ impl Packages {
 pub struct PackageBuilder<'r, T> {
     registered: &'r mut RegisteredPackage,
     functions_by_id: BTreeMap<FunctionId, T>,
-    next_id: FunctionId,
+    next_id: u32,
 }
 
 impl<T> PackageBuilder<'_, T> {
@@ -69,8 +69,8 @@ impl<T> PackageBuilder<'_, T> {
     where
         T: Function,
     {
-        let id = self.next_id;
-        self.next_id = FunctionId { id: id.id + 1 };
+        let id = FunctionId { id: self.next_id };
+        self.next_id += 1;
 
         self.registered
             .function_ids_by_name
