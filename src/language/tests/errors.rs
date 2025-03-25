@@ -81,11 +81,11 @@ fn syntax_node_that_could_resolve_to_multiple_functions_is_unresolved() {
         Some(&CodeError::UnresolvedIdentifier {
             candidates: vec![
                 Expression::HostFunction {
-                    id: FunctionId { id: 0 }
+                    id: FunctionId { id: 0 },
                 },
                 Expression::IntrinsicFunction {
-                    intrinsic: IntrinsicFunction::Identity
-                }
+                    intrinsic: IntrinsicFunction::Identity,
+                },
             ]
         }),
     );
