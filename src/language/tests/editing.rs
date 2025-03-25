@@ -88,7 +88,7 @@ fn add_parent_node() {
 
     let mut language = Language::new();
 
-    let package = test_package();
+    let package = test_package(&mut language);
     language.packages_mut().register_package(&package);
 
     language.on_code("a");
@@ -114,7 +114,7 @@ fn add_parent_of_node_that_already_has_a_parent() {
 
     let mut language = Language::new();
 
-    let package = test_package();
+    let package = test_package(&mut language);
     language.packages_mut().register_package(&package);
 
     language.on_code("a b_to_c");
@@ -527,7 +527,7 @@ impl Function for TestFunction {
     }
 }
 
-fn test_package() -> Package<TestFunction> {
+fn test_package(_: &mut Language) -> Package<TestFunction> {
     let mut package = Package::new();
 
     package.add_function(TestFunction::A);
