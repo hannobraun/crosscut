@@ -30,7 +30,7 @@ impl Language {
     }
 
     pub fn with_package<T: Function>(&mut self, package: &Package<T>) {
-        self.packages.register_package(package);
+        self.packages_mut().register_package(package);
     }
 
     pub fn codebase(&self) -> &Codebase {
@@ -47,6 +47,10 @@ impl Language {
 
     pub fn packages(&self) -> &Packages {
         &self.packages
+    }
+
+    pub fn packages_mut(&mut self) -> &mut Packages {
+        &mut self.packages
     }
 
     pub fn on_input(&mut self, event: EditorInputEvent) {
