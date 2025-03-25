@@ -15,6 +15,9 @@ impl Packages {
     }
 
     pub fn new_package<T>(&mut self) -> PackageBuilder<T> {
+        let id = self.next_id;
+        self.next_id.id += 1;
+
         self.inner.push(RegisteredPackage::default());
 
         let Some(package) = self.inner.last_mut() else {
@@ -22,9 +25,6 @@ impl Packages {
                 "Just pushed a package, so a last package must exist."
             );
         };
-
-        let id = self.next_id;
-        self.next_id.id += 1;
 
         PackageBuilder {
             functions_by_id: BTreeMap::new(),
