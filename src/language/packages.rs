@@ -107,7 +107,7 @@ pub trait Function: Copy + Ord {
     Clone, Copy, Debug, Eq, Ord, PartialEq, PartialOrd, udigest::Digestable,
 )]
 pub struct FunctionId {
-    pub id: u32,
+    id: u32,
 }
 
 #[derive(Clone, Copy, Debug)]
