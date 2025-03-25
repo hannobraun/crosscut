@@ -378,7 +378,8 @@ fn resolve_function(
     packages: &Packages,
 ) -> Result<Expression, Vec<Expression>> {
     let host_function = packages.resolve_function(name);
-    let intrinsic_function = if let Ok(value) = name.parse() {
+    let intrinsic_function = IntrinsicFunction::resolve(name);
+    let literal = if let Ok(value) = name.parse() {
         Some(IntrinsicFunction::Literal {
             literal: Literal::Integer { value },
         })
@@ -387,20 +388,23 @@ fn resolve_function(
             "tuple" => Some(IntrinsicFunction::Literal {
                 literal: Literal::Tuple,
             }),
-            name => IntrinsicFunction::resolve(name),
+            _ => None,
         }
     };
 
-    match (host_function, intrinsic_function) {
-        (Some(id), None) => Ok(Expression::HostFunction { id }),
-        (None, Some(intrinsic)) => {
+    match (host_function, intrinsic_function, literal) {
+        (Some(id), None, None) => Ok(Expression::HostFunction { id }),
+        (None, Some(intrinsic), None) => {
             Ok(Expression::IntrinsicFunction { intrinsic })
         }
-        (None, None) => {
+        (None, None, Some(literal)) => {
+            Ok(Expression::IntrinsicFunction { intrinsic: literal })
+        }
+        (None, None, None) => {
             let candidates = Vec::new();
             Err(candidates)
         }
-        (host_function, intrinsic_function) => {
+        (host_function, intrinsic_function, literal) => {
             let mut candidates = Vec::new();
 
             if let Some(id) = host_function {
@@ -408,6 +412,10 @@ fn resolve_function(
             }
             if let Some(intrinsic) = intrinsic_function {
                 candidates.push(Expression::IntrinsicFunction { intrinsic });
+            }
+            if let Some(literal) = literal {
+                candidates
+                    .push(Expression::IntrinsicFunction { intrinsic: literal });
             }
 
             Err(candidates)
