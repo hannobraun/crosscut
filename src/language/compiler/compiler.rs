@@ -378,7 +378,13 @@ fn resolve_function(
     packages: &Packages,
 ) -> Result<Expression, Vec<Expression>> {
     let host_function = packages.resolve_function(name);
-    let intrinsic_function = IntrinsicFunction::resolve(name);
+    let intrinsic_function = if let Ok(value) = name.parse() {
+        Some(IntrinsicFunction::Literal {
+            literal: Literal::Integer { value },
+        })
+    } else {
+        IntrinsicFunction::resolve(name)
+    };
 
     match (host_function, intrinsic_function) {
         (Some(id), None) => Ok(Expression::HostFunction { id }),

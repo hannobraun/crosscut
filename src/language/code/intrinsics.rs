@@ -10,20 +10,14 @@ pub enum IntrinsicFunction {
 
 impl IntrinsicFunction {
     pub fn resolve(name: &str) -> Option<Self> {
-        if let Ok(value) = name.parse() {
-            Some(Self::Literal {
-                literal: Literal::Integer { value },
-            })
-        } else {
-            match name {
-                "drop" => Some(Self::Drop),
-                "eval" => Some(Self::Eval),
-                "identity" => Some(Self::Identity),
-                "tuple" => Some(Self::Literal {
-                    literal: Literal::Tuple,
-                }),
-                _ => None,
-            }
+        match name {
+            "drop" => Some(Self::Drop),
+            "eval" => Some(Self::Eval),
+            "identity" => Some(Self::Identity),
+            "tuple" => Some(Self::Literal {
+                literal: Literal::Tuple,
+            }),
+            _ => None,
         }
     }
 }
