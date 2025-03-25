@@ -68,7 +68,8 @@ fn syntax_node_that_could_resolve_to_multiple_functions_is_unresolved() {
         }
     }
 
-    let package = Package::new().with_function(Identity);
+    let mut package = Package::new();
+    package.with_function(Identity);
 
     let mut language = Language::new();
     language.with_package(&package);
@@ -104,7 +105,8 @@ fn evaluate_code_up_until_an_error() {
         }
     }
 
-    let package = Package::new().with_function(Ping);
+    let mut package = Package::new();
+    package.with_function(Ping);
 
     let mut language = Language::new();
     language.with_package(&package);

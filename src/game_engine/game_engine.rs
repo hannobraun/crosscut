@@ -49,10 +49,10 @@ where
     A: EditorOutputAdapter,
 {
     pub fn new(adapter: A) -> Self {
-        let package = Package::new()
-            .with_function(GameEngineFunction::Dim)
-            .with_function(GameEngineFunction::Black)
-            .with_function(GameEngineFunction::White);
+        let mut package = Package::new();
+        package.with_function(GameEngineFunction::Dim);
+        package.with_function(GameEngineFunction::Black);
+        package.with_function(GameEngineFunction::White);
 
         let mut language = Language::new();
         language.with_package(&package);

@@ -9,7 +9,8 @@ use crate::language::{
 fn host_functions() {
     // The host can define functions that Crosscut code can call.
 
-    let package = Package::new().with_function(Halve);
+    let mut package = Package::new();
+    package.with_function(Halve);
 
     let mut language = Language::new();
     language.with_package(&package);
@@ -38,7 +39,8 @@ fn host_functions_can_trigger_effects() {
     // A host function, instead of returning a value, can trigger an effect. For
     // example to indicate an error.
 
-    let package = Package::new().with_function(Halve);
+    let mut package = Package::new();
+    package.with_function(Halve);
 
     let mut language = Language::new();
     language.with_package(&package);
@@ -70,7 +72,8 @@ fn host_functions_can_inject_opaque_value() {
     // A host function can define an opaque value and inject that into a
     // function.
 
-    let package = Package::new().with_function(ObserveOpaqueValue);
+    let mut package = Package::new();
+    package.with_function(ObserveOpaqueValue);
 
     let mut language = Language::new();
     language.with_package(&package);

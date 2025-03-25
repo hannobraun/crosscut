@@ -526,10 +526,13 @@ impl Function for TestFunction {
 }
 
 fn test_package() -> Package<TestFunction> {
-    Package::new()
-        .with_function(TestFunction::A)
-        .with_function(TestFunction::AToB)
-        .with_function(TestFunction::BToC)
+    let mut package = Package::new();
+
+    package.with_function(TestFunction::A);
+    package.with_function(TestFunction::AToB);
+    package.with_function(TestFunction::BToC);
+
+    package
 }
 
 fn handle_test_functions(
