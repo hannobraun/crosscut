@@ -37,10 +37,6 @@ impl Packages {
         }
     }
 
-    pub fn register_package(&mut self) -> PackageId {
-        self.next_id
-    }
-
     pub fn resolve_function(&self, name: &str) -> Option<FunctionId> {
         self.inner
             .iter()

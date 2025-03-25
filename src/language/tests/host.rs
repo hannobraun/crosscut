@@ -14,7 +14,6 @@ fn host_functions() {
     let mut package = language.packages_mut().new_package();
     package.add_function(Halve);
     let package = package.build();
-    language.packages_mut().register_package();
 
     language.on_code("64 halve");
 
@@ -45,7 +44,6 @@ fn host_functions_can_trigger_effects() {
     let mut package = language.packages_mut().new_package();
     package.add_function(Halve);
     let package = package.build();
-    language.packages_mut().register_package();
 
     language.on_code("halve");
 
@@ -79,7 +77,6 @@ fn host_functions_can_inject_opaque_value() {
     let mut package = language.packages_mut().new_package();
     package.add_function(ObserveOpaqueValue);
     let package = package.build();
-    language.packages_mut().register_package();
 
     language.on_code("observe_opaque_value fn");
 
