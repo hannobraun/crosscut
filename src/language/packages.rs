@@ -59,12 +59,12 @@ impl Packages {
 }
 
 #[derive(Debug)]
-pub struct Package<T: Function> {
+pub struct Package<T> {
     functions_by_id: BTreeMap<FunctionId, T>,
     next_id: FunctionId,
 }
 
-impl<T: Function> Package<T> {
+impl<T> Package<T> {
     pub fn new() -> Self {
         Self {
             functions_by_id: BTreeMap::new(),
