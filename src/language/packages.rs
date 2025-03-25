@@ -2,15 +2,15 @@ use std::collections::BTreeMap;
 
 #[derive(Debug)]
 pub struct Package<T: Function> {
-    next_id: FunctionId,
     functions_by_id: BTreeMap<FunctionId, T>,
+    next_id: FunctionId,
 }
 
 impl<T: Function> Package<T> {
     pub fn new() -> Self {
         Self {
-            next_id: FunctionId { id: 0 },
             functions_by_id: BTreeMap::new(),
+            next_id: FunctionId { id: 0 },
         }
     }
 
