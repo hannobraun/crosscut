@@ -90,6 +90,12 @@ impl<T> PackageBuilder<'_, T> {
     }
 }
 
+#[derive(Debug, Default)]
+struct RegisteredPackage {
+    function_ids_by_name: BTreeMap<String, FunctionId>,
+    function_names_by_id: BTreeMap<FunctionId, String>,
+}
+
 #[derive(Debug)]
 pub struct Package<T> {
     functions_by_id: BTreeMap<FunctionId, T>,
@@ -106,12 +112,6 @@ impl<T> Package<T> {
 
         function
     }
-}
-
-#[derive(Debug, Default)]
-struct RegisteredPackage {
-    function_ids_by_name: BTreeMap<String, FunctionId>,
-    function_names_by_id: BTreeMap<FunctionId, String>,
 }
 
 pub trait Function: Copy + Ord {
