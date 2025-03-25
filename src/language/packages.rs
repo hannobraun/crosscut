@@ -15,10 +15,7 @@ impl Packages {
     }
 
     pub fn new_package<T>(&mut self) -> PackageBuilder<T> {
-        self.inner.push(RegisteredPackage {
-            function_ids_by_name: BTreeMap::new(),
-            function_names_by_id: BTreeMap::new(),
-        });
+        self.inner.push(RegisteredPackage::default());
 
         let Some(package) = self.inner.last_mut() else {
             unreachable!(
@@ -111,7 +108,7 @@ impl<T> Package<T> {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Default)]
 struct RegisteredPackage {
     function_ids_by_name: BTreeMap<String, FunctionId>,
     function_names_by_id: BTreeMap<FunctionId, String>,
