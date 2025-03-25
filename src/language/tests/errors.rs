@@ -1,7 +1,7 @@
 use crate::language::{
     code::{CodeError, Expression, IntrinsicFunction, Type},
     language::Language,
-    packages::{Function, FunctionId, Package},
+    packages::{Function, Package},
     runtime::{Effect, RuntimeState, Value},
 };
 
@@ -69,7 +69,7 @@ fn syntax_node_that_could_resolve_to_multiple_functions_is_unresolved() {
     }
 
     let mut package = Package::new();
-    package.add_function(Identity);
+    let identity = package.add_function(Identity);
 
     let mut language = Language::new();
     language.with_package(&package);
@@ -81,9 +81,7 @@ fn syntax_node_that_could_resolve_to_multiple_functions_is_unresolved() {
         language.codebase().errors().get(&unresolved),
         Some(&CodeError::UnresolvedIdentifier {
             candidates: vec![
-                Expression::HostFunction {
-                    id: FunctionId { id: 0 },
-                },
+                Expression::HostFunction { id: identity },
                 Expression::IntrinsicFunction {
                     intrinsic: IntrinsicFunction::Identity,
                 },
