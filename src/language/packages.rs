@@ -26,12 +26,14 @@ impl Packages {
             );
         };
 
+        let id = self.next_id;
         self.next_id.id += 1;
 
         PackageBuilder {
             functions_by_id: BTreeMap::new(),
             registered: package,
             next_id: 0,
+            package: id,
         }
     }
 
@@ -62,6 +64,7 @@ pub struct PackageBuilder<'r, T> {
     registered: &'r mut RegisteredPackage,
     functions_by_id: BTreeMap<FunctionId, T>,
     next_id: u32,
+    package: PackageId,
 }
 
 impl<T> PackageBuilder<'_, T> {
@@ -69,7 +72,10 @@ impl<T> PackageBuilder<'_, T> {
     where
         T: Function,
     {
-        let id = FunctionId { id: self.next_id };
+        let id = FunctionId {
+            id: self.next_id,
+            package: self.package,
+        };
         self.next_id += 1;
 
         self.registered
@@ -124,6 +130,7 @@ pub trait Function: Copy + Ord {
 )]
 pub struct FunctionId {
     id: u32,
+    package: PackageId,
 }
 
 #[derive(
