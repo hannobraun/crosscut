@@ -1,7 +1,7 @@
 use super::{
     code::{Codebase, NodePath},
     editor::{Editor, EditorCommand, EditorInputEvent},
-    packages::{Function, Package, Packages},
+    packages::Packages,
     runtime::{Effect, Evaluator, RuntimeState, Value},
 };
 
@@ -27,10 +27,6 @@ impl Language {
             evaluator,
             packages,
         }
-    }
-
-    pub fn with_package<T: Function>(&mut self, package: &Package<T>) {
-        self.packages_mut().register_package(package);
     }
 
     pub fn codebase(&self) -> &Codebase {

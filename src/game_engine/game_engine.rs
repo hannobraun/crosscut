@@ -55,7 +55,7 @@ where
         package.add_function(GameEngineFunction::White);
 
         let mut language = Language::new();
-        language.with_package(&package);
+        language.packages_mut().register_package(&package);
 
         let mut game_engine = Self {
             language,

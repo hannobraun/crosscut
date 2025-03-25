@@ -89,7 +89,7 @@ fn add_parent_node() {
     let package = test_package();
 
     let mut language = Language::new();
-    language.with_package(&package);
+    language.packages_mut().register_package(&package);
 
     language.on_code("a");
     language.on_input(EditorInputEvent::AddParent);
@@ -113,7 +113,7 @@ fn add_parent_of_node_that_already_has_a_parent() {
     // parent in between them, as a child of the previous parent.
 
     let mut language = Language::new();
-    language.with_package(&test_package());
+    language.packages_mut().register_package(&test_package());
 
     language.on_code("a b_to_c");
     language.on_input(EditorInputEvent::MoveCursorUp);
