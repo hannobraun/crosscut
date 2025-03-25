@@ -1,7 +1,7 @@
 use crate::language::{
     code::{CodeError, Expression, IntrinsicFunction, Type},
     language::Language,
-    packages::{Function, Package},
+    packages::Function,
     runtime::{Effect, RuntimeState, Value},
 };
 
@@ -70,7 +70,7 @@ fn syntax_node_that_could_resolve_to_multiple_functions_is_unresolved() {
 
     let mut language = Language::new();
 
-    let mut package = Package::new();
+    let mut package = language.packages_mut().new_package();
     let identity = package.add_function(Identity);
     language.packages_mut().register_package(&package);
 
@@ -105,7 +105,7 @@ fn evaluate_code_up_until_an_error() {
 
     let mut language = Language::new();
 
-    let mut package = Package::new();
+    let mut package = language.packages_mut().new_package();
     package.add_function(Ping);
     language.packages_mut().register_package(&package);
 

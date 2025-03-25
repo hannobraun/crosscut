@@ -14,6 +14,13 @@ impl Packages {
         }
     }
 
+    pub fn new_package<T>(&mut self) -> Package<T> {
+        Package {
+            functions_by_id: BTreeMap::new(),
+            next_id: FunctionId { id: 0 },
+        }
+    }
+
     pub fn register_package<T: Function>(
         &mut self,
         package: &Package<T>,
@@ -65,13 +72,6 @@ pub struct Package<T> {
 }
 
 impl<T> Package<T> {
-    pub fn new() -> Self {
-        Self {
-            functions_by_id: BTreeMap::new(),
-            next_id: FunctionId { id: 0 },
-        }
-    }
-
     pub fn add_function(&mut self, function: T) -> FunctionId {
         let id = self.next_id;
         self.next_id = FunctionId { id: id.id + 1 };
