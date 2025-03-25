@@ -129,5 +129,5 @@ pub struct FunctionId {
 
 #[derive(Clone, Copy, Debug)]
 pub struct PackageId {
-    pub id: u32,
+    id: u32,
 }
