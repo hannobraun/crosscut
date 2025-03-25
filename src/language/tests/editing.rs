@@ -95,8 +95,8 @@ fn add_parent_node() {
     language.on_input(EditorInputEvent::AddParent);
     language.on_code("a_to_b");
 
-    let output = language
-        .step_until_finished_and_handle_host_functions(handle_test_functions());
+    let output =
+        language.step_until_finished_and_handle_host_functions(handler());
 
     assert_eq!(
         output,
@@ -122,8 +122,8 @@ fn add_parent_of_node_that_already_has_a_parent() {
     language.on_input(EditorInputEvent::AddParent);
     language.on_code("a_to_b");
 
-    let output = language
-        .step_until_finished_and_handle_host_functions(handle_test_functions());
+    let output =
+        language.step_until_finished_and_handle_host_functions(handler());
 
     assert_eq!(
         output,
@@ -537,8 +537,7 @@ fn test_package() -> Package<TestFunction> {
     package
 }
 
-fn handle_test_functions()
--> impl FnMut(&FunctionId, &Value) -> Result<Value, Effect> {
+fn handler() -> impl FnMut(&FunctionId, &Value) -> Result<Value, Effect> {
     |id, input| match test_package().function_by_id(id) {
         TestFunction::A => Ok(Value::Opaque {
             id: 0,
