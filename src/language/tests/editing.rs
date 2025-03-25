@@ -534,7 +534,7 @@ fn test_package(language: &mut Language) -> Package<TestFunction> {
     package.add_function(TestFunction::AToB);
     package.add_function(TestFunction::BToC);
 
-    package
+    package.build()
 }
 
 fn handler(

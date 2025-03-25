@@ -72,6 +72,7 @@ fn syntax_node_that_could_resolve_to_multiple_functions_is_unresolved() {
 
     let mut package = language.packages_mut().new_package();
     let identity = package.add_function(Identity);
+    let package = package.build();
     language.packages_mut().register_package(&package);
 
     language.on_code("identity");
@@ -107,6 +108,7 @@ fn evaluate_code_up_until_an_error() {
 
     let mut package = language.packages_mut().new_package();
     package.add_function(Ping);
+    let package = package.build();
     language.packages_mut().register_package(&package);
 
     language.on_code("ping unresolved");

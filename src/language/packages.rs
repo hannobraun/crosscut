@@ -14,32 +14,29 @@ impl Packages {
         }
     }
 
-    pub fn new_package<T>(&mut self) -> Package<T> {
-        Package {
+    pub fn new_package<T>(&mut self) -> PackageBuilder<T> {
+        self.inner.push(RegisteredPackage {
+            function_ids_by_name: BTreeMap::new(),
+            function_names_by_id: BTreeMap::new(),
+        });
+
+        let Some(package) = self.inner.last_mut() else {
+            unreachable!(
+                "Just pushed a package, so a last package must exist."
+            );
+        };
+
+        PackageBuilder {
             functions_by_id: BTreeMap::new(),
+            registered: package,
             next_id: FunctionId { id: 0 },
         }
     }
 
     pub fn register_package<T: Function>(
         &mut self,
-        package: &Package<T>,
+        _: &Package<T>,
     ) -> PackageId {
-        let package = RegisteredPackage {
-            function_ids_by_name: package
-                .functions_by_id
-                .iter()
-                .map(|(id, function)| (function.name().to_string(), *id))
-                .collect(),
-            function_names_by_id: package
-                .functions_by_id
-                .iter()
-                .map(|(id, function)| (*id, function.name().to_string()))
-                .collect(),
-        };
-
-        self.inner.push(package);
-
         let id = self.next_id;
         self.next_id.id += 1;
 
@@ -65,22 +62,45 @@ impl Packages {
     }
 }
 
-#[derive(Debug)]
-pub struct Package<T> {
+pub struct PackageBuilder<'r, T> {
+    registered: &'r mut RegisteredPackage,
     functions_by_id: BTreeMap<FunctionId, T>,
     next_id: FunctionId,
 }
 
-impl<T> Package<T> {
-    pub fn add_function(&mut self, function: T) -> FunctionId {
+impl<T> PackageBuilder<'_, T> {
+    pub fn add_function(&mut self, function: T) -> FunctionId
+    where
+        T: Function,
+    {
         let id = self.next_id;
         self.next_id = FunctionId { id: id.id + 1 };
+
+        self.registered
+            .function_ids_by_name
+            .insert(function.name().to_string(), id);
+        self.registered
+            .function_names_by_id
+            .insert(id, function.name().to_string());
 
         self.functions_by_id.insert(id, function);
 
         id
     }
 
+    pub fn build(self) -> Package<T> {
+        Package {
+            functions_by_id: self.functions_by_id,
+        }
+    }
+}
+
+#[derive(Debug)]
+pub struct Package<T> {
+    functions_by_id: BTreeMap<FunctionId, T>,
+}
+
+impl<T> Package<T> {
     pub fn function_by_id(&self, id: &FunctionId) -> &T {
         let Some(function) = self.functions_by_id.get(id) else {
             panic!(
