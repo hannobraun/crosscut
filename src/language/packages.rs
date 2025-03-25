@@ -34,11 +34,11 @@ impl Packages {
                 the ID to wrap."
             );
         };
-        let package = entry.insert(RegisteredPackage::default());
+        let registered = entry.insert(RegisteredPackage::default());
 
         PackageBuilder {
             functions_by_id: BTreeMap::new(),
-            registered: package,
+            registered,
             next_id: 0,
             package: package_id,
         }
