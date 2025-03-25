@@ -3,6 +3,7 @@ mod codebase;
 mod errors;
 mod expressions;
 mod intrinsics;
+mod literal;
 mod nodes;
 mod types;
 
@@ -11,7 +12,8 @@ pub use self::{
     codebase::Codebase,
     errors::{CodeError, Errors},
     expressions::Expression,
-    intrinsics::{IntrinsicFunction, Literal},
+    intrinsics::IntrinsicFunction,
+    literal::Literal,
     nodes::{Children, LocatedNode, Node, NodeHash, NodeKind, NodePath, Nodes},
     types::Type,
 };
