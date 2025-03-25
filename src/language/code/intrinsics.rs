@@ -14,9 +14,6 @@ impl IntrinsicFunction {
             "drop" => Some(Self::Drop),
             "eval" => Some(Self::Eval),
             "identity" => Some(Self::Identity),
-            "tuple" => Some(Self::Literal {
-                literal: Literal::Tuple,
-            }),
             _ => None,
         }
     }

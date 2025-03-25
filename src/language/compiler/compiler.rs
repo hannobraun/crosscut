@@ -383,7 +383,12 @@ fn resolve_function(
             literal: Literal::Integer { value },
         })
     } else {
-        IntrinsicFunction::resolve(name)
+        match name {
+            "tuple" => Some(IntrinsicFunction::Literal {
+                literal: Literal::Tuple,
+            }),
+            name => IntrinsicFunction::resolve(name),
+        }
     };
 
     match (host_function, intrinsic_function) {
