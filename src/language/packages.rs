@@ -14,7 +14,7 @@ impl<T: Function> Package<T> {
         }
     }
 
-    pub fn with_function(&mut self, function: T) {
+    pub fn add_function(&mut self, function: T) {
         let id = self.next_id;
         self.next_id = FunctionId { id: id.id + 1 };
 

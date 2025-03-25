@@ -528,9 +528,9 @@ impl Function for TestFunction {
 fn test_package() -> Package<TestFunction> {
     let mut package = Package::new();
 
-    package.with_function(TestFunction::A);
-    package.with_function(TestFunction::AToB);
-    package.with_function(TestFunction::BToC);
+    package.add_function(TestFunction::A);
+    package.add_function(TestFunction::AToB);
+    package.add_function(TestFunction::BToC);
 
     package
 }

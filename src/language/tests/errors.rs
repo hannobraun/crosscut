@@ -69,7 +69,7 @@ fn syntax_node_that_could_resolve_to_multiple_functions_is_unresolved() {
     }
 
     let mut package = Package::new();
-    package.with_function(Identity);
+    package.add_function(Identity);
 
     let mut language = Language::new();
     language.with_package(&package);
@@ -106,7 +106,7 @@ fn evaluate_code_up_until_an_error() {
     }
 
     let mut package = Package::new();
-    package.with_function(Ping);
+    package.add_function(Ping);
 
     let mut language = Language::new();
     language.with_package(&package);
