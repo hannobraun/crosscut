@@ -384,9 +384,8 @@ fn render_help<A: EditorOutputAdapter>(
                 Expression::Literal { literal } => {
                     writeln!(
                         adapter,
-                        "This is a special kind of intrinsic function, a \
-                        literal. Literals are functions that take `{}` and \
-                        return the value they represent.",
+                        "This is a literal. Literals are functions that take \
+                        `{}` and return the value they represent.",
                         Value::Nothing,
                     )?;
 
