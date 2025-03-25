@@ -16,7 +16,10 @@ impl Packages {
 
     pub fn new_package<T>(&mut self) -> PackageBuilder<T> {
         let id = self.next_id;
-        self.next_id += 1;
+        let Some(next_id) = self.next_id.checked_add(1) else {
+            panic!("Reached maximum number of supported packages.");
+        };
+        self.next_id = next_id;
 
         self.inner.push(RegisteredPackage::default());
 
