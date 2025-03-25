@@ -26,6 +26,8 @@ impl Packages {
             );
         };
 
+        self.next_id.id += 1;
+
         PackageBuilder {
             functions_by_id: BTreeMap::new(),
             registered: package,
@@ -34,10 +36,7 @@ impl Packages {
     }
 
     pub fn register_package(&mut self) -> PackageId {
-        let id = self.next_id;
-        self.next_id.id += 1;
-
-        id
+        self.next_id
     }
 
     pub fn resolve_function(&self, name: &str) -> Option<FunctionId> {
