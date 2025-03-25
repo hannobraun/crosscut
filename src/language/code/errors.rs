@@ -55,6 +55,9 @@ impl fmt::Display for CodeError {
                             Expression::IntrinsicFunction { .. } => {
                                 write!(f, "intrinsic function")?;
                             }
+                            Expression::Literal { .. } => {
+                                write!(f, "literal")?;
+                            }
                         }
                     }
 

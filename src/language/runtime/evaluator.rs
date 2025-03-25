@@ -96,11 +96,8 @@ impl Evaluator {
         loop {
             if let NodeKind::Expression {
                 expression:
-                    Expression::IntrinsicFunction {
-                        intrinsic:
-                            IntrinsicFunction::Literal {
-                                literal: Literal::Function,
-                            },
+                    Expression::Literal {
+                        literal: Literal::Function,
                     },
             } = codebase.node_at(&node.syntax_node).node.kind()
             {
@@ -197,93 +194,93 @@ impl Evaluator {
                             node.evaluated_children.into_active_value(),
                         );
                     }
-                    IntrinsicFunction::Literal { literal } => {
-                        let value = {
-                            match *literal {
-                                Literal::Function => {
-                                    match node
-                                        .evaluated_children
-                                        .clone()
-                                        .into_active_value()
-                                    {
-                                        Value::Nothing => {}
-                                        active_value => {
-                                            self.unexpected_input(
-                                                Type::Nothing,
-                                                active_value,
-                                                node.syntax_node.clone(),
-                                            );
-                                            self.eval_stack.push(node);
-                                            return;
-                                        }
-                                    }
-
-                                    let node =
-                                        codebase.node_at(&node.syntax_node);
-                                    let mut children =
-                                        node.children(codebase.nodes());
-
-                                    let Some(child) = children.next() else {
-                                        unreachable!(
-                                            "Function literal must have a \
-                                            child, or it wouldn't have been \
-                                            resolved as a function literal."
-                                        );
-                                    };
-
-                                    assert_eq!(
-                                        children.count(),
-                                        0,
-                                        "Only nodes with one child can be \
-                                        evaluated at this point.",
+                }
+            }
+            NodeKind::Expression {
+                expression: Expression::Literal { literal },
+                ..
+            } => {
+                let value = {
+                    match *literal {
+                        Literal::Function => {
+                            match node
+                                .evaluated_children
+                                .clone()
+                                .into_active_value()
+                            {
+                                Value::Nothing => {}
+                                active_value => {
+                                    self.unexpected_input(
+                                        Type::Nothing,
+                                        active_value,
+                                        node.syntax_node.clone(),
                                     );
-
-                                    Value::Function { body: child.path }
-                                }
-                                Literal::Integer { value } => {
-                                    match node
-                                        .evaluated_children
-                                        .clone()
-                                        .into_active_value()
-                                    {
-                                        Value::Nothing => {}
-                                        active_value => {
-                                            self.unexpected_input(
-                                                Type::Nothing,
-                                                active_value,
-                                                node.syntax_node.clone(),
-                                            );
-                                            self.eval_stack.push(node);
-                                            return;
-                                        }
-                                    }
-
-                                    Value::Integer { value }
-                                }
-                                Literal::Tuple => {
-                                    assert!(
-                                        node.children_to_evaluate.is_empty(),
-                                        "Due to the loop above, which puts all \
-                                        children of a node on the evaluation \
-                                        stack, on top of that node, all \
-                                        children of the tuple must be \
-                                        evaluated by now.",
-                                    );
-
-                                    Value::Tuple {
-                                        elements: node
-                                            .evaluated_children
-                                            .inner
-                                            .into_iter()
-                                            .collect(),
-                                    }
+                                    self.eval_stack.push(node);
+                                    return;
                                 }
                             }
-                        };
 
-                        self.finish_evaluating_node(value);
+                            let node = codebase.node_at(&node.syntax_node);
+                            let mut children = node.children(codebase.nodes());
+
+                            let Some(child) = children.next() else {
+                                unreachable!(
+                                    "Function literal must have a child, or it \
+                                    wouldn't have been resolved as a function \
+                                    literal."
+                                );
+                            };
+
+                            assert_eq!(
+                                children.count(),
+                                0,
+                                "Only nodes with one child can be evaluated at \
+                                this point.",
+                            );
+
+                            Value::Function { body: child.path }
+                        }
+                        Literal::Integer { value } => {
+                            match node
+                                .evaluated_children
+                                .clone()
+                                .into_active_value()
+                            {
+                                Value::Nothing => {}
+                                active_value => {
+                                    self.unexpected_input(
+                                        Type::Nothing,
+                                        active_value,
+                                        node.syntax_node.clone(),
+                                    );
+                                    self.eval_stack.push(node);
+                                    return;
+                                }
+                            }
+
+                            Value::Integer { value }
+                        }
+                        Literal::Tuple => {
+                            assert!(
+                                node.children_to_evaluate.is_empty(),
+                                "Due to the loop above, which puts all \
+                                children of a node on the evaluation stack, on \
+                                top of that node, all children of the tuple \
+                                must be evaluated by now.",
+                            );
+
+                            Value::Tuple {
+                                elements: node
+                                    .evaluated_children
+                                    .inner
+                                    .into_iter()
+                                    .collect(),
+                            }
+                        }
                     }
-                }
+                };
+
+                self.finish_evaluating_node(value);
             }
             NodeKind::Recursion => {
                 let path = self

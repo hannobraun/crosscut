@@ -2,12 +2,13 @@ use std::fmt;
 
 use crate::language::packages::{FunctionId, Packages};
 
-use super::IntrinsicFunction;
+use super::{IntrinsicFunction, Literal};
 
 #[derive(Clone, Debug, Eq, PartialEq, udigest::Digestable)]
 pub enum Expression {
     HostFunction { id: FunctionId },
     IntrinsicFunction { intrinsic: IntrinsicFunction },
+    Literal { literal: Literal },
 }
 
 impl Expression {
@@ -37,6 +38,17 @@ impl fmt::Display for ExpressionDisplay<'_> {
             Expression::IntrinsicFunction { intrinsic } => {
                 write!(f, "{intrinsic}")
             }
+            Expression::Literal { literal } => match literal {
+                Literal::Function => {
+                    write!(f, "fn")
+                }
+                Literal::Integer { value } => {
+                    write!(f, "{value}")
+                }
+                Literal::Tuple => {
+                    write!(f, "tuple")
+                }
+            },
         }
     }
 }

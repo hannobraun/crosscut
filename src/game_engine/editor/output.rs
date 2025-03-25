@@ -252,6 +252,7 @@ fn render_node<A: EditorOutputAdapter>(
         NodeKind::Expression { expression, .. } => match expression {
             Expression::HostFunction { .. } => Some(Color::DarkMagenta),
             Expression::IntrinsicFunction { .. } => Some(Color::DarkBlue),
+            Expression::Literal { .. } => Some(Color::DarkBlue),
         },
         NodeKind::Error { .. } => Some(ERROR_COLOR),
         _ => None,
@@ -378,38 +379,34 @@ fn render_help<A: EditorOutputAdapter>(
                                 input unchanged.",
                             )?;
                         }
-                        IntrinsicFunction::Literal { literal } => {
+                    }
+                }
+                Expression::Literal { literal } => {
+                    writeln!(
+                        adapter,
+                        "This is a special kind of intrinsic function, a \
+                        literal. Literals are functions that take `{}` and \
+                        return the value they represent.",
+                        Value::Nothing,
+                    )?;
+
+                    writeln!(adapter)?;
+
+                    match literal {
+                        Literal::Function => {
                             writeln!(
                                 adapter,
-                                "This is a special kind of intrinsic function, \
-                                a literal. Literals are functions that take \
-                                `{}` and return the value they represent.",
-                                Value::Nothing,
+                                "This literal returns a function.",
                             )?;
-
-                            writeln!(adapter)?;
-
-                            match literal {
-                                Literal::Function => {
-                                    writeln!(
-                                        adapter,
-                                        "This literal returns a function.",
-                                    )?;
-                                }
-                                Literal::Integer { value } => {
-                                    writeln!(
-                                        adapter,
-                                        "This literal returns the integer \
-                                        `{value}`.",
-                                    )?;
-                                }
-                                Literal::Tuple => {
-                                    writeln!(
-                                        adapter,
-                                        "This literal returns a tuple.",
-                                    )?;
-                                }
-                            }
+                        }
+                        Literal::Integer { value } => {
+                            writeln!(
+                                adapter,
+                                "This literal returns the integer `{value}`.",
+                            )?;
+                        }
+                        Literal::Tuple => {
+                            writeln!(adapter, "This literal returns a tuple.")?;
                         }
                     }
                 }

@@ -354,10 +354,8 @@ fn resolve_keyword(
             Some((
                 Node::new(
                     NodeKind::Expression {
-                        expression: Expression::IntrinsicFunction {
-                            intrinsic: IntrinsicFunction::Literal {
-                                literal: Literal::Function,
-                            },
+                        expression: Expression::Literal {
+                            literal: Literal::Function,
                         },
                     },
                     children,
@@ -380,14 +378,10 @@ fn resolve_function(
     let host_function = packages.resolve_function(name);
     let intrinsic_function = IntrinsicFunction::resolve(name);
     let literal = if let Ok(value) = name.parse() {
-        Some(IntrinsicFunction::Literal {
-            literal: Literal::Integer { value },
-        })
+        Some(Literal::Integer { value })
     } else {
         match name {
-            "tuple" => Some(IntrinsicFunction::Literal {
-                literal: Literal::Tuple,
-            }),
+            "tuple" => Some(Literal::Tuple),
             _ => None,
         }
     };
@@ -397,9 +391,7 @@ fn resolve_function(
         (None, Some(intrinsic), None) => {
             Ok(Expression::IntrinsicFunction { intrinsic })
         }
-        (None, None, Some(literal)) => {
-            Ok(Expression::IntrinsicFunction { intrinsic: literal })
-        }
+        (None, None, Some(literal)) => Ok(Expression::Literal { literal }),
         (None, None, None) => {
             let candidates = Vec::new();
             Err(candidates)
@@ -414,8 +406,7 @@ fn resolve_function(
                 candidates.push(Expression::IntrinsicFunction { intrinsic });
             }
             if let Some(literal) = literal {
-                candidates
-                    .push(Expression::IntrinsicFunction { intrinsic: literal });
+                candidates.push(Expression::Literal { literal });
             }
 
             Err(candidates)

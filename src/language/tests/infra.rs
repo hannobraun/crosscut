@@ -1,7 +1,7 @@
 use std::vec;
 
 use crate::language::code::{
-    Expression, IntrinsicFunction, Literal, LocatedNode, Node, NodeKind, Nodes,
+    Expression, Literal, LocatedNode, Node, NodeKind, Nodes,
 };
 
 pub trait NodeExt: Sized {
@@ -22,11 +22,8 @@ impl NodeExt for Node {
     fn expect_integer_literal(&self, expected: i32) -> Node {
         if let NodeKind::Expression {
             expression:
-                Expression::IntrinsicFunction {
-                    intrinsic:
-                        IntrinsicFunction::Literal {
-                            literal: Literal::Integer { value },
-                        },
+                Expression::Literal {
+                    literal: Literal::Integer { value },
                 },
         } = self.kind()
         {

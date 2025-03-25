@@ -5,7 +5,6 @@ pub enum IntrinsicFunction {
     Drop,
     Eval,
     Identity,
-    Literal { literal: Literal },
 }
 
 impl IntrinsicFunction {
@@ -31,17 +30,6 @@ impl fmt::Display for IntrinsicFunction {
             Self::Identity => {
                 write!(f, "identity")?;
             }
-            Self::Literal { literal } => match literal {
-                Literal::Function => {
-                    write!(f, "fn")?;
-                }
-                Literal::Integer { value } => {
-                    write!(f, "{value}")?;
-                }
-                Literal::Tuple => {
-                    write!(f, "tuple")?;
-                }
-            },
         }
 
         Ok(())
