@@ -538,7 +538,7 @@ fn test_package(language: &mut Language) -> Package<TestFunction> {
 fn handler(
     package: &Package<TestFunction>,
 ) -> impl FnMut(&FunctionId, &Value) -> Result<Value, Effect> {
-    |id, input| match package.function_by_id(id) {
+    |id, input| match package.function_by_id(id).unwrap() {
         TestFunction::A => Ok(Value::Opaque {
             id: 0,
             display: "a",
