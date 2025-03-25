@@ -38,14 +38,21 @@ impl<T: Function> Package<T> {
 #[derive(Debug)]
 pub struct Packages {
     inner: Vec<RegisteredPackage>,
+    next_id: PackageId,
 }
 
 impl Packages {
     pub fn new() -> Self {
-        Self { inner: Vec::new() }
+        Self {
+            inner: Vec::new(),
+            next_id: PackageId { id: 0 },
+        }
     }
 
-    pub fn register_package<T: Function>(&mut self, package: &Package<T>) {
+    pub fn register_package<T: Function>(
+        &mut self,
+        package: &Package<T>,
+    ) -> PackageId {
         let package = RegisteredPackage {
             function_ids_by_name: package
                 .functions_by_id
@@ -60,6 +67,11 @@ impl Packages {
         };
 
         self.inner.push(package);
+
+        let id = self.next_id;
+        self.next_id.id += 1;
+
+        id
     }
 
     pub fn resolve_function(&self, name: &str) -> Option<FunctionId> {
@@ -95,5 +107,10 @@ pub trait Function: Copy + Ord {
     Clone, Copy, Debug, Eq, Ord, PartialEq, PartialOrd, udigest::Digestable,
 )]
 pub struct FunctionId {
+    pub id: u32,
+}
+
+#[derive(Clone, Copy, Debug)]
+pub struct PackageId {
     pub id: u32,
 }
