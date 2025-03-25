@@ -103,10 +103,10 @@ fn evaluate_code_up_until_an_error() {
         }
     }
 
+    let mut language = Language::new();
+
     let mut package = Package::new();
     package.add_function(Ping);
-
-    let mut language = Language::new();
     language.packages_mut().register_package(&package);
 
     language.on_code("ping unresolved");
