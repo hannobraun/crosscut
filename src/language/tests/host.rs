@@ -72,10 +72,10 @@ fn host_functions_can_inject_opaque_value() {
     // A host function can define an opaque value and inject that into a
     // function.
 
+    let mut language = Language::new();
+
     let mut package = Package::new();
     package.add_function(ObserveOpaqueValue);
-
-    let mut language = Language::new();
     language.packages_mut().register_package(&package);
 
     language.on_code("observe_opaque_value fn");
