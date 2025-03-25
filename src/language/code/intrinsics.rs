@@ -1,5 +1,7 @@
 use std::fmt;
 
+use crate::language::packages::Function;
+
 #[derive(
     Clone, Copy, Debug, Eq, Ord, PartialEq, PartialOrd, udigest::Digestable,
 )]
@@ -16,6 +18,16 @@ impl IntrinsicFunction {
             "eval" => Some(Self::Eval),
             "identity" => Some(Self::Identity),
             _ => None,
+        }
+    }
+}
+
+impl Function for IntrinsicFunction {
+    fn name(&self) -> &str {
+        match self {
+            IntrinsicFunction::Drop => "drop",
+            IntrinsicFunction::Eval => "eval",
+            IntrinsicFunction::Identity => "identity",
         }
     }
 }
