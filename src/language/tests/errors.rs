@@ -68,10 +68,10 @@ fn syntax_node_that_could_resolve_to_multiple_functions_is_unresolved() {
         }
     }
 
+    let mut language = Language::new();
+
     let mut package = Package::new();
     let identity = package.add_function(Identity);
-
-    let mut language = Language::new();
     language.packages_mut().register_package(&package);
 
     language.on_code("identity");
