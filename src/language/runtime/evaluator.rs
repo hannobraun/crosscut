@@ -82,7 +82,7 @@ impl Evaluator {
         });
     }
 
-    pub fn exit_from_provided_function(&mut self, value: Value) {
+    pub fn exit_from_provided_function(&mut self, output: Value) {
         let RuntimeState::Effect {
             effect: Effect::ProvidedFunction { .. },
             ..
@@ -103,7 +103,7 @@ impl Evaluator {
             );
         };
 
-        self.finish_evaluating_node(value);
+        self.finish_evaluating_node(output);
     }
 
     pub fn trigger_effect(&mut self, effect: Effect) {
