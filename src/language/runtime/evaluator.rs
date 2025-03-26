@@ -63,6 +63,10 @@ impl Evaluator {
     /// Calling this function is appropriate, if the evaluation originates from
     /// outside of the source code. The caller is expected to take care of
     /// anything else that might happen to make this work correctly.
+    ///
+    /// If there is a current node that the evaluation originates from a syntax
+    /// node, please call [`Evaluator::eval_function_from_current_node`]
+    /// instead.
     pub fn eval_function_raw(
         &mut self,
         body: NodePath,
