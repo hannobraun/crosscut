@@ -177,10 +177,7 @@ impl Evaluator {
                     node.evaluated_children.into_active_value(),
                 );
             }
-            NodeKind::Expression {
-                expression: Expression::ProvidedFunction { id },
-                ..
-            } => {
+            NodeKind::ProvidedFunction { id } => {
                 self.state = RuntimeState::Effect {
                     effect: Effect::ProvidedFunction {
                         id: *id,

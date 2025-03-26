@@ -258,9 +258,9 @@ fn render_node<A: EditorOutputAdapter>(
 
     let color = match node.kind() {
         NodeKind::Expression { expression, .. } => match expression {
-            Expression::ProvidedFunction { .. } => Some(Color::DarkMagenta),
             Expression::Literal { .. } => Some(Color::DarkBlue),
         },
+        NodeKind::ProvidedFunction { .. } => Some(Color::DarkMagenta),
         NodeKind::Error { .. } => Some(ERROR_COLOR),
         _ => None,
     };
@@ -379,14 +379,6 @@ fn render_help<A: EditorOutputAdapter>(
             write!(adapter, "You are editing an expression. ")?;
 
             match expression {
-                Expression::ProvidedFunction { id: _ } => {
-                    writeln!(
-                        adapter,
-                        "This expression is the application of a provided \
-                        function. Those are defined outside of Crosscut code, \
-                        either as intrinsic functions, or by the host.",
-                    )?;
-                }
                 Expression::Literal { literal } => {
                     writeln!(
                         adapter,
@@ -416,6 +408,14 @@ fn render_help<A: EditorOutputAdapter>(
                     }
                 }
             }
+        }
+        NodeKind::ProvidedFunction { id: _ } => {
+            writeln!(
+                adapter,
+                "This expression is the application of a provided function. \
+                Those are defined outside of Crosscut code, either as \
+                intrinsic functions, or by the host.",
+            )?;
         }
         NodeKind::Recursion { .. } => {
             writeln!(

@@ -383,9 +383,7 @@ fn resolve_function(
     };
 
     match (provided_function, literal) {
-        (Some(id), None) => Ok(NodeKind::Expression {
-            expression: Expression::ProvidedFunction { id },
-        }),
+        (Some(id), None) => Ok(NodeKind::ProvidedFunction { id }),
         (None, Some(literal)) => Ok(NodeKind::Expression {
             expression: Expression::Literal { literal },
         }),

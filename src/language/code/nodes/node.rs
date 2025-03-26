@@ -1,6 +1,9 @@
 use std::fmt;
 
-use crate::language::{code::Expression, packages::Packages};
+use crate::language::{
+    code::Expression,
+    packages::{FunctionId, Packages},
+};
 
 use super::{Children, NodeHash};
 
@@ -52,6 +55,7 @@ impl Node {
 pub enum NodeKind {
     Empty,
     Expression { expression: Expression },
+    ProvidedFunction { id: FunctionId },
     Recursion,
     Error { node: String },
 }
@@ -82,6 +86,10 @@ impl fmt::Display for NodeDisplay<'_> {
             }
             NodeKind::Expression { expression, .. } => {
                 write!(f, "{}", expression.display(self.packages))
+            }
+            NodeKind::ProvidedFunction { id } => {
+                let name = self.packages.function_name_by_id(id);
+                write!(f, "{name}")
             }
             NodeKind::Recursion { .. } => {
                 write!(f, "self")

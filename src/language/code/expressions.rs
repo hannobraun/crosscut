@@ -1,39 +1,27 @@
 use std::fmt;
 
-use crate::language::packages::{FunctionId, Packages};
+use crate::language::packages::Packages;
 
 use super::Literal;
 
 #[derive(Clone, Debug, Eq, PartialEq, udigest::Digestable)]
 pub enum Expression {
-    ProvidedFunction { id: FunctionId },
     Literal { literal: Literal },
 }
 
 impl Expression {
-    pub fn display<'r>(
-        &'r self,
-        packages: &'r Packages,
-    ) -> ExpressionDisplay<'r> {
-        ExpressionDisplay {
-            expression: self,
-            packages,
-        }
+    pub fn display<'r>(&'r self, _: &'r Packages) -> ExpressionDisplay<'r> {
+        ExpressionDisplay { expression: self }
     }
 }
 
 pub struct ExpressionDisplay<'r> {
     expression: &'r Expression,
-    packages: &'r Packages,
 }
 
 impl fmt::Display for ExpressionDisplay<'_> {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match self.expression {
-            Expression::ProvidedFunction { id } => {
-                let name = self.packages.function_name_by_id(id);
-                write!(f, "{name}")
-            }
             Expression::Literal { literal } => match literal {
                 Literal::Function => {
                     write!(f, "fn")
