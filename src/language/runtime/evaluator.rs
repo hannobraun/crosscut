@@ -25,6 +25,35 @@ impl Evaluator {
         self.eval_function_raw(codebase.root().path, Value::Nothing, codebase);
     }
 
+    /// # Evaluate a function using the current node as source
+    ///
+    /// Calling this function is appropriate, if the evaluation originates from
+    /// the current syntax node. That would typically mean, that the current
+    /// syntax node is an application of a provided function, and this
+    /// evaluation is part of handling that function application.
+    ///
+    /// If this isn't the case, please call [`Evaluator::eval_function_raw`]
+    /// instead.
+    pub fn eval_function_from_current_node(
+        &mut self,
+        body: NodePath,
+        argument: Value,
+        codebase: &Codebase,
+    ) {
+        let Some(node) = self.eval_stack.pop() else {
+            panic!(
+                "Trying to evaluate a function from a node, but there is no \
+                node available right now."
+            );
+        };
+
+        self.eval_function_raw(body, argument, codebase);
+
+        self.state = RuntimeState::Running {
+            path: node.syntax_node,
+        };
+    }
+
     /// # Evaluate a function without considering where that might originate
     ///
     /// This function just does the bare minimum of starting the evaluation. It
@@ -189,7 +218,8 @@ impl Evaluator {
                             }
                         };
 
-                        self.eval_function_raw(
+                        self.eval_stack.push(node);
+                        self.eval_function_from_current_node(
                             body,
                             // Right now, the `eval` function doesn't support
                             // passing an argument to the function it evaluates.
