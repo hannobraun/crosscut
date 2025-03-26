@@ -25,6 +25,15 @@ impl Evaluator {
         self.eval_function_raw(codebase.root().path, Value::Nothing, codebase);
     }
 
+    /// # Evaluate a function without considering where that might originate
+    ///
+    /// This function just does the bare minimum of starting the evaluation. It
+    /// doesn't consider, if the evaluation might have originated from a syntax
+    /// node, nor does it do anything about the current state.
+    ///
+    /// Calling this function is appropriate, if the evaluation originates from
+    /// outside of the source code. The caller is expected to take care of
+    /// anything else that might happen to make this work correctly.
     pub fn eval_function_raw(
         &mut self,
         root_path: NodePath,
