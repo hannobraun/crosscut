@@ -97,9 +97,18 @@ impl Codebase {
             } else {
                 // The root node we're removing has multiple children, but we
                 // still need a single root node afterwards.
+                //
+                // Since we're just conjuring up a new node, there are no
+                // contents we could put in there. And since an empty node with
+                // multiple children is always an error, that's what we're
+                // creating here.
 
-                let mut new_root = self.nodes.get(&self.empty).clone();
-                *new_root.children_mut() = root.children().clone();
+                let new_root = Node::new(
+                    NodeKind::Error {
+                        node: "".to_string(),
+                    },
+                    root.children().clone(),
+                );
 
                 self.root.hash = self.nodes.insert(new_root);
             }
@@ -219,7 +228,15 @@ mod tests {
         codebase.make_change(|change_set| {
             change_set.remove(&c);
         });
-        assert_eq!(codebase.root().node, &Node::new(NodeKind::Empty, [a, b]),);
+        assert_eq!(
+            codebase.root().node,
+            &Node::new(
+                NodeKind::Error {
+                    node: "".to_string()
+                },
+                [a, b],
+            ),
+        );
     }
 
     fn test_nodes() -> [NodeKind; 3] {

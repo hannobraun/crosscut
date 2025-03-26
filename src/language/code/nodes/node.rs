@@ -35,6 +35,7 @@ impl Node {
         &self.children
     }
 
+    #[cfg(test)]
     pub fn children_mut(&mut self) -> &mut Children {
         &mut self.children
     }
