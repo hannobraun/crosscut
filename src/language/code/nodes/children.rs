@@ -9,8 +9,8 @@ pub struct Children {
 
 impl Children {
     pub fn new(children: impl IntoIterator<Item = NodeHash>) -> Self {
-        let children = children.into_iter().collect();
-        Self { inner: children }
+        let inner = children.into_iter().collect();
+        Self { inner }
     }
 
     pub fn has_none(&self) -> bool {
