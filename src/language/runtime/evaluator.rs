@@ -22,7 +22,7 @@ impl Evaluator {
 
     pub fn reset(&mut self, codebase: &Codebase) {
         *self = Self::new();
-        self.eval_function_raw(codebase.root().path, Value::Nothing, codebase);
+        self.apply_function_raw(codebase.root().path, Value::Nothing, codebase);
     }
 
     /// # Evaluate a function using the current node as source
@@ -47,7 +47,7 @@ impl Evaluator {
             );
         };
 
-        self.eval_function_raw(body, argument, codebase);
+        self.apply_function_raw(body, argument, codebase);
 
         self.state = RuntimeState::Running {
             path: node.syntax_node,
@@ -67,7 +67,7 @@ impl Evaluator {
     /// If there is a current node that the evaluation originates from a syntax
     /// node, please call [`Evaluator::eval_function_from_current_node`]
     /// instead.
-    pub fn eval_function_raw(
+    pub fn apply_function_raw(
         &mut self,
         body: NodePath,
         argument: Value,
@@ -291,7 +291,7 @@ impl Evaluator {
                     .unwrap_or_else(|| codebase.root().path);
 
                 let active_value = node.evaluated_children.into_active_value();
-                self.eval_function_raw(path, active_value, codebase);
+                self.apply_function_raw(path, active_value, codebase);
             }
             NodeKind::Error { .. } => {
                 self.state = RuntimeState::Error {
