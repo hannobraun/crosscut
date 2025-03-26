@@ -264,7 +264,8 @@ fn render_node<A: EditorOutputAdapter>(
 
     if let Some(error) = context.codebase.errors().get(path) {
         adapter.color(ERROR_COLOR, |adapter| {
-            write!(adapter, "    error: {error}")
+            write!(adapter, "    error: {error}")?;
+            Ok(())
         })?;
     }
 
