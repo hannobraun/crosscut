@@ -61,9 +61,12 @@ fn uniquely_identify_identical_siblings() {
         let a = change_set.add(Node::new(a, []));
 
         let parent = {
-            let mut node = change_set.nodes().get(root.hash()).clone();
-            node.children_mut().add(a);
-            node.children_mut().add(a);
+            let node = Node::new(
+                NodeKind::Error {
+                    node: "".to_string(),
+                },
+                [a, a],
+            );
 
             change_set.add(node)
         };

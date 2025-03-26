@@ -35,11 +35,6 @@ impl Node {
         &self.children
     }
 
-    #[cfg(test)]
-    pub fn children_mut(&mut self) -> &mut Children {
-        &mut self.children
-    }
-
     pub fn display<'r>(&'r self, packages: &'r Packages) -> NodeDisplay<'r> {
         NodeDisplay {
             node: self,
