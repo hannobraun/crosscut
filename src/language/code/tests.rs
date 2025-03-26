@@ -61,14 +61,12 @@ fn uniquely_identify_identical_siblings() {
         let a = change_set.add(Node::new(a, []));
 
         let parent = {
-            let node = Node::new(
+            change_set.add(Node::new(
                 NodeKind::Error {
                     node: "".to_string(),
                 },
                 [a, a],
-            );
-
-            change_set.add(node)
+            ))
         };
 
         let parent = NodePath::for_root(parent);
