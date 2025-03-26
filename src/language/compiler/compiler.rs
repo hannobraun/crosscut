@@ -325,12 +325,7 @@ fn compile_token(
                     },
                     children,
                 ),
-                Some(CodeError::UnresolvedIdentifier {
-                    candidates: candidates
-                        .into_iter()
-                        .map(|expression| CandidateForResolution { expression })
-                        .collect(),
-                }),
+                Some(CodeError::UnresolvedIdentifier { candidates }),
             ),
         }
     };
@@ -376,7 +371,7 @@ fn resolve_keyword(
 fn resolve_function(
     name: &str,
     packages: &Packages,
-) -> Result<NodeKind, Vec<Expression>> {
+) -> Result<NodeKind, Vec<CandidateForResolution>> {
     let provided_function = packages.resolve_function(name);
     let literal = if let Ok(value) = name.parse() {
         Some(Literal::Integer { value })
@@ -402,10 +397,14 @@ fn resolve_function(
             let mut candidates = Vec::new();
 
             if let Some(id) = provided_function {
-                candidates.push(Expression::ProvidedFunction { id });
+                candidates.push(CandidateForResolution {
+                    expression: Expression::ProvidedFunction { id },
+                });
             }
             if let Some(literal) = literal {
-                candidates.push(Expression::Literal { literal });
+                candidates.push(CandidateForResolution {
+                    expression: Expression::Literal { literal },
+                });
             }
 
             Err(candidates)
