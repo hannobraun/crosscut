@@ -3,7 +3,7 @@ use crossterm::style::{Attribute, Color};
 use crate::{
     io::editor::output::{Cursor, EditorOutputAdapter},
     language::{
-        code::{Codebase, Expression, Literal, NodeKind, NodePath},
+        code::{CodeError, Codebase, Expression, Literal, NodeKind, NodePath},
         editor::{Editor, EditorLayout, EditorLine},
         language::Language,
         packages::Packages,
@@ -157,7 +157,7 @@ fn render_runtime_state<A: EditorOutputAdapter>(
 
                     if let Some(error) = maybe_error {
                         write!(adapter, ": ")?;
-                        write!(adapter, "{error}")?;
+                        render_error(adapter, error)?;
                         writeln!(adapter)?;
                     } else {
                         writeln!(adapter)?;
@@ -275,11 +275,19 @@ fn render_node<A: EditorOutputAdapter>(
     if let Some(error) = context.codebase.errors().get(path) {
         adapter.color(ERROR_COLOR, |adapter| {
             write!(adapter, "    error: ")?;
-            write!(adapter, "{error}")?;
+            render_error(adapter, error)?;
             Ok(())
         })?;
     }
 
+    Ok(())
+}
+
+fn render_error<A: EditorOutputAdapter>(
+    adapter: &mut A,
+    error: &CodeError,
+) -> anyhow::Result<()> {
+    write!(adapter, "{error}")?;
     Ok(())
 }
 
