@@ -85,7 +85,7 @@ impl fmt::Display for NodeDisplay<'_> {
                 write!(f, "")
             }
             NodeKind::Expression { expression, .. } => {
-                write!(f, "{}", expression.display(self.packages))
+                write!(f, "{}", expression.display())
             }
             NodeKind::ProvidedFunction { id } => {
                 let name = self.packages.function_name_by_id(id);

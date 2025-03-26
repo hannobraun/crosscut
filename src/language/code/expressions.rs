@@ -1,7 +1,5 @@
 use std::fmt;
 
-use crate::language::packages::Packages;
-
 use super::Literal;
 
 #[derive(Clone, Debug, Eq, PartialEq, udigest::Digestable)]
@@ -10,7 +8,7 @@ pub enum Expression {
 }
 
 impl Expression {
-    pub fn display<'r>(&'r self, _: &'r Packages) -> ExpressionDisplay<'r> {
+    pub fn display(&self) -> ExpressionDisplay {
         ExpressionDisplay { expression: self }
     }
 }
