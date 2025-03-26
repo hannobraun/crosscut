@@ -60,7 +60,7 @@ impl NodePath {
     ) -> Self {
         if let Some(parent) = &parent {
             assert!(
-                nodes.get(&parent.hash).has_child(&hash),
+                nodes.get(&parent.hash).has_this_child(&hash),
                 "Attempting to construct invalid `NodePath`: Node being \
                 referred to is not among its purported children.",
             );
