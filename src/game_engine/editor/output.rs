@@ -129,7 +129,8 @@ fn render_runtime_state<A: EditorOutputAdapter>(
                         Effect::ProvidedFunction { id, input } => {
                             writeln!(
                                 adapter,
-                                "apply host function `{id:?}` (input: {input})",
+                                "applying provided function `{id:?}` (input: \
+                                {input})",
                             )?;
                         }
                         Effect::UnexpectedInput { expected, actual } => {
