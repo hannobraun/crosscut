@@ -1,7 +1,6 @@
 mod changes;
 mod codebase;
 mod errors;
-mod expressions;
 mod intrinsics;
 mod literal;
 mod nodes;
