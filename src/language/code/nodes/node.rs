@@ -39,6 +39,10 @@ impl Node {
         self.children.is_empty()
     }
 
+    pub fn has_single_child(&self) -> Option<&NodeHash> {
+        self.children.is_single_child()
+    }
+
     pub fn children(&self) -> &Children {
         &self.children
     }
