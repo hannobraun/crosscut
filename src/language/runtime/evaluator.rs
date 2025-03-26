@@ -1,5 +1,5 @@
 use crate::language::code::{
-    Codebase, Expression, IntrinsicFunction, Literal, NodeKind, NodePath, Type,
+    Codebase, Expression, Literal, NodeKind, NodePath, Type,
 };
 
 use super::{Effect, RuntimeState, Value};
@@ -196,47 +196,6 @@ impl Evaluator {
                 // provided its output. It might also trigger an effect, and
                 // then we still need the node.
                 self.eval_stack.push(node);
-            }
-            NodeKind::Expression {
-                expression: Expression::IntrinsicFunction { intrinsic },
-                ..
-            } => {
-                match intrinsic {
-                    IntrinsicFunction::Drop => {
-                        self.finish_evaluating_node(Value::Nothing);
-                    }
-                    IntrinsicFunction::Eval => {
-                        let body = match node
-                            .evaluated_children
-                            .clone()
-                            .into_active_value()
-                        {
-                            Value::Function { body } => body,
-                            active_value => {
-                                self.unexpected_input(
-                                    Type::Function,
-                                    active_value,
-                                    node.syntax_node,
-                                );
-                                return;
-                            }
-                        };
-
-                        self.eval_stack.push(node);
-                        self.eval_function_from_current_node(
-                            body,
-                            // Right now, the `eval` function doesn't support
-                            // passing an argument to the function it evaluates.
-                            Value::Nothing,
-                            codebase,
-                        );
-                    }
-                    IntrinsicFunction::Identity => {
-                        self.finish_evaluating_node(
-                            node.evaluated_children.into_active_value(),
-                        );
-                    }
-                }
             }
             NodeKind::Expression {
                 expression: Expression::Literal { literal },

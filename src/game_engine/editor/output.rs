@@ -3,10 +3,7 @@ use crossterm::style::{Attribute, Color};
 use crate::{
     io::editor::output::{Cursor, EditorOutputAdapter},
     language::{
-        code::{
-            Codebase, Expression, IntrinsicFunction, Literal, NodeKind,
-            NodePath,
-        },
+        code::{Codebase, Expression, Literal, NodeKind, NodePath},
         editor::{Editor, EditorLayout, EditorLine},
         language::Language,
         packages::Packages,
@@ -251,7 +248,6 @@ fn render_node<A: EditorOutputAdapter>(
     let color = match node.kind() {
         NodeKind::Expression { expression, .. } => match expression {
             Expression::HostFunction { .. } => Some(Color::DarkMagenta),
-            Expression::IntrinsicFunction { .. } => Some(Color::DarkBlue),
             Expression::Literal { .. } => Some(Color::DarkBlue),
         },
         NodeKind::Error { .. } => Some(ERROR_COLOR),
@@ -337,49 +333,6 @@ fn render_help<A: EditorOutputAdapter>(
                         outside world (in whatever way the host allows you to \
                         do so).",
                     )?;
-                }
-                Expression::IntrinsicFunction { intrinsic } => {
-                    writeln!(
-                        adapter,
-                        "This expression is the application of an intrinsic \
-                        function. Intrinsic functions are built into Crosscut, \
-                        and are available to every Crosscut program.",
-                    )?;
-                    writeln!(adapter)?;
-                    writeln!(
-                        adapter,
-                        "Intrinsic functions never allow interaction with the \
-                        outside world though (except maybe in some limited \
-                        ways with the development environment, to help with \
-                        debugging). To do that, you need to call a host \
-                        function.",
-                    )?;
-
-                    writeln!(adapter)?;
-
-                    match intrinsic {
-                        IntrinsicFunction::Drop => {
-                            writeln!(
-                                adapter,
-                                "The `{intrinsic}` function takes any argument \
-                                and returns `nothing`.",
-                            )?;
-                        }
-                        IntrinsicFunction::Eval => {
-                            writeln!(
-                                adapter,
-                                "The `{intrinsic}` function expects a function \
-                                as an argument and evaluates that function.",
-                            )?;
-                        }
-                        IntrinsicFunction::Identity => {
-                            writeln!(
-                                adapter,
-                                "The `{intrinsic}` function just returns its \
-                                input unchanged.",
-                            )?;
-                        }
-                    }
                 }
                 Expression::Literal { literal } => {
                     writeln!(

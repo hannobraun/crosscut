@@ -11,17 +11,6 @@ pub enum IntrinsicFunction {
     Identity,
 }
 
-impl IntrinsicFunction {
-    pub fn resolve(name: &str) -> Option<Self> {
-        match name {
-            "drop" => Some(Self::Drop),
-            "eval" => Some(Self::Eval),
-            "identity" => Some(Self::Identity),
-            _ => None,
-        }
-    }
-}
-
 impl Function for IntrinsicFunction {
     fn name(&self) -> &str {
         match self {

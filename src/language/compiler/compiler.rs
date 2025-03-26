@@ -1,7 +1,7 @@
 use crate::language::{
     code::{
-        Children, CodeError, Codebase, Errors, Expression, IntrinsicFunction,
-        Literal, NewChangeSet, Node, NodeKind, NodePath,
+        Children, CodeError, Codebase, Errors, Expression, Literal,
+        NewChangeSet, Node, NodeKind, NodePath,
     },
     packages::Packages,
 };
@@ -376,7 +376,6 @@ fn resolve_function(
     packages: &Packages,
 ) -> Result<Expression, Vec<Expression>> {
     let host_function = packages.resolve_function(name);
-    let intrinsic_function = IntrinsicFunction::resolve(name);
     let literal = if let Ok(value) = name.parse() {
         Some(Literal::Integer { value })
     } else {
@@ -386,24 +385,18 @@ fn resolve_function(
         }
     };
 
-    match (host_function, intrinsic_function, literal) {
-        (Some(id), None, None) => Ok(Expression::HostFunction { id }),
-        (None, Some(intrinsic), None) => {
-            Ok(Expression::IntrinsicFunction { intrinsic })
-        }
-        (None, None, Some(literal)) => Ok(Expression::Literal { literal }),
-        (None, None, None) => {
+    match (host_function, literal) {
+        (Some(id), None) => Ok(Expression::HostFunction { id }),
+        (None, Some(literal)) => Ok(Expression::Literal { literal }),
+        (None, None) => {
             let candidates = Vec::new();
             Err(candidates)
         }
-        (host_function, intrinsic_function, literal) => {
+        (host_function, literal) => {
             let mut candidates = Vec::new();
 
             if let Some(id) = host_function {
                 candidates.push(Expression::HostFunction { id });
-            }
-            if let Some(intrinsic) = intrinsic_function {
-                candidates.push(Expression::IntrinsicFunction { intrinsic });
             }
             if let Some(literal) = literal {
                 candidates.push(Expression::Literal { literal });

@@ -1,7 +1,7 @@
 use super::{
-    code::{Codebase, NodePath},
+    code::{Codebase, IntrinsicFunction, NodePath, Type},
     editor::{Editor, EditorCommand, EditorInputEvent},
-    packages::Packages,
+    packages::{Package, Packages},
     runtime::{Effect, Evaluator, RuntimeState, Value},
 };
 
@@ -11,21 +11,32 @@ pub struct Language {
     editor: Editor,
     evaluator: Evaluator,
     packages: Packages,
+    intrinsics: Package<IntrinsicFunction>,
 }
 
 impl Language {
     pub fn new() -> Self {
         let codebase = Codebase::new();
         let evaluator = Evaluator::new();
-        let packages = Packages::new();
+        let mut packages = Packages::new();
 
         let editor = Editor::new(codebase.root().path, &codebase, &packages);
+
+        let intrinsics = {
+            let mut package = packages.new_package();
+            package.add_function(IntrinsicFunction::Drop);
+            package.add_function(IntrinsicFunction::Eval);
+            package.add_function(IntrinsicFunction::Identity);
+
+            package.build()
+        };
 
         Self {
             codebase,
             editor,
             evaluator,
             packages,
+            intrinsics,
         }
     }
 
@@ -74,6 +85,44 @@ impl Language {
 
     pub fn step(&mut self) -> &RuntimeState {
         self.evaluator.step(&self.codebase);
+
+        if let RuntimeState::Effect {
+            effect: Effect::ApplyHostFunction { id, input },
+            ..
+        } = self.evaluator.state().clone()
+        {
+            match self.intrinsics.function_by_id(&id) {
+                Some(IntrinsicFunction::Drop) => {
+                    self.evaluator.provide_host_function_output(Value::Nothing);
+                }
+                Some(IntrinsicFunction::Eval) => match input {
+                    Value::Function { body } => {
+                        self.evaluator.eval_function_from_current_node(
+                            body,
+                            // Right now, the `eval` function doesn't support
+                            // passing an argument to the function it
+                            Value::Nothing,
+                            &self.codebase,
+                        );
+                    }
+                    input => {
+                        self.evaluator.trigger_effect(
+                            Effect::UnexpectedInput {
+                                expected: Type::Function,
+                                actual: input,
+                            },
+                        );
+                    }
+                },
+                Some(IntrinsicFunction::Identity) => {
+                    self.evaluator.provide_host_function_output(input);
+                }
+                None => {
+                    // This must be a host function, so let the host handle it.
+                }
+            }
+        }
+
         self.evaluator.state()
     }
 

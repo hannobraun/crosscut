@@ -52,9 +52,6 @@ impl fmt::Display for CodeError {
                             Expression::HostFunction { .. } => {
                                 write!(f, "host function")?;
                             }
-                            Expression::IntrinsicFunction { .. } => {
-                                write!(f, "intrinsic function")?;
-                            }
                             Expression::Literal { .. } => {
                                 write!(f, "literal")?;
                             }

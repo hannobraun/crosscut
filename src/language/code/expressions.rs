@@ -2,12 +2,11 @@ use std::fmt;
 
 use crate::language::packages::{FunctionId, Packages};
 
-use super::{IntrinsicFunction, Literal};
+use super::Literal;
 
 #[derive(Clone, Debug, Eq, PartialEq, udigest::Digestable)]
 pub enum Expression {
     HostFunction { id: FunctionId },
-    IntrinsicFunction { intrinsic: IntrinsicFunction },
     Literal { literal: Literal },
 }
 
@@ -34,9 +33,6 @@ impl fmt::Display for ExpressionDisplay<'_> {
             Expression::HostFunction { id } => {
                 let name = self.packages.function_name_by_id(id);
                 write!(f, "{name}")
-            }
-            Expression::IntrinsicFunction { intrinsic } => {
-                write!(f, "{intrinsic}")
             }
             Expression::Literal { literal } => match literal {
                 Literal::Function => {
