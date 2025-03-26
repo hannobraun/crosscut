@@ -99,9 +99,7 @@ impl Codebase {
                 // still need a single root node afterwards.
 
                 let mut new_root = self.nodes.get(&self.empty).clone();
-                for child in root.children().iter().copied() {
-                    new_root.children_mut().add(child);
-                }
+                *new_root.children_mut() = root.children().clone();
 
                 self.root.hash = self.nodes.insert(new_root);
             }
