@@ -10,7 +10,7 @@ mod types;
 pub use self::{
     changes::{Changes, NewChangeSet},
     codebase::Codebase,
-    errors::{CodeError, Errors},
+    errors::{CandidateForResolution, CodeError, Errors},
     expressions::Expression,
     intrinsics::IntrinsicFunction,
     literal::Literal,

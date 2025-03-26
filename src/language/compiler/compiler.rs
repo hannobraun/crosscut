@@ -1,7 +1,7 @@
 use crate::language::{
     code::{
-        Children, CodeError, Codebase, Errors, Expression, Literal,
-        NewChangeSet, Node, NodeKind, NodePath,
+        CandidateForResolution, Children, CodeError, Codebase, Errors,
+        Expression, Literal, NewChangeSet, Node, NodeKind, NodePath,
     },
     packages::Packages,
 };
@@ -325,7 +325,12 @@ fn compile_token(
                     },
                     children,
                 ),
-                Some(CodeError::UnresolvedIdentifier { candidates }),
+                Some(CodeError::UnresolvedIdentifier {
+                    candidates: candidates
+                        .into_iter()
+                        .map(|expression| CandidateForResolution { expression })
+                        .collect(),
+                }),
             ),
         }
     };

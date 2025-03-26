@@ -304,7 +304,7 @@ fn render_error<A: EditorOutputAdapter>(
                         write!(adapter, ", ")?;
                     }
 
-                    match candidate {
+                    match candidate.expression {
                         Expression::ProvidedFunction { .. } => {
                             write!(adapter, "provided function")?;
                         }
