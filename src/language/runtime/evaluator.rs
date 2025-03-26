@@ -42,8 +42,8 @@ impl Evaluator {
     ) {
         let Some(node) = self.eval_stack.pop() else {
             panic!(
-                "Trying to evaluate a function from a node, but there is no \
-                node available right now."
+                "Trying to apply a function from a node, but no node is \
+                available."
             );
         };
 
