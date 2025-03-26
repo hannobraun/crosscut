@@ -35,6 +35,10 @@ impl Node {
         self.children.inner.contains(child)
     }
 
+    pub fn has_no_children(&self) -> bool {
+        self.children.has_none()
+    }
+
     pub fn children(&self) -> &Children {
         &self.children
     }

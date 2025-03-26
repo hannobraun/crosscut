@@ -84,7 +84,7 @@ impl Codebase {
         if root_was_removed {
             let root = self.root().node;
 
-            if root.children().has_none() {
+            if root.has_no_children() {
                 // The root node we're removing has no children, but we still
                 // need a new root node.
 
