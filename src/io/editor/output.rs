@@ -27,7 +27,7 @@ pub trait EditorOutputAdapter: fmt::Write {
     fn color(
         &mut self,
         color: Color,
-        f: impl FnOnce(&mut Self) -> fmt::Result,
+        f: impl FnOnce(&mut Self) -> anyhow::Result<()>,
     ) -> anyhow::Result<()> {
         let _ = color;
         f(self)?;
@@ -162,7 +162,7 @@ impl EditorOutputAdapter for RawTerminalAdapter {
     fn color(
         &mut self,
         color: Color,
-        f: impl FnOnce(&mut Self) -> fmt::Result,
+        f: impl FnOnce(&mut Self) -> anyhow::Result<()>,
     ) -> anyhow::Result<()> {
         self.w.queue(SetForegroundColor(color))?;
         f(self)?;
