@@ -1,6 +1,4 @@
-use crate::language::code::{
-    Codebase, Expression, Literal, NodeKind, NodePath, Type,
-};
+use crate::language::code::{Codebase, Literal, NodeKind, NodePath, Type};
 
 use super::{Effect, RuntimeState, Value};
 
@@ -135,11 +133,8 @@ impl Evaluator {
         // node that can be evaluated, and that all its parents are on the
         // evaluation stack, so they can be evaluated later.
         loop {
-            if let NodeKind::Expression {
-                expression:
-                    Expression::Literal {
-                        literal: Literal::Function,
-                    },
+            if let NodeKind::Literal {
+                literal: Literal::Function,
             } = codebase.node_at(&node.syntax_node).node.kind()
             {
                 // If this were any other node, we'd need to evaluate its
@@ -194,10 +189,7 @@ impl Evaluator {
                 // then we still need the node.
                 self.eval_stack.push(node);
             }
-            NodeKind::Expression {
-                expression: Expression::Literal { literal },
-                ..
-            } => {
+            NodeKind::Literal { literal } => {
                 let value = {
                     match *literal {
                         Literal::Function => {

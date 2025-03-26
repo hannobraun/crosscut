@@ -1,8 +1,6 @@
 use std::vec;
 
-use crate::language::code::{
-    Expression, Literal, LocatedNode, Node, NodeKind, Nodes,
-};
+use crate::language::code::{Literal, LocatedNode, Node, NodeKind, Nodes};
 
 pub trait NodeExt: Sized {
     fn expect_empty(&self) -> Node;
@@ -20,11 +18,8 @@ impl NodeExt for Node {
     }
 
     fn expect_integer_literal(&self, expected: i32) -> Node {
-        if let NodeKind::Expression {
-            expression:
-                Expression::Literal {
-                    literal: Literal::Integer { value },
-                },
+        if let NodeKind::Literal {
+            literal: Literal::Integer { value },
         } = self.kind()
         {
             assert_eq!(value, &expected);

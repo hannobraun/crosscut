@@ -1,7 +1,7 @@
 use crate::language::{
     code::{
-        CandidateForResolution, Children, CodeError, Codebase, Errors,
-        Expression, Literal, NewChangeSet, Node, NodeKind, NodePath,
+        CandidateForResolution, Children, CodeError, Codebase, Errors, Literal,
+        NewChangeSet, Node, NodeKind, NodePath,
     },
     packages::Packages,
 };
@@ -350,10 +350,8 @@ fn resolve_keyword(
 
             Some((
                 Node::new(
-                    NodeKind::Expression {
-                        expression: Expression::Literal {
-                            literal: Literal::Function,
-                        },
+                    NodeKind::Literal {
+                        literal: Literal::Function,
                     },
                     children,
                 ),
@@ -384,9 +382,7 @@ fn resolve_function(
 
     match (provided_function, literal) {
         (Some(id), None) => Ok(NodeKind::ProvidedFunction { id }),
-        (None, Some(literal)) => Ok(NodeKind::Expression {
-            expression: Expression::Literal { literal },
-        }),
+        (None, Some(literal)) => Ok(NodeKind::Literal { literal }),
         (None, None) => {
             let candidates = Vec::new();
             Err(candidates)

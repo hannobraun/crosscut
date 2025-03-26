@@ -4,8 +4,8 @@ use crate::{
     io::editor::output::{Cursor, EditorOutputAdapter},
     language::{
         code::{
-            CandidateForResolution, CodeError, Codebase, Expression, Literal,
-            NodeKind, NodePath,
+            CandidateForResolution, CodeError, Codebase, Literal, NodeKind,
+            NodePath,
         },
         editor::{Editor, EditorLayout, EditorLine},
         language::Language,
@@ -257,9 +257,7 @@ fn render_node<A: EditorOutputAdapter>(
     }
 
     let color = match node.kind() {
-        NodeKind::Expression { expression, .. } => match expression {
-            Expression::Literal { .. } => Some(Color::DarkBlue),
-        },
+        NodeKind::Literal { .. } => Some(Color::DarkBlue),
         NodeKind::ProvidedFunction { .. } => Some(Color::DarkMagenta),
         NodeKind::Error { .. } => Some(ERROR_COLOR),
         _ => None,
@@ -375,33 +373,31 @@ fn render_help<A: EditorOutputAdapter>(
                 making up your mind about what you want to type."
             )?;
         }
-        NodeKind::Expression { expression, .. } => match expression {
-            Expression::Literal { literal } => {
-                writeln!(
-                    adapter,
-                    "This is a literal. Literals are functions that take `{}` \
-                    and return the value they represent.",
-                    Value::Nothing,
-                )?;
+        NodeKind::Literal { literal } => {
+            writeln!(
+                adapter,
+                "This is a literal. Literals are functions that take `{}` and \
+                return the value they represent.",
+                Value::Nothing,
+            )?;
 
-                writeln!(adapter)?;
+            writeln!(adapter)?;
 
-                match literal {
-                    Literal::Function => {
-                        writeln!(adapter, "This literal returns a function.",)?;
-                    }
-                    Literal::Integer { value } => {
-                        writeln!(
-                            adapter,
-                            "This literal returns the integer `{value}`.",
-                        )?;
-                    }
-                    Literal::Tuple => {
-                        writeln!(adapter, "This literal returns a tuple.")?;
-                    }
+            match literal {
+                Literal::Function => {
+                    writeln!(adapter, "This literal returns a function.",)?;
+                }
+                Literal::Integer { value } => {
+                    writeln!(
+                        adapter,
+                        "This literal returns the integer `{value}`.",
+                    )?;
+                }
+                Literal::Tuple => {
+                    writeln!(adapter, "This literal returns a tuple.")?;
                 }
             }
-        },
+        }
         NodeKind::ProvidedFunction { id: _ } => {
             writeln!(
                 adapter,

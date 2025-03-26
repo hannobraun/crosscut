@@ -1,7 +1,7 @@
 use std::fmt;
 
 use crate::language::{
-    code::Expression,
+    code::Literal,
     packages::{FunctionId, Packages},
 };
 
@@ -54,7 +54,7 @@ impl Node {
 #[derive(Clone, Debug, Eq, PartialEq, udigest::Digestable)]
 pub enum NodeKind {
     Empty,
-    Expression { expression: Expression },
+    Literal { literal: Literal },
     ProvidedFunction { id: FunctionId },
     Recursion,
     Error { node: String },
@@ -65,10 +65,8 @@ impl NodeKind {
     pub fn integer_literal(value: i32) -> Self {
         use crate::language::code::Literal;
 
-        Self::Expression {
-            expression: Expression::Literal {
-                literal: Literal::Integer { value },
-            },
+        Self::Literal {
+            literal: Literal::Integer { value },
         }
     }
 }
@@ -84,9 +82,17 @@ impl fmt::Display for NodeDisplay<'_> {
             NodeKind::Empty { .. } => {
                 write!(f, "")
             }
-            NodeKind::Expression { expression, .. } => {
-                write!(f, "{}", expression.display())
-            }
+            NodeKind::Literal { literal } => match literal {
+                Literal::Function => {
+                    write!(f, "fn")
+                }
+                Literal::Integer { value } => {
+                    write!(f, "{value}")
+                }
+                Literal::Tuple => {
+                    write!(f, "tuple")
+                }
+            },
             NodeKind::ProvidedFunction { id } => {
                 let name = self.packages.function_name_by_id(id);
                 write!(f, "{name}")

@@ -11,7 +11,6 @@ pub use self::{
     changes::{Changes, NewChangeSet},
     codebase::Codebase,
     errors::{CandidateForResolution, CodeError, Errors},
-    expressions::Expression,
     intrinsics::IntrinsicFunction,
     literal::Literal,
     nodes::{Children, LocatedNode, Node, NodeHash, NodeKind, NodePath, Nodes},
