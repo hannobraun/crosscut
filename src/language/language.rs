@@ -1,8 +1,10 @@
 use super::{
-    code::{Codebase, IntrinsicFunction, NodePath, Type},
+    code::{Codebase, IntrinsicFunction, NodePath},
     editor::{Editor, EditorCommand, EditorInputEvent},
     packages::{Package, Packages},
-    runtime::{Effect, Evaluator, RuntimeState, Value},
+    runtime::{
+        Effect, Evaluator, RuntimeState, Value, apply_intrinsic_function,
+    },
 };
 
 #[derive(Debug)]
@@ -92,30 +94,13 @@ impl Language {
         } = self.evaluator.state().clone()
         {
             match self.intrinsics.function_by_id(&id) {
-                Some(IntrinsicFunction::Drop) => {
-                    self.evaluator.exit_from_provided_function(Value::Nothing);
-                }
-                Some(IntrinsicFunction::Eval) => match input {
-                    Value::Function { body } => {
-                        self.evaluator.apply_function_from_current_node(
-                            body,
-                            // Right now, the `eval` function doesn't support
-                            // passing an argument to the function it
-                            Value::Nothing,
-                            &self.codebase,
-                        );
-                    }
-                    input => {
-                        self.evaluator.trigger_effect(
-                            Effect::UnexpectedInput {
-                                expected: Type::Function,
-                                actual: input,
-                            },
-                        );
-                    }
-                },
-                Some(IntrinsicFunction::Identity) => {
-                    self.evaluator.exit_from_provided_function(input);
+                Some(intrinsic) => {
+                    apply_intrinsic_function(
+                        intrinsic,
+                        input,
+                        &mut self.evaluator,
+                        &self.codebase,
+                    );
                 }
                 None => {
                     // This must be a host function, so let the host handle it.
