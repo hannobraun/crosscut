@@ -397,14 +397,11 @@ fn resolve_function(
             let mut candidates = Vec::new();
 
             if let Some(id) = provided_function {
-                candidates.push(CandidateForResolution {
-                    expression: Expression::ProvidedFunction { id },
-                });
+                candidates
+                    .push(CandidateForResolution::ProvidedFunction { id });
             }
             if let Some(literal) = literal {
-                candidates.push(CandidateForResolution {
-                    expression: Expression::Literal { literal },
-                });
+                candidates.push(CandidateForResolution::Literal { literal });
             }
 
             Err(candidates)

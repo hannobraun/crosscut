@@ -3,7 +3,10 @@ use crossterm::style::{Attribute, Color};
 use crate::{
     io::editor::output::{Cursor, EditorOutputAdapter},
     language::{
-        code::{CodeError, Codebase, Expression, Literal, NodeKind, NodePath},
+        code::{
+            CandidateForResolution, CodeError, Codebase, Expression, Literal,
+            NodeKind, NodePath,
+        },
         editor::{Editor, EditorLayout, EditorLine},
         language::Language,
         packages::Packages,
@@ -304,11 +307,11 @@ fn render_error<A: EditorOutputAdapter>(
                         write!(adapter, ", ")?;
                     }
 
-                    match candidate.expression {
-                        Expression::ProvidedFunction { .. } => {
+                    match candidate {
+                        CandidateForResolution::ProvidedFunction { .. } => {
                             write!(adapter, "provided function")?;
                         }
-                        Expression::Literal { .. } => {
+                        CandidateForResolution::Literal { .. } => {
                             write!(adapter, "literal")?;
                         }
                     }

@@ -1,6 +1,8 @@
 use std::collections::BTreeMap;
 
-use super::{Expression, NodePath};
+use crate::language::packages::FunctionId;
+
+use super::{Literal, NodePath};
 
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub struct Errors {
@@ -32,6 +34,7 @@ pub enum CodeError {
 }
 
 #[derive(Clone, Debug, Eq, PartialEq)]
-pub struct CandidateForResolution {
-    pub expression: Expression,
+pub enum CandidateForResolution {
+    Literal { literal: Literal },
+    ProvidedFunction { id: FunctionId },
 }
