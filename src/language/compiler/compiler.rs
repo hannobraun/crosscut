@@ -299,7 +299,7 @@ fn compile_token(
     packages: &Packages,
 ) -> (Node, Option<CodeError>) {
     let (node, maybe_error) = if token.is_empty() {
-        let (kind, error) = if children.has_multiple().is_none() {
+        let (kind, error) = if children.is_multiple_children().is_none() {
             (NodeKind::Empty, None)
         } else {
             (

@@ -28,7 +28,9 @@ impl Children {
         }
     }
 
-    pub fn has_multiple(&self) -> Option<impl Iterator<Item = &NodeHash>> {
+    pub fn is_multiple_children(
+        &self,
+    ) -> Option<impl Iterator<Item = &NodeHash>> {
         if self.inner.len() > 1 {
             Some(self.inner.iter())
         } else {
