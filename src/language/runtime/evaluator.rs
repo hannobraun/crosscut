@@ -36,15 +36,15 @@ impl Evaluator {
     /// anything else that might happen to make this work correctly.
     pub fn eval_function_raw(
         &mut self,
-        root_path: NodePath,
+        body: NodePath,
         argument: Value,
         codebase: &Codebase,
     ) {
         self.eval_stack
-            .push(RuntimeNode::from_syntax_node(root_path.clone(), codebase));
+            .push(RuntimeNode::from_syntax_node(body.clone(), codebase));
 
         self.call_stack.push(StackFrame {
-            root: root_path,
+            root: body,
             argument,
         });
     }
