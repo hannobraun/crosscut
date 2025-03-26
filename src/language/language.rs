@@ -93,18 +93,13 @@ impl Language {
             ..
         } = self.evaluator.state().clone()
         {
-            match self.intrinsics.function_by_id(&id) {
-                Some(intrinsic) => {
-                    apply_intrinsic_function(
-                        intrinsic,
-                        input,
-                        &mut self.evaluator,
-                        &self.codebase,
-                    );
-                }
-                None => {
-                    // This must be a host function, so let the host handle it.
-                }
+            if let Some(intrinsic) = self.intrinsics.function_by_id(&id) {
+                apply_intrinsic_function(
+                    intrinsic,
+                    input,
+                    &mut self.evaluator,
+                    &self.codebase,
+                );
             }
         }
 
