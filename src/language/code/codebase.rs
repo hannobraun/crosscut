@@ -89,7 +89,9 @@ impl Codebase {
                 // need a new root node.
 
                 self.root.hash = self.empty;
-            } else if let Some(child) = root.children().has_one().copied() {
+            } else if let Some(child) =
+                root.children().is_single_child().copied()
+            {
                 // The root node we're removing has exactly one child, which can
                 // become the new root node.
 

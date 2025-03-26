@@ -20,7 +20,7 @@ impl Children {
     /// # Access the single child of this node
     ///
     /// Returns `None`, if the node has zero or more than one children.
-    pub fn has_one(&self) -> Option<&NodeHash> {
+    pub fn is_single_child(&self) -> Option<&NodeHash> {
         if self.inner.len() == 1 {
             self.inner.first()
         } else {
@@ -106,9 +106,9 @@ mod tests {
     fn has_one_should_indicate_whether_there_is_one_child() {
         let [a, b, ..] = test_nodes();
 
-        assert!(Children::new([]).has_one().is_none());
-        assert!(Children::new([a]).has_one().is_some());
-        assert!(Children::new([a, b]).has_one().is_none());
+        assert!(Children::new([]).is_single_child().is_none());
+        assert!(Children::new([a]).is_single_child().is_some());
+        assert!(Children::new([a, b]).is_single_child().is_none());
     }
 
     #[test]
