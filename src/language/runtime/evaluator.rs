@@ -34,7 +34,7 @@ impl Evaluator {
     ///
     /// If this isn't the case, please call [`Evaluator::eval_function_raw`]
     /// instead.
-    pub fn eval_function_from_current_node(
+    pub fn apply_function_from_current_node(
         &mut self,
         body: NodePath,
         argument: Value,

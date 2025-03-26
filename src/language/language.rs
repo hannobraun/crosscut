@@ -97,7 +97,7 @@ impl Language {
                 }
                 Some(IntrinsicFunction::Eval) => match input {
                     Value::Function { body } => {
-                        self.evaluator.eval_function_from_current_node(
+                        self.evaluator.apply_function_from_current_node(
                             body,
                             // Right now, the `eval` function doesn't support
                             // passing an argument to the function it
