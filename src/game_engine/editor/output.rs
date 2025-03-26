@@ -287,7 +287,38 @@ fn render_error<A: EditorOutputAdapter>(
     adapter: &mut A,
     error: &CodeError,
 ) -> anyhow::Result<()> {
-    write!(adapter, "{error}")?;
+    match error {
+        CodeError::EmptyNodeWithMultipleChildren => {
+            write!(adapter, "empty node with multiple children")?;
+        }
+        CodeError::UnresolvedIdentifier { candidates } => {
+            write!(adapter, "unresolved syntax node")?;
+
+            if !candidates.is_empty() {
+                write!(adapter, " (could resolve to")?;
+
+                for (i, candidate) in candidates.iter().enumerate() {
+                    if i == 0 {
+                        write!(adapter, " ")?;
+                    } else {
+                        write!(adapter, ", ")?;
+                    }
+
+                    match candidate {
+                        Expression::ProvidedFunction { .. } => {
+                            write!(adapter, "provided function")?;
+                        }
+                        Expression::Literal { .. } => {
+                            write!(adapter, "literal")?;
+                        }
+                    }
+                }
+
+                write!(adapter, ")")?;
+            }
+        }
+    }
+
     Ok(())
 }
 
