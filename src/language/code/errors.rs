@@ -50,7 +50,7 @@ impl fmt::Display for CodeError {
 
                         match candidate {
                             Expression::ProvidedFunction { .. } => {
-                                write!(f, "host function")?;
+                                write!(f, "provided function")?;
                             }
                             Expression::Literal { .. } => {
                                 write!(f, "literal")?;
