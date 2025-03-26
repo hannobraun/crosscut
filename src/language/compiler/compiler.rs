@@ -317,7 +317,7 @@ fn compile_token(
         (node, maybe_err)
     } else {
         match resolve_function(token, packages) {
-            Ok(expression) => (Node::new(expression, children), None),
+            Ok(kind) => (Node::new(kind, children), None),
             Err(candidates) => (
                 Node::new(
                     NodeKind::Error {
