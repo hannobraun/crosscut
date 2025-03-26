@@ -91,12 +91,12 @@ impl Language {
         if let RuntimeState::Effect {
             effect: Effect::ProvidedFunction { id, input },
             ..
-        } = self.evaluator.state().clone()
+        } = self.evaluator.state()
         {
-            if let Some(intrinsic) = self.intrinsics.function_by_id(&id) {
+            if let Some(intrinsic) = self.intrinsics.function_by_id(id) {
                 apply_intrinsic_function(
                     intrinsic,
-                    input,
+                    input.clone(),
                     &mut self.evaluator,
                     &self.codebase,
                 );
