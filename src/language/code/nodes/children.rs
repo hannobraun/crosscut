@@ -13,7 +13,7 @@ impl Children {
         Self { inner }
     }
 
-    pub fn has_none(&self) -> bool {
+    pub fn is_empty(&self) -> bool {
         self.inner.is_empty()
     }
 

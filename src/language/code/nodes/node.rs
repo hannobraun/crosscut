@@ -36,7 +36,7 @@ impl Node {
     }
 
     pub fn has_no_children(&self) -> bool {
-        self.children.has_none()
+        self.children.is_empty()
     }
 
     pub fn children(&self) -> &Children {

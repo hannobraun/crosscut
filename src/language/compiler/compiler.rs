@@ -341,7 +341,7 @@ fn resolve_keyword(
     match name {
         "fn" => {
             // Every function must have a child. Other code assumes that.
-            let children = if children.has_none() {
+            let children = if children.is_empty() {
                 let child = change_set.add(Node::new(NodeKind::Empty, []));
                 Children::new(Some(child))
             } else {
