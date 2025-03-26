@@ -25,7 +25,7 @@ impl Evaluator {
         self.apply_function_raw(codebase.root().path, Value::Nothing, codebase);
     }
 
-    /// # Evaluate a function using the current node as source
+    /// # Apply a function using the current node as source
     ///
     /// Calling this function is appropriate, if the evaluation originates from
     /// the current syntax node. That would typically mean, that the current
@@ -54,7 +54,7 @@ impl Evaluator {
         };
     }
 
-    /// # Evaluate a function without considering where that might originate
+    /// # Apply a function without considering where that might originate
     ///
     /// This function just does the bare minimum of starting the evaluation. It
     /// doesn't consider, if the evaluation might have originated from a syntax
