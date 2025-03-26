@@ -327,11 +327,9 @@ fn render_help<A: EditorOutputAdapter>(
                 Expression::HostFunction { id: _ } => {
                     writeln!(
                         adapter,
-                        "This expression is the application of a host \
-                        function. Those are defined outside of Crosscut, by \
-                        the host. They allow your program to interact with the \
-                        outside world (in whatever way the host allows you to \
-                        do so).",
+                        "This expression is the application of a provided \
+                        function. Those are defined outside of Crosscut code, \
+                        either as intrinsic functions, or by the host.",
                     )?;
                 }
                 Expression::Literal { literal } => {
