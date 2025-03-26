@@ -31,6 +31,10 @@ impl Node {
         &self.kind
     }
 
+    pub fn has_child(&self, child: &NodeHash) -> bool {
+        self.children.contains(child)
+    }
+
     pub fn children(&self) -> &Children {
         &self.children
     }
