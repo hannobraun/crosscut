@@ -178,7 +178,7 @@ impl Evaluator {
                 );
             }
             NodeKind::Expression {
-                expression: Expression::HostFunction { id },
+                expression: Expression::ProvidedFunction { id },
                 ..
             } => {
                 self.state = RuntimeState::Effect {

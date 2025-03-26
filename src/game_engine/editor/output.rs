@@ -247,7 +247,7 @@ fn render_node<A: EditorOutputAdapter>(
 
     let color = match node.kind() {
         NodeKind::Expression { expression, .. } => match expression {
-            Expression::HostFunction { .. } => Some(Color::DarkMagenta),
+            Expression::ProvidedFunction { .. } => Some(Color::DarkMagenta),
             Expression::Literal { .. } => Some(Color::DarkBlue),
         },
         NodeKind::Error { .. } => Some(ERROR_COLOR),
@@ -324,7 +324,7 @@ fn render_help<A: EditorOutputAdapter>(
             write!(adapter, "You are editing an expression. ")?;
 
             match expression {
-                Expression::HostFunction { id: _ } => {
+                Expression::ProvidedFunction { id: _ } => {
                     writeln!(
                         adapter,
                         "This expression is the application of a provided \

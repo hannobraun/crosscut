@@ -386,7 +386,7 @@ fn resolve_function(
     };
 
     match (host_function, literal) {
-        (Some(id), None) => Ok(Expression::HostFunction { id }),
+        (Some(id), None) => Ok(Expression::ProvidedFunction { id }),
         (None, Some(literal)) => Ok(Expression::Literal { literal }),
         (None, None) => {
             let candidates = Vec::new();
@@ -396,7 +396,7 @@ fn resolve_function(
             let mut candidates = Vec::new();
 
             if let Some(id) = host_function {
-                candidates.push(Expression::HostFunction { id });
+                candidates.push(Expression::ProvidedFunction { id });
             }
             if let Some(literal) = literal {
                 candidates.push(Expression::Literal { literal });
