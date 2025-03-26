@@ -43,15 +43,15 @@ impl Node {
         &self.children
     }
 
+    pub fn to_token(&self, packages: &Packages) -> String {
+        self.display(packages).to_string()
+    }
+
     pub fn display<'r>(&'r self, packages: &'r Packages) -> NodeDisplay<'r> {
         NodeDisplay {
             node: self,
             packages,
         }
-    }
-
-    pub fn to_token(&self, packages: &Packages) -> String {
-        self.display(packages).to_string()
     }
 }
 
