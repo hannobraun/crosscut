@@ -308,11 +308,11 @@ fn render_error<A: EditorOutputAdapter>(
                     }
 
                     match candidate {
-                        CandidateForResolution::ProvidedFunction { .. } => {
-                            write!(adapter, "provided function")?;
-                        }
                         CandidateForResolution::Literal { .. } => {
                             write!(adapter, "literal")?;
+                        }
+                        CandidateForResolution::ProvidedFunction { .. } => {
+                            write!(adapter, "provided function")?;
                         }
                     }
                 }
