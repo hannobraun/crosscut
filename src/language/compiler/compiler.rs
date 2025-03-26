@@ -35,7 +35,7 @@ impl<'r> Compiler<'r> {
             let child = change_set.add(child);
 
             let mut siblings =
-                change_set.nodes().get(parent.hash()).children().clone();
+                change_set.nodes().get(parent.hash()).to_children();
             let sibling_index = siblings.add(child);
 
             let parent_path = replace_node_and_update_parents(
@@ -126,7 +126,7 @@ impl<'r> Compiler<'r> {
 
             let parent = self.codebase.node_at(parent);
 
-            let mut children = parent.node.children().clone();
+            let mut children = parent.node.to_children();
             children.replace(
                 to_remove.hash(),
                 node_to_remove.children().iter().copied(),
@@ -194,8 +194,7 @@ impl<'r> Compiler<'r> {
         replacement_token: &str,
         packages: &Packages,
     ) -> NodePath {
-        let children =
-            self.codebase.node_at(to_replace).node.children().clone();
+        let children = self.codebase.node_at(to_replace).node.to_children();
         self.replace_inner(to_replace, replacement_token, children, packages)
     }
 
@@ -248,7 +247,7 @@ fn replace_node_and_update_parents(
             let parent_node = change_set.nodes().get(parent_path.hash());
 
             next_token = parent_node.to_token(packages);
-            next_children = parent_node.children().clone();
+            next_children = parent_node.to_children();
 
             next_children
                 .replace(next_to_replace.hash(), [previous_replacement]);

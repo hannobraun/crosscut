@@ -43,6 +43,10 @@ impl Node {
         &self.children
     }
 
+    pub fn to_children(&self) -> Children {
+        self.children.clone()
+    }
+
     pub fn to_token(&self, packages: &Packages) -> String {
         self.display(packages).to_string()
     }
