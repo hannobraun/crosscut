@@ -126,7 +126,7 @@ fn render_runtime_state<A: EditorOutputAdapter>(
                     write!(adapter, "Effect: ")?;
 
                     match effect {
-                        Effect::ApplyHostFunction { id, input } => {
+                        Effect::ProvidedFunction { id, input } => {
                             writeln!(
                                 adapter,
                                 "apply host function `{id:?}` (input: {input})",

@@ -84,7 +84,7 @@ impl Evaluator {
 
     pub fn provide_host_function_output(&mut self, value: Value) {
         let RuntimeState::Effect {
-            effect: Effect::ApplyHostFunction { .. },
+            effect: Effect::ProvidedFunction { .. },
             ..
         } = &self.state
         else {
@@ -182,7 +182,7 @@ impl Evaluator {
                 ..
             } => {
                 self.state = RuntimeState::Effect {
-                    effect: Effect::ApplyHostFunction {
+                    effect: Effect::ProvidedFunction {
                         id: *id,
                         input: node
                             .evaluated_children

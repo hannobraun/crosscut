@@ -78,7 +78,7 @@ fn evaluate_code_up_until_an_error() {
     assert!(matches!(
         language.step(),
         RuntimeState::Effect {
-            effect: Effect::ApplyHostFunction { .. },
+            effect: Effect::ProvidedFunction { .. },
             ..
         },
     ));

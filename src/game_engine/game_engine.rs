@@ -110,7 +110,7 @@ where
                     continue;
                 }
                 RuntimeState::Effect { effect, .. } => match effect {
-                    Effect::ApplyHostFunction { id, input } => {
+                    Effect::ProvidedFunction { id, input } => {
                         self.apply_host_function(id, input);
                         continue;
                     }
