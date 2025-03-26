@@ -262,7 +262,10 @@ fn render_node<A: EditorOutputAdapter>(
 
     let node_display = node.display(context.packages);
     if let Some(color) = color {
-        adapter.color(color, |adapter| write!(adapter, "{node_display}"))?;
+        adapter.color(color, |adapter| {
+            write!(adapter, "{node_display}")?;
+            Ok(())
+        })?;
     } else {
         write!(adapter, "{node_display}")?;
     }
