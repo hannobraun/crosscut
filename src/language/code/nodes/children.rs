@@ -4,41 +4,41 @@ use super::NodeHash;
 
 #[derive(Clone, Debug, Eq, PartialEq, udigest::Digestable)]
 pub struct Children {
-    pub children: Vec<NodeHash>,
+    pub inner: Vec<NodeHash>,
 }
 
 impl Children {
     pub fn new(children: impl IntoIterator<Item = NodeHash>) -> Self {
         let children = children.into_iter().collect();
-        Self { children }
+        Self { inner: children }
     }
 
     pub fn has_none(&self) -> bool {
-        self.children.is_empty()
+        self.inner.is_empty()
     }
 
     /// # Access the single child of this node
     ///
     /// Returns `None`, if the node has zero or more than one children.
     pub fn has_one(&self) -> Option<&NodeHash> {
-        if self.children.len() == 1 {
-            self.children.first()
+        if self.inner.len() == 1 {
+            self.inner.first()
         } else {
             None
         }
     }
 
     pub fn has_multiple(&self) -> Option<impl Iterator<Item = &NodeHash>> {
-        if self.children.len() > 1 {
-            Some(self.children.iter())
+        if self.inner.len() > 1 {
+            Some(self.inner.iter())
         } else {
             None
         }
     }
 
     pub fn add(&mut self, to_add: NodeHash) -> usize {
-        let index = self.children.len();
-        self.children.push(to_add);
+        let index = self.inner.len();
+        self.inner.push(to_add);
         index
     }
 
@@ -48,7 +48,7 @@ impl Children {
         replacements: impl IntoIterator<Item = NodeHash>,
     ) {
         let Some(index) = self
-            .children
+            .inner
             .iter()
             .enumerate()
             .find_map(|(i, child)| (child == to_replace).then_some(i))
@@ -56,24 +56,24 @@ impl Children {
             panic!("Trying to replace child that is not present.");
         };
 
-        self.children.remove(index);
+        self.inner.remove(index);
 
         let mut index = index;
         for replacement in replacements {
-            self.children.insert(index, replacement);
+            self.inner.insert(index, replacement);
             index += 1;
         }
     }
 
     pub fn iter(&self) -> slice::Iter<NodeHash> {
-        self.children.iter()
+        self.inner.iter()
     }
 }
 
 impl<const N: usize> From<[NodeHash; N]> for Children {
     fn from(children: [NodeHash; N]) -> Self {
         Self {
-            children: children.into(),
+            inner: children.into(),
         }
     }
 }
@@ -83,7 +83,7 @@ impl IntoIterator for Children {
     type IntoIter = vec::IntoIter<NodeHash>;
 
     fn into_iter(self) -> Self::IntoIter {
-        self.children.into_iter()
+        self.inner.into_iter()
     }
 }
 
