@@ -392,10 +392,10 @@ fn resolve_function(
             let candidates = Vec::new();
             Err(candidates)
         }
-        (host_function, literal) => {
+        (provided_function, literal) => {
             let mut candidates = Vec::new();
 
-            if let Some(id) = host_function {
+            if let Some(id) = provided_function {
                 candidates.push(Expression::ProvidedFunction { id });
             }
             if let Some(literal) = literal {
