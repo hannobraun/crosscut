@@ -4,7 +4,7 @@ use super::NodeHash;
 
 #[derive(Clone, Debug, Eq, PartialEq, udigest::Digestable)]
 pub struct Children {
-    children: Vec<NodeHash>,
+    pub children: Vec<NodeHash>,
 }
 
 impl Children {
