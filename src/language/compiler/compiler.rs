@@ -375,7 +375,7 @@ fn resolve_function(
     name: &str,
     packages: &Packages,
 ) -> Result<Expression, Vec<Expression>> {
-    let host_function = packages.resolve_function(name);
+    let provided_function = packages.resolve_function(name);
     let literal = if let Ok(value) = name.parse() {
         Some(Literal::Integer { value })
     } else {
@@ -385,7 +385,7 @@ fn resolve_function(
         }
     };
 
-    match (host_function, literal) {
+    match (provided_function, literal) {
         (Some(id), None) => Ok(Expression::ProvidedFunction { id }),
         (None, Some(literal)) => Ok(Expression::Literal { literal }),
         (None, None) => {
