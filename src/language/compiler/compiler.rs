@@ -317,10 +317,7 @@ fn compile_token(
         (node, maybe_err)
     } else {
         match resolve_function(token, packages) {
-            Ok(expression) => (
-                Node::new(NodeKind::Expression { expression }, children),
-                None,
-            ),
+            Ok(expression) => (Node::new(expression, children), None),
             Err(candidates) => (
                 Node::new(
                     NodeKind::Error {
@@ -374,7 +371,7 @@ fn resolve_keyword(
 fn resolve_function(
     name: &str,
     packages: &Packages,
-) -> Result<Expression, Vec<Expression>> {
+) -> Result<NodeKind, Vec<Expression>> {
     let provided_function = packages.resolve_function(name);
     let literal = if let Ok(value) = name.parse() {
         Some(Literal::Integer { value })
@@ -386,8 +383,12 @@ fn resolve_function(
     };
 
     match (provided_function, literal) {
-        (Some(id), None) => Ok(Expression::ProvidedFunction { id }),
-        (None, Some(literal)) => Ok(Expression::Literal { literal }),
+        (Some(id), None) => Ok(NodeKind::Expression {
+            expression: Expression::ProvidedFunction { id },
+        }),
+        (None, Some(literal)) => Ok(NodeKind::Expression {
+            expression: Expression::Literal { literal },
+        }),
         (None, None) => {
             let candidates = Vec::new();
             Err(candidates)
