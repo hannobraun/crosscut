@@ -82,7 +82,7 @@ impl Evaluator {
         });
     }
 
-    pub fn provide_host_function_output(&mut self, value: Value) {
+    pub fn exit_from_provided_function(&mut self, value: Value) {
         let RuntimeState::Effect {
             effect: Effect::ProvidedFunction { .. },
             ..

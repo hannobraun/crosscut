@@ -93,7 +93,7 @@ impl Language {
         {
             match self.intrinsics.function_by_id(&id) {
                 Some(IntrinsicFunction::Drop) => {
-                    self.evaluator.provide_host_function_output(Value::Nothing);
+                    self.evaluator.exit_from_provided_function(Value::Nothing);
                 }
                 Some(IntrinsicFunction::Eval) => match input {
                     Value::Function { body } => {
@@ -115,7 +115,7 @@ impl Language {
                     }
                 },
                 Some(IntrinsicFunction::Identity) => {
-                    self.evaluator.provide_host_function_output(input);
+                    self.evaluator.exit_from_provided_function(input);
                 }
                 None => {
                     // This must be a host function, so let the host handle it.
@@ -127,7 +127,7 @@ impl Language {
     }
 
     pub fn provide_host_function_output(&mut self, output: Value) {
-        self.evaluator.provide_host_function_output(output);
+        self.evaluator.exit_from_provided_function(output);
     }
 
     pub fn trigger_effect(&mut self, effect: Effect) {
