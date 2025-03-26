@@ -157,7 +157,8 @@ fn render_runtime_state<A: EditorOutputAdapter>(
 
                     if let Some(error) = maybe_error {
                         write!(adapter, ": ")?;
-                        writeln!(adapter, "{error}")?;
+                        write!(adapter, "{error}")?;
+                        writeln!(adapter)?;
                     } else {
                         writeln!(adapter)?;
                     }
