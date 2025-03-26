@@ -40,9 +40,8 @@ impl Evaluator {
         argument: Value,
         codebase: &Codebase,
     ) {
-        let root_node =
-            RuntimeNode::from_syntax_node(root_path.clone(), codebase);
-        self.eval_stack.push(root_node);
+        self.eval_stack
+            .push(RuntimeNode::from_syntax_node(root_path.clone(), codebase));
 
         self.call_stack.push(StackFrame {
             root: root_path,
