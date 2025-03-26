@@ -22,10 +22,10 @@ impl Evaluator {
 
     pub fn reset(&mut self, codebase: &Codebase) {
         *self = Self::new();
-        self.call_function(codebase.root().path, Value::Nothing, codebase);
+        self.eval_function_raw(codebase.root().path, Value::Nothing, codebase);
     }
 
-    pub fn call_function(
+    pub fn eval_function_raw(
         &mut self,
         root_path: NodePath,
         argument: Value,
@@ -181,7 +181,7 @@ impl Evaluator {
                             }
                         };
 
-                        self.call_function(
+                        self.eval_function_raw(
                             body,
                             // Right now, the `eval` function doesn't support
                             // passing an argument to the function it evaluates.
@@ -290,7 +290,7 @@ impl Evaluator {
                     .unwrap_or_else(|| codebase.root().path);
 
                 let active_value = node.evaluated_children.into_active_value();
-                self.call_function(path, active_value, codebase);
+                self.eval_function_raw(path, active_value, codebase);
             }
             NodeKind::Error { .. } => {
                 self.state = RuntimeState::Error {
