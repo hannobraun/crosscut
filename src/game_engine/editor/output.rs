@@ -118,7 +118,8 @@ fn render_runtime_state<A: EditorOutputAdapter>(
         match evaluator.state() {
             RuntimeState::Started | RuntimeState::Running { .. } => {
                 adapter.color(Color::DarkGreen, |adapter| {
-                    writeln!(adapter, "Running")
+                    writeln!(adapter, "Running")?;
+                    Ok(())
                 })?;
             }
             RuntimeState::Effect { effect, .. } => {
@@ -165,7 +166,8 @@ fn render_runtime_state<A: EditorOutputAdapter>(
             }
             RuntimeState::Finished { output } => {
                 adapter.color(Color::DarkYellow, |adapter| {
-                    writeln!(adapter, "Finished: {}", output)
+                    writeln!(adapter, "Finished: {}", output)?;
+                    Ok(())
                 })?;
             }
         }
