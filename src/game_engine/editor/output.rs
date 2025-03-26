@@ -226,7 +226,10 @@ fn render_line<A: EditorOutputAdapter>(
     context: &mut RenderContext,
 ) -> anyhow::Result<()> {
     for _ in 0..line.width_of_indentation() {
-        adapter.color(Color::Grey, |adapter| write!(adapter, "·"))?;
+        adapter.color(Color::Grey, |adapter| {
+            write!(adapter, "·")?;
+            Ok(())
+        })?;
     }
 
     render_node(&line.node.path, adapter, context)?;
