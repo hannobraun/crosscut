@@ -333,20 +333,9 @@ fn compile_token(
 fn resolve_keyword(
     name: &str,
     children: &Children,
-    change_set: &mut NewChangeSet,
+    _: &mut NewChangeSet,
 ) -> Option<(Node, Option<CodeError>)> {
     match name {
-        "fn" => {
-            // Every function must have a child. Other code assumes that.
-            let children = if children.is_empty() {
-                let child = change_set.add(Node::new(NodeKind::Empty, []));
-                Children::new(Some(child))
-            } else {
-                children.clone()
-            };
-
-            Some((Node::new(NodeKind::LiteralFunction, children), None))
-        }
         "self" => Some((
             Node::new(NodeKind::Recursion, children.iter().copied()),
             None,
@@ -358,7 +347,7 @@ fn resolve_keyword(
 fn resolve_function(
     name: &str,
     children: Children,
-    _: &mut NewChangeSet,
+    change_set: &mut NewChangeSet,
     packages: &Packages,
 ) -> Result<Node, (Children, Vec<CandidateForResolution>)> {
     let provided_function = packages.resolve_function(name);
@@ -370,6 +359,14 @@ fn resolve_function(
         }
         (None, Some(literal)) => match literal {
             Literal::Function => {
+                // Every function must have a child. Other code assumes that.
+                let children = if children.is_empty() {
+                    let child = change_set.add(Node::new(NodeKind::Empty, []));
+                    Children::new(Some(child))
+                } else {
+                    children.clone()
+                };
+
                 Ok(Node::new(NodeKind::LiteralFunction, children))
             }
             Literal::Integer { value } => {
@@ -402,6 +399,7 @@ fn resolve_literal(name: &str) -> Option<Literal> {
         Some(Literal::Integer { value })
     } else {
         match name {
+            "fn" => Some(Literal::Function),
             "tuple" => Some(Literal::Tuple),
             _ => None,
         }
