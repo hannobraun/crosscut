@@ -296,18 +296,19 @@ fn compile_token(
     packages: &Packages,
 ) -> (Node, Option<CodeError>) {
     let (node, maybe_error) = if token.is_empty() {
-        let (kind, error) = if children.is_multiple_children().is_none() {
-            (NodeKind::Empty, None)
+        if children.is_multiple_children().is_none() {
+            (Node::new(NodeKind::Empty, children), None)
         } else {
             (
-                NodeKind::Error {
-                    node: token.to_string(),
-                },
+                Node::new(
+                    NodeKind::Error {
+                        node: token.to_string(),
+                    },
+                    children,
+                ),
                 Some(CodeError::EmptyNodeWithMultipleChildren),
             )
-        };
-
-        (Node::new(kind, children), error)
+        }
     } else if let Some((node, maybe_err)) = resolve_keyword(token, &children) {
         (node, maybe_err)
     } else {
