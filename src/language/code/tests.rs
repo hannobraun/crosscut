@@ -53,10 +53,10 @@ fn uniquely_identify_identical_siblings() {
         let a = change_set.add(node("a", []));
         let b = change_set.add(node("b", [a, a]));
 
-        let parent = NodePath::for_root(b);
-        change_set.replace(&root, &parent);
+        let b = NodePath::for_root(b);
+        change_set.replace(&root, &b);
 
-        parent
+        b
     });
 
     let [a1, a2] = codebase
