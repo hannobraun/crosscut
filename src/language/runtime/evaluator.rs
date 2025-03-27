@@ -171,7 +171,7 @@ impl Evaluator {
                     node.evaluated_children.into_active_value(),
                 );
             }
-            NodeKind::ProvidedFunction { id } => {
+            NodeKind::ProvidedFunction { id, .. } => {
                 self.state = RuntimeState::Effect {
                     effect: Effect::ProvidedFunction {
                         id: *id,
@@ -188,7 +188,7 @@ impl Evaluator {
                 // then we still need the node.
                 self.eval_stack.push(node);
             }
-            NodeKind::LiteralFunction => {
+            NodeKind::LiteralFunction { .. } => {
                 match node.evaluated_children.clone().into_active_value() {
                     Value::Nothing => {}
                     active_value => {
@@ -222,7 +222,7 @@ impl Evaluator {
                     body: child.path,
                 });
             }
-            NodeKind::LiteralInteger { value } => {
+            NodeKind::LiteralInteger { value, .. } => {
                 match node.evaluated_children.clone().into_active_value() {
                     Value::Nothing => {}
                     active_value => {
@@ -238,7 +238,7 @@ impl Evaluator {
 
                 self.finish_evaluating_node(Value::Integer { value: *value });
             }
-            NodeKind::LiteralTuple => {
+            NodeKind::LiteralTuple { .. } => {
                 assert!(
                     node.children_to_evaluate.is_empty(),
                     "Due to the loop above, which puts all children of a node \
@@ -254,7 +254,7 @@ impl Evaluator {
                         .collect(),
                 });
             }
-            NodeKind::Recursion => {
+            NodeKind::Recursion { .. } => {
                 let path = self
                     .call_stack
                     .pop()
