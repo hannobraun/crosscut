@@ -9,7 +9,7 @@ pub fn node(name: &str, children: impl IntoIterator<Item = NodeHash>) -> Node {
 
     Node::new(NodeKind::Error {
         node: name.to_string(),
-        children: children.clone(),
+        children,
     })
 }
 
