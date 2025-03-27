@@ -11,16 +11,12 @@ fn uniquely_identify_identical_children_of_different_parents() {
 
     let mut codebase = Codebase::new();
 
-    let [a, b, c, d] = ["a", "b", "c", "d"].map(|name| NodeKind::Error {
-        node: name.to_string(),
-    });
-
     let root = codebase.root().path;
     let root = codebase.make_change(|change_set| {
-        let a = change_set.add(Node::new(a, []));
-        let b = change_set.add(Node::new(b, [a]));
-        let c = change_set.add(Node::new(c, [a]));
-        let d = change_set.add(Node::new(d, [b, c]));
+        let a = change_set.add(node("a", []));
+        let b = change_set.add(node("b", [a]));
+        let c = change_set.add(node("c", [a]));
+        let d = change_set.add(node("d", [b, c]));
 
         let d = NodePath::for_root(d);
         change_set.replace(&root, &d);
