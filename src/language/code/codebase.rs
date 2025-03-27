@@ -133,7 +133,7 @@ impl Root {
 
 #[cfg(test)]
 mod tests {
-    use crate::language::code::{Node, NodeKind, NodePath};
+    use crate::language::code::{Node, NodeHash, NodeKind, NodePath};
 
     use super::Codebase;
 
@@ -146,8 +146,7 @@ mod tests {
 
         let old_root = codebase.root().path;
         let new_root = codebase.make_change(|change_set| {
-            let a =
-                NodePath::for_root(change_set.add(Node::new(node("a"), [])));
+            let a = NodePath::for_root(change_set.add(node("a", [])));
             change_set.replace(&old_root, &a);
 
             a
@@ -165,8 +164,8 @@ mod tests {
 
         let root = codebase.root().path;
         let a = codebase.make_change(|change_set| {
-            let a = change_set.add(Node::new(node("a"), []));
-            let b = change_set.add(Node::new(node("b"), [a]));
+            let a = change_set.add(node("a", []));
+            let b = change_set.add(node("b", [a]));
 
             change_set.replace(&root, &NodePath::for_root(b));
 
@@ -189,8 +188,7 @@ mod tests {
 
         let root = codebase.root().path;
         let a = codebase.make_change(|change_set| {
-            let a =
-                NodePath::for_root(change_set.add(Node::new(node("a"), [])));
+            let a = NodePath::for_root(change_set.add(node("a", [])));
             change_set.replace(&root, &a);
 
             a
@@ -213,9 +211,9 @@ mod tests {
 
         let root = codebase.root().path;
         let (a, b, c) = codebase.make_change(|change_set| {
-            let a = change_set.add(Node::new(node("a"), []));
-            let b = change_set.add(Node::new(node("b"), []));
-            let c = change_set.add(Node::new(node("c"), [a, b]));
+            let a = change_set.add(node("a", []));
+            let b = change_set.add(node("b", []));
+            let c = change_set.add(node("c", [a, b]));
 
             let c = NodePath::for_root(c);
             change_set.replace(&root, &c);
@@ -237,9 +235,12 @@ mod tests {
         );
     }
 
-    fn node(name: &str) -> NodeKind {
-        NodeKind::Error {
-            node: name.to_string(),
-        }
+    fn node(name: &str, children: impl IntoIterator<Item = NodeHash>) -> Node {
+        Node::new(
+            NodeKind::Error {
+                node: name.to_string(),
+            },
+            children,
+        )
     }
 }
