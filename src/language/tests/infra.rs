@@ -53,7 +53,7 @@ where
 {
     fn expect_errors(self) -> vec::IntoIter<String> {
         self.map(|located_node| {
-            let NodeKind::Error { node } = located_node.node.kind() else {
+            let NodeKind::Error { node, .. } = located_node.node.kind() else {
                 panic!("Expected error, got {:?}", located_node.node.kind());
             };
 
