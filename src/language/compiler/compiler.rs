@@ -315,7 +315,7 @@ fn compile_token(
             Err((children, candidates)) => (
                 Node::new(NodeKind::Error {
                     node: token.to_string(),
-                    children: children.clone(),
+                    children,
                 }),
                 Some(CodeError::UnresolvedIdentifier { candidates }),
             ),
