@@ -77,16 +77,16 @@ impl fmt::Display for NodeDisplay<'_> {
             NodeKind::Empty { .. } => {
                 write!(f, "")
             }
-            NodeKind::LiteralFunction => {
+            NodeKind::LiteralFunction { .. } => {
                 write!(f, "fn")
             }
-            NodeKind::LiteralInteger { value } => {
+            NodeKind::LiteralInteger { value, .. } => {
                 write!(f, "{value}")
             }
-            NodeKind::LiteralTuple => {
+            NodeKind::LiteralTuple { .. } => {
                 write!(f, "tuple")
             }
-            NodeKind::ProvidedFunction { id } => {
+            NodeKind::ProvidedFunction { id, .. } => {
                 let name = self.packages.function_name_by_id(id);
                 write!(f, "{name}")
             }
