@@ -368,10 +368,7 @@ fn resolve_function(
                 Ok(Node::new(NodeKind::LiteralFunction { children }))
             }
             Literal::Integer { value } => {
-                Ok(Node::new(NodeKind::LiteralInteger {
-                    value,
-                    children: children.clone(),
-                }))
+                Ok(Node::new(NodeKind::LiteralInteger { value, children }))
             }
             Literal::Tuple => Ok(Node::new(NodeKind::LiteralTuple {
                 children: children.clone(),
