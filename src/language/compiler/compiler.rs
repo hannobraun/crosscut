@@ -314,7 +314,7 @@ fn compile_token(
         (node, maybe_err)
     } else {
         match resolve_function(token, children.clone(), packages) {
-            Ok(kind) => (Node::new(kind, children), None),
+            Ok(kind) => (kind, None),
             Err(candidates) => (
                 Node::new(
                     NodeKind::Error {
@@ -357,20 +357,24 @@ fn resolve_keyword(
 
 fn resolve_function(
     name: &str,
-    _: Children,
+    children: Children,
     packages: &Packages,
-) -> Result<NodeKind, Vec<CandidateForResolution>> {
+) -> Result<Node, Vec<CandidateForResolution>> {
     let provided_function = packages.resolve_function(name);
     let literal = resolve_literal(name);
 
     match (provided_function, literal) {
-        (Some(id), None) => Ok(NodeKind::ProvidedFunction { id }),
+        (Some(id), None) => {
+            Ok(Node::new(NodeKind::ProvidedFunction { id }, children))
+        }
         (None, Some(literal)) => match literal {
-            Literal::Function => Ok(NodeKind::LiteralFunction),
-            Literal::Integer { value } => {
-                Ok(NodeKind::LiteralInteger { value })
+            Literal::Function => {
+                Ok(Node::new(NodeKind::LiteralFunction, children))
             }
-            Literal::Tuple => Ok(NodeKind::LiteralTuple),
+            Literal::Integer { value } => {
+                Ok(Node::new(NodeKind::LiteralInteger { value }, children))
+            }
+            Literal::Tuple => Ok(Node::new(NodeKind::LiteralTuple, children)),
         },
         (None, None) => {
             let candidates = Vec::new();
