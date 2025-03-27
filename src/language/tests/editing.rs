@@ -205,7 +205,7 @@ fn add_sibling_to_root_node() {
     assert_eq!(
         root.kind(),
         &NodeKind::Error {
-            node: "".to_string()
+            node: "".to_string(),
         },
     );
 
