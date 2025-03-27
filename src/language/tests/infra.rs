@@ -1,11 +1,16 @@
 use std::vec;
 
-use crate::language::code::{LocatedNode, Node, NodeHash, NodeKind, Nodes};
+use crate::language::code::{
+    Children, LocatedNode, Node, NodeHash, NodeKind, Nodes,
+};
 
 pub fn node(name: &str, children: impl IntoIterator<Item = NodeHash>) -> Node {
+    let children = Children::new(children);
+
     Node::new(
         NodeKind::Error {
             node: name.to_string(),
+            children: children.clone(),
         },
         children,
     )

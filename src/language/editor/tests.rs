@@ -1,7 +1,7 @@
 use itertools::Itertools;
 
 use crate::language::{
-    code::{Codebase, NodeKind},
+    code::{Children, Codebase, NodeKind},
     compiler::Compiler,
     packages::Packages,
     runtime::Evaluator,
@@ -30,7 +30,10 @@ fn edit_initial_node() {
 
     assert_eq!(
         codebase.node_at(editor.editing()).node.kind(),
-        &NodeKind::LiteralInteger { value: 127 },
+        &NodeKind::LiteralInteger {
+            value: 127,
+            children: Children::new([]),
+        },
     );
 }
 
@@ -111,7 +114,10 @@ fn merge_with_previous_sibling() {
             .children(codebase.nodes())
             .map(|located_node| located_node.node.kind())
             .collect::<Vec<_>>(),
-        vec![&NodeKind::LiteralInteger { value: 127 }],
+        vec![&NodeKind::LiteralInteger {
+            value: 127,
+            children: Children::new([]),
+        }],
     );
 }
 
@@ -150,7 +156,10 @@ fn merge_with_next_sibling() {
             .children(codebase.nodes())
             .map(|located_node| located_node.node.kind())
             .collect::<Vec<_>>(),
-        vec![&NodeKind::LiteralInteger { value: 127 }],
+        vec![&NodeKind::LiteralInteger {
+            value: 127,
+            children: Children::new([]),
+        }],
     );
 }
 
@@ -193,8 +202,14 @@ fn split_node_to_create_sibling() {
             .map(|located_node| located_node.node.kind())
             .collect::<Vec<_>>(),
         vec![
-            &NodeKind::LiteralInteger { value: 127 },
-            &NodeKind::LiteralInteger { value: 255 },
+            &NodeKind::LiteralInteger {
+                value: 127,
+                children: Children::new([]),
+            },
+            &NodeKind::LiteralInteger {
+                value: 255,
+                children: Children::new([]),
+            },
         ],
     );
 }
@@ -224,7 +239,12 @@ fn reuse_empty_node_for_parent() {
     };
 
     // Make sure the test setup worked as expected.
-    assert_eq!(codebase.node_at(&root).node.kind(), &NodeKind::Empty);
+    assert_eq!(
+        codebase.node_at(&root).node.kind(),
+        &NodeKind::Empty {
+            children: Children::new([*leaf.hash()]),
+        }
+    );
 
     let mut editor = Editor::new(leaf, &codebase, &packages);
     editor.on_code(" ", &mut codebase, &mut evaluator, &packages);
@@ -243,13 +263,15 @@ fn reuse_empty_error_node_for_parent() {
     let mut codebase = Codebase::new();
     let mut evaluator = Evaluator::new();
 
-    {
+    let [a, b] = {
         let mut compiler = Compiler::new(&mut codebase);
 
         let a =
             compiler.replace(&compiler.codebase().root().path, "a", &packages);
-        compiler.insert_sibling(&a, "b", &packages);
-    }
+        let b = compiler.insert_sibling(&a, "b", &packages);
+
+        [a, b]
+    };
 
     // Two siblings created at what was previously the root level. An empty node
     // has been created automatically as the new root node.
@@ -257,6 +279,7 @@ fn reuse_empty_error_node_for_parent() {
         codebase.root().node.kind(),
         &NodeKind::Error {
             node: "".to_string(),
+            children: Children::new([a, b].map(|path| *path.hash())),
         }
     );
 

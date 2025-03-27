@@ -363,7 +363,7 @@ struct StackFrame {
 #[cfg(test)]
 mod tests {
     use crate::language::{
-        code::{Codebase, Node, NodeKind, NodePath},
+        code::{Children, Codebase, Node, NodeKind, NodePath},
         runtime::{Evaluator, RuntimeState},
     };
 
@@ -378,7 +378,12 @@ mod tests {
 
         let root = codebase.root().path;
         codebase.make_change(|change_set| {
-            let hash = change_set.add(Node::new(NodeKind::Recursion, []));
+            let hash = change_set.add(Node::new(
+                NodeKind::Recursion {
+                    children: Children::new([]),
+                },
+                [],
+            ));
             change_set.replace(&root, &NodePath::for_root(hash))
         });
 
@@ -398,7 +403,12 @@ mod tests {
 
         let root = codebase.root().path;
         codebase.make_change(|change_set| {
-            let hash = change_set.add(Node::new(NodeKind::Recursion, []));
+            let hash = change_set.add(Node::new(
+                NodeKind::Recursion {
+                    children: Children::new([]),
+                },
+                [],
+            ));
             change_set.replace(&root, &NodePath::for_root(hash))
         });
 

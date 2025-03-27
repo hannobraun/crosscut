@@ -1,7 +1,7 @@
 use itertools::Itertools;
 
 use crate::language::{
-    code::{CodeError, Codebase, NodeKind, NodePath},
+    code::{Children, CodeError, Codebase, NodeHash, NodeKind, NodePath},
     compiler::Compiler,
     packages::Packages,
 };
@@ -235,15 +235,23 @@ fn empty_node_with_multiple_children_is_an_error() {
     let mut compiler = Compiler::new(&mut codebase);
 
     // Verify the assumptions this tests makes about the default root node.
-    assert_eq!(compiler.codebase().root().node.kind(), &NodeKind::Empty);
+    assert_eq!(
+        compiler.codebase().root().node.kind(),
+        &NodeKind::Empty {
+            children: Children::new([])
+        }
+    );
 
-    compiler.insert_child(compiler.codebase().root().path, "", &packages);
-    compiler.insert_child(compiler.codebase().root().path, "", &packages);
+    let a =
+        compiler.insert_child(compiler.codebase().root().path, "", &packages);
+    let b =
+        compiler.insert_child(compiler.codebase().root().path, "", &packages);
 
     assert_eq!(
         compiler.codebase().root().node.kind(),
         &NodeKind::Error {
             node: "".to_string(),
+            children: Children::new([a, b].map(|path| *path.hash())),
         },
     );
 
@@ -269,7 +277,7 @@ fn updating_child_updates_parent() {
     let parent = compiler.insert_parent(&child, "unresolved", &packages);
 
     // Verify our baseline assumptions about what the parent node should be.
-    check_parent(parent, compiler.codebase());
+    check_parent(parent, [*child.hash()], compiler.codebase());
 
     let child = compiler
         .codebase()
@@ -277,18 +285,23 @@ fn updating_child_updates_parent() {
         .children(compiler.codebase().nodes())
         .next()
         .unwrap();
-    compiler.replace(&child.path, "127", &packages);
+    let child = compiler.replace(&child.path, "127", &packages);
 
     // After editing the child, the new parent node should be the same as the
     // old one.
     let parent = compiler.codebase().root().path;
-    check_parent(parent, &codebase);
+    check_parent(parent, [*child.hash()], &codebase);
 
-    fn check_parent(parent: NodePath, codebase: &Codebase) {
+    fn check_parent(
+        parent: NodePath,
+        children: impl IntoIterator<Item = NodeHash>,
+        codebase: &Codebase,
+    ) {
         assert_eq!(
             codebase.node_at(&parent).node.kind(),
             &NodeKind::Error {
                 node: "unresolved".to_string(),
+                children: Children::new(children),
             },
         );
         assert_eq!(

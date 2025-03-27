@@ -57,13 +57,13 @@ impl Node {
 
 #[derive(Clone, Debug, Eq, PartialEq, udigest::Digestable)]
 pub enum NodeKind {
-    Empty,
-    LiteralFunction,
-    LiteralInteger { value: i32 },
-    LiteralTuple,
-    ProvidedFunction { id: FunctionId },
-    Recursion,
-    Error { node: String },
+    Empty { children: Children },
+    LiteralFunction { children: Children },
+    LiteralInteger { value: i32, children: Children },
+    LiteralTuple { children: Children },
+    ProvidedFunction { id: FunctionId, children: Children },
+    Recursion { children: Children },
+    Error { node: String, children: Children },
 }
 
 pub struct NodeDisplay<'r> {

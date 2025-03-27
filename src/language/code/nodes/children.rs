@@ -128,6 +128,7 @@ mod tests {
             NodeHash::new(&Node::new(
                 NodeKind::Error {
                     node: node.to_string(),
+                    children: Children::new([]),
                 },
                 [],
             ))

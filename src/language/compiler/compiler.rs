@@ -297,12 +297,21 @@ fn compile_token(
 ) -> (Node, Option<CodeError>) {
     let (node, maybe_error) = if token.is_empty() {
         if children.is_multiple_children().is_none() {
-            (Node::new(NodeKind::Empty, children), None)
+            (
+                Node::new(
+                    NodeKind::Empty {
+                        children: children.clone(),
+                    },
+                    children,
+                ),
+                None,
+            )
         } else {
             (
                 Node::new(
                     NodeKind::Error {
                         node: token.to_string(),
+                        children: children.clone(),
                     },
                     children,
                 ),
@@ -318,6 +327,7 @@ fn compile_token(
                 Node::new(
                     NodeKind::Error {
                         node: token.to_string(),
+                        children: children.clone(),
                     },
                     children,
                 ),
@@ -335,7 +345,12 @@ fn resolve_keyword(
 ) -> Option<(Node, Option<CodeError>)> {
     match name {
         "self" => Some((
-            Node::new(NodeKind::Recursion, children.iter().copied()),
+            Node::new(
+                NodeKind::Recursion {
+                    children: Children::new(children.iter().copied()),
+                },
+                children.iter().copied(),
+            ),
             None,
         )),
         _ => None,
@@ -352,25 +367,48 @@ fn resolve_function(
     let literal = resolve_literal(name);
 
     match (provided_function, literal) {
-        (Some(id), None) => {
-            Ok(Node::new(NodeKind::ProvidedFunction { id }, children))
-        }
+        (Some(id), None) => Ok(Node::new(
+            NodeKind::ProvidedFunction {
+                id,
+                children: children.clone(),
+            },
+            children,
+        )),
         (None, Some(literal)) => match literal {
             Literal::Function => {
                 // Every function must have a child. Other code assumes that.
                 let children = if children.is_empty() {
-                    let child = change_set.add(Node::new(NodeKind::Empty, []));
+                    let child = change_set.add(Node::new(
+                        NodeKind::Empty {
+                            children: Children::new([]),
+                        },
+                        [],
+                    ));
                     Children::new(Some(child))
                 } else {
                     children.clone()
                 };
 
-                Ok(Node::new(NodeKind::LiteralFunction, children))
+                Ok(Node::new(
+                    NodeKind::LiteralFunction {
+                        children: children.clone(),
+                    },
+                    children,
+                ))
             }
-            Literal::Integer { value } => {
-                Ok(Node::new(NodeKind::LiteralInteger { value }, children))
-            }
-            Literal::Tuple => Ok(Node::new(NodeKind::LiteralTuple, children)),
+            Literal::Integer { value } => Ok(Node::new(
+                NodeKind::LiteralInteger {
+                    value,
+                    children: children.clone(),
+                },
+                children,
+            )),
+            Literal::Tuple => Ok(Node::new(
+                NodeKind::LiteralTuple {
+                    children: children.clone(),
+                },
+                children,
+            )),
         },
         (None, None) => {
             let candidates = Vec::new();
