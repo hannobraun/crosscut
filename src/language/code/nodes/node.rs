@@ -75,8 +75,6 @@ pub enum NodeKind {
 impl NodeKind {
     #[cfg(test)]
     pub fn integer_literal(value: i32) -> Self {
-        use crate::language::code::Literal;
-
         Self::Literal {
             literal: Literal::Integer { value },
         }
