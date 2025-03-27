@@ -297,7 +297,12 @@ fn compile_token(
 ) -> (Node, Option<CodeError>) {
     let (node, maybe_error) = if token.is_empty() {
         if children.is_multiple_children().is_none() {
-            (Node::new(NodeKind::Empty { children }), None)
+            (
+                Node::new(NodeKind::Empty {
+                    children: children.is_single_child().copied(),
+                }),
+                None,
+            )
         } else {
             (
                 Node::new(NodeKind::Error {
@@ -357,9 +362,8 @@ fn resolve_function(
             Literal::Function => {
                 // Every function must have a child. Other code assumes that.
                 let children = if children.is_empty() {
-                    let child = change_set.add(Node::new(NodeKind::Empty {
-                        children: Children::new([]),
-                    }));
+                    let child = change_set
+                        .add(Node::new(NodeKind::Empty { children: None }));
                     Children::new(Some(child))
                 } else {
                     children.clone()

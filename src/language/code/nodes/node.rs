@@ -1,4 +1,4 @@
-use std::{fmt, slice};
+use std::{fmt, option, slice};
 
 use crate::language::packages::{FunctionId, Packages};
 
@@ -20,8 +20,8 @@ impl Node {
 
     pub fn has_this_child(&self, child: &NodeHash) -> bool {
         match &self.kind {
-            NodeKind::Empty { children }
-            | NodeKind::LiteralFunction { children }
+            NodeKind::Empty { children } => children.as_ref() == Some(child),
+            NodeKind::LiteralFunction { children }
             | NodeKind::LiteralInteger { children, .. }
             | NodeKind::LiteralTuple { children }
             | NodeKind::ProvidedFunction { children, .. }
@@ -34,8 +34,8 @@ impl Node {
 
     pub fn has_no_children(&self) -> bool {
         match &self.kind {
-            NodeKind::Empty { children }
-            | NodeKind::LiteralFunction { children }
+            NodeKind::Empty { children } => children.is_none(),
+            NodeKind::LiteralFunction { children }
             | NodeKind::LiteralInteger { children, .. }
             | NodeKind::LiteralTuple { children }
             | NodeKind::ProvidedFunction { children, .. }
@@ -46,8 +46,8 @@ impl Node {
 
     pub fn has_single_child(&self) -> Option<&NodeHash> {
         match &self.kind {
-            NodeKind::Empty { children }
-            | NodeKind::LiteralFunction { children }
+            NodeKind::Empty { children } => children.as_ref(),
+            NodeKind::LiteralFunction { children }
             | NodeKind::LiteralInteger { children, .. }
             | NodeKind::LiteralTuple { children }
             | NodeKind::ProvidedFunction { children, .. }
@@ -58,8 +58,10 @@ impl Node {
 
     pub fn children(&self) -> ChildrenIter {
         match &self.kind {
-            NodeKind::Empty { children }
-            | NodeKind::LiteralFunction { children }
+            NodeKind::Empty { children } => ChildrenIter::Option {
+                iter: children.iter(),
+            },
+            NodeKind::LiteralFunction { children }
             | NodeKind::LiteralInteger { children, .. }
             | NodeKind::LiteralTuple { children }
             | NodeKind::ProvidedFunction { children, .. }
@@ -72,8 +74,8 @@ impl Node {
 
     pub fn to_children(&self) -> Children {
         match &self.kind {
-            NodeKind::Empty { children }
-            | NodeKind::LiteralFunction { children }
+            NodeKind::Empty { children } => Children::new(*children),
+            NodeKind::LiteralFunction { children }
             | NodeKind::LiteralInteger { children, .. }
             | NodeKind::LiteralTuple { children }
             | NodeKind::ProvidedFunction { children, .. }
@@ -95,6 +97,7 @@ impl Node {
 }
 
 pub enum ChildrenIter<'r> {
+    Option { iter: option::Iter<'r, NodeHash> },
     Slice { iter: slice::Iter<'r, NodeHash> },
 }
 
@@ -103,12 +106,14 @@ impl<'r> Iterator for ChildrenIter<'r> {
 
     fn next(&mut self) -> Option<Self::Item> {
         match self {
+            Self::Option { iter } => iter.next(),
             Self::Slice { iter } => iter.next(),
         }
     }
 
     fn size_hint(&self) -> (usize, Option<usize>) {
         match self {
+            Self::Option { iter } => iter.size_hint(),
             Self::Slice { iter } => iter.size_hint(),
         }
     }
@@ -117,6 +122,7 @@ impl<'r> Iterator for ChildrenIter<'r> {
 impl DoubleEndedIterator for ChildrenIter<'_> {
     fn next_back(&mut self) -> Option<Self::Item> {
         match self {
+            Self::Option { iter } => iter.next_back(),
             Self::Slice { iter } => iter.next_back(),
         }
     }
@@ -126,7 +132,7 @@ impl ExactSizeIterator for ChildrenIter<'_> {}
 
 #[derive(Clone, Debug, Eq, PartialEq, udigest::Digestable)]
 pub enum NodeKind {
-    Empty { children: Children },
+    Empty { children: Option<NodeHash> },
     LiteralFunction { children: Children },
     LiteralInteger { value: i32, children: Children },
     LiteralTuple { children: Children },

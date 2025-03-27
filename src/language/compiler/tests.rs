@@ -237,9 +237,7 @@ fn empty_node_with_multiple_children_is_an_error() {
     // Verify the assumptions this tests makes about the default root node.
     assert_eq!(
         compiler.codebase().root().node.kind(),
-        &NodeKind::Empty {
-            children: Children::new([])
-        }
+        &NodeKind::Empty { children: None }
     );
 
     let a =

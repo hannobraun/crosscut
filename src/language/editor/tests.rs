@@ -242,7 +242,7 @@ fn reuse_empty_node_for_parent() {
     assert_eq!(
         codebase.node_at(&root).node.kind(),
         &NodeKind::Empty {
-            children: Children::new([*leaf.hash()]),
+            children: Some(*leaf.hash()),
         }
     );
 
