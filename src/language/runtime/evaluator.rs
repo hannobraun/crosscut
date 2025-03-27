@@ -190,7 +190,7 @@ impl Evaluator {
                 self.eval_stack.push(node);
             }
             NodeKind::Literal { literal } => {
-                let value = {
+                {
                     match *literal {
                         Literal::Function => {
                             match node
@@ -228,7 +228,9 @@ impl Evaluator {
                                 this point.",
                             );
 
-                            Value::Function { body: child.path }
+                            self.finish_evaluating_node(Value::Function {
+                                body: child.path,
+                            });
                         }
                         Literal::Integer { value } => {
                             match node
@@ -248,7 +250,9 @@ impl Evaluator {
                                 }
                             }
 
-                            Value::Integer { value }
+                            self.finish_evaluating_node(Value::Integer {
+                                value,
+                            });
                         }
                         Literal::Tuple => {
                             assert!(
@@ -259,18 +263,16 @@ impl Evaluator {
                                 must be evaluated by now.",
                             );
 
-                            Value::Tuple {
+                            self.finish_evaluating_node(Value::Tuple {
                                 elements: node
                                     .evaluated_children
                                     .inner
                                     .into_iter()
                                     .collect(),
-                            }
+                            });
                         }
                     }
-                };
-
-                self.finish_evaluating_node(value);
+                }
             }
             NodeKind::Recursion => {
                 let path = self
