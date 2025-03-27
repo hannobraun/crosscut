@@ -120,8 +120,10 @@ impl Editor {
                         self.editing.parent().and_then(|parent| {
                             let parent = compiler.codebase().node_at(parent);
 
-                            let parent_is_empty =
-                                matches!(parent.node.kind(), NodeKind::Empty);
+                            let parent_is_empty = matches!(
+                                parent.node.kind(),
+                                NodeKind::Empty { .. }
+                            );
                             let parent_is_error_but_empty =
                                 if let NodeKind::Error { node } =
                                     parent.node.kind()
