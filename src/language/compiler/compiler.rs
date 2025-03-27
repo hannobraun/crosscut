@@ -302,7 +302,7 @@ fn compile_token(
             (
                 Node::new(NodeKind::Error {
                     node: token.to_string(),
-                    children: children.clone(),
+                    children,
                 }),
                 Some(CodeError::EmptyNodeWithMultipleChildren),
             )
