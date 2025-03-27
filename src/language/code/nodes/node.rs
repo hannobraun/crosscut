@@ -85,6 +85,7 @@ pub enum NodeKind {
     Empty {
         child: Option<NodeHash>,
     },
+
     LiteralFunction {
         /// # The children of the function
         ///
@@ -105,20 +106,25 @@ pub enum NodeKind {
         /// only be made invalid.
         children: Children,
     },
+
     LiteralInteger {
         value: i32,
         children: Children,
     },
+
     LiteralTuple {
         children: Children,
     },
+
     ProvidedFunction {
         id: FunctionId,
         children: Children,
     },
+
     Recursion {
         children: Children,
     },
+
     Error {
         node: String,
         children: Children,
