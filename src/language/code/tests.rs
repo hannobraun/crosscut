@@ -58,7 +58,7 @@ fn uniquely_identify_identical_siblings() {
 
         let parent = change_set.add(Node::new(
             NodeKind::Error {
-                node: "".to_string(),
+                node: "b".to_string(),
             },
             [a, a],
         ));
