@@ -345,15 +345,7 @@ fn resolve_keyword(
                 children.clone()
             };
 
-            Some((
-                Node::new(
-                    NodeKind::Literal {
-                        literal: Literal::Function,
-                    },
-                    children,
-                ),
-                None,
-            ))
+            Some((Node::new(NodeKind::LiteralFunction, children), None))
         }
         "self" => Some((
             Node::new(NodeKind::Recursion, children.iter().copied()),
@@ -372,7 +364,13 @@ fn resolve_function(
 
     match (provided_function, literal) {
         (Some(id), None) => Ok(NodeKind::ProvidedFunction { id }),
-        (None, Some(literal)) => Ok(NodeKind::Literal { literal }),
+        (None, Some(literal)) => match literal {
+            Literal::Function => Ok(NodeKind::LiteralFunction),
+            Literal::Integer { value } => {
+                Ok(NodeKind::LiteralInteger { value })
+            }
+            Literal::Tuple => Ok(NodeKind::LiteralTuple),
+        },
         (None, None) => {
             let candidates = Vec::new();
             Err(candidates)

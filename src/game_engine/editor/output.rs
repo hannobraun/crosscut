@@ -4,8 +4,7 @@ use crate::{
     io::editor::output::{Cursor, EditorOutputAdapter},
     language::{
         code::{
-            CandidateForResolution, CodeError, Codebase, Literal, NodeKind,
-            NodePath,
+            CandidateForResolution, CodeError, Codebase, NodeKind, NodePath,
         },
         editor::{Editor, EditorLayout, EditorLine},
         language::Language,
@@ -257,7 +256,9 @@ fn render_node<A: EditorOutputAdapter>(
     }
 
     let color = match node.kind() {
-        NodeKind::Literal { .. } => Some(Color::DarkBlue),
+        NodeKind::LiteralFunction
+        | NodeKind::LiteralInteger { .. }
+        | NodeKind::LiteralTuple => Some(Color::DarkBlue),
         NodeKind::ProvidedFunction { .. } => Some(Color::DarkMagenta),
         NodeKind::Error { .. } => Some(ERROR_COLOR),
         _ => None,
@@ -373,28 +374,26 @@ fn render_help<A: EditorOutputAdapter>(
                 making up your mind about what you want to type."
             )?;
         }
-        NodeKind::Literal { literal } => match literal {
-            Literal::Function => {
-                writeln!(
-                    adapter,
-                    "This is a function literal that produces a function value.",
-                )?;
-            }
-            Literal::Integer { value } => {
-                writeln!(
-                    adapter,
-                    "This is an integer literal that produces the integer \
-                        value `{value}`.",
-                )?;
-            }
-            Literal::Tuple => {
-                writeln!(
-                    adapter,
-                    "This a tuple literal that produces a tuple value \
-                        which contains the tuple's children.",
-                )?;
-            }
-        },
+        NodeKind::LiteralFunction => {
+            writeln!(
+                adapter,
+                "This is a function literal that produces a function value.",
+            )?;
+        }
+        NodeKind::LiteralInteger { value } => {
+            writeln!(
+                adapter,
+                "This is an integer literal that produces the integer value \
+                `{value}`.",
+            )?;
+        }
+        NodeKind::LiteralTuple => {
+            writeln!(
+                adapter,
+                "This a tuple literal that produces a tuple value which \
+                contains the tuple's children.",
+            )?;
+        }
         NodeKind::ProvidedFunction { id: _ } => {
             writeln!(
                 adapter,

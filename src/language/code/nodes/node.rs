@@ -1,9 +1,6 @@
 use std::{fmt, slice};
 
-use crate::language::{
-    code::Literal,
-    packages::{FunctionId, Packages},
-};
+use crate::language::packages::{FunctionId, Packages};
 
 use super::{Children, NodeHash};
 
@@ -66,7 +63,9 @@ impl Node {
 #[derive(Clone, Debug, Eq, PartialEq, udigest::Digestable)]
 pub enum NodeKind {
     Empty,
-    Literal { literal: Literal },
+    LiteralFunction,
+    LiteralInteger { value: i32 },
+    LiteralTuple,
     ProvidedFunction { id: FunctionId },
     Recursion,
     Error { node: String },
@@ -75,9 +74,7 @@ pub enum NodeKind {
 impl NodeKind {
     #[cfg(test)]
     pub fn integer_literal(value: i32) -> Self {
-        Self::Literal {
-            literal: Literal::Integer { value },
-        }
+        Self::LiteralInteger { value }
     }
 }
 
@@ -92,17 +89,15 @@ impl fmt::Display for NodeDisplay<'_> {
             NodeKind::Empty { .. } => {
                 write!(f, "")
             }
-            NodeKind::Literal { literal } => match literal {
-                Literal::Function => {
-                    write!(f, "fn")
-                }
-                Literal::Integer { value } => {
-                    write!(f, "{value}")
-                }
-                Literal::Tuple => {
-                    write!(f, "tuple")
-                }
-            },
+            NodeKind::LiteralFunction => {
+                write!(f, "fn")
+            }
+            NodeKind::LiteralInteger { value } => {
+                write!(f, "{value}")
+            }
+            NodeKind::LiteralTuple => {
+                write!(f, "tuple")
+            }
             NodeKind::ProvidedFunction { id } => {
                 let name = self.packages.function_name_by_id(id);
                 write!(f, "{name}")
