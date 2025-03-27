@@ -82,13 +82,47 @@ impl Node {
 
 #[derive(Clone, Debug, Eq, PartialEq, udigest::Digestable)]
 pub enum NodeKind {
-    Empty { child: Option<NodeHash> },
-    LiteralFunction { children: Children },
-    LiteralInteger { value: i32, children: Children },
-    LiteralTuple { children: Children },
-    ProvidedFunction { id: FunctionId, children: Children },
-    Recursion { children: Children },
-    Error { node: String, children: Children },
+    Empty {
+        child: Option<NodeHash>,
+    },
+    LiteralFunction {
+        /// # The children of the function
+        ///
+        /// ## Implementation Note
+        ///
+        /// Currently, it's generally assumed that a function has one child, its
+        /// body. (Although this isn't checked much, or at all.) In contrast to
+        /// the other variants of this enum, I've decided not to enforce that
+        /// via the type of this field though.
+        ///
+        /// That would complicate the compiler, which would need to check the
+        /// number of children when constructing this variant. And that wouldn't
+        /// be worth it, because soon, functions will have two children (they
+        /// need parameters), and eventually probably an arbitrary number (any
+        /// number of branches).
+        ///
+        /// I'd rather see this shake out, before making changes here that would
+        /// only be made invalid.
+        children: Children,
+    },
+    LiteralInteger {
+        value: i32,
+        children: Children,
+    },
+    LiteralTuple {
+        children: Children,
+    },
+    ProvidedFunction {
+        id: FunctionId,
+        children: Children,
+    },
+    Recursion {
+        children: Children,
+    },
+    Error {
+        node: String,
+        children: Children,
+    },
 }
 
 pub struct NodeDisplay<'r> {
