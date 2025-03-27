@@ -374,20 +374,20 @@ fn render_help<A: EditorOutputAdapter>(
                 making up your mind about what you want to type."
             )?;
         }
-        NodeKind::LiteralFunction => {
+        NodeKind::LiteralFunction { .. } => {
             writeln!(
                 adapter,
                 "This is a function literal that produces a function value.",
             )?;
         }
-        NodeKind::LiteralInteger { value } => {
+        NodeKind::LiteralInteger { value, .. } => {
             writeln!(
                 adapter,
                 "This is an integer literal that produces the integer value \
                 `{value}`.",
             )?;
         }
-        NodeKind::LiteralTuple => {
+        NodeKind::LiteralTuple { .. } => {
             writeln!(
                 adapter,
                 "This a tuple literal that produces a tuple value which \
