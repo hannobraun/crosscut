@@ -308,9 +308,7 @@ fn compile_token(
         };
 
         (Node::new(kind, children), error)
-    } else if let Some((node, maybe_err)) =
-        resolve_keyword(token, &children, change_set)
-    {
+    } else if let Some((node, maybe_err)) = resolve_keyword(token, &children) {
         (node, maybe_err)
     } else {
         match resolve_function(token, children, change_set, packages) {
@@ -333,7 +331,6 @@ fn compile_token(
 fn resolve_keyword(
     name: &str,
     children: &Children,
-    _: &mut NewChangeSet,
 ) -> Option<(Node, Option<CodeError>)> {
     match name {
         "self" => Some((
