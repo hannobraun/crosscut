@@ -243,7 +243,7 @@ fn empty_node_with_multiple_children_is_an_error() {
     assert_eq!(
         compiler.codebase().root().node.kind(),
         &NodeKind::Error {
-            node: "".to_string()
+            node: "".to_string(),
         },
     );
 
