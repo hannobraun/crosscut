@@ -19,11 +19,6 @@ impl Node {
         Self { kind, children }
     }
 
-    #[cfg(test)]
-    pub fn integer_literal(value: i32) -> Self {
-        Self::new(NodeKind::LiteralInteger { value }, None)
-    }
-
     pub fn kind(&self) -> &NodeKind {
         &self.kind
     }
