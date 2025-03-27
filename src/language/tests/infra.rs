@@ -19,7 +19,7 @@ pub trait NodeExt: Sized {
 
 impl NodeExt for Node {
     fn expect_empty(&self) -> Node {
-        if let NodeKind::Empty = self.kind() {
+        if let NodeKind::Empty { .. } = self.kind() {
             self.clone()
         } else {
             panic!("Expected empty node.");
@@ -27,7 +27,7 @@ impl NodeExt for Node {
     }
 
     fn expect_integer_literal(&self, expected: i32) -> Node {
-        if let NodeKind::LiteralInteger { value } = self.kind() {
+        if let NodeKind::LiteralInteger { value, .. } = self.kind() {
             assert_eq!(value, &expected);
             self.clone()
         } else {
