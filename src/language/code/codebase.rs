@@ -142,12 +142,12 @@ mod tests {
         // When replacing the root node, the replacement should become the new
         // root node.
 
-        let [a, ..] = test_nodes();
         let mut codebase = Codebase::new();
 
         let old_root = codebase.root().path;
         let new_root = codebase.make_change(|change_set| {
-            let a = NodePath::for_root(change_set.add(Node::new(a, [])));
+            let a =
+                NodePath::for_root(change_set.add(Node::new(node("a"), [])));
             change_set.replace(&old_root, &a);
 
             a
@@ -161,13 +161,12 @@ mod tests {
         // When removing a root node that has a single child, that child should
         // become the new root node.
 
-        let [a, b, ..] = test_nodes();
         let mut codebase = Codebase::new();
 
         let root = codebase.root().path;
         let a = codebase.make_change(|change_set| {
-            let a = change_set.add(Node::new(a, []));
-            let b = change_set.add(Node::new(b, [a]));
+            let a = change_set.add(Node::new(node("a"), []));
+            let b = change_set.add(Node::new(node("b"), [a]));
 
             change_set.replace(&root, &NodePath::for_root(b));
 
@@ -186,12 +185,12 @@ mod tests {
         // When removing a root node that has no child, an empty node should be
         // left in its place.
 
-        let [a, ..] = test_nodes();
         let mut codebase = Codebase::new();
 
         let root = codebase.root().path;
         let a = codebase.make_change(|change_set| {
-            let a = NodePath::for_root(change_set.add(Node::new(a, [])));
+            let a =
+                NodePath::for_root(change_set.add(Node::new(node("a"), [])));
             change_set.replace(&root, &a);
 
             a
@@ -210,14 +209,13 @@ mod tests {
         // needs to be one root node after. An empty node can be created for
         // this.
 
-        let [a, b, c] = test_nodes();
         let mut codebase = Codebase::new();
 
         let root = codebase.root().path;
         let (a, b, c) = codebase.make_change(|change_set| {
-            let a = change_set.add(Node::new(a, []));
-            let b = change_set.add(Node::new(b, []));
-            let c = change_set.add(Node::new(c, [a, b]));
+            let a = change_set.add(Node::new(node("a"), []));
+            let b = change_set.add(Node::new(node("b"), []));
+            let c = change_set.add(Node::new(node("c"), [a, b]));
 
             let c = NodePath::for_root(c);
             change_set.replace(&root, &c);
@@ -239,9 +237,9 @@ mod tests {
         );
     }
 
-    fn test_nodes() -> [NodeKind; 3] {
-        ["a", "b", "c"].map(|node| NodeKind::Error {
-            node: String::from(node),
-        })
+    fn node(name: &str) -> NodeKind {
+        NodeKind::Error {
+            node: name.to_string(),
+        }
     }
 }
