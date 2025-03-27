@@ -256,9 +256,9 @@ fn render_node<A: EditorOutputAdapter>(
     }
 
     let color = match node.kind() {
-        NodeKind::LiteralFunction
+        NodeKind::LiteralFunction { .. }
         | NodeKind::LiteralInteger { .. }
-        | NodeKind::LiteralTuple => Some(Color::DarkBlue),
+        | NodeKind::LiteralTuple { .. } => Some(Color::DarkBlue),
         NodeKind::ProvidedFunction { .. } => Some(Color::DarkMagenta),
         NodeKind::Error { .. } => Some(ERROR_COLOR),
         _ => None,
