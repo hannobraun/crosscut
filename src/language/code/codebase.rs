@@ -228,7 +228,7 @@ mod tests {
             codebase.root().node,
             &Node::new(
                 NodeKind::Error {
-                    node: "".to_string()
+                    node: "".to_string(),
                 },
                 [a, b],
             ),
