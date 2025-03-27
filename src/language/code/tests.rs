@@ -56,12 +56,7 @@ fn uniquely_identify_identical_siblings() {
     let root = codebase.make_change(|change_set| {
         let a = change_set.add(Node::new(a, []));
 
-        let parent = change_set.add(Node::new(
-            NodeKind::Error {
-                node: "b".to_string(),
-            },
-            [a, a],
-        ));
+        let parent = change_set.add(node("b", [a, a]));
 
         let parent = NodePath::for_root(parent);
         change_set.replace(&root, &parent);
