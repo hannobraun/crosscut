@@ -10,7 +10,7 @@ use crate::{
         editor::{Editor, EditorLayout, EditorLine},
         language::Language,
         packages::Packages,
-        runtime::{Effect, Evaluator, RuntimeState, Value},
+        runtime::{Effect, Evaluator, RuntimeState},
     },
 };
 
@@ -373,31 +373,28 @@ fn render_help<A: EditorOutputAdapter>(
                 making up your mind about what you want to type."
             )?;
         }
-        NodeKind::Literal { literal } => {
-            writeln!(
-                adapter,
-                "This is a literal. Literals are functions that take `{}` and \
-                return the value they represent.",
-                Value::Nothing,
-            )?;
-
-            writeln!(adapter)?;
-
-            match literal {
-                Literal::Function => {
-                    writeln!(adapter, "This literal returns a function.",)?;
-                }
-                Literal::Integer { value } => {
-                    writeln!(
-                        adapter,
-                        "This literal returns the integer `{value}`.",
-                    )?;
-                }
-                Literal::Tuple => {
-                    writeln!(adapter, "This literal returns a tuple.")?;
-                }
+        NodeKind::Literal { literal } => match literal {
+            Literal::Function => {
+                writeln!(
+                    adapter,
+                    "This is a function literal that produces a function value.",
+                )?;
             }
-        }
+            Literal::Integer { value } => {
+                writeln!(
+                    adapter,
+                    "This is an integer literal that produces the integer \
+                        value `{value}`.",
+                )?;
+            }
+            Literal::Tuple => {
+                writeln!(
+                    adapter,
+                    "This a tuple literal that produces a tuple value \
+                        which contains the tuple's children.",
+                )?;
+            }
+        },
         NodeKind::ProvidedFunction { id: _ } => {
             writeln!(
                 adapter,
