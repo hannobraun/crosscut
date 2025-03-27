@@ -204,8 +204,8 @@ mod tests {
         assert_eq!(
             codebase.root().node,
             &Node::new(NodeKind::Empty {
-                children: Children::new([])
-            })
+                children: Children::new([]),
+            }),
         );
     }
 
