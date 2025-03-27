@@ -1,6 +1,15 @@
 use std::vec;
 
-use crate::language::code::{LocatedNode, Node, NodeKind, Nodes};
+use crate::language::code::{LocatedNode, Node, NodeHash, NodeKind, Nodes};
+
+pub fn node(name: &str, children: impl IntoIterator<Item = NodeHash>) -> Node {
+    Node::new(
+        NodeKind::Error {
+            node: name.to_string(),
+        },
+        children,
+    )
+}
 
 pub trait NodeExt: Sized {
     fn expect_empty(&self) -> Node;

@@ -133,7 +133,10 @@ impl Root {
 
 #[cfg(test)]
 mod tests {
-    use crate::language::code::{Node, NodeKind, NodePath, tests::node};
+    use crate::language::{
+        code::{Node, NodeKind, NodePath},
+        tests::infra::node,
+    };
 
     use super::Codebase;
 
