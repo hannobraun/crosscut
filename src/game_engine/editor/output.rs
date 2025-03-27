@@ -394,7 +394,7 @@ fn render_help<A: EditorOutputAdapter>(
                 contains the tuple's children.",
             )?;
         }
-        NodeKind::ProvidedFunction { id: _ } => {
+        NodeKind::ProvidedFunction { .. } => {
             writeln!(
                 adapter,
                 "This expression is the application of a provided function. \
