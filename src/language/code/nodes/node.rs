@@ -34,7 +34,7 @@ impl Node {
 
     pub fn has_no_children(&self) -> bool {
         match &self.kind {
-            NodeKind::Empty { child: children } => children.is_none(),
+            NodeKind::Empty { child } => child.is_none(),
             NodeKind::LiteralFunction { children }
             | NodeKind::LiteralInteger { children, .. }
             | NodeKind::LiteralTuple { children }
@@ -46,7 +46,7 @@ impl Node {
 
     pub fn has_single_child(&self) -> Option<&NodeHash> {
         match &self.kind {
-            NodeKind::Empty { child: children } => children.as_ref(),
+            NodeKind::Empty { child } => child.as_ref(),
             NodeKind::LiteralFunction { children }
             | NodeKind::LiteralInteger { children, .. }
             | NodeKind::LiteralTuple { children }
@@ -58,9 +58,9 @@ impl Node {
 
     pub fn children(&self) -> ChildrenIter {
         match &self.kind {
-            NodeKind::Empty { child: children } => ChildrenIter::Option {
-                iter: children.iter(),
-            },
+            NodeKind::Empty { child } => {
+                ChildrenIter::Option { iter: child.iter() }
+            }
             NodeKind::LiteralFunction { children }
             | NodeKind::LiteralInteger { children, .. }
             | NodeKind::LiteralTuple { children }
@@ -74,7 +74,7 @@ impl Node {
 
     pub fn to_children(&self) -> Children {
         match &self.kind {
-            NodeKind::Empty { child: children } => Children::new(*children),
+            NodeKind::Empty { child } => Children::new(*child),
             NodeKind::LiteralFunction { children }
             | NodeKind::LiteralInteger { children, .. }
             | NodeKind::LiteralTuple { children }
