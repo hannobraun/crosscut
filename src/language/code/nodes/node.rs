@@ -21,7 +21,7 @@ impl Node {
 
     #[cfg(test)]
     pub fn integer_literal(value: i32) -> Self {
-        Self::new(NodeKind::integer_literal(value), None)
+        Self::new(NodeKind::LiteralInteger { value }, None)
     }
 
     pub fn kind(&self) -> &NodeKind {
@@ -69,13 +69,6 @@ pub enum NodeKind {
     ProvidedFunction { id: FunctionId },
     Recursion,
     Error { node: String },
-}
-
-impl NodeKind {
-    #[cfg(test)]
-    pub fn integer_literal(value: i32) -> Self {
-        Self::LiteralInteger { value }
-    }
 }
 
 pub struct NodeDisplay<'r> {

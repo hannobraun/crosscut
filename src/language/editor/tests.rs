@@ -30,7 +30,7 @@ fn edit_initial_node() {
 
     assert_eq!(
         codebase.node_at(editor.editing()).node.kind(),
-        &NodeKind::integer_literal(127),
+        &NodeKind::LiteralInteger { value: 127 },
     );
 }
 
@@ -111,7 +111,7 @@ fn merge_with_previous_sibling() {
             .children(codebase.nodes())
             .map(|located_node| located_node.node.kind())
             .collect::<Vec<_>>(),
-        vec![&NodeKind::integer_literal(127)],
+        vec![&NodeKind::LiteralInteger { value: 127 }],
     );
 }
 
@@ -150,7 +150,7 @@ fn merge_with_next_sibling() {
             .children(codebase.nodes())
             .map(|located_node| located_node.node.kind())
             .collect::<Vec<_>>(),
-        vec![&NodeKind::integer_literal(127)],
+        vec![&NodeKind::LiteralInteger { value: 127 }],
     );
 }
 
@@ -193,8 +193,8 @@ fn split_node_to_create_sibling() {
             .map(|located_node| located_node.node.kind())
             .collect::<Vec<_>>(),
         vec![
-            &NodeKind::integer_literal(127),
-            &NodeKind::integer_literal(255),
+            &NodeKind::LiteralInteger { value: 127 },
+            &NodeKind::LiteralInteger { value: 255 },
         ],
     );
 }
