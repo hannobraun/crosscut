@@ -368,14 +368,7 @@ fn resolve_function(
     packages: &Packages,
 ) -> Result<NodeKind, Vec<CandidateForResolution>> {
     let provided_function = packages.resolve_function(name);
-    let literal = if let Ok(value) = name.parse() {
-        Some(Literal::Integer { value })
-    } else {
-        match name {
-            "tuple" => Some(Literal::Tuple),
-            _ => None,
-        }
-    };
+    let literal = resolve_literal(name);
 
     match (provided_function, literal) {
         (Some(id), None) => Ok(NodeKind::ProvidedFunction { id }),
@@ -396,6 +389,17 @@ fn resolve_function(
             }
 
             Err(candidates)
+        }
+    }
+}
+
+fn resolve_literal(name: &str) -> Option<Literal> {
+    if let Ok(value) = name.parse() {
+        Some(Literal::Integer { value })
+    } else {
+        match name {
+            "tuple" => Some(Literal::Tuple),
+            _ => None,
         }
     }
 }
