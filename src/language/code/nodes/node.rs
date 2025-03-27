@@ -20,9 +20,7 @@ impl Node {
 
     pub fn has_this_child(&self, child: &NodeHash) -> bool {
         match &self.kind {
-            NodeKind::Empty { child: children } => {
-                children.as_ref() == Some(child)
-            }
+            NodeKind::Empty { child: c } => c.as_ref() == Some(child),
             NodeKind::LiteralFunction { children }
             | NodeKind::LiteralInteger { children, .. }
             | NodeKind::LiteralTuple { children }
