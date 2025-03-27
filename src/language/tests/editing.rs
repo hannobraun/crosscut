@@ -173,7 +173,6 @@ fn add_sibling() {
 
     let [a, b] = root
         .children()
-        .iter()
         .map(|hash| language.codebase().nodes().get(hash))
         .collect_array()
         .unwrap();
@@ -212,7 +211,6 @@ fn add_sibling_to_root_node() {
 
     let [a, b] = root
         .children()
-        .iter()
         .map(|hash| language.codebase().nodes().get(hash))
         .collect_array()
         .unwrap();
@@ -253,7 +251,6 @@ fn split_node_if_adding_sibling_while_cursor_is_in_the_middle() {
 
     let [a, b] = root
         .children()
-        .iter()
         .map(|hash| language.codebase().nodes().get(hash))
         .collect_array()
         .unwrap();

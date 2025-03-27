@@ -107,7 +107,7 @@ impl Codebase {
                     NodeKind::Error {
                         node: "".to_string(),
                     },
-                    root.children().iter().copied(),
+                    root.children().copied(),
                 );
 
                 self.root.hash = self.nodes.insert(new_root);

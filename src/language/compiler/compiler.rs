@@ -127,10 +127,8 @@ impl<'r> Compiler<'r> {
             let parent = self.codebase.node_at(parent);
 
             let mut children = parent.node.to_children();
-            children.replace(
-                to_remove.hash(),
-                node_to_remove.children().iter().copied(),
-            );
+            children
+                .replace(to_remove.hash(), node_to_remove.children().copied());
 
             let parent = self.replace_inner(
                 &parent.path,

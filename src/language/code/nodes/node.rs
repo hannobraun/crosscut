@@ -1,4 +1,4 @@
-use std::fmt;
+use std::{fmt, slice};
 
 use crate::language::{
     code::Literal,
@@ -43,8 +43,8 @@ impl Node {
         self.children.is_single_child()
     }
 
-    pub fn children(&self) -> &Children {
-        &self.children
+    pub fn children(&self) -> slice::Iter<NodeHash> {
+        self.children.iter()
     }
 
     pub fn to_children(&self) -> Children {
