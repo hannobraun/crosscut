@@ -297,12 +297,7 @@ fn compile_token(
 ) -> (Node, Option<CodeError>) {
     let (node, maybe_error) = if token.is_empty() {
         if children.is_multiple_children().is_none() {
-            (
-                Node::new(NodeKind::Empty {
-                    children: children.clone(),
-                }),
-                None,
-            )
+            (Node::new(NodeKind::Empty { children }), None)
         } else {
             (
                 Node::new(NodeKind::Error {
