@@ -176,13 +176,10 @@ mod tests {
         let mut nodes = Nodes::new();
 
         let [node_a, node_b] = ["a", "b"].map(|name| {
-            Node::new(
-                NodeKind::Error {
-                    node: String::from(name),
-                    children: Children::new([]),
-                },
-                None,
-            )
+            Node::new(NodeKind::Error {
+                node: String::from(name),
+                children: Children::new([]),
+            })
         });
         let path_a = {
             let hash = nodes.insert(node_a.clone());

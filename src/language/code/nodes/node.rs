@@ -10,7 +10,7 @@ pub struct Node {
 }
 
 impl Node {
-    pub fn new(kind: NodeKind, _: impl IntoIterator<Item = NodeHash>) -> Self {
+    pub fn new(kind: NodeKind) -> Self {
         Self { kind }
     }
 

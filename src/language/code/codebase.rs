@@ -16,12 +16,9 @@ pub struct Codebase {
 impl Codebase {
     pub fn new() -> Self {
         let mut nodes = Nodes::new();
-        let empty = nodes.insert(Node::new(
-            NodeKind::Empty {
-                children: Children::new([]),
-            },
-            [],
-        ));
+        let empty = nodes.insert(Node::new(NodeKind::Empty {
+            children: Children::new([]),
+        }));
 
         Self {
             root: Root { hash: empty },
@@ -108,13 +105,10 @@ impl Codebase {
                 // multiple children is always an error, that's what we're
                 // creating here.
 
-                let new_root = Node::new(
-                    NodeKind::Error {
-                        node: "".to_string(),
-                        children: Children::new(root.children().copied()),
-                    },
-                    root.children().copied(),
-                );
+                let new_root = Node::new(NodeKind::Error {
+                    node: "".to_string(),
+                    children: Children::new(root.children().copied()),
+                });
 
                 self.root.hash = self.nodes.insert(new_root);
             }
@@ -209,12 +203,9 @@ mod tests {
         });
         assert_eq!(
             codebase.root().node,
-            &Node::new(
-                NodeKind::Empty {
-                    children: Children::new([])
-                },
-                []
-            )
+            &Node::new(NodeKind::Empty {
+                children: Children::new([])
+            })
         );
     }
 
@@ -243,13 +234,10 @@ mod tests {
         });
         assert_eq!(
             codebase.root().node,
-            &Node::new(
-                NodeKind::Error {
-                    node: "".to_string(),
-                    children: Children::new([a, b]),
-                },
-                [a, b],
-            ),
+            &Node::new(NodeKind::Error {
+                node: "".to_string(),
+                children: Children::new([a, b]),
+            }),
         );
     }
 }

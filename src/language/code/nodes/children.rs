@@ -125,13 +125,10 @@ mod tests {
 
     fn test_nodes() -> [NodeHash; 5] {
         ["a", "b", "c", "d", "e"].map(|node| {
-            NodeHash::new(&Node::new(
-                NodeKind::Error {
-                    node: node.to_string(),
-                    children: Children::new([]),
-                },
-                [],
-            ))
+            NodeHash::new(&Node::new(NodeKind::Error {
+                node: node.to_string(),
+                children: Children::new([]),
+            }))
         })
     }
 }

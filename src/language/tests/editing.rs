@@ -493,13 +493,10 @@ fn remove_right_removes_next_syntax_node_if_empty() {
 
     assert_eq!(
         language.codebase().root().node,
-        &Node::new(
-            NodeKind::LiteralInteger {
-                value: 127,
-                children: Children::new([]),
-            },
-            None,
-        ),
+        &Node::new(NodeKind::LiteralInteger {
+            value: 127,
+            children: Children::new([]),
+        },),
     );
 }
 

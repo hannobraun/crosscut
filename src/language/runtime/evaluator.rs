@@ -378,12 +378,9 @@ mod tests {
 
         let root = codebase.root().path;
         codebase.make_change(|change_set| {
-            let hash = change_set.add(Node::new(
-                NodeKind::Recursion {
-                    children: Children::new([]),
-                },
-                [],
-            ));
+            let hash = change_set.add(Node::new(NodeKind::Recursion {
+                children: Children::new([]),
+            }));
             change_set.replace(&root, &NodePath::for_root(hash))
         });
 
@@ -403,12 +400,9 @@ mod tests {
 
         let root = codebase.root().path;
         codebase.make_change(|change_set| {
-            let hash = change_set.add(Node::new(
-                NodeKind::Recursion {
-                    children: Children::new([]),
-                },
-                [],
-            ));
+            let hash = change_set.add(Node::new(NodeKind::Recursion {
+                children: Children::new([]),
+            }));
             change_set.replace(&root, &NodePath::for_root(hash))
         });
 

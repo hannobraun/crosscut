@@ -7,13 +7,10 @@ use crate::language::code::{
 pub fn node(name: &str, children: impl IntoIterator<Item = NodeHash>) -> Node {
     let children = Children::new(children);
 
-    Node::new(
-        NodeKind::Error {
-            node: name.to_string(),
-            children: children.clone(),
-        },
-        children,
-    )
+    Node::new(NodeKind::Error {
+        node: name.to_string(),
+        children: children.clone(),
+    })
 }
 
 pub trait NodeExt: Sized {
