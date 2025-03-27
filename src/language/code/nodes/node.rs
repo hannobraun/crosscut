@@ -1,4 +1,4 @@
-use std::{fmt, option, slice};
+use std::fmt;
 
 use crate::language::packages::{FunctionId, Packages};
 
@@ -56,22 +56,6 @@ impl Node {
         }
     }
 
-    pub fn children(&self) -> ChildrenIter {
-        match &self.kind {
-            NodeKind::Empty { child } => {
-                ChildrenIter::Option { iter: child.iter() }
-            }
-            NodeKind::LiteralFunction { children }
-            | NodeKind::LiteralInteger { children, .. }
-            | NodeKind::LiteralTuple { children }
-            | NodeKind::ProvidedFunction { children, .. }
-            | NodeKind::Recursion { children }
-            | NodeKind::Error { children, .. } => ChildrenIter::Slice {
-                iter: children.iter(),
-            },
-        }
-    }
-
     pub fn to_children(&self) -> Children {
         match &self.kind {
             NodeKind::Empty { child } => Children::new(*child),
@@ -95,40 +79,6 @@ impl Node {
         }
     }
 }
-
-pub enum ChildrenIter<'r> {
-    Option { iter: option::Iter<'r, NodeHash> },
-    Slice { iter: slice::Iter<'r, NodeHash> },
-}
-
-impl<'r> Iterator for ChildrenIter<'r> {
-    type Item = &'r NodeHash;
-
-    fn next(&mut self) -> Option<Self::Item> {
-        match self {
-            Self::Option { iter } => iter.next(),
-            Self::Slice { iter } => iter.next(),
-        }
-    }
-
-    fn size_hint(&self) -> (usize, Option<usize>) {
-        match self {
-            Self::Option { iter } => iter.size_hint(),
-            Self::Slice { iter } => iter.size_hint(),
-        }
-    }
-}
-
-impl DoubleEndedIterator for ChildrenIter<'_> {
-    fn next_back(&mut self) -> Option<Self::Item> {
-        match self {
-            Self::Option { iter } => iter.next_back(),
-            Self::Slice { iter } => iter.next_back(),
-        }
-    }
-}
-
-impl ExactSizeIterator for ChildrenIter<'_> {}
 
 #[derive(Clone, Debug, Eq, PartialEq, udigest::Digestable)]
 pub enum NodeKind {
