@@ -56,7 +56,7 @@ impl Node {
         }
     }
 
-    pub fn children(&self) -> slice::Iter<NodeHash> {
+    pub fn children(&self) -> ChildrenIter {
         match &self.kind {
             NodeKind::Empty { children }
             | NodeKind::LiteralFunction { children }
@@ -64,7 +64,9 @@ impl Node {
             | NodeKind::LiteralTuple { children }
             | NodeKind::ProvidedFunction { children, .. }
             | NodeKind::Recursion { children }
-            | NodeKind::Error { children, .. } => children.iter(),
+            | NodeKind::Error { children, .. } => ChildrenIter::Slice {
+                iter: children.iter(),
+            },
         }
     }
 
@@ -91,6 +93,36 @@ impl Node {
         }
     }
 }
+
+pub enum ChildrenIter<'r> {
+    Slice { iter: slice::Iter<'r, NodeHash> },
+}
+
+impl<'r> Iterator for ChildrenIter<'r> {
+    type Item = &'r NodeHash;
+
+    fn next(&mut self) -> Option<Self::Item> {
+        match self {
+            Self::Slice { iter } => iter.next(),
+        }
+    }
+
+    fn size_hint(&self) -> (usize, Option<usize>) {
+        match self {
+            Self::Slice { iter } => iter.size_hint(),
+        }
+    }
+}
+
+impl DoubleEndedIterator for ChildrenIter<'_> {
+    fn next_back(&mut self) -> Option<Self::Item> {
+        match self {
+            Self::Slice { iter } => iter.next_back(),
+        }
+    }
+}
+
+impl ExactSizeIterator for ChildrenIter<'_> {}
 
 #[derive(Clone, Debug, Eq, PartialEq, udigest::Digestable)]
 pub enum NodeKind {
