@@ -125,7 +125,7 @@ impl Editor {
                                 NodeKind::Empty { .. }
                             );
                             let parent_is_error_but_empty =
-                                if let NodeKind::Error { node } =
+                                if let NodeKind::Error { node, .. } =
                                     parent.node.kind()
                                 {
                                     node.is_empty()
