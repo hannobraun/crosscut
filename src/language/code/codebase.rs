@@ -133,7 +133,7 @@ impl Root {
 
 #[cfg(test)]
 mod tests {
-    use crate::language::code::{Node, NodeHash, NodeKind, NodePath};
+    use crate::language::code::{Node, NodeKind, NodePath, tests::node};
 
     use super::Codebase;
 
@@ -233,14 +233,5 @@ mod tests {
                 [a, b],
             ),
         );
-    }
-
-    fn node(name: &str, children: impl IntoIterator<Item = NodeHash>) -> Node {
-        Node::new(
-            NodeKind::Error {
-                node: name.to_string(),
-            },
-            children,
-        )
     }
 }

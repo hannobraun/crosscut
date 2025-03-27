@@ -2,7 +2,7 @@ use itertools::Itertools;
 
 use crate::language::code::NodePath;
 
-use super::{Codebase, Node, NodeKind};
+use super::{Codebase, Node, NodeHash, NodeKind};
 
 #[test]
 fn uniquely_identify_identical_children_of_different_parents() {
@@ -80,4 +80,13 @@ fn uniquely_identify_identical_siblings() {
         .unwrap();
 
     assert_ne!(a1, a2);
+}
+
+pub fn node(name: &str, children: impl IntoIterator<Item = NodeHash>) -> Node {
+    Node::new(
+        NodeKind::Error {
+            node: name.to_string(),
+        },
+        children,
+    )
 }
