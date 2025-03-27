@@ -189,7 +189,7 @@ impl Evaluator {
                 // then we still need the node.
                 self.eval_stack.push(node);
             }
-            NodeKind::Literal { literal } => match *literal {
+            NodeKind::Literal { literal } => match literal {
                 Literal::Function => {
                     match node.evaluated_children.clone().into_active_value() {
                         Value::Nothing => {}
@@ -239,7 +239,9 @@ impl Evaluator {
                         }
                     }
 
-                    self.finish_evaluating_node(Value::Integer { value });
+                    self.finish_evaluating_node(Value::Integer {
+                        value: *value,
+                    });
                 }
                 Literal::Tuple => {
                     assert!(
