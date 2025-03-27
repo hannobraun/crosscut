@@ -313,9 +313,9 @@ fn compile_token(
     {
         (node, maybe_err)
     } else {
-        match resolve_function(token, children.clone(), packages) {
+        match resolve_function(token, children, packages) {
             Ok(node) => (node, None),
-            Err(candidates) => (
+            Err((children, candidates)) => (
                 Node::new(
                     NodeKind::Error {
                         node: token.to_string(),
@@ -359,7 +359,7 @@ fn resolve_function(
     name: &str,
     children: Children,
     packages: &Packages,
-) -> Result<Node, Vec<CandidateForResolution>> {
+) -> Result<Node, (Children, Vec<CandidateForResolution>)> {
     let provided_function = packages.resolve_function(name);
     let literal = resolve_literal(name);
 
@@ -378,7 +378,7 @@ fn resolve_function(
         },
         (None, None) => {
             let candidates = Vec::new();
-            Err(candidates)
+            Err((children, candidates))
         }
         (provided_function, literal) => {
             let mut candidates = Vec::new();
@@ -391,7 +391,7 @@ fn resolve_function(
                 candidates.push(CandidateForResolution::Literal { literal });
             }
 
-            Err(candidates)
+            Err((children, candidates))
         }
     }
 }
