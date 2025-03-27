@@ -7,16 +7,11 @@ use super::{Children, NodeHash};
 #[derive(Clone, Debug, Eq, PartialEq, udigest::Digestable)]
 pub struct Node {
     kind: NodeKind,
-    children: Children,
 }
 
 impl Node {
-    pub fn new(
-        kind: NodeKind,
-        children: impl IntoIterator<Item = NodeHash>,
-    ) -> Self {
-        let children = Children::new(children);
-        Self { kind, children }
+    pub fn new(kind: NodeKind, _: impl IntoIterator<Item = NodeHash>) -> Self {
+        Self { kind }
     }
 
     pub fn kind(&self) -> &NodeKind {
@@ -24,23 +19,65 @@ impl Node {
     }
 
     pub fn has_this_child(&self, child: &NodeHash) -> bool {
-        self.children.inner.contains(child)
+        match &self.kind {
+            NodeKind::Empty { children }
+            | NodeKind::LiteralFunction { children }
+            | NodeKind::LiteralInteger { children, .. }
+            | NodeKind::LiteralTuple { children }
+            | NodeKind::ProvidedFunction { children, .. }
+            | NodeKind::Recursion { children }
+            | NodeKind::Error { children, .. } => {
+                children.inner.contains(child)
+            }
+        }
     }
 
     pub fn has_no_children(&self) -> bool {
-        self.children.is_empty()
+        match &self.kind {
+            NodeKind::Empty { children }
+            | NodeKind::LiteralFunction { children }
+            | NodeKind::LiteralInteger { children, .. }
+            | NodeKind::LiteralTuple { children }
+            | NodeKind::ProvidedFunction { children, .. }
+            | NodeKind::Recursion { children }
+            | NodeKind::Error { children, .. } => children.is_empty(),
+        }
     }
 
     pub fn has_single_child(&self) -> Option<&NodeHash> {
-        self.children.is_single_child()
+        match &self.kind {
+            NodeKind::Empty { children }
+            | NodeKind::LiteralFunction { children }
+            | NodeKind::LiteralInteger { children, .. }
+            | NodeKind::LiteralTuple { children }
+            | NodeKind::ProvidedFunction { children, .. }
+            | NodeKind::Recursion { children }
+            | NodeKind::Error { children, .. } => children.is_single_child(),
+        }
     }
 
     pub fn children(&self) -> slice::Iter<NodeHash> {
-        self.children.iter()
+        match &self.kind {
+            NodeKind::Empty { children }
+            | NodeKind::LiteralFunction { children }
+            | NodeKind::LiteralInteger { children, .. }
+            | NodeKind::LiteralTuple { children }
+            | NodeKind::ProvidedFunction { children, .. }
+            | NodeKind::Recursion { children }
+            | NodeKind::Error { children, .. } => children.iter(),
+        }
     }
 
     pub fn to_children(&self) -> Children {
-        self.children.clone()
+        match &self.kind {
+            NodeKind::Empty { children }
+            | NodeKind::LiteralFunction { children }
+            | NodeKind::LiteralInteger { children, .. }
+            | NodeKind::LiteralTuple { children }
+            | NodeKind::ProvidedFunction { children, .. }
+            | NodeKind::Recursion { children }
+            | NodeKind::Error { children, .. } => children.clone(),
+        }
     }
 
     pub fn to_token(&self, packages: &Packages) -> String {
