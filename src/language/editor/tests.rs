@@ -256,7 +256,7 @@ fn reuse_empty_error_node_for_parent() {
     assert_eq!(
         codebase.root().node.kind(),
         &NodeKind::Error {
-            node: "".to_string()
+            node: "".to_string(),
         }
     );
 
