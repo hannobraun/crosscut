@@ -313,7 +313,7 @@ fn compile_token(
     {
         (node, maybe_err)
     } else {
-        match resolve_function(token, children, packages) {
+        match resolve_function(token, children, change_set, packages) {
             Ok(node) => (node, None),
             Err((children, candidates)) => (
                 Node::new(
@@ -358,6 +358,7 @@ fn resolve_keyword(
 fn resolve_function(
     name: &str,
     children: Children,
+    _: &mut NewChangeSet,
     packages: &Packages,
 ) -> Result<Node, (Children, Vec<CandidateForResolution>)> {
     let provided_function = packages.resolve_function(name);
