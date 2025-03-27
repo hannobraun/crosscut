@@ -6,4 +6,4 @@ mod host;
 mod intrinsics;
 mod tuples;
 
-mod infra;
+pub mod infra;

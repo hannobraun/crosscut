@@ -6,4 +6,4 @@ pub mod packages;
 pub mod runtime;
 
 #[cfg(test)]
-mod tests;
+pub mod tests;
