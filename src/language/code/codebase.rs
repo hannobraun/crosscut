@@ -1,4 +1,4 @@
-use crate::language::code::{Children, NodeKind};
+use crate::language::code::NodeKind;
 
 use super::{
     Changes, Errors, LocatedNode, NewChangeSet, Node, NodeHash, NodePath, Nodes,
@@ -105,7 +105,7 @@ impl Codebase {
 
                 let new_root = Node::new(NodeKind::Error {
                     node: "".to_string(),
-                    children: Children::new(root.children().copied()),
+                    children: root.to_children(),
                 });
 
                 self.root.hash = self.nodes.insert(new_root);
