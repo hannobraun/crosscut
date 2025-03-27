@@ -20,7 +20,9 @@ impl Node {
 
     pub fn has_this_child(&self, child: &NodeHash) -> bool {
         match &self.kind {
-            NodeKind::Empty { children } => children.as_ref() == Some(child),
+            NodeKind::Empty { child: children } => {
+                children.as_ref() == Some(child)
+            }
             NodeKind::LiteralFunction { children }
             | NodeKind::LiteralInteger { children, .. }
             | NodeKind::LiteralTuple { children }
@@ -34,7 +36,7 @@ impl Node {
 
     pub fn has_no_children(&self) -> bool {
         match &self.kind {
-            NodeKind::Empty { children } => children.is_none(),
+            NodeKind::Empty { child: children } => children.is_none(),
             NodeKind::LiteralFunction { children }
             | NodeKind::LiteralInteger { children, .. }
             | NodeKind::LiteralTuple { children }
@@ -46,7 +48,7 @@ impl Node {
 
     pub fn has_single_child(&self) -> Option<&NodeHash> {
         match &self.kind {
-            NodeKind::Empty { children } => children.as_ref(),
+            NodeKind::Empty { child: children } => children.as_ref(),
             NodeKind::LiteralFunction { children }
             | NodeKind::LiteralInteger { children, .. }
             | NodeKind::LiteralTuple { children }
@@ -58,7 +60,7 @@ impl Node {
 
     pub fn children(&self) -> ChildrenIter {
         match &self.kind {
-            NodeKind::Empty { children } => ChildrenIter::Option {
+            NodeKind::Empty { child: children } => ChildrenIter::Option {
                 iter: children.iter(),
             },
             NodeKind::LiteralFunction { children }
@@ -74,7 +76,7 @@ impl Node {
 
     pub fn to_children(&self) -> Children {
         match &self.kind {
-            NodeKind::Empty { children } => Children::new(*children),
+            NodeKind::Empty { child: children } => Children::new(*children),
             NodeKind::LiteralFunction { children }
             | NodeKind::LiteralInteger { children, .. }
             | NodeKind::LiteralTuple { children }
@@ -132,7 +134,7 @@ impl ExactSizeIterator for ChildrenIter<'_> {}
 
 #[derive(Clone, Debug, Eq, PartialEq, udigest::Digestable)]
 pub enum NodeKind {
-    Empty { children: Option<NodeHash> },
+    Empty { child: Option<NodeHash> },
     LiteralFunction { children: Children },
     LiteralInteger { value: i32, children: Children },
     LiteralTuple { children: Children },

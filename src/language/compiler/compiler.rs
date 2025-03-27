@@ -299,7 +299,7 @@ fn compile_token(
         if children.is_multiple_children().is_none() {
             (
                 Node::new(NodeKind::Empty {
-                    children: children.is_single_child().copied(),
+                    child: children.is_single_child().copied(),
                 }),
                 None,
             )
@@ -363,7 +363,7 @@ fn resolve_function(
                 // Every function must have a child. Other code assumes that.
                 let children = if children.is_empty() {
                     let child = change_set
-                        .add(Node::new(NodeKind::Empty { children: None }));
+                        .add(Node::new(NodeKind::Empty { child: None }));
                     Children::new(Some(child))
                 } else {
                     children.clone()

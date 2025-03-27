@@ -16,7 +16,7 @@ pub struct Codebase {
 impl Codebase {
     pub fn new() -> Self {
         let mut nodes = Nodes::new();
-        let empty = nodes.insert(Node::new(NodeKind::Empty { children: None }));
+        let empty = nodes.insert(Node::new(NodeKind::Empty { child: None }));
 
         Self {
             root: Root { hash: empty },
@@ -201,7 +201,7 @@ mod tests {
         });
         assert_eq!(
             codebase.root().node,
-            &Node::new(NodeKind::Empty { children: None }),
+            &Node::new(NodeKind::Empty { child: None }),
         );
     }
 
