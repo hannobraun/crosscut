@@ -2,7 +2,7 @@ use std::collections::BTreeMap;
 
 use crate::language::packages::FunctionId;
 
-use super::{Literal, NodePath};
+use super::NodePath;
 
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub struct Errors {
@@ -37,4 +37,11 @@ pub enum CodeError {
 pub enum CandidateForResolution {
     Literal { literal: Literal },
     ProvidedFunction { id: FunctionId },
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, udigest::Digestable)]
+pub enum Literal {
+    Function,
+    Integer { value: i32 },
+    Tuple,
 }
