@@ -370,9 +370,9 @@ fn resolve_function(
             Literal::Integer { value } => {
                 Ok(Node::new(NodeKind::LiteralInteger { value, children }))
             }
-            Literal::Tuple => Ok(Node::new(NodeKind::LiteralTuple {
-                children: children.clone(),
-            })),
+            Literal::Tuple => {
+                Ok(Node::new(NodeKind::LiteralTuple { children }))
+            }
         },
         (None, None) => {
             let candidates = Vec::new();
