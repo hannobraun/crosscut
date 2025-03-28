@@ -234,7 +234,9 @@ fn empty_node_with_multiple_children_is_an_error() {
     let mut codebase = Codebase::new();
     let mut compiler = Compiler::new(&mut codebase);
 
-    compiler.replace(&compiler.codebase().root().path, "", &packages);
+    let token = "";
+
+    compiler.replace(&compiler.codebase().root().path, token, &packages);
 
     let a =
         compiler.insert_child(compiler.codebase().root().path, "", &packages);
