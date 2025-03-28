@@ -315,7 +315,7 @@ fn compile_token(
         (node, maybe_err)
     } else {
         match resolve_function(token, children, change_set, packages) {
-            Ok(node) => (node, None),
+            Ok((node, maybe_err)) => (node, maybe_err),
             Err((children, candidates)) => (
                 Node::new(NodeKind::Error {
                     node: token.to_string(),
@@ -349,13 +349,14 @@ fn resolve_function(
     children: Children,
     change_set: &mut NewChangeSet,
     packages: &Packages,
-) -> Result<Node, (Children, Vec<CandidateForResolution>)> {
+) -> Result<(Node, Option<CodeError>), (Children, Vec<CandidateForResolution>)>
+{
     let provided_function = packages.resolve_function(name);
     let literal = resolve_literal(name);
 
     match (provided_function, literal) {
         (Some(id), None) => {
-            Ok(Node::new(NodeKind::ProvidedFunction { id, children }))
+            Ok((Node::new(NodeKind::ProvidedFunction { id, children }), None))
         }
         (None, Some(literal)) => match literal {
             Literal::Function => {
@@ -368,13 +369,14 @@ fn resolve_function(
                     children.clone()
                 };
 
-                Ok(Node::new(NodeKind::LiteralFunction { children }))
+                Ok((Node::new(NodeKind::LiteralFunction { children }), None))
             }
-            Literal::Integer { value } => {
-                Ok(Node::new(NodeKind::LiteralInteger { value, children }))
-            }
+            Literal::Integer { value } => Ok((
+                Node::new(NodeKind::LiteralInteger { value, children }),
+                None,
+            )),
             Literal::Tuple => {
-                Ok(Node::new(NodeKind::LiteralTuple { children }))
+                Ok((Node::new(NodeKind::LiteralTuple { children }), None))
             }
         },
         (None, None) => {
