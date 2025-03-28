@@ -22,7 +22,7 @@ impl Node {
         match &self.kind {
             NodeKind::Empty { child: c }
             | NodeKind::ProvidedFunction { child: c, .. }
-            | NodeKind::Recursion { children: c } => c.as_ref() == Some(child),
+            | NodeKind::Recursion { child: c } => c.as_ref() == Some(child),
             NodeKind::LiteralInteger { value: _ } => false,
             NodeKind::LiteralFunction { children }
             | NodeKind::LiteralTuple { children }
@@ -36,7 +36,7 @@ impl Node {
         match &self.kind {
             NodeKind::Empty { child }
             | NodeKind::ProvidedFunction { child, .. }
-            | NodeKind::Recursion { children: child } => child.is_none(),
+            | NodeKind::Recursion { child } => child.is_none(),
             NodeKind::LiteralInteger { value: _ } => true,
             NodeKind::LiteralFunction { children }
             | NodeKind::LiteralTuple { children }
@@ -48,7 +48,7 @@ impl Node {
         match &self.kind {
             NodeKind::Empty { child }
             | NodeKind::ProvidedFunction { child, .. }
-            | NodeKind::Recursion { children: child } => child.as_ref(),
+            | NodeKind::Recursion { child } => child.as_ref(),
             NodeKind::LiteralInteger { value: _ } => None,
             NodeKind::LiteralFunction { children }
             | NodeKind::LiteralTuple { children }
@@ -60,7 +60,7 @@ impl Node {
         match &self.kind {
             NodeKind::Empty { child }
             | NodeKind::ProvidedFunction { child, .. }
-            | NodeKind::Recursion { children: child } => Children::new(*child),
+            | NodeKind::Recursion { child } => Children::new(*child),
             NodeKind::LiteralInteger { value: _ } => Children::new([]),
             NodeKind::LiteralFunction { children }
             | NodeKind::LiteralTuple { children }
@@ -121,7 +121,7 @@ pub enum NodeKind {
     },
 
     Recursion {
-        children: Option<NodeHash>,
+        child: Option<NodeHash>,
     },
 
     Error {
