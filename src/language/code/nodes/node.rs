@@ -28,7 +28,7 @@ pub enum Node {
         ///
         /// I'd rather see this shake out, before making changes here that would
         /// only be made invalid.
-        children: Children,
+        children: NodeHash,
     },
 
     LiteralInteger {
@@ -61,9 +61,10 @@ impl Node {
             | Self::ProvidedFunction { child: c, .. }
             | Self::Recursion { child: c } => c.as_ref() == Some(child),
             Self::LiteralInteger { value: _ } => false,
-            Self::LiteralFunction { children }
-            | Self::LiteralTuple { children }
-            | Self::Error { children, .. } => children.inner.contains(child),
+            Self::LiteralFunction { children } => children == child,
+            Self::LiteralTuple { children } | Self::Error { children, .. } => {
+                children.inner.contains(child)
+            }
         }
     }
 
@@ -73,9 +74,12 @@ impl Node {
             | Self::ProvidedFunction { child, .. }
             | Self::Recursion { child } => child.is_none(),
             Self::LiteralInteger { value: _ } => true,
-            Self::LiteralFunction { children }
-            | Self::LiteralTuple { children }
-            | Self::Error { children, .. } => children.is_empty(),
+            Self::LiteralFunction {
+                children: NodeHash { .. },
+            } => false,
+            Self::LiteralTuple { children } | Self::Error { children, .. } => {
+                children.is_empty()
+            }
         }
     }
 
@@ -85,9 +89,10 @@ impl Node {
             | Self::ProvidedFunction { child, .. }
             | Self::Recursion { child } => child.as_ref(),
             Self::LiteralInteger { value: _ } => None,
-            Self::LiteralFunction { children }
-            | Self::LiteralTuple { children }
-            | Self::Error { children, .. } => children.is_single_child(),
+            Self::LiteralFunction { children } => Some(children),
+            Self::LiteralTuple { children } | Self::Error { children, .. } => {
+                children.is_single_child()
+            }
         }
     }
 
@@ -97,9 +102,10 @@ impl Node {
             | Self::ProvidedFunction { child, .. }
             | Self::Recursion { child } => Children::new(*child),
             Self::LiteralInteger { value: _ } => Children::new([]),
-            Self::LiteralFunction { children }
-            | Self::LiteralTuple { children }
-            | Self::Error { children, .. } => children.clone(),
+            Self::LiteralFunction { children } => Children::new([*children]),
+            Self::LiteralTuple { children } | Self::Error { children, .. } => {
+                children.clone()
+            }
         }
     }
 
