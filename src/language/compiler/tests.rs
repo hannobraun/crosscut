@@ -234,11 +234,7 @@ fn empty_node_with_multiple_children_is_an_error() {
     let mut codebase = Codebase::new();
     let mut compiler = Compiler::new(&mut codebase);
 
-    // Verify the assumptions this tests makes about the default root node.
-    assert_eq!(
-        compiler.codebase().root().node.kind(),
-        &NodeKind::Empty { child: None }
-    );
+    compiler.replace(&compiler.codebase().root().path, "", &packages);
 
     let a =
         compiler.insert_child(compiler.codebase().root().path, "", &packages);
