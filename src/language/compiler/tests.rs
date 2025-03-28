@@ -287,7 +287,7 @@ fn integer_literal_with_children_is_an_error() {
     );
     assert_eq!(
         compiler.codebase().errors().get(&root.path),
-        Some(&CodeError::IntegerLiteralWithChildren),
+        Some(&CodeError::TooManyChildren),
     );
 }
 

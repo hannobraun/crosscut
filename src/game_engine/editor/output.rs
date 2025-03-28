@@ -288,9 +288,6 @@ fn render_error<A: EditorOutputAdapter>(
     error: &CodeError,
 ) -> anyhow::Result<()> {
     match error {
-        CodeError::IntegerLiteralWithChildren => {
-            write!(adapter, "integer literal with children")?;
-        }
         CodeError::TooManyChildren => {
             write!(adapter, "node has too many children")?;
         }

@@ -372,7 +372,7 @@ fn resolve_function(
                             node: name.to_string(),
                             children,
                         },
-                        Some(CodeError::IntegerLiteralWithChildren),
+                        Some(CodeError::TooManyChildren),
                     ))
                 }
             }
