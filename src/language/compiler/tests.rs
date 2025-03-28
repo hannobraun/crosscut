@@ -231,31 +231,8 @@ fn empty_node_with_multiple_children_is_an_error() {
 
     let packages = Packages::new();
 
-    let mut codebase = Codebase::new();
-    let mut compiler = Compiler::new(&mut codebase);
-
     let token = "";
-
-    compiler.replace(&compiler.codebase().root().path, token, &packages);
-
-    let a =
-        compiler.insert_child(compiler.codebase().root().path, "", &packages);
-    let b =
-        compiler.insert_child(compiler.codebase().root().path, "", &packages);
-
-    assert_eq!(
-        compiler.codebase().root().node.kind(),
-        &NodeKind::Error {
-            node: "".to_string(),
-            children: Children::new([a, b].map(|path| *path.hash())),
-        },
-    );
-
-    let error = compiler.codebase().root().path;
-    assert_eq!(
-        compiler.codebase().errors().get(&error),
-        Some(&CodeError::OnlyUpToOneChildAllowedForThisNode),
-    );
+    expect_error_on_multiple_children(token, &packages);
 }
 
 #[test]
@@ -334,4 +311,30 @@ fn updating_child_updates_parent() {
             Some(&CodeError::UnresolvedIdentifier { candidates: vec![] }),
         );
     }
+}
+
+fn expect_error_on_multiple_children(token: &str, packages: &Packages) {
+    let mut codebase = Codebase::new();
+    let mut compiler = Compiler::new(&mut codebase);
+
+    compiler.replace(&compiler.codebase().root().path, token, packages);
+
+    let a =
+        compiler.insert_child(compiler.codebase().root().path, "", packages);
+    let b =
+        compiler.insert_child(compiler.codebase().root().path, "", packages);
+
+    assert_eq!(
+        compiler.codebase().root().node.kind(),
+        &NodeKind::Error {
+            node: "".to_string(),
+            children: Children::new([a, b].map(|path| *path.hash())),
+        },
+    );
+
+    let error = compiler.codebase().root().path;
+    assert_eq!(
+        compiler.codebase().errors().get(&error),
+        Some(&CodeError::OnlyUpToOneChildAllowedForThisNode),
+    );
 }
