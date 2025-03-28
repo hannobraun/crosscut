@@ -3,9 +3,7 @@ use crossterm::style::{Attribute, Color};
 use crate::{
     io::editor::output::{Cursor, EditorOutputAdapter},
     language::{
-        code::{
-            CandidateForResolution, CodeError, Codebase, NodeKind, NodePath,
-        },
+        code::{CandidateForResolution, CodeError, Codebase, Node, NodePath},
         editor::{Editor, EditorLayout, EditorLine},
         language::Language,
         packages::Packages,
@@ -256,11 +254,11 @@ fn render_node<A: EditorOutputAdapter>(
     }
 
     let color = match node.kind() {
-        NodeKind::LiteralFunction { .. }
-        | NodeKind::LiteralInteger { .. }
-        | NodeKind::LiteralTuple { .. } => Some(Color::DarkBlue),
-        NodeKind::ProvidedFunction { .. } => Some(Color::DarkMagenta),
-        NodeKind::Error { .. } => Some(ERROR_COLOR),
+        Node::LiteralFunction { .. }
+        | Node::LiteralInteger { .. }
+        | Node::LiteralTuple { .. } => Some(Color::DarkBlue),
+        Node::ProvidedFunction { .. } => Some(Color::DarkMagenta),
+        Node::Error { .. } => Some(ERROR_COLOR),
         _ => None,
     };
 
@@ -372,7 +370,7 @@ fn render_help<A: EditorOutputAdapter>(
     writeln!(adapter)?;
 
     match node.kind() {
-        NodeKind::Empty { .. } => {
+        Node::Empty { .. } => {
             writeln!(
                 adapter,
                 "You are editing an empty syntax node. Those get completely \
@@ -380,27 +378,27 @@ fn render_help<A: EditorOutputAdapter>(
                 making up your mind about what you want to type."
             )?;
         }
-        NodeKind::LiteralFunction { .. } => {
+        Node::LiteralFunction { .. } => {
             writeln!(
                 adapter,
                 "This is a function literal that produces a function value.",
             )?;
         }
-        NodeKind::LiteralInteger { value, .. } => {
+        Node::LiteralInteger { value, .. } => {
             writeln!(
                 adapter,
                 "This is an integer literal that produces the integer value \
                 `{value}`.",
             )?;
         }
-        NodeKind::LiteralTuple { .. } => {
+        Node::LiteralTuple { .. } => {
             writeln!(
                 adapter,
                 "This a tuple literal that produces a tuple value which \
                 contains the tuple's children.",
             )?;
         }
-        NodeKind::ProvidedFunction { .. } => {
+        Node::ProvidedFunction { .. } => {
             writeln!(
                 adapter,
                 "This expression is the application of a provided function. \
@@ -408,7 +406,7 @@ fn render_help<A: EditorOutputAdapter>(
                 intrinsic functions, or by the host.",
             )?;
         }
-        NodeKind::Recursion { .. } => {
+        Node::Recursion { .. } => {
             writeln!(
                 adapter,
                 "You are editing the `{}` keyword, which calls the current \
@@ -416,7 +414,7 @@ fn render_help<A: EditorOutputAdapter>(
                 node.display(context.packages),
             )?;
         }
-        NodeKind::Error { .. } => {
+        Node::Error { .. } => {
             writeln!(adapter, "You are editing an erroneous syntax node.",)?;
         }
     }

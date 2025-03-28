@@ -1,7 +1,7 @@
 use crate::language::{
     code::{
         CandidateForResolution, Children, CodeError, Codebase, Errors, Literal,
-        NewChangeSet, Node, NodeHash, NodeKind, NodePath,
+        NewChangeSet, Node, NodeHash, NodePath,
     },
     packages::Packages,
 };
@@ -296,7 +296,7 @@ fn compile_token(
 ) -> (Node, Option<CodeError>) {
     let (node, maybe_error) = if token.is_empty() {
         node_with_one_child_or_error(
-            |child| NodeKind::Empty { child },
+            |child| Node::Empty { child },
             token,
             children,
         )
@@ -308,7 +308,7 @@ fn compile_token(
         match resolve_function(token, children, change_set, packages) {
             Ok((node, maybe_err)) => (node, maybe_err),
             Err((children, candidates)) => (
-                Node::new(NodeKind::Error {
+                Node::new(Node::Error {
                     node: token.to_string(),
                     children,
                 }),
@@ -326,7 +326,7 @@ fn resolve_keyword(
 ) -> Option<(Node, Option<CodeError>)> {
     match name {
         "self" => Some(node_with_one_child_or_error(
-            |child| NodeKind::Recursion { child },
+            |child| Node::Recursion { child },
             name,
             children,
         )),
@@ -346,7 +346,7 @@ fn resolve_function(
 
     match (provided_function, literal) {
         (Some(id), None) => Ok(node_with_one_child_or_error(
-            |child| NodeKind::ProvidedFunction { id, child },
+            |child| Node::ProvidedFunction { id, child },
             name,
             children,
         )),
@@ -354,21 +354,21 @@ fn resolve_function(
             Literal::Function => {
                 // Every function must have a child. Other code assumes that.
                 let children = if children.is_empty() {
-                    let child = change_set
-                        .add(Node::new(NodeKind::Empty { child: None }));
+                    let child =
+                        change_set.add(Node::new(Node::Empty { child: None }));
                     Children::new(Some(child))
                 } else {
                     children.clone()
                 };
 
-                Ok((Node::new(NodeKind::LiteralFunction { children }), None))
+                Ok((Node::new(Node::LiteralFunction { children }), None))
             }
             Literal::Integer { value } => {
                 if children.is_empty() {
-                    Ok((Node::new(NodeKind::LiteralInteger { value }), None))
+                    Ok((Node::new(Node::LiteralInteger { value }), None))
                 } else {
                     Ok((
-                        Node::new(NodeKind::Error {
+                        Node::new(Node::Error {
                             node: name.to_string(),
                             children,
                         }),
@@ -377,7 +377,7 @@ fn resolve_function(
                 }
             }
             Literal::Tuple => {
-                Ok((Node::new(NodeKind::LiteralTuple { children }), None))
+                Ok((Node::new(Node::LiteralTuple { children }), None))
             }
         },
         (None, None) => {
@@ -413,7 +413,7 @@ fn resolve_literal(name: &str) -> Option<Literal> {
 }
 
 fn node_with_one_child_or_error(
-    kind: impl FnOnce(Option<NodeHash>) -> NodeKind,
+    kind: impl FnOnce(Option<NodeHash>) -> Node,
     token: &str,
     children: Children,
 ) -> (Node, Option<CodeError>) {
@@ -422,7 +422,7 @@ fn node_with_one_child_or_error(
         (Node::new(kind(maybe_child)), None)
     } else {
         (
-            Node::new(NodeKind::Error {
+            Node::new(Node::Error {
                 node: token.to_string(),
                 children,
             }),

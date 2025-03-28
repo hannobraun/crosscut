@@ -10,7 +10,7 @@ pub use self::{
     codebase::Codebase,
     errors::{CandidateForResolution, CodeError, Errors, Literal},
     intrinsics::IntrinsicFunction,
-    nodes::{Children, LocatedNode, Node, NodeHash, NodeKind, NodePath, Nodes},
+    nodes::{Children, LocatedNode, Node, NodeHash, NodePath, Nodes},
     types::Type,
 };
 

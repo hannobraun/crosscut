@@ -1,7 +1,7 @@
 use itertools::Itertools;
 
 use crate::language::{
-    code::{Children, Node, NodeKind},
+    code::{Children, Node},
     editor::EditorInputEvent,
     language::Language,
     packages::{Function, FunctionId, Package},
@@ -166,7 +166,7 @@ fn add_sibling() {
     let root = language.codebase().root().node;
     assert_eq!(
         root.kind(),
-        &NodeKind::Error {
+        &Node::Error {
             node: "c".to_string(),
             children: root.to_children(),
         },
@@ -180,14 +180,14 @@ fn add_sibling() {
         .unwrap();
     assert_eq!(
         a.kind(),
-        &NodeKind::Error {
+        &Node::Error {
             node: "a".to_string(),
             children: Children::new([]),
         },
     );
     assert_eq!(
         b.kind(),
-        &NodeKind::Error {
+        &Node::Error {
             node: "b".to_string(),
             children: Children::new([]),
         },
@@ -208,7 +208,7 @@ fn add_sibling_to_root_node() {
     let root = language.codebase().root().node;
     assert_eq!(
         root.kind(),
-        &NodeKind::Error {
+        &Node::Error {
             node: "".to_string(),
             children: root.to_children(),
         },
@@ -222,14 +222,14 @@ fn add_sibling_to_root_node() {
         .unwrap();
     assert_eq!(
         a.kind(),
-        &NodeKind::Error {
+        &Node::Error {
             node: "a".to_string(),
             children: Children::new([]),
         },
     );
     assert_eq!(
         b.kind(),
-        &NodeKind::Error {
+        &Node::Error {
             node: "b".to_string(),
             children: Children::new([]),
         },
@@ -252,7 +252,7 @@ fn split_node_if_adding_sibling_while_cursor_is_in_the_middle() {
     let root = language.codebase().root().node;
     assert_eq!(
         root.kind(),
-        &NodeKind::Error {
+        &Node::Error {
             node: "c".to_string(),
             children: root.to_children(),
         },
@@ -266,14 +266,14 @@ fn split_node_if_adding_sibling_while_cursor_is_in_the_middle() {
         .unwrap();
     assert_eq!(
         a.kind(),
-        &NodeKind::Error {
+        &Node::Error {
             node: "a".to_string(),
             children: Children::new([]),
         },
     );
     assert_eq!(
         b.kind(),
-        &NodeKind::Error {
+        &Node::Error {
             node: "b".to_string(),
             children: Children::new([]),
         },
@@ -496,7 +496,7 @@ fn remove_right_removes_next_syntax_node_if_empty() {
 
     assert_eq!(
         language.codebase().root().node,
-        &Node::new(NodeKind::LiteralInteger { value: 127 }),
+        &Node::new(Node::LiteralInteger { value: 127 }),
     );
 }
 

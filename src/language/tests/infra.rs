@@ -1,13 +1,11 @@
 use std::vec;
 
-use crate::language::code::{
-    Children, LocatedNode, Node, NodeHash, NodeKind, Nodes,
-};
+use crate::language::code::{Children, LocatedNode, Node, NodeHash, Nodes};
 
 pub fn node(name: &str, children: impl IntoIterator<Item = NodeHash>) -> Node {
     let children = Children::new(children);
 
-    Node::new(NodeKind::Error {
+    Node::new(Node::Error {
         node: name.to_string(),
         children,
     })
@@ -22,7 +20,7 @@ pub trait NodeExt: Sized {
 
 impl NodeExt for Node {
     fn expect_empty(&self) -> Node {
-        if let NodeKind::Empty { .. } = self.kind() {
+        if let Node::Empty { .. } = self.kind() {
             self.clone()
         } else {
             panic!("Expected empty node.");
@@ -30,7 +28,7 @@ impl NodeExt for Node {
     }
 
     fn expect_error(&self, expected: &str) -> Node {
-        if let NodeKind::Error { node, .. } = self.kind() {
+        if let Node::Error { node, .. } = self.kind() {
             assert_eq!(node, expected);
             self.clone()
         } else {
@@ -39,7 +37,7 @@ impl NodeExt for Node {
     }
 
     fn expect_integer_literal(&self, expected: i32) -> Node {
-        if let NodeKind::LiteralInteger { value, .. } = self.kind() {
+        if let Node::LiteralInteger { value, .. } = self.kind() {
             assert_eq!(value, &expected);
             self.clone()
         } else {
@@ -65,7 +63,7 @@ where
 {
     fn expect_errors(self) -> vec::IntoIter<String> {
         self.map(|located_node| {
-            let NodeKind::Error { node, .. } = located_node.node.kind() else {
+            let Node::Error { node, .. } = located_node.node.kind() else {
                 panic!("Expected error, got {:?}", located_node.node.kind());
             };
 

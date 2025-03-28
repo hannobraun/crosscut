@@ -100,7 +100,7 @@ impl<'r> IntoIterator for &'r Children {
 
 #[cfg(test)]
 mod tests {
-    use crate::language::code::{Node, NodeHash, NodeKind};
+    use crate::language::code::{Node, NodeHash};
 
     use super::Children;
 
@@ -125,7 +125,7 @@ mod tests {
 
     fn test_nodes() -> [NodeHash; 5] {
         ["a", "b", "c", "d", "e"].map(|node| {
-            NodeHash::new(&Node::new(NodeKind::Error {
+            NodeHash::new(&Node::new(Node::Error {
                 node: node.to_string(),
                 children: Children::new([]),
             }))

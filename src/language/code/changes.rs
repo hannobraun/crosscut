@@ -166,7 +166,7 @@ struct CircularDependency;
 
 #[cfg(test)]
 mod tests {
-    use crate::language::code::{Children, Node, NodeKind, NodePath, Nodes};
+    use crate::language::code::{Children, Node, NodePath, Nodes};
 
     use super::Changes;
 
@@ -176,7 +176,7 @@ mod tests {
         let mut nodes = Nodes::new();
 
         let [node_a, node_b] = ["a", "b"].map(|name| {
-            Node::new(NodeKind::Error {
+            Node::new(Node::Error {
                 node: String::from(name),
                 children: Children::new([]),
             })

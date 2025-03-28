@@ -1,5 +1,5 @@
 use crate::language::{
-    code::{Codebase, NodeKind, NodePath},
+    code::{Codebase, Node, NodePath},
     compiler::Compiler,
     packages::Packages,
     runtime::Evaluator,
@@ -122,10 +122,10 @@ impl Editor {
 
                             let parent_is_empty = matches!(
                                 parent.node.kind(),
-                                NodeKind::Empty { .. }
+                                Node::Empty { .. }
                             );
                             let parent_is_error_but_empty =
-                                if let NodeKind::Error { node, .. } =
+                                if let Node::Error { node, .. } =
                                     parent.node.kind()
                                 {
                                     node.is_empty()

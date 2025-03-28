@@ -5,83 +5,7 @@ use crate::language::packages::{FunctionId, Packages};
 use super::{Children, NodeHash};
 
 #[derive(Clone, Debug, Eq, PartialEq, udigest::Digestable)]
-pub struct Node {
-    kind: NodeKind,
-}
-
-impl Node {
-    pub fn new(kind: NodeKind) -> Self {
-        Self { kind }
-    }
-
-    pub fn kind(&self) -> &NodeKind {
-        &self.kind
-    }
-
-    pub fn has_this_child(&self, child: &NodeHash) -> bool {
-        match &self.kind {
-            NodeKind::Empty { child: c }
-            | NodeKind::ProvidedFunction { child: c, .. }
-            | NodeKind::Recursion { child: c } => c.as_ref() == Some(child),
-            NodeKind::LiteralInteger { value: _ } => false,
-            NodeKind::LiteralFunction { children }
-            | NodeKind::LiteralTuple { children }
-            | NodeKind::Error { children, .. } => {
-                children.inner.contains(child)
-            }
-        }
-    }
-
-    pub fn has_no_children(&self) -> bool {
-        match &self.kind {
-            NodeKind::Empty { child }
-            | NodeKind::ProvidedFunction { child, .. }
-            | NodeKind::Recursion { child } => child.is_none(),
-            NodeKind::LiteralInteger { value: _ } => true,
-            NodeKind::LiteralFunction { children }
-            | NodeKind::LiteralTuple { children }
-            | NodeKind::Error { children, .. } => children.is_empty(),
-        }
-    }
-
-    pub fn has_single_child(&self) -> Option<&NodeHash> {
-        match &self.kind {
-            NodeKind::Empty { child }
-            | NodeKind::ProvidedFunction { child, .. }
-            | NodeKind::Recursion { child } => child.as_ref(),
-            NodeKind::LiteralInteger { value: _ } => None,
-            NodeKind::LiteralFunction { children }
-            | NodeKind::LiteralTuple { children }
-            | NodeKind::Error { children, .. } => children.is_single_child(),
-        }
-    }
-
-    pub fn to_children(&self) -> Children {
-        match &self.kind {
-            NodeKind::Empty { child }
-            | NodeKind::ProvidedFunction { child, .. }
-            | NodeKind::Recursion { child } => Children::new(*child),
-            NodeKind::LiteralInteger { value: _ } => Children::new([]),
-            NodeKind::LiteralFunction { children }
-            | NodeKind::LiteralTuple { children }
-            | NodeKind::Error { children, .. } => children.clone(),
-        }
-    }
-
-    pub fn to_token(&self, packages: &Packages) -> String {
-        self.display(packages).to_string()
-    }
-
-    pub fn display<'r>(&'r self, packages: &'r Packages) -> NodeDisplay<'r> {
-        NodeDisplay {
-            node: self,
-            packages,
-        }
-    }
-}
-
-#[derive(Clone, Debug, Eq, PartialEq, udigest::Digestable)]
-pub enum NodeKind {
+pub enum Node {
     Empty {
         child: Option<NodeHash>,
     },
@@ -130,6 +54,75 @@ pub enum NodeKind {
     },
 }
 
+impl Node {
+    pub fn new(kind: Node) -> Self {
+        kind
+    }
+
+    pub fn kind(&self) -> &Self {
+        self
+    }
+
+    pub fn has_this_child(&self, child: &NodeHash) -> bool {
+        match self {
+            Self::Empty { child: c }
+            | Self::ProvidedFunction { child: c, .. }
+            | Self::Recursion { child: c } => c.as_ref() == Some(child),
+            Self::LiteralInteger { value: _ } => false,
+            Self::LiteralFunction { children }
+            | Self::LiteralTuple { children }
+            | Self::Error { children, .. } => children.inner.contains(child),
+        }
+    }
+
+    pub fn has_no_children(&self) -> bool {
+        match self {
+            Self::Empty { child }
+            | Self::ProvidedFunction { child, .. }
+            | Self::Recursion { child } => child.is_none(),
+            Self::LiteralInteger { value: _ } => true,
+            Self::LiteralFunction { children }
+            | Self::LiteralTuple { children }
+            | Self::Error { children, .. } => children.is_empty(),
+        }
+    }
+
+    pub fn has_single_child(&self) -> Option<&NodeHash> {
+        match self {
+            Self::Empty { child }
+            | Self::ProvidedFunction { child, .. }
+            | Self::Recursion { child } => child.as_ref(),
+            Self::LiteralInteger { value: _ } => None,
+            Self::LiteralFunction { children }
+            | Self::LiteralTuple { children }
+            | Self::Error { children, .. } => children.is_single_child(),
+        }
+    }
+
+    pub fn to_children(&self) -> Children {
+        match self {
+            Self::Empty { child }
+            | Self::ProvidedFunction { child, .. }
+            | Self::Recursion { child } => Children::new(*child),
+            Self::LiteralInteger { value: _ } => Children::new([]),
+            Self::LiteralFunction { children }
+            | Self::LiteralTuple { children }
+            | Self::Error { children, .. } => children.clone(),
+        }
+    }
+
+    pub fn to_token(&self, packages: &Packages) -> String {
+        self.display(packages).to_string()
+    }
+
+    pub fn display<'r>(&'r self, packages: &'r Packages) -> NodeDisplay<'r> {
+        NodeDisplay {
+            node: self,
+            packages,
+        }
+    }
+}
+
 pub struct NodeDisplay<'r> {
     node: &'r Node,
     packages: &'r Packages,
@@ -137,27 +130,27 @@ pub struct NodeDisplay<'r> {
 
 impl fmt::Display for NodeDisplay<'_> {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        match &self.node.kind {
-            NodeKind::Empty { .. } => {
+        match &self.node {
+            Node::Empty { .. } => {
                 write!(f, "")
             }
-            NodeKind::LiteralFunction { .. } => {
+            Node::LiteralFunction { .. } => {
                 write!(f, "fn")
             }
-            NodeKind::LiteralInteger { value, .. } => {
+            Node::LiteralInteger { value, .. } => {
                 write!(f, "{value}")
             }
-            NodeKind::LiteralTuple { .. } => {
+            Node::LiteralTuple { .. } => {
                 write!(f, "tuple")
             }
-            NodeKind::ProvidedFunction { id, .. } => {
+            Node::ProvidedFunction { id, .. } => {
                 let name = self.packages.function_name_by_id(id);
                 write!(f, "{name}")
             }
-            NodeKind::Recursion { .. } => {
+            Node::Recursion { .. } => {
                 write!(f, "self")
             }
-            NodeKind::Error { node, .. } => {
+            Node::Error { node, .. } => {
                 write!(f, "{node}")
             }
         }

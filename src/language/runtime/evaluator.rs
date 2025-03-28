@@ -1,4 +1,4 @@
-use crate::language::code::{Codebase, NodeKind, NodePath, Type};
+use crate::language::code::{Codebase, Node, NodePath, Type};
 
 use super::{Effect, RuntimeState, Value};
 
@@ -133,7 +133,7 @@ impl Evaluator {
         // node that can be evaluated, and that all its parents are on the
         // evaluation stack, so they can be evaluated later.
         loop {
-            if let NodeKind::LiteralFunction { .. } =
+            if let Node::LiteralFunction { .. } =
                 codebase.node_at(&node.syntax_node).node.kind()
             {
                 // If this were any other node, we'd need to evaluate its
@@ -166,12 +166,12 @@ impl Evaluator {
         };
 
         match codebase.node_at(&node.syntax_node).node.kind() {
-            NodeKind::Empty { .. } => {
+            Node::Empty { .. } => {
                 self.finish_evaluating_node(
                     node.evaluated_children.into_active_value(),
                 );
             }
-            NodeKind::ProvidedFunction { id, .. } => {
+            Node::ProvidedFunction { id, .. } => {
                 self.state = RuntimeState::Effect {
                     effect: Effect::ProvidedFunction {
                         id: *id,
@@ -188,7 +188,7 @@ impl Evaluator {
                 // then we still need the node.
                 self.eval_stack.push(node);
             }
-            NodeKind::LiteralFunction { .. } => {
+            Node::LiteralFunction { .. } => {
                 match node.evaluated_children.clone().into_active_value() {
                     Value::Nothing => {}
                     active_value => {
@@ -222,7 +222,7 @@ impl Evaluator {
                     body: child.path,
                 });
             }
-            NodeKind::LiteralInteger { value, .. } => {
+            Node::LiteralInteger { value, .. } => {
                 match node.evaluated_children.clone().into_active_value() {
                     Value::Nothing => {}
                     active_value => {
@@ -238,7 +238,7 @@ impl Evaluator {
 
                 self.finish_evaluating_node(Value::Integer { value: *value });
             }
-            NodeKind::LiteralTuple { .. } => {
+            Node::LiteralTuple { .. } => {
                 assert!(
                     node.children_to_evaluate.is_empty(),
                     "Due to the loop above, which puts all children of a node \
@@ -254,7 +254,7 @@ impl Evaluator {
                         .collect(),
                 });
             }
-            NodeKind::Recursion { .. } => {
+            Node::Recursion { .. } => {
                 let path = self
                     .call_stack
                     .pop()
@@ -264,7 +264,7 @@ impl Evaluator {
                 let active_value = node.evaluated_children.into_active_value();
                 self.apply_function_raw(path, active_value, codebase);
             }
-            NodeKind::Error { .. } => {
+            Node::Error { .. } => {
                 self.state = RuntimeState::Error {
                     path: node.syntax_node.clone(),
                 };
@@ -363,7 +363,7 @@ struct StackFrame {
 #[cfg(test)]
 mod tests {
     use crate::language::{
-        code::{Codebase, Node, NodeKind, NodePath},
+        code::{Codebase, Node, NodePath},
         runtime::{Evaluator, RuntimeState},
     };
 
@@ -379,7 +379,7 @@ mod tests {
         let root = codebase.root().path;
         codebase.make_change(|change_set| {
             let hash =
-                change_set.add(Node::new(NodeKind::Recursion { child: None }));
+                change_set.add(Node::new(Node::Recursion { child: None }));
             change_set.replace(&root, &NodePath::for_root(hash))
         });
 
@@ -400,7 +400,7 @@ mod tests {
         let root = codebase.root().path;
         codebase.make_change(|change_set| {
             let hash =
-                change_set.add(Node::new(NodeKind::Recursion { child: None }));
+                change_set.add(Node::new(Node::Recursion { child: None }));
             change_set.replace(&root, &NodePath::for_root(hash))
         });
 

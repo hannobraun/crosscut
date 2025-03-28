@@ -1,5 +1,3 @@
-use crate::language::code::NodeKind;
-
 use super::{
     Changes, Errors, LocatedNode, NewChangeSet, Node, NodeHash, NodePath, Nodes,
 };
@@ -16,7 +14,7 @@ pub struct Codebase {
 impl Codebase {
     pub fn new() -> Self {
         let mut nodes = Nodes::new();
-        let empty = nodes.insert(Node::new(NodeKind::Empty { child: None }));
+        let empty = nodes.insert(Node::new(Node::Empty { child: None }));
 
         Self {
             root: Root { hash: empty },
@@ -103,7 +101,7 @@ impl Codebase {
                 // multiple children is always an error, that's what we're
                 // creating here.
 
-                let new_root = Node::new(NodeKind::Error {
+                let new_root = Node::new(Node::Error {
                     node: "".to_string(),
                     children: root.to_children(),
                 });
@@ -132,7 +130,7 @@ impl Root {
 #[cfg(test)]
 mod tests {
     use crate::language::{
-        code::{Children, Node, NodeKind, NodePath},
+        code::{Children, Node, NodePath},
         tests::infra::node,
     };
 
@@ -201,7 +199,7 @@ mod tests {
         });
         assert_eq!(
             codebase.root().node,
-            &Node::new(NodeKind::Empty { child: None }),
+            &Node::new(Node::Empty { child: None }),
         );
     }
 
@@ -230,7 +228,7 @@ mod tests {
         });
         assert_eq!(
             codebase.root().node,
-            &Node::new(NodeKind::Error {
+            &Node::new(Node::Error {
                 node: "".to_string(),
                 children: Children::new([a, b]),
             }),

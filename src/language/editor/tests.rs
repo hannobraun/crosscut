@@ -1,7 +1,7 @@
 use itertools::Itertools;
 
 use crate::language::{
-    code::{Children, Codebase, NodeKind},
+    code::{Children, Codebase, Node},
     compiler::Compiler,
     packages::Packages,
     runtime::Evaluator,
@@ -30,7 +30,7 @@ fn edit_initial_node() {
 
     assert_eq!(
         codebase.node_at(editor.editing()).node.kind(),
-        &NodeKind::LiteralInteger { value: 127 },
+        &Node::LiteralInteger { value: 127 },
     );
 }
 
@@ -111,7 +111,7 @@ fn merge_with_previous_sibling() {
             .children(codebase.nodes())
             .map(|located_node| located_node.node.kind())
             .collect::<Vec<_>>(),
-        vec![&NodeKind::LiteralInteger { value: 127 }],
+        vec![&Node::LiteralInteger { value: 127 }],
     );
 }
 
@@ -150,7 +150,7 @@ fn merge_with_next_sibling() {
             .children(codebase.nodes())
             .map(|located_node| located_node.node.kind())
             .collect::<Vec<_>>(),
-        vec![&NodeKind::LiteralInteger { value: 127 }],
+        vec![&Node::LiteralInteger { value: 127 }],
     );
 }
 
@@ -193,8 +193,8 @@ fn split_node_to_create_sibling() {
             .map(|located_node| located_node.node.kind())
             .collect::<Vec<_>>(),
         vec![
-            &NodeKind::LiteralInteger { value: 127 },
-            &NodeKind::LiteralInteger { value: 255 },
+            &Node::LiteralInteger { value: 127 },
+            &Node::LiteralInteger { value: 255 },
         ],
     );
 }
@@ -226,7 +226,7 @@ fn reuse_empty_node_for_parent() {
     // Make sure the test setup worked as expected.
     assert_eq!(
         codebase.node_at(&root).node.kind(),
-        &NodeKind::Empty {
+        &Node::Empty {
             child: Some(*leaf.hash()),
         }
     );
@@ -262,7 +262,7 @@ fn reuse_empty_error_node_for_parent() {
     // has been created automatically as the new root node.
     assert_eq!(
         codebase.root().node.kind(),
-        &NodeKind::Error {
+        &Node::Error {
             node: "".to_string(),
             children: Children::new([a, b].map(|path| *path.hash())),
         }

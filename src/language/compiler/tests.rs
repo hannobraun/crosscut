@@ -1,7 +1,7 @@
 use itertools::Itertools;
 
 use crate::language::{
-    code::{Children, CodeError, Codebase, NodeHash, NodeKind, NodePath},
+    code::{Children, CodeError, Codebase, Node, NodeHash, NodePath},
     compiler::Compiler,
     packages::{Function, Packages},
 };
@@ -280,7 +280,7 @@ fn integer_literal_with_children_is_an_error() {
     let root = compiler.codebase().root();
     assert_eq!(
         root.node.kind(),
-        &NodeKind::Error {
+        &Node::Error {
             node: "127".to_string(),
             children: Children::new([*child.hash()])
         },
@@ -328,7 +328,7 @@ fn updating_child_updates_parent() {
     ) {
         assert_eq!(
             codebase.node_at(&parent).node.kind(),
-            &NodeKind::Error {
+            &Node::Error {
                 node: "unresolved".to_string(),
                 children: Children::new(children),
             },
@@ -353,7 +353,7 @@ fn expect_error_on_multiple_children(token: &str, packages: &Packages) {
 
     assert_eq!(
         compiler.codebase().root().node.kind(),
-        &NodeKind::Error {
+        &Node::Error {
             node: token.to_string(),
             children: Children::new([a, b].map(|path| *path.hash())),
         },
