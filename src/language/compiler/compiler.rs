@@ -415,8 +415,8 @@ fn error_if_multiple_children_or(
     children: Children,
 ) -> (Node, Option<CodeError>) {
     if children.is_multiple_children().is_none() {
-        let children = children.is_single_child().copied();
-        (Node::new(kind(children)), None)
+        let maybe_child = children.is_single_child().copied();
+        (Node::new(kind(maybe_child)), None)
     } else {
         (
             Node::new(NodeKind::Error {
