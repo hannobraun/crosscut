@@ -263,6 +263,33 @@ fn self_keyword_with_multiple_children_is_an_error() {
 }
 
 #[test]
+fn function_literal_with_multiple_children_is_an_error() {
+    // A function literal should have one child, its body.
+
+    let packages = Packages::new();
+
+    let mut codebase = Codebase::new();
+    let mut compiler = Compiler::new(&mut codebase);
+
+    // Creating an `fn` node without children automatically adds an empty child
+    // for the body. So adding any additional children is one too many.
+    compiler.replace(&compiler.codebase().root().path, "fn", &packages);
+    compiler.insert_child(compiler.codebase().root().path, "error", &packages);
+
+    let root = compiler.codebase().root();
+
+    if let Node::Error { node, .. } = root.node {
+        assert_eq!(node, "fn");
+    } else {
+        panic!();
+    }
+    assert_eq!(
+        compiler.codebase().errors().get(&root.path),
+        Some(&CodeError::TooManyChildren),
+    );
+}
+
+#[test]
 fn integer_literal_with_children_is_an_error() {
     // An integer literal already carries all of the information that it needs
     // to evaluate to an integer. There is nothing it could do with children,

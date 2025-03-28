@@ -371,10 +371,11 @@ fn resolve_function(
                     ))
                 } else {
                     Ok((
-                        Node::LiteralFunction {
+                        Node::Error {
+                            node: name.to_string(),
                             children: children.clone(),
                         },
-                        None,
+                        Some(CodeError::TooManyChildren),
                     ))
                 }
             }
