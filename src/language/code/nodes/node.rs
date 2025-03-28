@@ -118,7 +118,7 @@ impl fmt::Display for NodeDisplay<'_> {
             Node::LiteralFunction { .. } => {
                 write!(f, "fn")
             }
-            Node::LiteralInteger { value, .. } => {
+            Node::LiteralInteger { value } => {
                 write!(f, "{value}")
             }
             Node::LiteralTuple { .. } => {
