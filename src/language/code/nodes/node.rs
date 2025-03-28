@@ -44,7 +44,7 @@ impl Node {
             | Self::ProvidedFunction { child: c, .. }
             | Self::Recursion { child: c } => c.as_ref() == Some(child),
             Self::LiteralInteger { value: _ } => false,
-            Self::LiteralFunction { body: children } => children == child,
+            Self::LiteralFunction { body } => body == child,
             Self::LiteralTuple { children } | Self::Error { children, .. } => {
                 children.inner.contains(child)
             }
