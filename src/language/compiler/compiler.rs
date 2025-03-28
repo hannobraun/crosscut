@@ -355,8 +355,8 @@ fn resolve_function(
                 if children.is_empty() {
                     // Every function must have a child. Other code assumes
                     // that.
-                    let child = change_set.add(Node::Empty { child: None });
-                    Ok((Node::LiteralFunction { body: child }, None))
+                    let body = change_set.add(Node::Empty { child: None });
+                    Ok((Node::LiteralFunction { body }, None))
                 } else if let Some(child) = children.is_single_child() {
                     Ok((Node::LiteralFunction { body: *child }, None))
                 } else {
