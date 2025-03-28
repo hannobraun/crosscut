@@ -288,14 +288,14 @@ fn render_error<A: EditorOutputAdapter>(
     error: &CodeError,
 ) -> anyhow::Result<()> {
     match error {
+        CodeError::IntegerLiteralWithChildren => {
+            write!(adapter, "integer literal with children")?;
+        }
         CodeError::OnlyUpToOneChildAllowedForThisNode => {
             write!(
                 adapter,
                 "only up to one child allowed for this kind of node",
             )?;
-        }
-        CodeError::IntegerLiteralWithChildren => {
-            write!(adapter, "integer literal with children")?;
         }
         CodeError::UnresolvedIdentifier { candidates } => {
             write!(adapter, "unresolved syntax node")?;
