@@ -357,6 +357,8 @@ fn resolve_function(
                     // that.
                     let child = change_set.add(Node::Empty { child: None });
                     Children::new(Some(child))
+                } else if let Some(child) = children.is_single_child() {
+                    Children::new(Some(*child))
                 } else {
                     children.clone()
                 };
