@@ -85,9 +85,7 @@ impl Node {
             | Self::ProvidedFunction { child, .. }
             | Self::Recursion { child } => Children::new(*child),
             Self::LiteralInteger { value: _ } => Children::new([]),
-            Self::LiteralFunction { body: children } => {
-                Children::new([*children])
-            }
+            Self::LiteralFunction { body } => Children::new([*body]),
             Self::LiteralTuple { children } | Self::Error { children, .. } => {
                 children.clone()
             }
