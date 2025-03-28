@@ -11,23 +11,6 @@ pub enum Node {
     },
 
     LiteralFunction {
-        /// # The children of the function
-        ///
-        /// ## Implementation Note
-        ///
-        /// Currently, it's generally assumed that a function has one child, its
-        /// body. (Although this isn't checked much, or at all.) In contrast to
-        /// the other variants of this enum, I've decided not to enforce that
-        /// via the type of this field though.
-        ///
-        /// That would complicate the compiler, which would need to check the
-        /// number of children when constructing this variant. And that wouldn't
-        /// be worth it, because soon, functions will have two children (they
-        /// need parameters), and eventually probably an arbitrary number (any
-        /// number of branches).
-        ///
-        /// I'd rather see this shake out, before making changes here that would
-        /// only be made invalid.
         children: NodeHash,
     },
 
