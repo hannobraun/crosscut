@@ -424,7 +424,7 @@ fn node_with_one_child_or_error(
                 node: token.to_string(),
                 children,
             },
-            Some(CodeError::OnlyUpToOneChildAllowedForThisNode),
+            Some(CodeError::TooManyChildren),
         )
     }
 }

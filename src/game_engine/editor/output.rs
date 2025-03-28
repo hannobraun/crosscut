@@ -291,7 +291,7 @@ fn render_error<A: EditorOutputAdapter>(
         CodeError::IntegerLiteralWithChildren => {
             write!(adapter, "integer literal with children")?;
         }
-        CodeError::OnlyUpToOneChildAllowedForThisNode => {
+        CodeError::TooManyChildren => {
             write!(
                 adapter,
                 "only up to one child allowed for this kind of node",

@@ -362,6 +362,6 @@ fn expect_error_on_multiple_children(token: &str, packages: &Packages) {
     let error = compiler.codebase().root().path;
     assert_eq!(
         compiler.codebase().errors().get(&error),
-        Some(&CodeError::OnlyUpToOneChildAllowedForThisNode),
+        Some(&CodeError::TooManyChildren),
     );
 }
