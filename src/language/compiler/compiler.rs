@@ -325,7 +325,13 @@ fn resolve_keyword(
     children: Children,
 ) -> Option<(Node, Option<CodeError>)> {
     match name {
-        "self" => Some((Node::new(NodeKind::Recursion { children }), None)),
+        "self" => Some(node_with_one_child_or_error(
+            |child| NodeKind::Recursion {
+                children: Children::new(child),
+            },
+            name,
+            children,
+        )),
         _ => None,
     }
 }

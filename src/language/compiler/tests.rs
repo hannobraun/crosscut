@@ -253,6 +253,16 @@ fn provided_function_application_with_multiple_children_is_an_error() {
 }
 
 #[test]
+fn self_keyword_with_multiple_children_is_an_error() {
+    // A self keyword can only have one child: the argument for the function
+    // that it calls recursively.
+
+    let packages = Packages::new();
+
+    expect_error_on_multiple_children("self", &packages);
+}
+
+#[test]
 fn integer_literal_with_children_is_an_error() {
     // An integer literal already carries all of the information that it needs
     // to evaluate to an integer. There is nothing it could do with children,
