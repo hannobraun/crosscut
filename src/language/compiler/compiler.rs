@@ -300,7 +300,9 @@ fn compile_token(
             token,
             children,
         )
-    } else if let Some((node, maybe_err)) = resolve_keyword(token, &children) {
+    } else if let Some((node, maybe_err)) =
+        resolve_keyword(token, children.clone())
+    {
         (node, maybe_err)
     } else {
         match resolve_function(token, children, change_set, packages) {
@@ -320,7 +322,7 @@ fn compile_token(
 
 fn resolve_keyword(
     name: &str,
-    children: &Children,
+    children: Children,
 ) -> Option<(Node, Option<CodeError>)> {
     match name {
         "self" => Some((
