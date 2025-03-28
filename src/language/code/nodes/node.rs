@@ -21,7 +21,7 @@ impl Node {
     pub fn has_this_child(&self, child: &NodeHash) -> bool {
         match &self.kind {
             NodeKind::Empty { child: c }
-            | NodeKind::ProvidedFunction { children: c, .. } => {
+            | NodeKind::ProvidedFunction { child: c, .. } => {
                 c.as_ref() == Some(child)
             }
             NodeKind::LiteralInteger { value: _ } => false,
@@ -37,9 +37,7 @@ impl Node {
     pub fn has_no_children(&self) -> bool {
         match &self.kind {
             NodeKind::Empty { child }
-            | NodeKind::ProvidedFunction {
-                children: child, ..
-            } => child.is_none(),
+            | NodeKind::ProvidedFunction { child, .. } => child.is_none(),
             NodeKind::LiteralInteger { value: _ } => true,
             NodeKind::LiteralFunction { children }
             | NodeKind::LiteralTuple { children }
@@ -51,9 +49,7 @@ impl Node {
     pub fn has_single_child(&self) -> Option<&NodeHash> {
         match &self.kind {
             NodeKind::Empty { child }
-            | NodeKind::ProvidedFunction {
-                children: child, ..
-            } => child.as_ref(),
+            | NodeKind::ProvidedFunction { child, .. } => child.as_ref(),
             NodeKind::LiteralInteger { value: _ } => None,
             NodeKind::LiteralFunction { children }
             | NodeKind::LiteralTuple { children }
@@ -65,9 +61,7 @@ impl Node {
     pub fn to_children(&self) -> Children {
         match &self.kind {
             NodeKind::Empty { child }
-            | NodeKind::ProvidedFunction {
-                children: child, ..
-            } => Children::new(*child),
+            | NodeKind::ProvidedFunction { child, .. } => Children::new(*child),
             NodeKind::LiteralInteger { value: _ } => Children::new([]),
             NodeKind::LiteralFunction { children }
             | NodeKind::LiteralTuple { children }
@@ -125,7 +119,7 @@ pub enum NodeKind {
 
     ProvidedFunction {
         id: FunctionId,
-        children: Option<NodeHash>,
+        child: Option<NodeHash>,
     },
 
     Recursion {
