@@ -28,6 +28,7 @@ impl Errors {
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub enum CodeError {
     EmptyNodeWithMultipleChildren,
+    IntegerLiteralWithChildren,
     UnresolvedIdentifier {
         candidates: Vec<CandidateForResolution>,
     },

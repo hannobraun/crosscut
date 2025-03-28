@@ -371,10 +371,22 @@ fn resolve_function(
 
                 Ok((Node::new(NodeKind::LiteralFunction { children }), None))
             }
-            Literal::Integer { value } => Ok((
-                Node::new(NodeKind::LiteralInteger { value, children }),
-                None,
-            )),
+            Literal::Integer { value } => {
+                if children.is_empty() {
+                    Ok((
+                        Node::new(NodeKind::LiteralInteger { value, children }),
+                        None,
+                    ))
+                } else {
+                    Ok((
+                        Node::new(NodeKind::Error {
+                            node: name.to_string(),
+                            children,
+                        }),
+                        Some(CodeError::IntegerLiteralWithChildren),
+                    ))
+                }
+            }
             Literal::Tuple => {
                 Ok((Node::new(NodeKind::LiteralTuple { children }), None))
             }

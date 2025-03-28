@@ -1,34 +1,9 @@
 use crate::language::{
-    code::{CodeError, Type},
+    code::CodeError,
     language::Language,
     packages::Function,
     runtime::{Effect, RuntimeState, Value},
 };
-
-#[test]
-fn number_literal_wrong_input() {
-    // A number literal is a function that takes `None` and returns `Integer`.
-    // So having two in a row means, that the second one does not get the
-    // expected input.
-
-    // The compiler doesn't do type checking at this point, so it doesn't know
-    // that the second number literal gets an invalid input.
-    let mut language = Language::from_code("127 255");
-
-    let invalid = language.codebase().root().path;
-
-    assert!(language.step().is_running());
-    assert_eq!(
-        language.step(),
-        &RuntimeState::Effect {
-            effect: Effect::UnexpectedInput {
-                expected: Type::Nothing,
-                actual: Value::Integer { value: 127 },
-            },
-            path: invalid,
-        },
-    );
-}
 
 #[test]
 fn unresolved_syntax_node() {

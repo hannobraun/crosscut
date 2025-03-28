@@ -293,6 +293,9 @@ fn render_error<A: EditorOutputAdapter>(
         CodeError::EmptyNodeWithMultipleChildren => {
             write!(adapter, "empty node with multiple children")?;
         }
+        CodeError::IntegerLiteralWithChildren => {
+            write!(adapter, "integer literal with children")?;
+        }
         CodeError::UnresolvedIdentifier { candidates } => {
             write!(adapter, "unresolved syntax node")?;
 

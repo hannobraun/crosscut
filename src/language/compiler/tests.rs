@@ -261,6 +261,32 @@ fn empty_node_with_multiple_children_is_an_error() {
 }
 
 #[test]
+fn integer_literal_with_children_is_an_error() {
+    // An integer literal already carries all of the information that it needs
+    // to evaluate to an integer. There is nothing it could do with children,
+    // except ignore them.
+
+    let packages = Packages::new();
+
+    let mut codebase = Codebase::new();
+    let mut compiler = Compiler::new(&mut codebase);
+
+    compiler.replace(&compiler.codebase().root().path, "127", &packages);
+    compiler.insert_child(compiler.codebase().root().path, "", &packages);
+
+    let root = compiler.codebase().root();
+    if let NodeKind::Error { node, .. } = root.node.kind() {
+        assert_eq!(node, "127");
+    } else {
+        panic!();
+    }
+    assert_eq!(
+        compiler.codebase().errors().get(&root.path),
+        Some(&CodeError::IntegerLiteralWithChildren),
+    );
+}
+
+#[test]
 fn updating_child_updates_parent() {
     // If the child of a parent node is being updated, the parent node should be
     // updated as well.

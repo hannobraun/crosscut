@@ -15,6 +15,7 @@ pub fn node(name: &str, children: impl IntoIterator<Item = NodeHash>) -> Node {
 
 pub trait NodeExt: Sized {
     fn expect_empty(&self) -> Node;
+    fn expect_error(&self, expected: &str) -> Node;
     fn expect_integer_literal(&self, value: i32) -> Node;
     fn expect_single_child(&self, nodes: &Nodes) -> Node;
 }
@@ -25,6 +26,15 @@ impl NodeExt for Node {
             self.clone()
         } else {
             panic!("Expected empty node.");
+        }
+    }
+
+    fn expect_error(&self, expected: &str) -> Node {
+        if let NodeKind::Error { node, .. } = self.kind() {
+            assert_eq!(node, expected);
+            self.clone()
+        } else {
+            panic!("Expected error.");
         }
     }
 

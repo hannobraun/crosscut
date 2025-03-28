@@ -442,7 +442,7 @@ fn remove_left_removes_previous_syntax_node_if_empty() {
         .codebase()
         .root()
         .node
-        .expect_integer_literal(127)
+        .expect_error("127")
         .expect_single_child(language.codebase().nodes())
         .expect_empty();
 
