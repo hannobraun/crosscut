@@ -378,7 +378,7 @@ fn render_help<A: EditorOutputAdapter>(
                 "This is a function literal that produces a function value.",
             )?;
         }
-        Node::LiteralInteger { value, .. } => {
+        Node::LiteralInteger { value } => {
             writeln!(
                 adapter,
                 "This is an integer literal that produces the integer value \
