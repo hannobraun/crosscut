@@ -373,10 +373,7 @@ fn resolve_function(
             }
             Literal::Integer { value } => {
                 if children.is_empty() {
-                    Ok((
-                        Node::new(NodeKind::LiteralInteger { value, children }),
-                        None,
-                    ))
+                    Ok((Node::new(NodeKind::LiteralInteger { value }), None))
                 } else {
                     Ok((
                         Node::new(NodeKind::Error {

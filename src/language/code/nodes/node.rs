@@ -21,8 +21,8 @@ impl Node {
     pub fn has_this_child(&self, child: &NodeHash) -> bool {
         match &self.kind {
             NodeKind::Empty { child: c } => c.as_ref() == Some(child),
+            NodeKind::LiteralInteger { value: _ } => false,
             NodeKind::LiteralFunction { children }
-            | NodeKind::LiteralInteger { children, .. }
             | NodeKind::LiteralTuple { children }
             | NodeKind::ProvidedFunction { children, .. }
             | NodeKind::Recursion { children }
@@ -35,8 +35,8 @@ impl Node {
     pub fn has_no_children(&self) -> bool {
         match &self.kind {
             NodeKind::Empty { child } => child.is_none(),
+            NodeKind::LiteralInteger { value: _ } => true,
             NodeKind::LiteralFunction { children }
-            | NodeKind::LiteralInteger { children, .. }
             | NodeKind::LiteralTuple { children }
             | NodeKind::ProvidedFunction { children, .. }
             | NodeKind::Recursion { children }
@@ -47,8 +47,8 @@ impl Node {
     pub fn has_single_child(&self) -> Option<&NodeHash> {
         match &self.kind {
             NodeKind::Empty { child } => child.as_ref(),
+            NodeKind::LiteralInteger { value: _ } => None,
             NodeKind::LiteralFunction { children }
-            | NodeKind::LiteralInteger { children, .. }
             | NodeKind::LiteralTuple { children }
             | NodeKind::ProvidedFunction { children, .. }
             | NodeKind::Recursion { children }
@@ -59,8 +59,8 @@ impl Node {
     pub fn to_children(&self) -> Children {
         match &self.kind {
             NodeKind::Empty { child } => Children::new(*child),
+            NodeKind::LiteralInteger { value: _ } => Children::new([]),
             NodeKind::LiteralFunction { children }
-            | NodeKind::LiteralInteger { children, .. }
             | NodeKind::LiteralTuple { children }
             | NodeKind::ProvidedFunction { children, .. }
             | NodeKind::Recursion { children }
@@ -109,7 +109,6 @@ pub enum NodeKind {
 
     LiteralInteger {
         value: i32,
-        children: Children,
     },
 
     LiteralTuple {
