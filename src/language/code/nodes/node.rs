@@ -11,7 +11,7 @@ pub enum Node {
     },
 
     LiteralFunction {
-        children: NodeHash,
+        body: NodeHash,
     },
 
     LiteralInteger {
@@ -44,7 +44,7 @@ impl Node {
             | Self::ProvidedFunction { child: c, .. }
             | Self::Recursion { child: c } => c.as_ref() == Some(child),
             Self::LiteralInteger { value: _ } => false,
-            Self::LiteralFunction { children } => children == child,
+            Self::LiteralFunction { body: children } => children == child,
             Self::LiteralTuple { children } | Self::Error { children, .. } => {
                 children.inner.contains(child)
             }
@@ -58,7 +58,7 @@ impl Node {
             | Self::Recursion { child } => child.is_none(),
             Self::LiteralInteger { value: _ } => true,
             Self::LiteralFunction {
-                children: NodeHash { .. },
+                body: NodeHash { .. },
             } => false,
             Self::LiteralTuple { children } | Self::Error { children, .. } => {
                 children.is_empty()
@@ -72,7 +72,7 @@ impl Node {
             | Self::ProvidedFunction { child, .. }
             | Self::Recursion { child } => child.as_ref(),
             Self::LiteralInteger { value: _ } => None,
-            Self::LiteralFunction { children } => Some(children),
+            Self::LiteralFunction { body: children } => Some(children),
             Self::LiteralTuple { children } | Self::Error { children, .. } => {
                 children.is_single_child()
             }
@@ -85,7 +85,9 @@ impl Node {
             | Self::ProvidedFunction { child, .. }
             | Self::Recursion { child } => Children::new(*child),
             Self::LiteralInteger { value: _ } => Children::new([]),
-            Self::LiteralFunction { children } => Children::new([*children]),
+            Self::LiteralFunction { body: children } => {
+                Children::new([*children])
+            }
             Self::LiteralTuple { children } | Self::Error { children, .. } => {
                 children.clone()
             }
