@@ -326,7 +326,7 @@ fn expect_error_on_multiple_children(token: &str, packages: &Packages) {
     assert_eq!(
         compiler.codebase().root().node.kind(),
         &NodeKind::Error {
-            node: "".to_string(),
+            node: token.to_string(),
             children: Children::new([a, b].map(|path| *path.hash())),
         },
     );
