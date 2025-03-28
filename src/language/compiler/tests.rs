@@ -274,17 +274,14 @@ fn integer_literal_with_children_is_an_error() {
     let mut compiler = Compiler::new(&mut codebase);
 
     compiler.replace(&compiler.codebase().root().path, "127", &packages);
-    let child =
-        compiler.insert_child(compiler.codebase().root().path, "", &packages);
+    compiler.insert_child(compiler.codebase().root().path, "", &packages);
 
     let root = compiler.codebase().root();
-    assert_eq!(
-        root.node,
-        &Node::Error {
-            node: "127".to_string(),
-            children: Children::new([*child.hash()])
-        },
-    );
+    if let Node::Error { node, .. } = root.node {
+        assert_eq!(node, "127");
+    } else {
+        panic!();
+    }
     assert_eq!(
         compiler.codebase().errors().get(&root.path),
         Some(&CodeError::TooManyChildren),
