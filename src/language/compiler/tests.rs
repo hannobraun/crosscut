@@ -262,6 +262,10 @@ fn self_keyword_with_multiple_children_is_an_error() {
     expect_error_on_multiple_children("self", &packages);
 }
 
+// There's a test in the `language` test suite (`functions` module), about
+// automatically adding an empty node, if a function is created without a child.
+// This test would probably fit here much better.
+
 #[test]
 fn function_literal_with_multiple_children_is_an_error() {
     // A function literal should have one child, its body.
