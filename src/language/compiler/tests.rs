@@ -236,7 +236,7 @@ fn empty_node_with_multiple_children_is_an_error() {
 
 #[test]
 fn provided_function_application_with_multiple_children_is_an_error() {
-    // A provided function application can only have one child: Its argument.
+    // A provided function application can only have one child: its argument.
 
     #[derive(Clone, Copy, Eq, Ord, PartialEq, PartialOrd)]
     struct Provided;
