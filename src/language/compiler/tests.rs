@@ -231,8 +231,7 @@ fn empty_node_with_multiple_children_is_an_error() {
 
     let packages = Packages::new();
 
-    let token = "";
-    expect_error_on_multiple_children(token, &packages);
+    expect_error_on_multiple_children("", &packages);
 }
 
 #[test]
