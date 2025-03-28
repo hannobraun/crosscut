@@ -295,7 +295,7 @@ fn compile_token(
     packages: &Packages,
 ) -> (Node, Option<CodeError>) {
     let (node, maybe_error) = if token.is_empty() {
-        error_if_multiple_children_or(
+        node_with_one_child_or_error(
             |child| NodeKind::Empty { child },
             token,
             children,
@@ -409,7 +409,7 @@ fn resolve_literal(name: &str) -> Option<Literal> {
     }
 }
 
-fn error_if_multiple_children_or(
+fn node_with_one_child_or_error(
     kind: impl FnOnce(Option<NodeHash>) -> NodeKind,
     token: &str,
     children: Children,
