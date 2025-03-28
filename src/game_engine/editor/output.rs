@@ -292,10 +292,7 @@ fn render_error<A: EditorOutputAdapter>(
             write!(adapter, "integer literal with children")?;
         }
         CodeError::TooManyChildren => {
-            write!(
-                adapter,
-                "only up to one child allowed for this kind of node",
-            )?;
+            write!(adapter, "node has too many children")?;
         }
         CodeError::UnresolvedIdentifier { candidates } => {
             write!(adapter, "unresolved syntax node")?;
