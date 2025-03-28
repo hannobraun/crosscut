@@ -290,7 +290,7 @@ fn render_error<A: EditorOutputAdapter>(
     error: &CodeError,
 ) -> anyhow::Result<()> {
     match error {
-        CodeError::EmptyNodeWithMultipleChildren => {
+        CodeError::OnlyUpToOneChildAllowedForThisNode => {
             write!(adapter, "empty node with multiple children")?;
         }
         CodeError::IntegerLiteralWithChildren => {

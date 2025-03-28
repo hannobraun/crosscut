@@ -308,7 +308,7 @@ fn compile_token(
                     node: token.to_string(),
                     children,
                 }),
-                Some(CodeError::EmptyNodeWithMultipleChildren),
+                Some(CodeError::OnlyUpToOneChildAllowedForThisNode),
             )
         }
     } else if let Some((node, maybe_err)) = resolve_keyword(token, &children) {

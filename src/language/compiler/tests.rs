@@ -256,7 +256,7 @@ fn empty_node_with_multiple_children_is_an_error() {
     let error = compiler.codebase().root().path;
     assert_eq!(
         compiler.codebase().errors().get(&error),
-        Some(&CodeError::EmptyNodeWithMultipleChildren),
+        Some(&CodeError::OnlyUpToOneChildAllowedForThisNode),
     );
 }
 
