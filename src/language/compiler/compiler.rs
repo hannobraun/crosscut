@@ -347,7 +347,7 @@ fn resolve_function(
         (Some(id), None) => Ok(node_with_one_child_or_error(
             |child| NodeKind::ProvidedFunction {
                 id,
-                children: Children::new(child),
+                children: child,
             },
             name,
             children,

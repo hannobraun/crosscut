@@ -20,11 +20,13 @@ impl Node {
 
     pub fn has_this_child(&self, child: &NodeHash) -> bool {
         match &self.kind {
-            NodeKind::Empty { child: c } => c.as_ref() == Some(child),
+            NodeKind::Empty { child: c }
+            | NodeKind::ProvidedFunction { children: c, .. } => {
+                c.as_ref() == Some(child)
+            }
             NodeKind::LiteralInteger { value: _ } => false,
             NodeKind::LiteralFunction { children }
             | NodeKind::LiteralTuple { children }
-            | NodeKind::ProvidedFunction { children, .. }
             | NodeKind::Recursion { children }
             | NodeKind::Error { children, .. } => {
                 children.inner.contains(child)
@@ -34,11 +36,13 @@ impl Node {
 
     pub fn has_no_children(&self) -> bool {
         match &self.kind {
-            NodeKind::Empty { child } => child.is_none(),
+            NodeKind::Empty { child }
+            | NodeKind::ProvidedFunction {
+                children: child, ..
+            } => child.is_none(),
             NodeKind::LiteralInteger { value: _ } => true,
             NodeKind::LiteralFunction { children }
             | NodeKind::LiteralTuple { children }
-            | NodeKind::ProvidedFunction { children, .. }
             | NodeKind::Recursion { children }
             | NodeKind::Error { children, .. } => children.is_empty(),
         }
@@ -46,11 +50,13 @@ impl Node {
 
     pub fn has_single_child(&self) -> Option<&NodeHash> {
         match &self.kind {
-            NodeKind::Empty { child } => child.as_ref(),
+            NodeKind::Empty { child }
+            | NodeKind::ProvidedFunction {
+                children: child, ..
+            } => child.as_ref(),
             NodeKind::LiteralInteger { value: _ } => None,
             NodeKind::LiteralFunction { children }
             | NodeKind::LiteralTuple { children }
-            | NodeKind::ProvidedFunction { children, .. }
             | NodeKind::Recursion { children }
             | NodeKind::Error { children, .. } => children.is_single_child(),
         }
@@ -58,11 +64,13 @@ impl Node {
 
     pub fn to_children(&self) -> Children {
         match &self.kind {
-            NodeKind::Empty { child } => Children::new(*child),
+            NodeKind::Empty { child }
+            | NodeKind::ProvidedFunction {
+                children: child, ..
+            } => Children::new(*child),
             NodeKind::LiteralInteger { value: _ } => Children::new([]),
             NodeKind::LiteralFunction { children }
             | NodeKind::LiteralTuple { children }
-            | NodeKind::ProvidedFunction { children, .. }
             | NodeKind::Recursion { children }
             | NodeKind::Error { children, .. } => children.clone(),
         }
@@ -117,7 +125,7 @@ pub enum NodeKind {
 
     ProvidedFunction {
         id: FunctionId,
-        children: Children,
+        children: Option<NodeHash>,
     },
 
     Recursion {
