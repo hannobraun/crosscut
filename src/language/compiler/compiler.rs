@@ -295,22 +295,13 @@ fn compile_token(
     packages: &Packages,
 ) -> (Node, Option<CodeError>) {
     let (node, maybe_error) = if token.is_empty() {
-        if children.is_multiple_children().is_none() {
-            (
-                Node::new(NodeKind::Empty {
-                    child: children.is_single_child().copied(),
-                }),
-                None,
-            )
-        } else {
-            (
-                Node::new(NodeKind::Error {
-                    node: token.to_string(),
-                    children,
-                }),
-                Some(CodeError::OnlyUpToOneChildAllowedForThisNode),
-            )
-        }
+        error_if_multiple_children_or(
+            |children| NodeKind::Empty {
+                child: children.is_single_child().copied(),
+            },
+            token,
+            children,
+        )
     } else if let Some((node, maybe_err)) = resolve_keyword(token, &children) {
         (node, maybe_err)
     } else {
@@ -417,5 +408,23 @@ fn resolve_literal(name: &str) -> Option<Literal> {
             "tuple" => Some(Literal::Tuple),
             _ => None,
         }
+    }
+}
+
+fn error_if_multiple_children_or(
+    kind: impl FnOnce(Children) -> NodeKind,
+    token: &str,
+    children: Children,
+) -> (Node, Option<CodeError>) {
+    if children.is_multiple_children().is_none() {
+        (Node::new(kind(children)), None)
+    } else {
+        (
+            Node::new(NodeKind::Error {
+                node: token.to_string(),
+                children,
+            }),
+            Some(CodeError::OnlyUpToOneChildAllowedForThisNode),
+        )
     }
 }
