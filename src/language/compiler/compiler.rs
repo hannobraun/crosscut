@@ -352,8 +352,9 @@ fn resolve_function(
         )),
         (None, Some(literal)) => match literal {
             Literal::Function => {
-                // Every function must have a child. Other code assumes that.
                 let children = if children.is_empty() {
+                    // Every function must have a child. Other code assumes
+                    // that.
                     let child = change_set.add(Node::Empty { child: None });
                     Children::new(Some(child))
                 } else {
