@@ -352,18 +352,31 @@ fn resolve_function(
         )),
         (None, Some(literal)) => match literal {
             Literal::Function => {
-                let children = if children.is_empty() {
+                if children.is_empty() {
                     // Every function must have a child. Other code assumes
                     // that.
                     let child = change_set.add(Node::Empty { child: None });
-                    Children::new(Some(child))
+                    Ok((
+                        Node::LiteralFunction {
+                            children: Children::new(Some(child)),
+                        },
+                        None,
+                    ))
                 } else if let Some(child) = children.is_single_child() {
-                    Children::new(Some(*child))
+                    Ok((
+                        Node::LiteralFunction {
+                            children: Children::new(Some(*child)),
+                        },
+                        None,
+                    ))
                 } else {
-                    children.clone()
-                };
-
-                Ok((Node::LiteralFunction { children }, None))
+                    Ok((
+                        Node::LiteralFunction {
+                            children: children.clone(),
+                        },
+                        None,
+                    ))
+                }
             }
             Literal::Integer { value } => {
                 if children.is_empty() {
