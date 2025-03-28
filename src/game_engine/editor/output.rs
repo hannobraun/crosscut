@@ -291,7 +291,10 @@ fn render_error<A: EditorOutputAdapter>(
 ) -> anyhow::Result<()> {
     match error {
         CodeError::OnlyUpToOneChildAllowedForThisNode => {
-            write!(adapter, "empty node with multiple children")?;
+            write!(
+                adapter,
+                "only up to one child allowed for this kind of node",
+            )?;
         }
         CodeError::IntegerLiteralWithChildren => {
             write!(adapter, "integer literal with children")?;
