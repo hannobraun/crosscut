@@ -5,10 +5,10 @@ use crate::language::code::{Children, LocatedNode, Node, NodeHash, Nodes};
 pub fn node(name: &str, children: impl IntoIterator<Item = NodeHash>) -> Node {
     let children = Children::new(children);
 
-    Node::new(Node::Error {
+    Node::Error {
         node: name.to_string(),
         children,
-    })
+    }
 }
 
 pub trait NodeExt: Sized {

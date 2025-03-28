@@ -55,10 +55,6 @@ pub enum Node {
 }
 
 impl Node {
-    pub fn new(kind: Node) -> Self {
-        kind
-    }
-
     pub fn kind(&self) -> &Self {
         self
     }

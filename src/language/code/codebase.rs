@@ -14,7 +14,7 @@ pub struct Codebase {
 impl Codebase {
     pub fn new() -> Self {
         let mut nodes = Nodes::new();
-        let empty = nodes.insert(Node::new(Node::Empty { child: None }));
+        let empty = nodes.insert(Node::Empty { child: None });
 
         Self {
             root: Root { hash: empty },
@@ -101,10 +101,10 @@ impl Codebase {
                 // multiple children is always an error, that's what we're
                 // creating here.
 
-                let new_root = Node::new(Node::Error {
+                let new_root = Node::Error {
                     node: "".to_string(),
                     children: root.to_children(),
-                });
+                };
 
                 self.root.hash = self.nodes.insert(new_root);
             }
@@ -197,10 +197,7 @@ mod tests {
         codebase.make_change(|change_set| {
             change_set.remove(&a);
         });
-        assert_eq!(
-            codebase.root().node,
-            &Node::new(Node::Empty { child: None }),
-        );
+        assert_eq!(codebase.root().node, &Node::Empty { child: None },);
     }
 
     #[test]
@@ -228,10 +225,10 @@ mod tests {
         });
         assert_eq!(
             codebase.root().node,
-            &Node::new(Node::Error {
+            &Node::Error {
                 node: "".to_string(),
                 children: Children::new([a, b]),
-            }),
+            },
         );
     }
 }

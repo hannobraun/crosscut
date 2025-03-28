@@ -308,10 +308,10 @@ fn compile_token(
         match resolve_function(token, children, change_set, packages) {
             Ok((node, maybe_err)) => (node, maybe_err),
             Err((children, candidates)) => (
-                Node::new(Node::Error {
+                Node::Error {
                     node: token.to_string(),
                     children,
-                }),
+                },
                 Some(CodeError::UnresolvedIdentifier { candidates }),
             ),
         }
@@ -354,31 +354,28 @@ fn resolve_function(
             Literal::Function => {
                 // Every function must have a child. Other code assumes that.
                 let children = if children.is_empty() {
-                    let child =
-                        change_set.add(Node::new(Node::Empty { child: None }));
+                    let child = change_set.add(Node::Empty { child: None });
                     Children::new(Some(child))
                 } else {
                     children.clone()
                 };
 
-                Ok((Node::new(Node::LiteralFunction { children }), None))
+                Ok((Node::LiteralFunction { children }, None))
             }
             Literal::Integer { value } => {
                 if children.is_empty() {
-                    Ok((Node::new(Node::LiteralInteger { value }), None))
+                    Ok((Node::LiteralInteger { value }, None))
                 } else {
                     Ok((
-                        Node::new(Node::Error {
+                        Node::Error {
                             node: name.to_string(),
                             children,
-                        }),
+                        },
                         Some(CodeError::IntegerLiteralWithChildren),
                     ))
                 }
             }
-            Literal::Tuple => {
-                Ok((Node::new(Node::LiteralTuple { children }), None))
-            }
+            Literal::Tuple => Ok((Node::LiteralTuple { children }, None)),
         },
         (None, None) => {
             let candidates = Vec::new();
@@ -419,13 +416,13 @@ fn node_with_one_child_or_error(
 ) -> (Node, Option<CodeError>) {
     if children.is_multiple_children().is_none() {
         let maybe_child = children.is_single_child().copied();
-        (Node::new(kind(maybe_child)), None)
+        (kind(maybe_child), None)
     } else {
         (
-            Node::new(Node::Error {
+            Node::Error {
                 node: token.to_string(),
                 children,
-            }),
+            },
             Some(CodeError::OnlyUpToOneChildAllowedForThisNode),
         )
     }

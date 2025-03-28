@@ -496,7 +496,7 @@ fn remove_right_removes_next_syntax_node_if_empty() {
 
     assert_eq!(
         language.codebase().root().node,
-        &Node::new(Node::LiteralInteger { value: 127 }),
+        &Node::LiteralInteger { value: 127 },
     );
 }
 
