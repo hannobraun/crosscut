@@ -1,7 +1,7 @@
 use crate::language::{
     code::{
         CandidateForResolution, Children, CodeError, Codebase, Errors, Literal,
-        NewChangeSet, Node, NodeKind, NodePath,
+        NewChangeSet, Node, NodeHash, NodeKind, NodePath,
     },
     packages::Packages,
 };
@@ -296,9 +296,7 @@ fn compile_token(
 ) -> (Node, Option<CodeError>) {
     let (node, maybe_error) = if token.is_empty() {
         error_if_multiple_children_or(
-            |children| NodeKind::Empty {
-                child: children.is_single_child().copied(),
-            },
+            |child| NodeKind::Empty { child },
             token,
             children,
         )
@@ -412,11 +410,12 @@ fn resolve_literal(name: &str) -> Option<Literal> {
 }
 
 fn error_if_multiple_children_or(
-    kind: impl FnOnce(Children) -> NodeKind,
+    kind: impl FnOnce(Option<NodeHash>) -> NodeKind,
     token: &str,
     children: Children,
 ) -> (Node, Option<CodeError>) {
     if children.is_multiple_children().is_none() {
+        let children = children.is_single_child().copied();
         (Node::new(kind(children)), None)
     } else {
         (
