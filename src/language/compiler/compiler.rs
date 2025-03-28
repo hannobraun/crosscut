@@ -344,9 +344,14 @@ fn resolve_function(
     let literal = resolve_literal(name);
 
     match (provided_function, literal) {
-        (Some(id), None) => {
-            Ok((Node::new(NodeKind::ProvidedFunction { id, children }), None))
-        }
+        (Some(id), None) => Ok(node_with_one_child_or_error(
+            |child| NodeKind::ProvidedFunction {
+                id,
+                children: Children::new(child),
+            },
+            name,
+            children,
+        )),
         (None, Some(literal)) => match literal {
             Literal::Function => {
                 // Every function must have a child. Other code assumes that.

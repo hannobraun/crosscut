@@ -3,7 +3,7 @@ use itertools::Itertools;
 use crate::language::{
     code::{Children, CodeError, Codebase, NodeHash, NodeKind, NodePath},
     compiler::Compiler,
-    packages::Packages,
+    packages::{Function, Packages},
 };
 
 #[test]
@@ -232,6 +232,24 @@ fn empty_node_with_multiple_children_is_an_error() {
     let packages = Packages::new();
 
     expect_error_on_multiple_children("", &packages);
+}
+
+#[test]
+fn provided_function_application_with_multiple_children_is_an_error() {
+    // A provided function application can only have one child: Its argument.
+
+    #[derive(Clone, Copy, Eq, Ord, PartialEq, PartialOrd)]
+    struct Provided;
+    impl Function for Provided {
+        fn name(&self) -> &str {
+            "provided"
+        }
+    }
+
+    let mut packages = Packages::new();
+    packages.new_package().add_function(Provided);
+
+    expect_error_on_multiple_children("provided", &packages);
 }
 
 #[test]
