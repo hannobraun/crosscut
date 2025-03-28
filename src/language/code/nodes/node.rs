@@ -72,7 +72,7 @@ impl Node {
             | Self::ProvidedFunction { child, .. }
             | Self::Recursion { child } => child.as_ref(),
             Self::LiteralInteger { value: _ } => None,
-            Self::LiteralFunction { body: children } => Some(children),
+            Self::LiteralFunction { body } => Some(body),
             Self::LiteralTuple { children } | Self::Error { children, .. } => {
                 children.is_single_child()
             }
