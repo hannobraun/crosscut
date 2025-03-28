@@ -253,7 +253,7 @@ fn render_node<A: EditorOutputAdapter>(
         }
     }
 
-    let color = match node.kind() {
+    let color = match node {
         Node::LiteralFunction { .. }
         | Node::LiteralInteger { .. }
         | Node::LiteralTuple { .. } => Some(Color::DarkBlue),
@@ -369,7 +369,7 @@ fn render_help<A: EditorOutputAdapter>(
 
     writeln!(adapter)?;
 
-    match node.kind() {
+    match node {
         Node::Empty { .. } => {
             writeln!(
                 adapter,

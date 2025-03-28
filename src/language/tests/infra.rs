@@ -20,7 +20,7 @@ pub trait NodeExt: Sized {
 
 impl NodeExt for Node {
     fn expect_empty(&self) -> Node {
-        if let Node::Empty { .. } = self.kind() {
+        if let Node::Empty { .. } = self {
             self.clone()
         } else {
             panic!("Expected empty node.");
@@ -28,7 +28,7 @@ impl NodeExt for Node {
     }
 
     fn expect_error(&self, expected: &str) -> Node {
-        if let Node::Error { node, .. } = self.kind() {
+        if let Node::Error { node, .. } = self {
             assert_eq!(node, expected);
             self.clone()
         } else {
@@ -37,7 +37,7 @@ impl NodeExt for Node {
     }
 
     fn expect_integer_literal(&self, expected: i32) -> Node {
-        if let Node::LiteralInteger { value, .. } = self.kind() {
+        if let Node::LiteralInteger { value, .. } = self {
             assert_eq!(value, &expected);
             self.clone()
         } else {
@@ -63,8 +63,8 @@ where
 {
     fn expect_errors(self) -> vec::IntoIter<String> {
         self.map(|located_node| {
-            let Node::Error { node, .. } = located_node.node.kind() else {
-                panic!("Expected error, got {:?}", located_node.node.kind());
+            let Node::Error { node, .. } = located_node.node else {
+                panic!("Expected error, got {:?}", located_node.node);
             };
 
             node.clone()

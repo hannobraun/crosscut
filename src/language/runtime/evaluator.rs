@@ -134,7 +134,7 @@ impl Evaluator {
         // evaluation stack, so they can be evaluated later.
         loop {
             if let Node::LiteralFunction { .. } =
-                codebase.node_at(&node.syntax_node).node.kind()
+                codebase.node_at(&node.syntax_node).node
             {
                 // If this were any other node, we'd need to evaluate its
                 // children first. But function nodes are different. Their child
@@ -165,7 +165,7 @@ impl Evaluator {
             path: node.syntax_node.clone(),
         };
 
-        match codebase.node_at(&node.syntax_node).node.kind() {
+        match codebase.node_at(&node.syntax_node).node {
             Node::Empty { .. } => {
                 self.finish_evaluating_node(
                     node.evaluated_children.into_active_value(),

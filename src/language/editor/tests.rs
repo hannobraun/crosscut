@@ -29,7 +29,7 @@ fn edit_initial_node() {
     editor.on_code("7", &mut codebase, &mut evaluator, &packages);
 
     assert_eq!(
-        codebase.node_at(editor.editing()).node.kind(),
+        codebase.node_at(editor.editing()).node,
         &Node::LiteralInteger { value: 127 },
     );
 }
@@ -109,7 +109,7 @@ fn merge_with_previous_sibling() {
         codebase
             .root()
             .children(codebase.nodes())
-            .map(|located_node| located_node.node.kind())
+            .map(|located_node| located_node.node)
             .collect::<Vec<_>>(),
         vec![&Node::LiteralInteger { value: 127 }],
     );
@@ -148,7 +148,7 @@ fn merge_with_next_sibling() {
         codebase
             .root()
             .children(codebase.nodes())
-            .map(|located_node| located_node.node.kind())
+            .map(|located_node| located_node.node)
             .collect::<Vec<_>>(),
         vec![&Node::LiteralInteger { value: 127 }],
     );
@@ -190,7 +190,7 @@ fn split_node_to_create_sibling() {
         codebase
             .root()
             .children(codebase.nodes())
-            .map(|located_node| located_node.node.kind())
+            .map(|located_node| located_node.node)
             .collect::<Vec<_>>(),
         vec![
             &Node::LiteralInteger { value: 127 },
@@ -225,7 +225,7 @@ fn reuse_empty_node_for_parent() {
 
     // Make sure the test setup worked as expected.
     assert_eq!(
-        codebase.node_at(&root).node.kind(),
+        codebase.node_at(&root).node,
         &Node::Empty {
             child: Some(*leaf.hash()),
         }
@@ -261,7 +261,7 @@ fn reuse_empty_error_node_for_parent() {
     // Two siblings created at what was previously the root level. An empty node
     // has been created automatically as the new root node.
     assert_eq!(
-        codebase.root().node.kind(),
+        codebase.root().node,
         &Node::Error {
             node: "".to_string(),
             children: Children::new([a, b].map(|path| *path.hash())),

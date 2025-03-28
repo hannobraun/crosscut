@@ -55,10 +55,6 @@ pub enum Node {
 }
 
 impl Node {
-    pub fn kind(&self) -> &Self {
-        self
-    }
-
     pub fn has_this_child(&self, child: &NodeHash) -> bool {
         match self {
             Self::Empty { child: c }

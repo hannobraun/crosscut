@@ -279,7 +279,7 @@ fn integer_literal_with_children_is_an_error() {
 
     let root = compiler.codebase().root();
     assert_eq!(
-        root.node.kind(),
+        root.node,
         &Node::Error {
             node: "127".to_string(),
             children: Children::new([*child.hash()])
@@ -327,7 +327,7 @@ fn updating_child_updates_parent() {
         codebase: &Codebase,
     ) {
         assert_eq!(
-            codebase.node_at(&parent).node.kind(),
+            codebase.node_at(&parent).node,
             &Node::Error {
                 node: "unresolved".to_string(),
                 children: Children::new(children),
@@ -352,7 +352,7 @@ fn expect_error_on_multiple_children(token: &str, packages: &Packages) {
         compiler.insert_child(compiler.codebase().root().path, "", packages);
 
     assert_eq!(
-        compiler.codebase().root().node.kind(),
+        compiler.codebase().root().node,
         &Node::Error {
             node: token.to_string(),
             children: Children::new([a, b].map(|path| *path.hash())),

@@ -165,7 +165,7 @@ fn add_sibling() {
 
     let root = language.codebase().root().node;
     assert_eq!(
-        root.kind(),
+        root,
         &Node::Error {
             node: "c".to_string(),
             children: root.to_children(),
@@ -179,14 +179,14 @@ fn add_sibling() {
         .collect_array()
         .unwrap();
     assert_eq!(
-        a.kind(),
+        a,
         &Node::Error {
             node: "a".to_string(),
             children: Children::new([]),
         },
     );
     assert_eq!(
-        b.kind(),
+        b,
         &Node::Error {
             node: "b".to_string(),
             children: Children::new([]),
@@ -207,7 +207,7 @@ fn add_sibling_to_root_node() {
 
     let root = language.codebase().root().node;
     assert_eq!(
-        root.kind(),
+        root,
         &Node::Error {
             node: "".to_string(),
             children: root.to_children(),
@@ -221,14 +221,14 @@ fn add_sibling_to_root_node() {
         .collect_array()
         .unwrap();
     assert_eq!(
-        a.kind(),
+        a,
         &Node::Error {
             node: "a".to_string(),
             children: Children::new([]),
         },
     );
     assert_eq!(
-        b.kind(),
+        b,
         &Node::Error {
             node: "b".to_string(),
             children: Children::new([]),
@@ -251,7 +251,7 @@ fn split_node_if_adding_sibling_while_cursor_is_in_the_middle() {
 
     let root = language.codebase().root().node;
     assert_eq!(
-        root.kind(),
+        root,
         &Node::Error {
             node: "c".to_string(),
             children: root.to_children(),
@@ -265,14 +265,14 @@ fn split_node_if_adding_sibling_while_cursor_is_in_the_middle() {
         .collect_array()
         .unwrap();
     assert_eq!(
-        a.kind(),
+        a,
         &Node::Error {
             node: "a".to_string(),
             children: Children::new([]),
         },
     );
     assert_eq!(
-        b.kind(),
+        b,
         &Node::Error {
             node: "b".to_string(),
             children: Children::new([]),
