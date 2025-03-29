@@ -337,7 +337,7 @@ fn resolve_keyword(
 fn resolve_function(
     name: &str,
     children: Children,
-    change_set: &mut NewChangeSet,
+    _: &mut NewChangeSet,
     packages: &Packages,
 ) -> Result<(Node, Option<CodeError>), (Children, Vec<CandidateForResolution>)>
 {
@@ -353,8 +353,13 @@ fn resolve_function(
         (None, Some(literal)) => match literal {
             Literal::Function => {
                 if children.is_empty() {
-                    let body = change_set.add(Node::Empty { child: None });
-                    Ok((Node::LiteralFunction { body }, None))
+                    Ok((
+                        Node::Error {
+                            node: name.to_string(),
+                            children: children.clone(),
+                        },
+                        Some(CodeError::TooFewChildren),
+                    ))
                 } else if let Some(child) = children.is_single_child() {
                     Ok((Node::LiteralFunction { body: *child }, None))
                 } else {

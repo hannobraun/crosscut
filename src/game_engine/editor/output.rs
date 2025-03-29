@@ -288,6 +288,9 @@ fn render_error<A: EditorOutputAdapter>(
     error: &CodeError,
 ) -> anyhow::Result<()> {
     match error {
+        CodeError::TooFewChildren => {
+            write!(adapter, "expected node to have more children")?;
+        }
         CodeError::TooManyChildren => {
             write!(adapter, "node has too many children")?;
         }

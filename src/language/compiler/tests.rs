@@ -274,14 +274,17 @@ fn empty_function() {
 
     compiler.replace(&compiler.codebase().root().path, "fn", &packages);
 
-    let [empty] = compiler
-        .codebase()
-        .root()
-        .children(compiler.codebase().nodes())
-        .collect_array()
-        .unwrap();
+    let root = compiler.codebase().root();
 
-    assert_eq!(empty.node, &Node::Empty { child: None });
+    if let Node::Error { node, .. } = root.node {
+        assert_eq!(node, "fn");
+    } else {
+        panic!();
+    }
+    assert_eq!(
+        compiler.codebase().errors().get(&root.path),
+        Some(&CodeError::TooFewChildren),
+    );
 }
 
 #[test]
@@ -297,6 +300,7 @@ fn function_literal_with_too_many_children_is_an_error() {
     // for the body. So adding any additional children is one too many.
     compiler.replace(&compiler.codebase().root().path, "fn", &packages);
     compiler.insert_child(compiler.codebase().root().path, "a", &packages);
+    compiler.insert_child(compiler.codebase().root().path, "b", &packages);
 
     let root = compiler.codebase().root();
 
