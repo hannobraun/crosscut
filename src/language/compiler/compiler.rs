@@ -357,12 +357,14 @@ fn resolve_function(
                 } else if let Some(child) = children.is_single_child() {
                     Ok((Node::LiteralFunction { body: *child }, None))
                 } else {
+                    let error = CodeError::TooManyChildren;
+
                     Ok((
                         Node::Error {
                             node: name.to_string(),
                             children: children.clone(),
                         },
-                        Some(CodeError::TooManyChildren),
+                        Some(error),
                     ))
                 }
             }
