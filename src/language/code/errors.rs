@@ -2,7 +2,7 @@ use std::collections::BTreeMap;
 
 use crate::language::packages::FunctionId;
 
-use super::{NodeHash, NodePath};
+use super::NodeHash;
 
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub struct Errors {
@@ -20,8 +20,8 @@ impl Errors {
         self.inner.get(hash)
     }
 
-    pub fn insert(&mut self, path: NodePath, error: CodeError) {
-        self.inner.insert(*path.hash(), error);
+    pub fn insert(&mut self, hash: NodeHash, error: CodeError) {
+        self.inner.insert(hash, error);
     }
 }
 

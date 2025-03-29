@@ -51,7 +51,7 @@ impl<'r> Compiler<'r> {
             );
 
             if let Some(error) = maybe_error {
-                errors.insert(child_path.clone(), error);
+                errors.insert(*child_path.hash(), error);
             }
 
             child_path
@@ -270,7 +270,7 @@ fn replace_node_and_update_parents(
         initial_replacement = Some(path.clone());
 
         if let Some(error) = maybe_error {
-            errors.insert(path, error);
+            errors.insert(*path.hash(), error);
         }
     }
 
