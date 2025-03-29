@@ -296,8 +296,6 @@ fn function_literal_with_too_many_children_is_an_error() {
     let mut codebase = Codebase::new();
     let mut compiler = Compiler::new(&mut codebase);
 
-    // Creating an `fn` node without children automatically adds an empty child
-    // for the body. So adding any additional children is one too many.
     compiler.replace(&compiler.codebase().root().path, "fn", &packages);
     compiler.insert_child(compiler.codebase().root().path, "a", &packages);
     compiler.insert_child(compiler.codebase().root().path, "b", &packages);
