@@ -16,8 +16,8 @@ impl Errors {
         }
     }
 
-    pub fn get(&self, path: &NodePath) -> Option<&CodeError> {
-        self.inner.get(path.hash())
+    pub fn get(&self, hash: &NodeHash) -> Option<&CodeError> {
+        self.inner.get(hash)
     }
 
     pub fn insert(&mut self, path: NodePath, error: CodeError) {

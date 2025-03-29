@@ -72,7 +72,7 @@ fn insert_child_should_update_errors() {
     );
 
     assert_eq!(
-        compiler.codebase().errors().get(&unresolved),
+        compiler.codebase().errors().get(unresolved.hash()),
         Some(&CodeError::UnresolvedIdentifier { candidates: vec![] }),
     );
 }
@@ -282,7 +282,7 @@ fn function_literal_with_too_few_children_is_an_error() {
         panic!();
     }
     assert_eq!(
-        compiler.codebase().errors().get(&root.path),
+        compiler.codebase().errors().get(root.path.hash()),
         Some(&CodeError::TooFewChildren),
     );
 }
@@ -308,7 +308,7 @@ fn function_literal_with_too_many_children_is_an_error() {
         panic!("Expected error, got `{:?}`", root.node);
     }
     assert_eq!(
-        compiler.codebase().errors().get(&root.path),
+        compiler.codebase().errors().get(root.path.hash()),
         Some(&CodeError::TooManyChildren),
     );
 }
@@ -334,7 +334,7 @@ fn integer_literal_with_children_is_an_error() {
         panic!();
     }
     assert_eq!(
-        compiler.codebase().errors().get(&root.path),
+        compiler.codebase().errors().get(root.path.hash()),
         Some(&CodeError::TooManyChildren),
     );
 }
@@ -382,7 +382,7 @@ fn updating_child_updates_parent() {
             },
         );
         assert_eq!(
-            codebase.errors().get(&parent),
+            codebase.errors().get(parent.hash()),
             Some(&CodeError::UnresolvedIdentifier { candidates: vec![] }),
         );
     }
@@ -409,7 +409,7 @@ fn expect_error_on_multiple_children(token: &str, packages: &Packages) {
 
     let error = compiler.codebase().root().path;
     assert_eq!(
-        compiler.codebase().errors().get(&error),
+        compiler.codebase().errors().get(error.hash()),
         Some(&CodeError::TooManyChildren),
     );
 }

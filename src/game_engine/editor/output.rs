@@ -143,7 +143,7 @@ fn render_runtime_state<A: EditorOutputAdapter>(
                 // While we have a dynamic type system, it's possible that an
                 // error is only known at runtime. In that case, we'll get
                 // `None` here.
-                let maybe_error = context.codebase.errors().get(path);
+                let maybe_error = context.codebase.errors().get(path.hash());
 
                 adapter.color(ERROR_COLOR, |adapter| {
                     write!(adapter, "Error")?;
@@ -265,7 +265,7 @@ fn render_node<A: EditorOutputAdapter>(
         write!(adapter, "{node_display}")?;
     }
 
-    if let Some(error) = context.codebase.errors().get(path) {
+    if let Some(error) = context.codebase.errors().get(path.hash()) {
         adapter.color(ERROR_COLOR, |adapter| {
             write!(adapter, "    error: ")?;
             render_error(adapter, error)?;

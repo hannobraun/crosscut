@@ -15,7 +15,7 @@ fn unresolved_syntax_node() {
     // The error should be registered in `Codebase`.
     let unresolved = language.codebase().root().path;
     assert_eq!(
-        language.codebase().errors().get(&unresolved),
+        language.codebase().errors().get(unresolved.hash()),
         Some(&CodeError::UnresolvedIdentifier { candidates: vec![] }),
     );
 
@@ -32,7 +32,7 @@ fn fixing_syntax_node_should_remove_error() {
         language
             .codebase()
             .errors()
-            .get(&language.codebase().root().path)
+            .get(language.codebase().root().path.hash())
             .is_some()
     );
 
@@ -40,7 +40,7 @@ fn fixing_syntax_node_should_remove_error() {
     language.on_code("y");
 
     let resolved = language.codebase().root().path;
-    assert_eq!(language.codebase().errors().get(&resolved), None);
+    assert_eq!(language.codebase().errors().get(resolved.hash()), None);
     assert_eq!(language.step_until_finished().unwrap(), Value::Nothing);
 }
 
