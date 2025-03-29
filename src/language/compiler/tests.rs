@@ -3,9 +3,7 @@ use itertools::Itertools;
 use crate::language::{
     code::{Children, CodeError, Codebase, Node, NodeHash, NodePath},
     compiler::Compiler,
-    language::Language,
     packages::{Function, Packages},
-    runtime::Value,
 };
 
 #[test]
@@ -269,8 +267,21 @@ fn empty_function() {
     // If an `fn` node doesn't have a child, an empty syntax node should be
     // created as a child for it.
 
-    let mut language = Language::from_code("fn eval");
-    assert_eq!(language.step_until_finished().unwrap(), Value::Nothing);
+    let packages = Packages::new();
+
+    let mut codebase = Codebase::new();
+    let mut compiler = Compiler::new(&mut codebase);
+
+    compiler.replace(&compiler.codebase().root().path, "fn", &packages);
+
+    let [empty] = compiler
+        .codebase()
+        .root()
+        .children(compiler.codebase().nodes())
+        .collect_array()
+        .unwrap();
+
+    assert_eq!(empty.node, &Node::Empty { child: None });
 }
 
 #[test]
