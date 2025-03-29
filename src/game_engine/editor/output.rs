@@ -14,7 +14,7 @@ use crate::{
 use super::input::{EditorMode, TerminalEditorInput};
 
 #[cfg(test)]
-pub fn codebase_to_stdout(codebase: &Codebase) {
+pub fn codebase_to_stdout(codebase: &Codebase, _: &Packages) {
     use crate::io::editor::output::DebugOutputAdapter;
     codebase_to_adapter(codebase, &mut DebugOutputAdapter);
 }
