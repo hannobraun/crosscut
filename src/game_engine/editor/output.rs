@@ -14,19 +14,19 @@ use crate::{
 use super::input::{EditorMode, TerminalEditorInput};
 
 #[cfg(test)]
-pub fn codebase_to_stdout(codebase: &Codebase, _: &Packages) {
+pub fn codebase_to_stdout(codebase: &Codebase, packages: &Packages) {
     use crate::io::editor::output::DebugOutputAdapter;
-    codebase_to_adapter(codebase, &mut DebugOutputAdapter);
+    codebase_to_adapter(codebase, packages, &mut DebugOutputAdapter);
 }
 
 #[cfg(test)]
-pub fn codebase_to_string(codebase: &Codebase, _: &Packages) -> String {
+pub fn codebase_to_string(codebase: &Codebase, packages: &Packages) -> String {
     use crate::io::editor::output::StringOutputAdapter;
 
     let mut adapter = StringOutputAdapter {
         output: String::new(),
     };
-    codebase_to_adapter(codebase, &mut adapter);
+    codebase_to_adapter(codebase, packages, &mut adapter);
 
     adapter.output
 }
@@ -34,23 +34,16 @@ pub fn codebase_to_string(codebase: &Codebase, _: &Packages) -> String {
 #[cfg(test)]
 fn codebase_to_adapter(
     codebase: &Codebase,
+    packages: &Packages,
     adapter: &mut impl EditorOutputAdapter,
 ) {
     let layout = EditorLayout::new(codebase.root(), codebase.nodes());
-
-    // Creating an empty `Packages` placeholder here, means this function can't
-    // be used to render host functions. This is only being used sporadically in
-    // tests, so for now, that's good enough.
-    //
-    // Once it's no longer good enough, that is going to be pretty obvious, I
-    // think, because the render code below is going to panic.
-    let packages = Packages::new();
 
     let mut context = RenderContext {
         codebase,
         editor: None,
         evaluator: None,
-        packages: &packages,
+        packages,
         cursor: None,
     };
 
