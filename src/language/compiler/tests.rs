@@ -285,7 +285,7 @@ fn empty_function() {
 }
 
 #[test]
-fn function_literal_with_multiple_children_is_an_error() {
+fn function_literal_with_too_many_children_is_an_error() {
     // A function literal should have one child, its body.
 
     let packages = Packages::new();
