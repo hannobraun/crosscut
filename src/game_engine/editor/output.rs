@@ -288,7 +288,7 @@ fn render_error<A: EditorOutputAdapter>(
             write!(adapter, "node has too many children")?;
         }
         CodeError::UnresolvedIdentifier { candidates } => {
-            write!(adapter, "unresolved syntax node")?;
+            write!(adapter, "unresolved identifier")?;
 
             if !candidates.is_empty() {
                 write!(adapter, " (could resolve to")?;
