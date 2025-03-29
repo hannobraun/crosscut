@@ -291,7 +291,7 @@ fn replace_node_and_update_parents(
 fn compile_token(
     token: &str,
     children: Children,
-    change_set: &mut NewChangeSet,
+    _: &mut NewChangeSet,
     packages: &Packages,
 ) -> (Node, Option<CodeError>) {
     let (node, maybe_error) = if token.is_empty() {
@@ -305,7 +305,7 @@ fn compile_token(
     {
         (node, maybe_err)
     } else {
-        match resolve_function(token, children, change_set, packages) {
+        match resolve_function(token, children, packages) {
             Ok((node, maybe_err)) => (node, maybe_err),
             Err((children, candidates)) => (
                 Node::Error {
@@ -337,7 +337,6 @@ fn resolve_keyword(
 fn resolve_function(
     name: &str,
     children: Children,
-    _: &mut NewChangeSet,
     packages: &Packages,
 ) -> Result<(Node, Option<CodeError>), (Children, Vec<CandidateForResolution>)>
 {
