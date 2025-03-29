@@ -20,7 +20,7 @@ pub fn codebase_to_stdout(codebase: &Codebase, _: &Packages) {
 }
 
 #[cfg(test)]
-pub fn codebase_to_string(codebase: &Codebase) -> String {
+pub fn codebase_to_string(codebase: &Codebase, _: &Packages) -> String {
     use crate::io::editor::output::StringOutputAdapter;
 
     let mut adapter = StringOutputAdapter {

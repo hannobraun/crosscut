@@ -176,7 +176,7 @@ impl Language {
                     panic!(
                         "Unexpected runtime error from this code:\n\
                         {}",
-                        codebase_to_string(&self.codebase),
+                        codebase_to_string(&self.codebase, &self.packages),
                     );
                 }
             }
