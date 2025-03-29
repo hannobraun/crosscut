@@ -2,11 +2,11 @@ use std::collections::BTreeMap;
 
 use crate::language::packages::FunctionId;
 
-use super::NodePath;
+use super::{NodeHash, NodePath};
 
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub struct Errors {
-    inner: BTreeMap<NodePath, CodeError>,
+    inner: BTreeMap<NodeHash, CodeError>,
 }
 
 impl Errors {
@@ -17,11 +17,11 @@ impl Errors {
     }
 
     pub fn get(&self, path: &NodePath) -> Option<&CodeError> {
-        self.inner.get(path)
+        self.inner.get(path.hash())
     }
 
     pub fn insert(&mut self, path: NodePath, error: CodeError) {
-        self.inner.insert(path, error);
+        self.inner.insert(*path.hash(), error);
     }
 }
 
