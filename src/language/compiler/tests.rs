@@ -3,7 +3,9 @@ use itertools::Itertools;
 use crate::language::{
     code::{Children, CodeError, Codebase, Node, NodeHash, NodePath},
     compiler::Compiler,
+    language::Language,
     packages::{Function, Packages},
+    runtime::Value,
 };
 
 #[test]
@@ -262,9 +264,14 @@ fn self_keyword_with_multiple_children_is_an_error() {
     expect_error_on_multiple_children("self", &packages);
 }
 
-// There's a test in the `language` test suite (`functions` module), about
-// automatically adding an empty node, if a function is created without a child.
-// This test would probably fit here much better.
+#[test]
+fn empty_function() {
+    // If an `fn` node doesn't have a child, an empty syntax node should be
+    // created as a child for it.
+
+    let mut language = Language::from_code("fn eval");
+    assert_eq!(language.step_until_finished().unwrap(), Value::Nothing);
+}
 
 #[test]
 fn function_literal_with_multiple_children_is_an_error() {

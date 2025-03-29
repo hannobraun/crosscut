@@ -24,12 +24,3 @@ fn self_recursion() {
         assert!(language.step().is_running());
     }
 }
-
-#[test]
-fn empty_function() {
-    // If an `fn` node doesn't have a child, an empty syntax node should be
-    // created as a child for it.
-
-    let mut language = Language::from_code("fn eval");
-    assert_eq!(language.step_until_finished().unwrap(), Value::Nothing);
-}
