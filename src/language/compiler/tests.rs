@@ -263,7 +263,7 @@ fn self_keyword_with_multiple_children_is_an_error() {
 }
 
 #[test]
-fn empty_function() {
+fn function_literal_with_too_few_children_is_an_error() {
     // If an `fn` node doesn't have a child, an empty syntax node should be
     // created as a child for it.
 
