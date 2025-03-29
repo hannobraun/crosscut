@@ -21,12 +21,6 @@ use super::{Node, NodeHash, Nodes};
 /// That means **any [`NodePath`] that you expect to point to a node within the
 /// current syntax tree will be invalidated any change to the syntax tree**. You
 /// are responsible for making sure that such a [`NodePath`] gets updated.
-///
-/// ## Implementation Note
-///
-/// At this point, [`NodePath`] can't distinguish between identical siblings of
-/// the same parent. To do that, the index of the node withing the parent's
-/// children needs to be added here.
 #[derive(Clone, Debug, Eq, Ord, PartialEq, PartialOrd, udigest::Digestable)]
 pub struct NodePath {
     hash: NodeHash,
