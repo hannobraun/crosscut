@@ -26,12 +26,8 @@ impl<'r> Compiler<'r> {
         packages: &Packages,
     ) -> NodePath {
         self.codebase.make_change_with_errors(|change_set, errors| {
-            let (child, maybe_error) = compile_token(
-                child_token,
-                Children::new([]),
-                change_set,
-                packages,
-            );
+            let (child, maybe_error) =
+                compile_token(child_token, Children::new([]), packages);
             let child = change_set.add(child);
 
             let mut siblings =
@@ -233,7 +229,7 @@ fn replace_node_and_update_parents(
 
     loop {
         let (node, maybe_error) =
-            compile_token(&next_token, next_children, change_set, packages);
+            compile_token(&next_token, next_children, packages);
 
         let hash = change_set.add(node);
         previous_replacement = hash;
@@ -291,7 +287,6 @@ fn replace_node_and_update_parents(
 fn compile_token(
     token: &str,
     children: Children,
-    _: &mut NewChangeSet,
     packages: &Packages,
 ) -> (Node, Option<CodeError>) {
     let (node, maybe_error) = if token.is_empty() {
