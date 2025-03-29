@@ -21,6 +21,20 @@ fn unresolved_syntax_node() {
 
     // And it should also result in a runtime error when stepping.
     assert!(language.step().is_error());
+}
+
+#[test]
+fn fixing_syntax_node_should_remove_error() {
+    let mut language = Language::from_code("identit");
+
+    // Make sure that this resulted in an error.
+    assert!(
+        language
+            .codebase()
+            .errors()
+            .get(&language.codebase().root().path)
+            .is_some()
+    );
 
     // Once we resolve the error, it should no longer be there.
     language.on_code("y");
