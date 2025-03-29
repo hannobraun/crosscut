@@ -303,7 +303,7 @@ fn function_literal_with_too_many_children_is_an_error() {
     if let Node::Error { node, .. } = root.node {
         assert_eq!(node, "fn");
     } else {
-        panic!();
+        panic!("Expected error, got `{:?}`", root.node);
     }
     assert_eq!(
         compiler.codebase().errors().get(&root.path),
