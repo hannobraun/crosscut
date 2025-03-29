@@ -346,18 +346,14 @@ fn resolve_function(
         )),
         (None, Some(literal)) => match literal {
             Literal::Function => {
-                if children.is_empty() {
-                    Ok((
-                        Node::Error {
-                            node: name.to_string(),
-                            children: children.clone(),
-                        },
-                        Some(CodeError::TooFewChildren),
-                    ))
-                } else if let Some(child) = children.is_single_child() {
+                if let Some(child) = children.is_single_child() {
                     Ok((Node::LiteralFunction { body: *child }, None))
                 } else {
-                    let error = CodeError::TooManyChildren;
+                    let error = if children.is_empty() {
+                        CodeError::TooFewChildren
+                    } else {
+                        CodeError::TooManyChildren
+                    };
 
                     Ok((
                         Node::Error {
