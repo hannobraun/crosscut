@@ -5,9 +5,22 @@ use super::{Node, NodeHash, Nodes};
 /// Builds on top of [`NodeHash`] to uniquely identify any syntax node within
 /// the syntax tree.
 ///
-/// [`NodePath`] is versioned, meaning that it will always point to the exact
-/// same syntax node. If a newer version of that node exists, the same instance
-/// of [`NodePath`] will still point to the original version.
+/// ## Attention: Any Change to the Syntax Tree May Invalidate a [`NodePath`]
+///
+/// [`NodePath`] contains a copy of its parent's [`NodePath`]. This is the main
+/// thing that distinguishes it from [`NodeHash`]: a [`NodeHash`]'s contents
+/// only depends on the node it refers to and its children. It won't be able to
+/// distinguish between identical nodes or subtrees that are located in
+/// different places.
+///
+/// But a [`NodePath`] can do that, because it depends on its parent's
+/// [`NodePath`]. And that parent path will depend on its parent, recursively,
+/// all the way to the root. And the root is going to change if _any_ node in
+/// the syntax tree changes.
+///
+/// That means **any [`NodePath`] that you expect to point to a node within the
+/// current syntax tree will be invalidated any change to the syntax tree**. You
+/// are responsible for making sure that such a [`NodePath`] gets updated.
 ///
 /// ## Implementation Note
 ///
