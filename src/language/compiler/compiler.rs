@@ -377,7 +377,9 @@ fn resolve_function(
                     ))
                 }
             }
-            Literal::Tuple => Ok((Node::LiteralTuple { children }, None)),
+            Literal::Tuple => {
+                Ok((Node::LiteralTuple { values: children }, None))
+            }
         },
         (None, None) => {
             let candidates = Vec::new();

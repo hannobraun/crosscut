@@ -51,7 +51,7 @@ pub enum Node {
     },
 
     LiteralTuple {
-        children: Children,
+        values: Children,
     },
 
     ProvidedFunction {
@@ -77,9 +77,8 @@ impl Node {
             | Self::Recursion { child: c } => c.as_ref() == Some(child),
             Self::LiteralNumber { value: _ } => false,
             Self::LiteralFunction { body } => body == child,
-            Self::LiteralTuple { children } | Self::Error { children, .. } => {
-                children.inner.contains(child)
-            }
+            Self::LiteralTuple { values: children }
+            | Self::Error { children, .. } => children.inner.contains(child),
         }
     }
 
@@ -92,9 +91,8 @@ impl Node {
             Self::LiteralFunction {
                 body: NodeHash { .. },
             } => false,
-            Self::LiteralTuple { children } | Self::Error { children, .. } => {
-                children.is_empty()
-            }
+            Self::LiteralTuple { values: children }
+            | Self::Error { children, .. } => children.is_empty(),
         }
     }
 
@@ -105,9 +103,8 @@ impl Node {
             | Self::Recursion { child } => child.as_ref(),
             Self::LiteralNumber { value: _ } => None,
             Self::LiteralFunction { body } => Some(body),
-            Self::LiteralTuple { children } | Self::Error { children, .. } => {
-                children.is_single_child()
-            }
+            Self::LiteralTuple { values: children }
+            | Self::Error { children, .. } => children.is_single_child(),
         }
     }
 
@@ -118,9 +115,8 @@ impl Node {
             | Self::Recursion { child } => Children::new(*child),
             Self::LiteralNumber { value: _ } => Children::new([]),
             Self::LiteralFunction { body } => Children::new([*body]),
-            Self::LiteralTuple { children } | Self::Error { children, .. } => {
-                children.clone()
-            }
+            Self::LiteralTuple { values: children }
+            | Self::Error { children, .. } => children.clone(),
         }
     }
 
