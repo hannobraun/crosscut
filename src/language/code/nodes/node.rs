@@ -50,7 +50,19 @@ pub enum Node {
         value: i32,
     },
 
+    /// # A tuple literal
+    ///
+    /// A literal that evaluates to a composite data type, a tuple.
+    ///
+    /// ## Implementation Note
+    ///
+    /// Tuples only exist in the language as a placeholder. I (@hannobraun)
+    /// expect to replace them with record types at some point.
     LiteralTuple {
+        /// # The nodes that determine the values of the tuple literal
+        ///
+        /// A tuple literal can have an arbitrary number of children, each of
+        /// which evaluates to one of the values in the tuple value.
         values: Children,
     },
 
