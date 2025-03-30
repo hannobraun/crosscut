@@ -66,8 +66,21 @@ pub enum Node {
         values: Children,
     },
 
+    /// # The application of a provided function
+    ///
+    /// Evaluating this note applies a provided function to the current active
+    /// value. Provided functions are functions that are provided (as the name
+    /// suggests) by an entity outside of the language: either the runtime,
+    /// which provides intrinsic functions; or the host, which provides host
+    /// functions.
     ProvidedFunction {
+        /// # The ID of the provided function
         id: FunctionId,
+
+        /// # The child of the node, if any
+        ///
+        /// If the provided function node has a child, that child's output is
+        /// taken as the input of the provided function.
         argument: Option<NodeHash>,
     },
 
