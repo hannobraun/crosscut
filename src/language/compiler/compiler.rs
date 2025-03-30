@@ -340,10 +340,7 @@ fn resolve_function(
 
     match (provided_function, literal) {
         (Some(id), None) => Ok(node_with_one_child_or_error(
-            |child| Node::ProvidedFunction {
-                id,
-                argument: child,
-            },
+            |argument| Node::ProvidedFunction { id, argument },
             name,
             children,
         )),
