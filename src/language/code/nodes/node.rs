@@ -6,7 +6,16 @@ use super::{Children, NodeHash};
 
 #[derive(Clone, Debug, Eq, PartialEq, udigest::Digestable)]
 pub enum Node {
+    /// # An empty node
+    ///
+    /// Empty nodes are placeholders, while the user is editing the code. They
+    /// have no effect. They can have up to one child, and evaluate to their
+    /// input.
     Empty {
+        /// # The child of the empty node, if any
+        ///
+        /// Since empty nodes are placeholders, they can have any type of child,
+        /// or none at all. If they have a child, they evaluate to its output.
         child: Option<NodeHash>,
     },
 
