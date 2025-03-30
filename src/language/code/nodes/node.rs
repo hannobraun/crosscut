@@ -27,7 +27,26 @@ pub enum Node {
         body: NodeHash,
     },
 
+    /// # A number literal
+    ///
+    /// As of this writing, there is only one number type supported in the
+    /// language (signed, 32-bit integer), so this literal always evaluates to
+    /// that. At a future point, it may be able to evaluate to different types
+    /// of number value, depending on context.
+    ///
+    /// Since a number literal takes no input and carries all the information it
+    /// needs to evaluate within itself, nodes of this type do not have any
+    /// children.
     LiteralNumber {
+        /// # The value of the number this literal evaluates to
+        ///
+        /// ## Implementation Note
+        ///
+        /// At this point, number literals always evaluate to signed, 32-bit
+        /// integers anyway, so that's the type of this field. In the future,
+        /// once we support more number types, and more ways of specifying
+        /// literals except as decimal numbers, this needs to become more
+        /// sophisticated.
         value: i32,
     },
 
