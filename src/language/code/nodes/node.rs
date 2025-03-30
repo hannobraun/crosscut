@@ -84,7 +84,15 @@ pub enum Node {
         argument: Option<NodeHash>,
     },
 
+    /// # The recursive application of the current function
+    ///
+    /// Evaluating the node recursively applies the current function to the
+    /// active value.
     Recursion {
+        /// # The child of the node, if any
+        ///
+        /// If the recursion node has a child, that child's output is taken as
+        /// the input of the applied function.
         argument: Option<NodeHash>,
     },
 
