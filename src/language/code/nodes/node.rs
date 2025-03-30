@@ -68,7 +68,7 @@ pub enum Node {
 
     ProvidedFunction {
         id: FunctionId,
-        child: Option<NodeHash>,
+        argument: Option<NodeHash>,
     },
 
     Recursion {
@@ -85,7 +85,7 @@ impl Node {
     pub fn has_this_child(&self, child: &NodeHash) -> bool {
         match self {
             Self::Empty { child: c }
-            | Self::ProvidedFunction { child: c, .. }
+            | Self::ProvidedFunction { argument: c, .. }
             | Self::Recursion { child: c } => c.as_ref() == Some(child),
             Self::LiteralNumber { value: _ } => false,
             Self::LiteralFunction { body } => body == child,
@@ -97,7 +97,9 @@ impl Node {
     pub fn has_no_children(&self) -> bool {
         match self {
             Self::Empty { child }
-            | Self::ProvidedFunction { child, .. }
+            | Self::ProvidedFunction {
+                argument: child, ..
+            }
             | Self::Recursion { child } => child.is_none(),
             Self::LiteralNumber { value: _ } => true,
             Self::LiteralFunction {
@@ -111,7 +113,9 @@ impl Node {
     pub fn has_single_child(&self) -> Option<&NodeHash> {
         match self {
             Self::Empty { child }
-            | Self::ProvidedFunction { child, .. }
+            | Self::ProvidedFunction {
+                argument: child, ..
+            }
             | Self::Recursion { child } => child.as_ref(),
             Self::LiteralNumber { value: _ } => None,
             Self::LiteralFunction { body } => Some(body),
@@ -123,7 +127,9 @@ impl Node {
     pub fn to_children(&self) -> Children {
         match self {
             Self::Empty { child }
-            | Self::ProvidedFunction { child, .. }
+            | Self::ProvidedFunction {
+                argument: child, ..
+            }
             | Self::Recursion { child } => Children::new(*child),
             Self::LiteralNumber { value: _ } => Children::new([]),
             Self::LiteralFunction { body } => Children::new([*body]),
