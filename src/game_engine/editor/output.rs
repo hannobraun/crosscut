@@ -291,12 +291,10 @@ fn render_error<A: EditorOutputAdapter>(
             write!(adapter, "unresolved identifier")?;
 
             if !candidates.is_empty() {
-                write!(adapter, " (could resolve to")?;
+                write!(adapter, " (could resolve to ")?;
 
                 for (i, candidate) in candidates.iter().enumerate() {
-                    if i == 0 {
-                        write!(adapter, " ")?;
-                    } else {
+                    if i > 0 {
                         write!(adapter, ", ")?;
                     }
 
