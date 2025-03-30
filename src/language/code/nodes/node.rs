@@ -27,7 +27,7 @@ pub enum Node {
         body: NodeHash,
     },
 
-    LiteralInteger {
+    LiteralNumber {
         value: i32,
     },
 
@@ -56,7 +56,7 @@ impl Node {
             Self::Empty { child: c }
             | Self::ProvidedFunction { child: c, .. }
             | Self::Recursion { child: c } => c.as_ref() == Some(child),
-            Self::LiteralInteger { value: _ } => false,
+            Self::LiteralNumber { value: _ } => false,
             Self::LiteralFunction { body } => body == child,
             Self::LiteralTuple { children } | Self::Error { children, .. } => {
                 children.inner.contains(child)
@@ -69,7 +69,7 @@ impl Node {
             Self::Empty { child }
             | Self::ProvidedFunction { child, .. }
             | Self::Recursion { child } => child.is_none(),
-            Self::LiteralInteger { value: _ } => true,
+            Self::LiteralNumber { value: _ } => true,
             Self::LiteralFunction {
                 body: NodeHash { .. },
             } => false,
@@ -84,7 +84,7 @@ impl Node {
             Self::Empty { child }
             | Self::ProvidedFunction { child, .. }
             | Self::Recursion { child } => child.as_ref(),
-            Self::LiteralInteger { value: _ } => None,
+            Self::LiteralNumber { value: _ } => None,
             Self::LiteralFunction { body } => Some(body),
             Self::LiteralTuple { children } | Self::Error { children, .. } => {
                 children.is_single_child()
@@ -97,7 +97,7 @@ impl Node {
             Self::Empty { child }
             | Self::ProvidedFunction { child, .. }
             | Self::Recursion { child } => Children::new(*child),
-            Self::LiteralInteger { value: _ } => Children::new([]),
+            Self::LiteralNumber { value: _ } => Children::new([]),
             Self::LiteralFunction { body } => Children::new([*body]),
             Self::LiteralTuple { children } | Self::Error { children, .. } => {
                 children.clone()
@@ -131,7 +131,7 @@ impl fmt::Display for NodeDisplay<'_> {
             Node::LiteralFunction { .. } => {
                 write!(f, "fn")
             }
-            Node::LiteralInteger { value } => {
+            Node::LiteralNumber { value } => {
                 write!(f, "{value}")
             }
             Node::LiteralTuple { .. } => {

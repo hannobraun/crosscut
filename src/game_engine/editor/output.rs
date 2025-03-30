@@ -248,7 +248,7 @@ fn render_node<A: EditorOutputAdapter>(
 
     let color = match node {
         Node::LiteralFunction { .. }
-        | Node::LiteralInteger { .. }
+        | Node::LiteralNumber { .. }
         | Node::LiteralTuple { .. } => Some(Color::DarkBlue),
         Node::ProvidedFunction { .. } => Some(Color::DarkMagenta),
         Node::Error { .. } => Some(ERROR_COLOR),
@@ -372,7 +372,7 @@ fn render_help<A: EditorOutputAdapter>(
                 "This is a function literal that produces a function value.",
             )?;
         }
-        Node::LiteralInteger { value } => {
+        Node::LiteralNumber { value } => {
             writeln!(
                 adapter,
                 "This is an integer literal that produces the integer value \

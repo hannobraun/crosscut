@@ -222,7 +222,7 @@ impl Evaluator {
                     body: child.path,
                 });
             }
-            Node::LiteralInteger { value } => {
+            Node::LiteralNumber { value } => {
                 match node.evaluated_children.clone().into_active_value() {
                     Value::Nothing => {}
                     active_value => {

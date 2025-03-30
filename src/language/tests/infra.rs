@@ -37,7 +37,7 @@ impl NodeExt for Node {
     }
 
     fn expect_integer_literal(&self, expected: i32) -> Node {
-        if let Node::LiteralInteger { value } = self {
+        if let Node::LiteralNumber { value } = self {
             assert_eq!(value, &expected);
             self.clone()
         } else {

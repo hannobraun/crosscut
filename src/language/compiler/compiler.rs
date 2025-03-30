@@ -366,7 +366,7 @@ fn resolve_function(
             }
             Literal::Integer { value } => {
                 if children.is_empty() {
-                    Ok((Node::LiteralInteger { value }, None))
+                    Ok((Node::LiteralNumber { value }, None))
                 } else {
                     Ok((
                         Node::Error {

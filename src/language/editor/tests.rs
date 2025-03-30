@@ -30,7 +30,7 @@ fn edit_initial_node() {
 
     assert_eq!(
         codebase.node_at(editor.editing()).node,
-        &Node::LiteralInteger { value: 127 },
+        &Node::LiteralNumber { value: 127 },
     );
 }
 
@@ -111,7 +111,7 @@ fn merge_with_previous_sibling() {
             .children(codebase.nodes())
             .map(|located_node| located_node.node)
             .collect::<Vec<_>>(),
-        vec![&Node::LiteralInteger { value: 127 }],
+        vec![&Node::LiteralNumber { value: 127 }],
     );
 }
 
@@ -150,7 +150,7 @@ fn merge_with_next_sibling() {
             .children(codebase.nodes())
             .map(|located_node| located_node.node)
             .collect::<Vec<_>>(),
-        vec![&Node::LiteralInteger { value: 127 }],
+        vec![&Node::LiteralNumber { value: 127 }],
     );
 }
 
@@ -193,8 +193,8 @@ fn split_node_to_create_sibling() {
             .map(|located_node| located_node.node)
             .collect::<Vec<_>>(),
         vec![
-            &Node::LiteralInteger { value: 127 },
-            &Node::LiteralInteger { value: 255 },
+            &Node::LiteralNumber { value: 127 },
+            &Node::LiteralNumber { value: 255 },
         ],
     );
 }
