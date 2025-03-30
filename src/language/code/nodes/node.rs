@@ -85,7 +85,7 @@ pub enum Node {
     },
 
     Recursion {
-        child: Option<NodeHash>,
+        argument: Option<NodeHash>,
     },
 
     Error {
@@ -99,7 +99,7 @@ impl Node {
         match self {
             Self::Empty { child: c }
             | Self::ProvidedFunction { argument: c, .. }
-            | Self::Recursion { child: c } => c.as_ref() == Some(child),
+            | Self::Recursion { argument: c } => c.as_ref() == Some(child),
             Self::LiteralNumber { value: _ } => false,
             Self::LiteralFunction { body } => body == child,
             Self::LiteralTuple { values: children }
@@ -113,7 +113,7 @@ impl Node {
             | Self::ProvidedFunction {
                 argument: child, ..
             }
-            | Self::Recursion { child } => child.is_none(),
+            | Self::Recursion { argument: child } => child.is_none(),
             Self::LiteralNumber { value: _ } => true,
             Self::LiteralFunction {
                 body: NodeHash { .. },
@@ -129,7 +129,7 @@ impl Node {
             | Self::ProvidedFunction {
                 argument: child, ..
             }
-            | Self::Recursion { child } => child.as_ref(),
+            | Self::Recursion { argument: child } => child.as_ref(),
             Self::LiteralNumber { value: _ } => None,
             Self::LiteralFunction { body } => Some(body),
             Self::LiteralTuple { values: children }
@@ -143,7 +143,7 @@ impl Node {
             | Self::ProvidedFunction {
                 argument: child, ..
             }
-            | Self::Recursion { child } => Children::new(*child),
+            | Self::Recursion { argument: child } => Children::new(*child),
             Self::LiteralNumber { value: _ } => Children::new([]),
             Self::LiteralFunction { body } => Children::new([*body]),
             Self::LiteralTuple { values: children }
