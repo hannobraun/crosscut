@@ -321,7 +321,7 @@ fn resolve_keyword(
 ) -> Option<(Node, Option<CodeError>)> {
     match name {
         "self" => Some(node_with_one_child_or_error(
-            |child| Node::Recursion { argument: child },
+            |argument| Node::Recursion { argument },
             name,
             children,
         )),
