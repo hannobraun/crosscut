@@ -19,7 +19,11 @@ pub enum Node {
         child: Option<NodeHash>,
     },
 
+    /// # A function literal
+    ///
+    /// Evaluates to a function value.
     LiteralFunction {
+        /// # The root node of the function's body
         body: NodeHash,
     },
 
