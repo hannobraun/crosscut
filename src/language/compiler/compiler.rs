@@ -1,7 +1,7 @@
 use crate::language::{
     code::{
         CandidateForResolution, Children, CodeError, Codebase, Errors, Literal,
-        NewChangeSet, Node, NodeHash, NodePath,
+        NewChangeSet, Node, NodeHash, NodePath, Nodes,
     },
     packages::Packages,
 };
@@ -35,6 +35,7 @@ impl<'r> Compiler<'r> {
                 Some(&parent),
                 sibling_index,
                 Children::new([]),
+                change_set.nodes(),
                 packages,
             );
 
@@ -240,6 +241,7 @@ fn replace_node_and_update_parents(
             next_to_replace.parent(),
             next_to_replace.sibling_index(),
             next_children,
+            change_set.nodes(),
             packages,
         );
 
@@ -301,6 +303,7 @@ fn compile_token(
     parent: Option<&NodePath>,
     sibling_index: usize,
     children: Children,
+    _: &Nodes,
     packages: &Packages,
 ) -> (Node, Option<CodeError>) {
     // We're about to need that, to correctly compile function parameters.
