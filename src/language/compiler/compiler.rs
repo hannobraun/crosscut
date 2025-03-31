@@ -28,6 +28,7 @@ impl<'r> Compiler<'r> {
         self.codebase.make_change_with_errors(|change_set, errors| {
             let mut siblings =
                 change_set.nodes().get(parent.hash()).to_children();
+            let sibling_index = siblings.next_index();
 
             let (child, maybe_error) = compile_token(
                 child_token,
@@ -37,7 +38,7 @@ impl<'r> Compiler<'r> {
             );
 
             let child = change_set.add(child);
-            let sibling_index = siblings.add(child);
+            siblings.add(child);
 
             let parent_path = replace_node_and_update_parents(
                 &parent,
