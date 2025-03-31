@@ -38,8 +38,12 @@ impl Children {
         }
     }
 
+    pub fn next_index(&self) -> usize {
+        self.inner.len()
+    }
+
     pub fn add(&mut self, to_add: NodeHash) -> usize {
-        let index = self.inner.len();
+        let index = self.next_index();
         self.inner.push(to_add);
         index
     }
