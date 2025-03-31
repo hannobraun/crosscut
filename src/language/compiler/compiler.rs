@@ -35,8 +35,8 @@ impl<'r> Compiler<'r> {
                 Children::new([]),
                 packages,
             );
-            let child = change_set.add(child);
 
+            let child = change_set.add(child);
             let sibling_index = siblings.add(child);
 
             let parent_path = replace_node_and_update_parents(
