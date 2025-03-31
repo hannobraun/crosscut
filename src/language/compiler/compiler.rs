@@ -33,6 +33,7 @@ impl<'r> Compiler<'r> {
             let (child, maybe_error) = compile_token(
                 child_token,
                 Some(&parent),
+                sibling_index,
                 Children::new([]),
                 packages,
             );
@@ -237,6 +238,7 @@ fn replace_node_and_update_parents(
         let (node, maybe_error) = compile_token(
             &next_token,
             next_to_replace.parent(),
+            next_to_replace.sibling_index(),
             next_children,
             packages,
         );
@@ -297,11 +299,13 @@ fn replace_node_and_update_parents(
 fn compile_token(
     token: &str,
     parent: Option<&NodePath>,
+    sibling_index: usize,
     children: Children,
     packages: &Packages,
 ) -> (Node, Option<CodeError>) {
     // We're about to need that, to correctly compile function parameters.
     let _ = parent;
+    let _ = sibling_index;
 
     let (node, maybe_error) = if token.is_empty() {
         node_with_one_child_or_error(
