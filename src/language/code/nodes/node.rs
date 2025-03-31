@@ -96,8 +96,12 @@ pub enum Node {
         argument: Option<NodeHash>,
     },
 
+    /// # The result of a build error
     Error {
+        /// # The original token that couldn't be compiled correctly
         node: String,
+
+        /// # The children of this node
         children: Children,
     },
 }
