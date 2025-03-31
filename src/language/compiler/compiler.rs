@@ -26,8 +26,12 @@ impl<'r> Compiler<'r> {
         packages: &Packages,
     ) -> NodePath {
         self.codebase.make_change_with_errors(|change_set, errors| {
-            let (child, maybe_error) =
-                compile_token(child_token, Children::new([]), packages);
+            let (child, maybe_error) = compile_token(
+                child_token,
+                Some(&parent),
+                Children::new([]),
+                packages,
+            );
             let child = change_set.add(child);
 
             let mut siblings =
@@ -228,8 +232,12 @@ fn replace_node_and_update_parents(
     let mut added_nodes = Vec::new();
 
     loop {
-        let (node, maybe_error) =
-            compile_token(&next_token, next_children, packages);
+        let (node, maybe_error) = compile_token(
+            &next_token,
+            next_to_replace.parent(),
+            next_children,
+            packages,
+        );
 
         let hash = change_set.add(node);
         previous_replacement = hash;
@@ -286,9 +294,13 @@ fn replace_node_and_update_parents(
 
 fn compile_token(
     token: &str,
+    parent: Option<&NodePath>,
     children: Children,
     packages: &Packages,
 ) -> (Node, Option<CodeError>) {
+    // We're about to need that, to correctly compile function parameters.
+    let _ = parent;
+
     let (node, maybe_error) = if token.is_empty() {
         node_with_one_child_or_error(
             |child| Node::Empty { child },
