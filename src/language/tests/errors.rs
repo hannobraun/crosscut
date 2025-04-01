@@ -1,8 +1,7 @@
 use crate::language::{
-    code::{CodeError, Codebase, Node},
-    compiler::Compiler,
+    code::{CodeError, Node},
     language::Language,
-    packages::{Function, Packages},
+    packages::Function,
     runtime::{Effect, RuntimeState, Value},
 };
 
@@ -113,16 +112,9 @@ fn function_literal_with_too_many_children_is_an_error() {
     // An `fn` node is expected to have one child, its body. If it has more than
     // that, that's an error.
 
-    let packages = Packages::new();
+    let language = Language::from_code("a\nb fn");
 
-    let mut codebase = Codebase::new();
-    let mut compiler = Compiler::new(&mut codebase);
-
-    compiler.replace(&compiler.codebase().root().path, "fn", &packages);
-    compiler.insert_child(compiler.codebase().root().path, "a", &packages);
-    compiler.insert_child(compiler.codebase().root().path, "b", &packages);
-
-    let root = compiler.codebase().root();
+    let root = language.codebase().root();
 
     if let Node::Error { node, .. } = root.node {
         assert_eq!(node, "fn");
@@ -130,7 +122,7 @@ fn function_literal_with_too_many_children_is_an_error() {
         panic!("Expected error, got `{:?}`", root.node);
     }
     assert_eq!(
-        compiler.codebase().errors().get(root.path.hash()),
+        language.codebase().errors().get(root.path.hash()),
         Some(&CodeError::TooManyChildren),
     );
 }
