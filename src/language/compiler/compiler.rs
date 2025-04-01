@@ -370,7 +370,9 @@ fn resolve_function(
                 if let Some(body) = children.is_single_child().copied() {
                     Ok((Node::LiteralFunction { body }, None))
                 } else {
-                    let error = if children.is_empty() {
+                    let num_children = children.inner.len();
+
+                    let error = if num_children == 0 {
                         CodeError::TooFewChildren
                     } else {
                         CodeError::TooManyChildren
