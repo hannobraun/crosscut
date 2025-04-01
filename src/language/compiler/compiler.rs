@@ -1,5 +1,7 @@
 use std::cmp::Ordering;
 
+use itertools::Itertools;
+
 use crate::language::{
     code::{
         CandidateForResolution, Children, CodeError, Codebase, Errors, Literal,
@@ -369,7 +371,7 @@ fn resolve_function(
         )),
         (None, Some(literal)) => match literal {
             Literal::Function => {
-                if let Some(body) = children.is_single_child().copied() {
+                if let Some([body]) = children.iter().copied().collect_array() {
                     Ok((Node::LiteralFunction { body }, None))
                 } else {
                     let expected_num = 1;
