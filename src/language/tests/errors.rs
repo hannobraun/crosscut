@@ -93,14 +93,9 @@ fn function_literal_with_too_few_children_is_an_error() {
     // If an `fn` node doesn't have a child, an empty syntax node should be
     // created as a child for it.
 
-    let packages = Packages::new();
+    let language = Language::from_code("fn");
 
-    let mut codebase = Codebase::new();
-    let mut compiler = Compiler::new(&mut codebase);
-
-    compiler.replace(&compiler.codebase().root().path, "fn", &packages);
-
-    let root = compiler.codebase().root();
+    let root = language.codebase().root();
 
     if let Node::Error { node, .. } = root.node {
         assert_eq!(node, "fn");
@@ -108,7 +103,7 @@ fn function_literal_with_too_few_children_is_an_error() {
         panic!();
     }
     assert_eq!(
-        compiler.codebase().errors().get(root.path.hash()),
+        language.codebase().errors().get(root.path.hash()),
         Some(&CodeError::TooFewChildren),
     );
 }
