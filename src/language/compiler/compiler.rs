@@ -1,3 +1,5 @@
+use std::cmp::Ordering;
+
 use crate::language::{
     code::{
         CandidateForResolution, Children, CodeError, Codebase, Errors, Literal,
@@ -370,12 +372,18 @@ fn resolve_function(
                 if let Some(body) = children.is_single_child().copied() {
                     Ok((Node::LiteralFunction { body }, None))
                 } else {
+                    let expected_num = 1;
                     let num_children = children.inner.len();
 
-                    let error = if num_children == 0 {
-                        CodeError::TooFewChildren
-                    } else {
-                        CodeError::TooManyChildren
+                    let error = match num_children.cmp(&expected_num) {
+                        Ordering::Less => CodeError::TooFewChildren,
+                        Ordering::Greater => CodeError::TooManyChildren,
+                        Ordering::Equal => {
+                            unreachable!(
+                                "We already handled the case, of the function \
+                                literal having the expected number of children."
+                            );
+                        }
                     };
 
                     Ok((
