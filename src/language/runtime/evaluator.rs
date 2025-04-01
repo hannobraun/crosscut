@@ -188,7 +188,7 @@ impl Evaluator {
                 // then we still need the node.
                 self.eval_stack.push(node);
             }
-            Node::LiteralFunction { .. } => {
+            Node::LiteralFunction { body } => {
                 match node.evaluated_children.clone().into_active_value() {
                     Value::Nothing => {}
                     active_value => {
@@ -202,25 +202,14 @@ impl Evaluator {
                     }
                 }
 
-                let node = codebase.node_at(&node.syntax_node);
-                let mut children = node.children(codebase.nodes());
-
-                let Some(child) = children.next() else {
-                    unreachable!(
-                        "Function literal must have a child, or it wouldn't \
-                        have been resolved as a function literal."
-                    );
-                };
-
-                assert_eq!(
-                    children.count(),
+                let body = NodePath::new(
+                    *body,
+                    Some(node.syntax_node),
                     0,
-                    "Only nodes with one child can be evaluated at this point.",
+                    codebase.nodes(),
                 );
 
-                self.finish_evaluating_node(Value::Function {
-                    body: child.path,
-                });
+                self.finish_evaluating_node(Value::Function { body });
             }
             Node::LiteralNumber { value } => {
                 match node.evaluated_children.clone().into_active_value() {
