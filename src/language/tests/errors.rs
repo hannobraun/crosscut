@@ -90,8 +90,8 @@ fn do_not_step_beyond_errors() {
 
 #[test]
 fn function_literal_with_too_few_children_is_an_error() {
-    // If an `fn` node doesn't have a child, an empty syntax node should be
-    // created as a child for it.
+    // An `fn` node is expected to have one child, its body. If it has fewer
+    // than that, that's an error.
 
     let language = Language::from_code("fn");
 
