@@ -110,7 +110,8 @@ fn function_literal_with_too_few_children_is_an_error() {
 
 #[test]
 fn function_literal_with_too_many_children_is_an_error() {
-    // A function literal should have one child, its body.
+    // An `fn` node is expected to have one child, its body. If it has more than
+    // that, that's an error.
 
     let packages = Packages::new();
 
