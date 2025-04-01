@@ -367,8 +367,8 @@ fn resolve_function(
         )),
         (None, Some(literal)) => match literal {
             Literal::Function => {
-                if let Some(child) = children.is_single_child() {
-                    Ok((Node::LiteralFunction { body: *child }, None))
+                if let Some(body) = children.is_single_child() {
+                    Ok((Node::LiteralFunction { body: *body }, None))
                 } else {
                     let error = if children.is_empty() {
                         CodeError::TooFewChildren
