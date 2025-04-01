@@ -92,19 +92,23 @@ fn function_literal_with_too_few_children_is_an_error() {
     // An `fn` node is expected to have one child, its body. If it has fewer
     // than that, that's an error.
 
-    let language = Language::from_code("fn");
+    expect_error_because_of_too_few_children("fn");
 
-    let root = language.codebase().root();
+    fn expect_error_because_of_too_few_children(code: &str) {
+        let language = Language::from_code(code);
 
-    if let Node::Error { node, .. } = root.node {
-        assert_eq!(node, "fn");
-    } else {
-        panic!();
+        let root = language.codebase().root();
+
+        if let Node::Error { node, .. } = root.node {
+            assert_eq!(node, "fn");
+        } else {
+            panic!();
+        }
+        assert_eq!(
+            language.codebase().errors().get(root.path.hash()),
+            Some(&CodeError::TooFewChildren),
+        );
     }
-    assert_eq!(
-        language.codebase().errors().get(root.path.hash()),
-        Some(&CodeError::TooFewChildren),
-    );
 }
 
 #[test]
