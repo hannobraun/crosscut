@@ -1,7 +1,8 @@
 use crate::language::{
-    code::CodeError,
+    code::{CodeError, Codebase, Node},
+    compiler::Compiler,
     language::Language,
-    packages::Function,
+    packages::{Function, Packages},
     runtime::{Effect, RuntimeState, Value},
 };
 
@@ -85,4 +86,55 @@ fn do_not_step_beyond_errors() {
 
     assert!(language.step().is_error());
     assert!(language.step().is_error());
+}
+
+#[test]
+fn function_literal_with_too_few_children_is_an_error() {
+    // If an `fn` node doesn't have a child, an empty syntax node should be
+    // created as a child for it.
+
+    let packages = Packages::new();
+
+    let mut codebase = Codebase::new();
+    let mut compiler = Compiler::new(&mut codebase);
+
+    compiler.replace(&compiler.codebase().root().path, "fn", &packages);
+
+    let root = compiler.codebase().root();
+
+    if let Node::Error { node, .. } = root.node {
+        assert_eq!(node, "fn");
+    } else {
+        panic!();
+    }
+    assert_eq!(
+        compiler.codebase().errors().get(root.path.hash()),
+        Some(&CodeError::TooFewChildren),
+    );
+}
+
+#[test]
+fn function_literal_with_too_many_children_is_an_error() {
+    // A function literal should have one child, its body.
+
+    let packages = Packages::new();
+
+    let mut codebase = Codebase::new();
+    let mut compiler = Compiler::new(&mut codebase);
+
+    compiler.replace(&compiler.codebase().root().path, "fn", &packages);
+    compiler.insert_child(compiler.codebase().root().path, "a", &packages);
+    compiler.insert_child(compiler.codebase().root().path, "b", &packages);
+
+    let root = compiler.codebase().root();
+
+    if let Node::Error { node, .. } = root.node {
+        assert_eq!(node, "fn");
+    } else {
+        panic!("Expected error, got `{:?}`", root.node);
+    }
+    assert_eq!(
+        compiler.codebase().errors().get(root.path.hash()),
+        Some(&CodeError::TooManyChildren),
+    );
 }

@@ -263,57 +263,6 @@ fn self_keyword_with_multiple_children_is_an_error() {
 }
 
 #[test]
-fn function_literal_with_too_few_children_is_an_error() {
-    // If an `fn` node doesn't have a child, an empty syntax node should be
-    // created as a child for it.
-
-    let packages = Packages::new();
-
-    let mut codebase = Codebase::new();
-    let mut compiler = Compiler::new(&mut codebase);
-
-    compiler.replace(&compiler.codebase().root().path, "fn", &packages);
-
-    let root = compiler.codebase().root();
-
-    if let Node::Error { node, .. } = root.node {
-        assert_eq!(node, "fn");
-    } else {
-        panic!();
-    }
-    assert_eq!(
-        compiler.codebase().errors().get(root.path.hash()),
-        Some(&CodeError::TooFewChildren),
-    );
-}
-
-#[test]
-fn function_literal_with_too_many_children_is_an_error() {
-    // A function literal should have one child, its body.
-
-    let packages = Packages::new();
-
-    let mut codebase = Codebase::new();
-    let mut compiler = Compiler::new(&mut codebase);
-
-    compiler.replace(&compiler.codebase().root().path, "fn", &packages);
-    compiler.insert_child(compiler.codebase().root().path, "a", &packages);
-    compiler.insert_child(compiler.codebase().root().path, "b", &packages);
-
-    let root = compiler.codebase().root();
-
-    if let Node::Error { node, .. } = root.node {
-        assert_eq!(node, "fn");
-    } else {
-        panic!("Expected error, got `{:?}`", root.node);
-    }
-    assert_eq!(
-        compiler.codebase().errors().get(root.path.hash()),
-        Some(&CodeError::TooManyChildren),
-    );
-}
-
-#[test]
 fn integer_literal_with_children_is_an_error() {
     // An integer literal already carries all of the information that it needs
     // to evaluate to an integer. There is nothing it could do with children,
