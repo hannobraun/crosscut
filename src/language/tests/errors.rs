@@ -2,7 +2,7 @@ use crate::language::{
     code::{CodeError, Node},
     language::Language,
     packages::Function,
-    runtime::{Effect, RuntimeState, Value},
+    runtime::{RuntimeState, Value},
 };
 
 #[test]
@@ -45,9 +45,11 @@ fn fixing_syntax_node_should_remove_error() {
 }
 
 #[test]
-fn evaluate_code_up_until_an_error() {
-    // Despite the presence of an error in the code, any valid code leading up
-    // to it should still get evaluated.
+fn children_of_error_should_not_be_evaluated() {
+    // Most of the time, it would make sense to evaluate any valid code, until
+    // an error is encountered. But some of the time, the erroneous node might
+    // be intended as a function literal. And then just starting to execute the
+    // erroneous function where it's defined, would be wild and unexpected.
 
     #[derive(Clone, Copy, Eq, Ord, PartialEq, PartialOrd)]
     struct Ping;
@@ -63,15 +65,6 @@ fn evaluate_code_up_until_an_error() {
     package.add_function(Ping);
 
     language.on_code("ping unresolved");
-
-    assert!(matches!(
-        language.step(),
-        RuntimeState::Effect {
-            effect: Effect::ProvidedFunction { .. },
-            ..
-        },
-    ));
-    language.provide_host_function_output(Value::Nothing);
 
     assert!(matches!(language.step(), RuntimeState::Error { .. }));
 }

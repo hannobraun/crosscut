@@ -133,7 +133,7 @@ impl Evaluator {
         // node that can be evaluated, and that all its parents are on the
         // evaluation stack, so they can be evaluated later.
         loop {
-            if let Node::LiteralFunction { .. } =
+            if let Node::LiteralFunction { .. } | Node::Error { .. } =
                 codebase.node_at(&node.syntax_node).node
             {
                 // If this were any other node, we'd need to evaluate its
