@@ -78,7 +78,7 @@ fn host_functions_can_inject_opaque_value() {
     package.add_function(ObserveOpaqueValue);
     let package = package.build();
 
-    language.on_code("observe_opaque_value fn");
+    language.on_code("0\nobserve_opaque_value fn");
 
     let path = language
         .step_until_finished()

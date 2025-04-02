@@ -371,10 +371,12 @@ fn resolve_function(
         )),
         (None, Some(literal)) => match literal {
             Literal::Function => {
-                if let Some([body]) = children.iter().copied().collect_array() {
-                    Ok((Node::LiteralFunction { body }, None))
+                if let Some([parameter, body]) =
+                    children.iter().copied().collect_array()
+                {
+                    Ok((Node::LiteralFunction { parameter, body }, None))
                 } else {
-                    let expected_num = 1;
+                    let expected_num = 2;
                     let num_children = children.inner.len();
 
                     let error = match num_children.cmp(&expected_num) {

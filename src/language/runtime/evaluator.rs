@@ -198,7 +198,7 @@ impl Evaluator {
                 // then we still need the node.
                 self.eval_stack.push(node);
             }
-            Node::LiteralFunction { body } => {
+            Node::LiteralFunction { parameter: _, body } => {
                 match node.evaluated_children.clone().into_active_value() {
                     Value::Nothing => {}
                     active_value => {

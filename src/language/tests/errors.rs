@@ -86,6 +86,7 @@ fn function_literal_with_too_few_children_is_an_error() {
     // than that, that's an error.
 
     expect_error_because_of_too_few_children("fn");
+    expect_error_because_of_too_few_children("a fn");
 
     fn expect_error_because_of_too_few_children(code: &str) {
         let language = Language::from_code(code);
@@ -109,7 +110,7 @@ fn function_literal_with_too_many_children_is_an_error() {
     // An `fn` node is expected to have one child, its body. If it has more than
     // that, that's an error.
 
-    let language = Language::from_code("a\nb fn");
+    let language = Language::from_code("a\nb\nc fn");
 
     let root = language.codebase().root();
 

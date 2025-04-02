@@ -23,6 +23,9 @@ pub enum Node {
     ///
     /// Evaluates to a function value.
     LiteralFunction {
+        /// # The parameter of the function
+        parameter: NodeHash,
+
         /// # The root node of the function's body
         body: NodeHash,
     },
@@ -113,7 +116,9 @@ impl Node {
             | Self::ProvidedFunction { argument: c, .. }
             | Self::Recursion { argument: c } => c.as_ref() == Some(child),
             Self::LiteralNumber { value: _ } => false,
-            Self::LiteralFunction { body } => body == child,
+            Self::LiteralFunction { parameter, body } => {
+                parameter == child || body == child
+            }
             Self::LiteralTuple { values: children }
             | Self::Error { children, .. } => children.inner.contains(child),
         }
@@ -128,6 +133,7 @@ impl Node {
             | Self::Recursion { argument: child } => child.is_none(),
             Self::LiteralNumber { value: _ } => true,
             Self::LiteralFunction {
+                parameter: NodeHash { .. },
                 body: NodeHash { .. },
             } => false,
             Self::LiteralTuple { values: children }
@@ -143,7 +149,10 @@ impl Node {
             }
             | Self::Recursion { argument: child } => child.as_ref(),
             Self::LiteralNumber { value: _ } => None,
-            Self::LiteralFunction { body } => Some(body),
+            Self::LiteralFunction {
+                parameter: NodeHash { .. },
+                body: NodeHash { .. },
+            } => None,
             Self::LiteralTuple { values: children }
             | Self::Error { children, .. } => children.is_single_child(),
         }
@@ -157,7 +166,9 @@ impl Node {
             }
             | Self::Recursion { argument: child } => Children::new(*child),
             Self::LiteralNumber { value: _ } => Children::new([]),
-            Self::LiteralFunction { body } => Children::new([*body]),
+            Self::LiteralFunction { parameter, body } => {
+                Children::new([*parameter, *body])
+            }
             Self::LiteralTuple { values: children }
             | Self::Error { children, .. } => children.clone(),
         }
