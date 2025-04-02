@@ -136,9 +136,19 @@ impl Evaluator {
             if let Node::LiteralFunction { .. } | Node::Error { .. } =
                 codebase.node_at(&node.syntax_node).node
             {
-                // If this were any other node, we'd need to evaluate its
-                // children first. But function nodes are different. Their child
-                // should only be evaluated, when the function is applied.
+                // We encountered a function literal and an error node. Either
+                // means that we need to stop here.
+                //
+                // If this is a function literal, then not stopping here would
+                // cause the function to be evaluated right away, where it is
+                // defined, defeating the purpose of defining a function
+                // literal.
+                //
+                // With an error, things are a bit less clear-cut. Most of the
+                // time, it would make sense to evaluate any valid code up to an
+                // error. But if the error was supposed to be a function
+                // literal, then just evaluating its body would be wild and
+                // unexpected.
                 break;
             }
 
