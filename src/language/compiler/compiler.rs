@@ -10,6 +10,8 @@ use crate::language::{
     packages::Packages,
 };
 
+use super::strategy::ReplacementStrategy;
+
 pub struct Compiler<'r> {
     codebase: &'r mut Codebase,
 }
@@ -231,7 +233,9 @@ fn replace_node_and_update_parents(
     change_set: &mut NewChangeSet,
     errors: &mut Errors,
 ) -> NodePath {
-    let mut next_to_replace = to_replace.clone();
+    let mut strategy = ReplacementStrategy {
+        next_to_replace: to_replace.clone(),
+    };
 
     let mut next_token = replacement_token.to_string();
     let mut next_children = children;
@@ -242,8 +246,8 @@ fn replace_node_and_update_parents(
     loop {
         let (node, maybe_error) = compile_token(
             &next_token,
-            next_to_replace.parent(),
-            next_to_replace.sibling_index(),
+            strategy.next_to_replace.parent(),
+            strategy.next_to_replace.sibling_index(),
             next_children,
             change_set.nodes(),
             packages,
@@ -252,18 +256,20 @@ fn replace_node_and_update_parents(
         let hash = change_set.add(node);
         previous_replacement = hash;
 
-        added_nodes.push((next_to_replace.clone(), hash, maybe_error));
+        added_nodes.push((strategy.next_to_replace.clone(), hash, maybe_error));
 
-        if let Some(parent_path) = next_to_replace.parent().cloned() {
+        if let Some(parent_path) = strategy.next_to_replace.parent().cloned() {
             let parent_node = change_set.nodes().get(parent_path.hash());
 
             next_token = parent_node.to_token(packages);
             next_children = parent_node.to_children();
 
-            next_children
-                .replace(next_to_replace.hash(), [previous_replacement]);
+            next_children.replace(
+                strategy.next_to_replace.hash(),
+                [previous_replacement],
+            );
 
-            next_to_replace = parent_path;
+            strategy.next_to_replace = parent_path;
 
             continue;
         } else {
