@@ -33,8 +33,10 @@ impl<'r> Compiler<'r> {
             let sibling_index = siblings.next_index();
 
             let (child, maybe_error) = compile_token(
-                Token { text: child_token },
-                Some(&parent),
+                Token {
+                    text: child_token,
+                    parent: Some(&parent),
+                },
                 sibling_index,
                 Children::new([]),
                 change_set.nodes(),
@@ -240,8 +242,8 @@ fn replace_node_and_update_parents(
         let (node, maybe_error) = compile_token(
             Token {
                 text: &strategy.next_token,
+                parent: strategy.next_to_replace.parent(),
             },
-            strategy.next_to_replace.parent(),
             strategy.next_to_replace.sibling_index(),
             strategy.next_children,
             change_set.nodes(),
