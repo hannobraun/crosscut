@@ -14,11 +14,11 @@ pub struct Token<'r> {
     pub text: &'r str,
     pub parent: Option<&'r NodePath>,
     pub sibling_index: usize,
+    pub children: Children,
 }
 
 pub fn compile_token(
     token: Token,
-    children: Children,
     _: &Nodes,
     packages: &Packages,
 ) -> (Node, Option<CodeError>) {
@@ -30,14 +30,14 @@ pub fn compile_token(
         node_with_one_child_or_error(
             |child| Node::Empty { child },
             token.text,
-            children,
+            token.children,
         )
     } else if let Some((node, maybe_err)) =
-        resolve_keyword(token.text, children.clone())
+        resolve_keyword(token.text, token.children.clone())
     {
         (node, maybe_err)
     } else {
-        match resolve_function(token.text, children, packages) {
+        match resolve_function(token.text, token.children, packages) {
             Ok((node, maybe_err)) => (node, maybe_err),
             Err((children, candidates)) => (
                 Node::Error {
