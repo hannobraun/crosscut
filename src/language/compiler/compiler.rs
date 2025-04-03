@@ -250,12 +250,12 @@ fn replace_node_and_update_parents(
             packages,
         );
 
-        let hash = change_set.add(node);
-        let previous_replacement = hash;
+        let added = change_set.add(node);
+        let previous_replacement = added;
 
         strategy.added_nodes.push(NodeAddedDuringReplacement {
             replaced: strategy.next_to_replace.clone(),
-            added: hash,
+            added,
             error_of_added_node: maybe_error,
         });
 
