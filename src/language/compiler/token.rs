@@ -27,7 +27,7 @@ impl Token<'_> {
     }
 }
 
-pub fn compile_token(
+fn compile_token(
     token: Token,
     _: &Nodes,
     packages: &Packages,
