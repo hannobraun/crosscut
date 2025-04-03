@@ -312,7 +312,7 @@ fn replace_node_and_update_parents(
     path
 }
 
-fn compile_token(
+pub fn compile_token(
     token: &str,
     parent: Option<&NodePath>,
     sibling_index: usize,
