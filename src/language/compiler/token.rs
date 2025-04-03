@@ -13,18 +13,18 @@ use crate::language::{
 pub struct Token<'r> {
     pub text: &'r str,
     pub parent: Option<&'r NodePath>,
+    pub sibling_index: usize,
 }
 
 pub fn compile_token(
     token: Token,
-    sibling_index: usize,
     children: Children,
     _: &Nodes,
     packages: &Packages,
 ) -> (Node, Option<CodeError>) {
     // We're about to need that, to correctly compile function parameters.
     let _ = token.parent;
-    let _ = sibling_index;
+    let _ = token.sibling_index;
 
     let (node, maybe_error) = if token.text.is_empty() {
         node_with_one_child_or_error(

@@ -36,8 +36,8 @@ impl<'r> Compiler<'r> {
                 Token {
                     text: child_token,
                     parent: Some(&parent),
+                    sibling_index,
                 },
-                sibling_index,
                 Children::new([]),
                 change_set.nodes(),
                 packages,
@@ -243,8 +243,8 @@ fn replace_node_and_update_parents(
             Token {
                 text: &strategy.next_token,
                 parent: strategy.next_to_replace.parent(),
+                sibling_index: strategy.next_to_replace.sibling_index(),
             },
-            strategy.next_to_replace.sibling_index(),
             strategy.next_children,
             change_set.nodes(),
             packages,
