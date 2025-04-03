@@ -220,7 +220,7 @@ impl<'r> Compiler<'r> {
     }
 }
 
-fn replace_node_and_update_parents(
+pub fn replace_node_and_update_parents(
     to_replace: &NodePath,
     replacement_token: &str,
     children: Children,
