@@ -239,7 +239,6 @@ fn replace_node_and_update_parents(
         next_children: children,
     };
 
-    let mut previous_replacement;
     let mut added_nodes = Vec::new();
 
     loop {
@@ -253,7 +252,7 @@ fn replace_node_and_update_parents(
         );
 
         let hash = change_set.add(node);
-        previous_replacement = hash;
+        let previous_replacement = hash;
 
         added_nodes.push((strategy.next_to_replace.clone(), hash, maybe_error));
 
