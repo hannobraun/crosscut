@@ -255,7 +255,7 @@ fn replace_node_and_update_parents(
 
         strategy.added_nodes.push(NodeAddedDuringReplacement {
             replaced: strategy.next_to_replace.clone(),
-            hash_of_added_node: hash,
+            added: hash,
             error_of_added_node: maybe_error,
         });
 
@@ -283,7 +283,7 @@ fn replace_node_and_update_parents(
 
     while let Some(NodeAddedDuringReplacement {
         replaced,
-        hash_of_added_node: hash,
+        added: hash,
         error_of_added_node: maybe_error,
     }) = strategy.added_nodes.pop()
     {
