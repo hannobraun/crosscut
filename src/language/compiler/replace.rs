@@ -23,7 +23,7 @@ pub fn replace_node_and_update_parents(
     loop {
         let ReplacementAction::CompileToken { action } = strategy.next_action();
         let (node, maybe_error) =
-            action.token.compile(change_set.nodes(), packages);
+            action.token().compile(change_set.nodes(), packages);
 
         let added = change_set.add(node);
 
@@ -97,14 +97,7 @@ struct ReplacementStrategy {
 impl ReplacementStrategy {
     fn next_action(&mut self) -> ReplacementAction {
         ReplacementAction::CompileToken {
-            action: CompileToken {
-                token: Token {
-                    text: &self.next_token,
-                    parent: self.next_to_replace.parent(),
-                    sibling_index: self.next_to_replace.sibling_index(),
-                    children: self.next_children.clone(),
-                },
-            },
+            action: CompileToken { strategy: self },
         }
     }
 }
@@ -120,5 +113,16 @@ enum ReplacementAction<'r> {
 }
 
 struct CompileToken<'r> {
-    token: Token<'r>,
+    strategy: &'r mut ReplacementStrategy,
+}
+
+impl CompileToken<'_> {
+    fn token(&self) -> Token {
+        Token {
+            text: &self.strategy.next_token,
+            parent: self.strategy.next_to_replace.parent(),
+            sibling_index: self.strategy.next_to_replace.sibling_index(),
+            children: self.strategy.next_children.clone(),
+        }
+    }
 }
