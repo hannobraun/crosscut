@@ -236,13 +236,13 @@ fn replace_node_and_update_parents(
     };
 
     loop {
-        let (node, maybe_error) = Token {
+        let token = Token {
             text: &strategy.next_token,
             parent: strategy.next_to_replace.parent(),
             sibling_index: strategy.next_to_replace.sibling_index(),
             children: strategy.next_children,
-        }
-        .compile(change_set.nodes(), packages);
+        };
+        let (node, maybe_error) = token.compile(change_set.nodes(), packages);
 
         let added = change_set.add(node);
 
