@@ -1,5 +1,5 @@
 mod compiler;
-mod strategy;
+mod replace;
 mod token;
 
 pub use self::compiler::Compiler;

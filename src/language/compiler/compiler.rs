@@ -4,7 +4,7 @@ use crate::language::{
 };
 
 use super::{
-    strategy::{NodeAddedDuringReplacement, ReplacementStrategy},
+    replace::{NodeAddedDuringReplacement, ReplacementStrategy},
     token::Token,
 };
 
