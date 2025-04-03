@@ -21,7 +21,7 @@ pub fn replace_node_and_update_parents(
     };
 
     loop {
-        let token = strategy.next_action();
+        let ReplacementAction::CompileToken { token } = strategy.next_action();
         let (node, maybe_error) = token.compile(change_set.nodes(), packages);
 
         let added = change_set.add(node);
@@ -94,12 +94,14 @@ struct ReplacementStrategy {
 }
 
 impl ReplacementStrategy {
-    fn next_action(&self) -> Token {
-        Token {
-            text: &self.next_token,
-            parent: self.next_to_replace.parent(),
-            sibling_index: self.next_to_replace.sibling_index(),
-            children: self.next_children.clone(),
+    fn next_action(&self) -> ReplacementAction {
+        ReplacementAction::CompileToken {
+            token: Token {
+                text: &self.next_token,
+                parent: self.next_to_replace.parent(),
+                sibling_index: self.next_to_replace.sibling_index(),
+                children: self.next_children.clone(),
+            },
         }
     }
 }
@@ -108,4 +110,8 @@ struct NodeAddedDuringReplacement {
     replaced: NodePath,
     added: NodeHash,
     maybe_error: Option<CodeError>,
+}
+
+enum ReplacementAction<'r> {
+    CompileToken { token: Token<'r> },
 }
