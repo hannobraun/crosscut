@@ -1,5 +1,7 @@
 use crate::language::{
-    code::{Children, CodeError, Errors, NewChangeSet, NodeHash, NodePath},
+    code::{
+        Children, CodeError, Errors, NewChangeSet, NodeHash, NodePath, Nodes,
+    },
     packages::Packages,
 };
 
@@ -27,28 +29,16 @@ pub fn replace_node_and_update_parents(
 
         let added = change_set.add(node);
 
-        strategy.added_nodes.push(NodeAddedDuringReplacement {
-            replaced: strategy.next_to_replace.clone(),
+        if action.provide_added_node(
             added,
             maybe_error,
-        });
-
-        if let Some(parent_path) = strategy.next_to_replace.parent().cloned() {
-            let parent_node = change_set.nodes().get(parent_path.hash());
-
-            strategy.next_token = parent_node.to_token(packages);
-            strategy.next_children = parent_node.to_children();
-
-            strategy
-                .next_children
-                .replace(strategy.next_to_replace.hash(), [added]);
-
-            strategy.next_to_replace = parent_path;
-
+            change_set.nodes(),
+            packages,
+        ) {
             continue;
         } else {
             break;
-        };
+        }
     }
 
     let mut initial_replacement = None;
@@ -123,6 +113,39 @@ impl CompileToken<'_> {
             parent: self.strategy.next_to_replace.parent(),
             sibling_index: self.strategy.next_to_replace.sibling_index(),
             children: self.strategy.next_children.clone(),
+        }
+    }
+
+    fn provide_added_node(
+        self,
+        added: NodeHash,
+        maybe_error: Option<CodeError>,
+        nodes: &Nodes,
+        packages: &Packages,
+    ) -> bool {
+        self.strategy.added_nodes.push(NodeAddedDuringReplacement {
+            replaced: self.strategy.next_to_replace.clone(),
+            added,
+            maybe_error,
+        });
+
+        if let Some(parent_path) =
+            self.strategy.next_to_replace.parent().cloned()
+        {
+            let parent_node = nodes.get(parent_path.hash());
+
+            self.strategy.next_token = parent_node.to_token(packages);
+            self.strategy.next_children = parent_node.to_children();
+
+            self.strategy
+                .next_children
+                .replace(self.strategy.next_to_replace.hash(), [added]);
+
+            self.strategy.next_to_replace = parent_path;
+
+            true
+        } else {
+            false
         }
     }
 }
