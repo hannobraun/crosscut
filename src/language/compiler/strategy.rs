@@ -7,4 +7,8 @@ pub struct ReplacementStrategy {
     pub added_nodes: Vec<NodeAddedDuringReplacement>,
 }
 
-pub type NodeAddedDuringReplacement = (NodePath, NodeHash, Option<CodeError>);
+pub struct NodeAddedDuringReplacement {
+    pub path_of_replaced_node: NodePath,
+    pub hash_of_added_node: NodeHash,
+    pub error_of_added_node: Option<CodeError>,
+}

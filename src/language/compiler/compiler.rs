@@ -10,7 +10,7 @@ use crate::language::{
     packages::Packages,
 };
 
-use super::strategy::ReplacementStrategy;
+use super::strategy::{NodeAddedDuringReplacement, ReplacementStrategy};
 
 pub struct Compiler<'r> {
     codebase: &'r mut Codebase,
@@ -253,11 +253,11 @@ fn replace_node_and_update_parents(
         let hash = change_set.add(node);
         let previous_replacement = hash;
 
-        strategy.added_nodes.push((
-            strategy.next_to_replace.clone(),
-            hash,
-            maybe_error,
-        ));
+        strategy.added_nodes.push(NodeAddedDuringReplacement {
+            path_of_replaced_node: strategy.next_to_replace.clone(),
+            hash_of_added_node: hash,
+            error_of_added_node: maybe_error,
+        });
 
         if let Some(parent_path) = strategy.next_to_replace.parent().cloned() {
             let parent_node = change_set.nodes().get(parent_path.hash());
@@ -281,7 +281,12 @@ fn replace_node_and_update_parents(
     let mut initial_replacement = None;
     let mut parent = None;
 
-    while let Some((replaced, hash, maybe_error)) = strategy.added_nodes.pop() {
+    while let Some(NodeAddedDuringReplacement {
+        path_of_replaced_node: replaced,
+        hash_of_added_node: hash,
+        error_of_added_node: maybe_error,
+    }) = strategy.added_nodes.pop()
+    {
         let path = NodePath::new(
             hash,
             parent,
