@@ -237,9 +237,8 @@ fn replace_node_and_update_parents(
         next_to_replace: to_replace.clone(),
         next_token: replacement_token.to_string(),
         next_children: children,
+        added_nodes: Vec::new(),
     };
-
-    let mut added_nodes = Vec::new();
 
     loop {
         let (node, maybe_error) = compile_token(
@@ -254,7 +253,11 @@ fn replace_node_and_update_parents(
         let hash = change_set.add(node);
         let previous_replacement = hash;
 
-        added_nodes.push((strategy.next_to_replace.clone(), hash, maybe_error));
+        strategy.added_nodes.push((
+            strategy.next_to_replace.clone(),
+            hash,
+            maybe_error,
+        ));
 
         if let Some(parent_path) = strategy.next_to_replace.parent().cloned() {
             let parent_node = change_set.nodes().get(parent_path.hash());
@@ -278,7 +281,7 @@ fn replace_node_and_update_parents(
     let mut initial_replacement = None;
     let mut parent = None;
 
-    while let Some((replaced, hash, maybe_error)) = added_nodes.pop() {
+    while let Some((replaced, hash, maybe_error)) = strategy.added_nodes.pop() {
         let path = NodePath::new(
             hash,
             parent,
