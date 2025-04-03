@@ -235,9 +235,9 @@ fn replace_node_and_update_parents(
 ) -> NodePath {
     let mut strategy = ReplacementStrategy {
         next_to_replace: to_replace.clone(),
+        next_token: replacement_token.to_string(),
     };
 
-    let mut next_token = replacement_token.to_string();
     let mut next_children = children;
 
     let mut previous_replacement;
@@ -245,7 +245,7 @@ fn replace_node_and_update_parents(
 
     loop {
         let (node, maybe_error) = compile_token(
-            &next_token,
+            &strategy.next_token,
             strategy.next_to_replace.parent(),
             strategy.next_to_replace.sibling_index(),
             next_children,
@@ -261,7 +261,7 @@ fn replace_node_and_update_parents(
         if let Some(parent_path) = strategy.next_to_replace.parent().cloned() {
             let parent_node = change_set.nodes().get(parent_path.hash());
 
-            next_token = parent_node.to_token(packages);
+            strategy.next_token = parent_node.to_token(packages);
             next_children = parent_node.to_children();
 
             next_children.replace(
