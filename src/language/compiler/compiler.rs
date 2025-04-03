@@ -251,7 +251,6 @@ fn replace_node_and_update_parents(
         );
 
         let added = change_set.add(node);
-        let previous_replacement = added;
 
         strategy.added_nodes.push(NodeAddedDuringReplacement {
             replaced: strategy.next_to_replace.clone(),
@@ -265,10 +264,9 @@ fn replace_node_and_update_parents(
             strategy.next_token = parent_node.to_token(packages);
             strategy.next_children = parent_node.to_children();
 
-            strategy.next_children.replace(
-                strategy.next_to_replace.hash(),
-                [previous_replacement],
-            );
+            strategy
+                .next_children
+                .replace(strategy.next_to_replace.hash(), [added]);
 
             strategy.next_to_replace = parent_path;
 
