@@ -8,7 +8,7 @@ pub struct ReplacementStrategy {
 }
 
 pub struct NodeAddedDuringReplacement {
-    pub path_of_replaced_node: NodePath,
+    pub replaced: NodePath,
     pub hash_of_added_node: NodeHash,
     pub error_of_added_node: Option<CodeError>,
 }
