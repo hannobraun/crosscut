@@ -33,7 +33,7 @@ pub fn compile_token(
             token.children,
         )
     } else if let Some((node, maybe_err)) =
-        resolve_keyword(token.text, token.children.clone())
+        resolve_keyword(token.text, &token.children)
     {
         (node, maybe_err)
     } else {
@@ -54,13 +54,13 @@ pub fn compile_token(
 
 fn resolve_keyword(
     name: &str,
-    children: Children,
+    children: &Children,
 ) -> Option<(Node, Option<CodeError>)> {
     match name {
         "self" => Some(node_with_one_child_or_error(
             |argument| Node::Recursion { argument },
             name,
-            children,
+            children.clone(),
         )),
         _ => None,
     }
