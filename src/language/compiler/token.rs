@@ -10,8 +10,12 @@ use crate::language::{
     packages::Packages,
 };
 
+pub struct Token<'r> {
+    pub text: &'r str,
+}
+
 pub fn compile_token(
-    token: &str,
+    token: Token,
     parent: Option<&NodePath>,
     sibling_index: usize,
     children: Children,
@@ -22,22 +26,22 @@ pub fn compile_token(
     let _ = parent;
     let _ = sibling_index;
 
-    let (node, maybe_error) = if token.is_empty() {
+    let (node, maybe_error) = if token.text.is_empty() {
         node_with_one_child_or_error(
             |child| Node::Empty { child },
-            token,
+            token.text,
             children,
         )
     } else if let Some((node, maybe_err)) =
-        resolve_keyword(token, children.clone())
+        resolve_keyword(token.text, children.clone())
     {
         (node, maybe_err)
     } else {
-        match resolve_function(token, children, packages) {
+        match resolve_function(token.text, children, packages) {
             Ok((node, maybe_err)) => (node, maybe_err),
             Err((children, candidates)) => (
                 Node::Error {
-                    node: token.to_string(),
+                    node: token.text.to_string(),
                     children,
                 },
                 Some(CodeError::UnresolvedIdentifier { candidates }),

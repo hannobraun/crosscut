@@ -5,7 +5,7 @@ use crate::language::{
 
 use super::{
     strategy::{NodeAddedDuringReplacement, ReplacementStrategy},
-    token::compile_token,
+    token::{Token, compile_token},
 };
 
 pub struct Compiler<'r> {
@@ -33,7 +33,7 @@ impl<'r> Compiler<'r> {
             let sibling_index = siblings.next_index();
 
             let (child, maybe_error) = compile_token(
-                child_token,
+                Token { text: child_token },
                 Some(&parent),
                 sibling_index,
                 Children::new([]),
@@ -238,7 +238,9 @@ fn replace_node_and_update_parents(
 
     loop {
         let (node, maybe_error) = compile_token(
-            &strategy.next_token,
+            Token {
+                text: &strategy.next_token,
+            },
             strategy.next_to_replace.parent(),
             strategy.next_to_replace.sibling_index(),
             strategy.next_children,
