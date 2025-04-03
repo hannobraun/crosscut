@@ -17,6 +17,16 @@ pub struct Token<'r> {
     pub children: Children,
 }
 
+impl Token<'_> {
+    pub fn compile(
+        self,
+        nodes: &Nodes,
+        packages: &Packages,
+    ) -> (Node, Option<CodeError>) {
+        compile_token(self, nodes, packages)
+    }
+}
+
 pub fn compile_token(
     token: Token,
     _: &Nodes,

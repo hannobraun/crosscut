@@ -5,7 +5,7 @@ use crate::language::{
 
 use super::{
     strategy::{NodeAddedDuringReplacement, ReplacementStrategy},
-    token::{Token, compile_token},
+    token::Token,
 };
 
 pub struct Compiler<'r> {
@@ -32,16 +32,13 @@ impl<'r> Compiler<'r> {
                 change_set.nodes().get(parent.hash()).to_children();
             let sibling_index = siblings.next_index();
 
-            let (child, maybe_error) = compile_token(
-                Token {
-                    text: child_token,
-                    parent: Some(&parent),
-                    sibling_index,
-                    children: Children::new([]),
-                },
-                change_set.nodes(),
-                packages,
-            );
+            let (child, maybe_error) = Token {
+                text: child_token,
+                parent: Some(&parent),
+                sibling_index,
+                children: Children::new([]),
+            }
+            .compile(change_set.nodes(), packages);
 
             let child = change_set.add(child);
             siblings.add(child);
@@ -239,16 +236,13 @@ fn replace_node_and_update_parents(
     };
 
     loop {
-        let (node, maybe_error) = compile_token(
-            Token {
-                text: &strategy.next_token,
-                parent: strategy.next_to_replace.parent(),
-                sibling_index: strategy.next_to_replace.sibling_index(),
-                children: strategy.next_children,
-            },
-            change_set.nodes(),
-            packages,
-        );
+        let (node, maybe_error) = Token {
+            text: &strategy.next_token,
+            parent: strategy.next_to_replace.parent(),
+            sibling_index: strategy.next_to_replace.sibling_index(),
+            children: strategy.next_children,
+        }
+        .compile(change_set.nodes(), packages);
 
         let added = change_set.add(node);
 
