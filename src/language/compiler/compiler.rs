@@ -283,12 +283,12 @@ fn replace_node_and_update_parents(
 
     while let Some(NodeAddedDuringReplacement {
         replaced,
-        added: hash,
+        added,
         error_of_added_node: maybe_error,
     }) = strategy.added_nodes.pop()
     {
         let path = NodePath::new(
-            hash,
+            added,
             parent,
             replaced.sibling_index(),
             change_set.nodes(),
