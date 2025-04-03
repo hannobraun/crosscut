@@ -95,7 +95,7 @@ struct ReplacementStrategy {
 }
 
 impl ReplacementStrategy {
-    fn next_action(&self) -> ReplacementAction {
+    fn next_action(&mut self) -> ReplacementAction {
         ReplacementAction::CompileToken {
             action: CompileToken {
                 token: Token {
