@@ -255,7 +255,7 @@ fn replace_node_and_update_parents(
         strategy.added_nodes.push(NodeAddedDuringReplacement {
             replaced: strategy.next_to_replace.clone(),
             added,
-            error_of_added_node: maybe_error,
+            maybe_error,
         });
 
         if let Some(parent_path) = strategy.next_to_replace.parent().cloned() {
@@ -282,7 +282,7 @@ fn replace_node_and_update_parents(
     while let Some(NodeAddedDuringReplacement {
         replaced,
         added,
-        error_of_added_node: maybe_error,
+        maybe_error,
     }) = strategy.added_nodes.pop()
     {
         let path = NodePath::new(

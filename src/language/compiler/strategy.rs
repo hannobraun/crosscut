@@ -10,5 +10,5 @@ pub struct ReplacementStrategy {
 pub struct NodeAddedDuringReplacement {
     pub replaced: NodePath,
     pub added: NodeHash,
-    pub error_of_added_node: Option<CodeError>,
+    pub maybe_error: Option<CodeError>,
 }
