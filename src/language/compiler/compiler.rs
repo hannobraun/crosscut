@@ -236,9 +236,8 @@ fn replace_node_and_update_parents(
     let mut strategy = ReplacementStrategy {
         next_to_replace: to_replace.clone(),
         next_token: replacement_token.to_string(),
+        next_children: children,
     };
-
-    let mut next_children = children;
 
     let mut previous_replacement;
     let mut added_nodes = Vec::new();
@@ -248,7 +247,7 @@ fn replace_node_and_update_parents(
             &strategy.next_token,
             strategy.next_to_replace.parent(),
             strategy.next_to_replace.sibling_index(),
-            next_children,
+            strategy.next_children,
             change_set.nodes(),
             packages,
         );
@@ -262,9 +261,9 @@ fn replace_node_and_update_parents(
             let parent_node = change_set.nodes().get(parent_path.hash());
 
             strategy.next_token = parent_node.to_token(packages);
-            next_children = parent_node.to_children();
+            strategy.next_children = parent_node.to_children();
 
-            next_children.replace(
+            strategy.next_children.replace(
                 strategy.next_to_replace.hash(),
                 [previous_replacement],
             );
