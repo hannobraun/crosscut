@@ -86,15 +86,15 @@ pub fn replace_node_and_update_parents(
     path
 }
 
-pub struct ReplacementStrategy {
-    pub next_to_replace: NodePath,
-    pub next_token: String,
-    pub next_children: Children,
-    pub added_nodes: Vec<NodeAddedDuringReplacement>,
+struct ReplacementStrategy {
+    next_to_replace: NodePath,
+    next_token: String,
+    next_children: Children,
+    added_nodes: Vec<NodeAddedDuringReplacement>,
 }
 
 impl ReplacementStrategy {
-    pub fn next_action(&self) -> Token {
+    fn next_action(&self) -> Token {
         Token {
             text: &self.next_token,
             parent: self.next_to_replace.parent(),
@@ -104,8 +104,8 @@ impl ReplacementStrategy {
     }
 }
 
-pub struct NodeAddedDuringReplacement {
-    pub replaced: NodePath,
-    pub added: NodeHash,
-    pub maybe_error: Option<CodeError>,
+struct NodeAddedDuringReplacement {
+    replaced: NodePath,
+    added: NodeHash,
+    maybe_error: Option<CodeError>,
 }
