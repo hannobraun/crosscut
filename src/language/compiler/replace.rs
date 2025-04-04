@@ -41,6 +41,8 @@ pub fn replace_node_and_update_parents(
         }
     }
 
+    let mut added_nodes = strategy.added_nodes;
+
     let mut initial_replacement = None;
     let mut parent = None;
 
@@ -48,7 +50,7 @@ pub fn replace_node_and_update_parents(
         replaced,
         added,
         maybe_error,
-    }) = strategy.added_nodes.pop()
+    }) = added_nodes.pop()
     {
         let path = NodePath::new(
             added,
