@@ -22,8 +22,8 @@ pub fn replace_node_and_update_parents(
         replacements: Vec::new(),
     };
 
-    while let Some(action) = strategy.next_action(change_set.nodes()) {
-        match action {
+    loop {
+        match strategy.next_action(change_set.nodes()) {
             ReplacementAction::CompileToken { action } => {
                 let (node, maybe_error) =
                     action.token().compile(change_set.nodes(), packages);
@@ -46,8 +46,6 @@ pub fn replace_node_and_update_parents(
             }
         }
     }
-
-    unreachable!("We always `return` directly from the loop.");
 }
 
 enum ReplacementStrategy {
@@ -65,12 +63,12 @@ enum ReplacementStrategy {
 }
 
 impl ReplacementStrategy {
-    fn next_action(&mut self, nodes: &Nodes) -> Option<ReplacementAction> {
+    fn next_action(&mut self, nodes: &Nodes) -> ReplacementAction {
         match self {
             strategy @ Self::PropagatingReplacementToRoot { .. } => {
-                Some(ReplacementAction::CompileToken {
+                ReplacementAction::CompileToken {
                     action: CompileToken { strategy },
-                })
+                }
             }
             Self::UpdatingPathsAfterReplacement {
                 replacements,
@@ -86,10 +84,10 @@ impl ReplacementStrategy {
 
                     *parent = Some(replacement.clone());
 
-                    Some(ReplacementAction::UpdatePath {
+                    ReplacementAction::UpdatePath {
                         replaced: node.replaced,
                         replacement,
-                    })
+                    }
                 } else {
                     let Some(path) = parent.clone() else {
                         unreachable!(
@@ -99,7 +97,7 @@ impl ReplacementStrategy {
                         );
                     };
 
-                    Some(ReplacementAction::Finish { path })
+                    ReplacementAction::Finish { path }
                 }
             }
             Self::PlaceholderState => {
