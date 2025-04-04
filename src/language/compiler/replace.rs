@@ -90,21 +90,25 @@ impl ReplacementStrategy {
             Self::UpdatingPathsAfterReplacement {
                 replacements,
                 parent,
-            } => replacements.pop().map(|node| {
-                let replacement = NodePath::new(
-                    node.replacement,
-                    parent.clone(),
-                    node.replaced.sibling_index(),
-                    nodes,
-                );
+            } => {
+                if let Some(node) = replacements.pop() {
+                    let replacement = NodePath::new(
+                        node.replacement,
+                        parent.clone(),
+                        node.replaced.sibling_index(),
+                        nodes,
+                    );
 
-                *parent = Some(replacement.clone());
+                    *parent = Some(replacement.clone());
 
-                ReplacementAction::UpdatePath {
-                    replaced: node.replaced,
-                    replacement,
+                    Some(ReplacementAction::UpdatePath {
+                        replaced: node.replaced,
+                        replacement,
+                    })
+                } else {
+                    None
                 }
-            }),
+            }
             Self::PlaceholderState => {
                 unreachable!("Strategy is never left in placeholder state.");
             }
