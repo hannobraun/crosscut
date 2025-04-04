@@ -31,16 +31,12 @@ pub fn replace_node_and_update_parents(
             action.token().compile(change_set.nodes(), packages);
         let added = change_set.add(node);
 
-        if action.provide_added_node(
+        action.provide_added_node(
             added,
             maybe_error,
             change_set.nodes(),
             packages,
-        ) {
-            continue;
-        } else {
-            break;
-        }
+        );
     }
 
     let ReplacementStrategy::UpdatingPathsAfterReplacement {
