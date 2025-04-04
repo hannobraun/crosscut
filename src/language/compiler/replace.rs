@@ -41,6 +41,9 @@ pub fn replace_node_and_update_parents(
             } => {
                 change_set.replace(&replaced, &replacement);
             }
+            ReplacementAction::Finish { path } => {
+                return path;
+            }
         }
     }
 
@@ -106,7 +109,15 @@ impl ReplacementStrategy {
                         replacement,
                     })
                 } else {
-                    None
+                    let Some(path) = parent.clone() else {
+                        unreachable!(
+                            "There is always at least one replacement, so we \
+                            _must_ have set the `parent` at least once in the \
+                            code above."
+                        );
+                    };
+
+                    Some(ReplacementAction::Finish { path })
                 }
             }
             Self::PlaceholderState => {
@@ -129,6 +140,9 @@ enum ReplacementAction<'r> {
     UpdatePath {
         replaced: NodePath,
         replacement: NodePath,
+    },
+    Finish {
+        path: NodePath,
     },
 }
 
