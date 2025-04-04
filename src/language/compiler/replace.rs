@@ -112,6 +112,7 @@ impl ReplacementStrategy {
                     action: CompileToken { strategy },
                 })
             }
+            Self::UpdatingPathsAfterReplacement { .. } => None,
             _ => None,
         }
     }
