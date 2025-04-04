@@ -39,12 +39,9 @@ pub fn replace_node_and_update_parents(
                 );
             }
             ReplacementAction::UpdatePath {
-                node:
-                    NodeAddedDuringReplacement {
-                        replaced,
-                        added,
-                        maybe_error,
-                    },
+                replaced,
+                added,
+                maybe_error,
                 initial_replacement,
                 parent,
             } => {
@@ -121,11 +118,9 @@ impl ReplacementStrategy {
                      added,
                      maybe_error,
                  }| ReplacementAction::UpdatePath {
-                    node: NodeAddedDuringReplacement {
-                        replaced,
-                        added,
-                        maybe_error,
-                    },
+                    replaced,
+                    added,
+                    maybe_error,
                     initial_replacement,
                     parent,
                 },
@@ -149,7 +144,9 @@ enum ReplacementAction<'r> {
         action: CompileToken<'r>,
     },
     UpdatePath {
-        node: NodeAddedDuringReplacement,
+        replaced: NodePath,
+        added: NodeHash,
+        maybe_error: Option<CodeError>,
         initial_replacement: &'r mut Option<NodePath>,
         parent: &'r mut Option<NodePath>,
     },
