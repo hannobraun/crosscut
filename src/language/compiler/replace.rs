@@ -159,9 +159,8 @@ impl CompileToken<'_> {
     ) -> bool {
         let ReplacementStrategy::PropagatingReplacementToRoot {
             next_to_replace,
-            next_token: _,
-            next_children: _,
             mut added_nodes,
+            ..
         } = mem::take(self.strategy)
         else {
             unreachable!(
