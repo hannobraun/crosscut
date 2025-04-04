@@ -166,7 +166,7 @@ impl CompileToken<'_> {
 
         let ReplacementStrategy::PropagatingReplacementToRoot {
             next_to_replace,
-            replacements: mut added_nodes,
+            mut replacements,
             ..
         } = strategy
         else {
@@ -179,7 +179,7 @@ impl CompileToken<'_> {
         let replaced = *next_to_replace.hash();
         let maybe_parent = next_to_replace.parent().cloned();
 
-        added_nodes.push(Replacement {
+        replacements.push(Replacement {
             replaced: next_to_replace,
             replacement,
         });
@@ -195,12 +195,12 @@ impl CompileToken<'_> {
                     next_to_replace: parent,
                     next_token: parent_node.to_token(packages),
                     next_children,
-                    replacements: added_nodes,
+                    replacements,
                 };
         } else {
             *self.strategy =
                 ReplacementStrategy::UpdatingPathsAfterReplacement {
-                    added_nodes,
+                    added_nodes: replacements,
                     parent: None,
                 };
         }
