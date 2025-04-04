@@ -33,7 +33,7 @@ pub fn replace_node_and_update_parents(
                     errors.insert(added, error);
                 }
 
-                action.provide_added_node(added, change_set.nodes(), packages);
+                action.provide_replacement(added, change_set.nodes(), packages);
             }
             ReplacementAction::UpdatePath {
                 replaced,
@@ -155,7 +155,7 @@ impl CompileToken<'_> {
         }
     }
 
-    fn provide_added_node(
+    fn provide_replacement(
         self,
         added: NodeHash,
         nodes: &Nodes,
