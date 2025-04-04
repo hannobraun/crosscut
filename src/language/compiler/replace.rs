@@ -142,8 +142,8 @@ impl CompileToken<'_> {
             let parent_node = nodes.get(parent.hash());
 
             self.strategy.next_token = parent_node.to_token(packages);
-            self.strategy.next_children = parent_node.to_children();
 
+            self.strategy.next_children = parent_node.to_children();
             self.strategy.next_children.replace(replaced, [added]);
 
             self.strategy.next_to_replace = parent;
