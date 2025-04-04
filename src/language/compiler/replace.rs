@@ -41,10 +41,14 @@ pub fn replace_node_and_update_parents(
         }
     }
 
-    let ReplacementStrategy::PropagatingReplacementToRoot {
-        mut added_nodes,
-        ..
-    } = strategy;
+    let ReplacementStrategy::UpdatingPathsAfterReplacement { mut added_nodes } =
+        strategy
+    else {
+        unreachable!(
+            "Strategy is put into this state after replacement has propagated \
+            to root."
+        );
+    };
 
     let mut initial_replacement = None;
     let mut parent = None;
@@ -89,6 +93,9 @@ enum ReplacementStrategy {
         next_children: Children,
         added_nodes: Vec<NodeAddedDuringReplacement>,
     },
+    UpdatingPathsAfterReplacement {
+        added_nodes: Vec<NodeAddedDuringReplacement>,
+    },
 }
 
 impl ReplacementStrategy {
@@ -121,7 +128,13 @@ impl CompileToken<'_> {
             next_token,
             next_children,
             added_nodes: _,
-        } = &self.strategy;
+        } = &self.strategy
+        else {
+            unreachable!(
+                "This action only exists while replacement strategy is in this \
+                state."
+            );
+        };
 
         Token {
             text: next_token,
@@ -143,7 +156,13 @@ impl CompileToken<'_> {
             next_token,
             next_children,
             added_nodes,
-        } = self.strategy;
+        } = self.strategy
+        else {
+            unreachable!(
+                "This action only exists while replacement strategy is in this \
+                state."
+            );
+        };
 
         let replaced = next_to_replace.hash();
         let maybe_parent = next_to_replace.parent().cloned();
@@ -166,6 +185,10 @@ impl CompileToken<'_> {
 
             true
         } else {
+            *self.strategy =
+                ReplacementStrategy::UpdatingPathsAfterReplacement {
+                    added_nodes: added_nodes.clone(),
+                };
             false
         }
     }
