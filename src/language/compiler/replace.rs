@@ -39,31 +39,30 @@ pub fn replace_node_and_update_parents(
                 );
             }
             ReplacementAction::UpdatePath {
-                added_nodes,
+                node,
                 initial_replacement,
                 parent,
             } => {
-                while let Some(NodeAddedDuringReplacement {
+                let NodeAddedDuringReplacement {
                     replaced,
                     added,
                     maybe_error,
-                }) = added_nodes.pop()
-                {
-                    let path = NodePath::new(
-                        added,
-                        parent.clone(),
-                        replaced.sibling_index(),
-                        change_set.nodes(),
-                    );
-                    *parent = Some(path.clone());
+                } = node;
 
-                    change_set.replace(&replaced, &path);
+                let path = NodePath::new(
+                    added,
+                    parent.clone(),
+                    replaced.sibling_index(),
+                    change_set.nodes(),
+                );
+                *parent = Some(path.clone());
 
-                    *initial_replacement = Some(path.clone());
+                change_set.replace(&replaced, &path);
 
-                    if let Some(error) = maybe_error {
-                        errors.insert(*path.hash(), error);
-                    }
+                *initial_replacement = Some(path.clone());
+
+                if let Some(error) = maybe_error {
+                    errors.insert(*path.hash(), error);
                 }
             }
         }
@@ -117,17 +116,11 @@ impl ReplacementStrategy {
                 added_nodes,
                 initial_replacement,
                 parent,
-            } => {
-                if !added_nodes.is_empty() {
-                    Some(ReplacementAction::UpdatePath {
-                        added_nodes,
-                        initial_replacement,
-                        parent,
-                    })
-                } else {
-                    None
-                }
-            }
+            } => added_nodes.pop().map(|node| ReplacementAction::UpdatePath {
+                node,
+                initial_replacement,
+                parent,
+            }),
             Self::PlaceholderState => {
                 unreachable!("Strategy is never left in placeholder state.");
             }
@@ -147,7 +140,7 @@ enum ReplacementAction<'r> {
         action: CompileToken<'r>,
     },
     UpdatePath {
-        added_nodes: &'r mut Vec<NodeAddedDuringReplacement>,
+        node: NodeAddedDuringReplacement,
         initial_replacement: &'r mut Option<NodePath>,
         parent: &'r mut Option<NodePath>,
     },
