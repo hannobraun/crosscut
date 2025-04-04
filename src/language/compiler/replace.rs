@@ -86,6 +86,7 @@ pub fn replace_node_and_update_parents(
     path
 }
 
+#[derive(Default)]
 enum ReplacementStrategy {
     PropagatingReplacementToRoot {
         next_to_replace: NodePath,
@@ -96,6 +97,9 @@ enum ReplacementStrategy {
     UpdatingPathsAfterReplacement {
         added_nodes: Vec<NodeAddedDuringReplacement>,
     },
+
+    #[default]
+    Placeholder,
 }
 
 impl ReplacementStrategy {
