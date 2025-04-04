@@ -47,25 +47,7 @@ pub fn replace_node_and_update_parents(
         }
     }
 
-    let ReplacementStrategy::UpdatingPathsAfterReplacement {
-        parent: initial_replacement,
-        ..
-    } = strategy
-    else {
-        unreachable!(
-            "Strategy is put into this state after replacement has propagated \
-            to root."
-        );
-    };
-
-    let Some(path) = initial_replacement else {
-        unreachable!(
-            "The loop above is executed at least once. The variable must have \
-            been set."
-        );
-    };
-
-    path
+    unreachable!("We always `return` directly from the loop.");
 }
 
 enum ReplacementStrategy {
