@@ -130,11 +130,18 @@ impl CompileToken<'_> {
         nodes: &Nodes,
         packages: &Packages,
     ) -> bool {
-        let replaced = self.strategy.next_to_replace.hash();
-        let maybe_parent = self.strategy.next_to_replace.parent().cloned();
+        let ReplacementStrategy {
+            next_to_replace,
+            next_token,
+            next_children,
+            added_nodes,
+        } = self.strategy;
 
-        self.strategy.added_nodes.push(NodeAddedDuringReplacement {
-            replaced: self.strategy.next_to_replace.clone(),
+        let replaced = next_to_replace.hash();
+        let maybe_parent = next_to_replace.parent().cloned();
+
+        added_nodes.push(NodeAddedDuringReplacement {
+            replaced: next_to_replace.clone(),
             added,
             maybe_error,
         });
@@ -142,12 +149,12 @@ impl CompileToken<'_> {
         if let Some(parent) = maybe_parent {
             let parent_node = nodes.get(parent.hash());
 
-            self.strategy.next_token = parent_node.to_token(packages);
+            *next_token = parent_node.to_token(packages);
 
-            self.strategy.next_children = parent_node.to_children();
-            self.strategy.next_children.replace(replaced, [added]);
+            *next_children = parent_node.to_children();
+            next_children.replace(replaced, [added]);
 
-            self.strategy.next_to_replace = parent;
+            *next_to_replace = parent;
 
             true
         } else {
