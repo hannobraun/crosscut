@@ -82,7 +82,6 @@ enum ReplacementStrategy {
     },
     UpdatingPathsAfterReplacement {
         added_nodes: Vec<NodeAddedDuringReplacement>,
-        initial_replacement: Option<NodePath>,
         parent: Option<NodePath>,
     },
     PlaceholderState,
@@ -98,7 +97,6 @@ impl ReplacementStrategy {
             }
             Self::UpdatingPathsAfterReplacement {
                 added_nodes,
-                initial_replacement,
                 parent,
             } => added_nodes.pop().map(|node| {
                 let replacement = NodePath::new(
@@ -109,7 +107,6 @@ impl ReplacementStrategy {
                 );
 
                 *parent = Some(replacement.clone());
-                *initial_replacement = Some(replacement.clone());
 
                 ReplacementAction::UpdatePath {
                     replaced: node.replaced,
@@ -217,7 +214,6 @@ impl CompileToken<'_> {
             *self.strategy =
                 ReplacementStrategy::UpdatingPathsAfterReplacement {
                     added_nodes,
-                    initial_replacement: None,
                     parent: None,
                 };
         }
