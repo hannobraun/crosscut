@@ -200,7 +200,7 @@ impl CompileToken<'_> {
         } else {
             *self.strategy =
                 ReplacementStrategy::UpdatingPathsAfterReplacement {
-                    added_nodes: added_nodes.clone(),
+                    added_nodes,
                 };
             false
         }
