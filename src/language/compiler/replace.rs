@@ -88,9 +88,9 @@ impl ReplacementStrategy {
                 })
             }
             Self::UpdatingPathsAfterReplacement {
-                replacements: added_nodes,
+                replacements,
                 parent,
-            } => added_nodes.pop().map(|node| {
+            } => replacements.pop().map(|node| {
                 let replacement = NodePath::new(
                     node.replacement,
                     parent.clone(),
