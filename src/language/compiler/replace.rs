@@ -186,11 +186,9 @@ impl CompileToken<'_> {
             let mut next_children = parent_node.to_children();
             next_children.replace(&replaced, [added]);
 
-            let next_to_replace = parent;
-
             *self.strategy =
                 ReplacementStrategy::PropagatingReplacementToRoot {
-                    next_to_replace,
+                    next_to_replace: parent,
                     next_token,
                     next_children,
                     added_nodes,
