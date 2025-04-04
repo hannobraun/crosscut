@@ -108,9 +108,13 @@ enum ReplacementStrategy {
 
 impl ReplacementStrategy {
     fn next_action(&mut self) -> Option<ReplacementAction> {
-        Some(ReplacementAction::CompileToken {
-            action: CompileToken { strategy: self },
-        })
+        if let Self::PropagatingReplacementToRoot { .. } = self {
+            Some(ReplacementAction::CompileToken {
+                action: CompileToken { strategy: self },
+            })
+        } else {
+            None
+        }
     }
 }
 
