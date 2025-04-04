@@ -99,6 +99,7 @@ impl ReplacementStrategy {
     }
 }
 
+#[derive(Clone)]
 struct NodeAddedDuringReplacement {
     replaced: NodePath,
     added: NodeHash,
