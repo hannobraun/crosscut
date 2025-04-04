@@ -1,3 +1,5 @@
+use std::mem;
+
 use crate::language::{
     code::{
         Children, CodeError, Errors, NewChangeSet, NodeHash, NodePath, Nodes,
@@ -157,10 +159,10 @@ impl CompileToken<'_> {
     ) -> bool {
         let ReplacementStrategy::PropagatingReplacementToRoot {
             next_to_replace,
-            next_token,
-            next_children,
-            added_nodes,
-        } = self.strategy
+            next_token: _,
+            next_children: _,
+            mut added_nodes,
+        } = mem::take(self.strategy)
         else {
             unreachable!(
                 "This action only exists while replacement strategy is in this \
@@ -180,13 +182,20 @@ impl CompileToken<'_> {
         if let Some(parent) = maybe_parent {
             let parent_node = nodes.get(parent.hash());
 
-            *next_token = parent_node.to_token(packages);
+            let next_token = parent_node.to_token(packages);
 
-            *next_children = parent_node.to_children();
+            let mut next_children = parent_node.to_children();
             next_children.replace(replaced, [added]);
 
-            *next_to_replace = parent;
+            let next_to_replace = parent;
 
+            *self.strategy =
+                ReplacementStrategy::PropagatingReplacementToRoot {
+                    next_to_replace,
+                    next_token,
+                    next_children,
+                    added_nodes,
+                };
             true
         } else {
             *self.strategy =
