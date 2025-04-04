@@ -39,16 +39,15 @@ pub fn replace_node_and_update_parents(
                 );
             }
             ReplacementAction::UpdatePath {
-                node,
+                node:
+                    NodeAddedDuringReplacement {
+                        replaced,
+                        added,
+                        maybe_error,
+                    },
                 initial_replacement,
                 parent,
             } => {
-                let NodeAddedDuringReplacement {
-                    replaced,
-                    added,
-                    maybe_error,
-                } = node;
-
                 let path = NodePath::new(
                     added,
                     parent.clone(),
