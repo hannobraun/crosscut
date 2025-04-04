@@ -42,11 +42,8 @@ pub fn replace_node_and_update_parents(
                 replaced,
                 replacement,
                 maybe_error,
-                initial_replacement,
             } => {
                 change_set.replace(&replaced, &replacement);
-
-                *initial_replacement = Some(replacement.clone());
 
                 if let Some(error) = maybe_error {
                     errors.insert(*replacement.hash(), error);
@@ -112,12 +109,12 @@ impl ReplacementStrategy {
                 );
 
                 *parent = Some(replacement.clone());
+                *initial_replacement = Some(replacement.clone());
 
                 ReplacementAction::UpdatePath {
                     replaced: node.replaced,
                     replacement,
                     maybe_error: node.maybe_error,
-                    initial_replacement,
                 }
             }),
             Self::PlaceholderState => {
@@ -142,7 +139,6 @@ enum ReplacementAction<'r> {
         replaced: NodePath,
         replacement: NodePath,
         maybe_error: Option<CodeError>,
-        initial_replacement: &'r mut Option<NodePath>,
     },
 }
 
