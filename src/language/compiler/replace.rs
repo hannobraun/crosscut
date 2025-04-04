@@ -118,14 +118,14 @@ impl ReplacementStrategy {
                 initial_replacement,
                 parent,
             } => {
-                if added_nodes.is_empty() {
-                    None
-                } else {
+                if !added_nodes.is_empty() {
                     Some(ReplacementAction::UpdatePath {
                         added_nodes,
                         initial_replacement,
                         parent,
                     })
+                } else {
+                    None
                 }
             }
             Self::PlaceholderState => {
