@@ -158,7 +158,7 @@ impl CompileToken<'_> {
         maybe_error: Option<CodeError>,
         nodes: &Nodes,
         packages: &Packages,
-    ) -> bool {
+    ) {
         let ReplacementStrategy::PropagatingReplacementToRoot {
             next_to_replace,
             mut added_nodes,
@@ -193,7 +193,6 @@ impl CompileToken<'_> {
                     next_children,
                     added_nodes,
                 };
-            true
         } else {
             *self.strategy =
                 ReplacementStrategy::UpdatingPathsAfterReplacement {
@@ -201,7 +200,6 @@ impl CompileToken<'_> {
                     initial_replacement: None,
                     parent: None,
                 };
-            false
         }
     }
 }
