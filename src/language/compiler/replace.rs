@@ -53,7 +53,7 @@ pub fn replace_node_and_update_parents(
     }
 
     let ReplacementStrategy::UpdatingPathsAfterReplacement {
-        initial_replacement,
+        parent: initial_replacement,
         ..
     } = strategy
     else {
