@@ -42,7 +42,7 @@ pub fn replace_node_and_update_parents(
                 change_set.replace(&replaced, &replacement);
             }
             ReplacementAction::Finish { path } => {
-                return path;
+                break path;
             }
         }
     }
