@@ -113,7 +113,9 @@ impl ReplacementStrategy {
                 })
             }
             Self::UpdatingPathsAfterReplacement { .. } => None,
-            _ => None,
+            Self::Placeholder => {
+                unreachable!("Strategy is never left in placeholder state.");
+            }
         }
     }
 }
