@@ -102,7 +102,7 @@ enum ReplacementStrategy {
     },
 
     #[default]
-    Placeholder,
+    PlaceholderState,
 }
 
 impl ReplacementStrategy {
@@ -114,7 +114,7 @@ impl ReplacementStrategy {
                 })
             }
             Self::UpdatingPathsAfterReplacement { .. } => None,
-            Self::Placeholder => {
+            Self::PlaceholderState => {
                 unreachable!("Strategy is never left in placeholder state.");
             }
         }
