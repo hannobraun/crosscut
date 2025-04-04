@@ -73,7 +73,7 @@ enum ReplacementStrategy {
         replacements: Vec<Replacement>,
     },
     UpdatingPathsAfterReplacement {
-        added_nodes: Vec<Replacement>,
+        replacements: Vec<Replacement>,
         parent: Option<NodePath>,
     },
     PlaceholderState,
@@ -88,7 +88,7 @@ impl ReplacementStrategy {
                 })
             }
             Self::UpdatingPathsAfterReplacement {
-                added_nodes,
+                replacements: added_nodes,
                 parent,
             } => added_nodes.pop().map(|node| {
                 let replacement = NodePath::new(
@@ -200,7 +200,7 @@ impl CompileToken<'_> {
         } else {
             *self.strategy =
                 ReplacementStrategy::UpdatingPathsAfterReplacement {
-                    added_nodes: replacements,
+                    replacements,
                     parent: None,
                 };
         }
