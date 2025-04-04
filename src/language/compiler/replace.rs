@@ -41,7 +41,9 @@ pub fn replace_node_and_update_parents(
         }
     }
 
-    let mut added_nodes = strategy.added_nodes;
+    let ReplacementStrategy {
+        mut added_nodes, ..
+    } = strategy;
 
     let mut initial_replacement = None;
     let mut parent = None;
