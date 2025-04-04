@@ -24,9 +24,9 @@ pub fn replace_node_and_update_parents(
         added_nodes: Vec::new(),
     };
 
-    loop {
-        let ReplacementAction::CompileToken { action } = strategy.next_action();
-
+    while let Some(ReplacementAction::CompileToken { action }) =
+        strategy.next_action()
+    {
         let (node, maybe_error) =
             action.token().compile(change_set.nodes(), packages);
         let added = change_set.add(node);
@@ -107,10 +107,10 @@ enum ReplacementStrategy {
 }
 
 impl ReplacementStrategy {
-    fn next_action(&mut self) -> ReplacementAction {
-        ReplacementAction::CompileToken {
+    fn next_action(&mut self) -> Option<ReplacementAction> {
+        Some(ReplacementAction::CompileToken {
             action: CompileToken { strategy: self },
-        }
+        })
     }
 }
 
