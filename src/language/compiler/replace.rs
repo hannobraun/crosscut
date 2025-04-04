@@ -40,17 +40,11 @@ pub fn replace_node_and_update_parents(
             }
             ReplacementAction::UpdatePath {
                 replaced,
-                added,
+                replacement,
                 maybe_error,
                 initial_replacement,
                 parent,
             } => {
-                let replacement = NodePath::new(
-                    added,
-                    parent.clone(),
-                    replaced.sibling_index(),
-                    change_set.nodes(),
-                );
                 *parent = Some(replacement.clone());
 
                 change_set.replace(&replaced, &replacement);
@@ -101,7 +95,7 @@ enum ReplacementStrategy {
 }
 
 impl ReplacementStrategy {
-    fn next_action(&mut self, _: &Nodes) -> Option<ReplacementAction> {
+    fn next_action(&mut self, nodes: &Nodes) -> Option<ReplacementAction> {
         match self {
             strategy @ Self::PropagatingReplacementToRoot { .. } => {
                 Some(ReplacementAction::CompileToken {
@@ -112,12 +106,21 @@ impl ReplacementStrategy {
                 added_nodes,
                 initial_replacement,
                 parent,
-            } => added_nodes.pop().map(|node| ReplacementAction::UpdatePath {
-                replaced: node.replaced,
-                added: node.added,
-                maybe_error: node.maybe_error,
-                initial_replacement,
-                parent,
+            } => added_nodes.pop().map(|node| {
+                let replacement = NodePath::new(
+                    node.added,
+                    parent.clone(),
+                    node.replaced.sibling_index(),
+                    nodes,
+                );
+
+                ReplacementAction::UpdatePath {
+                    replaced: node.replaced,
+                    replacement,
+                    maybe_error: node.maybe_error,
+                    initial_replacement,
+                    parent,
+                }
             }),
             Self::PlaceholderState => {
                 unreachable!("Strategy is never left in placeholder state.");
@@ -139,7 +142,7 @@ enum ReplacementAction<'r> {
     },
     UpdatePath {
         replaced: NodePath,
-        added: NodeHash,
+        replacement: NodePath,
         maybe_error: Option<CodeError>,
         initial_replacement: &'r mut Option<NodePath>,
         parent: &'r mut Option<NodePath>,
