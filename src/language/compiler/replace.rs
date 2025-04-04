@@ -166,11 +166,13 @@ impl CompileToken<'_> {
         nodes: &Nodes,
         packages: &Packages,
     ) {
+        let strategy = mem::take(self.strategy);
+
         let ReplacementStrategy::PropagatingReplacementToRoot {
             next_to_replace,
             mut added_nodes,
             ..
-        } = mem::take(self.strategy)
+        } = strategy
         else {
             unreachable!(
                 "This action only exists while replacement strategy is in this \
