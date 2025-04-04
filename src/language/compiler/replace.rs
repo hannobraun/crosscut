@@ -170,7 +170,7 @@ impl CompileToken<'_> {
             );
         };
 
-        let replaced = next_to_replace.hash();
+        let replaced = *next_to_replace.hash();
         let maybe_parent = next_to_replace.parent().cloned();
 
         added_nodes.push(NodeAddedDuringReplacement {
@@ -185,7 +185,7 @@ impl CompileToken<'_> {
             let next_token = parent_node.to_token(packages);
 
             let mut next_children = parent_node.to_children();
-            next_children.replace(replaced, [added]);
+            next_children.replace(&replaced, [added]);
 
             let next_to_replace = parent;
 
