@@ -19,7 +19,7 @@ pub fn replace_node_and_update_parents(
         next_to_replace: to_replace.clone(),
         next_token: replacement_token.to_string(),
         next_children: children,
-        added_nodes: Vec::new(),
+        replacements: Vec::new(),
     };
 
     while let Some(action) = strategy.next_action(change_set.nodes()) {
@@ -70,7 +70,7 @@ enum ReplacementStrategy {
         next_to_replace: NodePath,
         next_token: String,
         next_children: Children,
-        added_nodes: Vec<Replacement>,
+        replacements: Vec<Replacement>,
     },
     UpdatingPathsAfterReplacement {
         added_nodes: Vec<Replacement>,
@@ -138,7 +138,7 @@ impl CompileToken<'_> {
             next_to_replace,
             next_token,
             next_children,
-            added_nodes: _,
+            replacements: _,
         } = &self.strategy
         else {
             unreachable!(
@@ -166,7 +166,7 @@ impl CompileToken<'_> {
 
         let ReplacementStrategy::PropagatingReplacementToRoot {
             next_to_replace,
-            mut added_nodes,
+            replacements: mut added_nodes,
             ..
         } = strategy
         else {
@@ -195,7 +195,7 @@ impl CompileToken<'_> {
                     next_to_replace: parent,
                     next_token: parent_node.to_token(packages),
                     next_children,
-                    added_nodes,
+                    replacements: added_nodes,
                 };
         } else {
             *self.strategy =
