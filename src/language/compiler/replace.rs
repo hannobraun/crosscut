@@ -136,10 +136,8 @@ impl CompileToken<'_> {
             maybe_error,
         });
 
-        if let Some(parent_path) =
-            self.strategy.next_to_replace.parent().cloned()
-        {
-            let parent_node = nodes.get(parent_path.hash());
+        if let Some(parent) = self.strategy.next_to_replace.parent().cloned() {
+            let parent_node = nodes.get(parent.hash());
 
             self.strategy.next_token = parent_node.to_token(packages);
             self.strategy.next_children = parent_node.to_children();
@@ -148,7 +146,7 @@ impl CompileToken<'_> {
                 .next_children
                 .replace(self.strategy.next_to_replace.hash(), [added]);
 
-            self.strategy.next_to_replace = parent_path;
+            self.strategy.next_to_replace = parent;
 
             true
         } else {
