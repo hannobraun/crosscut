@@ -166,7 +166,8 @@ impl CompileToken<'_> {
         nodes: &Nodes,
         packages: &Packages,
     ) {
-        let strategy = mem::take(self.strategy);
+        let strategy =
+            mem::replace(self.strategy, ReplacementStrategy::PlaceholderState);
 
         let ReplacementStrategy::PropagatingReplacementToRoot {
             next_to_replace,
