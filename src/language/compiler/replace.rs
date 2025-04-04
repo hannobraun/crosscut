@@ -174,7 +174,7 @@ impl CompileToken<'_> {
         let maybe_parent = next_to_replace.parent().cloned();
 
         added_nodes.push(NodeAddedDuringReplacement {
-            replaced: next_to_replace.clone(),
+            replaced: next_to_replace,
             added,
             maybe_error,
         });
