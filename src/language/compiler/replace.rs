@@ -92,7 +92,7 @@ impl ReplacementStrategy {
                 parent,
             } => added_nodes.pop().map(|node| {
                 let replacement = NodePath::new(
-                    node.added,
+                    node.replacement,
                     parent.clone(),
                     node.replaced.sibling_index(),
                     nodes,
@@ -115,7 +115,7 @@ impl ReplacementStrategy {
 #[derive(Clone)]
 struct NodeAddedDuringReplacement {
     replaced: NodePath,
-    added: NodeHash,
+    replacement: NodeHash,
 }
 
 enum ReplacementAction<'r> {
@@ -181,7 +181,7 @@ impl CompileToken<'_> {
 
         added_nodes.push(NodeAddedDuringReplacement {
             replaced: next_to_replace,
-            added: replacement,
+            replacement,
         });
 
         if let Some(parent) = maybe_parent {
