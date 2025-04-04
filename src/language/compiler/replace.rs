@@ -1,9 +1,7 @@
 use std::mem;
 
 use crate::language::{
-    code::{
-        Children, CodeError, Errors, NewChangeSet, NodeHash, NodePath, Nodes,
-    },
+    code::{Children, Errors, NewChangeSet, NodeHash, NodePath, Nodes},
     packages::Packages,
 };
 
@@ -35,12 +33,7 @@ pub fn replace_node_and_update_parents(
                     errors.insert(added, error);
                 }
 
-                action.provide_added_node(
-                    added,
-                    maybe_error,
-                    change_set.nodes(),
-                    packages,
-                );
+                action.provide_added_node(added, change_set.nodes(), packages);
             }
             ReplacementAction::UpdatePath {
                 replaced,
@@ -165,7 +158,6 @@ impl CompileToken<'_> {
     fn provide_added_node(
         self,
         added: NodeHash,
-        _: Option<CodeError>,
         nodes: &Nodes,
         packages: &Packages,
     ) {
