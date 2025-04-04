@@ -181,15 +181,13 @@ impl CompileToken<'_> {
         if let Some(parent) = maybe_parent {
             let parent_node = nodes.get(parent.hash());
 
-            let next_token = parent_node.to_token(packages);
-
             let mut next_children = parent_node.to_children();
             next_children.replace(&replaced, [added]);
 
             *self.strategy =
                 ReplacementStrategy::PropagatingReplacementToRoot {
                     next_to_replace: parent,
-                    next_token,
+                    next_token: parent_node.to_token(packages),
                     next_children,
                     added_nodes,
                 };
