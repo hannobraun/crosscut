@@ -94,6 +94,7 @@ enum ReplacementStrategy {
         next_children: Children,
         added_nodes: Vec<NodeAddedDuringReplacement>,
     },
+
     UpdatingPathsAfterReplacement {
         added_nodes: Vec<NodeAddedDuringReplacement>,
         initial_replacement: Option<NodePath>,
