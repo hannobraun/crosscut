@@ -130,6 +130,8 @@ impl CompileToken<'_> {
         nodes: &Nodes,
         packages: &Packages,
     ) -> bool {
+        let replaced = self.strategy.next_to_replace.hash();
+
         self.strategy.added_nodes.push(NodeAddedDuringReplacement {
             replaced: self.strategy.next_to_replace.clone(),
             added,
@@ -142,9 +144,7 @@ impl CompileToken<'_> {
             self.strategy.next_token = parent_node.to_token(packages);
             self.strategy.next_children = parent_node.to_children();
 
-            self.strategy
-                .next_children
-                .replace(self.strategy.next_to_replace.hash(), [added]);
+            self.strategy.next_children.replace(replaced, [added]);
 
             self.strategy.next_to_replace = parent;
 
