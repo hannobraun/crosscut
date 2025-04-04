@@ -157,7 +157,7 @@ impl CompileToken<'_> {
 
     fn provide_replacement(
         self,
-        added: NodeHash,
+        replacement: NodeHash,
         nodes: &Nodes,
         packages: &Packages,
     ) {
@@ -181,14 +181,14 @@ impl CompileToken<'_> {
 
         added_nodes.push(NodeAddedDuringReplacement {
             replaced: next_to_replace,
-            added,
+            added: replacement,
         });
 
         if let Some(parent) = maybe_parent {
             let parent_node = nodes.get(parent.hash());
 
             let mut next_children = parent_node.to_children();
-            next_children.replace(&replaced, [added]);
+            next_children.replace(&replaced, [replacement]);
 
             *self.strategy =
                 ReplacementStrategy::PropagatingReplacementToRoot {
