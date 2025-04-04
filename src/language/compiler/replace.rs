@@ -70,9 +70,8 @@ pub fn replace_node_and_update_parents(
     }
 
     let ReplacementStrategy::UpdatingPathsAfterReplacement {
-        added_nodes: _,
         initial_replacement,
-        parent: _,
+        ..
     } = strategy
     else {
         unreachable!(
