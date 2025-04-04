@@ -15,7 +15,7 @@ pub fn replace_node_and_update_parents(
     change_set: &mut NewChangeSet,
     errors: &mut Errors,
 ) -> NodePath {
-    let mut strategy = ReplacementStrategy {
+    let mut strategy = ReplacementStrategy::PropagatingReplacementToRoot {
         next_to_replace: to_replace.clone(),
         next_token: replacement_token.to_string(),
         next_children: children,
@@ -41,8 +41,9 @@ pub fn replace_node_and_update_parents(
         }
     }
 
-    let ReplacementStrategy {
-        mut added_nodes, ..
+    let ReplacementStrategy::PropagatingReplacementToRoot {
+        mut added_nodes,
+        ..
     } = strategy;
 
     let mut initial_replacement = None;
@@ -81,11 +82,13 @@ pub fn replace_node_and_update_parents(
     path
 }
 
-struct ReplacementStrategy {
-    next_to_replace: NodePath,
-    next_token: String,
-    next_children: Children,
-    added_nodes: Vec<NodeAddedDuringReplacement>,
+enum ReplacementStrategy {
+    PropagatingReplacementToRoot {
+        next_to_replace: NodePath,
+        next_token: String,
+        next_children: Children,
+        added_nodes: Vec<NodeAddedDuringReplacement>,
+    },
 }
 
 impl ReplacementStrategy {
@@ -112,7 +115,7 @@ struct CompileToken<'r> {
 
 impl CompileToken<'_> {
     fn token(&self) -> Token {
-        let ReplacementStrategy {
+        let ReplacementStrategy::PropagatingReplacementToRoot {
             next_to_replace,
             next_token,
             next_children,
@@ -134,7 +137,7 @@ impl CompileToken<'_> {
         nodes: &Nodes,
         packages: &Packages,
     ) -> bool {
-        let ReplacementStrategy {
+        let ReplacementStrategy::PropagatingReplacementToRoot {
             next_to_replace,
             next_token,
             next_children,
