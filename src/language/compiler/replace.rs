@@ -24,9 +24,9 @@ pub fn replace_node_and_update_parents(
         added_nodes: Vec::new(),
     };
 
-    while let Some(ReplacementAction::CompileToken { action }) =
-        strategy.next_action()
-    {
+    while let Some(action) = strategy.next_action() {
+        let ReplacementAction::CompileToken { action } = action;
+
         let (node, maybe_error) =
             action.token().compile(change_set.nodes(), packages);
         let added = change_set.add(node);
