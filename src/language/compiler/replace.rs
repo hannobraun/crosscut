@@ -29,7 +29,7 @@ pub fn replace_node_and_update_parents(
                     action.token().compile(change_set.nodes(), packages);
                 let added = change_set.add(node);
 
-                if let Some(error) = maybe_error.clone() {
+                if let Some(error) = maybe_error {
                     errors.insert(added, error);
                 }
 
