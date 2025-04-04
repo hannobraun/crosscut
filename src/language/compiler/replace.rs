@@ -43,8 +43,10 @@ pub fn replace_node_and_update_parents(
         }
     }
 
-    let ReplacementStrategy::UpdatingPathsAfterReplacement { mut added_nodes } =
-        strategy
+    let ReplacementStrategy::UpdatingPathsAfterReplacement {
+        mut added_nodes,
+        mut initial_replacement,
+    } = strategy
     else {
         unreachable!(
             "Strategy is put into this state after replacement has propagated \
@@ -52,7 +54,6 @@ pub fn replace_node_and_update_parents(
         );
     };
 
-    let mut initial_replacement = None;
     let mut parent = None;
 
     while let Some(NodeAddedDuringReplacement {
@@ -98,6 +99,7 @@ enum ReplacementStrategy {
     },
     UpdatingPathsAfterReplacement {
         added_nodes: Vec<NodeAddedDuringReplacement>,
+        initial_replacement: Option<NodePath>,
     },
 
     #[default]
@@ -196,6 +198,7 @@ impl CompileToken<'_> {
             *self.strategy =
                 ReplacementStrategy::UpdatingPathsAfterReplacement {
                     added_nodes,
+                    initial_replacement: None,
                 };
             false
         }
