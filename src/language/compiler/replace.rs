@@ -115,11 +115,21 @@ impl ReplacementStrategy {
                 added_nodes,
                 initial_replacement,
                 parent,
-            } => added_nodes.pop().map(|node| ReplacementAction::UpdatePath {
-                node,
-                initial_replacement,
-                parent,
-            }),
+            } => added_nodes.pop().map(
+                |NodeAddedDuringReplacement {
+                     replaced,
+                     added,
+                     maybe_error,
+                 }| ReplacementAction::UpdatePath {
+                    node: NodeAddedDuringReplacement {
+                        replaced,
+                        added,
+                        maybe_error,
+                    },
+                    initial_replacement,
+                    parent,
+                },
+            ),
             Self::PlaceholderState => {
                 unreachable!("Strategy is never left in placeholder state.");
             }
