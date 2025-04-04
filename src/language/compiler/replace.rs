@@ -38,13 +38,41 @@ pub fn replace_node_and_update_parents(
                     packages,
                 );
             }
+            ReplacementAction::UpdatePath {
+                added_nodes,
+                initial_replacement,
+                parent,
+            } => {
+                while let Some(NodeAddedDuringReplacement {
+                    replaced,
+                    added,
+                    maybe_error,
+                }) = added_nodes.pop()
+                {
+                    let path = NodePath::new(
+                        added,
+                        parent.clone(),
+                        replaced.sibling_index(),
+                        change_set.nodes(),
+                    );
+                    *parent = Some(path.clone());
+
+                    change_set.replace(&replaced, &path);
+
+                    *initial_replacement = Some(path.clone());
+
+                    if let Some(error) = maybe_error {
+                        errors.insert(*path.hash(), error);
+                    }
+                }
+            }
         }
     }
 
     let ReplacementStrategy::UpdatingPathsAfterReplacement {
-        mut added_nodes,
-        mut initial_replacement,
-        mut parent,
+        added_nodes: _,
+        initial_replacement,
+        parent: _,
     } = strategy
     else {
         unreachable!(
@@ -52,29 +80,6 @@ pub fn replace_node_and_update_parents(
             to root."
         );
     };
-
-    while let Some(NodeAddedDuringReplacement {
-        replaced,
-        added,
-        maybe_error,
-    }) = added_nodes.pop()
-    {
-        let path = NodePath::new(
-            added,
-            parent,
-            replaced.sibling_index(),
-            change_set.nodes(),
-        );
-        parent = Some(path.clone());
-
-        change_set.replace(&replaced, &path);
-
-        initial_replacement = Some(path.clone());
-
-        if let Some(error) = maybe_error {
-            errors.insert(*path.hash(), error);
-        }
-    }
 
     let Some(path) = initial_replacement else {
         unreachable!(
@@ -109,7 +114,21 @@ impl ReplacementStrategy {
                     action: CompileToken { strategy },
                 })
             }
-            Self::UpdatingPathsAfterReplacement { .. } => None,
+            Self::UpdatingPathsAfterReplacement {
+                added_nodes,
+                initial_replacement,
+                parent,
+            } => {
+                if added_nodes.is_empty() {
+                    None
+                } else {
+                    Some(ReplacementAction::UpdatePath {
+                        added_nodes,
+                        initial_replacement,
+                        parent,
+                    })
+                }
+            }
             Self::PlaceholderState => {
                 unreachable!("Strategy is never left in placeholder state.");
             }
@@ -125,7 +144,14 @@ struct NodeAddedDuringReplacement {
 }
 
 enum ReplacementAction<'r> {
-    CompileToken { action: CompileToken<'r> },
+    CompileToken {
+        action: CompileToken<'r>,
+    },
+    UpdatePath {
+        added_nodes: &'r mut Vec<NodeAddedDuringReplacement>,
+        initial_replacement: &'r mut Option<NodePath>,
+        parent: &'r mut Option<NodePath>,
+    },
 }
 
 struct CompileToken<'r> {
