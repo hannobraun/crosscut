@@ -70,10 +70,10 @@ enum ReplacementStrategy {
         next_to_replace: NodePath,
         next_token: String,
         next_children: Children,
-        added_nodes: Vec<NodeAddedDuringReplacement>,
+        added_nodes: Vec<Replacement>,
     },
     UpdatingPathsAfterReplacement {
-        added_nodes: Vec<NodeAddedDuringReplacement>,
+        added_nodes: Vec<Replacement>,
         parent: Option<NodePath>,
     },
     PlaceholderState,
@@ -113,7 +113,7 @@ impl ReplacementStrategy {
 }
 
 #[derive(Clone)]
-struct NodeAddedDuringReplacement {
+struct Replacement {
     replaced: NodePath,
     replacement: NodeHash,
 }
@@ -179,7 +179,7 @@ impl CompileToken<'_> {
         let replaced = *next_to_replace.hash();
         let maybe_parent = next_to_replace.parent().cloned();
 
-        added_nodes.push(NodeAddedDuringReplacement {
+        added_nodes.push(Replacement {
             replaced: next_to_replace,
             replacement,
         });
