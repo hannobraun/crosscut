@@ -511,9 +511,9 @@ checksum = "877a4ace8713b0bcf2a4e7eec82529c029f1d0619886d18145fea96c3ffe5c0f"
 
 [[package]]
 name = "errno"
-version = "0.3.10"
+version = "0.3.11"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "33d852cb9b869c2a9b3df2f71a3074817f01e1844f839a144f5fcef059a4eb5d"
+checksum = "976dd42dc7e85965fe702eb8164f21f450704bdde31faefd6471dba214cb594e"
 dependencies = [
  "libc",
  "windows-sys 0.59.0",
@@ -2122,9 +2122,9 @@ dependencies = [
 
 [[package]]
 name = "wgpu-hal"
-version = "24.0.2"
+version = "24.0.4"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "4317a17171dc20e6577bf606796794580accae0716a69edbc7388c86a3ec9f23"
+checksum = "f112f464674ca69f3533248508ee30cb84c67cf06c25ff6800685f5e0294e259"
 dependencies = [
  "android_system_properties",
  "arrayvec",
