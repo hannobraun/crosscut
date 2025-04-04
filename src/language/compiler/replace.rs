@@ -45,11 +45,8 @@ pub fn replace_node_and_update_parents(
             ReplacementAction::UpdatePath {
                 replaced,
                 replacement,
-                maybe_error,
             } => {
                 change_set.replace(&replaced, &replacement);
-
-                let _ = maybe_error;
             }
         }
     }
@@ -113,7 +110,6 @@ impl ReplacementStrategy {
                 ReplacementAction::UpdatePath {
                     replaced: node.replaced,
                     replacement,
-                    maybe_error: node.maybe_error,
                 }
             }),
             Self::PlaceholderState => {
@@ -127,7 +123,6 @@ impl ReplacementStrategy {
 struct NodeAddedDuringReplacement {
     replaced: NodePath,
     added: NodeHash,
-    maybe_error: Option<CodeError>,
 }
 
 enum ReplacementAction<'r> {
@@ -137,7 +132,6 @@ enum ReplacementAction<'r> {
     UpdatePath {
         replaced: NodePath,
         replacement: NodePath,
-        maybe_error: Option<CodeError>,
     },
 }
 
@@ -171,7 +165,7 @@ impl CompileToken<'_> {
     fn provide_added_node(
         self,
         added: NodeHash,
-        maybe_error: Option<CodeError>,
+        _: Option<CodeError>,
         nodes: &Nodes,
         packages: &Packages,
     ) {
@@ -196,7 +190,6 @@ impl CompileToken<'_> {
         added_nodes.push(NodeAddedDuringReplacement {
             replaced: next_to_replace,
             added,
-            maybe_error,
         });
 
         if let Some(parent) = maybe_parent {
