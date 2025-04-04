@@ -45,20 +45,20 @@ pub fn replace_node_and_update_parents(
                 initial_replacement,
                 parent,
             } => {
-                let path = NodePath::new(
+                let replacement = NodePath::new(
                     added,
                     parent.clone(),
                     replaced.sibling_index(),
                     change_set.nodes(),
                 );
-                *parent = Some(path.clone());
+                *parent = Some(replacement.clone());
 
-                change_set.replace(&replaced, &path);
+                change_set.replace(&replaced, &replacement);
 
-                *initial_replacement = Some(path.clone());
+                *initial_replacement = Some(replacement.clone());
 
                 if let Some(error) = maybe_error {
-                    errors.insert(*path.hash(), error);
+                    errors.insert(*replacement.hash(), error);
                 }
             }
         }
