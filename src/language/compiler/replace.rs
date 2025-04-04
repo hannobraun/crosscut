@@ -108,11 +108,18 @@ struct CompileToken<'r> {
 
 impl CompileToken<'_> {
     fn token(&self) -> Token {
+        let ReplacementStrategy {
+            next_to_replace,
+            next_token,
+            next_children,
+            added_nodes: _,
+        } = &self.strategy;
+
         Token {
-            text: &self.strategy.next_token,
-            parent: self.strategy.next_to_replace.parent(),
-            sibling_index: self.strategy.next_to_replace.sibling_index(),
-            children: self.strategy.next_children.clone(),
+            text: next_token,
+            parent: next_to_replace.parent(),
+            sibling_index: next_to_replace.sibling_index(),
+            children: next_children.clone(),
         }
     }
 
