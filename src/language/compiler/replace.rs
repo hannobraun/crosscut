@@ -27,8 +27,8 @@ pub fn replace_node_and_update_parents(
             ReplacementAction::CompileToken { action } => {
                 let (node, maybe_error) =
                     action.token().compile(change_set.nodes(), packages);
-                let added = change_set.add(node);
 
+                let added = change_set.add(node);
                 if let Some(error) = maybe_error {
                     errors.insert(added, error);
                 }
