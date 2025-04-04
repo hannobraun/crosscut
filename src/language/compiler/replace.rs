@@ -43,10 +43,7 @@ pub fn replace_node_and_update_parents(
                 replacement,
                 maybe_error,
                 initial_replacement,
-                parent,
             } => {
-                *parent = Some(replacement.clone());
-
                 change_set.replace(&replaced, &replacement);
 
                 *initial_replacement = Some(replacement.clone());
@@ -114,12 +111,13 @@ impl ReplacementStrategy {
                     nodes,
                 );
 
+                *parent = Some(replacement.clone());
+
                 ReplacementAction::UpdatePath {
                     replaced: node.replaced,
                     replacement,
                     maybe_error: node.maybe_error,
                     initial_replacement,
-                    parent,
                 }
             }),
             Self::PlaceholderState => {
@@ -145,7 +143,6 @@ enum ReplacementAction<'r> {
         replacement: NodePath,
         maybe_error: Option<CodeError>,
         initial_replacement: &'r mut Option<NodePath>,
-        parent: &'r mut Option<NodePath>,
     },
 }
 
