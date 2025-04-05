@@ -15,12 +15,8 @@ pub fn replace_node_and_update_parents(
     change_set: &mut NewChangeSet,
     errors: &mut Errors,
 ) -> NodePath {
-    let mut strategy = ReplacementStrategy::PropagatingReplacementToRoot {
-        next_to_replace: to_replace.clone(),
-        next_token: replacement_token.to_string(),
-        next_children: children,
-        replacements: Vec::new(),
-    };
+    let mut strategy =
+        ReplacementStrategy::new(to_replace, replacement_token, children);
 
     loop {
         match strategy.next_action(change_set.nodes()) {
@@ -63,6 +59,19 @@ enum ReplacementStrategy {
 }
 
 impl ReplacementStrategy {
+    fn new(
+        to_replace: &NodePath,
+        replacement_token: &str,
+        children: Children,
+    ) -> Self {
+        Self::PropagatingReplacementToRoot {
+            next_to_replace: to_replace.clone(),
+            next_token: replacement_token.to_string(),
+            next_children: children,
+            replacements: Vec::new(),
+        }
+    }
+
     fn next_action(&mut self, nodes: &Nodes) -> ReplacementAction {
         match self {
             strategy @ Self::PropagatingReplacementToRoot { .. } => {
