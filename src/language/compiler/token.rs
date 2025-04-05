@@ -171,13 +171,13 @@ fn resolve_literal(name: &str) -> Option<Literal> {
 }
 
 fn node_with_one_child_or_error(
-    kind: impl FnOnce(Option<NodeHash>) -> Node,
+    node_from_child: impl FnOnce(Option<NodeHash>) -> Node,
     token: &str,
     children: Children,
 ) -> (Node, Option<CodeError>) {
     if children.is_multiple_children().is_none() {
         let maybe_child = children.is_single_child().copied();
-        (kind(maybe_child), None)
+        (node_from_child(maybe_child), None)
     } else {
         (
             Node::Error {
