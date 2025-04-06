@@ -213,3 +213,34 @@ impl CompileToken<'_> {
         }
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use crate::language::{code::Codebase, compiler::Compiler};
+
+    use super::{ReplacementAction, ReplacementStrategy};
+
+    #[test]
+    fn start_with_compiling_new_token() {
+        // Any replacement should start with compiling the new token that is to
+        // replace the existing node.
+
+        let mut codebase = Codebase::new();
+        let compiler = Compiler::new(&mut codebase);
+
+        let root = compiler.codebase().root();
+
+        let mut strategy = ReplacementStrategy::new(
+            &root.path,
+            "token",
+            root.node.to_children(),
+        );
+
+        let ReplacementAction::CompileToken { action } =
+            strategy.next_action(compiler.codebase().nodes())
+        else {
+            panic!("Expected strategy to start with compiling the new token.");
+        };
+        assert_eq!(action.token().text, "token");
+    }
+}
