@@ -216,7 +216,7 @@ impl CompileToken<'_> {
 
 #[cfg(test)]
 mod tests {
-    use crate::language::{code::Codebase, compiler::Compiler};
+    use crate::language::code::Codebase;
 
     use super::{ReplacementAction, ReplacementStrategy};
 
@@ -225,10 +225,9 @@ mod tests {
         // Any replacement should start with compiling the new token that is to
         // replace the existing node.
 
-        let mut codebase = Codebase::new();
-        let compiler = Compiler::new(&mut codebase);
+        let codebase = Codebase::new();
 
-        let root = compiler.codebase().root();
+        let root = codebase.root();
 
         let mut strategy = ReplacementStrategy::new(
             &root.path,
@@ -237,7 +236,7 @@ mod tests {
         );
 
         let ReplacementAction::CompileToken { action } =
-            strategy.next_action(compiler.codebase().nodes())
+            strategy.next_action(codebase.nodes())
         else {
             panic!("Expected strategy to start with compiling the new token.");
         };
