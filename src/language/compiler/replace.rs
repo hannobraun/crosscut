@@ -231,7 +231,7 @@ mod tests {
 
         let mut strategy = ReplacementStrategy::new(
             &root.path,
-            "token",
+            "root",
             root.node.to_children(),
         );
 
@@ -240,6 +240,6 @@ mod tests {
         else {
             panic!("Expected strategy to start with compiling the new token.");
         };
-        assert_eq!(action.token().text, "token");
+        assert_eq!(action.token().text, "root");
     }
 }
