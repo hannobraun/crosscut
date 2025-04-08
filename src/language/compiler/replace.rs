@@ -69,12 +69,12 @@ impl ReplaceAction {
             },
             Self::CompileToken {
                 path,
-                token: next_token,
+                token,
                 next_children,
                 mut replacements,
             } => {
                 let token = Token {
-                    text: &next_token,
+                    text: &token,
                     parent: path.parent(),
                     sibling_index: path.sibling_index(),
                     children: next_children.clone(),
