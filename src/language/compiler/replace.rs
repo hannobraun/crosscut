@@ -42,11 +42,11 @@ pub fn replace_node_and_update_parents(
                 mut replacements,
                 parent,
             } => {
-                if let Some(node) = replacements.pop() {
+                if let Some(replacement) = replacements.pop() {
                     ReplaceAction::UpdatePath {
                         replacements,
                         parent,
-                        replaced: node,
+                        replaced: replacement,
                     }
                 } else {
                     let Some(path) = parent.clone() else {
