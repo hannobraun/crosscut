@@ -26,9 +26,7 @@ pub fn replace_node_and_update_parents(
         let next_action = match &mut strategy {
             strategy @ ReplacementState::PropagatingReplacementToRoot {
                 ..
-            } => ReplacementAction::CompileToken {
-                action: CompileToken { strategy },
-            },
+            } => ReplacementAction::CompileToken { strategy },
             ReplacementState::UpdatingPathsAfterReplacement {
                 replacements,
                 parent,
@@ -65,9 +63,7 @@ pub fn replace_node_and_update_parents(
         };
 
         match next_action {
-            ReplacementAction::CompileToken {
-                action: CompileToken { strategy },
-            } => {
+            ReplacementAction::CompileToken { strategy } => {
                 let ReplacementState::PropagatingReplacementToRoot {
                     next_to_replace,
                     next_token,
@@ -165,7 +161,7 @@ struct Replacement {
 
 enum ReplacementAction<'r> {
     CompileToken {
-        action: CompileToken<'r>,
+        strategy: &'r mut ReplacementState,
     },
     UpdatePath {
         replaced: NodePath,
@@ -174,8 +170,4 @@ enum ReplacementAction<'r> {
     Finish {
         path: NodePath,
     },
-}
-
-struct CompileToken<'r> {
-    strategy: &'r mut ReplacementState,
 }
