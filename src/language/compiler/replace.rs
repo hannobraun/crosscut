@@ -66,7 +66,25 @@ pub fn replace_node_and_update_parents(
 
         match next_action {
             ReplacementAction::CompileToken { action } => {
-                let token = action.token();
+                let ReplacementState::PropagatingReplacementToRoot {
+                    next_to_replace,
+                    next_token,
+                    next_children,
+                    replacements: _,
+                } = &action.strategy
+                else {
+                    unreachable!(
+                        "This action only exists while replacement strategy is \
+                        in this state."
+                    );
+                };
+
+                let token = Token {
+                    text: next_token,
+                    parent: next_to_replace.parent(),
+                    sibling_index: next_to_replace.sibling_index(),
+                    children: next_children.clone(),
+                };
                 let added = token.compile(change_set, errors, packages);
 
                 let strategy = mem::replace(
@@ -163,28 +181,4 @@ enum ReplacementAction<'r> {
 
 struct CompileToken<'r> {
     strategy: &'r mut ReplacementState,
-}
-
-impl CompileToken<'_> {
-    fn token(&self) -> Token {
-        let ReplacementState::PropagatingReplacementToRoot {
-            next_to_replace,
-            next_token,
-            next_children,
-            replacements: _,
-        } = &self.strategy
-        else {
-            unreachable!(
-                "This action only exists while replacement strategy is in this \
-                state."
-            );
-        };
-
-        Token {
-            text: next_token,
-            parent: next_to_replace.parent(),
-            sibling_index: next_to_replace.sibling_index(),
-            children: next_children.clone(),
-        }
-    }
 }
