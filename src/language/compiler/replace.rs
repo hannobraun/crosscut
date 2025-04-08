@@ -56,9 +56,7 @@ impl ReplaceAction {
         errors: &mut Errors,
         packages: &Packages,
     ) -> Self {
-        let next_action = self;
-
-        match next_action {
+        match self {
             ReplaceAction::Start {
                 next_to_replace,
                 next_token,
