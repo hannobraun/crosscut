@@ -68,24 +68,24 @@ impl ReplaceAction {
                 replacements: Vec::new(),
             },
             Self::CompileToken {
-                path: next_to_replace,
+                path,
                 next_token,
                 next_children,
                 mut replacements,
             } => {
                 let token = Token {
                     text: &next_token,
-                    parent: next_to_replace.parent(),
-                    sibling_index: next_to_replace.sibling_index(),
+                    parent: path.parent(),
+                    sibling_index: path.sibling_index(),
                     children: next_children.clone(),
                 };
                 let added = token.compile(change_set, errors, packages);
 
-                let replaced = *next_to_replace.hash();
-                let maybe_parent = next_to_replace.parent().cloned();
+                let replaced = *path.hash();
+                let maybe_parent = path.parent().cloned();
 
                 replacements.push(Replacement {
-                    replaced: next_to_replace,
+                    replaced: path,
                     replacement: added,
                 });
 
