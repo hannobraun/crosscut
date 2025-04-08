@@ -115,7 +115,7 @@ impl ReplaceAction {
                 if let Some(replacement) = replacements.pop() {
                     let path = NodePath::new(
                         replacement.replacement,
-                        parent.clone(),
+                        parent,
                         replacement.replaced.sibling_index(),
                         change_set.nodes(),
                     );
