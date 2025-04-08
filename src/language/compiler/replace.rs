@@ -60,11 +60,11 @@ impl ReplaceAction {
             Self::Start {
                 to_replace,
                 replacement_token,
-                children: next_children,
+                children,
             } => Self::CompileToken {
                 next_to_replace: to_replace,
                 next_token: replacement_token,
-                next_children,
+                next_children: children,
                 replacements: Vec::new(),
             },
             Self::CompileToken {
