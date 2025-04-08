@@ -32,17 +32,13 @@ impl<'r> Compiler<'r> {
                 change_set.nodes().get(parent.hash()).to_children();
             let sibling_index = siblings.next_index();
 
-            let child = compile_token(
-                Token {
-                    text: child_token,
-                    parent: Some(&parent),
-                    sibling_index,
-                    children: Children::new([]),
-                },
-                change_set,
-                errors,
-                packages,
-            );
+            let token = Token {
+                text: child_token,
+                parent: Some(&parent),
+                sibling_index,
+                children: Children::new([]),
+            };
+            let child = compile_token(token, change_set, errors, packages);
 
             siblings.add(child);
 
