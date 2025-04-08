@@ -24,7 +24,7 @@ pub fn replace_node_and_update_parents(
                 let (node, maybe_error) =
                     action.token().compile(change_set, packages);
 
-                let added = change_set.add(node);
+                let added = node;
                 if let Some(error) = maybe_error {
                     errors.insert(added, error);
                 }

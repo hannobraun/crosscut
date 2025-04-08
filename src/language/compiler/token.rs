@@ -22,16 +22,16 @@ impl Token<'_> {
         self,
         change_set: &mut NewChangeSet,
         packages: &Packages,
-    ) -> (Node, Option<CodeError>) {
+    ) -> (NodeHash, Option<CodeError>) {
         compile_token(self, change_set, packages)
     }
 }
 
 fn compile_token(
     token: Token,
-    _: &mut NewChangeSet,
+    change_set: &mut NewChangeSet,
     packages: &Packages,
-) -> (Node, Option<CodeError>) {
+) -> (NodeHash, Option<CodeError>) {
     // We're about to need that, to correctly compile function parameters.
     let _ = token.parent;
     let _ = token.sibling_index;
@@ -58,6 +58,8 @@ fn compile_token(
             ),
         }
     };
+
+    let node = change_set.add(node);
 
     (node, maybe_error)
 }

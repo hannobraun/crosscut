@@ -37,7 +37,6 @@ impl<'r> Compiler<'r> {
             }
             .compile(change_set, packages);
 
-            let child = change_set.add(child);
             siblings.add(child);
 
             let parent_path = replace_node_and_update_parents(
