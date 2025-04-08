@@ -27,9 +27,17 @@ pub fn replace_node_and_update_parents(
             &mut strategy,
             ReplacementState::PlaceholderState,
         ) {
-            strategy @ ReplacementState::PropagatingReplacementToRoot {
-                ..
-            } => ReplaceAction::CompileToken { strategy },
+            ReplacementState::PropagatingReplacementToRoot {
+                next_to_replace,
+                next_token,
+                next_children,
+                replacements,
+            } => ReplaceAction::CompileToken {
+                next_to_replace,
+                next_token,
+                next_children,
+                replacements,
+            },
             ReplacementState::UpdatingPathsAfterReplacement {
                 mut replacements,
                 mut parent,
@@ -73,20 +81,12 @@ pub fn replace_node_and_update_parents(
         };
 
         match next_action {
-            ReplaceAction::CompileToken { strategy: s } => {
-                let ReplacementState::PropagatingReplacementToRoot {
-                    next_to_replace,
-                    next_token,
-                    next_children,
-                    mut replacements,
-                } = s
-                else {
-                    unreachable!(
-                        "This action only exists while replacement strategy is \
-                        in this state."
-                    );
-                };
-
+            ReplaceAction::CompileToken {
+                next_to_replace,
+                next_token,
+                next_children,
+                mut replacements,
+            } => {
                 let token = Token {
                     text: &next_token,
                     parent: next_to_replace.parent(),
@@ -158,7 +158,10 @@ struct Replacement {
 
 enum ReplaceAction {
     CompileToken {
-        strategy: ReplacementState,
+        next_to_replace: NodePath,
+        next_token: String,
+        next_children: Children,
+        replacements: Vec<Replacement>,
     },
     UpdatePath {
         replaced: NodePath,
