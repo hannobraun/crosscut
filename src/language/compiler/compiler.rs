@@ -56,7 +56,7 @@ impl<'r> Compiler<'r> {
             );
 
             if let Some(error) = maybe_error {
-                errors.insert(*child_path.hash(), error);
+                errors.insert(child, error);
             }
 
             child_path
