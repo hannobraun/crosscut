@@ -107,7 +107,7 @@ pub fn replace_node_and_update_parents(
             ReplaceAction::Finish { path } => {
                 break path;
             }
-        }
+        };
     }
 }
 
