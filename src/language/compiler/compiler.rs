@@ -43,9 +43,9 @@ impl<'r> Compiler<'r> {
                 &parent,
                 &change_set.nodes().get(parent.hash()).to_token(packages),
                 siblings,
-                packages,
                 change_set,
                 errors,
+                packages,
             );
 
             let child_path = NodePath::new(
@@ -204,9 +204,9 @@ impl<'r> Compiler<'r> {
                 to_replace,
                 replacement_token,
                 children.into(),
-                packages,
                 change_set,
                 errors,
+                packages,
             )
         })
     }

@@ -9,9 +9,9 @@ pub fn replace_node_and_update_parents(
     to_replace: &NodePath,
     replacement_token: &str,
     children: Children,
-    packages: &Packages,
     change_set: &mut NewChangeSet,
     errors: &mut Errors,
+    packages: &Packages,
 ) -> NodePath {
     let mut next_action = ReplaceAction::Start {
         next_to_replace: to_replace.clone(),
