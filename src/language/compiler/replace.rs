@@ -25,7 +25,7 @@ pub fn replace_node_and_update_parents(
     loop {
         let next_action = match mem::replace(
             &mut strategy,
-            ReplacementState::PlaceholderState,
+            ReplacementState::Placeholder,
         ) {
             ReplacementState::PropagatingReplacementToRoot {
                 next_to_replace,
@@ -75,7 +75,7 @@ pub fn replace_node_and_update_parents(
 
                 next_action
             }
-            ReplacementState::PlaceholderState => {
+            ReplacementState::Placeholder => {
                 unreachable!("Strategy is never left in placeholder state.");
             }
         };
@@ -147,7 +147,7 @@ enum ReplacementState {
         replacements: Vec<Replacement>,
         parent: Option<NodePath>,
     },
-    PlaceholderState,
+    Placeholder,
 }
 
 #[derive(Clone)]
