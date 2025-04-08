@@ -15,7 +15,7 @@ pub fn replace_node_and_update_parents(
     change_set: &mut NewChangeSet,
     errors: &mut Errors,
 ) -> NodePath {
-    let mut strategy = ReplacementStrategy::PropagatingReplacementToRoot {
+    let mut strategy = ReplacementState::PropagatingReplacementToRoot {
         next_to_replace: to_replace.clone(),
         next_token: replacement_token.to_string(),
         next_children: children,
@@ -24,12 +24,12 @@ pub fn replace_node_and_update_parents(
 
     loop {
         let next_action = match &mut strategy {
-            strategy @ ReplacementStrategy::PropagatingReplacementToRoot {
+            strategy @ ReplacementState::PropagatingReplacementToRoot {
                 ..
             } => ReplacementAction::CompileToken {
                 action: CompileToken { strategy },
             },
-            ReplacementStrategy::UpdatingPathsAfterReplacement {
+            ReplacementState::UpdatingPathsAfterReplacement {
                 replacements,
                 parent,
             } => {
@@ -59,7 +59,7 @@ pub fn replace_node_and_update_parents(
                     ReplacementAction::Finish { path }
                 }
             }
-            ReplacementStrategy::PlaceholderState => {
+            ReplacementState::PlaceholderState => {
                 unreachable!("Strategy is never left in placeholder state.");
             }
         };
@@ -71,10 +71,10 @@ pub fn replace_node_and_update_parents(
 
                 let strategy = mem::replace(
                     action.strategy,
-                    ReplacementStrategy::PlaceholderState,
+                    ReplacementState::PlaceholderState,
                 );
 
-                let ReplacementStrategy::PropagatingReplacementToRoot {
+                let ReplacementState::PropagatingReplacementToRoot {
                     next_to_replace,
                     mut replacements,
                     ..
@@ -101,7 +101,7 @@ pub fn replace_node_and_update_parents(
                     next_children.replace(&replaced, [added]);
 
                     *action.strategy =
-                        ReplacementStrategy::PropagatingReplacementToRoot {
+                        ReplacementState::PropagatingReplacementToRoot {
                             next_to_replace: parent,
                             next_token: parent_node.to_token(packages),
                             next_children,
@@ -109,7 +109,7 @@ pub fn replace_node_and_update_parents(
                         };
                 } else {
                     *action.strategy =
-                        ReplacementStrategy::UpdatingPathsAfterReplacement {
+                        ReplacementState::UpdatingPathsAfterReplacement {
                             replacements,
                             parent: None,
                         };
@@ -128,7 +128,7 @@ pub fn replace_node_and_update_parents(
     }
 }
 
-enum ReplacementStrategy {
+enum ReplacementState {
     PropagatingReplacementToRoot {
         next_to_replace: NodePath,
         next_token: String,
@@ -162,12 +162,12 @@ enum ReplacementAction<'r> {
 }
 
 struct CompileToken<'r> {
-    strategy: &'r mut ReplacementStrategy,
+    strategy: &'r mut ReplacementState,
 }
 
 impl CompileToken<'_> {
     fn token(&self) -> Token {
-        let ReplacementStrategy::PropagatingReplacementToRoot {
+        let ReplacementState::PropagatingReplacementToRoot {
             next_to_replace,
             next_token,
             next_children,
