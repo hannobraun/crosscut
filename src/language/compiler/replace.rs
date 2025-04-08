@@ -77,7 +77,7 @@ impl ReplaceAction {
                     text: &token,
                     parent: path.parent(),
                     sibling_index: path.sibling_index(),
-                    children: children.clone(),
+                    children,
                 };
                 let added = token.compile(change_set, errors, packages);
 
