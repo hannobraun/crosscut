@@ -57,17 +57,17 @@ impl ReplaceAction {
         packages: &Packages,
     ) -> Self {
         match self {
-            ReplaceAction::Start {
+            Self::Start {
                 next_to_replace,
                 next_token,
                 next_children,
-            } => ReplaceAction::CompileToken {
+            } => Self::CompileToken {
                 next_to_replace,
                 next_token,
                 next_children,
                 replacements: Vec::new(),
             },
-            ReplaceAction::CompileToken {
+            Self::CompileToken {
                 next_to_replace,
                 next_token,
                 next_children,
@@ -95,20 +95,20 @@ impl ReplaceAction {
                     let mut next_children = parent_node.to_children();
                     next_children.replace(&replaced, [added]);
 
-                    ReplaceAction::CompileToken {
+                    Self::CompileToken {
                         next_to_replace: parent,
                         next_token: parent_node.to_token(packages),
                         next_children,
                         replacements,
                     }
                 } else {
-                    ReplaceAction::UpdatePath {
+                    Self::UpdatePath {
                         replacements,
                         parent: None,
                     }
                 }
             }
-            ReplaceAction::UpdatePath {
+            Self::UpdatePath {
                 mut replacements,
                 mut parent,
             } => {
@@ -124,7 +124,7 @@ impl ReplaceAction {
 
                     parent = Some(path.clone());
 
-                    ReplaceAction::UpdatePath {
+                    Self::UpdatePath {
                         replacements,
                         parent,
                     }
@@ -137,10 +137,10 @@ impl ReplaceAction {
                         );
                     };
 
-                    ReplaceAction::Finish { path }
+                    Self::Finish { path }
                 }
             }
-            action @ ReplaceAction::Finish { .. } => action,
+            action @ Self::Finish { .. } => action,
         }
     }
 }
