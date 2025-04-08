@@ -101,12 +101,6 @@ pub fn replace_node_and_update_parents(
     }
 }
 
-#[derive(Clone)]
-struct Replacement {
-    replaced: NodePath,
-    replacement: NodeHash,
-}
-
 enum ReplaceAction {
     CompileToken {
         next_to_replace: NodePath,
@@ -118,4 +112,10 @@ enum ReplaceAction {
         replacements: Vec<Replacement>,
         parent: Option<NodePath>,
     },
+}
+
+#[derive(Clone)]
+struct Replacement {
+    replaced: NodePath,
+    replacement: NodeHash,
 }
