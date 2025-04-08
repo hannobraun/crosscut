@@ -1,7 +1,7 @@
 use std::mem;
 
 use crate::language::{
-    code::{Children, Errors, NewChangeSet, NodeHash, NodePath, Nodes},
+    code::{Children, Errors, NewChangeSet, NodeHash, NodePath},
     packages::Packages,
 };
 
@@ -19,7 +19,46 @@ pub fn replace_node_and_update_parents(
         ReplacementStrategy::new(to_replace, replacement_token, children);
 
     loop {
-        let next_action = strategy.next_action(change_set.nodes());
+        let next_action = match &mut strategy {
+            strategy @ ReplacementStrategy::PropagatingReplacementToRoot {
+                ..
+            } => ReplacementAction::CompileToken {
+                action: CompileToken { strategy },
+            },
+            ReplacementStrategy::UpdatingPathsAfterReplacement {
+                replacements,
+                parent,
+            } => {
+                if let Some(node) = replacements.pop() {
+                    let replacement = NodePath::new(
+                        node.replacement,
+                        parent.clone(),
+                        node.replaced.sibling_index(),
+                        change_set.nodes(),
+                    );
+
+                    *parent = Some(replacement.clone());
+
+                    ReplacementAction::UpdatePath {
+                        replaced: node.replaced,
+                        replacement,
+                    }
+                } else {
+                    let Some(path) = parent.clone() else {
+                        unreachable!(
+                            "There is always at least one replacement, so we \
+                            _must_ have set the `parent` at least once in the \
+                            code above."
+                        );
+                    };
+
+                    ReplacementAction::Finish { path }
+                }
+            }
+            ReplacementStrategy::PlaceholderState => {
+                unreachable!("Strategy is never left in placeholder state.");
+            }
+        };
 
         match next_action {
             ReplacementAction::CompileToken { action } => {
@@ -110,49 +149,6 @@ impl ReplacementStrategy {
             next_token: replacement_token.to_string(),
             next_children: children,
             replacements: Vec::new(),
-        }
-    }
-
-    fn next_action(&mut self, nodes: &Nodes) -> ReplacementAction {
-        match self {
-            strategy @ Self::PropagatingReplacementToRoot { .. } => {
-                ReplacementAction::CompileToken {
-                    action: CompileToken { strategy },
-                }
-            }
-            Self::UpdatingPathsAfterReplacement {
-                replacements,
-                parent,
-            } => {
-                if let Some(node) = replacements.pop() {
-                    let replacement = NodePath::new(
-                        node.replacement,
-                        parent.clone(),
-                        node.replaced.sibling_index(),
-                        nodes,
-                    );
-
-                    *parent = Some(replacement.clone());
-
-                    ReplacementAction::UpdatePath {
-                        replaced: node.replaced,
-                        replacement,
-                    }
-                } else {
-                    let Some(path) = parent.clone() else {
-                        unreachable!(
-                            "There is always at least one replacement, so we \
-                            _must_ have set the `parent` at least once in the \
-                            code above."
-                        );
-                    };
-
-                    ReplacementAction::Finish { path }
-                }
-            }
-            Self::PlaceholderState => {
-                unreachable!("Strategy is never left in placeholder state.");
-            }
         }
     }
 }
