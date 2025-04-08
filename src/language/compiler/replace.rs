@@ -1,5 +1,3 @@
-use std::mem;
-
 use crate::language::{
     code::{Children, Errors, NewChangeSet, NodeHash, NodePath},
     packages::Packages,
@@ -15,7 +13,7 @@ pub fn replace_node_and_update_parents(
     change_set: &mut NewChangeSet,
     errors: &mut Errors,
 ) -> NodePath {
-    let mut strategy = ReplacementState::PropagatingReplacementToRoot {
+    let mut strategy = ReplaceAction::CompileToken {
         next_to_replace: to_replace.clone(),
         next_token: replacement_token.to_string(),
         next_children: children,
@@ -23,32 +21,7 @@ pub fn replace_node_and_update_parents(
     };
 
     loop {
-        let next_action =
-            match mem::replace(&mut strategy, ReplacementState::Placeholder) {
-                ReplacementState::PropagatingReplacementToRoot {
-                    next_to_replace,
-                    next_token,
-                    next_children,
-                    replacements,
-                } => ReplaceAction::CompileToken {
-                    next_to_replace,
-                    next_token,
-                    next_children,
-                    replacements,
-                },
-                ReplacementState::UpdatingPathsAfterReplacement {
-                    replacements,
-                    parent,
-                } => ReplaceAction::UpdatePath {
-                    replacements,
-                    parent,
-                },
-                ReplacementState::Placeholder => {
-                    unreachable!(
-                        "Strategy is never left in placeholder state."
-                    );
-                }
-            };
+        let next_action = strategy;
 
         match next_action {
             ReplaceAction::CompileToken {
@@ -79,18 +52,17 @@ pub fn replace_node_and_update_parents(
                     let mut next_children = parent_node.to_children();
                     next_children.replace(&replaced, [added]);
 
-                    strategy = ReplacementState::PropagatingReplacementToRoot {
+                    strategy = ReplaceAction::CompileToken {
                         next_to_replace: parent,
                         next_token: parent_node.to_token(packages),
                         next_children,
                         replacements,
                     };
                 } else {
-                    strategy =
-                        ReplacementState::UpdatingPathsAfterReplacement {
-                            replacements,
-                            parent: None,
-                        };
+                    strategy = ReplaceAction::UpdatePath {
+                        replacements,
+                        parent: None,
+                    };
                 };
             }
             ReplaceAction::UpdatePath {
@@ -109,11 +81,10 @@ pub fn replace_node_and_update_parents(
 
                     parent = Some(path.clone());
 
-                    strategy =
-                        ReplacementState::UpdatingPathsAfterReplacement {
-                            replacements,
-                            parent,
-                        };
+                    strategy = ReplaceAction::UpdatePath {
+                        replacements,
+                        parent,
+                    };
                 } else {
                     let Some(path) = parent.clone() else {
                         unreachable!(
@@ -128,20 +99,6 @@ pub fn replace_node_and_update_parents(
             }
         }
     }
-}
-
-enum ReplacementState {
-    PropagatingReplacementToRoot {
-        next_to_replace: NodePath,
-        next_token: String,
-        next_children: Children,
-        replacements: Vec<Replacement>,
-    },
-    UpdatingPathsAfterReplacement {
-        replacements: Vec<Replacement>,
-        parent: Option<NodePath>,
-    },
-    Placeholder,
 }
 
 #[derive(Clone)]
