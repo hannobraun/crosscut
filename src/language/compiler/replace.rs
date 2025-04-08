@@ -20,7 +20,45 @@ pub fn replace_node_and_update_parents(
     };
 
     loop {
-        next_action = match next_action {
+        next_action = next_action.perform(change_set, errors, packages);
+
+        if let ReplaceAction::Finish { path } = next_action {
+            break path;
+        }
+    }
+}
+
+enum ReplaceAction {
+    Start {
+        next_to_replace: NodePath,
+        next_token: String,
+        next_children: Children,
+    },
+    CompileToken {
+        next_to_replace: NodePath,
+        next_token: String,
+        next_children: Children,
+        replacements: Vec<Replacement>,
+    },
+    UpdatePath {
+        replacements: Vec<Replacement>,
+        parent: Option<NodePath>,
+    },
+    Finish {
+        path: NodePath,
+    },
+}
+
+impl ReplaceAction {
+    fn perform(
+        self,
+        change_set: &mut NewChangeSet,
+        errors: &mut Errors,
+        packages: &Packages,
+    ) -> Self {
+        let next_action = self;
+
+        match next_action {
             ReplaceAction::Start {
                 next_to_replace,
                 next_token,
@@ -105,33 +143,8 @@ pub fn replace_node_and_update_parents(
                 }
             }
             action @ ReplaceAction::Finish { .. } => action,
-        };
-
-        if let ReplaceAction::Finish { path } = next_action {
-            break path;
         }
     }
-}
-
-enum ReplaceAction {
-    Start {
-        next_to_replace: NodePath,
-        next_token: String,
-        next_children: Children,
-    },
-    CompileToken {
-        next_to_replace: NodePath,
-        next_token: String,
-        next_children: Children,
-        replacements: Vec<Replacement>,
-    },
-    UpdatePath {
-        replacements: Vec<Replacement>,
-        parent: Option<NodePath>,
-    },
-    Finish {
-        path: NodePath,
-    },
 }
 
 #[derive(Clone)]
