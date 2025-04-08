@@ -13,7 +13,7 @@ pub fn replace_node_and_update_parents(
     change_set: &mut NewChangeSet,
     errors: &mut Errors,
 ) -> NodePath {
-    let mut strategy = ReplaceAction::CompileToken {
+    let mut next_action = ReplaceAction::CompileToken {
         next_to_replace: to_replace.clone(),
         next_token: replacement_token.to_string(),
         next_children: children,
@@ -21,7 +21,7 @@ pub fn replace_node_and_update_parents(
     };
 
     loop {
-        match strategy {
+        match next_action {
             ReplaceAction::CompileToken {
                 next_to_replace,
                 next_token,
@@ -50,14 +50,14 @@ pub fn replace_node_and_update_parents(
                     let mut next_children = parent_node.to_children();
                     next_children.replace(&replaced, [added]);
 
-                    strategy = ReplaceAction::CompileToken {
+                    next_action = ReplaceAction::CompileToken {
                         next_to_replace: parent,
                         next_token: parent_node.to_token(packages),
                         next_children,
                         replacements,
                     };
                 } else {
-                    strategy = ReplaceAction::UpdatePath {
+                    next_action = ReplaceAction::UpdatePath {
                         replacements,
                         parent: None,
                     };
@@ -79,7 +79,7 @@ pub fn replace_node_and_update_parents(
 
                     parent = Some(path.clone());
 
-                    strategy = ReplaceAction::UpdatePath {
+                    next_action = ReplaceAction::UpdatePath {
                         replacements,
                         parent,
                     };
