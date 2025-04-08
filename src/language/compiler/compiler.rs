@@ -32,7 +32,7 @@ impl<'r> Compiler<'r> {
                 change_set.nodes().get(parent.hash()).to_children();
             let sibling_index = siblings.next_index();
 
-            let (child, _) = compile_token(
+            let child = compile_token(
                 Token {
                     text: child_token,
                     parent: Some(&parent),

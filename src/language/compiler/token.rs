@@ -22,7 +22,7 @@ pub fn compile_token(
     change_set: &mut NewChangeSet,
     errors: &mut Errors,
     packages: &Packages,
-) -> (NodeHash, Option<CodeError>) {
+) -> NodeHash {
     // We're about to need that, to correctly compile function parameters.
     let _ = token.parent;
     let _ = token.sibling_index;
@@ -55,7 +55,7 @@ pub fn compile_token(
         errors.insert(hash, error);
     }
 
-    (hash, maybe_error)
+    hash
 }
 
 fn resolve_keyword(
