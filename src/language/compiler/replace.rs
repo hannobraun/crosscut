@@ -20,19 +20,17 @@ pub fn replace_node_and_update_parents(
     };
 
     loop {
-        match next_action {
+        next_action = match next_action {
             ReplaceAction::Start {
                 next_to_replace,
                 next_token,
                 next_children,
-            } => {
-                next_action = ReplaceAction::CompileToken {
-                    next_to_replace,
-                    next_token,
-                    next_children,
-                    replacements: Vec::new(),
-                }
-            }
+            } => ReplaceAction::CompileToken {
+                next_to_replace,
+                next_token,
+                next_children,
+                replacements: Vec::new(),
+            },
             ReplaceAction::CompileToken {
                 next_to_replace,
                 next_token,
@@ -61,17 +59,17 @@ pub fn replace_node_and_update_parents(
                     let mut next_children = parent_node.to_children();
                     next_children.replace(&replaced, [added]);
 
-                    next_action = ReplaceAction::CompileToken {
+                    ReplaceAction::CompileToken {
                         next_to_replace: parent,
                         next_token: parent_node.to_token(packages),
                         next_children,
                         replacements,
-                    };
+                    }
                 } else {
-                    next_action = ReplaceAction::UpdatePath {
+                    ReplaceAction::UpdatePath {
                         replacements,
                         parent: None,
-                    };
+                    }
                 }
             }
             ReplaceAction::UpdatePath {
@@ -90,10 +88,10 @@ pub fn replace_node_and_update_parents(
 
                     parent = Some(path.clone());
 
-                    next_action = ReplaceAction::UpdatePath {
+                    ReplaceAction::UpdatePath {
                         replacements,
                         parent,
-                    };
+                    }
                 } else {
                     let Some(path) = parent.clone() else {
                         unreachable!(
