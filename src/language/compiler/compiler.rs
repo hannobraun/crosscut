@@ -3,10 +3,7 @@ use crate::language::{
     packages::Packages,
 };
 
-use super::{
-    replace::replace_node_and_update_parents,
-    token::{Token, compile_token},
-};
+use super::{replace::replace_node_and_update_parents, token::Token};
 
 pub struct Compiler<'r> {
     codebase: &'r mut Codebase,
@@ -38,7 +35,7 @@ impl<'r> Compiler<'r> {
                 sibling_index,
                 children: Children::new([]),
             };
-            let child = compile_token(token, change_set, errors, packages);
+            let child = token.compile_token(change_set, errors, packages);
 
             siblings.add(child);
 

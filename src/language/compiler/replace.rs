@@ -5,7 +5,7 @@ use crate::language::{
     packages::Packages,
 };
 
-use super::token::{Token, compile_token};
+use super::token::Token;
 
 pub fn replace_node_and_update_parents(
     to_replace: &NodePath,
@@ -22,7 +22,7 @@ pub fn replace_node_and_update_parents(
         match strategy.next_action(change_set.nodes()) {
             ReplacementAction::CompileToken { action } => {
                 let added =
-                    compile_token(action.token(), change_set, errors, packages);
+                    action.token().compile_token(change_set, errors, packages);
 
                 action.provide_replacement(added, change_set.nodes(), packages);
             }

@@ -17,45 +17,49 @@ pub struct Token<'r> {
     pub children: Children,
 }
 
-pub fn compile_token(
-    token: Token,
-    change_set: &mut NewChangeSet,
-    errors: &mut Errors,
-    packages: &Packages,
-) -> NodeHash {
-    // We're about to need that, to correctly compile function parameters.
-    let _ = token.parent;
-    let _ = token.sibling_index;
+impl Token<'_> {
+    pub fn compile_token(
+        self,
+        change_set: &mut NewChangeSet,
+        errors: &mut Errors,
+        packages: &Packages,
+    ) -> NodeHash {
+        let token = self;
 
-    let (node, maybe_error) = if token.text.is_empty() {
-        node_with_one_child_or_error(
-            |child| Node::Empty { child },
-            token.text,
-            token.children,
-        )
-    } else if let Some((node, maybe_err)) =
-        resolve_keyword(token.text, &token.children)
-    {
-        (node, maybe_err)
-    } else {
-        match resolve_function(token.text, token.children, packages) {
-            Ok((node, maybe_err)) => (node, maybe_err),
-            Err((children, candidates)) => (
-                Node::Error {
-                    node: token.text.to_string(),
-                    children,
-                },
-                Some(CodeError::UnresolvedIdentifier { candidates }),
-            ),
+        // We're about to need that, to correctly compile function parameters.
+        let _ = token.parent;
+        let _ = token.sibling_index;
+
+        let (node, maybe_error) = if token.text.is_empty() {
+            node_with_one_child_or_error(
+                |child| Node::Empty { child },
+                token.text,
+                token.children,
+            )
+        } else if let Some((node, maybe_err)) =
+            resolve_keyword(token.text, &token.children)
+        {
+            (node, maybe_err)
+        } else {
+            match resolve_function(token.text, token.children, packages) {
+                Ok((node, maybe_err)) => (node, maybe_err),
+                Err((children, candidates)) => (
+                    Node::Error {
+                        node: token.text.to_string(),
+                        children,
+                    },
+                    Some(CodeError::UnresolvedIdentifier { candidates }),
+                ),
+            }
+        };
+
+        let hash = change_set.add(node);
+        if let Some(error) = maybe_error {
+            errors.insert(hash, error);
         }
-    };
 
-    let hash = change_set.add(node);
-    if let Some(error) = maybe_error {
-        errors.insert(hash, error);
+        hash
     }
-
-    hash
 }
 
 fn resolve_keyword(
