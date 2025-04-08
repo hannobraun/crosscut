@@ -16,7 +16,7 @@ pub fn replace_node_and_update_parents(
     let mut next_action = ReplaceAction::Start {
         to_replace: to_replace.clone(),
         replacement_token: replacement_token.to_string(),
-        next_children: children,
+        children,
     };
 
     loop {
@@ -32,7 +32,7 @@ enum ReplaceAction {
     Start {
         to_replace: NodePath,
         replacement_token: String,
-        next_children: Children,
+        children: Children,
     },
     CompileToken {
         next_to_replace: NodePath,
@@ -60,7 +60,7 @@ impl ReplaceAction {
             Self::Start {
                 to_replace: next_to_replace,
                 replacement_token: next_token,
-                next_children,
+                children: next_children,
             } => Self::CompileToken {
                 next_to_replace,
                 next_token,
