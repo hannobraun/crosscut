@@ -46,7 +46,7 @@ pub fn replace_node_and_update_parents(
                     ReplaceAction::UpdatePath {
                         replacements,
                         parent,
-                        replaced: replacement,
+                        replacement,
                     }
                 } else {
                     let Some(path) = parent.clone() else {
@@ -111,7 +111,7 @@ pub fn replace_node_and_update_parents(
             ReplaceAction::UpdatePath {
                 replacements,
                 mut parent,
-                replaced,
+                replacement: replaced,
             } => {
                 let replacement = NodePath::new(
                     replaced.replacement,
@@ -166,7 +166,7 @@ enum ReplaceAction {
     UpdatePath {
         replacements: Vec<Replacement>,
         parent: Option<NodePath>,
-        replaced: Replacement,
+        replacement: Replacement,
     },
     Finish {
         path: NodePath,
