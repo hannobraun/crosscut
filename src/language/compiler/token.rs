@@ -28,7 +28,7 @@ impl Token<'_> {
     }
 }
 
-fn compile_token(
+pub fn compile_token(
     token: Token,
     change_set: &mut NewChangeSet,
     errors: &mut Errors,
