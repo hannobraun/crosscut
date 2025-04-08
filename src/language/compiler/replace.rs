@@ -66,8 +66,8 @@ pub fn replace_node_and_update_parents(
 
         match next_action {
             ReplacementAction::CompileToken { action } => {
-                let added =
-                    action.token().compile(change_set, errors, packages);
+                let token = action.token();
+                let added = token.compile(change_set, errors, packages);
 
                 let strategy = mem::replace(
                     action.strategy,
