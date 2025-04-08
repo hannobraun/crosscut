@@ -14,7 +14,7 @@ pub fn replace_node_and_update_parents(
     packages: &Packages,
 ) -> NodePath {
     let mut next_action = ReplaceAction::Start {
-        to_replace: to_replace.clone(),
+        to_replace,
         replacement_token,
         children,
     };
