@@ -23,19 +23,18 @@ pub fn replace_node_and_update_parents(
     };
 
     loop {
-        let next_action = match &mut strategy {
+        let next_action = match mem::replace(
+            &mut strategy,
+            ReplacementState::PlaceholderState,
+        ) {
             strategy @ ReplacementState::PropagatingReplacementToRoot {
                 ..
-            } => {
-                let strategy =
-                    mem::replace(strategy, ReplacementState::PlaceholderState);
-                ReplaceAction::CompileToken { strategy }
-            }
+            } => ReplaceAction::CompileToken { strategy },
             ReplacementState::UpdatingPathsAfterReplacement {
-                replacements,
-                parent,
+                mut replacements,
+                mut parent,
             } => {
-                if let Some(node) = replacements.pop() {
+                let next_action = if let Some(node) = replacements.pop() {
                     let replacement = NodePath::new(
                         node.replacement,
                         parent.clone(),
@@ -43,7 +42,7 @@ pub fn replace_node_and_update_parents(
                         change_set.nodes(),
                     );
 
-                    *parent = Some(replacement.clone());
+                    parent = Some(replacement.clone());
 
                     ReplaceAction::UpdatePath {
                         replaced: node.replaced,
@@ -59,7 +58,14 @@ pub fn replace_node_and_update_parents(
                     };
 
                     ReplaceAction::Finish { path }
-                }
+                };
+
+                strategy = ReplacementState::UpdatingPathsAfterReplacement {
+                    replacements,
+                    parent,
+                };
+
+                next_action
             }
             ReplacementState::PlaceholderState => {
                 unreachable!("Strategy is never left in placeholder state.");
