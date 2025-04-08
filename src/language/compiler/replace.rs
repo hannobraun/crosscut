@@ -40,7 +40,7 @@ pub fn replace_node_and_update_parents(
             },
             ReplacementState::UpdatingPathsAfterReplacement {
                 mut replacements,
-                mut parent,
+                parent,
             } => {
                 let next_action = if let Some(node) = replacements.pop() {
                     let replacement = NodePath::new(
@@ -49,8 +49,6 @@ pub fn replace_node_and_update_parents(
                         node.replaced.sibling_index(),
                         change_set.nodes(),
                     );
-
-                    parent = Some(replacement.clone());
 
                     ReplaceAction::UpdatePath {
                         replacements,
@@ -122,11 +120,13 @@ pub fn replace_node_and_update_parents(
             }
             ReplaceAction::UpdatePath {
                 replacements,
-                parent,
+                mut parent,
                 replaced,
                 replacement,
             } => {
                 change_set.replace(&replaced, &replacement);
+
+                parent = Some(replacement.clone());
 
                 strategy = ReplacementState::UpdatingPathsAfterReplacement {
                     replacements,
