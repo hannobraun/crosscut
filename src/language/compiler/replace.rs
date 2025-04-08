@@ -104,10 +104,12 @@ pub fn replace_node_and_update_parents(
                     ReplaceAction::Finish { path }
                 }
             }
-            ReplaceAction::Finish { path } => {
-                break path;
-            }
+            action @ ReplaceAction::Finish { .. } => action,
         };
+
+        if let ReplaceAction::Finish { path } = next_action {
+            break path;
+        }
     }
 }
 
