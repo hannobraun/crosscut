@@ -26,7 +26,7 @@ pub fn replace_node_and_update_parents(
         let next_action = match &mut strategy {
             strategy @ ReplacementState::PropagatingReplacementToRoot {
                 ..
-            } => ReplacementAction::CompileToken { strategy },
+            } => ReplaceAction::CompileToken { strategy },
             ReplacementState::UpdatingPathsAfterReplacement {
                 replacements,
                 parent,
@@ -41,7 +41,7 @@ pub fn replace_node_and_update_parents(
 
                     *parent = Some(replacement.clone());
 
-                    ReplacementAction::UpdatePath {
+                    ReplaceAction::UpdatePath {
                         replaced: node.replaced,
                         replacement,
                     }
@@ -54,7 +54,7 @@ pub fn replace_node_and_update_parents(
                         );
                     };
 
-                    ReplacementAction::Finish { path }
+                    ReplaceAction::Finish { path }
                 }
             }
             ReplacementState::PlaceholderState => {
@@ -63,7 +63,7 @@ pub fn replace_node_and_update_parents(
         };
 
         match next_action {
-            ReplacementAction::CompileToken { strategy } => {
+            ReplaceAction::CompileToken { strategy } => {
                 let ReplacementState::PropagatingReplacementToRoot {
                     next_to_replace,
                     next_token,
@@ -126,13 +126,13 @@ pub fn replace_node_and_update_parents(
                         };
                 };
             }
-            ReplacementAction::UpdatePath {
+            ReplaceAction::UpdatePath {
                 replaced,
                 replacement,
             } => {
                 change_set.replace(&replaced, &replacement);
             }
-            ReplacementAction::Finish { path } => {
+            ReplaceAction::Finish { path } => {
                 break path;
             }
         }
@@ -159,7 +159,7 @@ struct Replacement {
     replacement: NodeHash,
 }
 
-enum ReplacementAction<'r> {
+enum ReplaceAction<'r> {
     CompileToken {
         strategy: &'r mut ReplacementState,
     },
