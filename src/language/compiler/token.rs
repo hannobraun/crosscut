@@ -4,8 +4,8 @@ use itertools::Itertools;
 
 use crate::language::{
     code::{
-        CandidateForResolution, Children, CodeError, Literal, NewChangeSet,
-        Node, NodeHash, NodePath,
+        CandidateForResolution, Children, CodeError, Errors, Literal,
+        NewChangeSet, Node, NodeHash, NodePath,
     },
     packages::Packages,
 };
@@ -21,6 +21,7 @@ impl Token<'_> {
     pub fn compile(
         self,
         change_set: &mut NewChangeSet,
+        _: &mut Errors,
         packages: &Packages,
     ) -> (NodeHash, Option<CodeError>) {
         compile_token(self, change_set, packages)

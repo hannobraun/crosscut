@@ -35,7 +35,7 @@ impl<'r> Compiler<'r> {
                 sibling_index,
                 children: Children::new([]),
             }
-            .compile(change_set, packages);
+            .compile(change_set, errors, packages);
 
             siblings.add(child);
 
