@@ -23,47 +23,32 @@ pub fn replace_node_and_update_parents(
     };
 
     loop {
-        let next_action = match mem::replace(
-            &mut strategy,
-            ReplacementState::Placeholder,
-        ) {
-            ReplacementState::PropagatingReplacementToRoot {
-                next_to_replace,
-                next_token,
-                next_children,
-                replacements,
-            } => ReplaceAction::CompileToken {
-                next_to_replace,
-                next_token,
-                next_children,
-                replacements,
-            },
-            ReplacementState::UpdatingPathsAfterReplacement {
-                mut replacements,
-                parent,
-            } => {
-                if let Some(replacement) = replacements.pop() {
-                    ReplaceAction::UpdatePath {
-                        replacements,
-                        parent,
-                        replacement,
-                    }
-                } else {
-                    let Some(path) = parent.clone() else {
-                        unreachable!(
-                            "There is always at least one replacement, so we \
-                            _must_ have set the `parent` at least once in the \
-                            code above."
-                        );
-                    };
-
-                    ReplaceAction::Finish { path }
+        let next_action =
+            match mem::replace(&mut strategy, ReplacementState::Placeholder) {
+                ReplacementState::PropagatingReplacementToRoot {
+                    next_to_replace,
+                    next_token,
+                    next_children,
+                    replacements,
+                } => ReplaceAction::CompileToken {
+                    next_to_replace,
+                    next_token,
+                    next_children,
+                    replacements,
+                },
+                ReplacementState::UpdatingPathsAfterReplacement {
+                    replacements,
+                    parent,
+                } => ReplaceAction::UpdatePath {
+                    replacements,
+                    parent,
+                },
+                ReplacementState::Placeholder => {
+                    unreachable!(
+                        "Strategy is never left in placeholder state."
+                    );
                 }
-            }
-            ReplacementState::Placeholder => {
-                unreachable!("Strategy is never left in placeholder state.");
-            }
-        };
+            };
 
         match next_action {
             ReplaceAction::CompileToken {
@@ -109,28 +94,37 @@ pub fn replace_node_and_update_parents(
                 };
             }
             ReplaceAction::UpdatePath {
-                replacements,
+                mut replacements,
                 mut parent,
-                replacement,
             } => {
-                let path = NodePath::new(
-                    replacement.replacement,
-                    parent.clone(),
-                    replacement.replaced.sibling_index(),
-                    change_set.nodes(),
-                );
+                if let Some(replacement) = replacements.pop() {
+                    let path = NodePath::new(
+                        replacement.replacement,
+                        parent.clone(),
+                        replacement.replaced.sibling_index(),
+                        change_set.nodes(),
+                    );
 
-                change_set.replace(&replacement.replaced, &path);
+                    change_set.replace(&replacement.replaced, &path);
 
-                parent = Some(path.clone());
+                    parent = Some(path.clone());
 
-                strategy = ReplacementState::UpdatingPathsAfterReplacement {
-                    replacements,
-                    parent,
-                };
-            }
-            ReplaceAction::Finish { path } => {
-                break path;
+                    strategy =
+                        ReplacementState::UpdatingPathsAfterReplacement {
+                            replacements,
+                            parent,
+                        };
+                } else {
+                    let Some(path) = parent.clone() else {
+                        unreachable!(
+                            "There is always at least one replacement, so we \
+                            _must_ have set the `parent` at least once in the \
+                            code above."
+                        );
+                    };
+
+                    break path;
+                }
             }
         }
     }
@@ -166,9 +160,5 @@ enum ReplaceAction {
     UpdatePath {
         replacements: Vec<Replacement>,
         parent: Option<NodePath>,
-        replacement: Replacement,
-    },
-    Finish {
-        path: NodePath,
     },
 }
