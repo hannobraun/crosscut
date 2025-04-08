@@ -72,7 +72,7 @@ pub fn replace_node_and_update_parents(
                         replacements,
                         parent: None,
                     };
-                };
+                }
             }
             ReplaceAction::UpdatePath {
                 mut replacements,
