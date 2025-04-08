@@ -19,7 +19,9 @@ pub fn replace_node_and_update_parents(
         ReplacementStrategy::new(to_replace, replacement_token, children);
 
     loop {
-        match strategy.next_action(change_set.nodes()) {
+        let next_action = strategy.next_action(change_set.nodes());
+
+        match next_action {
             ReplacementAction::CompileToken { action } => {
                 let added =
                     action.token().compile(change_set, errors, packages);
