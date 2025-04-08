@@ -41,7 +41,7 @@ impl<'r> Compiler<'r> {
 
             let parent_path = replace_node_and_update_parents(
                 &parent,
-                &change_set.nodes().get(parent.hash()).to_token(packages),
+                change_set.nodes().get(parent.hash()).to_token(packages),
                 siblings,
                 change_set,
                 errors,
@@ -202,7 +202,7 @@ impl<'r> Compiler<'r> {
         self.codebase.make_change_with_errors(|change_set, errors| {
             replace_node_and_update_parents(
                 to_replace,
-                replacement_token,
+                replacement_token.to_string(),
                 children.into(),
                 change_set,
                 errors,
