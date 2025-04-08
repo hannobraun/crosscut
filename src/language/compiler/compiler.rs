@@ -39,13 +39,10 @@ impl<'r> Compiler<'r> {
 
             siblings.add(child);
 
+            let token =
+                change_set.nodes().get(parent.hash()).to_token(packages);
             let parent_path = replace_node_and_update_parents(
-                &parent,
-                change_set.nodes().get(parent.hash()).to_token(packages),
-                siblings,
-                change_set,
-                errors,
-                packages,
+                &parent, token, siblings, change_set, errors, packages,
             );
 
             let child_path = NodePath::new(
