@@ -13,15 +13,26 @@ pub fn replace_node_and_update_parents(
     change_set: &mut NewChangeSet,
     errors: &mut Errors,
 ) -> NodePath {
-    let mut next_action = ReplaceAction::CompileToken {
+    let mut next_action = ReplaceAction::Start {
         next_to_replace: to_replace.clone(),
         next_token: replacement_token.to_string(),
         next_children: children,
-        replacements: Vec::new(),
     };
 
     loop {
         match next_action {
+            ReplaceAction::Start {
+                next_to_replace,
+                next_token,
+                next_children,
+            } => {
+                next_action = ReplaceAction::CompileToken {
+                    next_to_replace,
+                    next_token,
+                    next_children,
+                    replacements: Vec::new(),
+                }
+            }
             ReplaceAction::CompileToken {
                 next_to_replace,
                 next_token,
@@ -100,6 +111,11 @@ pub fn replace_node_and_update_parents(
 }
 
 enum ReplaceAction {
+    Start {
+        next_to_replace: NodePath,
+        next_token: String,
+        next_children: Children,
+    },
     CompileToken {
         next_to_replace: NodePath,
         next_token: String,
