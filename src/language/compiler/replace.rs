@@ -22,7 +22,7 @@ pub fn replace_node_and_update_parents(
         match strategy.next_action(change_set.nodes()) {
             ReplacementAction::CompileToken { action } => {
                 let added =
-                    action.token().compile_token(change_set, errors, packages);
+                    action.token().compile(change_set, errors, packages);
 
                 action.provide_replacement(added, change_set.nodes(), packages);
             }

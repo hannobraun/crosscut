@@ -18,7 +18,7 @@ pub struct Token<'r> {
 }
 
 impl Token<'_> {
-    pub fn compile_token(
+    pub fn compile(
         self,
         change_set: &mut NewChangeSet,
         errors: &mut Errors,

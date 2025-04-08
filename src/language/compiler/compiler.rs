@@ -35,7 +35,7 @@ impl<'r> Compiler<'r> {
                 sibling_index,
                 children: Children::new([]),
             };
-            let child = token.compile_token(change_set, errors, packages);
+            let child = token.compile(change_set, errors, packages);
 
             siblings.add(child);
 
