@@ -29,7 +29,7 @@ impl<'r> Compiler<'r> {
                 change_set.nodes().get(parent.hash()).to_children();
             let sibling_index = siblings.next_index();
 
-            let (child, maybe_error) = Token {
+            let (child, _) = Token {
                 text: child_token,
                 parent: Some(&parent),
                 sibling_index,
@@ -54,10 +54,6 @@ impl<'r> Compiler<'r> {
                 sibling_index,
                 change_set.nodes(),
             );
-
-            if let Some(error) = maybe_error {
-                errors.insert(child, error);
-            }
 
             child_path
         })

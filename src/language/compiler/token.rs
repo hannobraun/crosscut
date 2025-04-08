@@ -31,7 +31,7 @@ impl Token<'_> {
 fn compile_token(
     token: Token,
     change_set: &mut NewChangeSet,
-    _: &mut Errors,
+    errors: &mut Errors,
     packages: &Packages,
 ) -> (NodeHash, Option<CodeError>) {
     // We're about to need that, to correctly compile function parameters.
@@ -62,6 +62,9 @@ fn compile_token(
     };
 
     let hash = change_set.add(node);
+    if let Some(error) = maybe_error.clone() {
+        errors.insert(hash, error);
+    }
 
     (hash, maybe_error)
 }
