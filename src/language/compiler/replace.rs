@@ -70,14 +70,14 @@ impl ReplaceAction {
             Self::CompileToken {
                 path,
                 token,
-                children: next_children,
+                children,
                 mut replacements,
             } => {
                 let token = Token {
                     text: &token,
                     parent: path.parent(),
                     sibling_index: path.sibling_index(),
-                    children: next_children.clone(),
+                    children: children.clone(),
                 };
                 let added = token.compile(change_set, errors, packages);
 
