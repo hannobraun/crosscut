@@ -17,17 +17,6 @@ pub struct Token<'r> {
     pub children: Children,
 }
 
-impl Token<'_> {
-    pub fn compile(
-        self,
-        change_set: &mut NewChangeSet,
-        errors: &mut Errors,
-        packages: &Packages,
-    ) -> (NodeHash, Option<CodeError>) {
-        compile_token(self, change_set, errors, packages)
-    }
-}
-
 pub fn compile_token(
     token: Token,
     change_set: &mut NewChangeSet,
