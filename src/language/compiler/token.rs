@@ -24,28 +24,26 @@ impl Token<'_> {
         errors: &mut Errors,
         packages: &Packages,
     ) -> NodeHash {
-        let token = self;
-
         // We're about to need that, to correctly compile function parameters.
-        let _ = token.parent;
-        let _ = token.sibling_index;
+        let _ = self.parent;
+        let _ = self.sibling_index;
 
-        let (node, maybe_error) = if token.text.is_empty() {
+        let (node, maybe_error) = if self.text.is_empty() {
             node_with_one_child_or_error(
                 |child| Node::Empty { child },
-                token.text,
-                token.children,
+                self.text,
+                self.children,
             )
         } else if let Some((node, maybe_err)) =
-            resolve_keyword(token.text, &token.children)
+            resolve_keyword(self.text, &self.children)
         {
             (node, maybe_err)
         } else {
-            match resolve_function(token.text, token.children, packages) {
+            match resolve_function(self.text, self.children, packages) {
                 Ok((node, maybe_err)) => (node, maybe_err),
                 Err((children, candidates)) => (
                     Node::Error {
-                        node: token.text.to_string(),
+                        node: self.text.to_string(),
                         children,
                     },
                     Some(CodeError::UnresolvedIdentifier { candidates }),
