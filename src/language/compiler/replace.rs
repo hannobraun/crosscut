@@ -63,13 +63,13 @@ pub fn replace_node_and_update_parents(
         };
 
         match next_action {
-            ReplaceAction::CompileToken { strategy } => {
+            ReplaceAction::CompileToken { strategy: s } => {
                 let ReplacementState::PropagatingReplacementToRoot {
                     next_to_replace,
                     next_token,
                     next_children,
                     mut replacements,
-                } = mem::replace(strategy, ReplacementState::PlaceholderState)
+                } = mem::replace(s, ReplacementState::PlaceholderState)
                 else {
                     unreachable!(
                         "This action only exists while replacement strategy is \
@@ -99,19 +99,17 @@ pub fn replace_node_and_update_parents(
                     let mut next_children = parent_node.to_children();
                     next_children.replace(&replaced, [added]);
 
-                    *strategy =
-                        ReplacementState::PropagatingReplacementToRoot {
-                            next_to_replace: parent,
-                            next_token: parent_node.to_token(packages),
-                            next_children,
-                            replacements,
-                        };
+                    *s = ReplacementState::PropagatingReplacementToRoot {
+                        next_to_replace: parent,
+                        next_token: parent_node.to_token(packages),
+                        next_children,
+                        replacements,
+                    };
                 } else {
-                    *strategy =
-                        ReplacementState::UpdatingPathsAfterReplacement {
-                            replacements,
-                            parent: None,
-                        };
+                    *s = ReplacementState::UpdatingPathsAfterReplacement {
+                        replacements,
+                        parent: None,
+                    };
                 };
             }
             ReplaceAction::UpdatePath {
