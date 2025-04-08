@@ -26,7 +26,11 @@ pub fn replace_node_and_update_parents(
         let next_action = match &mut strategy {
             strategy @ ReplacementState::PropagatingReplacementToRoot {
                 ..
-            } => ReplaceAction::CompileToken { strategy },
+            } => {
+                let strategy =
+                    mem::replace(strategy, ReplacementState::PlaceholderState);
+                ReplaceAction::CompileToken { strategy }
+            }
             ReplacementState::UpdatingPathsAfterReplacement {
                 replacements,
                 parent,
@@ -69,7 +73,7 @@ pub fn replace_node_and_update_parents(
                     next_token,
                     next_children,
                     mut replacements,
-                } = mem::replace(s, ReplacementState::PlaceholderState)
+                } = s
                 else {
                     unreachable!(
                         "This action only exists while replacement strategy is \
@@ -99,17 +103,18 @@ pub fn replace_node_and_update_parents(
                     let mut next_children = parent_node.to_children();
                     next_children.replace(&replaced, [added]);
 
-                    *s = ReplacementState::PropagatingReplacementToRoot {
+                    strategy = ReplacementState::PropagatingReplacementToRoot {
                         next_to_replace: parent,
                         next_token: parent_node.to_token(packages),
                         next_children,
                         replacements,
                     };
                 } else {
-                    *s = ReplacementState::UpdatingPathsAfterReplacement {
-                        replacements,
-                        parent: None,
-                    };
+                    strategy =
+                        ReplacementState::UpdatingPathsAfterReplacement {
+                            replacements,
+                            parent: None,
+                        };
                 };
             }
             ReplaceAction::UpdatePath {
@@ -145,9 +150,9 @@ struct Replacement {
     replacement: NodeHash,
 }
 
-enum ReplaceAction<'r> {
+enum ReplaceAction {
     CompileToken {
-        strategy: &'r mut ReplacementState,
+        strategy: ReplacementState,
     },
     UpdatePath {
         replaced: NodePath,
