@@ -5,7 +5,7 @@ use itertools::Itertools;
 use crate::language::{
     code::{
         CandidateForResolution, Children, CodeError, Literal, NewChangeSet,
-        Node, NodeHash, NodePath, Nodes,
+        Node, NodeHash, NodePath,
     },
     packages::Packages,
 };
@@ -23,13 +23,13 @@ impl Token<'_> {
         change_set: &mut NewChangeSet,
         packages: &Packages,
     ) -> (Node, Option<CodeError>) {
-        compile_token(self, change_set.nodes(), packages)
+        compile_token(self, change_set, packages)
     }
 }
 
 fn compile_token(
     token: Token,
-    _: &Nodes,
+    _: &mut NewChangeSet,
     packages: &Packages,
 ) -> (Node, Option<CodeError>) {
     // We're about to need that, to correctly compile function parameters.
