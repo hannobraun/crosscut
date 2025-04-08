@@ -65,13 +65,15 @@ pub fn replace_node_and_update_parents(
         };
 
         match next_action {
-            ReplacementAction::CompileToken { action } => {
+            ReplacementAction::CompileToken {
+                action: CompileToken { strategy },
+            } => {
                 let ReplacementState::PropagatingReplacementToRoot {
                     next_to_replace,
                     next_token,
                     next_children,
                     replacements: _,
-                } = &action.strategy
+                } = &strategy
                 else {
                     unreachable!(
                         "This action only exists while replacement strategy is \
@@ -91,10 +93,7 @@ pub fn replace_node_and_update_parents(
                     next_to_replace,
                     mut replacements,
                     ..
-                } = mem::replace(
-                    action.strategy,
-                    ReplacementState::PlaceholderState,
-                )
+                } = mem::replace(strategy, ReplacementState::PlaceholderState)
                 else {
                     unreachable!(
                         "This action only exists while replacement strategy is \
@@ -116,7 +115,7 @@ pub fn replace_node_and_update_parents(
                     let mut next_children = parent_node.to_children();
                     next_children.replace(&replaced, [added]);
 
-                    *action.strategy =
+                    *strategy =
                         ReplacementState::PropagatingReplacementToRoot {
                             next_to_replace: parent,
                             next_token: parent_node.to_token(packages),
@@ -124,7 +123,7 @@ pub fn replace_node_and_update_parents(
                             replacements,
                         };
                 } else {
-                    *action.strategy =
+                    *strategy =
                         ReplacementState::UpdatingPathsAfterReplacement {
                             replacements,
                             parent: None,
