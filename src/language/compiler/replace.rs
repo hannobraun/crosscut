@@ -87,16 +87,14 @@ pub fn replace_node_and_update_parents(
                 };
                 let added = token.compile(change_set, errors, packages);
 
-                let strategy = mem::replace(
-                    action.strategy,
-                    ReplacementState::PlaceholderState,
-                );
-
                 let ReplacementState::PropagatingReplacementToRoot {
                     next_to_replace,
                     mut replacements,
                     ..
-                } = strategy
+                } = mem::replace(
+                    action.strategy,
+                    ReplacementState::PlaceholderState,
+                )
                 else {
                     unreachable!(
                         "This action only exists while replacement strategy is \
