@@ -42,7 +42,7 @@ pub fn replace_node_and_update_parents(
                 mut replacements,
                 parent,
             } => {
-                let next_action = if let Some(node) = replacements.pop() {
+                if let Some(node) = replacements.pop() {
                     let replacement = NodePath::new(
                         node.replacement,
                         parent.clone(),
@@ -66,9 +66,7 @@ pub fn replace_node_and_update_parents(
                     };
 
                     ReplaceAction::Finish { path }
-                };
-
-                next_action
+                }
             }
             ReplacementState::Placeholder => {
                 unreachable!("Strategy is never left in placeholder state.");
