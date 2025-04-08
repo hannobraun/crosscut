@@ -58,11 +58,11 @@ impl ReplaceAction {
     ) -> Self {
         match self {
             Self::Start {
-                to_replace: next_to_replace,
+                to_replace,
                 replacement_token: next_token,
                 children: next_children,
             } => Self::CompileToken {
-                next_to_replace,
+                next_to_replace: to_replace,
                 next_token,
                 next_children,
                 replacements: Vec::new(),
