@@ -111,16 +111,16 @@ pub fn replace_node_and_update_parents(
             ReplaceAction::UpdatePath {
                 replacements,
                 mut parent,
-                replacement: replaced,
+                replacement,
             } => {
                 let path = NodePath::new(
-                    replaced.replacement,
+                    replacement.replacement,
                     parent.clone(),
-                    replaced.replaced.sibling_index(),
+                    replacement.replaced.sibling_index(),
                     change_set.nodes(),
                 );
 
-                change_set.replace(&replaced.replaced, &path);
+                change_set.replace(&replacement.replaced, &path);
 
                 parent = Some(path.clone());
 
