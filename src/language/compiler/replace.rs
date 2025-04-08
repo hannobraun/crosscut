@@ -53,6 +53,8 @@ pub fn replace_node_and_update_parents(
                     parent = Some(replacement.clone());
 
                     ReplaceAction::UpdatePath {
+                        replacements,
+                        parent,
                         replaced: node.replaced,
                         replacement,
                     }
@@ -66,11 +68,6 @@ pub fn replace_node_and_update_parents(
                     };
 
                     ReplaceAction::Finish { path }
-                };
-
-                strategy = ReplacementState::UpdatingPathsAfterReplacement {
-                    replacements,
-                    parent,
                 };
 
                 next_action
@@ -124,10 +121,17 @@ pub fn replace_node_and_update_parents(
                 };
             }
             ReplaceAction::UpdatePath {
+                replacements,
+                parent,
                 replaced,
                 replacement,
             } => {
                 change_set.replace(&replaced, &replacement);
+
+                strategy = ReplacementState::UpdatingPathsAfterReplacement {
+                    replacements,
+                    parent,
+                };
             }
             ReplaceAction::Finish { path } => {
                 break path;
@@ -164,6 +168,8 @@ enum ReplaceAction {
         replacements: Vec<Replacement>,
     },
     UpdatePath {
+        replacements: Vec<Replacement>,
+        parent: Option<NodePath>,
         replaced: NodePath,
         replacement: NodePath,
     },
