@@ -43,18 +43,10 @@ pub fn replace_node_and_update_parents(
                 parent,
             } => {
                 if let Some(node) = replacements.pop() {
-                    let replacement = NodePath::new(
-                        node.replacement,
-                        parent.clone(),
-                        node.replaced.sibling_index(),
-                        change_set.nodes(),
-                    );
-
                     ReplaceAction::UpdatePath {
                         replacements,
                         parent,
                         replaced: node,
-                        replacement,
                     }
                 } else {
                     let Some(path) = parent.clone() else {
@@ -120,8 +112,14 @@ pub fn replace_node_and_update_parents(
                 replacements,
                 mut parent,
                 replaced,
-                replacement,
             } => {
+                let replacement = NodePath::new(
+                    replaced.replacement,
+                    parent.clone(),
+                    replaced.replaced.sibling_index(),
+                    change_set.nodes(),
+                );
+
                 change_set.replace(&replaced.replaced, &replacement);
 
                 parent = Some(replacement.clone());
@@ -169,7 +167,6 @@ enum ReplaceAction {
         replacements: Vec<Replacement>,
         parent: Option<NodePath>,
         replaced: Replacement,
-        replacement: NodePath,
     },
     Finish {
         path: NodePath,
