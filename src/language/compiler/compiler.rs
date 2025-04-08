@@ -35,7 +35,7 @@ impl<'r> Compiler<'r> {
                 sibling_index,
                 children: Children::new([]),
             }
-            .compile(change_set.nodes(), packages);
+            .compile(change_set, packages);
 
             let child = change_set.add(child);
             siblings.add(child);
