@@ -37,7 +37,7 @@ enum ReplaceAction {
     CompileToken {
         path: NodePath,
         token: String,
-        next_children: Children,
+        children: Children,
         replacements: Vec<Replacement>,
     },
     UpdatePath {
@@ -64,13 +64,13 @@ impl ReplaceAction {
             } => Self::CompileToken {
                 path: to_replace,
                 token: replacement_token,
-                next_children: children,
+                children,
                 replacements: Vec::new(),
             },
             Self::CompileToken {
                 path,
                 token,
-                next_children,
+                children: next_children,
                 mut replacements,
             } => {
                 let token = Token {
@@ -98,7 +98,7 @@ impl ReplaceAction {
                     Self::CompileToken {
                         path: parent,
                         token: parent_node.to_token(packages),
-                        next_children,
+                        children: next_children,
                         replacements,
                     }
                 } else {
