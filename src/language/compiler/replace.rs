@@ -101,8 +101,11 @@ pub fn replace_node_and_update_parents(
                         );
                     };
 
-                    break path;
+                    ReplaceAction::Finish { path }
                 }
+            }
+            ReplaceAction::Finish { path } => {
+                break path;
             }
         }
     }
@@ -123,6 +126,9 @@ enum ReplaceAction {
     UpdatePath {
         replacements: Vec<Replacement>,
         parent: Option<NodePath>,
+    },
+    Finish {
+        path: NodePath,
     },
 }
 
