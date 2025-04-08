@@ -21,10 +21,9 @@ pub fn replace_node_and_update_parents(
     loop {
         match strategy.next_action(change_set.nodes()) {
             ReplacementAction::CompileToken { action } => {
-                let (node, maybe_error) =
+                let (added, maybe_error) =
                     action.token().compile(change_set, packages);
 
-                let added = node;
                 if let Some(error) = maybe_error {
                     errors.insert(added, error);
                 }
