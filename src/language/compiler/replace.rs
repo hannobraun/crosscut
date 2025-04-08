@@ -21,9 +21,7 @@ pub fn replace_node_and_update_parents(
     };
 
     loop {
-        let next_action = strategy;
-
-        match next_action {
+        match strategy {
             ReplaceAction::CompileToken {
                 next_to_replace,
                 next_token,
