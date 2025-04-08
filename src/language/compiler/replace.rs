@@ -68,8 +68,8 @@ pub fn replace_node_and_update_parents(
                     next_to_replace,
                     next_token,
                     next_children,
-                    replacements: _,
-                } = &strategy
+                    mut replacements,
+                } = mem::replace(strategy, ReplacementState::PlaceholderState)
                 else {
                     unreachable!(
                         "This action only exists while replacement strategy is \
@@ -78,24 +78,12 @@ pub fn replace_node_and_update_parents(
                 };
 
                 let token = Token {
-                    text: next_token,
+                    text: &next_token,
                     parent: next_to_replace.parent(),
                     sibling_index: next_to_replace.sibling_index(),
                     children: next_children.clone(),
                 };
                 let added = token.compile(change_set, errors, packages);
-
-                let ReplacementState::PropagatingReplacementToRoot {
-                    next_to_replace,
-                    mut replacements,
-                    ..
-                } = mem::replace(strategy, ReplacementState::PlaceholderState)
-                else {
-                    unreachable!(
-                        "This action only exists while replacement strategy is \
-                        in this state."
-                    );
-                };
 
                 let replaced = *next_to_replace.hash();
                 let maybe_parent = next_to_replace.parent().cloned();
