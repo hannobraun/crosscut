@@ -51,7 +51,7 @@ pub fn compile_token(
     };
 
     let hash = change_set.add(node);
-    if let Some(error) = maybe_error.clone() {
+    if let Some(error) = maybe_error {
         errors.insert(hash, error);
     }
 
