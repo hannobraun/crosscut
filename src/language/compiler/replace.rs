@@ -24,7 +24,51 @@ pub fn replace_node_and_update_parents(
                 let added =
                     action.token().compile(change_set, errors, packages);
 
-                action.provide_replacement(added, change_set.nodes(), packages);
+                let strategy = mem::replace(
+                    action.strategy,
+                    ReplacementStrategy::PlaceholderState,
+                );
+
+                let ReplacementStrategy::PropagatingReplacementToRoot {
+                    next_to_replace,
+                    mut replacements,
+                    ..
+                } = strategy
+                else {
+                    unreachable!(
+                        "This action only exists while replacement strategy is \
+                        in this state."
+                    );
+                };
+
+                let replaced = *next_to_replace.hash();
+                let maybe_parent = next_to_replace.parent().cloned();
+
+                replacements.push(Replacement {
+                    replaced: next_to_replace,
+                    replacement: added,
+                });
+
+                if let Some(parent) = maybe_parent {
+                    let parent_node = change_set.nodes().get(parent.hash());
+
+                    let mut next_children = parent_node.to_children();
+                    next_children.replace(&replaced, [added]);
+
+                    *action.strategy =
+                        ReplacementStrategy::PropagatingReplacementToRoot {
+                            next_to_replace: parent,
+                            next_token: parent_node.to_token(packages),
+                            next_children,
+                            replacements,
+                        };
+                } else {
+                    *action.strategy =
+                        ReplacementStrategy::UpdatingPathsAfterReplacement {
+                            replacements,
+                            parent: None,
+                        };
+                };
             }
             ReplacementAction::UpdatePath {
                 replaced,
@@ -154,57 +198,6 @@ impl CompileToken<'_> {
             parent: next_to_replace.parent(),
             sibling_index: next_to_replace.sibling_index(),
             children: next_children.clone(),
-        }
-    }
-
-    fn provide_replacement(
-        self,
-        replacement: NodeHash,
-        nodes: &Nodes,
-        packages: &Packages,
-    ) {
-        let strategy =
-            mem::replace(self.strategy, ReplacementStrategy::PlaceholderState);
-
-        let ReplacementStrategy::PropagatingReplacementToRoot {
-            next_to_replace,
-            mut replacements,
-            ..
-        } = strategy
-        else {
-            unreachable!(
-                "This action only exists while replacement strategy is in this \
-                state."
-            );
-        };
-
-        let replaced = *next_to_replace.hash();
-        let maybe_parent = next_to_replace.parent().cloned();
-
-        replacements.push(Replacement {
-            replaced: next_to_replace,
-            replacement,
-        });
-
-        if let Some(parent) = maybe_parent {
-            let parent_node = nodes.get(parent.hash());
-
-            let mut next_children = parent_node.to_children();
-            next_children.replace(&replaced, [replacement]);
-
-            *self.strategy =
-                ReplacementStrategy::PropagatingReplacementToRoot {
-                    next_to_replace: parent,
-                    next_token: parent_node.to_token(packages),
-                    next_children,
-                    replacements,
-                };
-        } else {
-            *self.strategy =
-                ReplacementStrategy::UpdatingPathsAfterReplacement {
-                    replacements,
-                    parent: None,
-                };
         }
     }
 }
