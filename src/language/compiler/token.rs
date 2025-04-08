@@ -59,9 +59,9 @@ fn compile_token(
         }
     };
 
-    let node = change_set.add(node);
+    let hash = change_set.add(node);
 
-    (node, maybe_error)
+    (hash, maybe_error)
 }
 
 fn resolve_keyword(
