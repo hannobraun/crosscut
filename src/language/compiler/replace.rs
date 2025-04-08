@@ -6,7 +6,7 @@ use crate::language::{
 use super::token::Token;
 
 pub fn replace_node_and_update_parents(
-    to_replace: &NodePath,
+    to_replace: NodePath,
     replacement_token: String,
     children: Children,
     change_set: &mut NewChangeSet,

@@ -42,7 +42,7 @@ impl<'r> Compiler<'r> {
             let token =
                 change_set.nodes().get(parent.hash()).to_token(packages);
             let parent_path = replace_node_and_update_parents(
-                &parent, token, siblings, change_set, errors, packages,
+                parent, token, siblings, change_set, errors, packages,
             );
 
             let child_path = NodePath::new(
@@ -198,7 +198,7 @@ impl<'r> Compiler<'r> {
     ) -> NodePath {
         self.codebase.make_change_with_errors(|change_set, errors| {
             replace_node_and_update_parents(
-                to_replace,
+                to_replace.clone(),
                 replacement_token.to_string(),
                 children.into(),
                 change_set,
