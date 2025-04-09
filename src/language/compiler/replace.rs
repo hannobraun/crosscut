@@ -67,46 +67,16 @@ impl ReplaceAction {
                 path,
                 token,
                 children,
-                mut replacements,
-            } => {
-                let token = Token {
-                    text: &token,
-                    parent: path.parent(),
-                    sibling_index: path.sibling_index(),
-                    children,
-                };
-                let added = token.compile(change_set, errors, packages);
-
-                let replaced = *path.hash();
-                let maybe_parent = path.parent().cloned();
-
-                let replacement = Replacement {
-                    replaced: path,
-                    replacement: added,
-                };
-
-                if let Some(parent) = maybe_parent {
-                    let parent_node = change_set.nodes().get(parent.hash());
-
-                    let mut next_children = parent_node.to_children();
-                    next_children.replace(&replaced, [added]);
-
-                    replacements.push(replacement);
-
-                    Self::CompileToken {
-                        path: parent,
-                        token: parent_node.to_token(packages),
-                        children: next_children,
-                        replacements,
-                    }
-                } else {
-                    Self::UpdatePath {
-                        replacement,
-                        parent: None,
-                        replacements,
-                    }
-                }
-            }
+                replacements,
+            } => compile_token(
+                path,
+                token,
+                children,
+                replacements,
+                change_set,
+                errors,
+                packages,
+            ),
             Self::UpdatePath {
                 replacement,
                 parent,
@@ -146,6 +116,54 @@ fn start(
         token: replacement_token,
         children,
         replacements: Vec::new(),
+    }
+}
+
+fn compile_token(
+    path: NodePath,
+    token: String,
+    children: Children,
+    mut replacements: Vec<Replacement>,
+    change_set: &mut NewChangeSet,
+    errors: &mut Errors,
+    packages: &Packages,
+) -> ReplaceAction {
+    let token = Token {
+        text: &token,
+        parent: path.parent(),
+        sibling_index: path.sibling_index(),
+        children,
+    };
+    let added = token.compile(change_set, errors, packages);
+
+    let replaced = *path.hash();
+    let maybe_parent = path.parent().cloned();
+
+    let replacement = Replacement {
+        replaced: path,
+        replacement: added,
+    };
+
+    if let Some(parent) = maybe_parent {
+        let parent_node = change_set.nodes().get(parent.hash());
+
+        let mut next_children = parent_node.to_children();
+        next_children.replace(&replaced, [added]);
+
+        replacements.push(replacement);
+
+        ReplaceAction::CompileToken {
+            path: parent,
+            token: parent_node.to_token(packages),
+            children: next_children,
+            replacements,
+        }
+    } else {
+        ReplaceAction::UpdatePath {
+            replacement,
+            parent: None,
+            replacements,
+        }
     }
 }
 
