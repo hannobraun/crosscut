@@ -188,3 +188,40 @@ struct Replacement {
     replaced: NodePath,
     replacement: NodeHash,
 }
+
+#[cfg(test)]
+mod tests {
+    use crate::language::{
+        code::Codebase, compiler::replace::ReplaceAction, packages::Packages,
+    };
+
+    #[test]
+    fn replace_root_node() {
+        // Replacing the root node should lead to the root node being
+        // recompiled, and the path being updated.
+
+        let packages = Packages::new();
+        let mut codebase = Codebase::new();
+
+        let root = codebase.root();
+        let mut action = ReplaceAction::Start {
+            to_replace: root.path,
+            replacement_token: "root".to_string(),
+            children: root.node.to_children(),
+        };
+
+        codebase.make_change_with_errors(|change_set, errors| {
+            action = action.perform(change_set, errors, &packages);
+            let ReplaceAction::CompileToken { token, .. } = &action else {
+                panic!("Expected recompilation of root node.");
+            };
+            assert_eq!(token, "root");
+
+            action = action.perform(change_set, errors, &packages);
+            let ReplaceAction::UpdatePath { parent, .. } = &action else {
+                panic!("Expected path update of root node.")
+            };
+            assert_eq!(parent, &None);
+        });
+    }
+}
