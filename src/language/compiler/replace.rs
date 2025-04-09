@@ -238,7 +238,7 @@ mod tests {
 
         fn expect_compile_token_and_extract_token(&self) -> &str {
             let ReplaceAction::CompileToken { token, .. } = &self else {
-                panic!("Expected recompilation of root node.");
+                panic!("Expected `CompileToken`.");
             };
 
             token
@@ -250,7 +250,7 @@ mod tests {
                 ..
             } = &self
             else {
-                panic!("Expected path update of root node.")
+                panic!("Expected `UpdatePath`.")
             };
 
             replaced
