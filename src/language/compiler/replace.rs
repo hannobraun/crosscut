@@ -205,8 +205,7 @@ mod tests {
         let packages = Packages::new();
         let mut codebase = Codebase::new();
 
-        let root = codebase.root();
-        let mut action = ReplaceAction::start(root, "root");
+        let mut action = ReplaceAction::start(codebase.root(), "root");
 
         codebase.make_change_with_errors(|change_set, errors| {
             action = action.perform(change_set, errors, &packages);
