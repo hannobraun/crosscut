@@ -126,14 +126,12 @@ fn compile_token(
     };
     let replacement = token.compile(change_set, errors, packages);
 
-    let maybe_parent = path.parent().cloned();
-
     let replacement = Replacement {
         replaced: path,
         replacement,
     };
 
-    if let Some(parent) = maybe_parent {
+    if let Some(parent) = replacement.replaced.parent().cloned() {
         let parent_node = change_set.nodes().get(parent.hash());
 
         let mut next_children = parent_node.to_children();
