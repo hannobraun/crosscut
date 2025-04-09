@@ -62,12 +62,7 @@ impl ReplaceAction {
                 to_replace,
                 replacement_token,
                 children,
-            } => Self::CompileToken {
-                path: to_replace,
-                token: replacement_token,
-                children,
-                replacements: Vec::new(),
-            },
+            } => start(to_replace, replacement_token, children),
             Self::CompileToken {
                 path,
                 token,
@@ -138,6 +133,19 @@ impl ReplaceAction {
             }
             action @ Self::Finish { .. } => action,
         }
+    }
+}
+
+fn start(
+    to_replace: NodePath,
+    replacement_token: String,
+    children: Children,
+) -> ReplaceAction {
+    ReplaceAction::CompileToken {
+        path: to_replace,
+        token: replacement_token,
+        children,
+        replacements: Vec::new(),
     }
 }
 
