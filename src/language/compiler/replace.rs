@@ -123,7 +123,7 @@ impl ReplaceAction {
                     change_set.replace(&replacement.replaced, &path);
 
                     Self::UpdatePath {
-                        parent: Some(path.clone()),
+                        parent: Some(path),
                         replacements,
                     }
                 } else {
