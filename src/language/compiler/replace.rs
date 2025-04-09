@@ -218,6 +218,10 @@ mod tests {
                     .distance_from_root(),
                 0,
             );
+
+            action
+                .perform(change_set, errors, &packages)
+                .expect_finish();
         });
     }
 
@@ -225,6 +229,7 @@ mod tests {
         fn start(located_node: LocatedNode, replacement_token: &str) -> Self;
         fn expect_compile_token_and_extract_token(&self) -> &str;
         fn expect_update_path_and_extract_replaced(&self) -> &NodePath;
+        fn expect_finish(&self);
     }
 
     impl ReplaceActionExt for ReplaceAction {
@@ -256,6 +261,13 @@ mod tests {
             };
 
             replaced
+        }
+
+        #[track_caller]
+        fn expect_finish(&self) {
+            let ReplaceAction::Finish { .. } = self else {
+                panic!("Expected `Finish`.");
+            };
         }
     }
 }
