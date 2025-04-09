@@ -88,9 +88,10 @@ impl ReplaceAction {
                     replaced: path,
                     replacement: added,
                 };
-                replacements.push(replacement);
 
                 if let Some(parent) = maybe_parent {
+                    replacements.push(replacement);
+
                     let parent_node = change_set.nodes().get(parent.hash());
 
                     let mut next_children = parent_node.to_children();
@@ -103,6 +104,8 @@ impl ReplaceAction {
                         replacements,
                     }
                 } else {
+                    replacements.push(replacement);
+
                     Self::UpdatePath {
                         parent: None,
                         replacements,
