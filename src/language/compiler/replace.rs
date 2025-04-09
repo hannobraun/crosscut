@@ -198,7 +198,7 @@ mod tests {
     };
 
     #[test]
-    fn replace_root_node() {
+    fn replace_root() {
         // Replacing the root node should lead to the root node being
         // recompiled, and the path being updated.
 
