@@ -137,7 +137,8 @@ fn compile_token(
         let parent_node = change_set.nodes().get(parent.hash());
 
         let mut next_children = parent_node.to_children();
-        next_children.replace(replacement.replaced.hash(), [added]);
+        next_children
+            .replace(replacement.replaced.hash(), [replacement.replacement]);
 
         replacements.push(replacement);
 
