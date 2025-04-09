@@ -41,8 +41,8 @@ enum ReplaceAction {
         replacements: Vec<Replacement>,
     },
     UpdatePath {
-        replacements: Vec<Replacement>,
         parent: Option<NodePath>,
+        replacements: Vec<Replacement>,
     },
     Finish {
         path: NodePath,
@@ -103,14 +103,14 @@ impl ReplaceAction {
                     }
                 } else {
                     Self::UpdatePath {
-                        replacements,
                         parent: None,
+                        replacements,
                     }
                 }
             }
             Self::UpdatePath {
-                mut replacements,
                 parent,
+                mut replacements,
             } => {
                 if let Some(replacement) = replacements.pop() {
                     let path = NodePath::new(
@@ -123,8 +123,8 @@ impl ReplaceAction {
                     change_set.replace(&replacement.replaced, &path);
 
                     Self::UpdatePath {
-                        replacements,
                         parent: Some(path.clone()),
+                        replacements,
                     }
                 } else {
                     let Some(path) = parent.clone() else {
