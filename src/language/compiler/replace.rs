@@ -192,7 +192,7 @@ struct Replacement {
 #[cfg(test)]
 mod tests {
     use crate::language::{
-        code::Codebase,
+        code::{Codebase, NodePath},
         compiler::replace::{ReplaceAction, Replacement},
         packages::Packages,
     };
@@ -217,19 +217,18 @@ mod tests {
             assert_eq!(action.expect_compile_token_and_extract_token(), "root");
 
             action = action.perform(change_set, errors, &packages);
-            let ReplaceAction::UpdatePath {
-                replacement: Replacement { replaced, .. },
-                ..
-            } = &action
-            else {
-                panic!("Expected path update of root node.")
-            };
-            assert_eq!(replaced.distance_from_root(), 0);
+            assert_eq!(
+                action
+                    .expect_update_path_and_extract_replaced()
+                    .distance_from_root(),
+                0,
+            );
         });
     }
 
     trait ReplaceActionExt {
         fn expect_compile_token_and_extract_token(&self) -> &str;
+        fn expect_update_path_and_extract_replaced(&self) -> &NodePath;
     }
 
     impl ReplaceActionExt for ReplaceAction {
@@ -239,6 +238,18 @@ mod tests {
             };
 
             token
+        }
+
+        fn expect_update_path_and_extract_replaced(&self) -> &NodePath {
+            let ReplaceAction::UpdatePath {
+                replacement: Replacement { replaced, .. },
+                ..
+            } = &self
+            else {
+                panic!("Expected path update of root node.")
+            };
+
+            replaced
         }
     }
 }
