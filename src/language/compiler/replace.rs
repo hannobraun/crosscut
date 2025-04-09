@@ -214,10 +214,7 @@ mod tests {
 
         codebase.make_change_with_errors(|change_set, errors| {
             action = action.perform(change_set, errors, &packages);
-            let ReplaceAction::CompileToken { token, .. } = &action else {
-                panic!("Expected recompilation of root node.");
-            };
-            assert_eq!(token, "root");
+            assert_eq!(action.expect_compile_token_and_extract_token(), "root");
 
             action = action.perform(change_set, errors, &packages);
             let ReplaceAction::UpdatePath {
@@ -229,5 +226,19 @@ mod tests {
             };
             assert_eq!(replaced.distance_from_root(), 0);
         });
+    }
+
+    trait ReplaceActionExt {
+        fn expect_compile_token_and_extract_token(&self) -> &str;
+    }
+
+    impl ReplaceActionExt for ReplaceAction {
+        fn expect_compile_token_and_extract_token(&self) -> &str {
+            let ReplaceAction::CompileToken { token, .. } = &self else {
+                panic!("Expected recompilation of root node.");
+            };
+
+            token
+        }
     }
 }
