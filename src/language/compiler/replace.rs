@@ -62,26 +62,35 @@ impl ReplaceAction {
                 to_replace,
                 replacement_token,
                 children,
-            } => start(to_replace, replacement_token, children),
+            } => {
+                // comment added to force more readable formatting
+                start(to_replace, replacement_token, children)
+            }
             Self::CompileToken {
                 path,
                 token,
                 children,
                 replacements,
-            } => compile_token(
-                path,
-                token,
-                children,
-                replacements,
-                change_set,
-                errors,
-                packages,
-            ),
+            } => {
+                // comment added to force more readable formatting
+                compile_token(
+                    path,
+                    token,
+                    children,
+                    replacements,
+                    change_set,
+                    errors,
+                    packages,
+                )
+            }
             Self::UpdatePath {
                 replacement,
                 parent,
                 replacements,
-            } => update_path(replacement, parent, replacements, change_set),
+            } => {
+                // comment added to force more readable formatting
+                update_path(replacement, parent, replacements, change_set)
+            }
             action @ Self::Finish { .. } => action,
         }
     }
