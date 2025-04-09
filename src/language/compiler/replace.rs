@@ -126,7 +126,6 @@ fn compile_token(
     };
     let added = token.compile(change_set, errors, packages);
 
-    let replaced = *path.hash();
     let maybe_parent = path.parent().cloned();
 
     let replacement = Replacement {
@@ -138,7 +137,7 @@ fn compile_token(
         let parent_node = change_set.nodes().get(parent.hash());
 
         let mut next_children = parent_node.to_children();
-        next_children.replace(&replaced, [added]);
+        next_children.replace(replacement.replaced.hash(), [added]);
 
         replacements.push(replacement);
 
