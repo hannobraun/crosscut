@@ -124,13 +124,13 @@ fn compile_token(
         sibling_index: path.sibling_index(),
         children,
     };
-    let added = token.compile(change_set, errors, packages);
+    let replacement = token.compile(change_set, errors, packages);
 
     let maybe_parent = path.parent().cloned();
 
     let replacement = Replacement {
         replaced: path,
-        replacement: added,
+        replacement,
     };
 
     if let Some(parent) = maybe_parent {
