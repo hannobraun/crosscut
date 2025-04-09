@@ -192,7 +192,9 @@ struct Replacement {
 #[cfg(test)]
 mod tests {
     use crate::language::{
-        code::Codebase, compiler::replace::ReplaceAction, packages::Packages,
+        code::Codebase,
+        compiler::replace::{ReplaceAction, Replacement},
+        packages::Packages,
     };
 
     #[test]
@@ -218,10 +220,14 @@ mod tests {
             assert_eq!(token, "root");
 
             action = action.perform(change_set, errors, &packages);
-            let ReplaceAction::UpdatePath { parent, .. } = &action else {
+            let ReplaceAction::UpdatePath {
+                replacement: Replacement { replaced, .. },
+                ..
+            } = &action
+            else {
                 panic!("Expected path update of root node.")
             };
-            assert_eq!(parent, &None);
+            assert_eq!(replaced.distance_from_root(), 0);
         });
     }
 }

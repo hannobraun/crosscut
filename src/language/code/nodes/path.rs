@@ -126,6 +126,19 @@ impl NodePath {
 
         false
     }
+
+    #[cfg(test)]
+    pub fn distance_from_root(&self) -> u32 {
+        let mut distance_from_root = 0;
+        let mut parent = self.parent();
+
+        while let Some(p) = parent {
+            distance_from_root += 1;
+            parent = p.parent();
+        }
+
+        distance_from_root
+    }
 }
 
 #[derive(Debug, Eq, PartialEq)]
