@@ -90,12 +90,12 @@ impl ReplaceAction {
                 };
 
                 if let Some(parent) = maybe_parent {
-                    replacements.push(replacement);
-
                     let parent_node = change_set.nodes().get(parent.hash());
 
                     let mut next_children = parent_node.to_children();
                     next_children.replace(&replaced, [added]);
+
+                    replacements.push(replacement);
 
                     Self::CompileToken {
                         path: parent,
