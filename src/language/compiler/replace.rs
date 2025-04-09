@@ -192,7 +192,7 @@ struct Replacement {
 #[cfg(test)]
 mod tests {
     use crate::language::{
-        code::{Codebase, NodePath},
+        code::{Codebase, LocatedNode, NodePath},
         compiler::replace::{ReplaceAction, Replacement},
         packages::Packages,
     };
@@ -206,11 +206,7 @@ mod tests {
         let mut codebase = Codebase::new();
 
         let root = codebase.root();
-        let mut action = ReplaceAction::Start {
-            to_replace: root.path,
-            replacement_token: "root".to_string(),
-            children: root.node.to_children(),
-        };
+        let mut action = ReplaceAction::start(root, "root");
 
         codebase.make_change_with_errors(|change_set, errors| {
             action = action.perform(change_set, errors, &packages);
@@ -227,11 +223,20 @@ mod tests {
     }
 
     trait ReplaceActionExt {
+        fn start(located_node: LocatedNode, replacement_token: &str) -> Self;
         fn expect_compile_token_and_extract_token(&self) -> &str;
         fn expect_update_path_and_extract_replaced(&self) -> &NodePath;
     }
 
     impl ReplaceActionExt for ReplaceAction {
+        fn start(located_node: LocatedNode, replacement_token: &str) -> Self {
+            Self::Start {
+                to_replace: located_node.path,
+                replacement_token: replacement_token.to_string(),
+                children: located_node.node.to_children(),
+            }
+        }
+
         fn expect_compile_token_and_extract_token(&self) -> &str {
             let ReplaceAction::CompileToken { token, .. } = &self else {
                 panic!("Expected recompilation of root node.");
