@@ -41,6 +41,7 @@ enum ReplaceAction {
         replacements: Vec<Replacement>,
     },
     UpdatePath {
+        replacement: Replacement,
         parent: Option<NodePath>,
         replacements: Vec<Replacement>,
     },
@@ -104,34 +105,27 @@ impl ReplaceAction {
                         replacements,
                     }
                 } else {
-                    replacements.push(replacement);
-
                     Self::UpdatePath {
+                        replacement,
                         parent: None,
                         replacements,
                     }
                 }
             }
             Self::UpdatePath {
+                replacement,
                 parent,
                 mut replacements,
             } => {
-                if let Some(replacement) = replacements.pop() {
-                    let path = update_path(replacement, parent, change_set);
+                let path = update_path(replacement, parent, change_set);
 
+                if let Some(replacement) = replacements.pop() {
                     Self::UpdatePath {
+                        replacement,
                         parent: Some(path),
                         replacements,
                     }
                 } else {
-                    let Some(path) = parent.clone() else {
-                        unreachable!(
-                            "There is always at least one replacement, so we \
-                            _must_ have set the `parent` at least once in the \
-                            code above."
-                        );
-                    };
-
                     Self::Finish { path }
                 }
             }
