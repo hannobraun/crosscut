@@ -113,14 +113,7 @@ impl ReplaceAction {
                 mut replacements,
             } => {
                 if let Some(replacement) = replacements.pop() {
-                    let path = NodePath::new(
-                        replacement.replacement,
-                        parent,
-                        replacement.replaced.sibling_index(),
-                        change_set.nodes(),
-                    );
-
-                    change_set.replace(&replacement.replaced, &path);
+                    let path = update_path(replacement, parent, change_set);
 
                     Self::UpdatePath {
                         parent: Some(path),
@@ -141,6 +134,23 @@ impl ReplaceAction {
             action @ Self::Finish { .. } => action,
         }
     }
+}
+
+fn update_path(
+    replacement: Replacement,
+    parent: Option<NodePath>,
+    change_set: &mut NewChangeSet,
+) -> NodePath {
+    let path = NodePath::new(
+        replacement.replacement,
+        parent,
+        replacement.replaced.sibling_index(),
+        change_set.nodes(),
+    );
+
+    change_set.replace(&replacement.replaced, &path);
+
+    path
 }
 
 #[derive(Clone)]
