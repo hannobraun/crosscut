@@ -236,6 +236,7 @@ mod tests {
             }
         }
 
+        #[track_caller]
         fn expect_compile_token_and_extract_token(&self) -> &str {
             let ReplaceAction::CompileToken { token, .. } = &self else {
                 panic!("Expected `CompileToken`.");
@@ -244,6 +245,7 @@ mod tests {
             token
         }
 
+        #[track_caller]
         fn expect_update_path_and_extract_replaced(&self) -> &NodePath {
             let ReplaceAction::UpdatePath {
                 replacement: Replacement { replaced, .. },
