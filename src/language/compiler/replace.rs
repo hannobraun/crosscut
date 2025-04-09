@@ -80,27 +80,8 @@ impl ReplaceAction {
             Self::UpdatePath {
                 replacement,
                 parent,
-                mut replacements,
-            } => {
-                let path = NodePath::new(
-                    replacement.replacement,
-                    parent,
-                    replacement.replaced.sibling_index(),
-                    change_set.nodes(),
-                );
-
-                change_set.replace(&replacement.replaced, &path);
-
-                if let Some(replacement) = replacements.pop() {
-                    Self::UpdatePath {
-                        replacement,
-                        parent: Some(path),
-                        replacements,
-                    }
-                } else {
-                    Self::Finish { path }
-                }
-            }
+                replacements,
+            } => update_path(replacement, parent, replacements, change_set),
             action @ Self::Finish { .. } => action,
         }
     }
@@ -164,6 +145,32 @@ fn compile_token(
             parent: None,
             replacements,
         }
+    }
+}
+
+fn update_path(
+    replacement: Replacement,
+    parent: Option<NodePath>,
+    mut replacements: Vec<Replacement>,
+    change_set: &mut NewChangeSet,
+) -> ReplaceAction {
+    let path = NodePath::new(
+        replacement.replacement,
+        parent,
+        replacement.replaced.sibling_index(),
+        change_set.nodes(),
+    );
+
+    change_set.replace(&replacement.replaced, &path);
+
+    if let Some(replacement) = replacements.pop() {
+        ReplaceAction::UpdatePath {
+            replacement,
+            parent: Some(path),
+            replacements,
+        }
+    } else {
+        ReplaceAction::Finish { path }
     }
 }
 
