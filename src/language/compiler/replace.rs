@@ -84,10 +84,11 @@ impl ReplaceAction {
                 let replaced = *path.hash();
                 let maybe_parent = path.parent().cloned();
 
-                replacements.push(Replacement {
+                let replacement = Replacement {
                     replaced: path,
                     replacement: added,
-                });
+                };
+                replacements.push(replacement);
 
                 if let Some(parent) = maybe_parent {
                     let parent_node = change_set.nodes().get(parent.hash());
