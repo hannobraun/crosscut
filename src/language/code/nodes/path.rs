@@ -57,7 +57,7 @@ impl NodePath {
         nodes: &Nodes,
     ) -> Self {
         if let Some(parent) = &parent {
-            let Some(_) = nodes.get(&parent.hash).has_this_child(&hash) else {
+            let Some(_) = nodes.get(&parent.hash).has_child(&hash) else {
                 panic!(
                     "Attempting to construct invalid `NodePath`: Node is not \
                     listed among children of its supposed parent.",
