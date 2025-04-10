@@ -32,7 +32,7 @@ impl<'r> Compiler<'r> {
             let token = Token {
                 text: child_token,
                 parent: Some(&parent),
-                sibling_index,
+                sibling_index: sibling_index.index,
                 children: Children::new([]),
             };
             let child = token.compile(change_set, errors, packages);
@@ -48,7 +48,7 @@ impl<'r> Compiler<'r> {
             let child_path = NodePath::new(
                 child,
                 Some(parent_path),
-                sibling_index,
+                sibling_index.index,
                 change_set.nodes(),
             );
 

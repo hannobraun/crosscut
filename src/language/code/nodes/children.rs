@@ -1,6 +1,6 @@
 use std::{slice, vec};
 
-use super::NodeHash;
+use super::{NodeHash, path::SiblingIndex};
 
 #[derive(Clone, Debug, Eq, PartialEq, udigest::Digestable)]
 pub struct Children {
@@ -38,14 +38,16 @@ impl Children {
         }
     }
 
-    pub fn next_index(&self) -> usize {
-        self.inner.len()
+    pub fn next_index(&self) -> SiblingIndex {
+        SiblingIndex {
+            index: self.inner.len(),
+        }
     }
 
     pub fn add(&mut self, to_add: NodeHash) -> usize {
         let index = self.next_index();
         self.inner.push(to_add);
-        index
+        index.index
     }
 
     pub fn replace(
