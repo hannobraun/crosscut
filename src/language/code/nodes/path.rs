@@ -57,11 +57,12 @@ impl NodePath {
         nodes: &Nodes,
     ) -> Self {
         if let Some(parent) = &parent {
-            assert!(
-                nodes.get(&parent.hash).has_this_child(&hash).is_some(),
-                "Attempting to construct invalid `NodePath`: Node being \
-                referred to is not among its purported children.",
-            );
+            let Some(_) = nodes.get(&parent.hash).has_this_child(&hash) else {
+                panic!(
+                    "Attempting to construct invalid `NodePath`: Node being \
+                    referred to is not among its purported children.",
+                );
+            };
         }
 
         let parent = parent.map(Box::new);
