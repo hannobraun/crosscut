@@ -110,7 +110,7 @@ pub enum Node {
 }
 
 impl Node {
-    pub fn has_child(
+    pub fn has_child_at(
         &self,
         child: &NodeHash,
         sibling_index: &SiblingIndex,
