@@ -70,7 +70,13 @@ impl NodePath {
                     Trying to construct `NodePath` for hash `{hash}` with \
                     sibling index {index}.\n\
                     \n\
-                    Parent path: {parent_path:#?}",
+                    Parent:\n\
+                    \n\
+                    {parent_node:#?}
+                    \n\
+                    at path\n\
+                    \n\
+                    {parent_path:#?}",
                 );
             }
         }
