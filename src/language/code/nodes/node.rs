@@ -132,9 +132,9 @@ impl Node {
                     .or_else(|| (body == child).then_some(body_index))
             }
             Self::LiteralTuple { values: children }
-            | Self::Error { children, .. } => {
-                children.contains(child, sibling_index)
-            }
+            | Self::Error { children, .. } => children
+                .contains(child, sibling_index)
+                .then_some(*sibling_index),
         }
     }
 

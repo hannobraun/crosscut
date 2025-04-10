@@ -21,11 +21,11 @@ impl Children {
         &self,
         child: &NodeHash,
         sibling_index: &SiblingIndex,
-    ) -> Option<SiblingIndex> {
-        self.inner.iter().enumerate().find_map(|(index, c)| {
-            (c == child && index == sibling_index.index)
-                .then_some(SiblingIndex { index })
-        })
+    ) -> bool {
+        self.inner
+            .iter()
+            .enumerate()
+            .any(|(index, c)| (c == child && index == sibling_index.index))
     }
 
     /// # Access the single child of this node
