@@ -110,7 +110,11 @@ pub enum Node {
 }
 
 impl Node {
-    pub fn has_child(&self, child: &NodeHash) -> Option<SiblingIndex> {
+    pub fn has_child(
+        &self,
+        child: &NodeHash,
+        _: &SiblingIndex,
+    ) -> Option<SiblingIndex> {
         match self {
             Self::Empty { child: c }
             | Self::ProvidedFunction { argument: c, .. }
