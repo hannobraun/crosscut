@@ -1,5 +1,5 @@
 use crate::language::{
-    code::{Children, Codebase, NodePath},
+    code::{Children, Codebase, NodePath, SiblingIndex},
     packages::Packages,
 };
 
@@ -144,14 +144,8 @@ impl<'r> Compiler<'r> {
             !update_node_is_descendent && !update_node_is_ancestor;
 
         if update_node_is_descendent || update_node_is_lateral_relation {
-            let to_update_new_sibling_index = if to_update.parent()
-                == to_remove.parent()
-                && to_update.sibling_index() > to_remove.sibling_index()
-            {
-                to_update.sibling_index().dec()
-            } else {
-                to_update.sibling_index()
-            };
+            let to_update_new_sibling_index =
+                update_sibling_index_on_remove(to_update, to_remove);
 
             let mut parent = if update_node_is_descendent {
                 parent
@@ -209,5 +203,18 @@ impl<'r> Compiler<'r> {
                 packages,
             )
         })
+    }
+}
+
+fn update_sibling_index_on_remove(
+    path: &NodePath,
+    removed: &NodePath,
+) -> SiblingIndex {
+    if path.parent() == removed.parent()
+        && path.sibling_index() > removed.sibling_index()
+    {
+        path.sibling_index().dec()
+    } else {
+        path.sibling_index()
     }
 }
