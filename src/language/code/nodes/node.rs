@@ -133,7 +133,7 @@ impl Node {
             }
             Self::LiteralTuple { values: children }
             | Self::Error { children, .. } => children
-                .contains(child, sibling_index)
+                .contains_at(child, sibling_index)
                 .then_some(*sibling_index),
         }
     }

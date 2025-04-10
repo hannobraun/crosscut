@@ -17,7 +17,7 @@ impl Children {
         self.inner.is_empty()
     }
 
-    pub fn contains(
+    pub fn contains_at(
         &self,
         child: &NodeHash,
         sibling_index: &SiblingIndex,
