@@ -121,7 +121,7 @@ fn compile_token(
     let token = Token {
         text: &token,
         parent: path.parent(),
-        sibling_index: path.sibling_index(),
+        sibling_index: path.sibling_index().index,
         children,
     };
     let replacement = token.compile(change_set, errors, packages);
@@ -164,7 +164,7 @@ fn update_path(
     let path = NodePath::new(
         replacement.replacement,
         parent,
-        replacement.replaced.sibling_index(),
+        replacement.replaced.sibling_index().index,
         change_set.nodes(),
     );
 

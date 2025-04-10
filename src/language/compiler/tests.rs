@@ -217,8 +217,8 @@ fn remove_node_and_update_path_of_sibling() {
     let mut updated = to_update.clone();
     compiler.remove(&to_remove, &mut updated, &packages);
 
-    assert_eq!(to_update.sibling_index(), 1);
-    assert_eq!(updated.sibling_index(), 0);
+    assert_eq!(to_update.sibling_index().index, 1);
+    assert_eq!(updated.sibling_index().index, 0);
 }
 
 #[test]
