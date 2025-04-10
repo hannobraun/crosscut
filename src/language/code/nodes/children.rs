@@ -17,6 +17,10 @@ impl Children {
         self.inner.is_empty()
     }
 
+    pub fn contains(&self, child: &NodeHash) -> bool {
+        self.inner.contains(child)
+    }
+
     /// # Access the single child of this node
     ///
     /// Returns `None`, if the node has zero or more than one children.
