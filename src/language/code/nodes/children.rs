@@ -18,7 +18,7 @@ impl Children {
     }
 
     pub fn contains(&self, child: &NodeHash) -> Option<()> {
-        self.inner.contains(child).then_some(())
+        self.inner.iter().find_map(|c| (c == child).then_some(()))
     }
 
     /// # Access the single child of this node
