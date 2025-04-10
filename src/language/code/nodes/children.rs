@@ -1,6 +1,6 @@
 use std::{slice, vec};
 
-use super::{NodeHash, path::SiblingIndex};
+use super::{NodeHash, SiblingIndex};
 
 #[derive(Clone, Debug, Eq, PartialEq, udigest::Digestable)]
 pub struct Children {

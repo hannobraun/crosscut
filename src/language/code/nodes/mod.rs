@@ -9,5 +9,5 @@ pub use self::{
     hash::NodeHash,
     node::Node,
     nodes::Nodes,
-    path::{LocatedNode, NodePath},
+    path::{LocatedNode, NodePath, SiblingIndex},
 };
