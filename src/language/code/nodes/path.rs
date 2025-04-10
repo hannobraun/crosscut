@@ -145,7 +145,9 @@ impl NodePath {
 /// `u32` or whatever.
 ///
 /// For now, this works. But it might have to change going forward.
-#[derive(Clone, Debug, Eq, Ord, PartialEq, PartialOrd, udigest::Digestable)]
+#[derive(
+    Clone, Copy, Debug, Eq, Ord, PartialEq, PartialOrd, udigest::Digestable,
+)]
 pub struct SiblingIndex {
     pub index: usize,
 }
