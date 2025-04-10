@@ -128,7 +128,7 @@ impl Node {
             }
             Self::LiteralTuple { values: children }
             | Self::Error { children, .. } => {
-                children.contains(child)
+                children.contains(child).map(|_| ())
             }
         }
     }
