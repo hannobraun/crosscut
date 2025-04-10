@@ -110,17 +110,21 @@ pub enum Node {
 }
 
 impl Node {
-    pub fn has_this_child(&self, child: &NodeHash) -> bool {
+    pub fn has_this_child(&self, child: &NodeHash) -> Option<()> {
         match self {
             Self::Empty { child: c }
             | Self::ProvidedFunction { argument: c, .. }
-            | Self::Recursion { argument: c } => c.as_ref() == Some(child),
-            Self::LiteralNumber { value: _ } => false,
-            Self::LiteralFunction { parameter, body } => {
-                parameter == child || body == child
+            | Self::Recursion { argument: c } => {
+                (c.as_ref() == Some(child)).then_some(())
             }
+            Self::LiteralNumber { value: _ } => None,
+            Self::LiteralFunction { parameter, body } => (parameter == child)
+                .then_some(())
+                .or_else(|| (body == child).then_some(())),
             Self::LiteralTuple { values: children }
-            | Self::Error { children, .. } => children.inner.contains(child),
+            | Self::Error { children, .. } => {
+                children.inner.contains(child).then_some(())
+            }
         }
     }
 
