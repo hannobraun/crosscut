@@ -167,10 +167,13 @@ impl<'r> Compiler<'r> {
                     to_update_new_sibling_index,
                     self.codebase.nodes(),
                 );
+
+                let parent_new_sibling_index = path.sibling_index();
+
                 parent = Some(NodePath::new(
                     *path.hash(),
                     parent,
-                    path.sibling_index(),
+                    parent_new_sibling_index,
                     self.codebase.nodes(),
                 ));
             }
