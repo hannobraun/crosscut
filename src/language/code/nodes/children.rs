@@ -17,8 +17,8 @@ impl Children {
         self.inner.is_empty()
     }
 
-    pub fn contains(&self, child: &NodeHash) -> bool {
-        self.inner.contains(child)
+    pub fn contains(&self, child: &NodeHash) -> Option<()> {
+        self.inner.contains(child).then_some(())
     }
 
     /// # Access the single child of this node
