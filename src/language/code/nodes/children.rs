@@ -17,7 +17,11 @@ impl Children {
         self.inner.is_empty()
     }
 
-    pub fn contains(&self, child: &NodeHash) -> Option<SiblingIndex> {
+    pub fn contains(
+        &self,
+        child: &NodeHash,
+        _: &SiblingIndex,
+    ) -> Option<SiblingIndex> {
         self.inner.iter().enumerate().find_map(|(index, c)| {
             (c == child).then_some(SiblingIndex { index })
         })

@@ -113,7 +113,7 @@ impl Node {
     pub fn has_child(
         &self,
         child: &NodeHash,
-        _: &SiblingIndex,
+        sibling_index: &SiblingIndex,
     ) -> Option<SiblingIndex> {
         match self {
             Self::Empty { child: c }
@@ -132,7 +132,9 @@ impl Node {
                     .or_else(|| (body == child).then_some(body_index))
             }
             Self::LiteralTuple { values: children }
-            | Self::Error { children, .. } => children.contains(child),
+            | Self::Error { children, .. } => {
+                children.contains(child, sibling_index)
+            }
         }
     }
 
