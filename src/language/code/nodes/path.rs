@@ -59,6 +59,7 @@ pub struct NodePath {
 }
 
 impl NodePath {
+    #[track_caller]
     pub fn new(
         hash: NodeHash,
         parent: Option<NodePath>,
