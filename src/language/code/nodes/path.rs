@@ -55,7 +55,7 @@ pub struct NodePath {
     /// for `u32` or whatever.
     ///
     /// For now, this works. But it might have to change going forward.
-    sibling_index: usize,
+    sibling_index: SiblingIndex,
 }
 
 impl NodePath {
@@ -78,7 +78,9 @@ impl NodePath {
         Self {
             hash,
             parent,
-            sibling_index,
+            sibling_index: SiblingIndex {
+                index: sibling_index,
+            },
         }
     }
 
@@ -86,7 +88,7 @@ impl NodePath {
         Self {
             hash,
             parent: None,
-            sibling_index: 0,
+            sibling_index: SiblingIndex { index: 0 },
         }
     }
 
@@ -111,7 +113,7 @@ impl NodePath {
     }
 
     pub fn sibling_index(&self) -> usize {
-        self.sibling_index
+        self.sibling_index.index
     }
 
     pub fn is_ancestor_of(&self, possible_descendant: &NodePath) -> bool {
@@ -140,6 +142,11 @@ impl NodePath {
 
         distance_from_root
     }
+}
+
+#[derive(Clone, Debug, Eq, Ord, PartialEq, PartialOrd, udigest::Digestable)]
+pub struct SiblingIndex {
+    pub index: usize,
 }
 
 #[derive(Debug, Eq, PartialEq)]
