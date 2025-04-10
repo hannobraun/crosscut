@@ -215,7 +215,7 @@ impl Evaluator {
                 let body = NodePath::new(
                     *body,
                     Some(node.syntax_node),
-                    SiblingIndex { index: 0 },
+                    SiblingIndex { index: 1 },
                     codebase.nodes(),
                 );
 
@@ -361,10 +361,54 @@ struct StackFrame {
 
 #[cfg(test)]
 mod tests {
+    use itertools::Itertools;
+
     use crate::language::{
         code::{Codebase, Node, NodePath},
-        runtime::{Evaluator, RuntimeState},
+        runtime::{Evaluator, RuntimeState, Value},
     };
+
+    #[test]
+    fn create_correct_path_for_function_value() {
+        // When constructing a function value, the evaluator needs to create its
+        // body's path. There are ways this could go wrong, so let's make sure
+        // it doesn't.
+
+        let mut codebase = Codebase::new();
+
+        let root = codebase.root().path;
+        codebase.make_change(|change_set| {
+            let parameter = change_set.add(Node::LiteralNumber { value: 0 });
+            let body = change_set.add(Node::Empty { child: None });
+
+            let function =
+                change_set.add(Node::LiteralFunction { parameter, body });
+
+            change_set.replace(&root, &NodePath::for_root(function));
+        });
+
+        let [expected_parameter, expected_body] = codebase
+            .root()
+            .children(codebase.nodes())
+            .collect_array()
+            .unwrap();
+
+        let mut evaluator = Evaluator::new();
+        evaluator.reset(&codebase);
+
+        evaluator.step(&codebase);
+        let RuntimeState::Finished {
+            output: Value::Function { body },
+        } = evaluator.state()
+        else {
+            panic!();
+        };
+
+        // At some point the parameter will be part of the function value. Then
+        // we'll need to check against this expected value.
+        let _ = expected_parameter;
+        assert_eq!(body, &expected_body.path);
+    }
 
     #[test]
     fn handle_bare_recursion() {
