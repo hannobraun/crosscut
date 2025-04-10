@@ -59,8 +59,8 @@ impl NodePath {
         if let Some(parent) = &parent {
             let Some(_) = nodes.get(&parent.hash).has_this_child(&hash) else {
                 panic!(
-                    "Attempting to construct invalid `NodePath`: Node being \
-                    referred to is not among its purported children.",
+                    "Attempting to construct invalid `NodePath`: Node is not \
+                    listed among children of its supposed parent.",
                 );
             };
         }
