@@ -56,9 +56,9 @@ impl NodePath {
         sibling_index: SiblingIndex,
         nodes: &Nodes,
     ) -> Self {
-        if let Some(parent) = &parent {
+        if let Some(parent_path) = &parent {
             if nodes
-                .get(&parent.hash)
+                .get(&parent_path.hash)
                 .has_child(&hash, &sibling_index)
                 .is_none()
             {
@@ -72,7 +72,7 @@ impl NodePath {
                     Trying to construct `NodePath` for hash `{hash}` with \
                     sibling index {index}.\n\
                     \n\
-                    Parent path: {parent:#?}",
+                    Parent path: {parent_path:#?}",
                 );
             }
         }
