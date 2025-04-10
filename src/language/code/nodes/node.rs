@@ -114,31 +114,26 @@ impl Node {
         &self,
         child: &NodeHash,
         sibling_index: &SiblingIndex,
-    ) -> Option<SiblingIndex> {
+    ) -> bool {
         match self {
             Self::Empty { child: c }
             | Self::ProvidedFunction { argument: c, .. }
             | Self::Recursion { argument: c } => {
                 let child_index = SiblingIndex { index: 0 };
-                (c.as_ref() == Some(child) && sibling_index == &child_index)
-                    .then_some(child_index)
+                c.as_ref() == Some(child) && sibling_index == &child_index
             }
-            Self::LiteralNumber { value: _ } => None,
+            Self::LiteralNumber { value: _ } => false,
             Self::LiteralFunction { parameter, body } => {
                 let [parameter_index, body_index] =
                     [0, 1].map(|index| SiblingIndex { index });
 
-                (parameter == child && sibling_index == &parameter_index)
-                    .then_some(parameter_index)
-                    .or_else(|| {
-                        (body == child && sibling_index == &body_index)
-                            .then_some(body_index)
-                    })
+                parameter == child && sibling_index == &parameter_index
+                    || body == child && sibling_index == &body_index
             }
             Self::LiteralTuple { values: children }
-            | Self::Error { children, .. } => children
-                .contains_at(child, sibling_index)
-                .then_some(*sibling_index),
+            | Self::Error { children, .. } => {
+                children.contains_at(child, sibling_index)
+            }
         }
     }
 

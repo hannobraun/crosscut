@@ -59,7 +59,7 @@ impl NodePath {
         if let Some(parent_path) = &parent {
             let parent_node = nodes.get(&parent_path.hash);
 
-            if parent_node.has_child(&hash, &sibling_index).is_none() {
+            if !parent_node.has_child(&hash, &sibling_index) {
                 let index = sibling_index.index;
 
                 panic!(
