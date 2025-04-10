@@ -44,10 +44,10 @@ impl Children {
         }
     }
 
-    pub fn add(&mut self, to_add: NodeHash) -> usize {
+    pub fn add(&mut self, to_add: NodeHash) -> SiblingIndex {
         let index = self.next_index();
         self.inner.push(to_add);
-        index.index
+        index
     }
 
     pub fn replace(
