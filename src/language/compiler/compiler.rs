@@ -32,7 +32,7 @@ impl<'r> Compiler<'r> {
             let token = Token {
                 text: child_token,
                 parent: Some(&parent),
-                sibling_index: sibling_index.index,
+                sibling_index,
                 children: Children::new([]),
             };
             let child = token.compile(change_set, errors, packages);

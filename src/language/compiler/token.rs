@@ -5,7 +5,7 @@ use itertools::Itertools;
 use crate::language::{
     code::{
         CandidateForResolution, Children, CodeError, Errors, Literal,
-        NewChangeSet, Node, NodeHash, NodePath,
+        NewChangeSet, Node, NodeHash, NodePath, SiblingIndex,
     },
     packages::Packages,
 };
@@ -13,7 +13,7 @@ use crate::language::{
 pub struct Token<'r> {
     pub text: &'r str,
     pub parent: Option<&'r NodePath>,
-    pub sibling_index: usize,
+    pub sibling_index: SiblingIndex,
     pub children: Children,
 }
 
