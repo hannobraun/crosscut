@@ -102,8 +102,8 @@ impl NodePath {
         self.parent.as_deref()
     }
 
-    pub fn sibling_index(&self) -> &SiblingIndex {
-        &self.sibling_index
+    pub fn sibling_index(&self) -> SiblingIndex {
+        self.sibling_index
     }
 
     pub fn is_ancestor_of(&self, possible_descendant: &NodePath) -> bool {
