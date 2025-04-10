@@ -57,14 +57,14 @@ impl NodePath {
         nodes: &Nodes,
     ) -> Self {
         if let Some(parent) = &parent {
-            let Some(_) =
-                nodes.get(&parent.hash).has_child(&hash, &sibling_index)
-            else {
-                panic!(
-                    "Attempting to construct invalid `NodePath`: Node is not \
-                    listed among children of its supposed parent.",
-                );
-            };
+            assert!(
+                nodes
+                    .get(&parent.hash)
+                    .has_child(&hash, &sibling_index)
+                    .is_some(),
+                "Attempting to construct invalid `NodePath`: Node is not \
+                listed among children of its supposed parent.",
+            );
         }
 
         let parent = parent.map(Box::new);
