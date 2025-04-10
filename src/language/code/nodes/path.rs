@@ -53,7 +53,7 @@ impl NodePath {
     pub fn new(
         hash: NodeHash,
         parent: Option<NodePath>,
-        sibling_index: usize,
+        sibling_index: SiblingIndex,
         nodes: &Nodes,
     ) -> Self {
         if let Some(parent) = &parent {
@@ -68,9 +68,7 @@ impl NodePath {
         Self {
             hash,
             parent,
-            sibling_index: SiblingIndex {
-                index: sibling_index,
-            },
+            sibling_index,
         }
     }
 
@@ -181,7 +179,7 @@ impl<'r> LocatedNode<'r> {
                     path: NodePath::new(
                         hash,
                         Some(self.path.clone()),
-                        index,
+                        SiblingIndex { index },
                         nodes,
                     ),
                 }

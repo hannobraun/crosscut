@@ -1,4 +1,4 @@
-use crate::language::code::{Codebase, Node, NodePath, Type};
+use crate::language::code::{Codebase, Node, NodePath, SiblingIndex, Type};
 
 use super::{Effect, RuntimeState, Value};
 
@@ -215,7 +215,7 @@ impl Evaluator {
                 let body = NodePath::new(
                     *body,
                     Some(node.syntax_node),
-                    0,
+                    SiblingIndex { index: 0 },
                     codebase.nodes(),
                 );
 

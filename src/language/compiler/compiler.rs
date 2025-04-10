@@ -48,7 +48,7 @@ impl<'r> Compiler<'r> {
             let child_path = NodePath::new(
                 child,
                 Some(parent_path),
-                sibling_index.index,
+                sibling_index,
                 change_set.nodes(),
             );
 
@@ -164,13 +164,13 @@ impl<'r> Compiler<'r> {
                 *to_update = NodePath::new(
                     *to_update.hash(),
                     parent.clone(),
-                    to_update_new_sibling_index.index,
+                    to_update_new_sibling_index,
                     self.codebase.nodes(),
                 );
                 parent = Some(NodePath::new(
                     *path.hash(),
                     parent,
-                    path.sibling_index().index,
+                    path.sibling_index(),
                     self.codebase.nodes(),
                 ));
             }
