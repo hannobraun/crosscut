@@ -57,11 +57,9 @@ impl NodePath {
         nodes: &Nodes,
     ) -> Self {
         if let Some(parent_path) = &parent {
-            if nodes
-                .get(&parent_path.hash)
-                .has_child(&hash, &sibling_index)
-                .is_none()
-            {
+            let parent_node = nodes.get(&parent_path.hash);
+
+            if parent_node.has_child(&hash, &sibling_index).is_none() {
                 let index = sibling_index.index;
 
                 panic!(
