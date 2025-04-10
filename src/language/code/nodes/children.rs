@@ -20,10 +20,11 @@ impl Children {
     pub fn contains(
         &self,
         child: &NodeHash,
-        _: &SiblingIndex,
+        sibling_index: &SiblingIndex,
     ) -> Option<SiblingIndex> {
         self.inner.iter().enumerate().find_map(|(index, c)| {
-            (c == child).then_some(SiblingIndex { index })
+            (c == child && index == sibling_index.index)
+                .then_some(SiblingIndex { index })
         })
     }
 
