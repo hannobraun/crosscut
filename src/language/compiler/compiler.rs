@@ -148,7 +148,7 @@ impl<'r> Compiler<'r> {
                 == to_remove.parent()
                 && to_update.sibling_index() > to_remove.sibling_index()
             {
-                to_update.sibling_index().index - 1
+                to_update.sibling_index().dec().index
             } else {
                 to_update.sibling_index().index
             };
