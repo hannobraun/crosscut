@@ -119,9 +119,13 @@ impl Node {
                 (c.as_ref() == Some(child)).then_some(child_index)
             }
             Self::LiteralNumber { value: _ } => None,
-            Self::LiteralFunction { parameter, body } => (parameter == child)
-                .then_some(())
-                .or_else(|| (body == child).then_some(())),
+            Self::LiteralFunction { parameter, body } => {
+                let [parameter_index, body_index] = [(); 2];
+
+                (parameter == child)
+                    .then_some(parameter_index)
+                    .or_else(|| (body == child).then_some(body_index))
+            }
             Self::LiteralTuple { values: children }
             | Self::Error { children, .. } => {
                 children.inner.contains(child).then_some(())
