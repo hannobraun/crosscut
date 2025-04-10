@@ -115,7 +115,8 @@ impl Node {
             Self::Empty { child: c }
             | Self::ProvidedFunction { argument: c, .. }
             | Self::Recursion { argument: c } => {
-                (c.as_ref() == Some(child)).then_some(())
+                let child_index = ();
+                (c.as_ref() == Some(child)).then_some(child_index)
             }
             Self::LiteralNumber { value: _ } => None,
             Self::LiteralFunction { parameter, body } => (parameter == child)
