@@ -62,9 +62,17 @@ impl NodePath {
                 .has_child(&hash, &sibling_index)
                 .is_none()
             {
+                let index = sibling_index.index;
+
                 panic!(
                     "Attempting to construct invalid `NodePath`: Node is not \
-                    listed among children of its supposed parent.",
+                    listed among children of its supposed parent, at the given \
+                    sibling index.\n\
+                    \n\
+                    Trying to construct `NodePath` for hash `{hash}` with \
+                    sibling index {index}.\n\
+                    \n\
+                    Parent path: {parent:#?}",
                 );
             }
         }
