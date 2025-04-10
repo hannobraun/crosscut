@@ -2,7 +2,7 @@ use std::fmt;
 
 use crate::language::packages::{FunctionId, Packages};
 
-use super::{Children, NodeHash};
+use super::{Children, NodeHash, SiblingIndex};
 
 #[derive(Clone, Debug, Eq, PartialEq, udigest::Digestable)]
 pub enum Node {
@@ -110,26 +110,25 @@ pub enum Node {
 }
 
 impl Node {
-    pub fn has_this_child(&self, child: &NodeHash) -> Option<()> {
+    pub fn has_this_child(&self, child: &NodeHash) -> Option<SiblingIndex> {
         match self {
             Self::Empty { child: c }
             | Self::ProvidedFunction { argument: c, .. }
             | Self::Recursion { argument: c } => {
-                let child_index = ();
+                let child_index = SiblingIndex { index: 0 };
                 (c.as_ref() == Some(child)).then_some(child_index)
             }
             Self::LiteralNumber { value: _ } => None,
             Self::LiteralFunction { parameter, body } => {
-                let [parameter_index, body_index] = [(); 2];
+                let [parameter_index, body_index] =
+                    [0, 1].map(|index| SiblingIndex { index });
 
                 (parameter == child)
                     .then_some(parameter_index)
                     .or_else(|| (body == child).then_some(body_index))
             }
             Self::LiteralTuple { values: children }
-            | Self::Error { children, .. } => {
-                children.contains(child).map(|_| ())
-            }
+            | Self::Error { children, .. } => children.contains(child),
         }
     }
 
