@@ -162,7 +162,8 @@ impl<'r> Compiler<'r> {
                     self.codebase.nodes(),
                 );
 
-                let parent_new_sibling_index = path.sibling_index();
+                let parent_new_sibling_index =
+                    update_sibling_index_on_remove(&path, to_remove);
 
                 parent = Some(NodePath::new(
                     *path.hash(),

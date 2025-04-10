@@ -120,16 +120,20 @@ impl Node {
             | Self::ProvidedFunction { argument: c, .. }
             | Self::Recursion { argument: c } => {
                 let child_index = SiblingIndex { index: 0 };
-                (c.as_ref() == Some(child)).then_some(child_index)
+                (c.as_ref() == Some(child) && sibling_index == &child_index)
+                    .then_some(child_index)
             }
             Self::LiteralNumber { value: _ } => None,
             Self::LiteralFunction { parameter, body } => {
                 let [parameter_index, body_index] =
                     [0, 1].map(|index| SiblingIndex { index });
 
-                (parameter == child)
+                (parameter == child && sibling_index == &parameter_index)
                     .then_some(parameter_index)
-                    .or_else(|| (body == child).then_some(body_index))
+                    .or_else(|| {
+                        (body == child && sibling_index == &body_index)
+                            .then_some(body_index)
+                    })
             }
             Self::LiteralTuple { values: children }
             | Self::Error { children, .. } => children
