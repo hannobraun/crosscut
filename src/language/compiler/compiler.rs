@@ -148,9 +148,9 @@ impl<'r> Compiler<'r> {
                 == to_remove.parent()
                 && to_update.sibling_index() > to_remove.sibling_index()
             {
-                to_update.sibling_index().dec().index
+                to_update.sibling_index().dec()
             } else {
-                to_update.sibling_index().index
+                to_update.sibling_index()
             };
 
             let mut parent = if update_node_is_descendent {
@@ -164,7 +164,7 @@ impl<'r> Compiler<'r> {
                 *to_update = NodePath::new(
                     *to_update.hash(),
                     parent.clone(),
-                    to_update_new_sibling_index,
+                    to_update_new_sibling_index.index,
                     self.codebase.nodes(),
                 );
                 parent = Some(NodePath::new(
