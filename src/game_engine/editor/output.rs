@@ -358,6 +358,12 @@ fn render_help<A: EditorOutputAdapter>(
     writeln!(adapter)?;
 
     match node {
+        Node::Application { .. } => {
+            writeln!(
+                adapter,
+                "This is the application of a function to an argument.",
+            )?;
+        }
         Node::Empty => {
             writeln!(
                 adapter,

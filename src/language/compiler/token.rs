@@ -65,6 +65,44 @@ fn resolve_keyword(
     children: &Children,
 ) -> Option<(Node, Option<CodeError>)> {
     match name {
+        "apply" => {
+            let (node, maybe_error) =
+                if let Some(function) = children.is_single_child().copied() {
+                    (
+                        Node::Application {
+                            function,
+                            argument: None,
+                        },
+                        None,
+                    )
+                } else if children.inner.len() == 2 {
+                    let Some([function, argument]) =
+                        children.iter().copied().collect_array()
+                    else {
+                        unreachable!(
+                            "Just checked that there are exactly two children."
+                        );
+                    };
+
+                    (
+                        Node::Application {
+                            function,
+                            argument: Some(argument),
+                        },
+                        None,
+                    )
+                } else {
+                    (
+                        Node::Error {
+                            node: name.to_string(),
+                            children: children.clone(),
+                        },
+                        None,
+                    )
+                };
+
+            Some((node, maybe_error))
+        }
         "self" => Some(node_with_one_child_or_error(
             |argument| Node::Recursion { argument },
             name,

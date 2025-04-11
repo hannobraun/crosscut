@@ -176,6 +176,12 @@ impl Evaluator {
         };
 
         match codebase.node_at(&node.syntax_node).node {
+            Node::Application { .. } => {
+                // Implementation is currently in progress.
+                todo!(
+                    "Applying functions via `Application` is not supported yet."
+                );
+            }
             Node::Empty => {
                 self.finish_evaluating_node(
                     node.evaluated_children.into_active_value(),

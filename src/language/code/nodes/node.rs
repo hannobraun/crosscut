@@ -6,6 +6,15 @@ use super::{Children, NodeHash, SiblingIndex};
 
 #[derive(Clone, Debug, Eq, PartialEq, udigest::Digestable)]
 pub enum Node {
+    /// # The application of a function
+    Application {
+        /// # The function that is being applied
+        function: NodeHash,
+
+        /// # The argument that the function is applied to
+        argument: Option<NodeHash>,
+    },
+
     /// # An empty node
     ///
     /// Empty nodes are placeholders, while the user is editing the code. They
@@ -110,6 +119,14 @@ impl Node {
         sibling_index: &SiblingIndex,
     ) -> bool {
         match self {
+            Self::Application { function, argument } => {
+                let [function_index, argument_index] =
+                    [0, 1].map(|index| SiblingIndex { index });
+
+                child == function && sibling_index == &function_index
+                    || Some(child) == argument.as_ref()
+                        && sibling_index == &argument_index
+            }
             Self::Empty | Self::LiteralNumber { value: _ } => false,
             Self::LiteralFunction { parameter, body } => {
                 let [parameter_index, body_index] =
@@ -133,7 +150,11 @@ impl Node {
     pub fn has_no_children(&self) -> bool {
         match self {
             Self::Empty | Self::LiteralNumber { value: _ } => true,
-            Self::LiteralFunction {
+            Self::Application {
+                function: NodeHash { .. },
+                argument: _,
+            }
+            | Self::LiteralFunction {
                 parameter: NodeHash { .. },
                 body: NodeHash { .. },
             } => false,
@@ -148,6 +169,13 @@ impl Node {
 
     pub fn has_single_child(&self) -> Option<&NodeHash> {
         match self {
+            Self::Application { function, argument } => {
+                if argument.is_none() {
+                    Some(function)
+                } else {
+                    None
+                }
+            }
             Self::Empty | Self::LiteralNumber { value: _ } => None,
             Self::LiteralFunction {
                 parameter: NodeHash { .. },
@@ -164,6 +192,9 @@ impl Node {
 
     pub fn to_children(&self) -> Children {
         match self {
+            Self::Application { function, argument } => {
+                Children::new([*function].into_iter().chain(*argument))
+            }
             Self::Empty | Self::LiteralNumber { value: _ } => Children::new([]),
             Self::LiteralFunction {
                 parameter: a,
@@ -198,6 +229,9 @@ pub struct NodeDisplay<'r> {
 impl fmt::Display for NodeDisplay<'_> {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match &self.node {
+            Node::Application { .. } => {
+                write!(f, "apply")
+            }
             Node::Empty => {
                 write!(f, "")
             }
