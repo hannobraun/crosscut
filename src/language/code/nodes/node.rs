@@ -197,13 +197,17 @@ impl Node {
             Self::Application { function, argument } => {
                 Children::new([*function, *argument])
             }
+
             Self::Empty | Self::LiteralNumber { value: _ } => Children::new([]),
+
             Self::LiteralFunction {
                 parameter: a,
                 body: b,
             } => Children::new([*a, *b]),
+
             Self::LiteralTuple { values: children }
             | Self::Error { children, .. } => children.clone(),
+
             Self::ProvidedFunction {
                 argument: child, ..
             }
