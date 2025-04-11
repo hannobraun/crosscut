@@ -80,9 +80,9 @@ impl Language {
         );
     }
 
-    pub fn call_function(&mut self, root: NodePath, active_value: Value) {
+    pub fn call_function(&mut self, root: NodePath, argument: Value) {
         self.evaluator
-            .apply_function_raw(root, active_value, &self.codebase);
+            .apply_function_raw(root, argument, &self.codebase);
     }
 
     pub fn step(&mut self) -> &RuntimeState {
