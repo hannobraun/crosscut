@@ -123,10 +123,10 @@ impl Node {
                 function: child_a,
                 argument: child_b,
             } => {
-                let [function_index, argument_index] =
+                let [index_a, argument_index] =
                     [0, 1].map(|index| SiblingIndex { index });
 
-                child == child_a && sibling_index == &function_index
+                child == child_a && sibling_index == &index_a
                     || child == child_b && sibling_index == &argument_index
             }
 
