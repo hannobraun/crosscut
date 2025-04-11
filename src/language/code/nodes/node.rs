@@ -195,7 +195,7 @@ impl Node {
     pub fn to_children(&self) -> Children {
         match self {
             Self::Application { function, argument } => {
-                Children::new([*function].into_iter().chain([*argument]))
+                Children::new([*function, *argument])
             }
             Self::Empty | Self::LiteralNumber { value: _ } => Children::new([]),
             Self::LiteralFunction {
