@@ -1,3 +1,5 @@
+use itertools::Itertools;
+
 use crate::language::code::{Codebase, Node, NodePath, SiblingIndex, Type};
 
 use super::{Effect, RuntimeState, Value};
@@ -177,10 +179,34 @@ impl Evaluator {
 
         match codebase.node_at(&node.syntax_node).node {
             Node::Application { .. } => {
-                // Implementation is currently in progress.
-                todo!(
-                    "Applying functions via `Application` is not supported yet."
-                );
+                let Some([function, argument]) = node
+                    .clone()
+                    .evaluated_children
+                    .inner
+                    .into_iter()
+                    .collect_array()
+                else {
+                    unreachable!(
+                        "`Node::Application must have two children. If it \
+                        doesn't, that is a bug. Specifically, it is a mismatch \
+                        between the compiler and the evaluator."
+                    );
+                };
+
+                let body = match function {
+                    Value::Function { body } => body,
+                    value => {
+                        self.unexpected_input(
+                            Type::Function,
+                            value.clone(),
+                            node.syntax_node.clone(),
+                        );
+                        self.eval_stack.push(node);
+                        return;
+                    }
+                };
+
+                self.apply_function_raw(body, argument, codebase);
             }
             Node::Empty => {
                 self.finish_evaluating_node(
