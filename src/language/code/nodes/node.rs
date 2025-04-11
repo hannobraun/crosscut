@@ -121,13 +121,13 @@ impl Node {
         match self {
             Self::Application {
                 function: child_a,
-                argument,
+                argument: child_b,
             } => {
                 let [function_index, argument_index] =
                     [0, 1].map(|index| SiblingIndex { index });
 
                 child == child_a && sibling_index == &function_index
-                    || child == argument && sibling_index == &argument_index
+                    || child == child_b && sibling_index == &argument_index
             }
 
             Self::Empty | Self::LiteralNumber { value: _ } => false,
