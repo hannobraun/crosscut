@@ -119,19 +119,11 @@ fn resolve_function(
                     ))
                 }
             }
-            Literal::Integer { value } => {
-                if children.is_empty() {
-                    Ok((Node::LiteralNumber { value }, None))
-                } else {
-                    Ok((
-                        Node::Error {
-                            node: name.to_string(),
-                            children,
-                        },
-                        Some(CodeError::TooManyChildren),
-                    ))
-                }
-            }
+            Literal::Integer { value } => Ok(node_with_no_child_or_error(
+                || Node::LiteralNumber { value },
+                name,
+                children,
+            )),
             Literal::Tuple => {
                 Ok((Node::LiteralTuple { values: children }, None))
             }
@@ -165,6 +157,24 @@ fn resolve_literal(name: &str) -> Option<Literal> {
             "tuple" => Some(Literal::Tuple),
             _ => None,
         }
+    }
+}
+
+fn node_with_no_child_or_error(
+    node: impl FnOnce() -> Node,
+    token: &str,
+    children: Children,
+) -> (Node, Option<CodeError>) {
+    if children.is_empty() {
+        (node(), None)
+    } else {
+        (
+            Node::Error {
+                node: token.to_string(),
+                children,
+            },
+            Some(CodeError::TooManyChildren),
+        )
     }
 }
 
