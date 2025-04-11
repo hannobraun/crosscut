@@ -110,12 +110,12 @@ impl Node {
         sibling_index: &SiblingIndex,
     ) -> bool {
         match self {
+            Self::Empty | Self::LiteralNumber { value: _ } => false,
             Self::ProvidedFunction { argument: c, .. }
             | Self::Recursion { argument: c } => {
                 let child_index = SiblingIndex { index: 0 };
                 c.as_ref() == Some(child) && sibling_index == &child_index
             }
-            Self::Empty | Self::LiteralNumber { value: _ } => false,
             Self::LiteralFunction { parameter, body } => {
                 let [parameter_index, body_index] =
                     [0, 1].map(|index| SiblingIndex { index });
@@ -132,11 +132,11 @@ impl Node {
 
     pub fn has_no_children(&self) -> bool {
         match self {
+            Self::Empty | Self::LiteralNumber { value: _ } => true,
             Self::ProvidedFunction {
                 argument: child, ..
             }
             | Self::Recursion { argument: child } => child.is_none(),
-            Self::Empty | Self::LiteralNumber { value: _ } => true,
             Self::LiteralFunction {
                 parameter: NodeHash { .. },
                 body: NodeHash { .. },
@@ -148,11 +148,11 @@ impl Node {
 
     pub fn has_single_child(&self) -> Option<&NodeHash> {
         match self {
+            Self::Empty | Self::LiteralNumber { value: _ } => None,
             Self::ProvidedFunction {
                 argument: child, ..
             }
             | Self::Recursion { argument: child } => child.as_ref(),
-            Self::Empty | Self::LiteralNumber { value: _ } => None,
             Self::LiteralFunction {
                 parameter: NodeHash { .. },
                 body: NodeHash { .. },
@@ -164,11 +164,11 @@ impl Node {
 
     pub fn to_children(&self) -> Children {
         match self {
+            Self::Empty | Self::LiteralNumber { value: _ } => Children::new([]),
             Self::ProvidedFunction {
                 argument: child, ..
             }
             | Self::Recursion { argument: child } => Children::new(*child),
-            Self::Empty | Self::LiteralNumber { value: _ } => Children::new([]),
             Self::LiteralFunction { parameter, body } => {
                 Children::new([*parameter, *body])
             }
