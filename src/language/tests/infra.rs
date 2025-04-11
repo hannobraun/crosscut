@@ -19,6 +19,7 @@ pub trait NodeExt: Sized {
 }
 
 impl NodeExt for Node {
+    #[track_caller]
     fn expect_empty(&self) -> Node {
         if let Node::Empty { .. } = self {
             self.clone()
@@ -27,6 +28,7 @@ impl NodeExt for Node {
         }
     }
 
+    #[track_caller]
     fn expect_error(&self, expected: &str) -> Node {
         if let Node::Error { node, .. } = self {
             assert_eq!(node, expected);
@@ -36,6 +38,7 @@ impl NodeExt for Node {
         }
     }
 
+    #[track_caller]
     fn expect_integer_literal(&self, expected: i32) -> Node {
         if let Node::LiteralNumber { value } = self {
             assert_eq!(value, &expected);
@@ -45,6 +48,7 @@ impl NodeExt for Node {
         }
     }
 
+    #[track_caller]
     fn expect_single_child(&self, nodes: &Nodes) -> Node {
         let hash = self
             .has_single_child()
