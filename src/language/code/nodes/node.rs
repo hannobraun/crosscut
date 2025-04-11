@@ -132,11 +132,14 @@ impl Node {
 
             Self::Empty | Self::LiteralNumber { value: _ } => false,
 
-            Self::LiteralFunction { parameter, body } => {
+            Self::LiteralFunction {
+                parameter: child_a,
+                body,
+            } => {
                 let [parameter_index, body_index] =
                     [0, 1].map(|index| SiblingIndex { index });
 
-                child == parameter && sibling_index == &parameter_index
+                child == child_a && sibling_index == &parameter_index
                     || child == body && sibling_index == &body_index
             }
 
