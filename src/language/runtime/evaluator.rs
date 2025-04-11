@@ -213,23 +213,6 @@ impl Evaluator {
                     node.evaluated_children.into_active_value(),
                 );
             }
-            Node::ProvidedFunction { id, .. } => {
-                self.state = RuntimeState::Effect {
-                    effect: Effect::ProvidedFunction {
-                        id: *id,
-                        input: node
-                            .evaluated_children
-                            .clone()
-                            .into_active_value(),
-                    },
-                    path: node.syntax_node.clone(),
-                };
-
-                // A host function is not fully handled, until the handler has
-                // provided its output. It might also trigger an effect, and
-                // then we still need the node.
-                self.eval_stack.push(node);
-            }
             Node::LiteralFunction { parameter: _, body } => {
                 match node.evaluated_children.clone().into_active_value() {
                     Value::Nothing => {}
@@ -284,6 +267,23 @@ impl Evaluator {
                         .into_iter()
                         .collect(),
                 });
+            }
+            Node::ProvidedFunction { id, .. } => {
+                self.state = RuntimeState::Effect {
+                    effect: Effect::ProvidedFunction {
+                        id: *id,
+                        input: node
+                            .evaluated_children
+                            .clone()
+                            .into_active_value(),
+                    },
+                    path: node.syntax_node.clone(),
+                };
+
+                // A host function is not fully handled, until the handler has
+                // provided its output. It might also trigger an effect, and
+                // then we still need the node.
+                self.eval_stack.push(node);
             }
             Node::Recursion { .. } => {
                 let path = self
