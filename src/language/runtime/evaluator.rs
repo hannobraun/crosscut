@@ -260,8 +260,8 @@ impl Evaluator {
                     .map(|stack_frame| stack_frame.root)
                     .unwrap_or_else(|| codebase.root().path);
 
-                let active_value = node.evaluated_children.into_active_value();
-                self.apply_function_raw(path, active_value, codebase);
+                let argument = node.evaluated_children.into_active_value();
+                self.apply_function_raw(path, argument, codebase);
             }
             Node::Error { .. } => {
                 self.state = RuntimeState::Error {
