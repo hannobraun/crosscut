@@ -176,8 +176,9 @@ impl Node {
                     None
                 }
             }
-            Self::Empty | Self::LiteralNumber { value: _ } => None,
-            Self::LiteralFunction {
+            Self::Empty
+            | Self::LiteralNumber { value: _ }
+            | Self::LiteralFunction {
                 parameter: NodeHash { .. },
                 body: NodeHash { .. },
             } => None,
