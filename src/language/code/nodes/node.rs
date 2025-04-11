@@ -12,7 +12,7 @@ pub enum Node {
         function: NodeHash,
 
         /// # The argument that the function is applied to
-        argument: Option<NodeHash>,
+        argument: NodeHash,
     },
 
     /// # An empty node
@@ -124,8 +124,7 @@ impl Node {
                     [0, 1].map(|index| SiblingIndex { index });
 
                 child == function && sibling_index == &function_index
-                    || Some(child) == argument.as_ref()
-                        && sibling_index == &argument_index
+                    || child == argument && sibling_index == &argument_index
             }
 
             Self::Empty | Self::LiteralNumber { value: _ } => false,
@@ -176,15 +175,8 @@ impl Node {
 
     pub fn has_single_child(&self) -> Option<&NodeHash> {
         match self {
-            Self::Application { function, argument } => {
-                if argument.is_none() {
-                    Some(function)
-                } else {
-                    None
-                }
-            }
-
-            Self::Empty
+            Self::Application { .. }
+            | Self::Empty
             | Self::LiteralNumber { value: _ }
             | Self::LiteralFunction {
                 parameter: NodeHash { .. },
@@ -204,7 +196,7 @@ impl Node {
     pub fn to_children(&self) -> Children {
         match self {
             Self::Application { function, argument } => {
-                Children::new([*function].into_iter().chain(*argument))
+                Children::new([*function].into_iter().chain([*argument]))
             }
             Self::Empty | Self::LiteralNumber { value: _ } => Children::new([]),
             Self::LiteralFunction {
