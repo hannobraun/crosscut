@@ -80,7 +80,7 @@ impl Language {
         );
     }
 
-    pub fn call_function(&mut self, root: NodePath, argument: Value) {
+    pub fn apply_function(&mut self, root: NodePath, argument: Value) {
         self.evaluator
             .apply_function_raw(root, argument, &self.codebase);
     }

@@ -135,7 +135,7 @@ where
                                 // set the color.
 
                                 self.language
-                                    .call_function(body, self.display.clone());
+                                    .apply_function(body, self.display.clone());
                                 continue;
                             }
                             Err(_) => {

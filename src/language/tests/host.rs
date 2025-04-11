@@ -90,7 +90,7 @@ fn host_functions_can_inject_opaque_value() {
         id: 0,
         display: "opaque",
     };
-    language.call_function(path, opaque_value.clone());
+    language.apply_function(path, opaque_value.clone());
 
     let mut value_observed = false;
     let output =
