@@ -316,7 +316,7 @@ impl Evaluator {
     }
 }
 
-#[derive(Debug)]
+#[derive(Clone, Debug)]
 struct RuntimeNode {
     syntax_node: NodePath,
     children_to_evaluate: Vec<NodePath>,
