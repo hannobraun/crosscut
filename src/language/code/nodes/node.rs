@@ -149,7 +149,6 @@ impl Node {
 
     pub fn has_no_children(&self) -> bool {
         match self {
-            Self::Empty | Self::LiteralNumber { value: _ } => true,
             Self::Application {
                 function: NodeHash { .. },
                 argument: _,
@@ -158,6 +157,7 @@ impl Node {
                 parameter: NodeHash { .. },
                 body: NodeHash { .. },
             } => false,
+            Self::Empty | Self::LiteralNumber { value: _ } => true,
             Self::LiteralTuple { values: children }
             | Self::Error { children, .. } => children.is_empty(),
             Self::ProvidedFunction {
