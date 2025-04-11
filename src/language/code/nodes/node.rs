@@ -196,8 +196,8 @@ impl Node {
         match self {
             Self::Application {
                 function: a,
-                argument,
-            } => Children::new([*a, *argument]),
+                argument: b,
+            } => Children::new([*a, *b]),
 
             Self::Empty | Self::LiteralNumber { value: _ } => Children::new([]),
 
