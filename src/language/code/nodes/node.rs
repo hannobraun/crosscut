@@ -134,13 +134,13 @@ impl Node {
 
             Self::LiteralFunction {
                 parameter: child_a,
-                body,
+                body: child_b,
             } => {
                 let [parameter_index, body_index] =
                     [0, 1].map(|index| SiblingIndex { index });
 
                 child == child_a && sibling_index == &parameter_index
-                    || child == body && sibling_index == &body_index
+                    || child == child_b && sibling_index == &body_index
             }
 
             Self::LiteralTuple { values: children }
