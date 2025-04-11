@@ -197,7 +197,7 @@ mod tests {
         codebase.make_change(|change_set| {
             change_set.remove(&a);
         });
-        assert_eq!(codebase.root().node, &Node::Empty { child: None },);
+        assert_eq!(codebase.root().node, &Node::Empty { child: None });
     }
 
     #[test]
