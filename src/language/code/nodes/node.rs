@@ -123,11 +123,11 @@ impl Node {
                 function: child_a,
                 argument: child_b,
             } => {
-                let [index_a, argument_index] =
+                let [index_a, index_b] =
                     [0, 1].map(|index| SiblingIndex { index });
 
                 child == child_a && sibling_index == &index_a
-                    || child == child_b && sibling_index == &argument_index
+                    || child == child_b && sibling_index == &index_b
             }
 
             Self::Empty | Self::LiteralNumber { value: _ } => false,
