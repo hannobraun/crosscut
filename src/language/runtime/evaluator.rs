@@ -473,8 +473,8 @@ mod tests {
 
         let root = codebase.root().path;
         codebase.make_change(|change_set| {
-            let hash = change_set.add(Node::Recursion { argument: None });
-            change_set.replace(&root, &NodePath::for_root(hash))
+            let recursion = change_set.add(Node::Recursion { argument: None });
+            change_set.replace(&root, &NodePath::for_root(recursion))
         });
 
         let mut evaluator = Evaluator::new();
