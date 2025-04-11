@@ -115,8 +115,8 @@ impl Node {
                 let [parameter_index, body_index] =
                     [0, 1].map(|index| SiblingIndex { index });
 
-                parameter == child && sibling_index == &parameter_index
-                    || body == child && sibling_index == &body_index
+                child == parameter && sibling_index == &parameter_index
+                    || child == body && sibling_index == &body_index
             }
             Self::LiteralTuple { values: children }
             | Self::Error { children, .. } => {
