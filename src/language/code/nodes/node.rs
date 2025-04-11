@@ -127,7 +127,9 @@ impl Node {
                     || Some(child) == argument.as_ref()
                         && sibling_index == &argument_index
             }
+
             Self::Empty | Self::LiteralNumber { value: _ } => false,
+
             Self::LiteralFunction { parameter, body } => {
                 let [parameter_index, body_index] =
                     [0, 1].map(|index| SiblingIndex { index });
@@ -135,10 +137,12 @@ impl Node {
                 child == parameter && sibling_index == &parameter_index
                     || child == body && sibling_index == &body_index
             }
+
             Self::LiteralTuple { values: children }
             | Self::Error { children, .. } => {
                 children.contains_at(child, sibling_index)
             }
+
             Self::ProvidedFunction { argument: c, .. }
             | Self::Recursion { argument: c } => {
                 let child_index = SiblingIndex { index: 0 };
@@ -157,9 +161,12 @@ impl Node {
                 parameter: NodeHash { .. },
                 body: NodeHash { .. },
             } => false,
+
             Self::Empty | Self::LiteralNumber { value: _ } => true,
+
             Self::LiteralTuple { values: children }
             | Self::Error { children, .. } => children.is_empty(),
+
             Self::ProvidedFunction {
                 argument: child, ..
             }
@@ -176,14 +183,17 @@ impl Node {
                     None
                 }
             }
+
             Self::Empty
             | Self::LiteralNumber { value: _ }
             | Self::LiteralFunction {
                 parameter: NodeHash { .. },
                 body: NodeHash { .. },
             } => None,
+
             Self::LiteralTuple { values: children }
             | Self::Error { children, .. } => children.is_single_child(),
+
             Self::ProvidedFunction {
                 argument: child, ..
             }
