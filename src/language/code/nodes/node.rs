@@ -119,11 +119,14 @@ impl Node {
         sibling_index: &SiblingIndex,
     ) -> bool {
         match self {
-            Self::Application { function, argument } => {
+            Self::Application {
+                function: child_a,
+                argument,
+            } => {
                 let [function_index, argument_index] =
                     [0, 1].map(|index| SiblingIndex { index });
 
-                child == function && sibling_index == &function_index
+                child == child_a && sibling_index == &function_index
                     || child == argument && sibling_index == &argument_index
             }
 
