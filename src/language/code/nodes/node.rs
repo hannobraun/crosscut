@@ -194,9 +194,10 @@ impl Node {
 
     pub fn to_children(&self) -> Children {
         match self {
-            Self::Application { function, argument } => {
-                Children::new([*function, *argument])
-            }
+            Self::Application {
+                function: a,
+                argument,
+            } => Children::new([*a, *argument]),
 
             Self::Empty | Self::LiteralNumber { value: _ } => Children::new([]),
 
