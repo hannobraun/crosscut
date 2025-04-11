@@ -153,7 +153,7 @@ impl Node {
         match self {
             Self::Application {
                 function: NodeHash { .. },
-                argument: _,
+                argument: NodeHash { .. },
             }
             | Self::LiteralFunction {
                 parameter: NodeHash { .. },
