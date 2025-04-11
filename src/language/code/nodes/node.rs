@@ -11,13 +11,7 @@ pub enum Node {
     /// Empty nodes are placeholders, while the user is editing the code. They
     /// have no effect. They can have up to one child, and evaluate to their
     /// input.
-    Empty {
-        /// # The child of the empty node, if any
-        ///
-        /// Since empty nodes are placeholders, they can have any type of child,
-        /// or none at all. If they have a child, they evaluate to its output.
-        child: Option<NodeHash>,
-    },
+    Empty,
 
     /// # A function literal
     ///
@@ -116,13 +110,12 @@ impl Node {
         sibling_index: &SiblingIndex,
     ) -> bool {
         match self {
-            Self::Empty { child: c }
-            | Self::ProvidedFunction { argument: c, .. }
+            Self::ProvidedFunction { argument: c, .. }
             | Self::Recursion { argument: c } => {
                 let child_index = SiblingIndex { index: 0 };
                 c.as_ref() == Some(child) && sibling_index == &child_index
             }
-            Self::LiteralNumber { value: _ } => false,
+            Self::Empty | Self::LiteralNumber { value: _ } => false,
             Self::LiteralFunction { parameter, body } => {
                 let [parameter_index, body_index] =
                     [0, 1].map(|index| SiblingIndex { index });
@@ -139,12 +132,11 @@ impl Node {
 
     pub fn has_no_children(&self) -> bool {
         match self {
-            Self::Empty { child }
-            | Self::ProvidedFunction {
+            Self::ProvidedFunction {
                 argument: child, ..
             }
             | Self::Recursion { argument: child } => child.is_none(),
-            Self::LiteralNumber { value: _ } => true,
+            Self::Empty | Self::LiteralNumber { value: _ } => true,
             Self::LiteralFunction {
                 parameter: NodeHash { .. },
                 body: NodeHash { .. },
@@ -156,12 +148,11 @@ impl Node {
 
     pub fn has_single_child(&self) -> Option<&NodeHash> {
         match self {
-            Self::Empty { child }
-            | Self::ProvidedFunction {
+            Self::ProvidedFunction {
                 argument: child, ..
             }
             | Self::Recursion { argument: child } => child.as_ref(),
-            Self::LiteralNumber { value: _ } => None,
+            Self::Empty | Self::LiteralNumber { value: _ } => None,
             Self::LiteralFunction {
                 parameter: NodeHash { .. },
                 body: NodeHash { .. },
@@ -173,12 +164,11 @@ impl Node {
 
     pub fn to_children(&self) -> Children {
         match self {
-            Self::Empty { child }
-            | Self::ProvidedFunction {
+            Self::ProvidedFunction {
                 argument: child, ..
             }
             | Self::Recursion { argument: child } => Children::new(*child),
-            Self::LiteralNumber { value: _ } => Children::new([]),
+            Self::Empty | Self::LiteralNumber { value: _ } => Children::new([]),
             Self::LiteralFunction { parameter, body } => {
                 Children::new([*parameter, *body])
             }
@@ -207,7 +197,7 @@ pub struct NodeDisplay<'r> {
 impl fmt::Display for NodeDisplay<'_> {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match &self.node {
-            Node::Empty { .. } => {
+            Node::Empty => {
                 write!(f, "")
             }
             Node::LiteralFunction { .. } => {

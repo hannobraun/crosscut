@@ -121,7 +121,7 @@ impl Editor {
                             let parent = compiler.codebase().node_at(parent);
 
                             let parent_is_empty =
-                                matches!(parent.node, Node::Empty { .. });
+                                matches!(parent.node, Node::Empty);
                             let parent_is_error_but_empty =
                                 if let Node::Error { node, .. } = parent.node {
                                     node.is_empty()

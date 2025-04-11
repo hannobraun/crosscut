@@ -358,7 +358,7 @@ fn render_help<A: EditorOutputAdapter>(
     writeln!(adapter)?;
 
     match node {
-        Node::Empty { .. } => {
+        Node::Empty => {
             writeln!(
                 adapter,
                 "You are editing an empty syntax node. Those get completely \

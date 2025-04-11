@@ -29,8 +29,8 @@ impl Token<'_> {
         let _ = self.sibling_index;
 
         let (node, maybe_error) = if self.text.is_empty() {
-            node_with_one_child_or_error(
-                |child| Node::Empty { child },
+            node_with_no_child_or_error(
+                || Node::Empty,
                 self.text,
                 self.children,
             )

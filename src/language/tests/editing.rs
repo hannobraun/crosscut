@@ -487,7 +487,7 @@ fn remove_right_removes_next_syntax_node_if_empty() {
         .codebase()
         .root()
         .node
-        .expect_empty()
+        .expect_error("")
         .expect_single_child(language.codebase().nodes())
         .expect_integer_literal(127);
 

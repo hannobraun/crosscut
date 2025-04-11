@@ -176,7 +176,7 @@ impl Evaluator {
         };
 
         match codebase.node_at(&node.syntax_node).node {
-            Node::Empty { .. } => {
+            Node::Empty => {
                 self.finish_evaluating_node(
                     node.evaluated_children.into_active_value(),
                 );
@@ -379,7 +379,7 @@ mod tests {
         let root = codebase.root().path;
         codebase.make_change(|change_set| {
             let parameter = change_set.add(Node::LiteralNumber { value: 0 });
-            let body = change_set.add(Node::Empty { child: None });
+            let body = change_set.add(Node::Empty);
 
             let function =
                 change_set.add(Node::LiteralFunction { parameter, body });

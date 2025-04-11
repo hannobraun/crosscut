@@ -21,7 +21,7 @@ pub trait NodeExt: Sized {
 impl NodeExt for Node {
     #[track_caller]
     fn expect_empty(&self) -> Node {
-        if let Node::Empty { .. } = self {
+        if let Node::Empty = self {
             self.clone()
         } else {
             panic!("Expected empty node.");
