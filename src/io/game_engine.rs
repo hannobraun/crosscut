@@ -170,18 +170,13 @@ impl Renderer {
             wgpu::Instance::new(&wgpu::InstanceDescriptor::default());
         let surface = instance.create_surface(window.clone())?;
 
-        let Ok(adapter) = instance
+        let adapter = instance
             .request_adapter(&wgpu::RequestAdapterOptions {
                 power_preference: wgpu::PowerPreference::default(),
                 force_fallback_adapter: false,
                 compatible_surface: Some(&surface),
             })
-            .await
-        else {
-            return Err(anyhow!(
-                "Did not find adapter that can render to surface."
-            ));
-        };
+            .await?;
 
         let (device, queue) = adapter
             .request_device(&wgpu::DeviceDescriptor {
