@@ -111,11 +111,6 @@ impl Node {
     ) -> bool {
         match self {
             Self::Empty | Self::LiteralNumber { value: _ } => false,
-            Self::ProvidedFunction { argument: c, .. }
-            | Self::Recursion { argument: c } => {
-                let child_index = SiblingIndex { index: 0 };
-                c.as_ref() == Some(child) && sibling_index == &child_index
-            }
             Self::LiteralFunction { parameter, body } => {
                 let [parameter_index, body_index] =
                     [0, 1].map(|index| SiblingIndex { index });
@@ -127,53 +122,58 @@ impl Node {
             | Self::Error { children, .. } => {
                 children.contains_at(child, sibling_index)
             }
+            Self::ProvidedFunction { argument: c, .. }
+            | Self::Recursion { argument: c } => {
+                let child_index = SiblingIndex { index: 0 };
+                c.as_ref() == Some(child) && sibling_index == &child_index
+            }
         }
     }
 
     pub fn has_no_children(&self) -> bool {
         match self {
             Self::Empty | Self::LiteralNumber { value: _ } => true,
-            Self::ProvidedFunction {
-                argument: child, ..
-            }
-            | Self::Recursion { argument: child } => child.is_none(),
             Self::LiteralFunction {
                 parameter: NodeHash { .. },
                 body: NodeHash { .. },
             } => false,
             Self::LiteralTuple { values: children }
             | Self::Error { children, .. } => children.is_empty(),
+            Self::ProvidedFunction {
+                argument: child, ..
+            }
+            | Self::Recursion { argument: child } => child.is_none(),
         }
     }
 
     pub fn has_single_child(&self) -> Option<&NodeHash> {
         match self {
             Self::Empty | Self::LiteralNumber { value: _ } => None,
-            Self::ProvidedFunction {
-                argument: child, ..
-            }
-            | Self::Recursion { argument: child } => child.as_ref(),
             Self::LiteralFunction {
                 parameter: NodeHash { .. },
                 body: NodeHash { .. },
             } => None,
             Self::LiteralTuple { values: children }
             | Self::Error { children, .. } => children.is_single_child(),
+            Self::ProvidedFunction {
+                argument: child, ..
+            }
+            | Self::Recursion { argument: child } => child.as_ref(),
         }
     }
 
     pub fn to_children(&self) -> Children {
         match self {
             Self::Empty | Self::LiteralNumber { value: _ } => Children::new([]),
-            Self::ProvidedFunction {
-                argument: child, ..
-            }
-            | Self::Recursion { argument: child } => Children::new(*child),
             Self::LiteralFunction { parameter, body } => {
                 Children::new([*parameter, *body])
             }
             Self::LiteralTuple { values: children }
             | Self::Error { children, .. } => children.clone(),
+            Self::ProvidedFunction {
+                argument: child, ..
+            }
+            | Self::Recursion { argument: child } => Children::new(*child),
         }
     }
 
