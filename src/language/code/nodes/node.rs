@@ -165,9 +165,10 @@ impl Node {
     pub fn to_children(&self) -> Children {
         match self {
             Self::Empty | Self::LiteralNumber { value: _ } => Children::new([]),
-            Self::LiteralFunction { parameter: a, body } => {
-                Children::new([*a, *body])
-            }
+            Self::LiteralFunction {
+                parameter: a,
+                body: b,
+            } => Children::new([*a, *b]),
             Self::LiteralTuple { values: children }
             | Self::Error { children, .. } => children.clone(),
             Self::ProvidedFunction {
