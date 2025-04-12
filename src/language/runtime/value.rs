@@ -4,7 +4,6 @@ use crate::language::code::NodePath;
 
 #[derive(Clone, Debug, Eq, PartialEq, udigest::Digestable)]
 pub enum Value {
-    Nothing,
     Function { body: NodePath },
     Integer { value: i32 },
     Opaque { id: u32, display: &'static str },
@@ -13,11 +12,17 @@ pub enum Value {
 
 impl Value {
     pub fn nothing() -> Self {
-        Self::Nothing
+        Self::Tuple {
+            elements: Vec::new(),
+        }
     }
 
     pub fn is_nothing(&self) -> bool {
-        matches!(self, Self::Nothing)
+        if let Self::Tuple { elements } = self {
+            elements.is_empty()
+        } else {
+            false
+        }
     }
 
     pub fn into_function_body(self) -> Result<NodePath, Self> {
@@ -31,9 +36,6 @@ impl Value {
 impl fmt::Display for Value {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match self {
-            Self::Nothing => {
-                write!(f, "nothing")?;
-            }
             Self::Function { body } => {
                 write!(f, "fn ")?;
                 write!(f, "{}", body.hash())?;
