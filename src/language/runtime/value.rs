@@ -16,6 +16,10 @@ impl Value {
         Self::Nothing
     }
 
+    pub fn is_nothing(&self) -> bool {
+        matches!(self, Self::Nothing)
+    }
+
     pub fn into_function_body(self) -> Result<NodePath, Self> {
         match self {
             Value::Function { body } => Ok(body),

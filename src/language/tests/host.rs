@@ -55,7 +55,7 @@ fn host_functions_can_trigger_effects() {
         language.step_until_finished_and_handle_host_functions(|id, input| {
             match package.function_by_id(id).unwrap() {
                 Halve => match input {
-                    Value::Nothing => Err(effect.clone()),
+                    value if value.is_nothing() => Err(effect.clone()),
                     input => {
                         unreachable!("Unexpected input: `{input:?}`");
                     }

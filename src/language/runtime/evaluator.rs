@@ -219,7 +219,7 @@ impl Evaluator {
             }
             Node::LiteralFunction { parameter: _, body } => {
                 match node.evaluated_children.clone().into_active_value() {
-                    Value::Nothing => {}
+                    value if value.is_nothing() => {}
                     active_value => {
                         self.unexpected_input(
                             Type::Nothing,
@@ -242,7 +242,7 @@ impl Evaluator {
             }
             Node::LiteralNumber { value } => {
                 match node.evaluated_children.clone().into_active_value() {
-                    Value::Nothing => {}
+                    value if value.is_nothing() => {}
                     active_value => {
                         self.unexpected_input(
                             Type::Nothing,
