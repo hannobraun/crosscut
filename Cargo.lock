@@ -977,9 +977,9 @@ dependencies = [
 
 [[package]]
 name = "naga"
-version = "25.0.0"
+version = "25.0.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "aab20c4fce5c7d2c161dc332b5eebbdba970dbacce925e130f16078d2533660e"
+checksum = "2b977c445f26e49757f9aca3631c3b8b836942cb278d69a92e7b80d3b24da632"
 dependencies = [
  "arrayvec",
  "bit-set",
@@ -992,6 +992,7 @@ dependencies = [
  "indexmap",
  "log",
  "num-traits",
+ "once_cell",
  "rustc-hash",
  "spirv",
  "strum",
@@ -2177,9 +2178,9 @@ dependencies = [
 
 [[package]]
 name = "wgpu-core"
-version = "25.0.0"
+version = "25.0.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "a57f3472e6ea6682a9cbe53c835048c6625f07bfb2a258cdae8ce4b6fe4c0ddb"
+checksum = "a19813e647da7aa3cdaa84f5846e2c64114970ea7c86b1e6aae8be08091f4bdc"
 dependencies = [
  "arrayvec",
  "bit-set",
@@ -2235,9 +2236,9 @@ dependencies = [
 
 [[package]]
 name = "wgpu-hal"
-version = "25.0.0"
+version = "25.0.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "e8f6a308c20f59fb207660d3cdd6bb1b704e86c3917cf64d26c5f732597577ee"
+checksum = "fb7c4a1dc42ff14c23c9b11ebf1ee85cde661a9b1cf0392f79c1faca5bc559fb"
 dependencies = [
  "android_system_properties",
  "arrayvec",
