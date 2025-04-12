@@ -10,7 +10,7 @@ pub fn apply_intrinsic_function(
 ) {
     match intrinsic {
         IntrinsicFunction::Drop => {
-            evaluator.exit_from_provided_function(Value::Nothing);
+            evaluator.exit_from_provided_function(Value::nothing());
         }
         IntrinsicFunction::Eval => match input {
             Value::Function { body } => {
@@ -18,7 +18,7 @@ pub fn apply_intrinsic_function(
                     body,
                     // Right now, the `eval` function doesn't support
                     // passing an argument to the function it
-                    Value::Nothing,
+                    Value::nothing(),
                     codebase,
                 );
             }

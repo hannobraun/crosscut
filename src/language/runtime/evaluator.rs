@@ -22,7 +22,11 @@ impl Evaluator {
 
     pub fn reset(&mut self, codebase: &Codebase) {
         *self = Self::new();
-        self.apply_function_raw(codebase.root().path, Value::Nothing, codebase);
+        self.apply_function_raw(
+            codebase.root().path,
+            Value::nothing(),
+            codebase,
+        );
     }
 
     /// # Apply a function using the current node as source
@@ -372,7 +376,7 @@ struct EvaluatedChildren {
 
 impl EvaluatedChildren {
     pub fn into_active_value(mut self) -> Value {
-        let value = self.inner.pop().unwrap_or(Value::Nothing);
+        let value = self.inner.pop().unwrap_or(Value::nothing());
 
         assert!(
             self.inner.is_empty(),

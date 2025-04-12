@@ -18,7 +18,7 @@ fn clear() {
     );
 
     language.on_command(EditorCommand::Clear);
-    assert_eq!(language.step_until_finished().unwrap(), Value::Nothing);
+    assert_eq!(language.step_until_finished().unwrap(), Value::nothing());
 
     language.on_code("7");
     assert_eq!(

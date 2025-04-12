@@ -12,6 +12,10 @@ pub enum Value {
 }
 
 impl Value {
+    pub fn nothing() -> Self {
+        Self::Nothing
+    }
+
     pub fn into_function_body(self) -> Result<NodePath, Self> {
         match self {
             Value::Function { body } => Ok(body),

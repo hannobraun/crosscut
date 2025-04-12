@@ -41,7 +41,7 @@ fn fixing_syntax_node_should_remove_error() {
 
     let resolved = language.codebase().root().path;
     assert_eq!(language.codebase().errors().get(resolved.hash()), None);
-    assert_eq!(language.step_until_finished().unwrap(), Value::Nothing);
+    assert_eq!(language.step_until_finished().unwrap(), Value::nothing());
 }
 
 #[test]

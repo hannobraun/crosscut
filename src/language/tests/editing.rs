@@ -79,7 +79,7 @@ fn update_after_removing_all_characters() {
     );
 
     language.on_input(EditorInputEvent::RemoveLeft { whole_node: false });
-    assert_eq!(language.step_until_finished().unwrap(), Value::Nothing);
+    assert_eq!(language.step_until_finished().unwrap(), Value::nothing());
 }
 
 #[test]
@@ -366,7 +366,7 @@ fn move_cursor_to_parent_node() {
     language.on_input(EditorInputEvent::MoveCursorDown);
     language.on_code("i");
 
-    assert_eq!(language.step_until_finished().unwrap(), Value::Nothing);
+    assert_eq!(language.step_until_finished().unwrap(), Value::nothing());
 }
 
 #[test]
