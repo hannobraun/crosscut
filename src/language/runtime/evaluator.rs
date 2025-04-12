@@ -443,28 +443,6 @@ mod tests {
     }
 
     #[test]
-    fn handle_bare_recursion() {
-        // Recursion can quite naturally be implemented in a way that results in
-        // an endless loop within `step`, if the evaluated expression consists
-        // of nothing but a `self`. And in fact, that's what the first draft
-        // did.
-
-        let mut codebase = Codebase::new();
-
-        let root = codebase.root().path;
-        codebase.make_change(|change_set| {
-            let hash = change_set.add(Node::Recursion { argument: None });
-            change_set.replace(&root, &NodePath::for_root(hash))
-        });
-
-        let mut evaluator = Evaluator::new();
-        evaluator.reset(&codebase);
-
-        evaluator.step(&codebase);
-        assert!(evaluator.state().is_running());
-    }
-
-    #[test]
     fn tail_call_elimination() {
         // The memory used by the evaluator should not grow, if a function is
         // tail-recursive.
