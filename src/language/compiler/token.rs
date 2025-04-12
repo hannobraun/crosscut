@@ -82,6 +82,12 @@ fn resolve_keyword(
                         node: name.to_string(),
                         children: children.clone(),
                     },
+                    // We should be setting an error here, but there's no test
+                    // to cover this yet.
+                    //
+                    // It might be best to wait and see how the ongoing cleanup
+                    // of `Node` shakes out, so there hasn't been a huge rush to
+                    // get this done.
                     None,
                 )
             };
