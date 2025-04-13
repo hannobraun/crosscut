@@ -4,7 +4,6 @@ use std::fmt;
 pub enum Type {
     Function,
     Integer,
-    Opaque { name: &'static str },
     Tuple { values: Vec<Type> },
 }
 
@@ -22,9 +21,6 @@ impl fmt::Display for Type {
             }
             Self::Integer => {
                 write!(f, "Integer")?;
-            }
-            Self::Opaque { name } => {
-                write!(f, "{name}")?;
             }
             Self::Tuple { values } => {
                 write!(f, "{{")?;
