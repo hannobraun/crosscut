@@ -4,13 +4,13 @@ use std::fmt;
 pub enum Type {
     Function,
     Integer,
-    Nothing,
     Opaque { name: &'static str },
+    Tuple { values: Vec<Type> },
 }
 
 impl Type {
     pub fn nothing() -> Self {
-        Self::Nothing
+        Self::Tuple { values: Vec::new() }
     }
 }
 
@@ -23,11 +23,23 @@ impl fmt::Display for Type {
             Self::Integer => {
                 write!(f, "Integer")?;
             }
-            Self::Nothing => {
-                write!(f, "Nothing")?;
-            }
             Self::Opaque { name } => {
                 write!(f, "{name}")?;
+            }
+            Self::Tuple { values } => {
+                write!(f, "{{")?;
+
+                for (i, value) in values.iter().enumerate() {
+                    if i == 0 || i == values.len() - 1 {
+                        write!(f, " ")?;
+                    } else {
+                        write!(f, ", ")?;
+                    }
+
+                    write!(f, "{value}")?;
+                }
+
+                write!(f, "}}")?;
             }
         }
 
