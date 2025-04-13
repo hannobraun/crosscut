@@ -222,7 +222,7 @@ impl Evaluator {
                     value if value.is_nothing() => {}
                     active_value => {
                         self.unexpected_input(
-                            Type::Nothing,
+                            Type::nothing(),
                             active_value,
                             node.syntax_node.clone(),
                         );
@@ -245,7 +245,7 @@ impl Evaluator {
                     value if value.is_nothing() => {}
                     active_value => {
                         self.unexpected_input(
-                            Type::Nothing,
+                            Type::nothing(),
                             active_value,
                             node.syntax_node.clone(),
                         );

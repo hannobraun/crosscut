@@ -8,6 +8,12 @@ pub enum Type {
     Opaque { name: &'static str },
 }
 
+impl Type {
+    pub fn nothing() -> Self {
+        Self::Nothing
+    }
+}
+
 impl fmt::Display for Type {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match self {
