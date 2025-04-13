@@ -172,7 +172,7 @@ where
                 }
             },
             Some(GameEngineFunction::Black) => {
-                if input == self.display {
+                if input.is_nothing() {
                     self.output_color(0);
                     self.language.provide_host_function_output(input);
                 } else {
