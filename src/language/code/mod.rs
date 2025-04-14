@@ -13,7 +13,7 @@ pub use self::{
     nodes::{
         Children, LocatedNode, Node, NodeHash, NodePath, Nodes, SiblingIndex,
     },
-    types::Type,
+    types::{Type, display_tuple},
 };
 
 #[cfg(test)]

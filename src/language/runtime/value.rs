@@ -1,6 +1,6 @@
 use std::fmt;
 
-use crate::language::code::NodePath;
+use crate::language::code::{NodePath, display_tuple};
 
 #[derive(Clone, Debug, Eq, PartialEq, udigest::Digestable)]
 pub enum Value {
@@ -62,10 +62,7 @@ impl fmt::Display for Value {
             }
 
             Self::Tuple { values } => {
-                for value in values {
-                    write!(f, "{value} ")?;
-                }
-                write!(f, "tuple")?;
+                display_tuple(values, f)?;
             }
         }
 
