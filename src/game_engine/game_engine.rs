@@ -51,6 +51,7 @@ where
         let mut language = Language::new();
 
         let mut package = language.packages_mut().new_package();
+        package.add_function(GameEngineFunction::Color);
         package.add_function(GameEngineFunction::Dim);
         package.add_function(GameEngineFunction::Black);
         package.add_function(GameEngineFunction::White);
@@ -151,6 +152,19 @@ where
 
     fn apply_host_function(&mut self, id: FunctionId, input: Value) {
         match self.package.function_by_id(&id) {
+            Some(GameEngineFunction::Color) => match input {
+                Value::Integer { value } => {
+                    self.output_color(value);
+                    self.language
+                        .provide_host_function_output(Value::nothing());
+                }
+                value => {
+                    self.language.trigger_effect(Effect::UnexpectedInput {
+                        expected: Type::Integer,
+                        actual: value,
+                    });
+                }
+            },
             Some(GameEngineFunction::Dim) => match input {
                 Value::Integer { value } => {
                     self.language.provide_host_function_output(
@@ -250,6 +264,7 @@ pub enum GameOutput {
 
 #[derive(Clone, Copy, Debug, Eq, Ord, PartialEq, PartialOrd)]
 pub enum GameEngineFunction {
+    Color,
     Dim,
     Black,
     White,
@@ -258,6 +273,7 @@ pub enum GameEngineFunction {
 impl Function for GameEngineFunction {
     fn name(&self) -> &str {
         match self {
+            Self::Color => "color",
             Self::Dim => "dim",
             Self::Black => "black",
             Self::White => "white",
