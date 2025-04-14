@@ -7,14 +7,17 @@ pub enum Value {
     Function {
         body: NodePath,
     },
+
     Integer {
         value: i32,
     },
+
     #[cfg(test)]
     Opaque {
         id: u32,
         display: &'static str,
     },
+
     Tuple {
         elements: Vec<Value>,
     },
