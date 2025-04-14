@@ -55,7 +55,6 @@ where
 
             package.add_function(GameEngineFunction::Color);
             package.add_function(GameEngineFunction::Dim);
-            package.add_function(GameEngineFunction::White);
 
             package.build()
         };
@@ -181,17 +180,6 @@ where
                     });
                 }
             },
-            Some(GameEngineFunction::White) => {
-                if input.is_nothing() {
-                    self.submit_color(255);
-                    self.language.provide_host_function_output(input);
-                } else {
-                    self.language.trigger_effect(Effect::UnexpectedInput {
-                        expected: Type::nothing(),
-                        actual: input,
-                    });
-                }
-            }
             None => {
                 panic!("Unexpected function: {id:?}");
             }
@@ -258,7 +246,6 @@ pub enum GameOutput {
 pub enum GameEngineFunction {
     Color,
     Dim,
-    White,
 }
 
 impl Function for GameEngineFunction {
@@ -266,7 +253,6 @@ impl Function for GameEngineFunction {
         match self {
             Self::Color => "color",
             Self::Dim => "dim",
-            Self::White => "white",
         }
     }
 }
