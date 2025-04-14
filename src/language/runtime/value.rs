@@ -53,13 +53,16 @@ impl fmt::Display for Value {
                 write!(f, "fn ")?;
                 write!(f, "{}", body.hash())?;
             }
+
             Self::Integer { value } => {
                 write!(f, "{value}")?;
             }
+
             #[cfg(test)]
             Self::Opaque { id: _, display } => {
                 write!(f, "{display}")?;
             }
+
             Self::Tuple { elements } => {
                 for element in elements {
                     write!(f, "{element} ")?;
