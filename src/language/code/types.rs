@@ -1,4 +1,4 @@
-use std::fmt;
+use std::fmt::{self};
 
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub enum Type {
@@ -31,7 +31,10 @@ impl fmt::Display for Type {
     }
 }
 
-pub fn display_tuple(values: &[Type], f: &mut fmt::Formatter) -> fmt::Result {
+pub fn display_tuple<V>(values: &[V], f: &mut fmt::Formatter) -> fmt::Result
+where
+    V: fmt::Display,
+{
     write!(f, "{{")?;
 
     for (i, value) in values.iter().enumerate() {
