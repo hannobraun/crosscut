@@ -23,22 +23,28 @@ impl fmt::Display for Type {
                 write!(f, "Integer")?;
             }
             Self::Tuple { values } => {
-                write!(f, "{{")?;
-
-                for (i, value) in values.iter().enumerate() {
-                    if i == 0 || i == values.len() - 1 {
-                        write!(f, " ")?;
-                    } else {
-                        write!(f, ", ")?;
-                    }
-
-                    write!(f, "{value}")?;
-                }
-
-                write!(f, "}}")?;
+                display_tuple(values, f)?;
             }
         }
 
         Ok(())
     }
+}
+
+pub fn display_tuple(values: &[Type], f: &mut fmt::Formatter) -> fmt::Result {
+    write!(f, "{{")?;
+
+    for (i, value) in values.iter().enumerate() {
+        if i == 0 || i == values.len() - 1 {
+            write!(f, " ")?;
+        } else {
+            write!(f, ", ")?;
+        }
+
+        write!(f, "{value}")?;
+    }
+
+    write!(f, "}}")?;
+
+    Ok(())
 }
