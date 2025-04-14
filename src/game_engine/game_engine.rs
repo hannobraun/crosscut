@@ -120,7 +120,7 @@ where
                         // If the program returns an integer, we use that to set
                         // the color.
 
-                        self.output_color(value);
+                        self.submit_color(value);
                     }
                     value => {
                         match value.into_function_body() {
@@ -154,7 +154,7 @@ where
         match self.package.function_by_id(&id) {
             Some(GameEngineFunction::Color) => match input {
                 Value::Integer { value } => {
-                    self.output_color(value);
+                    self.submit_color(value);
                     self.language
                         .provide_host_function_output(Value::nothing());
                 }
@@ -180,7 +180,7 @@ where
             },
             Some(GameEngineFunction::Black) => {
                 if input.is_nothing() {
-                    self.output_color(0);
+                    self.submit_color(0);
                     self.language.provide_host_function_output(input);
                 } else {
                     self.language.trigger_effect(Effect::UnexpectedInput {
@@ -191,7 +191,7 @@ where
             }
             Some(GameEngineFunction::White) => {
                 if input.is_nothing() {
-                    self.output_color(255);
+                    self.submit_color(255);
                     self.language.provide_host_function_output(input);
                 } else {
                     self.language.trigger_effect(Effect::UnexpectedInput {
@@ -206,7 +206,7 @@ where
         }
     }
 
-    fn output_color(&mut self, value: i32) {
+    fn submit_color(&mut self, value: i32) {
         let value: f64 = value.into();
         let value = value / 255.;
 
