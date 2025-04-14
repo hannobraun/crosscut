@@ -38,7 +38,7 @@ where
     write!(f, "{{")?;
 
     for (i, value) in values.iter().enumerate() {
-        if i == 0 || i == values.len() - 1 {
+        if i == 0 || i + 1 == values.len() {
             write!(f, " ")?;
         } else {
             write!(f, ", ")?;
