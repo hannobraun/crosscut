@@ -40,12 +40,10 @@ where
         return Ok(());
     }
 
-    write!(f, "{{")?;
+    write!(f, "{{ ")?;
 
     for (i, value) in values.iter().enumerate() {
-        if i == 0 {
-            write!(f, " ")?;
-        } else {
+        if i > 0 {
             write!(f, ", ")?;
         }
 
