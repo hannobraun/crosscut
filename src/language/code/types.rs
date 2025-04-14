@@ -35,6 +35,11 @@ pub fn display_tuple<V>(values: &[V], f: &mut fmt::Formatter) -> fmt::Result
 where
     V: fmt::Display,
 {
+    if values.is_empty() {
+        write!(f, "{{}}")?;
+        return Ok(());
+    }
+
     write!(f, "{{")?;
 
     for (i, value) in values.iter().enumerate() {
