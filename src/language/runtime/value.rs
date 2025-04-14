@@ -29,8 +29,8 @@ impl Value {
     }
 
     pub fn is_nothing(&self) -> bool {
-        if let Self::Tuple { values: elements } = self {
-            elements.is_empty()
+        if let Self::Tuple { values } = self {
+            values.is_empty()
         } else {
             false
         }
