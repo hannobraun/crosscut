@@ -265,11 +265,7 @@ impl Evaluator {
                 );
 
                 self.finish_evaluating_node(Value::Tuple {
-                    values: node
-                        .evaluated_children
-                        .inner
-                        .into_iter()
-                        .collect(),
+                    values: node.evaluated_children.inner.into_iter().collect(),
                 });
             }
             Node::ProvidedFunction { id, .. } => {
