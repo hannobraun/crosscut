@@ -11,7 +11,7 @@ fn single_field() {
     assert_eq!(
         language.step_until_finished().unwrap(),
         Value::Tuple {
-            elements: vec![Value::Integer { value: 127 }],
+            values: vec![Value::Integer { value: 127 }],
         },
     );
 }
@@ -27,8 +27,8 @@ fn nested() {
     assert_eq!(
         language.step_until_finished().unwrap(),
         Value::Tuple {
-            elements: vec![Value::Tuple {
-                elements: vec![Value::Integer { value: 127 }],
+            values: vec![Value::Tuple {
+                values: vec![Value::Integer { value: 127 }],
             }],
         },
     );
@@ -43,7 +43,7 @@ fn multi_field() {
     assert_eq!(
         language.step_until_finished().unwrap(),
         Value::Tuple {
-            elements: vec![
+            values: vec![
                 Value::Integer { value: 127 },
                 Value::Integer { value: 255 },
             ],

@@ -19,19 +19,17 @@ pub enum Value {
     },
 
     Tuple {
-        elements: Vec<Value>,
+        values: Vec<Value>,
     },
 }
 
 impl Value {
     pub fn nothing() -> Self {
-        Self::Tuple {
-            elements: Vec::new(),
-        }
+        Self::Tuple { values: Vec::new() }
     }
 
     pub fn is_nothing(&self) -> bool {
-        if let Self::Tuple { elements } = self {
+        if let Self::Tuple { values: elements } = self {
             elements.is_empty()
         } else {
             false
@@ -63,7 +61,7 @@ impl fmt::Display for Value {
                 write!(f, "{display}")?;
             }
 
-            Self::Tuple { elements } => {
+            Self::Tuple { values: elements } => {
                 for element in elements {
                     write!(f, "{element} ")?;
                 }

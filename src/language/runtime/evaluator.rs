@@ -265,7 +265,7 @@ impl Evaluator {
                 );
 
                 self.finish_evaluating_node(Value::Tuple {
-                    elements: node
+                    values: node
                         .evaluated_children
                         .inner
                         .into_iter()
