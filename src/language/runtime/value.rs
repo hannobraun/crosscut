@@ -61,8 +61,8 @@ impl fmt::Display for Value {
                 write!(f, "{display}")?;
             }
 
-            Self::Tuple { values: elements } => {
-                for element in elements {
+            Self::Tuple { values } => {
+                for element in values {
                     write!(f, "{element} ")?;
                 }
                 write!(f, "tuple")?;
