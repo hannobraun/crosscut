@@ -22,7 +22,6 @@ pub struct GameEngine<A> {
     game_output: Vec<GameOutput>,
     editor_input: TerminalEditorInput,
     editor_output: TerminalEditorOutput<A>,
-    display: Value,
 }
 
 impl GameEngine<DebugOutputAdapter> {
@@ -63,10 +62,6 @@ where
             game_output: Vec::new(),
             editor_input: TerminalEditorInput::new(),
             editor_output: TerminalEditorOutput::new(adapter),
-            display: Value::Opaque {
-                id: 0,
-                display: "display",
-            },
         };
         game_engine.run_game_until_finished();
 
@@ -135,7 +130,7 @@ where
                                 // set the color.
 
                                 self.language
-                                    .apply_function(body, self.display.clone());
+                                    .apply_function(body, Value::nothing());
                                 continue;
                             }
                             Err(_) => {
