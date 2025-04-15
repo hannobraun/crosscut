@@ -66,7 +66,7 @@ where
             editor_input: TerminalEditorInput::new(),
             editor_output: TerminalEditorOutput::new(adapter),
         };
-        game_engine.run_game_until_finished();
+        game_engine.run_game_for_a_few_steps();
 
         game_engine
     }
@@ -83,7 +83,7 @@ where
         event: TerminalInputEvent,
     ) -> anyhow::Result<()> {
         self.editor_input.on_input(event, &mut self.language);
-        self.run_game_until_finished();
+        self.run_game_for_a_few_steps();
         self.render_editor()?;
 
         Ok(())
@@ -93,7 +93,7 @@ where
         self.game_output.drain(..)
     }
 
-    fn run_game_until_finished(&mut self) {
+    fn run_game_for_a_few_steps(&mut self) {
         let mut num_steps = 0;
 
         loop {
