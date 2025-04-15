@@ -5,7 +5,7 @@ use crate::{
     language::{
         code::Type,
         language::Language,
-        packages::{Function, FunctionId, Package},
+        packages::{Function, Package},
         runtime::{Effect, RuntimeState, Value},
     },
 };
@@ -107,16 +107,59 @@ where
                     // We're not interested in intermediate values here.
                     continue;
                 }
-                RuntimeState::Effect { effect, .. } => match effect {
-                    Effect::ProvidedFunction { id, input } => {
-                        self.apply_host_function(id, input);
-                        continue;
+                RuntimeState::Effect { effect, .. } => {
+                    match effect {
+                        Effect::ProvidedFunction { id, input } => {
+                            match self.package.function_by_id(&id) {
+                                Some(GameEngineFunction::Color) => {
+                                    match input {
+                                        Value::Integer { value } => {
+                                            self.submit_color(value);
+                                            self.language
+                                                .provide_host_function_output(
+                                                    Value::nothing(),
+                                                );
+                                        }
+                                        value => {
+                                            self.language.trigger_effect(
+                                                Effect::UnexpectedInput {
+                                                    expected: Type::Integer,
+                                                    actual: value,
+                                                },
+                                            );
+                                        }
+                                    }
+                                }
+                                Some(GameEngineFunction::Dim) => match input {
+                                    Value::Integer { value } => {
+                                        self.language
+                                            .provide_host_function_output(
+                                                Value::Integer {
+                                                    value: value / 2,
+                                                },
+                                            );
+                                    }
+                                    value => {
+                                        self.language.trigger_effect(
+                                            Effect::UnexpectedInput {
+                                                expected: Type::Integer,
+                                                actual: value,
+                                            },
+                                        );
+                                    }
+                                },
+                                None => {
+                                    panic!("Unexpected function: {id:?}");
+                                }
+                            };
+                            continue;
+                        }
+                        _ => {
+                            // We can't handle any other effect.
+                            break;
+                        }
                     }
-                    _ => {
-                        // We can't handle any other effect.
-                        break;
-                    }
-                },
+                }
                 RuntimeState::Finished { output } => match output {
                     Value::Integer { value } => {
                         // If the program returns an integer, we use that to set
@@ -149,40 +192,6 @@ where
             }
 
             break;
-        }
-    }
-
-    fn apply_host_function(&mut self, id: FunctionId, input: Value) {
-        match self.package.function_by_id(&id) {
-            Some(GameEngineFunction::Color) => match input {
-                Value::Integer { value } => {
-                    self.submit_color(value);
-                    self.language
-                        .provide_host_function_output(Value::nothing());
-                }
-                value => {
-                    self.language.trigger_effect(Effect::UnexpectedInput {
-                        expected: Type::Integer,
-                        actual: value,
-                    });
-                }
-            },
-            Some(GameEngineFunction::Dim) => match input {
-                Value::Integer { value } => {
-                    self.language.provide_host_function_output(
-                        Value::Integer { value: value / 2 },
-                    );
-                }
-                value => {
-                    self.language.trigger_effect(Effect::UnexpectedInput {
-                        expected: Type::Integer,
-                        actual: value,
-                    });
-                }
-            },
-            None => {
-                panic!("Unexpected function: {id:?}");
-            }
         }
     }
 
