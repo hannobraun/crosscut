@@ -22,6 +22,7 @@ pub struct GameEngine<A> {
     game_output: Vec<GameOutput>,
     editor_input: TerminalEditorInput,
     editor_output: TerminalEditorOutput<A>,
+    end_of_frame: bool,
 }
 
 impl GameEngine<DebugOutputAdapter> {
@@ -65,6 +66,7 @@ where
             game_output: Vec::new(),
             editor_input: TerminalEditorInput::new(),
             editor_output: TerminalEditorOutput::new(adapter),
+            end_of_frame: false,
         };
         game_engine.run_game_for_a_few_steps();
 
@@ -94,6 +96,36 @@ where
     }
 
     fn run_game_for_a_few_steps(&mut self) {
+        if self.end_of_frame {
+            match self.language.evaluator().state() {
+                RuntimeState::Effect {
+                    effect: Effect::ProvidedFunction { id, .. },
+                    ..
+                } => {
+                    assert_eq!(
+                        self.package.function_by_id(id),
+                        Some(&GameEngineFunction::Color),
+                        "Expecting to provide output for `color` function, \
+                        because that is the only one that sets the \
+                        `end_of_frame` flag.",
+                    );
+
+                    self.language
+                        .provide_host_function_output(Value::nothing());
+                }
+                state => {
+                    assert!(
+                        matches!(state, RuntimeState::Started),
+                        "`end_of_frame` flag has been set, but expected effect \
+                        is not active. This should only happen, if the runtime \
+                        has been reset.",
+                    );
+                }
+            }
+
+            self.end_of_frame = false;
+        }
+
         let mut num_steps = 0;
 
         loop {
@@ -115,10 +147,8 @@ where
                                     match input {
                                         Value::Integer { value } => {
                                             self.submit_color(value);
-                                            self.language
-                                                .provide_host_function_output(
-                                                    Value::nothing(),
-                                                );
+                                            self.end_of_frame = true;
+                                            break;
                                         }
                                         value => {
                                             self.language.trigger_effect(
