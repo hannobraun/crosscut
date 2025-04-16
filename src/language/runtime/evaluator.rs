@@ -94,7 +94,10 @@ impl Evaluator {
         else {
             panic!(
                 "Trying to provide host function output, but no host function \
-                is currently being applied."
+                is currently being applied.\n\
+                \n\
+                Current state is `{:#?}`.",
+                self.state,
             );
         };
 
