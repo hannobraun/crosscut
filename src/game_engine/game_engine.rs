@@ -160,32 +160,36 @@ where
                         }
                     }
                 }
-                RuntimeState::Finished { output } => match output {
-                    Value::Integer { value } => {
-                        // If the program returns an integer, we use that to set
-                        // the color.
+                RuntimeState::Finished { output } => {
+                    // This comment exists to force the current formatting.
 
-                        self.submit_color(value);
-                    }
-                    value => {
-                        match value.into_function_body() {
-                            Ok(body) => {
-                                // If the program returns a function, we call
-                                // that function, passing it a display value.
-                                // Using that display value, the function can
-                                // set the color.
+                    match output {
+                        Value::Integer { value } => {
+                            // If the program returns an integer, we use that to set
+                            // the color.
 
-                                self.language
-                                    .apply_function(body, Value::nothing());
-                                continue;
-                            }
-                            Err(_) => {
-                                // The output is neither a number we can use for
-                                // the color, nor a function we can call.
+                            self.submit_color(value);
+                        }
+                        value => {
+                            match value.into_function_body() {
+                                Ok(body) => {
+                                    // If the program returns a function, we call
+                                    // that function, passing it a display value.
+                                    // Using that display value, the function can
+                                    // set the color.
+
+                                    self.language
+                                        .apply_function(body, Value::nothing());
+                                    continue;
+                                }
+                                Err(_) => {
+                                    // The output is neither a number we can use for
+                                    // the color, nor a function we can call.
+                                }
                             }
                         }
                     }
-                },
+                }
                 RuntimeState::Error { .. } => {
                     // Currently not handling errors.
                 }
