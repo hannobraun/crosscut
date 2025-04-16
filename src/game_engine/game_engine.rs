@@ -171,7 +171,6 @@ where
                             // stringent here, like expect a `main` function, or
                             // a module in a specific format. For now, this will
                             // do though.
-
                             self.language
                                 .apply_function(body, Value::nothing());
                             continue;
