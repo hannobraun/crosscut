@@ -103,7 +103,9 @@ pub fn start() -> anyhow::Result<Threads> {
             GameEngineEvent::GameInput {
                 input: GameInput::RenderingFrame,
             } => {
-                // This loop is coupled to the frame rate of the renderer.
+                // If a new frame is being rendered on the other thread, then
+                // the game engine can get ready to provide the next one.
+                game_engine.on_frame()?;
             }
             GameEngineEvent::Heartbeat => {}
         }

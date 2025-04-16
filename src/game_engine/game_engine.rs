@@ -91,6 +91,13 @@ where
         Ok(())
     }
 
+    pub fn on_frame(&mut self) -> anyhow::Result<()> {
+        self.run_game_for_a_few_steps();
+        self.render_editor()?;
+
+        Ok(())
+    }
+
     pub fn game_output(&mut self) -> impl Iterator<Item = GameOutput> + '_ {
         self.game_output.drain(..)
     }
