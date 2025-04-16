@@ -163,22 +163,15 @@ where
                 RuntimeState::Finished { output } => {
                     // This comment exists to force the current formatting.
 
-                    match output.into_function_body() {
-                        Ok(body) => {
-                            // If the program returns a function, we call that.
-                            //
-                            // Eventually, we would want something more
-                            // stringent here, like expect a `main` function, or
-                            // a module in a specific format. For now, this will
-                            // do though.
-                            self.language
-                                .apply_function(body, Value::nothing());
-                            continue;
-                        }
-                        Err(_) => {
-                            // The output is neither a number we can use for the
-                            // color, nor a function we can call.
-                        }
+                    if let Ok(body) = output.into_function_body() {
+                        // If the program returns a function, we call that.
+                        //
+                        // Eventually, we would want something more
+                        // stringent here, like expect a `main` function, or
+                        // a module in a specific format. For now, this will
+                        // do though.
+                        self.language.apply_function(body, Value::nothing());
+                        continue;
                     }
                 }
                 RuntimeState::Error { .. } => {
