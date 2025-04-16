@@ -177,11 +177,11 @@ impl Editor {
         );
 
         // Unconditionally resetting the interpreter like this, is not going to
-        // work long-term. It should only be reset, if it's finished.
+        // work long-term. What we actually want to do here, is hot-reload the
+        // changed code.
         //
-        // Right now, it doesn't seem to be practical to construct a high-level
-        // test where this makes a difference though, and I don't want to fix
-        // this until the behavior is covered by such a test.
+        // For now, it doesn't seem like the difference is actually observable
+        // though, due to the limited nature of the language.
         evaluator.reset(compiler.codebase());
     }
 
