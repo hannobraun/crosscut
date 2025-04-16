@@ -165,9 +165,12 @@ where
 
                     match output.into_function_body() {
                         Ok(body) => {
-                            // If the program returns a function, we call that
-                            // function, passing it a display value. Using that
-                            // display value, th function can set the color.
+                            // If the program returns a function, we call that.
+                            //
+                            // Eventually, we would want something more
+                            // stringent here, like expect a `main` function, or
+                            // a module in a specific format. For now, this will
+                            // do though.
 
                             self.language
                                 .apply_function(body, Value::nothing());
