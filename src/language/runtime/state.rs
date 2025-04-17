@@ -21,6 +21,10 @@ impl RuntimeState {
         matches!(self, Self::Effect { .. })
     }
 
+    pub fn is_finished(&self) -> bool {
+        matches!(self, Self::Finished { .. })
+    }
+
     #[cfg(test)]
     pub fn is_error(&self) -> bool {
         matches!(self, Self::Error { .. })
