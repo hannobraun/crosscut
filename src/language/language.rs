@@ -26,6 +26,7 @@ impl Language {
 
         let intrinsics = {
             let mut package = packages.new_package();
+            package.add_function(IntrinsicFunction::Add);
             package.add_function(IntrinsicFunction::Drop);
             package.add_function(IntrinsicFunction::Eval);
             package.add_function(IntrinsicFunction::Identity);
