@@ -540,9 +540,11 @@ impl Function for TestFunction {
 fn test_package(language: &mut Language) -> Package<TestFunction> {
     let mut package = language.packages_mut().new_package();
 
-    package.add_functions([TestFunction::A]);
-    package.add_functions([TestFunction::AToB]);
-    package.add_functions([TestFunction::BToC]);
+    package.add_functions([
+        TestFunction::A,
+        TestFunction::AToB,
+        TestFunction::BToC,
+    ]);
 
     package.build()
 }
