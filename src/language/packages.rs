@@ -70,7 +70,7 @@ pub struct PackageBuilder<'r, T> {
 }
 
 impl<T> PackageBuilder<'_, T> {
-    pub fn add_function(&mut self, functions: impl IntoIterator<Item = T>)
+    pub fn add_functions(&mut self, functions: impl IntoIterator<Item = T>)
     where
         T: Function,
     {
