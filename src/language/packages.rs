@@ -45,13 +45,12 @@ impl Packages {
         let mut builder = PackageBuilder {
             functions_by_id: BTreeMap::new(),
             next_id: 0,
-            package: package_id,
         };
 
         for function in functions {
             let id = FunctionId {
                 id: builder.next_id,
-                package: builder.package,
+                package: package_id,
             };
             builder.next_id += 1;
 
@@ -91,7 +90,6 @@ impl Packages {
 pub struct PackageBuilder<T> {
     functions_by_id: BTreeMap<FunctionId, T>,
     next_id: u32,
-    package: PackageId,
 }
 
 #[derive(Debug, Default)]
