@@ -70,7 +70,7 @@ pub struct PackageBuilder<'r, T> {
 }
 
 impl<T> PackageBuilder<'_, T> {
-    pub fn add_function(&mut self, function: T) -> FunctionId
+    pub fn add_function(&mut self, function: T)
     where
         T: Function,
     {
@@ -88,8 +88,6 @@ impl<T> PackageBuilder<'_, T> {
             .insert(id, function.name().to_string());
 
         self.functions_by_id.insert(id, function);
-
-        id
     }
 
     pub fn build(self) -> Package<T> {
