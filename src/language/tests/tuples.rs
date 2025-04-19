@@ -4,9 +4,7 @@ use crate::language::{language::Language, runtime::Value};
 fn single_field() {
     // It is possible to define a tuple with a single field.
 
-    let mut language = Language::new();
-
-    language.on_code("127 tuple");
+    let mut language = Language::from_code("127 tuple");
 
     assert_eq!(
         language.step_until_finished().unwrap(),
@@ -20,9 +18,7 @@ fn single_field() {
 fn nested() {
     // It is possible to defined nested tuples.
 
-    let mut language = Language::new();
-
-    language.on_code("127 tuple tuple");
+    let mut language = Language::from_code("127 tuple tuple");
 
     assert_eq!(
         language.step_until_finished().unwrap(),
