@@ -44,7 +44,6 @@ impl Packages {
 
         let mut builder = PackageBuilder {
             functions_by_id: BTreeMap::new(),
-            registered,
             next_id: 0,
             package: package_id,
         };
@@ -56,12 +55,10 @@ impl Packages {
             };
             builder.next_id += 1;
 
-            builder
-                .registered
+            registered
                 .function_ids_by_name
                 .insert(function.name().to_string(), id);
-            builder
-                .registered
+            registered
                 .function_names_by_id
                 .insert(id, function.name().to_string());
 
@@ -91,8 +88,7 @@ impl Packages {
     }
 }
 
-pub struct PackageBuilder<'r, T> {
-    registered: &'r mut RegisteredPackage,
+pub struct PackageBuilder<T> {
     functions_by_id: BTreeMap<FunctionId, T>,
     next_id: u32,
     package: PackageId,
