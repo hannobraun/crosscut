@@ -70,24 +70,26 @@ pub struct PackageBuilder<'r, T> {
 }
 
 impl<T> PackageBuilder<'_, T> {
-    pub fn add_function(&mut self, function: T)
+    pub fn add_function(&mut self, functions: impl IntoIterator<Item = T>)
     where
         T: Function,
     {
-        let id = FunctionId {
-            id: self.next_id,
-            package: self.package,
-        };
-        self.next_id += 1;
+        for function in functions {
+            let id = FunctionId {
+                id: self.next_id,
+                package: self.package,
+            };
+            self.next_id += 1;
 
-        self.registered
-            .function_ids_by_name
-            .insert(function.name().to_string(), id);
-        self.registered
-            .function_names_by_id
-            .insert(id, function.name().to_string());
+            self.registered
+                .function_ids_by_name
+                .insert(function.name().to_string(), id);
+            self.registered
+                .function_names_by_id
+                .insert(id, function.name().to_string());
 
-        self.functions_by_id.insert(id, function);
+            self.functions_by_id.insert(id, function);
+        }
     }
 
     pub fn build(self) -> Package<T> {

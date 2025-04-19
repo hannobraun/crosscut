@@ -62,7 +62,7 @@ fn children_of_error_should_not_be_evaluated() {
     let mut language = Language::new();
 
     let mut package = language.packages_mut().new_package();
-    package.add_function(Ping);
+    package.add_function([Ping]);
 
     language.on_code("ping unresolved");
 
