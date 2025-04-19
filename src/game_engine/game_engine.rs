@@ -52,9 +52,7 @@ where
         let mut language = Language::new();
 
         let package = {
-            let mut package = language.packages_mut().new_package();
-
-            package.add_functions([
+            let package = language.packages_mut().new_package([
                 GameEngineFunction::Color,
                 GameEngineFunction::Dim,
             ]);

@@ -25,8 +25,7 @@ impl Language {
         let editor = Editor::new(codebase.root().path, &codebase, &packages);
 
         let intrinsics = {
-            let mut package = packages.new_package();
-            package.add_functions([
+            let package = packages.new_package([
                 IntrinsicFunction::Add,
                 IntrinsicFunction::Drop,
                 IntrinsicFunction::Eval,

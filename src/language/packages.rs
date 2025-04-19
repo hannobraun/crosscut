@@ -14,7 +14,10 @@ impl Packages {
         }
     }
 
-    pub fn new_package<T>(&mut self) -> PackageBuilder<T>
+    pub fn new_package<T>(
+        &mut self,
+        functions: impl IntoIterator<Item = T>,
+    ) -> PackageBuilder<T>
     where
         T: Function,
     {
@@ -39,12 +42,16 @@ impl Packages {
         };
         let registered = entry.insert(RegisteredPackage::default());
 
-        PackageBuilder {
+        let mut builder = PackageBuilder {
             functions_by_id: BTreeMap::new(),
             registered,
             next_id: 0,
             package: package_id,
-        }
+        };
+
+        builder.add_functions(functions);
+
+        builder
     }
 
     pub fn resolve_function(&self, name: &str) -> Option<FunctionId> {

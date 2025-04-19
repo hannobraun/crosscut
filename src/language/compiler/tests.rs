@@ -247,7 +247,7 @@ fn provided_function_application_with_multiple_children_is_an_error() {
     }
 
     let mut packages = Packages::new();
-    packages.new_package().add_functions([Provided]);
+    packages.new_package([Provided]);
 
     expect_error_on_multiple_children("provided", &packages);
 }
