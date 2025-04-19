@@ -538,13 +538,11 @@ impl Function for TestFunction {
 }
 
 fn test_package(language: &mut Language) -> Package<TestFunction> {
-    let package = language.packages_mut().new_package([
+    language.packages_mut().new_package([
         TestFunction::A,
         TestFunction::AToB,
         TestFunction::BToC,
-    ]);
-
-    package.build()
+    ])
 }
 
 fn handler(

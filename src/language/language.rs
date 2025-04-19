@@ -25,14 +25,12 @@ impl Language {
         let editor = Editor::new(codebase.root().path, &codebase, &packages);
 
         let intrinsics = {
-            let package = packages.new_package([
+            packages.new_package([
                 IntrinsicFunction::Add,
                 IntrinsicFunction::Drop,
                 IntrinsicFunction::Eval,
                 IntrinsicFunction::Identity,
-            ]);
-
-            package.build()
+            ])
         };
 
         Self {

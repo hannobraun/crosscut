@@ -17,7 +17,7 @@ impl Packages {
     pub fn new_package<T>(
         &mut self,
         functions: impl IntoIterator<Item = T>,
-    ) -> PackageBuilder<T>
+    ) -> Package<T>
     where
         T: Function,
     {
@@ -68,7 +68,7 @@ impl Packages {
             builder.functions_by_id.insert(id, function);
         }
 
-        builder
+        builder.build()
     }
 
     pub fn resolve_function(&self, name: &str) -> Option<FunctionId> {
