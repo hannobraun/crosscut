@@ -51,12 +51,9 @@ where
     pub fn new(adapter: A) -> Self {
         let mut language = Language::new();
 
-        let package = {
-            language.packages_mut().new_package([
-                GameEngineFunction::Color,
-                GameEngineFunction::Dim,
-            ])
-        };
+        let package = language
+            .packages_mut()
+            .new_package([GameEngineFunction::Color, GameEngineFunction::Dim]);
 
         let mut game_engine = Self {
             language,
