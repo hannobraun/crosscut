@@ -26,10 +26,12 @@ impl Language {
 
         let intrinsics = {
             let mut package = packages.new_package();
-            package.add_functions([IntrinsicFunction::Add]);
-            package.add_functions([IntrinsicFunction::Drop]);
-            package.add_functions([IntrinsicFunction::Eval]);
-            package.add_functions([IntrinsicFunction::Identity]);
+            package.add_functions([
+                IntrinsicFunction::Add,
+                IntrinsicFunction::Drop,
+                IntrinsicFunction::Eval,
+                IntrinsicFunction::Identity,
+            ]);
 
             package.build()
         };
