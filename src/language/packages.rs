@@ -44,9 +44,9 @@ impl Packages {
 
         let mut functions_by_id = BTreeMap::new();
 
-        for (next_id, function) in (0_u32..).zip(functions.into_iter()) {
+        for (id, function) in (0_u32..).zip(functions.into_iter()) {
             let id = FunctionId {
-                id: next_id,
+                id,
                 package: package_id,
             };
 
