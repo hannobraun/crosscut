@@ -54,8 +54,10 @@ where
         let package = {
             let mut package = language.packages_mut().new_package();
 
-            package.add_functions([GameEngineFunction::Color]);
-            package.add_functions([GameEngineFunction::Dim]);
+            package.add_functions([
+                GameEngineFunction::Color,
+                GameEngineFunction::Dim,
+            ]);
 
             package.build()
         };
