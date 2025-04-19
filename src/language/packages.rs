@@ -43,14 +43,12 @@ impl Packages {
         let registered = entry.insert(RegisteredPackage::default());
 
         let mut functions_by_id = BTreeMap::new();
-        let mut builder = PackageBuilder { next_id: 0 };
 
-        for function in functions {
+        for (next_id, function) in (0_u32..).zip(functions.into_iter()) {
             let id = FunctionId {
-                id: builder.next_id,
+                id: next_id,
                 package: package_id,
             };
-            builder.next_id += 1;
 
             registered
                 .function_ids_by_name
@@ -81,10 +79,6 @@ impl Packages {
 
         name
     }
-}
-
-pub struct PackageBuilder {
-    next_id: u32,
 }
 
 #[derive(Debug, Default)]
