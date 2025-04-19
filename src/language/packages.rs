@@ -32,15 +32,18 @@ impl Packages {
             PackageId { id }
         };
 
-        let btree_map::Entry::Vacant(entry) = self.inner.entry(package_id)
-        else {
-            unreachable!(
-                "Duplicate package IDs are not possible. Above, we increment \
-                the ID every time we create a new package, and we don't allow \
-                the ID to wrap."
-            );
+        let registered = {
+            let btree_map::Entry::Vacant(entry) = self.inner.entry(package_id)
+            else {
+                unreachable!(
+                    "Duplicate package IDs are not possible. Above, we \
+                    increment the ID every time we create a new package, and \
+                    we don't allow the ID to wrap."
+                );
+            };
+
+            entry.insert(RegisteredPackage::default())
         };
-        let registered = entry.insert(RegisteredPackage::default());
 
         let mut functions_by_id = BTreeMap::new();
 
