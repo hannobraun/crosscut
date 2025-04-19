@@ -68,7 +68,9 @@ impl Packages {
             builder.functions_by_id.insert(id, function);
         }
 
-        builder.build()
+        Package {
+            functions_by_id: builder.functions_by_id,
+        }
     }
 
     pub fn resolve_function(&self, name: &str) -> Option<FunctionId> {
@@ -94,14 +96,6 @@ pub struct PackageBuilder<'r, T> {
     functions_by_id: BTreeMap<FunctionId, T>,
     next_id: u32,
     package: PackageId,
-}
-
-impl<T> PackageBuilder<'_, T> {
-    pub fn build(self) -> Package<T> {
-        Package {
-            functions_by_id: self.functions_by_id,
-        }
-    }
 }
 
 #[derive(Debug, Default)]
