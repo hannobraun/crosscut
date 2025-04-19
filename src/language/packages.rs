@@ -42,10 +42,8 @@ impl Packages {
         };
         let registered = entry.insert(RegisteredPackage::default());
 
-        let mut builder = PackageBuilder {
-            functions_by_id: BTreeMap::new(),
-            next_id: 0,
-        };
+        let mut functions_by_id = BTreeMap::new();
+        let mut builder = PackageBuilder { next_id: 0 };
 
         for function in functions {
             let id = FunctionId {
@@ -61,12 +59,10 @@ impl Packages {
                 .function_names_by_id
                 .insert(id, function.name().to_string());
 
-            builder.functions_by_id.insert(id, function);
+            functions_by_id.insert(id, function);
         }
 
-        Package {
-            functions_by_id: builder.functions_by_id,
-        }
+        Package { functions_by_id }
     }
 
     pub fn resolve_function(&self, name: &str) -> Option<FunctionId> {
@@ -87,8 +83,7 @@ impl Packages {
     }
 }
 
-pub struct PackageBuilder<T> {
-    functions_by_id: BTreeMap<FunctionId, T>,
+pub struct PackageBuilder {
     next_id: u32,
 }
 
