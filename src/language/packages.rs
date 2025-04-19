@@ -14,7 +14,10 @@ impl Packages {
         }
     }
 
-    pub fn new_package<T>(&mut self) -> PackageBuilder<T> {
+    pub fn new_package<T>(&mut self) -> PackageBuilder<T>
+    where
+        T: Function,
+    {
         let package_id = {
             let id = self.next_id;
 
