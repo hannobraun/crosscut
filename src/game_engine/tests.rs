@@ -1,5 +1,22 @@
 use crate::game_engine::{GameEngine, GameOutput};
 
+// All tests in this module are currently broken. I (Hanno Braun) did that
+// accidentally, when making a change to the game engine, forgetting to re-run
+// the tests.
+//
+// What's important to note though, is that the functionality covered by the
+// tests itself is not broken (supposedly; there no longer are any tests 😂).
+// What's broken is the mechanism that all of the tests are using to observe the
+// game engine's behavior.
+//
+// I decided not to fix this immediately. I'm currently working through an
+// important decision that could have a big effect on the syntax. In that case,
+// fixing these tests would be absolutely trivial.
+//
+// Right now, it wouldn't be. Any fix would make the tests more complicated. So
+// I think it's fine to wait for a bit, as that syntax decision is the higher
+// priority anyway.
+
 #[test]
 #[should_panic] // temporarily broken; working on fixing it
 fn enter_expression_and_expect_game_output() {
