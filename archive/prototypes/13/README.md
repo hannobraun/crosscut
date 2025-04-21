@@ -30,17 +30,17 @@ at for inspiration.
 Following a more general change in my thinking, towards focussing my innovation
 on the core interactive features, and deciding to go with more traditional
 approaches in other areas, I decided that this innovative approach to syntax was
-a liability rather than an asset.
+a liability rather than an asset. Prefix syntax, based on the same functional
+evaluation model, would be more manageable.
 
-The postfix syntax also had been clashing with the structural code editor, in
-ways that weren't obvious to me before, and that I didn't know how to address.
+At the same time, another insight developed, regarding the rather free-form
+approach I had taken towards structural code editing (which the postfix syntax
+had also been clashing with). I came to the conclusion that I wanted to change
+to a _more_ structured approach to code editing.
 
-So I decided to go back to prefix syntax, based on the same functional
-evaluation model. An approach for which numerous other languages can be used as
-direct inspiration.
-
-I archived this prototype and started working on the next one (a direct
-continuation) on 2025-04-21.
+Either of these changes would have justified archiving the current state as a
+snapshot, so I did just that on 2025-04-21, and started working on the next
+prototype (a direct continuation, based on the same code).
 
 ## Further Reading
 
