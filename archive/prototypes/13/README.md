@@ -1,0 +1,49 @@
+# Crosscut - Prototype 13
+
+## Context
+
+This is one of many prototypes of the Crosscut programming language and
+development environment. Check out the top-level README in this repository for
+more information.
+
+I started working on this prototype on 2025-01-26, following
+[prototype 12](../12/), which had followed the long-running
+[prototype 11](../11/). After a few weeks of development on the new prototype, I
+decided to revert one of the decisions I had made
+
+Specifically, I switched from prefix syntax back to postfix syntax (which
+previous prototypes had been based on). But this time based on a new evaluation
+model, more closely inspired by functional programming.
+
+This prototype was not a direct continuation of the previous one, though heavily
+based on it, with much code copied over.
+
+## Outcome
+
+The switch back to postfix syntax, while it seemed to make sense at the time,
+eventually turned out to be ill-fated.
+
+Using postfix syntax with an evaluation model closely inspired by functional
+languages, put me in no man's land design-wise, with no other languages to look
+at for inspiration.
+
+Following a more general change in my thinking, towards focussing my innovation
+on the core interactive features, and deciding to go with more traditional
+approaches in other areas, I decided that this innovative approach to syntax was
+a liability rather than an asset.
+
+The postfix syntax also had been clashing with the structural code editor, in
+ways that weren't obvious to me before, and that I didn't know how to address.
+
+So I decided to go back to prefix syntax, based on the same functional
+evaluation model. An approach for which numerous other languages can be used as
+direct inspiration.
+
+I archived this prototype and started working on the next one (a direct
+continuation) on 2025-04-21.
+
+## Further Reading
+
+As of this writing (2025-04-21) I have not yet announced this prototype in my
+[daily thoughts](https://www.crosscut.cc/daily). I intend to update this section
+once I have.
