@@ -171,20 +171,18 @@ fn split_node_to_create_sibling() {
 
     {
         let root = codebase.root().path;
-        Compiler::new(&mut codebase).replace(&root, "127255", &packages);
+        Compiler::new(&mut codebase).replace(&root, "ab", &packages);
     }
 
     let mut editor =
         Editor::postfix(codebase.root().path, &codebase, &packages);
 
-    for _ in "127".chars() {
-        editor.on_input(
-            EditorInputEvent::MoveCursorRight,
-            &mut codebase,
-            &mut evaluator,
-            &packages,
-        );
-    }
+    editor.on_input(
+        EditorInputEvent::MoveCursorRight,
+        &mut codebase,
+        &mut evaluator,
+        &packages,
+    );
     editor.on_input(
         EditorInputEvent::AddSibling,
         &mut codebase,
@@ -198,10 +196,7 @@ fn split_node_to_create_sibling() {
             .children(codebase.nodes())
             .map(|located_node| located_node.node)
             .collect::<Vec<_>>(),
-        vec![
-            &Node::LiteralNumber { value: 127 },
-            &Node::LiteralNumber { value: 255 },
-        ],
+        vec![&node("a", []), &node("b", [])],
     );
 }
 
