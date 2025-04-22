@@ -217,9 +217,8 @@ fn reuse_empty_error_node_for_parent() {
     {
         let mut compiler = Compiler::new(&mut codebase);
 
-        let a =
-            compiler.replace(&compiler.codebase().root().path, "a", &packages);
-        compiler.insert_sibling(&a, "b", &packages);
+        compiler.insert_child(compiler.codebase().root().path, "a", &packages);
+        compiler.insert_child(compiler.codebase().root().path, "b", &packages);
     }
 
     // Two siblings were created at what was previously the root level. An empty
