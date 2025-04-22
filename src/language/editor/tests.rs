@@ -1,11 +1,11 @@
 use itertools::Itertools;
 
 use crate::language::{
-    code::{Children, Codebase, Node},
+    code::{Codebase, Node},
     compiler::Compiler,
     packages::Packages,
     runtime::Evaluator,
-    tests::infra::node,
+    tests::infra::{NodeExt, node},
 };
 
 use super::{Editor, EditorInputEvent};
@@ -214,7 +214,7 @@ fn reuse_empty_error_node_for_parent() {
     let mut codebase = Codebase::new();
     let mut evaluator = Evaluator::new();
 
-    let [a, b] = {
+    let [_, _] = {
         let mut compiler = Compiler::new(&mut codebase);
 
         let a =
@@ -226,13 +226,7 @@ fn reuse_empty_error_node_for_parent() {
 
     // Two siblings created at what was previously the root level. An empty node
     // has been created automatically as the new root node.
-    assert_eq!(
-        codebase.root().node,
-        &Node::Error {
-            node: "".to_string(),
-            children: Children::new([a, b].map(|path| *path.hash())),
-        }
-    );
+    codebase.root().node.expect_error("");
 
     let [a, b] = codebase
         .root()
