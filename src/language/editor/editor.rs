@@ -16,6 +16,15 @@ pub struct Editor {
 }
 
 impl Editor {
+    #[cfg(test)]
+    pub fn new(
+        editing: NodePath,
+        codebase: &Codebase,
+        packages: &Packages,
+    ) -> Self {
+        Self::postfix(editing, codebase, packages)
+    }
+
     pub fn postfix(
         editing: NodePath,
         codebase: &Codebase,

@@ -25,8 +25,7 @@ fn edit_initial_node() {
         Compiler::new(&mut codebase).replace(&root, "12", &packages);
     }
 
-    let mut editor =
-        Editor::postfix(codebase.root().path, &codebase, &packages);
+    let mut editor = Editor::new(codebase.root().path, &codebase, &packages);
     editor.on_code("7", &mut codebase, &mut evaluator, &packages);
 
     assert_eq!(
