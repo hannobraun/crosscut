@@ -125,18 +125,22 @@ fn merge_with_next_sibling() {
     let mut codebase = Codebase::new();
     let mut evaluator = Evaluator::new();
 
-    let mut editor =
-        Editor::postfix(codebase.root().path, &codebase, &packages);
+    {
+        let mut compiler = Compiler::new(&mut codebase);
 
-    editor.on_code("a\nb", &mut codebase, &mut evaluator, &packages);
-    for _ in 1..=2 {
-        editor.on_input(
-            EditorInputEvent::MoveCursorLeft,
-            &mut codebase,
-            &mut evaluator,
-            &packages,
-        );
+        compiler.insert_child(compiler.codebase().root().path, "a", &packages);
+        compiler.insert_child(compiler.codebase().root().path, "b", &packages);
     }
+
+    let a = codebase.root().children(codebase.nodes()).next().unwrap();
+
+    let mut editor = Editor::postfix(a.path, &codebase, &packages);
+    editor.on_input(
+        EditorInputEvent::MoveCursorRight,
+        &mut codebase,
+        &mut evaluator,
+        &packages,
+    );
 
     editor.on_input(
         EditorInputEvent::RemoveRight { whole_node: false },
