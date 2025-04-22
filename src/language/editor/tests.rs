@@ -5,6 +5,7 @@ use crate::language::{
     compiler::Compiler,
     packages::Packages,
     runtime::Evaluator,
+    tests::infra::node,
 };
 
 use super::{Editor, EditorInputEvent};
@@ -91,7 +92,7 @@ fn merge_with_previous_sibling() {
     let mut editor =
         Editor::postfix(codebase.root().path, &codebase, &packages);
 
-    editor.on_code("12\n7", &mut codebase, &mut evaluator, &packages);
+    editor.on_code("a\nb", &mut codebase, &mut evaluator, &packages);
     editor.on_input(
         EditorInputEvent::MoveCursorLeft,
         &mut codebase,
@@ -112,7 +113,7 @@ fn merge_with_previous_sibling() {
             .children(codebase.nodes())
             .map(|located_node| located_node.node)
             .collect::<Vec<_>>(),
-        vec![&Node::LiteralNumber { value: 127 }],
+        vec![&node("ab", [])],
     );
 }
 
