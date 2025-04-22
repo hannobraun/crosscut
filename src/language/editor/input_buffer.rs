@@ -30,10 +30,8 @@ impl EditorInputBuffer {
     }
 
     pub fn update(&mut self, event: EditorInputEvent) -> Option<NodeAction> {
-        use EditorInputEvent::*;
-
         match event {
-            Insert { ch } => {
+            EditorInputEvent::Insert { ch } => {
                 assert!(
                     !ch.is_whitespace(),
                     "Expecting whitespace characters to be translated into \
@@ -42,34 +40,34 @@ impl EditorInputBuffer {
 
                 self.insert(ch);
             }
-            MoveCursorLeft => {
+            EditorInputEvent::MoveCursorLeft => {
                 return self.move_cursor_left();
             }
-            MoveCursorRight => {
+            EditorInputEvent::MoveCursorRight => {
                 return self.move_cursor_right();
             }
-            MoveCursorUp => {
+            EditorInputEvent::MoveCursorUp => {
                 return Some(NodeAction::NavigateToPrevious);
             }
-            MoveCursorDown => {
+            EditorInputEvent::MoveCursorDown => {
                 return Some(NodeAction::NavigateToNext);
             }
-            RemoveLeft { whole_node } => {
+            EditorInputEvent::RemoveLeft { whole_node } => {
                 if whole_node {
                     self.remove_left_whole_node();
                 } else {
                     return self.remove_left();
                 }
             }
-            RemoveRight { whole_node } => {
+            EditorInputEvent::RemoveRight { whole_node } => {
                 let _ = whole_node;
                 return self.remove_right();
             }
-            AddParent => {
+            EditorInputEvent::AddParent => {
                 let existing_child = self.add_parent_or_sibling();
                 return Some(NodeAction::AddParent { existing_child });
             }
-            AddSibling => {
+            EditorInputEvent::AddSibling => {
                 let existing_sibling = self.add_parent_or_sibling();
                 return Some(NodeAction::AddSibling { existing_sibling });
             }
