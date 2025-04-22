@@ -61,11 +61,11 @@ fn navigate_to_next_sibling() {
         compiler.insert_child(compiler.codebase().root().path, "b", &packages);
     }
 
-    let (a, b) = codebase
+    let [a, b] = codebase
         .root()
         .children(codebase.nodes())
         .map(|located_node| located_node.path)
-        .collect_tuple()
+        .collect_array()
         .unwrap();
 
     let mut editor = Editor::new(a, &codebase, &packages);
