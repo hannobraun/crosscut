@@ -134,7 +134,7 @@ fn merge_with_next_sibling() {
 
     let a = codebase.root().children(codebase.nodes()).next().unwrap();
 
-    let mut editor = Editor::postfix(a.path, &codebase, &packages);
+    let mut editor = Editor::new(a.path, &codebase, &packages);
     editor.on_input(
         EditorInputEvent::MoveCursorRight,
         &mut codebase,
