@@ -58,7 +58,7 @@ fn navigate_to_next_sibling() {
 
         compiler.insert_child(compiler.codebase().root().path, "a", &packages);
         compiler.insert_child(compiler.codebase().root().path, "b", &packages);
-    };
+    }
 
     let (a, b) = codebase
         .root()
