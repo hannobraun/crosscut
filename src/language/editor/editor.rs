@@ -37,7 +37,6 @@ impl Editor {
         };
 
         editor.navigate_to(editing, codebase, packages);
-        editor.input.move_cursor_to_end();
 
         editor
     }

@@ -23,11 +23,11 @@ fn edit_initial_node() {
 
     {
         let root = codebase.root().path;
-        Compiler::new(&mut codebase).replace(&root, "12", &packages);
+        Compiler::new(&mut codebase).replace(&root, "27", &packages);
     }
 
     let mut editor = Editor::new(codebase.root().path, &codebase, &packages);
-    editor.on_code("7", &mut codebase, &mut evaluator, &packages);
+    editor.on_code("1", &mut codebase, &mut evaluator, &packages);
 
     assert_eq!(
         codebase.node_at(editor.editing()).node,
@@ -175,9 +175,9 @@ fn split_node_to_create_sibling() {
     let mut editor =
         Editor::postfix(codebase.root().path, &codebase, &packages);
 
-    for _ in "255".chars() {
+    for _ in "127".chars() {
         editor.on_input(
-            EditorInputEvent::MoveCursorLeft,
+            EditorInputEvent::MoveCursorRight,
             &mut codebase,
             &mut evaluator,
             &packages,
@@ -233,6 +233,12 @@ fn reuse_empty_error_node_for_parent() {
         .unwrap();
 
     let mut editor = Editor::postfix(b.clone(), &codebase, &packages);
+    editor.on_input(
+        EditorInputEvent::MoveCursorRight,
+        &mut codebase,
+        &mut evaluator,
+        &packages,
+    );
 
     // Now tell the editor to create a parent node.
     editor.on_code(" ", &mut codebase, &mut evaluator, &packages);
