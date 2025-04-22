@@ -128,7 +128,7 @@ fn merge_with_next_sibling() {
     let mut editor =
         Editor::postfix(codebase.root().path, &codebase, &packages);
 
-    editor.on_code("12\n7", &mut codebase, &mut evaluator, &packages);
+    editor.on_code("a\nb", &mut codebase, &mut evaluator, &packages);
     for _ in 1..=2 {
         editor.on_input(
             EditorInputEvent::MoveCursorLeft,
@@ -151,7 +151,7 @@ fn merge_with_next_sibling() {
             .children(codebase.nodes())
             .map(|located_node| located_node.node)
             .collect::<Vec<_>>(),
-        vec![&Node::LiteralNumber { value: 127 }],
+        vec![&node("ab", [])],
     );
 }
 
