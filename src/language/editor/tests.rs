@@ -96,7 +96,7 @@ fn merge_with_previous_sibling() {
         compiler.insert_child(compiler.codebase().root().path, "b", &packages)
     };
 
-    let mut editor = Editor::postfix(b, &codebase, &packages);
+    let mut editor = Editor::new(b, &codebase, &packages);
 
     editor.on_input(
         EditorInputEvent::RemoveLeft { whole_node: false },
