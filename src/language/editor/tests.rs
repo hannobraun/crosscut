@@ -25,7 +25,8 @@ fn edit_initial_node() {
         Compiler::new(&mut codebase).replace(&root, "12", &packages);
     }
 
-    let mut editor = Editor::new(codebase.root().path, &codebase, &packages);
+    let mut editor =
+        Editor::postfix(codebase.root().path, &codebase, &packages);
     editor.on_code("7", &mut codebase, &mut evaluator, &packages);
 
     assert_eq!(
@@ -67,7 +68,7 @@ fn navigate_to_next_sibling() {
         .collect_tuple()
         .unwrap();
 
-    let mut editor = Editor::new(a, &codebase, &packages);
+    let mut editor = Editor::postfix(a, &codebase, &packages);
     editor.on_input(
         EditorInputEvent::MoveCursorDown,
         &mut codebase,
@@ -88,7 +89,8 @@ fn merge_with_previous_sibling() {
     let mut codebase = Codebase::new();
     let mut evaluator = Evaluator::new();
 
-    let mut editor = Editor::new(codebase.root().path, &codebase, &packages);
+    let mut editor =
+        Editor::postfix(codebase.root().path, &codebase, &packages);
 
     editor.on_code("12\n7", &mut codebase, &mut evaluator, &packages);
     editor.on_input(
@@ -125,7 +127,8 @@ fn merge_with_next_sibling() {
     let mut codebase = Codebase::new();
     let mut evaluator = Evaluator::new();
 
-    let mut editor = Editor::new(codebase.root().path, &codebase, &packages);
+    let mut editor =
+        Editor::postfix(codebase.root().path, &codebase, &packages);
 
     editor.on_code("12\n7", &mut codebase, &mut evaluator, &packages);
     for _ in 1..=2 {
@@ -169,7 +172,8 @@ fn split_node_to_create_sibling() {
         Compiler::new(&mut codebase).replace(&root, "127255", &packages);
     }
 
-    let mut editor = Editor::new(codebase.root().path, &codebase, &packages);
+    let mut editor =
+        Editor::postfix(codebase.root().path, &codebase, &packages);
 
     for _ in "255".chars() {
         editor.on_input(
@@ -237,7 +241,7 @@ fn reuse_empty_error_node_for_parent() {
         .collect_array()
         .unwrap();
 
-    let mut editor = Editor::new(b.clone(), &codebase, &packages);
+    let mut editor = Editor::postfix(b.clone(), &codebase, &packages);
 
     // Now tell the editor to create a parent node.
     editor.on_code(" ", &mut codebase, &mut evaluator, &packages);

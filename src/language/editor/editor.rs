@@ -16,7 +16,7 @@ pub struct Editor {
 }
 
 impl Editor {
-    pub fn new(
+    pub fn postfix(
         editing: NodePath,
         codebase: &Codebase,
         packages: &Packages,
@@ -195,7 +195,7 @@ impl Editor {
         match command {
             EditorCommand::Clear => {
                 *codebase = Codebase::new();
-                *self = Self::new(codebase.root().path, codebase, packages);
+                *self = Self::postfix(codebase.root().path, codebase, packages);
                 evaluator.reset(codebase);
             }
         }

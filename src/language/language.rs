@@ -22,7 +22,8 @@ impl Language {
         let evaluator = Evaluator::new();
         let mut packages = Packages::new();
 
-        let editor = Editor::new(codebase.root().path, &codebase, &packages);
+        let editor =
+            Editor::postfix(codebase.root().path, &codebase, &packages);
 
         let intrinsics = packages.new_package([
             IntrinsicFunction::Add,
