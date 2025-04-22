@@ -67,7 +67,7 @@ fn navigate_to_next_sibling() {
         .collect_tuple()
         .unwrap();
 
-    let mut editor = Editor::postfix(a, &codebase, &packages);
+    let mut editor = Editor::new(a, &codebase, &packages);
     editor.on_input(
         EditorInputEvent::MoveCursorDown,
         &mut codebase,
