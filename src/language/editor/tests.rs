@@ -221,8 +221,8 @@ fn reuse_empty_error_node_for_parent() {
         compiler.insert_child(compiler.codebase().root().path, "b", &packages);
     }
 
-    // Two siblings were created at what was previously the root level. An empty
-    // node must have been created automatically as the new root node.
+    // The initial root node should be empty. Let's make sure nothing went wrong
+    // with the test setup, and this is actually the case.
     codebase.root().node.expect_error("");
 
     let [a, b] = codebase
