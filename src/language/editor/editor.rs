@@ -48,7 +48,7 @@ impl Editor {
         evaluator: &mut Evaluator,
         packages: &Packages,
     ) {
-        let layout = EditorLayout::new(codebase.root(), codebase.nodes());
+        let layout = EditorLayout::postfix(codebase.root(), codebase.nodes());
         let mut compiler = Compiler::new(codebase);
 
         if let Some(action) = self.input.update(event) {
