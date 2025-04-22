@@ -174,8 +174,7 @@ fn split_node_to_create_sibling() {
         Compiler::new(&mut codebase).replace(&root, "ab", &packages);
     }
 
-    let mut editor =
-        Editor::postfix(codebase.root().path, &codebase, &packages);
+    let mut editor = Editor::new(codebase.root().path, &codebase, &packages);
 
     editor.on_input(
         EditorInputEvent::MoveCursorRight,
