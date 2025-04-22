@@ -224,8 +224,8 @@ fn reuse_empty_error_node_for_parent() {
         [a, b]
     };
 
-    // Two siblings created at what was previously the root level. An empty node
-    // has been created automatically as the new root node.
+    // Two siblings were created at what was previously the root level. An empty
+    // node must have been created automatically as the new root node.
     codebase.root().node.expect_error("");
 
     let [a, b] = codebase
