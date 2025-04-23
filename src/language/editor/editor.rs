@@ -155,9 +155,9 @@ impl Editor {
                             });
 
                         if let Some(parent) = empty_parent {
-                            // If the parent node is empty, we re-use it instead of
-                            // adding a new parent in between. This leads to a
-                            // smoother editing experience.
+                            // If the parent node is empty, we re-use it instead
+                            // of adding a new parent in between. This leads to
+                            // a smoother editing experience.
 
                             compiler.replace(
                                 &parent.path,
