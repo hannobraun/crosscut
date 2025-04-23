@@ -42,20 +42,19 @@ fn enter_expression_and_expect_game_output() {
 }
 
 #[test]
-#[should_panic] // temporarily broken; working on fixing it
 fn expect_clear_command_to_clear_previously_entered_code() {
     // If the `clear` command executes, previously entered code should have no
     // effect.
 
     let mut game_engine = GameEngine::without_editor_ui();
 
-    game_engine.enter_code("12");
+    game_engine.enter_code("color 12");
 
     game_engine.enter_command_mode();
     game_engine.enter_command("clear");
     game_engine.execute_command();
 
-    game_engine.enter_code("7");
+    game_engine.enter_code("color 7");
 
     let GameOutput::SubmitColor { color } =
         game_engine.game_output().last().unwrap();
