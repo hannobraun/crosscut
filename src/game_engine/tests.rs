@@ -63,13 +63,12 @@ fn expect_clear_command_to_clear_previously_entered_code() {
 }
 
 #[test]
-#[should_panic] // temporarily broken; working on fixing it
 fn expect_aborted_command_to_have_no_effect() {
     // If a command aborts instead of executing, this should have no effect.
 
     let mut game_engine = GameEngine::without_editor_ui();
 
-    game_engine.enter_code("12");
+    game_engine.enter_code("color 12");
 
     game_engine.enter_command_mode();
     game_engine.enter_command("clear");
