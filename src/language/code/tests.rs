@@ -24,7 +24,7 @@ fn uniquely_identify_identical_children_of_different_parents() {
         d
     });
 
-    let (a1, a2) = codebase
+    let [a1, a2] = codebase
         .node_at(&root)
         .children(codebase.nodes())
         .map(|b_or_c| {
@@ -36,7 +36,7 @@ fn uniquely_identify_identical_children_of_different_parents() {
 
             a
         })
-        .collect_tuple()
+        .collect_array()
         .unwrap();
 
     assert_ne!(a1, a2);
