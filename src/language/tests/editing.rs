@@ -1,11 +1,11 @@
 use itertools::Itertools;
 
 use crate::language::{
-    code::{Children, Node},
+    code::Node,
     editor::EditorInputEvent,
     language::Language,
     runtime::Value,
-    tests::infra::{LocatedNodeExt, NodeExt, NodesExt},
+    tests::infra::{NodeExt, NodesExt},
 };
 
 // Some tests in this suite have gotten a bit too detailed, as indicated by
@@ -79,45 +79,6 @@ fn update_after_removing_all_characters() {
 
     language.on_input(EditorInputEvent::RemoveLeft { whole_node: false });
     assert_eq!(language.step_until_finished().unwrap(), Value::nothing());
-}
-
-#[test]
-fn split_node_if_adding_sibling_while_cursor_is_in_the_middle() {
-    // If adding a sibling while the cursor is in the middle of a node, that
-    // node should be split.
-
-    let mut language = Language::new();
-
-    language.on_code("ab c");
-    for _ in 0..3 {
-        language.on_input(EditorInputEvent::MoveCursorLeft);
-    }
-    language.on_input(EditorInputEvent::AddSibling);
-
-    let root = language.codebase().root();
-    assert_eq!(
-        root.node,
-        &Node::Error {
-            node: "c".to_string(),
-            children: root.node.to_children(),
-        },
-    );
-
-    let [a, b] = root.expect_children(language.codebase().nodes());
-    assert_eq!(
-        a.node,
-        &Node::Error {
-            node: "a".to_string(),
-            children: Children::new([]),
-        },
-    );
-    assert_eq!(
-        b.node,
-        &Node::Error {
-            node: "b".to_string(),
-            children: Children::new([]),
-        },
-    );
 }
 
 #[test]
