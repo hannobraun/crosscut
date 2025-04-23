@@ -69,7 +69,7 @@ fn navigate_down_to_child() {
         &Packages::new(),
     );
 
-    assert_eq!(editor.cursor().path, b);
+    assert_eq!(editor.cursor(), &Cursor { path: b, index: 0 });
 }
 
 #[test]
@@ -134,7 +134,13 @@ fn navigate_up_to_parent() {
         &Packages::new(),
     );
 
-    assert_eq!(editor.cursor().path, codebase.root().path);
+    assert_eq!(
+        editor.cursor(),
+        &Cursor {
+            path: codebase.root().path,
+            index: 1
+        },
+    );
 }
 
 #[test]
@@ -212,7 +218,7 @@ fn navigate_down_to_next_sibling() {
         &Packages::new(),
     );
 
-    assert_eq!(editor.cursor().path, b);
+    assert_eq!(editor.cursor(), &Cursor { path: b, index: 0 });
 }
 
 #[test]
@@ -279,7 +285,7 @@ fn navigate_up_to_previous_sibling() {
         &Packages::new(),
     );
 
-    assert_eq!(editor.cursor().path, a);
+    assert_eq!(editor.cursor(), &Cursor { path: a, index: 1 });
 }
 
 #[test]
