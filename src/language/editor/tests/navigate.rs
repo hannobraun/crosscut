@@ -66,6 +66,42 @@ fn navigate_down_to_child() {
 }
 
 #[test]
+fn navigate_right_to_child() {
+    // Moving the cursor right while at the end of the current node navigates to
+    // the child.
+
+    let packages = Packages::new();
+
+    let mut codebase = Codebase::new();
+    let mut evaluator = Evaluator::new();
+
+    let b = {
+        let mut compiler = Compiler::new(&mut codebase);
+
+        let a =
+            compiler.replace(&compiler.codebase().root().path, "a", &packages);
+        compiler.insert_child(a, "b", &packages)
+    };
+
+    let mut editor = Editor::new(
+        Cursor {
+            path: codebase.root().path,
+            index: 1,
+        },
+        &codebase,
+        &packages,
+    );
+    editor.on_input(
+        [EditorInputEvent::MoveCursorRight],
+        &mut codebase,
+        &mut evaluator,
+        &Packages::new(),
+    );
+
+    assert_eq!(editor.cursor().path, b);
+}
+
+#[test]
 fn navigate_up_to_parent() {
     // Moving the cursor up navigates to the current node's parent.
 
