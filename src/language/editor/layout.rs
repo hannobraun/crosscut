@@ -1,5 +1,3 @@
-use std::cmp::max;
-
 use crate::language::code::{LocatedNode, NodePath, Nodes};
 
 #[derive(Debug)]
@@ -79,13 +77,11 @@ fn collect_nodes_from_root(
     nodes_from_root: &mut Vec<NodeInLayout>,
     nodes: &Nodes,
     postfix: bool,
-) -> u32 {
+) {
     nodes_from_root.push(NodeInLayout {
         path: node.path.clone(),
         distance_from_root,
     });
-
-    let mut max_distance_from_root = distance_from_root;
 
     let children = if postfix {
         // By rendering leaves first, root at the end, we are essentially
@@ -100,17 +96,12 @@ fn collect_nodes_from_root(
     };
 
     for child in children {
-        let distance_from_root = collect_nodes_from_root(
+        collect_nodes_from_root(
             child,
             distance_from_root + 1,
             nodes_from_root,
             nodes,
             postfix,
         );
-
-        max_distance_from_root =
-            max(max_distance_from_root, distance_from_root);
     }
-
-    max_distance_from_root
 }
