@@ -18,12 +18,12 @@ fn add_child() {
     let mut codebase = Codebase::new();
     let mut evaluator = Evaluator::new();
 
-    let child = {
+    let a = {
         let root = codebase.root().path;
         Compiler::new(&mut codebase).replace(&root, "a", &packages)
     };
 
-    let mut editor = Editor::new(child, &codebase, &packages);
+    let mut editor = Editor::new(a, &codebase, &packages);
 
     editor.on_input(
         EditorInputEvent::MoveCursorRight,
