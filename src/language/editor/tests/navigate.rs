@@ -132,7 +132,7 @@ fn navigate_down_to_next_sibling() {
 }
 
 #[test]
-fn navigate_to_previous_sibling() {
+fn navigate_up_to_previous_sibling() {
     // Moving the cursor up navigates to the current node's previous sibling.
 
     let packages = Packages::new();
