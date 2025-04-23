@@ -191,6 +191,7 @@ impl<'r> LocatedNode<'r> {
         self.node.to_children().into_iter().enumerate().map(
             move |(index, hash)| {
                 let node = nodes.get(&hash);
+
                 LocatedNode {
                     node,
                     path: NodePath::new(
