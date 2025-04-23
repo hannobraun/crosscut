@@ -189,21 +189,18 @@ fn add_sibling_to_root_node() {
     );
 
     let [a, b] = root
-        .node
-        .to_children()
-        .into_iter()
-        .map(|hash| language.codebase().nodes().get(&hash))
+        .children(language.codebase().nodes())
         .collect_array()
         .unwrap();
     assert_eq!(
-        a,
+        a.node,
         &Node::Error {
             node: "a".to_string(),
             children: Children::new([]),
         },
     );
     assert_eq!(
-        b,
+        b.node,
         &Node::Error {
             node: "b".to_string(),
             children: Children::new([]),
