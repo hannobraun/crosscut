@@ -196,3 +196,38 @@ fn navigate_up_to_previous_sibling() {
 
     assert_eq!(editor.cursor().path, a);
 }
+
+#[test]
+fn navigate_left_to_previous_sibling() {
+    // Moving the cursor left navigates to the end of the current node's
+    // previous sibling.
+
+    let packages = Packages::new();
+
+    let mut codebase = Codebase::new();
+    let mut evaluator = Evaluator::new();
+
+    {
+        let mut compiler = Compiler::new(&mut codebase);
+
+        compiler.insert_child(compiler.codebase().root().path, "a", &packages);
+        compiler.insert_child(compiler.codebase().root().path, "b", &packages);
+    }
+
+    let [a, b] = codebase
+        .root()
+        .expect_children(codebase.nodes())
+        .map(|located_node| located_node.path);
+
+    let mut editor =
+        Editor::new(Cursor { path: b, index: 0 }, &codebase, &packages);
+    editor.on_input(
+        [EditorInputEvent::MoveCursorLeft],
+        &mut codebase,
+        &mut evaluator,
+        &Packages::new(),
+    );
+
+    assert_eq!(editor.cursor().path, a);
+    assert_eq!(editor.cursor().index, 1);
+}
