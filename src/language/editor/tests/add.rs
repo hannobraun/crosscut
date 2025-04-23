@@ -31,8 +31,9 @@ fn add_child() {
     );
     editor.on_code("b", &mut codebase, &mut evaluator, &packages);
 
-    let [b] = codebase.root().expect_children(codebase.nodes());
-    assert_eq!(codebase.root().node, &node("a", [*b.path.hash()]));
+    let a = codebase.root();
+    let [b] = a.expect_children(codebase.nodes());
+    assert_eq!(a.node, &node("a", [*b.path.hash()]));
     assert_eq!(b.node, &node("b", []));
 }
 
