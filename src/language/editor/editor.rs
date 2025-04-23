@@ -50,8 +50,8 @@ impl Editor {
         &self.input
     }
 
-    pub fn cursor(&self) -> Cursor {
-        self.cursor.clone()
+    pub fn cursor(&self) -> &Cursor {
+        &self.cursor
     }
 
     pub fn on_input(
