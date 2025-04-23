@@ -139,16 +139,17 @@ fn add_sibling() {
     language.on_input(EditorInputEvent::AddSibling);
     language.on_code("b");
 
-    let root = language.codebase().root().node;
+    let root = language.codebase().root();
     assert_eq!(
-        root,
+        root.node,
         &Node::Error {
             node: "c".to_string(),
-            children: root.to_children(),
+            children: root.node.to_children(),
         },
     );
 
     let [a, b] = root
+        .node
         .to_children()
         .into_iter()
         .map(|hash| language.codebase().nodes().get(&hash))
