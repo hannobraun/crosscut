@@ -38,10 +38,10 @@ fn number_literal() {
 fn identity_none() {
     // The `identity` function takes any argument and returns it unchanged.
 
-    let mut language = Language::from_code_postfix("identity");
+    let mut language = Language::from_code("identity");
     assert_eq!(language.step_until_finished().unwrap(), Value::nothing());
 
-    let mut language = Language::from_code_postfix("127 identity");
+    let mut language = Language::from_code("identity 127");
     assert_eq!(
         language.step_until_finished().unwrap(),
         Value::Integer { value: 127 },
