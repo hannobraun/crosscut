@@ -43,6 +43,41 @@ fn add_child() {
 }
 
 #[test]
+fn split_node_if_adding_parent_while_cursor_is_in_the_middle() {
+    // If we add a parent while the cursor is in the middle of the current node,
+    // we should split the node right there.
+
+    let packages = Packages::new();
+
+    let mut codebase = Codebase::new();
+    let mut evaluator = Evaluator::new();
+
+    let a = {
+        let root = codebase.root().path;
+        Compiler::new(&mut codebase).replace(&root, "ab", &packages)
+    };
+
+    let mut editor = Editor::postfix(a, &codebase, &packages);
+
+    editor.on_input(
+        EditorInputEvent::MoveCursorRight,
+        &mut codebase,
+        &mut evaluator,
+        &packages,
+    );
+    editor.on_input(
+        EditorInputEvent::AddChildOrParent,
+        &mut codebase,
+        &mut evaluator,
+        &packages,
+    );
+
+    let [a] = codebase.root().expect_children(codebase.nodes());
+    assert_eq!(codebase.root().node, &node("b", [*a.path.hash()]));
+    assert_eq!(a.node, &node("a", []));
+}
+
+#[test]
 fn add_parent_of_node_that_already_has_a_parent() {
     // If a node already has a parent, then adding a parent should add the
     // parent in between them, as a child of the previous parent.

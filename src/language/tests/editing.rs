@@ -82,25 +82,6 @@ fn update_after_removing_all_characters() {
 }
 
 #[test]
-fn split_node_if_adding_parent_while_cursor_is_in_the_middle() {
-    // If we add a parent while the cursor is in the middle of the current node,
-    // we should split the node right there.
-
-    let mut language = Language::new();
-
-    language.on_code("127identity");
-    for _ in "identity".chars() {
-        language.on_input(EditorInputEvent::MoveCursorLeft);
-    }
-    language.on_input(EditorInputEvent::AddChildOrParent);
-
-    assert_eq!(
-        language.step_until_finished().unwrap(),
-        Value::Integer { value: 127 },
-    );
-}
-
-#[test]
 fn add_sibling() {
     // It is possible to add a sibling to a node.
 
