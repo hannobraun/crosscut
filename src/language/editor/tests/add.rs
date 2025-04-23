@@ -88,7 +88,7 @@ fn add_sibling_to_root_node() {
         Compiler::new(&mut codebase).replace(&root, "a", &packages)
     };
 
-    let mut editor = Editor::postfix(a, &codebase, &packages);
+    let mut editor = Editor::new(a, &codebase, &packages);
 
     editor.on_input(
         [MoveCursorRight, AddSibling],
