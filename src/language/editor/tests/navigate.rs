@@ -1,7 +1,7 @@
 use crate::language::{
     code::{Codebase, Node},
     compiler::Compiler,
-    editor::{Editor, EditorInputEvent},
+    editor::{Editor, EditorInputEvent, editor::Cursor},
     packages::Packages,
     runtime::Evaluator,
     tests::infra::LocatedNodeExt,
@@ -20,13 +20,20 @@ fn edit_initial_node() {
 
     {
         let root = codebase.root().path;
-        Compiler::new(&mut codebase).replace(&root, "27", &packages);
+        Compiler::new(&mut codebase).replace(&root, "17", &packages);
     }
 
-    let mut editor = Editor::new(codebase.root().path, &codebase, &packages);
+    let mut editor = Editor::new(
+        Cursor {
+            path: codebase.root().path,
+            index: 1,
+        },
+        &codebase,
+        &packages,
+    );
     assert_eq!(editor.cursor().path, codebase.root().path);
 
-    editor.on_code("1", &mut codebase, &mut evaluator, &packages);
+    editor.on_code("2", &mut codebase, &mut evaluator, &packages);
     assert_eq!(
         codebase.node_at(&editor.cursor().path).node,
         &Node::LiteralNumber { value: 127 },
