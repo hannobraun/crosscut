@@ -37,7 +37,7 @@ fn add_child() {
 }
 
 #[test]
-fn split_node_if_adding_parent_while_cursor_is_in_the_middle() {
+fn split_node_to_create_parent() {
     // If we add a parent while the cursor is in the middle of the current node,
     // we should split the node right there.
 
