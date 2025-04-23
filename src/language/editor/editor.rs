@@ -1,5 +1,5 @@
 use crate::language::{
-    code::{Codebase, Node, NodePath},
+    code::{Codebase, NodePath},
     compiler::Compiler,
     packages::Packages,
     runtime::Evaluator,
@@ -13,7 +13,6 @@ use super::{
 pub struct Editor {
     input: EditorInputBuffer,
     cursor: Cursor,
-    postfix: bool,
 }
 
 impl Editor {
@@ -27,21 +26,9 @@ impl Editor {
         let mut editor = Self {
             input: EditorInputBuffer::empty(),
             cursor: cursor.clone(),
-            postfix: false,
         };
 
         editor.navigate_to(cursor, codebase, packages);
-
-        editor
-    }
-
-    pub fn postfix(
-        editing: NodePath,
-        codebase: &Codebase,
-        packages: &Packages,
-    ) -> Self {
-        let mut editor = Self::new(editing, codebase, packages);
-        editor.postfix = true;
 
         editor
     }
@@ -57,11 +44,7 @@ impl Editor {
         evaluator: &mut Evaluator,
         packages: &Packages,
     ) {
-        let layout = if self.postfix {
-            EditorLayout::postfix(codebase.root(), codebase.nodes())
-        } else {
-            EditorLayout::new(codebase.root(), codebase.nodes())
-        };
+        let layout = EditorLayout::new(codebase.root(), codebase.nodes());
         let mut compiler = Compiler::new(codebase);
 
         for event in events {
@@ -156,52 +139,11 @@ impl Editor {
                             packages,
                         );
 
-                        self.cursor.path = if self.postfix {
-                            let empty_parent =
-                                self.cursor.path.parent().and_then(|parent| {
-                                    let parent =
-                                        compiler.codebase().node_at(parent);
-
-                                    let parent_is_empty =
-                                        matches!(parent.node, Node::Empty);
-                                    let parent_is_error_but_empty =
-                                        if let Node::Error { node, .. } =
-                                            parent.node
-                                        {
-                                            node.is_empty()
-                                        } else {
-                                            false
-                                        };
-
-                                    (parent_is_empty
-                                        || parent_is_error_but_empty)
-                                        .then_some(parent)
-                                });
-
-                            if let Some(parent) = empty_parent {
-                                // If the parent node is empty, we re-use it
-                                // instead of adding a new parent in between.
-                                // This leads to a smoother editing experience.
-
-                                compiler.replace(
-                                    &parent.path,
-                                    self.input.buffer(),
-                                    packages,
-                                )
-                            } else {
-                                compiler.insert_parent(
-                                    &self.cursor.path,
-                                    self.input.buffer(),
-                                    packages,
-                                )
-                            }
-                        } else {
-                            compiler.insert_child(
-                                self.cursor.path.clone(),
-                                self.input.buffer(),
-                                packages,
-                            )
-                        };
+                        self.cursor.path = compiler.insert_child(
+                            self.cursor.path.clone(),
+                            self.input.buffer(),
+                            packages,
+                        );
                     }
                     NodeAction::AddSibling { existing_sibling } => {
                         self.cursor.path = compiler.replace(
@@ -252,11 +194,7 @@ impl Editor {
         match command {
             EditorCommand::Clear => {
                 *codebase = Codebase::new();
-                *self = if self.postfix {
-                    Self::postfix(codebase.root().path, codebase, packages)
-                } else {
-                    Self::new(codebase.root().path, codebase, packages)
-                };
+                *self = Self::new(codebase.root().path, codebase, packages);
                 evaluator.reset(codebase);
             }
         }

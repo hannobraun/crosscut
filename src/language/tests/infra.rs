@@ -11,22 +11,6 @@ pub fn node(name: &str, children: impl IntoIterator<Item = NodeHash>) -> Node {
     }
 }
 
-pub trait NodeExt: Sized {
-    fn expect_error(&self, expected: &str) -> Node;
-}
-
-impl NodeExt for Node {
-    #[track_caller]
-    fn expect_error(&self, expected: &str) -> Node {
-        if let Node::Error { node, .. } = self {
-            assert_eq!(node, expected);
-            self.clone()
-        } else {
-            panic!("Expected error.");
-        }
-    }
-}
-
 pub trait LocatedNodeExt {
     fn expect_children<'r, const N: usize>(
         &self,

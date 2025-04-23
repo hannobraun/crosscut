@@ -4,7 +4,7 @@ use crate::language::{
     editor::{Editor, EditorInputEvent::*},
     packages::Packages,
     runtime::Evaluator,
-    tests::infra::{LocatedNodeExt, NodeExt, node},
+    tests::infra::{LocatedNodeExt, node},
 };
 
 #[test]
@@ -171,82 +171,4 @@ fn split_node_to_create_sibling() {
             .collect::<Vec<_>>(),
         vec![&node("a", []), &node("b", [])],
     );
-}
-
-#[test]
-fn add_parent_of_node_that_already_has_a_parent() {
-    // If a node already has a parent, then adding a parent should add the
-    // parent in between them, as a child of the previous parent.
-
-    let packages = Packages::new();
-
-    let mut codebase = Codebase::new();
-    let mut evaluator = Evaluator::new();
-
-    let c = {
-        let mut compiler = Compiler::new(&mut codebase);
-
-        let a =
-            compiler.replace(&compiler.codebase().root().path, "a", &packages);
-        compiler.insert_child(a, "c", &packages)
-    };
-
-    let mut editor = Editor::postfix(c, &codebase, &packages);
-
-    editor.on_input(
-        [MoveCursorRight, AddChildOrParent],
-        &mut codebase,
-        &mut evaluator,
-        &packages,
-    );
-    editor.on_code("b", &mut codebase, &mut evaluator, &packages);
-
-    let [b] = codebase.root().expect_children(codebase.nodes());
-    let [c] = b.expect_children(codebase.nodes());
-    assert_eq!(codebase.root().node, &node("a", [*b.path.hash()]));
-    assert_eq!(b.node, &node("b", [*c.path.hash()]));
-    assert_eq!(c.node, &node("c", []));
-}
-
-#[test]
-fn reuse_empty_error_node_for_parent() {
-    // If the parent of a node is empty, that node is re-used when adding a
-    // parent, instead of creating a new parent node. The same should be true
-    // for error nodes that happen to be empty.
-
-    let packages = Packages::new();
-
-    let mut codebase = Codebase::new();
-    let mut evaluator = Evaluator::new();
-
-    {
-        let mut compiler = Compiler::new(&mut codebase);
-
-        compiler.insert_child(compiler.codebase().root().path, "a", &packages);
-        compiler.insert_child(compiler.codebase().root().path, "b", &packages);
-    }
-
-    // The initial root node should be empty. Let's make sure nothing went wrong
-    // with the test setup, and this is actually the case.
-    codebase.root().node.expect_error("");
-
-    let [a, b] = codebase
-        .root()
-        .expect_children(codebase.nodes())
-        .map(|located_node| located_node.path);
-
-    let mut editor = Editor::postfix(b.clone(), &codebase, &packages);
-    editor.on_input(
-        [MoveCursorRight],
-        &mut codebase,
-        &mut evaluator,
-        &packages,
-    );
-
-    // Now tell the editor to create a parent node.
-    editor.on_code(" ", &mut codebase, &mut evaluator, &packages);
-
-    // And check that it has actually re-used the root node.
-    assert_eq!(a.parent(), Some(&codebase.root().path));
-    assert_eq!(b.parent(), Some(&codebase.root().path));
 }
