@@ -33,6 +33,7 @@ fn add_child() {
 
     let a = codebase.root();
     let [b] = a.expect_children(codebase.nodes());
+
     assert_eq!(a.node, &node("a", [*b.path.hash()]));
     assert_eq!(b.node, &node("b", []));
 }
