@@ -46,10 +46,6 @@ impl Editor {
         editor
     }
 
-    pub fn input(&self) -> &EditorInputBuffer {
-        &self.input
-    }
-
     pub fn cursor(&self) -> &Cursor {
         &self.cursor
     }
@@ -69,7 +65,9 @@ impl Editor {
         let mut compiler = Compiler::new(codebase);
 
         for event in events {
-            if let Some(action) = self.input.update(event) {
+            if let Some(action) =
+                self.input.update(event, &mut self.cursor.index)
+            {
                 // This code results in non-intuitive cursor movement, if using
                 // the up and down keys. This is tracked here:
                 // https://github.com/hannobraun/crosscut/issues/71
@@ -83,7 +81,8 @@ impl Editor {
                                 compiler.codebase(),
                                 packages,
                             );
-                            self.input.move_cursor_to_end();
+                            self.input
+                                .move_cursor_to_end(&mut self.cursor.index);
                         }
                     }
                     NodeAction::NavigateToNext => {
@@ -110,7 +109,10 @@ impl Editor {
                                         .to_string()
                                 })
                                 .join("");
-                            self.input = EditorInputBuffer::new(merged);
+                            self.input = EditorInputBuffer::new(
+                                merged,
+                                &mut self.cursor.index,
+                            );
 
                             compiler.remove(
                                 to_remove,
@@ -133,7 +135,10 @@ impl Editor {
                                         .to_string()
                                 })
                                 .join("");
-                            self.input = EditorInputBuffer::new(merged);
+                            self.input = EditorInputBuffer::new(
+                                merged,
+                                &mut self.cursor.index,
+                            );
 
                             compiler.remove(
                                 to_remove,
@@ -262,7 +267,10 @@ impl Editor {
         let cursor = cursor.into();
 
         let node = codebase.node_at(&cursor.path).node;
-        self.input = EditorInputBuffer::new(node.to_token(packages));
+        self.input = EditorInputBuffer::new(
+            node.to_token(packages),
+            &mut self.cursor.index,
+        );
 
         self.cursor = cursor;
     }
@@ -294,11 +302,12 @@ impl Editor {
 #[derive(Clone, Debug)]
 pub struct Cursor {
     pub path: NodePath,
+    pub index: usize,
 }
 
 impl From<NodePath> for Cursor {
     fn from(path: NodePath) -> Self {
-        Self { path }
+        Self { path, index: 0 }
     }
 }
 

@@ -242,7 +242,7 @@ fn render_node<A: EditorOutputAdapter>(
     if let Some(editor) = context.editor {
         if &editor.cursor().path == path {
             context.cursor =
-                Some(adapter.cursor().move_right(editor.input().cursor()));
+                Some(adapter.cursor().move_right(editor.cursor().index));
         }
     }
 
@@ -326,10 +326,10 @@ fn render_prompt<A: EditorOutputAdapter>(
             writeln!(adapter, "Currently editing.")?;
             writeln!(adapter, "Press ESC to enter command mode.")?;
         }
-        EditorMode::Command { input } => {
+        EditorMode::Command { input, cursor } => {
             write!(adapter, "Enter command > ")?;
 
-            context.cursor = Some(adapter.cursor().move_right(input.cursor()));
+            context.cursor = Some(adapter.cursor().move_right(*cursor));
 
             writeln!(adapter, "{}", input.buffer())?;
             writeln!(adapter, "Press ENTER to confirm, ESC to abort.")?;
