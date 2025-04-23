@@ -135,15 +135,14 @@ fn merge_with_next_sibling() {
     }
 
     let a = codebase.root().children(codebase.nodes()).next().unwrap();
-
     let mut editor = Editor::new(a.path, &codebase, &packages);
+
     editor.on_input(
         EditorInputEvent::MoveCursorRight,
         &mut codebase,
         &mut evaluator,
         &packages,
     );
-
     editor.on_input(
         EditorInputEvent::RemoveRight { whole_node: false },
         &mut codebase,
