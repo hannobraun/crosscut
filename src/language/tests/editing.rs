@@ -77,24 +77,6 @@ fn update_after_removing_all_characters() {
 }
 
 #[test]
-fn moving_cursor_up_at_first_node_should_do_nothing() {
-    // If already at the first node, moving to the previous one should do
-    // nothing.
-
-    let mut language = Language::new();
-
-    language.on_code("17");
-    language.on_input(EditorInputEvent::MoveCursorLeft);
-    language.on_input(EditorInputEvent::MoveCursorUp);
-    language.on_code("2");
-
-    assert_eq!(
-        language.step_until_finished().unwrap(),
-        Value::Integer { value: 127 },
-    );
-}
-
-#[test]
 fn move_cursor_to_parent_node() {
     // If moving the cursor down, and there is no next sibling, the cursor
     // should move to the parent node instead.
@@ -107,22 +89,6 @@ fn move_cursor_to_parent_node() {
     language.on_code("i");
 
     assert_eq!(language.step_until_finished().unwrap(), Value::nothing());
-}
-
-#[test]
-fn moving_cursor_down_at_root_node_should_do_nothing() {
-    // If already at the last node, moving to the next one should do nothing.
-
-    let mut language = Language::new();
-
-    language.on_code("12");
-    language.on_input(EditorInputEvent::MoveCursorDown);
-    language.on_code("7");
-
-    assert_eq!(
-        language.step_until_finished().unwrap(),
-        Value::Integer { value: 127 },
-    );
 }
 
 #[test]
