@@ -188,8 +188,11 @@ impl LocatedNode<'_> {
         &self,
         nodes: &'r Nodes,
     ) -> impl DoubleEndedIterator<Item = LocatedNode<'r>> {
-        self.node.to_children().into_iter().enumerate().map(
-            move |(index, hash)| {
+        self.node
+            .to_children()
+            .into_iter()
+            .enumerate()
+            .map(|(index, hash)| {
                 let node = nodes.get(&hash);
 
                 LocatedNode {
@@ -201,7 +204,6 @@ impl LocatedNode<'_> {
                         nodes,
                     ),
                 }
-            },
-        )
+            })
     }
 }
