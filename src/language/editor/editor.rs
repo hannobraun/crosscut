@@ -133,7 +133,7 @@ impl Editor {
                         packages,
                     );
 
-                    self.editing = {
+                    self.editing = if self.postfix {
                         let empty_parent =
                             self.editing.parent().and_then(|parent| {
                                 let parent =
@@ -171,6 +171,12 @@ impl Editor {
                                 packages,
                             )
                         }
+                    } else {
+                        compiler.insert_child(
+                            self.editing.clone(),
+                            self.input.buffer(),
+                            packages,
+                        )
                     };
                 }
                 NodeAction::AddSibling { existing_sibling } => {

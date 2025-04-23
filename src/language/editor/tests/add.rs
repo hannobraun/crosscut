@@ -23,7 +23,7 @@ fn add_parent_node() {
         Compiler::new(&mut codebase).replace(&root, "a", &packages)
     };
 
-    let mut editor = Editor::postfix(child, &codebase, &packages);
+    let mut editor = Editor::new(child, &codebase, &packages);
 
     editor.on_input(
         EditorInputEvent::MoveCursorRight,
@@ -39,9 +39,9 @@ fn add_parent_node() {
     );
     editor.on_code("b", &mut codebase, &mut evaluator, &packages);
 
-    let a = codebase.root().children(codebase.nodes()).next().unwrap();
-    assert_eq!(a.node, &node("a", []));
-    assert_eq!(codebase.root().node, &node("b", [*a.path.hash()]));
+    let b = codebase.root().children(codebase.nodes()).next().unwrap();
+    assert_eq!(codebase.root().node, &node("a", [*b.path.hash()]));
+    assert_eq!(b.node, &node("b", []));
 }
 
 #[test]
