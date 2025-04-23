@@ -16,16 +16,7 @@ pub struct Editor {
 }
 
 impl Editor {
-    #[cfg(test)]
     pub fn new(
-        editing: NodePath,
-        codebase: &Codebase,
-        packages: &Packages,
-    ) -> Self {
-        Self::postfix(editing, codebase, packages)
-    }
-
-    pub fn postfix(
         editing: NodePath,
         codebase: &Codebase,
         packages: &Packages,
@@ -38,6 +29,14 @@ impl Editor {
         editor.navigate_to(editing, codebase, packages);
 
         editor
+    }
+
+    pub fn postfix(
+        editing: NodePath,
+        codebase: &Codebase,
+        packages: &Packages,
+    ) -> Self {
+        Self::new(editing, codebase, packages)
     }
 
     pub fn input(&self) -> &EditorInputBuffer {
