@@ -66,7 +66,7 @@ fn navigate_to_next_sibling() {
 
     let mut editor = Editor::new(a, &codebase, &packages);
     editor.on_input(
-        EditorInputEvent::MoveCursorDown,
+        [EditorInputEvent::MoveCursorDown],
         &mut codebase,
         &mut evaluator,
         &Packages::new(),

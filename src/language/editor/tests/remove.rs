@@ -27,7 +27,7 @@ fn merge_with_previous_sibling() {
     let mut editor = Editor::new(b, &codebase, &packages);
 
     editor.on_input(
-        EditorInputEvent::RemoveLeft { whole_node: false },
+        [EditorInputEvent::RemoveLeft { whole_node: false }],
         &mut codebase,
         &mut evaluator,
         &packages,
@@ -64,13 +64,13 @@ fn merge_with_next_sibling() {
     let mut editor = Editor::new(a.path, &codebase, &packages);
 
     editor.on_input(
-        EditorInputEvent::MoveCursorRight,
+        [EditorInputEvent::MoveCursorRight],
         &mut codebase,
         &mut evaluator,
         &packages,
     );
     editor.on_input(
-        EditorInputEvent::RemoveRight { whole_node: false },
+        [EditorInputEvent::RemoveRight { whole_node: false }],
         &mut codebase,
         &mut evaluator,
         &packages,
