@@ -116,7 +116,9 @@ fn collect_nodes_from_root(
     // to invert the order of a node's children though. Otherwise, when working
     // on code that adds/removes children, our intuition won't match how we
     // think about this when manipulating children in the editor.
-    for child in node.children(nodes).rev() {
+    let children = node.children(nodes).rev();
+
+    for child in children {
         let distance_from_root = collect_nodes_from_root(
             child,
             distance_from_root + 1,
