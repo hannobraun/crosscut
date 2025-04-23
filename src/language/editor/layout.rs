@@ -31,7 +31,25 @@ impl EditorLayout {
     }
 
     pub fn postfix(root: LocatedNode, nodes: &Nodes) -> Self {
-        Self::new(root, nodes)
+        let mut nodes_from_root = Vec::new();
+        let max_distance_from_root =
+            collect_nodes_from_root(root, 0, &mut nodes_from_root, nodes);
+
+        let lines = nodes_from_root
+            .into_iter()
+            .rev()
+            .map(|node| {
+                let level_of_indentation =
+                    max_distance_from_root - node.distance_from_root;
+
+                EditorLine {
+                    node,
+                    level_of_indentation,
+                }
+            })
+            .collect();
+
+        Self { lines }
     }
 
     pub fn node_before(&self, path: &NodePath) -> Option<&NodePath> {
