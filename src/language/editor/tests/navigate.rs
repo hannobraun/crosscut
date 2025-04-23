@@ -54,7 +54,14 @@ fn navigate_down_to_child() {
         compiler.insert_child(a, "b", &packages)
     };
 
-    let mut editor = Editor::new(codebase.root().path, &codebase, &packages);
+    let mut editor = Editor::new(
+        Cursor {
+            path: codebase.root().path,
+            index: 0,
+        },
+        &codebase,
+        &packages,
+    );
     editor.on_input(
         [EditorInputEvent::MoveCursorDown],
         &mut codebase,
@@ -119,7 +126,8 @@ fn navigate_up_to_parent() {
         compiler.insert_child(a, "b", &packages)
     };
 
-    let mut editor = Editor::new(b, &codebase, &packages);
+    let mut editor =
+        Editor::new(Cursor { path: b, index: 1 }, &codebase, &packages);
     editor.on_input(
         [EditorInputEvent::MoveCursorUp],
         &mut codebase,
@@ -191,7 +199,8 @@ fn navigate_down_to_next_sibling() {
         .expect_children(codebase.nodes())
         .map(|located_node| located_node.path);
 
-    let mut editor = Editor::new(a, &codebase, &packages);
+    let mut editor =
+        Editor::new(Cursor { path: a, index: 0 }, &codebase, &packages);
     editor.on_input(
         [EditorInputEvent::MoveCursorDown],
         &mut codebase,
@@ -258,7 +267,8 @@ fn navigate_up_to_previous_sibling() {
         .expect_children(codebase.nodes())
         .map(|located_node| located_node.path);
 
-    let mut editor = Editor::new(b, &codebase, &packages);
+    let mut editor =
+        Editor::new(Cursor { path: b, index: 1 }, &codebase, &packages);
     editor.on_input(
         [EditorInputEvent::MoveCursorUp],
         &mut codebase,
