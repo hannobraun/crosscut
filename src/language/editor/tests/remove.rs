@@ -64,13 +64,10 @@ fn merge_with_next_sibling() {
     let mut editor = Editor::new(a.path, &codebase, &packages);
 
     editor.on_input(
-        [EditorInputEvent::MoveCursorRight],
-        &mut codebase,
-        &mut evaluator,
-        &packages,
-    );
-    editor.on_input(
-        [EditorInputEvent::RemoveRight { whole_node: false }],
+        [
+            EditorInputEvent::MoveCursorRight,
+            EditorInputEvent::RemoveRight { whole_node: false },
+        ],
         &mut codebase,
         &mut evaluator,
         &packages,
