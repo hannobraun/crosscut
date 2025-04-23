@@ -17,7 +17,7 @@ pub struct Language {
 }
 
 impl Language {
-    pub fn postfix() -> Self {
+    pub fn new() -> Self {
         let codebase = Codebase::new();
         let evaluator = Evaluator::new();
         let mut packages = Packages::new();
@@ -39,6 +39,10 @@ impl Language {
             packages,
             intrinsics,
         }
+    }
+
+    pub fn postfix() -> Self {
+        Self::new()
     }
 
     pub fn codebase(&self) -> &Codebase {
