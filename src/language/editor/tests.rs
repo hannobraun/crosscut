@@ -12,7 +12,7 @@ use super::{Editor, EditorInputEvent};
 
 #[test]
 fn edit_initial_node() {
-    // The editor is initialized with a specific node it is currently editing.
+    // The editor is initialized with the specific node it is currently editing.
     // That initialization should be correct, so editing that node actually
     // works.
 
