@@ -74,7 +74,7 @@ fn moving_cursor_up_should_navigate_to_child_node() {
 
 #[test]
 fn navigate_to_next_sibling() {
-    // Moving the cursor down should navigate to the next sibling.
+    // Moving the cursor down navigates to the current node's next sibling.
 
     let packages = Packages::new();
 
