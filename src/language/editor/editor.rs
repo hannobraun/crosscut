@@ -30,7 +30,7 @@ impl Editor {
             postfix: false,
         };
 
-        editor.navigate_to(cursor.path, codebase, packages);
+        editor.navigate_to(cursor, codebase, packages);
 
         editor
     }
