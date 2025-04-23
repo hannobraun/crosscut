@@ -18,11 +18,11 @@ pub struct Editor {
 
 impl Editor {
     pub fn new(
-        editing: impl Into<Cursor>,
+        cursor: impl Into<Cursor>,
         codebase: &Codebase,
         packages: &Packages,
     ) -> Self {
-        let cursor = editing.into();
+        let cursor = cursor.into();
 
         let mut editor = Self {
             input: EditorInputBuffer::empty(),
