@@ -11,7 +11,7 @@ use crate::language::{
 
 #[test]
 fn add_parent_node() {
-    // It's possible to add a parent node of the current node.
+    // It's possible to add a child to the current node.
 
     let packages = Packages::new();
 
