@@ -4,7 +4,7 @@ use crate::language::{language::Language, runtime::Value};
 fn drop() {
     // The `drop` function takes any argument and returns `nothing`.
 
-    let mut language = Language::from_code("127 drop");
+    let mut language = Language::from_code_postfix("127 drop");
     assert_eq!(language.step_until_finished().unwrap(), Value::nothing());
 }
 
@@ -15,7 +15,7 @@ fn eval() {
     // So far, the `eval` function can only pass `nothing` to the evaluated
     // function. Eventually, it should be able to pass any argument.
 
-    let mut language = Language::from_code("0\n127 fn eval");
+    let mut language = Language::from_code_postfix("0\n127 fn eval");
     assert_eq!(
         language.step_until_finished().unwrap(),
         Value::Integer { value: 127 },
@@ -27,7 +27,7 @@ fn number_literal() {
     // A number literal is a function that takes `nothing` and returns the
     // number it represents.
 
-    let mut language = Language::from_code("127");
+    let mut language = Language::from_code_postfix("127");
     assert_eq!(
         language.step_until_finished().unwrap(),
         Value::Integer { value: 127 },
@@ -38,10 +38,10 @@ fn number_literal() {
 fn identity_none() {
     // The `identity` function takes any argument and returns it unchanged.
 
-    let mut language = Language::from_code("identity");
+    let mut language = Language::from_code_postfix("identity");
     assert_eq!(language.step_until_finished().unwrap(), Value::nothing());
 
-    let mut language = Language::from_code("127 identity");
+    let mut language = Language::from_code_postfix("127 identity");
     assert_eq!(
         language.step_until_finished().unwrap(),
         Value::Integer { value: 127 },

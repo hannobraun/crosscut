@@ -10,7 +10,7 @@ fn unresolved_syntax_node() {
     // If a syntax node does not refer to a known function, that should result
     // in an error.
 
-    let mut language = Language::from_code("identit");
+    let mut language = Language::from_code_postfix("identit");
 
     // The error should be registered in `Codebase`.
     let unresolved = language.codebase().root().path;
@@ -25,7 +25,7 @@ fn unresolved_syntax_node() {
 
 #[test]
 fn fixing_syntax_node_should_remove_error() {
-    let mut language = Language::from_code("identit");
+    let mut language = Language::from_code_postfix("identit");
 
     // Make sure that this resulted in an error.
     assert!(
@@ -72,7 +72,7 @@ fn do_not_step_beyond_errors() {
     // If there's an error in the code, the interpreter should never step beyond
     // that, if it encounters it.
 
-    let mut language = Language::from_code("unresolved");
+    let mut language = Language::from_code_postfix("unresolved");
 
     assert!(language.step().is_error());
     assert!(language.step().is_error());
@@ -87,7 +87,7 @@ fn function_literal_with_too_few_children_is_an_error() {
     expect_error_because_of_too_few_children("a fn");
 
     fn expect_error_because_of_too_few_children(code: &str) {
-        let language = Language::from_code(code);
+        let language = Language::from_code_postfix(code);
 
         let root = language.codebase().root();
 
@@ -108,7 +108,7 @@ fn function_literal_with_too_many_children_is_an_error() {
     // An `fn` node is expected to have one child, its body. If it has more than
     // that, that's an error.
 
-    let language = Language::from_code("a\nb\nc fn");
+    let language = Language::from_code_postfix("a\nb\nc fn");
 
     let root = language.codebase().root();
 
