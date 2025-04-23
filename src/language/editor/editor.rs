@@ -255,14 +255,16 @@ impl Editor {
 
     fn navigate_to(
         &mut self,
-        path: NodePath,
+        path: impl Into<Cursor>,
         codebase: &Codebase,
         packages: &Packages,
     ) {
-        let node = codebase.node_at(&path).node;
+        let cursor = path.into();
+
+        let node = codebase.node_at(&cursor.path).node;
         self.input = EditorInputBuffer::new(node.to_token(packages));
 
-        self.cursor = Cursor { path };
+        self.cursor = cursor;
     }
 }
 
