@@ -39,7 +39,11 @@ fn add_child() {
     );
     editor.on_code("b", &mut codebase, &mut evaluator, &packages);
 
-    let b = codebase.root().children(codebase.nodes()).next().unwrap();
+    let [b] = codebase
+        .root()
+        .children(codebase.nodes())
+        .collect_array()
+        .unwrap();
     assert_eq!(codebase.root().node, &node("a", [*b.path.hash()]));
     assert_eq!(b.node, &node("b", []));
 }
