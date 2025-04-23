@@ -183,8 +183,8 @@ pub struct LocatedNode<'r> {
     pub path: NodePath,
 }
 
-impl<'r> LocatedNode<'r> {
-    pub fn children(
+impl LocatedNode<'_> {
+    pub fn children<'r>(
         &self,
         nodes: &'r Nodes,
     ) -> impl DoubleEndedIterator<Item = LocatedNode<'r>> {
