@@ -37,7 +37,7 @@ fn codebase_to_adapter(
     packages: &Packages,
     adapter: &mut impl EditorOutputAdapter,
 ) {
-    let layout = EditorLayout::postfix(codebase.root(), codebase.nodes());
+    let layout = EditorLayout::new(codebase.root(), codebase.nodes());
 
     let mut context = RenderContext {
         codebase,
@@ -77,7 +77,7 @@ where
             cursor: None,
         };
 
-        let layout = EditorLayout::postfix(
+        let layout = EditorLayout::new(
             context.codebase.root(),
             context.codebase.nodes(),
         );
