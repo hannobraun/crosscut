@@ -43,6 +43,47 @@ fn add_child() {
 }
 
 #[test]
+fn add_parent_of_node_that_already_has_a_parent() {
+    // If a node already has a parent, then adding a parent should add the
+    // parent in between them, as a child of the previous parent.
+
+    let packages = Packages::new();
+
+    let mut codebase = Codebase::new();
+    let mut evaluator = Evaluator::new();
+
+    let c = {
+        let mut compiler = Compiler::new(&mut codebase);
+
+        let a =
+            compiler.replace(&compiler.codebase().root().path, "a", &packages);
+        compiler.insert_child(a, "c", &packages)
+    };
+
+    let mut editor = Editor::postfix(c, &codebase, &packages);
+
+    editor.on_input(
+        EditorInputEvent::MoveCursorRight,
+        &mut codebase,
+        &mut evaluator,
+        &packages,
+    );
+    editor.on_input(
+        EditorInputEvent::AddChildOrParent,
+        &mut codebase,
+        &mut evaluator,
+        &packages,
+    );
+    editor.on_code("b", &mut codebase, &mut evaluator, &packages);
+
+    let [b] = codebase.root().expect_children(codebase.nodes());
+    let [c] = b.expect_children(codebase.nodes());
+    assert_eq!(codebase.root().node, &node("a", [*b.path.hash()]));
+    assert_eq!(b.node, &node("b", [*c.path.hash()]));
+    assert_eq!(c.node, &node("c", []));
+}
+
+#[test]
 fn split_node_to_create_sibling() {
     // When adding a sibling while the cursor is in the middle of a node, the
     // node should be split.

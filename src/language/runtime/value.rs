@@ -4,23 +4,9 @@ use crate::language::code::{NodePath, display_tuple};
 
 #[derive(Clone, Debug, Eq, PartialEq, udigest::Digestable)]
 pub enum Value {
-    Function {
-        body: NodePath,
-    },
-
-    Integer {
-        value: i32,
-    },
-
-    #[cfg(test)]
-    Opaque {
-        id: u32,
-        display: &'static str,
-    },
-
-    Tuple {
-        values: Vec<Value>,
-    },
+    Function { body: NodePath },
+    Integer { value: i32 },
+    Tuple { values: Vec<Value> },
 }
 
 impl Value {
@@ -54,11 +40,6 @@ impl fmt::Display for Value {
 
             Self::Integer { value } => {
                 write!(f, "{value}")?;
-            }
-
-            #[cfg(test)]
-            Self::Opaque { id: _, display } => {
-                write!(f, "{display}")?;
             }
 
             Self::Tuple { values } => {

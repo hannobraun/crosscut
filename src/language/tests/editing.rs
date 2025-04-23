@@ -4,8 +4,7 @@ use crate::language::{
     code::{Children, Node},
     editor::EditorInputEvent,
     language::Language,
-    packages::{Function, FunctionId, Package},
-    runtime::{Effect, Value},
+    runtime::Value,
     tests::infra::{LocatedNodeExt, NodeExt, NodesExt},
 };
 
@@ -80,32 +79,6 @@ fn update_after_removing_all_characters() {
 
     language.on_input(EditorInputEvent::RemoveLeft { whole_node: false });
     assert_eq!(language.step_until_finished().unwrap(), Value::nothing());
-}
-
-#[test]
-fn add_parent_of_node_that_already_has_a_parent() {
-    // If a node already has a parent, then adding a parent should add the
-    // parent in between them, as a child of the previous parent.
-
-    let mut language = Language::new();
-
-    let package = test_package(&mut language);
-
-    language.on_code("a b_to_c");
-    language.on_input(EditorInputEvent::MoveCursorUp);
-    language.on_input(EditorInputEvent::AddChildOrParent);
-    language.on_code("a_to_b");
-
-    let output = language
-        .step_until_finished_and_handle_host_functions(handler(&package));
-
-    assert_eq!(
-        output,
-        Ok(Value::Opaque {
-            id: 2,
-            display: "c",
-        }),
-    );
 }
 
 #[test]
@@ -480,67 +453,4 @@ fn remove_right_merges_with_next_syntax_node() {
         language.step_until_finished().unwrap(),
         Value::Integer { value: 127 },
     );
-}
-
-#[derive(Clone, Copy, Eq, Ord, PartialEq, PartialOrd)]
-enum TestFunction {
-    A,
-    AToB,
-    BToC,
-}
-impl Function for TestFunction {
-    fn name(&self) -> &str {
-        match self {
-            Self::A => "a",
-            Self::AToB => "a_to_b",
-            Self::BToC => "b_to_c",
-        }
-    }
-}
-
-fn test_package(language: &mut Language) -> Package<TestFunction> {
-    language.packages_mut().new_package([
-        TestFunction::A,
-        TestFunction::AToB,
-        TestFunction::BToC,
-    ])
-}
-
-fn handler(
-    package: &Package<TestFunction>,
-) -> impl FnMut(&FunctionId, &Value) -> Result<Value, Effect> {
-    |id, input| match package.function_by_id(id).unwrap() {
-        TestFunction::A => Ok(Value::Opaque {
-            id: 0,
-            display: "a",
-        }),
-        TestFunction::AToB => {
-            assert_eq!(
-                input,
-                &Value::Opaque {
-                    id: 0,
-                    display: "a"
-                },
-            );
-
-            Ok(Value::Opaque {
-                id: 1,
-                display: "b",
-            })
-        }
-        TestFunction::BToC => {
-            assert_eq!(
-                input,
-                &Value::Opaque {
-                    id: 1,
-                    display: "b"
-                },
-            );
-
-            Ok(Value::Opaque {
-                id: 2,
-                display: "c",
-            })
-        }
-    }
 }
