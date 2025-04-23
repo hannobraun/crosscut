@@ -118,7 +118,7 @@ fn collect_nodes_from_root(
         // Otherwise, when working on code that adds/removes children, our
         // intuition won't match how we think about this when manipulating
         // children in the editor.
-        node.children(nodes).rev()
+        node.children(nodes).rev().collect::<Vec<_>>()
     };
 
     for child in children {
