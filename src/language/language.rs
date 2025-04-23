@@ -40,18 +40,6 @@ impl Language {
         }
     }
 
-    #[cfg(test)]
-    pub fn postfix() -> Self {
-        let mut language = Self::new();
-        language.editor = Editor::postfix(
-            language.codebase.root().path,
-            &language.codebase,
-            &language.packages,
-        );
-
-        language
-    }
-
     pub fn codebase(&self) -> &Codebase {
         &self.codebase
     }
@@ -132,12 +120,6 @@ use super::packages::FunctionId;
 impl Language {
     pub fn from_code(code: &str) -> Self {
         let mut language = Self::new();
-        language.on_code(code);
-        language
-    }
-
-    pub fn from_code_postfix(code: &str) -> Self {
-        let mut language = Self::postfix();
         language.on_code(code);
         language
     }
