@@ -62,6 +62,7 @@ fn split_node_to_create_child() {
 
     let a = codebase.root();
     let [b] = a.expect_children(codebase.nodes());
+
     assert_eq!(a.node, &node("a", [*b.path.hash()]));
     assert_eq!(b.node, &node("b", []));
 }
