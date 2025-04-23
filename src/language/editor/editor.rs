@@ -12,7 +12,7 @@ use super::{
 #[derive(Debug)]
 pub struct Editor {
     input: EditorInputBuffer,
-    editing: NodePath,
+    editing: Cursor,
     postfix: bool,
 }
 
@@ -24,7 +24,9 @@ impl Editor {
     ) -> Self {
         let mut editor = Self {
             input: EditorInputBuffer::empty(),
-            editing: editing.clone(),
+            editing: Cursor {
+                path: editing.clone(),
+            },
             postfix: false,
         };
 
@@ -49,9 +51,7 @@ impl Editor {
     }
 
     pub fn cursor(&self) -> Cursor {
-        Cursor {
-            path: self.editing.clone(),
-        }
+        self.editing.clone()
     }
 
     pub fn on_input(
@@ -76,7 +76,7 @@ impl Editor {
                 match action {
                     NodeAction::NavigateToPrevious => {
                         if let Some(previous) =
-                            layout.node_before(&self.editing)
+                            layout.node_before(&self.editing.path)
                         {
                             self.navigate_to(
                                 previous.clone(),
@@ -87,7 +87,9 @@ impl Editor {
                         }
                     }
                     NodeAction::NavigateToNext => {
-                        if let Some(next) = layout.node_after(&self.editing) {
+                        if let Some(next) =
+                            layout.node_after(&self.editing.path)
+                        {
                             self.navigate_to(
                                 next.clone(),
                                 compiler.codebase(),
@@ -97,9 +99,9 @@ impl Editor {
                     }
                     NodeAction::MergeWithPrevious => {
                         if let Some(to_remove) =
-                            layout.node_before(&self.editing)
+                            layout.node_before(&self.editing.path)
                         {
-                            let merged = [to_remove, &self.editing]
+                            let merged = [to_remove, &self.editing.path]
                                 .map(|path| {
                                     compiler
                                         .codebase()
@@ -113,16 +115,16 @@ impl Editor {
 
                             compiler.remove(
                                 to_remove,
-                                &mut self.editing,
+                                &mut self.editing.path,
                                 packages,
                             );
                         }
                     }
                     NodeAction::MergeWithNext => {
                         if let Some(to_remove) =
-                            layout.node_after(&self.editing)
+                            layout.node_after(&self.editing.path)
                         {
-                            let merged = [&self.editing, to_remove]
+                            let merged = [&self.editing.path, to_remove]
                                 .map(|path| {
                                     compiler
                                         .codebase()
@@ -136,7 +138,7 @@ impl Editor {
 
                             compiler.remove(
                                 to_remove,
-                                &mut self.editing,
+                                &mut self.editing.path,
                                 packages,
                             );
                         }
@@ -144,15 +146,15 @@ impl Editor {
                     NodeAction::AddChildOrParent {
                         existing_child_or_parent,
                     } => {
-                        self.editing = compiler.replace(
-                            &self.editing,
+                        self.editing.path = compiler.replace(
+                            &self.editing.path,
                             &existing_child_or_parent,
                             packages,
                         );
 
-                        self.editing = if self.postfix {
+                        self.editing.path = if self.postfix {
                             let empty_parent =
-                                self.editing.parent().and_then(|parent| {
+                                self.editing.path.parent().and_then(|parent| {
                                     let parent =
                                         compiler.codebase().node_at(parent);
 
@@ -184,28 +186,28 @@ impl Editor {
                                 )
                             } else {
                                 compiler.insert_parent(
-                                    &self.editing,
+                                    &self.editing.path,
                                     self.input.buffer(),
                                     packages,
                                 )
                             }
                         } else {
                             compiler.insert_child(
-                                self.editing.clone(),
+                                self.editing.path.clone(),
                                 self.input.buffer(),
                                 packages,
                             )
                         };
                     }
                     NodeAction::AddSibling { existing_sibling } => {
-                        self.editing = compiler.replace(
-                            &self.editing,
+                        self.editing.path = compiler.replace(
+                            &self.editing.path,
                             &existing_sibling,
                             packages,
                         );
 
-                        self.editing = compiler.insert_sibling(
-                            &self.editing,
+                        self.editing.path = compiler.insert_sibling(
+                            &self.editing.path,
                             self.input.buffer(),
                             packages,
                         );
@@ -213,12 +215,16 @@ impl Editor {
                 }
             }
 
-            self.editing =
-                compiler.replace(&self.editing, self.input.buffer(), packages);
+            self.editing.path = compiler.replace(
+                &self.editing.path,
+                self.input.buffer(),
+                packages,
+            );
 
             let root = compiler.codebase().root().path;
             assert!(
-                self.editing == root || root.is_ancestor_of(&self.editing),
+                self.editing.path == root
+                    || root.is_ancestor_of(&self.editing.path),
                 "Editor is no longer editing a current node after update.",
             );
         }
@@ -257,7 +263,7 @@ impl Editor {
         let node = codebase.node_at(&path).node;
         self.input = EditorInputBuffer::new(node.to_token(packages));
 
-        self.editing = path;
+        self.editing = Cursor { path };
     }
 }
 
