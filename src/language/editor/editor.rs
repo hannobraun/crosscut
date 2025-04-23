@@ -18,19 +18,19 @@ pub struct Editor {
 
 impl Editor {
     pub fn new(
-        editing: NodePath,
+        editing: impl Into<Cursor>,
         codebase: &Codebase,
         packages: &Packages,
     ) -> Self {
+        let cursor = editing.into();
+
         let mut editor = Self {
             input: EditorInputBuffer::empty(),
-            cursor: Cursor {
-                path: editing.clone(),
-            },
+            cursor: cursor.clone(),
             postfix: false,
         };
 
-        editor.navigate_to(editing, codebase, packages);
+        editor.navigate_to(cursor.path, codebase, packages);
 
         editor
     }
