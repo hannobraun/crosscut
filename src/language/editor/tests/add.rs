@@ -38,7 +38,7 @@ fn add_child() {
 
 #[test]
 fn split_node_to_create_parent() {
-    // If we add a parent while the cursor is in the middle of the current node,
+    // If we add a child while the cursor is in the middle of the current node,
     // we should split the node right there.
 
     let packages = Packages::new();
