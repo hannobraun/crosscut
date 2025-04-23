@@ -9,7 +9,7 @@ use crate::language::{
 fn host_functions() {
     // The host can define functions that Crosscut code can call.
 
-    let mut language = Language::new();
+    let mut language = Language::postfix();
     let package = language.packages_mut().new_package([Halve]);
 
     language.on_code("64 halve");
@@ -36,7 +36,7 @@ fn host_functions_can_trigger_effects() {
     // A host function, instead of returning a value, can trigger an effect. For
     // example to indicate an error.
 
-    let mut language = Language::new();
+    let mut language = Language::postfix();
     let package = language.packages_mut().new_package([Halve]);
 
     language.on_code("halve");

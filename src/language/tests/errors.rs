@@ -59,7 +59,7 @@ fn children_of_error_should_not_be_evaluated() {
         }
     }
 
-    let mut language = Language::new();
+    let mut language = Language::postfix();
     language.packages_mut().new_package([Ping]);
 
     language.on_code("ping unresolved");

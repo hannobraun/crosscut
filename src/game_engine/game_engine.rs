@@ -49,7 +49,7 @@ where
     A: EditorOutputAdapter,
 {
     pub fn new(adapter: A) -> Self {
-        let mut language = Language::new();
+        let mut language = Language::postfix();
 
         let package = language
             .packages_mut()

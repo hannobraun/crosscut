@@ -17,7 +17,7 @@ pub struct Language {
 }
 
 impl Language {
-    pub fn new() -> Self {
+    pub fn postfix() -> Self {
         let codebase = Codebase::new();
         let evaluator = Evaluator::new();
         let mut packages = Packages::new();
@@ -120,7 +120,7 @@ use super::packages::FunctionId;
 #[cfg(test)]
 impl Language {
     pub fn from_code(code: &str) -> Self {
-        let mut language = Self::new();
+        let mut language = Self::postfix();
         language.on_code(code);
         language
     }
