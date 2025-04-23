@@ -23,14 +23,11 @@ fn edit_initial_node() {
         Compiler::new(&mut codebase).replace(&root, "17", &packages);
     }
 
-    let mut editor = Editor::new(
-        Cursor {
-            path: codebase.root().path,
-            index: 1,
-        },
-        &codebase,
-        &packages,
-    );
+    let cursor = Cursor {
+        path: codebase.root().path,
+        index: 1,
+    };
+    let mut editor = Editor::new(cursor, &codebase, &packages);
     assert_eq!(editor.cursor().path, codebase.root().path);
 
     editor.on_code("2", &mut codebase, &mut evaluator, &packages);
