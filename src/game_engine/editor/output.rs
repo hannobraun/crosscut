@@ -240,7 +240,7 @@ fn render_node<A: EditorOutputAdapter>(
     let node = context.codebase.node_at(path).node;
 
     if let Some(editor) = context.editor {
-        if editor.editing() == path {
+        if editor.editing().path == path {
             context.cursor =
                 Some(adapter.cursor().move_right(editor.input().cursor()));
         }
@@ -353,7 +353,7 @@ fn render_help<A: EditorOutputAdapter>(
         return Ok(());
     };
 
-    let node = context.codebase.node_at(editor.editing()).node;
+    let node = context.codebase.node_at(editor.editing().path).node;
 
     writeln!(adapter)?;
 

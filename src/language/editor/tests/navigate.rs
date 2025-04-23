@@ -24,11 +24,11 @@ fn edit_initial_node() {
     }
 
     let mut editor = Editor::new(codebase.root().path, &codebase, &packages);
-    assert_eq!(editor.editing(), &codebase.root().path);
+    assert_eq!(editor.editing().path, &codebase.root().path);
 
     editor.on_code("1", &mut codebase, &mut evaluator, &packages);
     assert_eq!(
-        codebase.node_at(editor.editing()).node,
+        codebase.node_at(editor.editing().path).node,
         &Node::LiteralNumber { value: 127 },
     );
 }
@@ -58,7 +58,7 @@ fn navigate_down_to_child() {
         &Packages::new(),
     );
 
-    assert_eq!(editor.editing(), &b);
+    assert_eq!(editor.editing().path, &b);
 }
 
 #[test]
@@ -86,7 +86,7 @@ fn navigate_up_to_parent() {
         &Packages::new(),
     );
 
-    assert_eq!(editor.editing(), &codebase.root().path);
+    assert_eq!(editor.editing().path, &codebase.root().path);
 }
 
 // There are some test cases missing right around here, about navigating to the
@@ -128,7 +128,7 @@ fn navigate_down_to_next_sibling() {
         &Packages::new(),
     );
 
-    assert_eq!(editor.editing(), &b);
+    assert_eq!(editor.editing().path, &b);
 }
 
 #[test]
@@ -160,5 +160,5 @@ fn navigate_up_to_previous_sibling() {
         &Packages::new(),
     );
 
-    assert_eq!(editor.editing(), &a);
+    assert_eq!(editor.editing().path, &a);
 }

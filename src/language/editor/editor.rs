@@ -48,8 +48,10 @@ impl Editor {
         &self.input
     }
 
-    pub fn editing(&self) -> &NodePath {
-        &self.editing
+    pub fn editing(&self) -> Cursor {
+        Cursor {
+            path: &self.editing,
+        }
     }
 
     pub fn on_input(
@@ -280,6 +282,10 @@ impl Editor {
             self.on_input([event], codebase, evaluator, packages);
         }
     }
+}
+
+pub struct Cursor<'r> {
+    pub path: &'r NodePath,
 }
 
 pub enum EditorCommand {
