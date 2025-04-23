@@ -124,7 +124,7 @@ impl Editor {
                         compiler.remove(to_remove, &mut self.editing, packages);
                     }
                 }
-                NodeAction::AddParent { existing_child } => {
+                NodeAction::AddChildOrParent { existing_child } => {
                     self.editing = compiler.replace(
                         &self.editing,
                         &existing_child,
