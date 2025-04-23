@@ -27,6 +27,8 @@ fn edit_initial_node() {
     }
 
     let mut editor = Editor::new(codebase.root().path, &codebase, &packages);
+    assert_eq!(editor.editing(), &codebase.root().path);
+
     editor.on_code("1", &mut codebase, &mut evaluator, &packages);
 
     assert_eq!(
