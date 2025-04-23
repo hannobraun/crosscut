@@ -34,7 +34,7 @@ fn edit_initial_node() {
 }
 
 #[test]
-fn moving_cursor_up_should_navigate_to_child_node() {
+fn navigate_to_child() {
     // Moving the cursor down navigates to the current node's child.
 
     let packages = Packages::new();
