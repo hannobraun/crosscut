@@ -30,7 +30,6 @@ fn edit_initial_node() {
     assert_eq!(editor.editing(), &codebase.root().path);
 
     editor.on_code("1", &mut codebase, &mut evaluator, &packages);
-
     assert_eq!(
         codebase.node_at(editor.editing()).node,
         &Node::LiteralNumber { value: 127 },
