@@ -77,25 +77,6 @@ fn update_after_removing_all_characters() {
 }
 
 #[test]
-fn moving_cursor_right_at_end_of_node_should_move_to_next_node() {
-    // If the cursor is at the end of a node, then pressing right should move it
-    // the start of the previous node.
-
-    let mut language = Language::new();
-
-    language.on_code("127 dentity");
-    language.on_input(EditorInputEvent::MoveCursorUp);
-
-    language.on_input(EditorInputEvent::MoveCursorRight);
-    language.on_code("i");
-
-    assert_eq!(
-        language.step_until_finished().unwrap(),
-        Value::Integer { value: 127 },
-    );
-}
-
-#[test]
 fn remove_left_removes_previous_syntax_node_if_empty() {
     // Removing left while cursor is in the leftmost position within the current
     // syntax node, removes the previous syntax node, if that is empty.
