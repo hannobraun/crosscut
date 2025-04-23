@@ -125,11 +125,11 @@ impl Editor {
                     }
                 }
                 NodeAction::AddChildOrParent {
-                    existing_child_or_parent: existing_child,
+                    existing_child_or_parent,
                 } => {
                     self.editing = compiler.replace(
                         &self.editing,
-                        &existing_child,
+                        &existing_child_or_parent,
                         packages,
                     );
 
