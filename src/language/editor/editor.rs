@@ -233,7 +233,7 @@ impl Editor {
     ) {
         for ch in code.chars() {
             let event = if ch == ' ' {
-                EditorInputEvent::AddParent
+                EditorInputEvent::AddChildOrParent
             } else if ch == '\n' {
                 EditorInputEvent::AddSibling
             } else {

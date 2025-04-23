@@ -103,7 +103,7 @@ impl TerminalInputEvent {
     fn into_editor_input_event(self) -> Option<EditorInputEvent> {
         match self {
             Self::Character { ch } if ch.is_whitespace() => {
-                Some(EditorInputEvent::AddParent)
+                Some(EditorInputEvent::AddChildOrParent)
             }
             Self::Character { ch } => Some(EditorInputEvent::Insert { ch }),
 

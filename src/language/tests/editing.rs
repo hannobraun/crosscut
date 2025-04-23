@@ -93,7 +93,7 @@ fn add_parent_of_node_that_already_has_a_parent() {
 
     language.on_code("a b_to_c");
     language.on_input(EditorInputEvent::MoveCursorUp);
-    language.on_input(EditorInputEvent::AddParent);
+    language.on_input(EditorInputEvent::AddChildOrParent);
     language.on_code("a_to_b");
 
     let output = language
@@ -119,7 +119,7 @@ fn split_node_if_adding_parent_while_cursor_is_in_the_middle() {
     for _ in "identity".chars() {
         language.on_input(EditorInputEvent::MoveCursorLeft);
     }
-    language.on_input(EditorInputEvent::AddParent);
+    language.on_input(EditorInputEvent::AddChildOrParent);
 
     assert_eq!(
         language.step_until_finished().unwrap(),

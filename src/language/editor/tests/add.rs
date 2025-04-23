@@ -32,7 +32,7 @@ fn add_parent_node() {
         &packages,
     );
     editor.on_input(
-        EditorInputEvent::AddParent,
+        EditorInputEvent::AddChildOrParent,
         &mut codebase,
         &mut evaluator,
         &packages,

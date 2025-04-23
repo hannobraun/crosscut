@@ -63,7 +63,7 @@ impl EditorInputBuffer {
                 let _ = whole_node;
                 return self.remove_right();
             }
-            EditorInputEvent::AddParent => {
+            EditorInputEvent::AddChildOrParent => {
                 let existing_child = self.add_parent_or_sibling();
                 return Some(NodeAction::AddParent { existing_child });
             }
@@ -174,7 +174,7 @@ pub enum EditorInputEvent {
     MoveCursorDown,
     RemoveLeft { whole_node: bool },
     RemoveRight { whole_node: bool },
-    AddParent,
+    AddChildOrParent, // depends on syntax mode
     AddSibling,
 }
 
@@ -340,7 +340,7 @@ mod tests {
         input.update(Insert { ch: '1' });
         assert_eq!(input.buffer(), "1");
 
-        input.update(AddParent);
+        input.update(AddChildOrParent);
         assert_eq!(input.buffer(), "");
     }
 
@@ -353,7 +353,7 @@ mod tests {
         assert_eq!(input.buffer(), "12");
 
         input.update(MoveCursorLeft);
-        input.update(AddParent);
+        input.update(AddChildOrParent);
         assert_eq!(input.buffer(), "2");
     }
 
