@@ -27,7 +27,7 @@ fn number_literal() {
     // A number literal is a function that takes `nothing` and returns the
     // number it represents.
 
-    let mut language = Language::from_code_postfix("127");
+    let mut language = Language::from_code("127");
     assert_eq!(
         language.step_until_finished().unwrap(),
         Value::Integer { value: 127 },
