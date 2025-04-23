@@ -105,8 +105,7 @@ fn navigate_to_next_sibling() {
 
 #[test]
 fn navigate_to_previous_sibling() {
-    // If a node has no children, then moving the cursor up should navigate to
-    // the previous sibling.
+    // Moving the cursor up navigates to the current node's previous sibling.
 
     let packages = Packages::new();
 
