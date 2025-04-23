@@ -1,7 +1,7 @@
 use crate::language::{
     code::Codebase,
     compiler::Compiler,
-    editor::{Editor, EditorInputEvent},
+    editor::{Editor, EditorInputEvent::*},
     packages::Packages,
     runtime::Evaluator,
     tests::infra::node,
@@ -27,7 +27,7 @@ fn merge_with_previous_sibling() {
     let mut editor = Editor::new(b, &codebase, &packages);
 
     editor.on_input(
-        [EditorInputEvent::RemoveLeft { whole_node: false }],
+        [RemoveLeft { whole_node: false }],
         &mut codebase,
         &mut evaluator,
         &packages,
@@ -64,10 +64,7 @@ fn merge_with_next_sibling() {
     let mut editor = Editor::new(a.path, &codebase, &packages);
 
     editor.on_input(
-        [
-            EditorInputEvent::MoveCursorRight,
-            EditorInputEvent::RemoveRight { whole_node: false },
-        ],
+        [MoveCursorRight, RemoveRight { whole_node: false }],
         &mut codebase,
         &mut evaluator,
         &packages,
