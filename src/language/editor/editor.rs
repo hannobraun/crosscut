@@ -216,7 +216,7 @@ impl Editor {
 
             let root = compiler.codebase().root().path;
             assert!(
-                self.editing == root || root.is_ancestor_of(self.editing()),
+                self.editing == root || root.is_ancestor_of(&self.editing),
                 "Editor is no longer editing a current node after update.",
             );
         }
