@@ -203,6 +203,41 @@ fn navigate_down_to_next_sibling() {
 }
 
 #[test]
+fn navigate_right_to_next_sibling() {
+    // Moving the cursor right while at the end of a node that has no child,
+    // navigates to the next sibling.
+
+    let packages = Packages::new();
+
+    let mut codebase = Codebase::new();
+    let mut evaluator = Evaluator::new();
+
+    {
+        let mut compiler = Compiler::new(&mut codebase);
+
+        compiler.insert_child(compiler.codebase().root().path, "a", &packages);
+        compiler.insert_child(compiler.codebase().root().path, "b", &packages);
+    }
+
+    let [a, b] = codebase
+        .root()
+        .expect_children(codebase.nodes())
+        .map(|located_node| located_node.path);
+
+    let mut editor =
+        Editor::new(Cursor { path: a, index: 1 }, &codebase, &packages);
+    editor.on_input(
+        [EditorInputEvent::MoveCursorRight],
+        &mut codebase,
+        &mut evaluator,
+        &Packages::new(),
+    );
+
+    assert_eq!(editor.cursor().path, b);
+    assert_eq!(editor.cursor().index, 0);
+}
+
+#[test]
 fn navigate_up_to_previous_sibling() {
     // Moving the cursor up navigates to the current node's previous sibling.
 
