@@ -44,6 +44,8 @@ prototype (a direct continuation, based on the same code).
 
 ## Further Reading
 
-As of this writing (2025-04-21) I have not yet announced this prototype in my
-[daily thoughts](https://www.crosscut.cc/daily). I intend to update this section
-once I have.
+I announced the archiving of this prototype in my daily though on
+[2025-04-23](https://www.crosscut.cc/daily/2025-04-23).
+
+As of this writing (2025-04-23), I have not yet written about these decisions in
+depth, but am planning to do so. I intend to update this section once I have.
