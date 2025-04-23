@@ -156,16 +156,6 @@ impl EditorInputBuffer {
 }
 
 #[derive(Debug)]
-pub enum NodeAction {
-    NavigateToPrevious,
-    NavigateToNext,
-    MergeWithPrevious,
-    MergeWithNext,
-    AddChildOrParent { existing_child: String }, // depends on syntax mode
-    AddSibling { existing_sibling: String },
-}
-
-#[derive(Debug)]
 pub enum EditorInputEvent {
     Insert { ch: char },
     MoveCursorLeft,
@@ -176,6 +166,16 @@ pub enum EditorInputEvent {
     RemoveRight { whole_node: bool },
     AddChildOrParent, // depends on syntax mode
     AddSibling,
+}
+
+#[derive(Debug)]
+pub enum NodeAction {
+    NavigateToPrevious,
+    NavigateToNext,
+    MergeWithPrevious,
+    MergeWithNext,
+    AddChildOrParent { existing_child: String }, // depends on syntax mode
+    AddSibling { existing_sibling: String },
 }
 
 #[cfg(test)]
