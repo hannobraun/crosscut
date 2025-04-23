@@ -70,6 +70,40 @@ fn split_node_to_create_child() {
 }
 
 #[test]
+fn split_node_to_create_sibling() {
+    // When adding a sibling while the cursor is in the middle of a node, the
+    // node should be split.
+
+    let packages = Packages::new();
+
+    let mut codebase = Codebase::new();
+    let mut evaluator = Evaluator::new();
+
+    {
+        let root = codebase.root().path;
+        Compiler::new(&mut codebase).replace(&root, "ab", &packages);
+    }
+
+    let mut editor = Editor::new(codebase.root().path, &codebase, &packages);
+
+    editor.on_input(
+        [MoveCursorRight, AddSibling],
+        &mut codebase,
+        &mut evaluator,
+        &packages,
+    );
+
+    assert_eq!(
+        codebase
+            .root()
+            .children(codebase.nodes())
+            .map(|located_node| located_node.node)
+            .collect::<Vec<_>>(),
+        vec![&node("a", []), &node("b", [])],
+    );
+}
+
+#[test]
 fn add_parent_of_node_that_already_has_a_parent() {
     // If a node already has a parent, then adding a parent should add the
     // parent in between them, as a child of the previous parent.
@@ -102,40 +136,6 @@ fn add_parent_of_node_that_already_has_a_parent() {
     assert_eq!(codebase.root().node, &node("a", [*b.path.hash()]));
     assert_eq!(b.node, &node("b", [*c.path.hash()]));
     assert_eq!(c.node, &node("c", []));
-}
-
-#[test]
-fn split_node_to_create_sibling() {
-    // When adding a sibling while the cursor is in the middle of a node, the
-    // node should be split.
-
-    let packages = Packages::new();
-
-    let mut codebase = Codebase::new();
-    let mut evaluator = Evaluator::new();
-
-    {
-        let root = codebase.root().path;
-        Compiler::new(&mut codebase).replace(&root, "ab", &packages);
-    }
-
-    let mut editor = Editor::new(codebase.root().path, &codebase, &packages);
-
-    editor.on_input(
-        [MoveCursorRight, AddSibling],
-        &mut codebase,
-        &mut evaluator,
-        &packages,
-    );
-
-    assert_eq!(
-        codebase
-            .root()
-            .children(codebase.nodes())
-            .map(|located_node| located_node.node)
-            .collect::<Vec<_>>(),
-        vec![&node("a", []), &node("b", [])],
-    );
 }
 
 #[test]
