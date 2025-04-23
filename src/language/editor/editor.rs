@@ -48,7 +48,7 @@ impl Editor {
         &self.input
     }
 
-    pub fn editing(&self) -> Cursor {
+    pub fn cursor(&self) -> Cursor {
         Cursor {
             path: &self.editing,
         }
