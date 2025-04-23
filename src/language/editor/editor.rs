@@ -284,6 +284,7 @@ impl Editor {
     }
 }
 
+#[derive(Debug)]
 pub struct Cursor {
     pub path: NodePath,
 }
