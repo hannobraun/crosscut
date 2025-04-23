@@ -130,12 +130,10 @@ impl Editor {
                             );
                         }
                     }
-                    NodeAction::AddChild {
-                        existing_parent: existing_child_or_parent,
-                    } => {
+                    NodeAction::AddChild { existing_parent } => {
                         self.cursor.path = compiler.replace(
                             &self.cursor.path,
-                            &existing_child_or_parent,
+                            &existing_parent,
                             packages,
                         );
 
