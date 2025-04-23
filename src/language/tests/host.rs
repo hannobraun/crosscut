@@ -36,7 +36,7 @@ fn host_functions_can_trigger_effects() {
     // A host function, instead of returning a value, can trigger an effect. For
     // example to indicate an error.
 
-    let mut language = Language::postfix();
+    let mut language = Language::new();
     let package = language.packages_mut().new_package([Halve]);
 
     language.on_code("halve");
