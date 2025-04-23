@@ -68,8 +68,8 @@ impl Editor {
 
         for event in events {
             if let Some(action) = self.input.update(event) {
-                // This code results in non-intuitive cursor movement, if using the
-                // up and down keys. This is tracked here:
+                // This code results in non-intuitive cursor movement, if using
+                // the up and down keys. This is tracked here:
                 // https://github.com/hannobraun/crosscut/issues/71
                 match action {
                     NodeAction::NavigateToPrevious => {
@@ -171,9 +171,9 @@ impl Editor {
                                 });
 
                             if let Some(parent) = empty_parent {
-                                // If the parent node is empty, we re-use it instead
-                                // of adding a new parent in between. This leads to
-                                // a smoother editing experience.
+                                // If the parent node is empty, we re-use it
+                                // instead of adding a new parent in between.
+                                // This leads to a smoother editing experience.
 
                                 compiler.replace(
                                     &parent.path,
