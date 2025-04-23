@@ -84,10 +84,10 @@ fn function_literal_with_too_few_children_is_an_error() {
     // than that, that's an error.
 
     expect_error_because_of_too_few_children("fn");
-    expect_error_because_of_too_few_children("a fn");
+    expect_error_because_of_too_few_children("fn a");
 
     fn expect_error_because_of_too_few_children(code: &str) {
-        let language = Language::from_code_postfix(code);
+        let language = Language::from_code(code);
 
         let root = language.codebase().root();
 
