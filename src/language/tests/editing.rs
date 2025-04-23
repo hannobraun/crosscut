@@ -221,16 +221,17 @@ fn split_node_if_adding_sibling_while_cursor_is_in_the_middle() {
     }
     language.on_input(EditorInputEvent::AddSibling);
 
-    let root = language.codebase().root().node;
+    let root = language.codebase().root();
     assert_eq!(
-        root,
+        root.node,
         &Node::Error {
             node: "c".to_string(),
-            children: root.to_children(),
+            children: root.node.to_children(),
         },
     );
 
     let [a, b] = root
+        .node
         .to_children()
         .into_iter()
         .map(|hash| language.codebase().nodes().get(&hash))
