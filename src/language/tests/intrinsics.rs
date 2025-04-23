@@ -4,7 +4,7 @@ use crate::language::{language::Language, runtime::Value};
 fn drop() {
     // The `drop` function takes any argument and returns `nothing`.
 
-    let mut language = Language::from_code_postfix("127 drop");
+    let mut language = Language::from_code("drop 127");
     assert_eq!(language.step_until_finished().unwrap(), Value::nothing());
 }
 
