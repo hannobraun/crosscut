@@ -28,11 +28,8 @@ fn uniquely_identify_identical_children_of_different_parents() {
         .node_at(&root)
         .children(codebase.nodes())
         .map(|b_or_c| {
-            let [a] = b_or_c
-                .children(codebase.nodes())
-                .map(|located_node| located_node.path)
-                .collect_array()
-                .unwrap();
+            let [a] =
+                b_or_c.children(codebase.nodes()).collect_array().unwrap();
 
             a
         })
