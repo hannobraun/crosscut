@@ -46,12 +46,12 @@ fn split_node_to_create_child() {
     let mut codebase = Codebase::new();
     let mut evaluator = Evaluator::new();
 
-    let a = {
+    let root = {
         let root = codebase.root().path;
         Compiler::new(&mut codebase).replace(&root, "ab", &packages)
     };
 
-    let mut editor = Editor::new(a, &codebase, &packages);
+    let mut editor = Editor::new(root, &codebase, &packages);
 
     editor.on_input(
         [MoveCursorRight, AddChildOrParent],
