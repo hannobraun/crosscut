@@ -63,7 +63,7 @@ fn navigate_to_child() {
 
 #[test]
 fn navigate_to_parent() {
-    // Moving the cursor down navigates to the current node's parent.
+    // Moving the cursor up navigates to the current node's parent.
 
     let packages = Packages::new();
 
