@@ -24,13 +24,10 @@ fn add_child() {
     let mut editor = Editor::new(a, &codebase, &packages);
 
     editor.on_input(
-        [EditorInputEvent::MoveCursorRight],
-        &mut codebase,
-        &mut evaluator,
-        &packages,
-    );
-    editor.on_input(
-        [EditorInputEvent::AddChildOrParent],
+        [
+            EditorInputEvent::MoveCursorRight,
+            EditorInputEvent::AddChildOrParent,
+        ],
         &mut codebase,
         &mut evaluator,
         &packages,
@@ -60,13 +57,10 @@ fn split_node_if_adding_parent_while_cursor_is_in_the_middle() {
     let mut editor = Editor::postfix(a, &codebase, &packages);
 
     editor.on_input(
-        [EditorInputEvent::MoveCursorRight],
-        &mut codebase,
-        &mut evaluator,
-        &packages,
-    );
-    editor.on_input(
-        [EditorInputEvent::AddChildOrParent],
+        [
+            EditorInputEvent::MoveCursorRight,
+            EditorInputEvent::AddChildOrParent,
+        ],
         &mut codebase,
         &mut evaluator,
         &packages,
@@ -98,13 +92,10 @@ fn add_parent_of_node_that_already_has_a_parent() {
     let mut editor = Editor::postfix(c, &codebase, &packages);
 
     editor.on_input(
-        [EditorInputEvent::MoveCursorRight],
-        &mut codebase,
-        &mut evaluator,
-        &packages,
-    );
-    editor.on_input(
-        [EditorInputEvent::AddChildOrParent],
+        [
+            EditorInputEvent::MoveCursorRight,
+            EditorInputEvent::AddChildOrParent,
+        ],
         &mut codebase,
         &mut evaluator,
         &packages,
@@ -136,13 +127,10 @@ fn split_node_to_create_sibling() {
     let mut editor = Editor::new(codebase.root().path, &codebase, &packages);
 
     editor.on_input(
-        [EditorInputEvent::MoveCursorRight],
-        &mut codebase,
-        &mut evaluator,
-        &packages,
-    );
-    editor.on_input(
-        [EditorInputEvent::AddSibling],
+        [
+            EditorInputEvent::MoveCursorRight,
+            EditorInputEvent::AddSibling,
+        ],
         &mut codebase,
         &mut evaluator,
         &packages,
