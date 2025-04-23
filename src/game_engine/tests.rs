@@ -18,7 +18,6 @@ use crate::game_engine::{GameEngine, GameOutput};
 // priority anyway.
 
 #[test]
-#[should_panic] // temporarily broken; working on fixing it
 fn enter_expression_and_expect_game_output() {
     // This is basically just a high-level smoke that, to make sure the most
     // basic interaction works: If the developer enters an expression into the
@@ -26,7 +25,7 @@ fn enter_expression_and_expect_game_output() {
 
     let mut game_engine = GameEngine::without_editor_ui();
 
-    game_engine.enter_code("127");
+    game_engine.enter_code("color 127");
 
     let game_output = game_engine
         .game_output()
