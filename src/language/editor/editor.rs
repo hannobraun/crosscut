@@ -294,6 +294,12 @@ pub struct Cursor {
     pub path: NodePath,
 }
 
+impl From<NodePath> for Cursor {
+    fn from(path: NodePath) -> Self {
+        Self { path }
+    }
+}
+
 pub enum EditorCommand {
     Clear,
 }
