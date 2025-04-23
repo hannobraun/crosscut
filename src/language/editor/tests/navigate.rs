@@ -62,7 +62,7 @@ fn navigate_to_child() {
 }
 
 #[test]
-fn move_cursor_to_parent_node() {
+fn navigate_to_parent() {
     // If moving the cursor down, and there is no next sibling, the cursor
     // should move to the parent node instead.
 
