@@ -50,7 +50,7 @@ impl Editor {
 
     pub fn cursor(&self) -> Cursor {
         Cursor {
-            path: &self.editing,
+            path: self.editing.clone(),
         }
     }
 
@@ -284,8 +284,8 @@ impl Editor {
     }
 }
 
-pub struct Cursor<'r> {
-    pub path: &'r NodePath,
+pub struct Cursor {
+    pub path: NodePath,
 }
 
 pub enum EditorCommand {
