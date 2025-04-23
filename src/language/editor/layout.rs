@@ -9,10 +9,6 @@ pub struct EditorLayout {
 
 impl EditorLayout {
     pub fn new(root: LocatedNode, nodes: &Nodes) -> Self {
-        Self::postfix(root, nodes)
-    }
-
-    pub fn postfix(root: LocatedNode, nodes: &Nodes) -> Self {
         let mut nodes_from_root = Vec::new();
         let max_distance_from_root =
             collect_nodes_from_root(root, 0, &mut nodes_from_root, nodes);
@@ -32,6 +28,10 @@ impl EditorLayout {
             .collect();
 
         Self { lines }
+    }
+
+    pub fn postfix(root: LocatedNode, nodes: &Nodes) -> Self {
+        Self::new(root, nodes)
     }
 
     pub fn node_before(&self, path: &NodePath) -> Option<&NodePath> {
