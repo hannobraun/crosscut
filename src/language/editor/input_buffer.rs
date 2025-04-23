@@ -66,11 +66,8 @@ impl EditorInputBuffer {
                 return self.remove_right(cursor);
             }
             EditorInputEvent::AddChild => {
-                let existing_child_or_parent =
-                    self.add_child_or_sibling(cursor);
-                return Some(NodeAction::AddChild {
-                    existing_parent: existing_child_or_parent,
-                });
+                let existing_parent = self.add_child_or_sibling(cursor);
+                return Some(NodeAction::AddChild { existing_parent });
             }
             EditorInputEvent::AddSibling => {
                 let existing_sibling = self.add_child_or_sibling(cursor);
