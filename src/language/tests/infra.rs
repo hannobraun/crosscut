@@ -12,22 +12,10 @@ pub fn node(name: &str, children: impl IntoIterator<Item = NodeHash>) -> Node {
 }
 
 pub trait NodeExt: Sized {
-    fn expect_empty(&self) -> Node;
     fn expect_error(&self, expected: &str) -> Node;
-    fn expect_integer_literal(&self, value: i32) -> Node;
-    fn expect_single_child(&self, nodes: &Nodes) -> Node;
 }
 
 impl NodeExt for Node {
-    #[track_caller]
-    fn expect_empty(&self) -> Node {
-        if let Node::Empty = self {
-            self.clone()
-        } else {
-            panic!("Expected empty node.");
-        }
-    }
-
     #[track_caller]
     fn expect_error(&self, expected: &str) -> Node {
         if let Node::Error { node, .. } = self {
@@ -36,24 +24,6 @@ impl NodeExt for Node {
         } else {
             panic!("Expected error.");
         }
-    }
-
-    #[track_caller]
-    fn expect_integer_literal(&self, expected: i32) -> Node {
-        if let Node::LiteralNumber { value } = self {
-            assert_eq!(value, &expected);
-            self.clone()
-        } else {
-            panic!("Expected integer literal.");
-        }
-    }
-
-    #[track_caller]
-    fn expect_single_child(&self, nodes: &Nodes) -> Node {
-        let hash = self
-            .has_single_child()
-            .expect("Expected node to have single child");
-        nodes.get(hash).clone()
     }
 }
 

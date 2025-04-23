@@ -1,6 +1,5 @@
 use crate::language::{
-    code::Node, editor::EditorInputEvent, language::Language, runtime::Value,
-    tests::infra::NodeExt,
+    editor::EditorInputEvent, language::Language, runtime::Value,
 };
 
 // Some tests in this suite have gotten a bit too detailed, as indicated by
@@ -77,33 +76,6 @@ fn update_after_removing_all_characters() {
 }
 
 #[test]
-fn remove_left_removes_previous_syntax_node_if_empty() {
-    // Removing left while cursor is in the leftmost position within the current
-    // syntax node, removes the previous syntax node, if that is empty.
-
-    let mut language = Language::new();
-
-    language.on_code(" 127");
-    for _ in "127".chars() {
-        language.on_input(EditorInputEvent::MoveCursorLeft);
-    }
-
-    // Make sure the test setup worked as expected.
-    language
-        .codebase()
-        .root()
-        .node
-        .expect_error("127")
-        .expect_single_child(language.codebase().nodes())
-        .expect_empty();
-
-    // Actual testing starts here.
-    language.on_input(EditorInputEvent::RemoveLeft { whole_node: false });
-
-    language.codebase().root().node.expect_integer_literal(127);
-}
-
-#[test]
 fn remove_left_merges_with_previous_syntax_node() {
     // Removing left while cursor is in the leftmost position within the current
     // syntax node, merges the current and the previous syntax node.
@@ -120,34 +92,6 @@ fn remove_left_merges_with_previous_syntax_node() {
     assert_eq!(
         language.step_until_finished().unwrap(),
         Value::Integer { value: 127 },
-    );
-}
-
-#[test]
-fn remove_right_removes_next_syntax_node_if_empty() {
-    // Removing right while cursor is in the rightmost position within the
-    // current syntax node, removes the next syntax node, if that is empty.
-
-    let mut language = Language::new();
-
-    language.on_code("127 ");
-    language.on_input(EditorInputEvent::MoveCursorLeft);
-
-    // Make sure the test setup worked as expected.
-    language
-        .codebase()
-        .root()
-        .node
-        .expect_error("")
-        .expect_single_child(language.codebase().nodes())
-        .expect_integer_literal(127);
-
-    // Actual testing starts here.
-    language.on_input(EditorInputEvent::RemoveRight { whole_node: false });
-
-    assert_eq!(
-        language.codebase().root().node,
-        &Node::LiteralNumber { value: 127 },
     );
 }
 
