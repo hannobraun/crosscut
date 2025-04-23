@@ -125,7 +125,7 @@ fn navigate_to_previous_sibling() {
         .expect_children(codebase.nodes())
         .map(|located_node| located_node.path);
 
-    let mut editor = Editor::postfix(b, &codebase, &packages);
+    let mut editor = Editor::new(b, &codebase, &packages);
     editor.on_input(
         [EditorInputEvent::MoveCursorUp],
         &mut codebase,
