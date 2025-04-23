@@ -13,6 +13,7 @@ use super::{
 pub struct Editor {
     input: EditorInputBuffer,
     editing: NodePath,
+    postfix: bool,
 }
 
 impl Editor {
@@ -24,6 +25,7 @@ impl Editor {
         let mut editor = Self {
             input: EditorInputBuffer::empty(),
             editing: editing.clone(),
+            postfix: false,
         };
 
         editor.navigate_to(editing, codebase, packages);
@@ -36,7 +38,10 @@ impl Editor {
         codebase: &Codebase,
         packages: &Packages,
     ) -> Self {
-        Self::new(editing, codebase, packages)
+        let mut editor = Self::new(editing, codebase, packages);
+        editor.postfix = true;
+
+        editor
     }
 
     pub fn input(&self) -> &EditorInputBuffer {
@@ -54,7 +59,11 @@ impl Editor {
         evaluator: &mut Evaluator,
         packages: &Packages,
     ) {
-        let layout = EditorLayout::postfix(codebase.root(), codebase.nodes());
+        let layout = if self.postfix {
+            EditorLayout::postfix(codebase.root(), codebase.nodes())
+        } else {
+            EditorLayout::new(codebase.root(), codebase.nodes())
+        };
         let mut compiler = Compiler::new(codebase);
 
         if let Some(action) = self.input.update(event) {

@@ -8,6 +8,10 @@ pub struct EditorLayout {
 }
 
 impl EditorLayout {
+    pub fn new(root: LocatedNode, nodes: &Nodes) -> Self {
+        Self::postfix(root, nodes)
+    }
+
     pub fn postfix(root: LocatedNode, nodes: &Nodes) -> Self {
         let mut nodes_from_root = Vec::new();
         let max_distance_from_root =
