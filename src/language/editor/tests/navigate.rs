@@ -63,8 +63,7 @@ fn navigate_to_child() {
 
 #[test]
 fn navigate_to_parent() {
-    // If moving the cursor down, and there is no next sibling, the cursor
-    // should move to the parent node instead.
+    // Moving the cursor down navigates to the current node's parent.
 
     let packages = Packages::new();
 
