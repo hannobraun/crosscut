@@ -77,21 +77,6 @@ fn update_after_removing_all_characters() {
 }
 
 #[test]
-fn move_cursor_to_parent_node() {
-    // If moving the cursor down, and there is no next sibling, the cursor
-    // should move to the parent node instead.
-
-    let mut language = Language::new();
-
-    language.on_code("identity dentity");
-    language.on_input(EditorInputEvent::MoveCursorUp);
-    language.on_input(EditorInputEvent::MoveCursorDown);
-    language.on_code("i");
-
-    assert_eq!(language.step_until_finished().unwrap(), Value::nothing());
-}
-
-#[test]
 fn moving_cursor_left_at_start_of_node_should_move_to_previous_node() {
     // If the cursor is at the start of a node, then pressing left should move
     // it the end of the previous node.

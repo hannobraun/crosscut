@@ -61,6 +61,35 @@ fn navigate_to_child() {
     assert_eq!(editor.editing(), &b);
 }
 
+#[test]
+fn move_cursor_to_parent_node() {
+    // If moving the cursor down, and there is no next sibling, the cursor
+    // should move to the parent node instead.
+
+    let packages = Packages::new();
+
+    let mut codebase = Codebase::new();
+    let mut evaluator = Evaluator::new();
+
+    let b = {
+        let mut compiler = Compiler::new(&mut codebase);
+
+        let a =
+            compiler.replace(&compiler.codebase().root().path, "a", &packages);
+        compiler.insert_child(a, "b", &packages)
+    };
+
+    let mut editor = Editor::postfix(b, &codebase, &packages);
+    editor.on_input(
+        [EditorInputEvent::MoveCursorDown],
+        &mut codebase,
+        &mut evaluator,
+        &Packages::new(),
+    );
+
+    assert_eq!(editor.editing(), &codebase.root().path);
+}
+
 // There are some test cases missing right around here, about navigating to the
 // previous node, and probably more detail on navigating to the next node.
 //
