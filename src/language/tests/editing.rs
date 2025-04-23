@@ -6,7 +6,7 @@ use crate::language::{
     language::Language,
     packages::{Function, FunctionId, Package},
     runtime::{Effect, Value},
-    tests::infra::{NodeExt, NodesExt},
+    tests::infra::{LocatedNodeExt, NodeExt, NodesExt},
 };
 
 // Some tests in this suite have gotten a bit too detailed, as indicated by
@@ -148,10 +148,7 @@ fn add_sibling() {
         },
     );
 
-    let [a, b] = root
-        .children(language.codebase().nodes())
-        .collect_array()
-        .unwrap();
+    let [a, b] = root.expect_children(language.codebase().nodes());
     assert_eq!(
         a.node,
         &Node::Error {
@@ -188,10 +185,7 @@ fn add_sibling_to_root_node() {
         },
     );
 
-    let [a, b] = root
-        .children(language.codebase().nodes())
-        .collect_array()
-        .unwrap();
+    let [a, b] = root.expect_children(language.codebase().nodes());
     assert_eq!(
         a.node,
         &Node::Error {
@@ -230,10 +224,7 @@ fn split_node_if_adding_sibling_while_cursor_is_in_the_middle() {
         },
     );
 
-    let [a, b] = root
-        .children(language.codebase().nodes())
-        .collect_array()
-        .unwrap();
+    let [a, b] = root.expect_children(language.codebase().nodes());
     assert_eq!(
         a.node,
         &Node::Error {

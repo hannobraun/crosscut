@@ -1,9 +1,8 @@
-use itertools::Itertools;
-
 use crate::language::{
     code::{Children, CodeError, Codebase, Node, NodeHash, NodePath},
     compiler::Compiler,
     packages::{Function, Packages},
+    tests::infra::LocatedNodeExt,
 };
 
 #[test]
@@ -21,9 +20,7 @@ fn insert_child() {
     let [child_of_root] = compiler
         .codebase()
         .root()
-        .children(compiler.codebase().nodes())
-        .collect_array()
-        .unwrap();
+        .expect_children(compiler.codebase().nodes());
     assert_eq!(child_of_root.path, a);
 }
 
@@ -44,13 +41,9 @@ fn insert_child_with_grandparent() {
     let [child_of_root] = compiler
         .codebase()
         .root()
-        .children(compiler.codebase().nodes())
-        .collect_array()
-        .unwrap();
-    let [grandchild_of_root] = child_of_root
-        .children(compiler.codebase().nodes())
-        .collect_array()
-        .unwrap();
+        .expect_children(compiler.codebase().nodes());
+    let [grandchild_of_root] =
+        child_of_root.expect_children(compiler.codebase().nodes());
     assert_eq!(grandchild_of_root.path, b);
 }
 
@@ -96,10 +89,8 @@ fn remove_node_and_update_path_of_ancestor() {
     let [to_update] = compiler
         .codebase()
         .root()
-        .children(compiler.codebase().nodes())
-        .map(|located_node| located_node.path)
-        .collect_array()
-        .unwrap();
+        .expect_children(compiler.codebase().nodes())
+        .map(|located_node| located_node.path);
 
     let mut updated = to_update.clone();
     compiler.remove(&to_remove, &mut updated, &packages);
@@ -136,9 +127,7 @@ fn remove_node_and_update_path_of_descendent() {
     let [to_remove] = compiler
         .codebase()
         .root()
-        .children(compiler.codebase().nodes())
-        .collect_array()
-        .unwrap();
+        .expect_children(compiler.codebase().nodes());
 
     let mut updated = to_update.clone();
     compiler.remove(&to_remove.path, &mut updated, &packages);
@@ -175,10 +164,8 @@ fn remove_node_and_update_path_of_lateral_relation() {
     let [to_remove, to_update] = compiler
         .codebase()
         .root()
-        .children(compiler.codebase().nodes())
-        .map(|located_node| located_node.path)
-        .collect_array()
-        .unwrap();
+        .expect_children(compiler.codebase().nodes())
+        .map(|located_node| located_node.path);
 
     let mut updated = to_update.clone();
     compiler.remove(&to_remove, &mut updated, &packages);
@@ -206,10 +193,8 @@ fn remove_node_and_update_path_of_sibling() {
     let [to_remove, to_update] = compiler
         .codebase()
         .root()
-        .children(compiler.codebase().nodes())
-        .map(|located_node| located_node.path)
-        .collect_array()
-        .unwrap();
+        .expect_children(compiler.codebase().nodes())
+        .map(|located_node| located_node.path);
 
     let mut updated = to_update.clone();
     compiler.remove(&to_remove, &mut updated, &packages);

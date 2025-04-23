@@ -403,11 +403,10 @@ struct StackFrame {
 
 #[cfg(test)]
 mod tests {
-    use itertools::Itertools;
-
     use crate::language::{
         code::{Codebase, Node, NodePath},
         runtime::{Evaluator, RuntimeState, Value},
+        tests::infra::LocatedNodeExt,
     };
 
     #[test]
@@ -429,11 +428,8 @@ mod tests {
             change_set.replace(&root, &NodePath::for_root(function));
         });
 
-        let [expected_parameter, expected_body] = codebase
-            .root()
-            .children(codebase.nodes())
-            .collect_array()
-            .unwrap();
+        let [expected_parameter, expected_body] =
+            codebase.root().expect_children(codebase.nodes());
 
         let mut evaluator = Evaluator::new();
         evaluator.reset(&codebase);

@@ -1,11 +1,10 @@
-use itertools::Itertools;
-
 use crate::language::{
     code::{Codebase, Node},
     compiler::Compiler,
     editor::{Editor, EditorInputEvent},
     packages::Packages,
     runtime::Evaluator,
+    tests::infra::LocatedNodeExt,
 };
 
 #[test]
@@ -62,10 +61,8 @@ fn navigate_to_next_sibling() {
 
     let [a, b] = codebase
         .root()
-        .children(codebase.nodes())
-        .map(|located_node| located_node.path)
-        .collect_array()
-        .unwrap();
+        .expect_children(codebase.nodes())
+        .map(|located_node| located_node.path);
 
     let mut editor = Editor::new(a, &codebase, &packages);
     editor.on_input(

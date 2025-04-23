@@ -1,5 +1,7 @@
 use std::vec;
 
+use itertools::Itertools;
+
 use crate::language::code::{Children, LocatedNode, Node, NodeHash, Nodes};
 
 pub fn node(name: &str, children: impl IntoIterator<Item = NodeHash>) -> Node {
@@ -54,6 +56,23 @@ impl NodeExt for Node {
             .has_single_child()
             .expect("Expected node to have single child");
         nodes.get(hash).clone()
+    }
+}
+
+pub trait LocatedNodeExt {
+    fn expect_children<'r, const N: usize>(
+        &self,
+        nodes: &'r Nodes,
+    ) -> [LocatedNode<'r>; N];
+}
+
+impl LocatedNodeExt for LocatedNode<'_> {
+    #[track_caller]
+    fn expect_children<'r, const N: usize>(
+        &self,
+        nodes: &'r Nodes,
+    ) -> [LocatedNode<'r>; N] {
+        self.children(nodes).collect_array().unwrap()
     }
 }
 

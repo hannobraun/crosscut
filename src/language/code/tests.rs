@@ -1,6 +1,9 @@
 use itertools::Itertools;
 
-use crate::language::{code::NodePath, tests::infra::node};
+use crate::language::{
+    code::NodePath,
+    tests::infra::{LocatedNodeExt, node},
+};
 
 use super::Codebase;
 
@@ -28,9 +31,7 @@ fn uniquely_identify_identical_children_of_different_parents() {
         .node_at(&root)
         .children(codebase.nodes())
         .map(|b_or_c| {
-            let [a] =
-                b_or_c.children(codebase.nodes()).collect_array().unwrap();
-
+            let [a] = b_or_c.expect_children(codebase.nodes());
             a
         })
         .collect_array()
@@ -56,11 +57,7 @@ fn uniquely_identify_identical_siblings() {
         b
     });
 
-    let [a1, a2] = codebase
-        .node_at(&root)
-        .children(codebase.nodes())
-        .collect_array()
-        .unwrap();
+    let [a1, a2] = codebase.node_at(&root).expect_children(codebase.nodes());
 
     assert_ne!(a1, a2);
 }

@@ -1,12 +1,10 @@
-use itertools::Itertools;
-
 use crate::language::{
     code::Codebase,
     compiler::Compiler,
     editor::{Editor, EditorInputEvent},
     packages::Packages,
     runtime::Evaluator,
-    tests::infra::{NodeExt, node},
+    tests::infra::{LocatedNodeExt, NodeExt, node},
 };
 
 #[test]
@@ -39,11 +37,7 @@ fn add_child() {
     );
     editor.on_code("b", &mut codebase, &mut evaluator, &packages);
 
-    let [b] = codebase
-        .root()
-        .children(codebase.nodes())
-        .collect_array()
-        .unwrap();
+    let [b] = codebase.root().expect_children(codebase.nodes());
     assert_eq!(codebase.root().node, &node("a", [*b.path.hash()]));
     assert_eq!(b.node, &node("b", []));
 }
@@ -112,10 +106,8 @@ fn reuse_empty_error_node_for_parent() {
 
     let [a, b] = codebase
         .root()
-        .children(codebase.nodes())
-        .map(|located_node| located_node.path)
-        .collect_array()
-        .unwrap();
+        .expect_children(codebase.nodes())
+        .map(|located_node| located_node.path);
 
     let mut editor = Editor::postfix(b.clone(), &codebase, &packages);
     editor.on_input(
