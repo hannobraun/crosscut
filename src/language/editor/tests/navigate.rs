@@ -104,7 +104,7 @@ fn navigate_to_next_sibling() {
 }
 
 #[test]
-fn cursor_up_should_move_to_previous_sibling_if_node_has_no_children() {
+fn navigate_to_previous_sibling() {
     // If a node has no children, then moving the cursor up should navigate to
     // the previous sibling.
 
