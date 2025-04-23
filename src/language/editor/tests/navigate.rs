@@ -8,7 +8,7 @@ use crate::language::{
 };
 
 #[test]
-fn edit_initial_node() {
+fn edit_at_initial_cursor() {
     // The editor is initialized with the specific node it is currently editing.
     // That initialization should be correct, so editing that node actually
     // works.
