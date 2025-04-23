@@ -1,5 +1,3 @@
-use std::vec;
-
 use itertools::Itertools;
 
 use crate::language::code::{Children, LocatedNode, Node, NodeHash, Nodes};
@@ -73,26 +71,5 @@ impl LocatedNodeExt for LocatedNode<'_> {
         nodes: &'r Nodes,
     ) -> [LocatedNode<'r>; N] {
         self.children(nodes).collect_array().unwrap()
-    }
-}
-
-pub trait NodesExt {
-    fn expect_errors(self) -> vec::IntoIter<String>;
-}
-
-impl<'r, T> NodesExt for T
-where
-    T: Iterator<Item = LocatedNode<'r>>,
-{
-    fn expect_errors(self) -> vec::IntoIter<String> {
-        self.map(|located_node| {
-            let Node::Error { node, .. } = located_node.node else {
-                panic!("Expected error, got {:?}", located_node.node);
-            };
-
-            node.clone()
-        })
-        .collect::<Vec<_>>()
-        .into_iter()
     }
 }

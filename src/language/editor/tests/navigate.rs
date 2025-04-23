@@ -102,3 +102,36 @@ fn navigate_to_next_sibling() {
 
     assert_eq!(editor.editing(), &b);
 }
+
+#[test]
+fn cursor_up_should_move_to_previous_sibling_if_node_has_no_children() {
+    // If a node has no children, then moving the cursor up should navigate to
+    // the previous sibling.
+
+    let packages = Packages::new();
+
+    let mut codebase = Codebase::new();
+    let mut evaluator = Evaluator::new();
+
+    {
+        let mut compiler = Compiler::new(&mut codebase);
+
+        compiler.insert_child(compiler.codebase().root().path, "a", &packages);
+        compiler.insert_child(compiler.codebase().root().path, "b", &packages);
+    }
+
+    let [a, b] = codebase
+        .root()
+        .expect_children(codebase.nodes())
+        .map(|located_node| located_node.path);
+
+    let mut editor = Editor::postfix(b, &codebase, &packages);
+    editor.on_input(
+        [EditorInputEvent::MoveCursorUp],
+        &mut codebase,
+        &mut evaluator,
+        &Packages::new(),
+    );
+
+    assert_eq!(editor.editing(), &a);
+}

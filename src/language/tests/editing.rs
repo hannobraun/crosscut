@@ -1,11 +1,6 @@
-use itertools::Itertools;
-
 use crate::language::{
-    code::Node,
-    editor::EditorInputEvent,
-    language::Language,
-    runtime::Value,
-    tests::infra::{NodeExt, NodesExt},
+    code::Node, editor::EditorInputEvent, language::Language, runtime::Value,
+    tests::infra::NodeExt,
 };
 
 // Some tests in this suite have gotten a bit too detailed, as indicated by
@@ -79,46 +74,6 @@ fn update_after_removing_all_characters() {
 
     language.on_input(EditorInputEvent::RemoveLeft { whole_node: false });
     assert_eq!(language.step_until_finished().unwrap(), Value::nothing());
-}
-
-#[test]
-fn cursor_up_should_move_to_previous_sibling_if_node_has_no_children() {
-    // If a node has no children, then moving the cursor up should navigate to
-    // the previous sibling.
-
-    let mut language = Language::new();
-
-    language.on_code("a");
-    language.on_input(EditorInputEvent::AddSibling);
-    language.on_code("c");
-
-    // Verify that the test setup worked.
-    assert_eq!(
-        language
-            .codebase()
-            .root()
-            .children(language.codebase().nodes())
-            .expect_errors()
-            .collect_array::<2>()
-            .unwrap(),
-        ["a", "c"].map(|node| node.to_string()),
-    );
-
-    // Actual testing starts here.
-
-    language.on_input(EditorInputEvent::MoveCursorUp);
-    language.on_code("b");
-
-    assert_eq!(
-        language
-            .codebase()
-            .root()
-            .children(language.codebase().nodes())
-            .expect_errors()
-            .next()
-            .unwrap(),
-        "ab".to_string(),
-    )
 }
 
 #[test]
