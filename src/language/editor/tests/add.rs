@@ -24,7 +24,7 @@ fn add_child() {
     let mut editor = Editor::new(a, &codebase, &packages);
 
     editor.on_input(
-        [MoveCursorRight, AddChildOrParent],
+        [MoveCursorRight, AddChild],
         &mut codebase,
         &mut evaluator,
         &packages,
@@ -126,7 +126,7 @@ fn split_node_to_create_child() {
     let mut editor = Editor::new(root, &codebase, &packages);
 
     editor.on_input(
-        [MoveCursorRight, AddChildOrParent],
+        [MoveCursorRight, AddChild],
         &mut codebase,
         &mut evaluator,
         &packages,
