@@ -2,7 +2,7 @@ use crate::language::{language::Language, runtime::Value};
 
 #[test]
 fn add() {
-    let mut language = Language::from_code_postfix("1\n2 tuple +");
+    let mut language = Language::from_code("+ tuple 1\n2");
 
     assert_eq!(
         language.step_until_finished().unwrap(),
