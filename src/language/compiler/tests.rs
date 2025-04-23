@@ -49,10 +49,9 @@ fn insert_child_with_grandparent() {
         .unwrap();
     let [grandchild_of_root] = child_of_root
         .children(compiler.codebase().nodes())
-        .map(|located_node| located_node.path)
         .collect_array()
         .unwrap();
-    assert_eq!(grandchild_of_root, b);
+    assert_eq!(grandchild_of_root.path, b);
 }
 
 #[test]
