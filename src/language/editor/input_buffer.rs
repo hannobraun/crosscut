@@ -174,7 +174,7 @@ pub enum NodeAction {
     NavigateToNext,
     MergeWithPrevious,
     MergeWithNext,
-    AddChildOrParent { existing_child: String }, // depends on syntax mode
+    AddChildOrParent { existing_child: String }, // depends on mode
     AddSibling { existing_sibling: String },
 }
 
