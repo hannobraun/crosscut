@@ -131,7 +131,7 @@ impl Editor {
                         }
                     }
                     NodeAction::AddChild {
-                        existing_child_or_parent,
+                        existing_parent: existing_child_or_parent,
                     } => {
                         self.cursor.path = compiler.replace(
                             &self.cursor.path,
