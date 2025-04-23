@@ -51,7 +51,7 @@ fn split_node_to_create_parent() {
         Compiler::new(&mut codebase).replace(&root, "ab", &packages)
     };
 
-    let mut editor = Editor::postfix(a, &codebase, &packages);
+    let mut editor = Editor::new(a, &codebase, &packages);
 
     editor.on_input(
         [MoveCursorRight, AddChildOrParent],
@@ -60,9 +60,9 @@ fn split_node_to_create_parent() {
         &packages,
     );
 
-    let [a] = codebase.root().expect_children(codebase.nodes());
-    assert_eq!(codebase.root().node, &node("b", [*a.path.hash()]));
-    assert_eq!(a.node, &node("a", []));
+    let [b] = codebase.root().expect_children(codebase.nodes());
+    assert_eq!(codebase.root().node, &node("a", [*b.path.hash()]));
+    assert_eq!(b.node, &node("b", []));
 }
 
 #[test]
