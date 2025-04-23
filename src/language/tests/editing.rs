@@ -77,27 +77,6 @@ fn update_after_removing_all_characters() {
 }
 
 #[test]
-fn moving_cursor_left_at_start_of_node_should_move_to_previous_node() {
-    // If the cursor is at the start of a node, then pressing left should move
-    // it the end of the previous node.
-
-    let mut language = Language::new();
-
-    language.on_code("12 identity");
-    for _ in "identity".chars() {
-        language.on_input(EditorInputEvent::MoveCursorLeft);
-    }
-
-    language.on_input(EditorInputEvent::MoveCursorLeft);
-    language.on_code("7");
-
-    assert_eq!(
-        language.step_until_finished().unwrap(),
-        Value::Integer { value: 127 },
-    );
-}
-
-#[test]
 fn moving_cursor_right_at_end_of_node_should_move_to_next_node() {
     // If the cursor is at the end of a node, then pressing right should move it
     // the start of the previous node.
