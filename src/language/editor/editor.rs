@@ -299,7 +299,7 @@ impl Editor {
     }
 }
 
-#[derive(Clone, Debug)]
+#[derive(Clone, Debug, Eq, PartialEq)]
 pub struct Cursor {
     pub path: NodePath,
     pub index: usize,
