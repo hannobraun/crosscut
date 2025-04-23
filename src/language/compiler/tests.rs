@@ -22,10 +22,9 @@ fn insert_child() {
         .codebase()
         .root()
         .children(compiler.codebase().nodes())
-        .map(|located_node| located_node.path)
         .collect_array()
         .unwrap();
-    assert_eq!(child_of_root, a);
+    assert_eq!(child_of_root.path, a);
 }
 
 #[test]
