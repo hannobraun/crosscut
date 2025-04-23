@@ -59,10 +59,10 @@ fn children_of_error_should_not_be_evaluated() {
         }
     }
 
-    let mut language = Language::postfix();
+    let mut language = Language::new();
     language.packages_mut().new_package([Ping]);
 
-    language.on_code("ping unresolved");
+    language.on_code("unresolved ping");
 
     assert!(matches!(language.step(), RuntimeState::Error { .. }));
 }
