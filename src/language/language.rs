@@ -40,6 +40,7 @@ impl Language {
         }
     }
 
+    #[cfg(test)]
     pub fn postfix() -> Self {
         let mut language = Self::new();
         language.editor = Editor::postfix(
