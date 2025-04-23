@@ -93,6 +93,36 @@ fn navigate_up_to_parent() {
     assert_eq!(editor.cursor().path, codebase.root().path);
 }
 
+#[test]
+fn navigate_left_to_parent() {
+    // Moving the cursor left navigates to the end of the current node's parent.
+
+    let packages = Packages::new();
+
+    let mut codebase = Codebase::new();
+    let mut evaluator = Evaluator::new();
+
+    let b = {
+        let mut compiler = Compiler::new(&mut codebase);
+
+        let a =
+            compiler.replace(&compiler.codebase().root().path, "a", &packages);
+        compiler.insert_child(a, "b", &packages)
+    };
+
+    let mut editor =
+        Editor::new(Cursor { path: b, index: 0 }, &codebase, &packages);
+    editor.on_input(
+        [EditorInputEvent::MoveCursorLeft],
+        &mut codebase,
+        &mut evaluator,
+        &Packages::new(),
+    );
+
+    assert_eq!(editor.cursor().path, codebase.root().path);
+    assert_eq!(editor.cursor().index, 1);
+}
+
 // There are some test cases missing right around here, about navigating to the
 // previous node, and probably more detail on navigating to the next node.
 //
