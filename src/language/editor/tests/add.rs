@@ -10,6 +10,41 @@ use crate::language::{
 };
 
 #[test]
+fn add_parent_node() {
+    // It's possible to add a parent node of the current node.
+
+    let packages = Packages::new();
+
+    let mut codebase = Codebase::new();
+    let mut evaluator = Evaluator::new();
+
+    let child = {
+        let root = codebase.root().path;
+        Compiler::new(&mut codebase).replace(&root, "a", &packages)
+    };
+
+    let mut editor = Editor::postfix(child, &codebase, &packages);
+
+    editor.on_input(
+        EditorInputEvent::MoveCursorRight,
+        &mut codebase,
+        &mut evaluator,
+        &packages,
+    );
+    editor.on_input(
+        EditorInputEvent::AddParent,
+        &mut codebase,
+        &mut evaluator,
+        &packages,
+    );
+    editor.on_code("b", &mut codebase, &mut evaluator, &packages);
+
+    let a = codebase.root().children(codebase.nodes()).next().unwrap();
+    assert_eq!(a.node, &node("a", []));
+    assert_eq!(codebase.root().node, &node("b", [*a.path.hash()]));
+}
+
+#[test]
 fn split_node_to_create_sibling() {
     // When adding a sibling while the cursor is in the middle of a node, the
     // node should be split.

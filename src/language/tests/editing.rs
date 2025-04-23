@@ -83,30 +83,6 @@ fn update_after_removing_all_characters() {
 }
 
 #[test]
-fn add_parent_node() {
-    // It's possible to add a parent node of the current node.
-
-    let mut language = Language::new();
-
-    let package = test_package(&mut language);
-
-    language.on_code("a");
-    language.on_input(EditorInputEvent::AddParent);
-    language.on_code("a_to_b");
-
-    let output = language
-        .step_until_finished_and_handle_host_functions(handler(&package));
-
-    assert_eq!(
-        output,
-        Ok(Value::Opaque {
-            id: 1,
-            display: "b"
-        }),
-    );
-}
-
-#[test]
 fn add_parent_of_node_that_already_has_a_parent() {
     // If a node already has a parent, then adding a parent should add the
     // parent in between them, as a child of the previous parent.
