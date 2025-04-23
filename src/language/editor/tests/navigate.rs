@@ -100,7 +100,7 @@ fn navigate_up_to_parent() {
 // that might not be worth the effort.
 
 #[test]
-fn navigate_to_next_sibling() {
+fn navigate_down_to_next_sibling() {
     // Moving the cursor down navigates to the current node's next sibling.
 
     let packages = Packages::new();
