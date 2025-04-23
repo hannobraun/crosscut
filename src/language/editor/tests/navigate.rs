@@ -33,6 +33,35 @@ fn edit_initial_node() {
     );
 }
 
+#[test]
+fn moving_cursor_up_should_navigate_to_child_node() {
+    // It is possible to navigate to the previous node in the editor.
+
+    let packages = Packages::new();
+
+    let mut codebase = Codebase::new();
+    let mut evaluator = Evaluator::new();
+
+    let b = {
+        let mut compiler = Compiler::new(&mut codebase);
+
+        let a =
+            compiler.replace(&compiler.codebase().root().path, "a", &packages);
+        compiler.insert_child(a, "b", &packages)
+    };
+
+    let mut editor =
+        Editor::postfix(codebase.root().path, &codebase, &packages);
+    editor.on_input(
+        [EditorInputEvent::MoveCursorUp],
+        &mut codebase,
+        &mut evaluator,
+        &Packages::new(),
+    );
+
+    assert_eq!(editor.editing(), &b);
+}
+
 // There are some test cases missing right around here, about navigating to the
 // previous node, and probably more detail on navigating to the next node.
 //

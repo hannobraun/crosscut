@@ -82,22 +82,6 @@ fn update_after_removing_all_characters() {
 }
 
 #[test]
-fn moving_cursor_up_should_navigate_to_child_node() {
-    // It is possible to navigate to the previous node in the editor.
-
-    let mut language = Language::new();
-
-    language.on_code("12 identity");
-    language.on_input(EditorInputEvent::MoveCursorUp);
-    language.on_code("7");
-
-    assert_eq!(
-        language.step_until_finished().unwrap(),
-        Value::Integer { value: 127 },
-    );
-}
-
-#[test]
 fn cursor_up_should_move_to_previous_sibling_if_node_has_no_children() {
     // If a node has no children, then moving the cursor up should navigate to
     // the previous sibling.
