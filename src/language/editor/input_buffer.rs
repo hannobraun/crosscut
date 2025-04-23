@@ -67,14 +67,13 @@ impl EditorInputBuffer {
             }
             EditorInputEvent::AddChildOrParent => {
                 let existing_child_or_parent =
-                    self.add_child_or_parent_or_sibling(cursor);
+                    self.add_child_or_sibling(cursor);
                 return Some(NodeAction::AddChildOrParent {
                     existing_child_or_parent,
                 });
             }
             EditorInputEvent::AddSibling => {
-                let existing_sibling =
-                    self.add_child_or_parent_or_sibling(cursor);
+                let existing_sibling = self.add_child_or_sibling(cursor);
                 return Some(NodeAction::AddSibling { existing_sibling });
             }
         }
@@ -151,7 +150,7 @@ impl EditorInputBuffer {
         }
     }
 
-    fn add_child_or_parent_or_sibling(&mut self, cursor: &mut usize) -> String {
+    fn add_child_or_sibling(&mut self, cursor: &mut usize) -> String {
         let mut old_buffer = mem::take(&mut self.buffer);
         let new_buffer = old_buffer.split_off(*cursor);
 
