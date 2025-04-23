@@ -108,7 +108,7 @@ fn function_literal_with_too_many_children_is_an_error() {
     // An `fn` node is expected to have one child, its body. If it has more than
     // that, that's an error.
 
-    let language = Language::from_code_postfix("a\nb\nc fn");
+    let language = Language::from_code("fn a\nb\nc");
 
     let root = language.codebase().root();
 
