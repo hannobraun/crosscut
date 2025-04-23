@@ -133,39 +133,44 @@ impl Editor {
                         packages,
                     );
 
-                    let empty_parent =
-                        self.editing.parent().and_then(|parent| {
-                            let parent = compiler.codebase().node_at(parent);
+                    self.editing = {
+                        let empty_parent =
+                            self.editing.parent().and_then(|parent| {
+                                let parent =
+                                    compiler.codebase().node_at(parent);
 
-                            let parent_is_empty =
-                                matches!(parent.node, Node::Empty);
-                            let parent_is_error_but_empty =
-                                if let Node::Error { node, .. } = parent.node {
-                                    node.is_empty()
-                                } else {
-                                    false
-                                };
+                                let parent_is_empty =
+                                    matches!(parent.node, Node::Empty);
+                                let parent_is_error_but_empty =
+                                    if let Node::Error { node, .. } =
+                                        parent.node
+                                    {
+                                        node.is_empty()
+                                    } else {
+                                        false
+                                    };
 
-                            (parent_is_empty || parent_is_error_but_empty)
-                                .then_some(parent)
-                        });
+                                (parent_is_empty || parent_is_error_but_empty)
+                                    .then_some(parent)
+                            });
 
-                    self.editing = if let Some(parent) = empty_parent {
-                        // If the parent node is empty, we re-use it instead of
-                        // adding a new parent in between. This leads to a
-                        // smoother editing experience.
+                        if let Some(parent) = empty_parent {
+                            // If the parent node is empty, we re-use it instead of
+                            // adding a new parent in between. This leads to a
+                            // smoother editing experience.
 
-                        compiler.replace(
-                            &parent.path,
-                            self.input.buffer(),
-                            packages,
-                        )
-                    } else {
-                        compiler.insert_parent(
-                            &self.editing,
-                            self.input.buffer(),
-                            packages,
-                        )
+                            compiler.replace(
+                                &parent.path,
+                                self.input.buffer(),
+                                packages,
+                            )
+                        } else {
+                            compiler.insert_parent(
+                                &self.editing,
+                                self.input.buffer(),
+                                packages,
+                            )
+                        }
                     };
                 }
                 NodeAction::AddSibling { existing_sibling } => {
