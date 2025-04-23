@@ -16,7 +16,7 @@ fn define_and_evaluate() {
 fn self_recursion() {
     // A function can recurse using the `self` keyword.
 
-    let mut language = Language::from_code_postfix("0\nself fn eval");
+    let mut language = Language::from_code("eval fn 0\nself");
 
     // This is a rather large number of steps, given the length of the program.
     // Should be proof enough, that it's recursing.
