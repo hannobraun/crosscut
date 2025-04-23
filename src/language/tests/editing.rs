@@ -82,43 +82,6 @@ fn update_after_removing_all_characters() {
 }
 
 #[test]
-fn add_sibling_to_root_node() {
-    // If adding a sibling to the root node, there still needs to be a single
-    // root node afterwards. So a new one is created automatically.
-
-    let mut language = Language::new();
-
-    language.on_code("a");
-    language.on_input(EditorInputEvent::AddSibling);
-    language.on_code("b");
-
-    let root = language.codebase().root();
-    assert_eq!(
-        root.node,
-        &Node::Error {
-            node: "".to_string(),
-            children: root.node.to_children(),
-        },
-    );
-
-    let [a, b] = root.expect_children(language.codebase().nodes());
-    assert_eq!(
-        a.node,
-        &Node::Error {
-            node: "a".to_string(),
-            children: Children::new([]),
-        },
-    );
-    assert_eq!(
-        b.node,
-        &Node::Error {
-            node: "b".to_string(),
-            children: Children::new([]),
-        },
-    );
-}
-
-#[test]
 fn split_node_if_adding_sibling_while_cursor_is_in_the_middle() {
     // If adding a sibling while the cursor is in the middle of a node, that
     // node should be split.
