@@ -252,7 +252,11 @@ impl Editor {
         match command {
             EditorCommand::Clear => {
                 *codebase = Codebase::new();
-                *self = Self::postfix(codebase.root().path, codebase, packages);
+                *self = if self.postfix {
+                    Self::postfix(codebase.root().path, codebase, packages)
+                } else {
+                    Self::new(codebase.root().path, codebase, packages)
+                };
                 evaluator.reset(codebase);
             }
         }
