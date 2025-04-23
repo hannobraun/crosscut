@@ -9,10 +9,10 @@ use crate::language::{
 fn host_functions() {
     // The host can define functions that Crosscut code can call.
 
-    let mut language = Language::postfix();
+    let mut language = Language::new();
     let package = language.packages_mut().new_package([Halve]);
 
-    language.on_code("64 halve");
+    language.on_code("halve 64");
 
     let output =
         language.step_until_finished_and_handle_host_functions(|id, input| {
