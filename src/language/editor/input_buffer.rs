@@ -65,7 +65,9 @@ impl EditorInputBuffer {
             }
             EditorInputEvent::AddChildOrParent => {
                 let existing_child = self.add_child_or_parent_or_sibling();
-                return Some(NodeAction::AddChildOrParent { existing_child });
+                return Some(NodeAction::AddChildOrParent {
+                    existing_child_or_parent: existing_child,
+                });
             }
             EditorInputEvent::AddSibling => {
                 let existing_sibling = self.add_child_or_parent_or_sibling();
@@ -174,7 +176,7 @@ pub enum NodeAction {
     NavigateToNext,
     MergeWithPrevious,
     MergeWithNext,
-    AddChildOrParent { existing_child: String }, // depends on mode
+    AddChildOrParent { existing_child_or_parent: String }, // depends on mode
     AddSibling { existing_sibling: String },
 }
 
