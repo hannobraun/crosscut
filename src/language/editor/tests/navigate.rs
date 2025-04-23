@@ -99,6 +99,7 @@ fn navigate_right_to_child() {
     );
 
     assert_eq!(editor.cursor().path, b);
+    assert_eq!(editor.cursor().index, 0);
 }
 
 #[test]
