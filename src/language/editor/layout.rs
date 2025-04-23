@@ -11,7 +11,7 @@ impl EditorLayout {
     pub fn new(root: LocatedNode, nodes: &Nodes) -> Self {
         let mut nodes_from_root = Vec::new();
         let max_distance_from_root =
-            collect_nodes_from_root(root, 0, &mut nodes_from_root, nodes);
+            collect_nodes_from_root(root, 0, &mut nodes_from_root, nodes, true);
 
         let lines = nodes_from_root
             .into_iter()
@@ -33,7 +33,7 @@ impl EditorLayout {
     pub fn postfix(root: LocatedNode, nodes: &Nodes) -> Self {
         let mut nodes_from_root = Vec::new();
         let max_distance_from_root =
-            collect_nodes_from_root(root, 0, &mut nodes_from_root, nodes);
+            collect_nodes_from_root(root, 0, &mut nodes_from_root, nodes, true);
 
         let lines = nodes_from_root
             .into_iter()
@@ -103,6 +103,7 @@ fn collect_nodes_from_root(
     distance_from_root: u32,
     nodes_from_root: &mut Vec<NodeInLayout>,
     nodes: &Nodes,
+    postfix: bool,
 ) -> u32 {
     nodes_from_root.push(NodeInLayout {
         path: node.path.clone(),
@@ -111,7 +112,7 @@ fn collect_nodes_from_root(
 
     let mut max_distance_from_root = distance_from_root;
 
-    let children = {
+    let children = if postfix {
         // By rendering leaves first, root at the end, we are essentially
         // inverting the tree, compared to how we usually think about trees. We
         // do _not_ want to invert the order of a node's children though.
@@ -119,6 +120,8 @@ fn collect_nodes_from_root(
         // intuition won't match how we think about this when manipulating
         // children in the editor.
         node.children(nodes).rev().collect::<Vec<_>>()
+    } else {
+        node.children(nodes).collect::<Vec<_>>()
     };
 
     for child in children {
@@ -127,6 +130,7 @@ fn collect_nodes_from_root(
             distance_from_root + 1,
             nodes_from_root,
             nodes,
+            postfix,
         );
 
         max_distance_from_root =
