@@ -10,7 +10,7 @@ fn unresolved_syntax_node() {
     // If a syntax node does not refer to a known function, that should result
     // in an error.
 
-    let mut language = Language::from_code_postfix("identit");
+    let mut language = Language::from_code("identit");
 
     // The error should be registered in `Codebase`.
     let unresolved = language.codebase().root().path;
@@ -25,7 +25,7 @@ fn unresolved_syntax_node() {
 
 #[test]
 fn fixing_syntax_node_should_remove_error() {
-    let mut language = Language::from_code_postfix("identit");
+    let mut language = Language::from_code("identit");
 
     // Make sure that this resulted in an error.
     assert!(
@@ -72,7 +72,7 @@ fn do_not_step_beyond_errors() {
     // If there's an error in the code, the interpreter should never step beyond
     // that, if it encounters it.
 
-    let mut language = Language::from_code_postfix("unresolved");
+    let mut language = Language::from_code("unresolved");
 
     assert!(language.step().is_error());
     assert!(language.step().is_error());
