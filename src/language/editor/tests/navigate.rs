@@ -50,10 +50,9 @@ fn navigate_to_child() {
         compiler.insert_child(a, "b", &packages)
     };
 
-    let mut editor =
-        Editor::postfix(codebase.root().path, &codebase, &packages);
+    let mut editor = Editor::new(codebase.root().path, &codebase, &packages);
     editor.on_input(
-        [EditorInputEvent::MoveCursorUp],
+        [EditorInputEvent::MoveCursorDown],
         &mut codebase,
         &mut evaluator,
         &Packages::new(),

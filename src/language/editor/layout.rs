@@ -10,15 +10,12 @@ pub struct EditorLayout {
 impl EditorLayout {
     pub fn new(root: LocatedNode, nodes: &Nodes) -> Self {
         let mut nodes_from_root = Vec::new();
-        let max_distance_from_root =
-            collect_nodes_from_root(root, 0, &mut nodes_from_root, nodes, true);
+        collect_nodes_from_root(root, 0, &mut nodes_from_root, nodes, false);
 
         let lines = nodes_from_root
             .into_iter()
-            .rev()
             .map(|node| {
-                let level_of_indentation =
-                    max_distance_from_root - node.distance_from_root;
+                let level_of_indentation = node.distance_from_root;
 
                 EditorLine {
                     node,
