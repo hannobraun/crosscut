@@ -241,12 +241,14 @@ impl GameEngine<DebugOutputAdapter> {
         self
     }
 
-    pub fn enter_command(&mut self, command: &str) {
+    pub fn enter_command(&mut self, command: &str) -> &mut Self {
         assert!(self.editor_input.mode().is_command_mode());
 
         for ch in command.chars() {
             self.on_char(ch);
         }
+
+        self
     }
 
     pub fn execute_command(&mut self) {
