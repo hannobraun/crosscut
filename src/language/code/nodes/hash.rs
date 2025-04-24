@@ -2,8 +2,6 @@ use std::{any::type_name, fmt, marker::PhantomData};
 
 use base64::{Engine, prelude::BASE64_URL_SAFE_NO_PAD};
 
-use super::Node;
-
 /// # The hash of a syntax node
 ///
 /// The purpose of this type is to serve as a building block for identifying
@@ -48,7 +46,7 @@ impl<T> fmt::Debug for NodeHash<T> {
     }
 }
 
-impl fmt::Display for NodeHash<Node> {
+impl<T> fmt::Display for NodeHash<T> {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", BASE64_URL_SAFE_NO_PAD.encode(self.hash))?;
         Ok(())
