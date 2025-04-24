@@ -226,12 +226,14 @@ where
 
 #[cfg(test)]
 impl GameEngine<DebugOutputAdapter> {
-    pub fn enter_code(&mut self, code: &str) {
+    pub fn enter_code(&mut self, code: &str) -> &mut Self {
         assert!(self.editor_input.mode().is_edit_mode());
 
         for ch in code.chars() {
             self.on_char(ch);
         }
+
+        self
     }
 
     pub fn enter_command_mode(&mut self) {
