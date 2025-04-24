@@ -116,7 +116,7 @@ use super::packages::FunctionId;
 
 #[cfg(test)]
 impl Language {
-    pub fn on_code(&mut self, code: &str) -> &mut Self {
+    pub fn code(&mut self, code: &str) -> &mut Self {
         self.editor.on_code(
             code,
             &mut self.codebase,

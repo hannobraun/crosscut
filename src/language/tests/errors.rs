@@ -11,7 +11,7 @@ fn unresolved_syntax_node() {
     // in an error.
 
     let mut language = Language::new();
-    language.on_code("identit");
+    language.code("identit");
 
     // The error should be registered in `Codebase`.
     let unresolved = language.codebase().root().path;
@@ -27,7 +27,7 @@ fn unresolved_syntax_node() {
 #[test]
 fn fixing_syntax_node_should_remove_error() {
     let mut language = Language::new();
-    language.on_code("identit");
+    language.code("identit");
 
     // Make sure that this resulted in an error.
     let root = language.codebase().root();
@@ -41,7 +41,7 @@ fn fixing_syntax_node_should_remove_error() {
     );
 
     // Once we resolve the error, it should no longer be there.
-    language.on_code("y");
+    language.code("y");
 
     let resolved = language.codebase().root().path;
     assert_eq!(language.codebase().errors().get(resolved.hash()), None);
@@ -66,7 +66,7 @@ fn children_of_error_should_not_be_evaluated() {
     let mut language = Language::new();
     language.packages_mut().new_package([Ping]);
 
-    language.on_code("unresolved ping");
+    language.code("unresolved ping");
 
     assert!(matches!(language.step(), RuntimeState::Error { .. }));
 }
@@ -77,7 +77,7 @@ fn do_not_step_beyond_errors() {
     // that, if it encounters it.
 
     let mut language = Language::new();
-    language.on_code("unresolved");
+    language.code("unresolved");
 
     assert!(language.step().is_error());
     assert!(language.step().is_error());

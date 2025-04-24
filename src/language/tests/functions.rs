@@ -7,13 +7,13 @@ fn define_and_evaluate() {
 
     let mut language = Language::new();
     language
-        .on_code("apply")
+        .code("apply")
         .down()
-        .on_code("fn")
+        .code("fn")
         .down()
-        .on_code("0")
+        .code("0")
         .down()
-        .on_code("127");
+        .code("127");
 
     assert_eq!(
         language.step_until_finished().unwrap(),
@@ -27,15 +27,15 @@ fn self_recursion() {
 
     let mut language = Language::new();
     language
-        .on_code("apply")
+        .code("apply")
         .down()
-        .on_code("fn")
+        .code("fn")
         .down()
-        .on_code("0")
+        .code("0")
         .down()
-        .on_code("apply")
+        .code("apply")
         .down()
-        .on_code("self");
+        .code("self");
 
     // This is a rather large number of steps, given the length of the program.
     // Should be proof enough, that it's recursing.

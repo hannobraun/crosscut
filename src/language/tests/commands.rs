@@ -11,7 +11,7 @@ fn clear() {
 
     let mut language = Language::new();
 
-    language.on_code("12");
+    language.code("12");
     assert_eq!(
         language.step_until_finished().unwrap(),
         Value::Integer { value: 12 },
@@ -20,7 +20,7 @@ fn clear() {
     language.on_command(EditorCommand::Clear);
     assert_eq!(language.step_until_finished().unwrap(), Value::nothing());
 
-    language.on_code("7");
+    language.code("7");
     assert_eq!(
         language.step_until_finished().unwrap(),
         Value::Integer { value: 7 },

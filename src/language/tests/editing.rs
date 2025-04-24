@@ -10,13 +10,13 @@ fn update_on_every_character() {
 
     let mut language = Language::new();
 
-    language.on_code("1");
+    language.code("1");
     assert_eq!(
         language.step_until_finished().unwrap(),
         Value::Integer { value: 1 },
     );
 
-    language.on_code("2");
+    language.code("2");
     assert_eq!(
         language.step_until_finished().unwrap(),
         Value::Integer { value: 12 },
@@ -30,7 +30,7 @@ fn update_after_removing_character() {
 
     let mut language = Language::new();
 
-    language.on_code("127");
+    language.code("127");
     assert_eq!(
         language.step_until_finished().unwrap(),
         Value::Integer { value: 127 },
@@ -56,7 +56,7 @@ fn update_after_removing_all_characters() {
 
     let mut language = Language::new();
 
-    language.on_code("1");
+    language.code("1");
     assert_eq!(
         language.step_until_finished().unwrap(),
         Value::Integer { value: 1 },
