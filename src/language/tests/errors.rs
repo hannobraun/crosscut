@@ -28,13 +28,8 @@ fn fixing_syntax_node_should_remove_error() {
     let mut language = Language::from_code("identit");
 
     // Make sure that this resulted in an error.
-    assert!(
-        language
-            .codebase()
-            .errors()
-            .get(language.codebase().root().path.hash())
-            .is_some()
-    );
+    let root = language.codebase().root();
+    assert!(language.codebase().errors().get(root.path.hash()).is_some());
 
     // Once we resolve the error, it should no longer be there.
     language.on_code("y");
