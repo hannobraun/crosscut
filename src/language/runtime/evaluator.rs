@@ -301,13 +301,13 @@ impl Evaluator {
                 self.eval_stack.push(node);
             }
             Expression::Recursion => {
-                let path = self
+                let body = self
                     .call_stack
                     .pop()
                     .map(|stack_frame| stack_frame.root)
                     .unwrap_or_else(|| codebase.root().path);
 
-                self.finish_evaluating_node(Value::Function { body: path });
+                self.finish_evaluating_node(Value::Function { body });
             }
             Expression::Error { .. } => {
                 self.state = RuntimeState::Error {
