@@ -127,10 +127,7 @@ impl Root {
 
 #[cfg(test)]
 mod tests {
-    use crate::language::{
-        code::{Children, Expression, NodePath},
-        tests::infra::node,
-    };
+    use crate::language::{code::NodePath, tests::infra::node};
 
     use super::Codebase;
 
@@ -152,85 +149,5 @@ mod tests {
         });
 
         assert_eq!(codebase.root().path, new_root);
-    }
-
-    #[test]
-    fn remove_root_node_with_single_child() {
-        // When removing a root node that has a single child, that child should
-        // become the new root node.
-
-        let mut codebase = Codebase::new();
-
-        let root = codebase.root().path;
-        let a = codebase.make_change(|change_set| {
-            let a = change_set.nodes_mut().insert(node("a", []));
-            let b = change_set.nodes_mut().insert(node("b", [a]));
-
-            change_set.replace(&root, &NodePath::for_root(b));
-
-            a
-        });
-
-        let root = codebase.root().path;
-        codebase.make_change(|change_set| {
-            change_set.remove(&root);
-        });
-        assert_eq!(codebase.root().path.hash(), &a);
-    }
-
-    #[test]
-    fn remove_root_node_with_no_child() {
-        // When removing a root node that has no child, an empty node should be
-        // left in its place.
-
-        let mut codebase = Codebase::new();
-
-        let root = codebase.root().path;
-        let a = codebase.make_change(|change_set| {
-            let a = NodePath::for_root(
-                change_set.nodes_mut().insert(node("a", [])),
-            );
-            change_set.replace(&root, &a);
-
-            a
-        });
-        assert_eq!(codebase.root().path, a);
-
-        codebase.make_change(|change_set| {
-            change_set.remove(&a);
-        });
-        assert_eq!(codebase.root().node, &Expression::Empty);
-    }
-
-    #[test]
-    fn remove_root_node_with_multiple_children() {
-        // When removing a root node that has multiple children, there still
-        // needs to be one root node after. An empty node can be created for
-        // this.
-
-        let mut codebase = Codebase::new();
-
-        let root = codebase.root().path;
-        let (a, b, c) = codebase.make_change(|change_set| {
-            let a = change_set.nodes_mut().insert(node("a", []));
-            let b = change_set.nodes_mut().insert(node("b", []));
-            let c = change_set.nodes_mut().insert(node("c", [a, b]));
-
-            let c = NodePath::for_root(c);
-            change_set.replace(&root, &c);
-
-            (a, b, c)
-        });
-
-        codebase.make_change(|change_set| {
-            change_set.remove(&c);
-        });
-        assert_eq!(
-            codebase.root().node,
-            &Expression::Error {
-                node: "".to_string(),
-                children: Children::new([a, b]),
-            },
-        );
     }
 }

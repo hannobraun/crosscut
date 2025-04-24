@@ -80,11 +80,6 @@ impl NewChangeSet<'_> {
         self.change_set
     }
 
-    #[cfg(test)]
-    pub fn remove(&mut self, to_remove: &NodePath) {
-        self.change_set.removed.insert(to_remove.clone());
-    }
-
     /// # Mark a node in the change set as replacing another
     ///
     /// This method must be used in conjunction with `add`, to insert the node
