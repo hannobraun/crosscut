@@ -19,7 +19,7 @@ use super::Node;
 /// [`NodePath`].
 ///
 /// [`NodePath`]: super::NodePath
-#[derive(Clone, Copy, Eq, Ord, PartialEq, PartialOrd, udigest::Digestable)]
+#[derive(Clone, Eq, Ord, PartialEq, PartialOrd, udigest::Digestable)]
 pub struct NodeHash {
     hash: [u8; 32],
 }
@@ -30,6 +30,8 @@ impl NodeHash {
         Self { hash }
     }
 }
+
+impl Copy for NodeHash {}
 
 impl fmt::Debug for NodeHash {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
