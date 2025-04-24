@@ -181,8 +181,10 @@ impl Evaluator {
                     );
                 };
 
-                let body = match function {
-                    Value::Function { body } => body,
+                match function {
+                    Value::Function { body } => {
+                        self.apply_function_raw(body, argument, codebase);
+                    }
                     value => {
                         self.unexpected_input(
                             Type::Function,
@@ -190,11 +192,8 @@ impl Evaluator {
                             node.syntax_node.clone(),
                         );
                         self.eval_stack.push(node);
-                        return;
                     }
                 };
-
-                self.apply_function_raw(body, argument, codebase);
             }
             Expression::Empty => {
                 self.finish_evaluating_node(
