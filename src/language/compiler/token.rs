@@ -68,8 +68,11 @@ fn resolve_keyword(
 ) -> Option<(Expression, Option<CodeError>)> {
     match name {
         "apply" => {
-            let function = nodes.insert(Expression::Empty);
-            let argument = nodes.insert(Expression::Empty);
+            let [function, argument] = children
+                .iter()
+                .copied()
+                .collect_array()
+                .unwrap_or_else(|| [nodes.insert(Expression::Empty); 2]);
 
             Some((Expression::Apply { function, argument }, None))
         }

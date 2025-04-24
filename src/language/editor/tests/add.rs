@@ -31,6 +31,27 @@ fn add_apply_node() {
     );
     assert_eq!(function.node, &Expression::Empty);
     assert_eq!(argument.node, &Expression::Empty);
+
+    // The apply node's children can then be edited.
+
+    editor.on_input([MoveCursorDown], &mut codebase, &mut evaluator, &packages);
+    editor.on_code("a", &mut codebase, &mut evaluator, &packages);
+
+    editor.on_input([MoveCursorDown], &mut codebase, &mut evaluator, &packages);
+    editor.on_code("b", &mut codebase, &mut evaluator, &packages);
+
+    let apply = codebase.root();
+    let [function, argument] = apply.expect_children(codebase.nodes());
+
+    assert_eq!(
+        apply.node,
+        &Expression::Apply {
+            function: *function.path.hash(),
+            argument: *argument.path.hash(),
+        },
+    );
+    assert_eq!(function.node, &node("a", []));
+    assert_eq!(argument.node, &node("b", []));
 }
 
 #[test]
