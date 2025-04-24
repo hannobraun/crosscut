@@ -29,7 +29,8 @@ fn fixing_syntax_node_should_remove_error() {
 
     // Make sure that this resulted in an error.
     let root = language.codebase().root();
-    assert!(language.codebase().errors().get(root.path.hash()).is_some());
+    let invalid = root.path.hash();
+    assert!(language.codebase().errors().get(invalid).is_some());
 
     // Once we resolve the error, it should no longer be there.
     language.on_code("y");
