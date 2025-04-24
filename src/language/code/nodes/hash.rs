@@ -25,8 +25,11 @@ pub struct NodeHash<T> {
     _t: PhantomData<T>,
 }
 
-impl NodeHash<Node> {
-    pub(super) fn new(node: &Node) -> Self {
+impl<T> NodeHash<T> {
+    pub(super) fn new(node: &T) -> Self
+    where
+        T: udigest::Digestable,
+    {
         let hash = udigest::hash::<blake3::Hasher>(&node).into();
         Self {
             hash,
