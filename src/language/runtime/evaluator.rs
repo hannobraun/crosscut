@@ -185,6 +185,20 @@ impl Evaluator {
                     Value::Function { body } => {
                         self.apply_function_raw(body, argument, codebase);
                     }
+                    Value::ProvidedFunction { id } => {
+                        self.state = RuntimeState::Effect {
+                            effect: Effect::ProvidedFunction {
+                                id,
+                                input: argument,
+                            },
+                            path: node.syntax_node.clone(),
+                        };
+
+                        // A host function is not fully handled, until the
+                        // handler has provided its output. It might also
+                        // trigger an effect, and then we still need the node.
+                        self.eval_stack.push(node);
+                    }
                     value => {
                         self.unexpected_input(
                             Type::Function,
@@ -254,21 +268,9 @@ impl Evaluator {
                 });
             }
             Expression::ProvidedFunction { id, .. } => {
-                self.state = RuntimeState::Effect {
-                    effect: Effect::ProvidedFunction {
-                        id: *id,
-                        input: node
-                            .evaluated_children
-                            .clone()
-                            .into_active_value(),
-                    },
-                    path: node.syntax_node.clone(),
-                };
-
-                // A host function is not fully handled, until the handler has
-                // provided its output. It might also trigger an effect, and
-                // then we still need the node.
-                self.eval_stack.push(node);
+                self.finish_evaluating_node(Value::ProvidedFunction {
+                    id: *id,
+                });
             }
             Expression::Recursion => {
                 let body = self

@@ -12,7 +12,12 @@ fn host_functions() {
     let mut language = Language::new();
     let package = language.packages_mut().new_package([Halve]);
 
-    language.code("halve 64");
+    language
+        .code("apply")
+        .down()
+        .code("halve")
+        .down()
+        .code("64");
 
     let output =
         language.step_until_finished_and_handle_host_functions(|id, input| {
@@ -39,7 +44,7 @@ fn host_functions_can_trigger_effects() {
     let mut language = Language::new();
     let package = language.packages_mut().new_package([Halve]);
 
-    language.code("halve");
+    language.code("apply").down().code("halve");
 
     let effect = Effect::UnexpectedInput {
         expected: Type::Integer,

@@ -8,7 +8,12 @@ fn enter_expression_and_expect_game_output() {
 
     let mut game_engine = GameEngine::without_editor_ui();
 
-    game_engine.enter_code("color 127");
+    game_engine
+        .enter_code("apply")
+        .cursor_down()
+        .enter_code("color")
+        .cursor_down()
+        .enter_code("127");
 
     let game_output = game_engine
         .game_output()
@@ -31,14 +36,24 @@ fn expect_clear_command_to_clear_previously_entered_code() {
 
     let mut game_engine = GameEngine::without_editor_ui();
 
-    game_engine.enter_code("color 12");
+    game_engine
+        .enter_code("apply")
+        .cursor_down()
+        .enter_code("color")
+        .cursor_down()
+        .enter_code("12");
 
     game_engine
         .enter_command_mode()
         .enter_command("clear")
         .execute_command();
 
-    game_engine.enter_code("color 7");
+    game_engine
+        .enter_code("apply")
+        .cursor_down()
+        .enter_code("color")
+        .cursor_down()
+        .enter_code("7");
 
     let GameOutput::SubmitColor { color } =
         game_engine.game_output().last().unwrap();
@@ -52,7 +67,12 @@ fn expect_aborted_command_to_have_no_effect() {
 
     let mut game_engine = GameEngine::without_editor_ui();
 
-    game_engine.enter_code("color 12");
+    game_engine
+        .enter_code("apply")
+        .cursor_down()
+        .enter_code("color")
+        .cursor_down()
+        .enter_code("12");
 
     game_engine
         .enter_command_mode()

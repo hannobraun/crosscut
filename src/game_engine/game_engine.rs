@@ -236,6 +236,12 @@ impl GameEngine<DebugOutputAdapter> {
         self
     }
 
+    pub fn cursor_down(&mut self) -> &mut Self {
+        assert!(self.editor_input.mode().is_edit_mode());
+        self.on_editor_input(TerminalInputEvent::Down).unwrap();
+        self
+    }
+
     pub fn enter_command_mode(&mut self) -> &mut Self {
         self.on_editor_input(TerminalInputEvent::Escape).unwrap();
         self

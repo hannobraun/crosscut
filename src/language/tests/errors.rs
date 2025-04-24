@@ -3,6 +3,7 @@ use crate::language::{
     language::Language,
     packages::Function,
     runtime::{RuntimeState, Value},
+    tests::infra::LocatedNodeExt,
 };
 
 #[test]
@@ -27,11 +28,11 @@ fn unresolved_syntax_node() {
 #[test]
 fn fixing_syntax_node_should_remove_error() {
     let mut language = Language::new();
-    language.code("identit");
+    language.code("apply").down().code("identit");
 
     // Make sure that this resulted in an error.
     let root = language.codebase().root();
-    let invalid = root;
+    let [invalid, _] = root.expect_children(language.codebase().nodes());
     assert!(
         language
             .codebase()
