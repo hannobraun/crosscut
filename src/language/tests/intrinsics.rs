@@ -5,6 +5,7 @@ fn drop() {
     // The `drop` function takes any argument and returns `nothing`.
 
     let mut language = Language::from_code("drop 127");
+
     assert_eq!(language.step_until_finished().unwrap(), Value::nothing());
 }
 
@@ -14,6 +15,7 @@ fn number_literal() {
     // number it represents.
 
     let mut language = Language::from_code("127");
+
     assert_eq!(
         language.step_until_finished().unwrap(),
         Value::Integer { value: 127 },
