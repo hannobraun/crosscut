@@ -1,6 +1,6 @@
 use std::collections::{BTreeMap, btree_map};
 
-#[derive(Debug)]
+#[derive(Debug, Default)]
 pub struct Packages {
     inner: BTreeMap<PackageId, RegisteredPackage>,
     next_id: u32,
@@ -8,10 +8,7 @@ pub struct Packages {
 
 impl Packages {
     pub fn new() -> Self {
-        Self {
-            inner: BTreeMap::new(),
-            next_id: 0,
-        }
+        Self::default()
     }
 
     pub fn new_package<T>(
