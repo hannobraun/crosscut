@@ -4,7 +4,8 @@ use crate::language::{language::Language, runtime::Value};
 fn drop() {
     // The `drop` function takes any argument and returns `nothing`.
 
-    let mut language = Language::from_code("drop 127");
+    let mut language = Language::new();
+    language.on_code("drop 127");
 
     assert_eq!(language.step_until_finished().unwrap(), Value::nothing());
 }
@@ -14,7 +15,8 @@ fn number_literal() {
     // A number literal is a function that takes `nothing` and returns the
     // number it represents.
 
-    let mut language = Language::from_code("127");
+    let mut language = Language::new();
+    language.on_code("127");
 
     assert_eq!(
         language.step_until_finished().unwrap(),
@@ -26,10 +28,12 @@ fn number_literal() {
 fn identity() {
     // The `identity` function takes any argument and returns it unchanged.
 
-    let mut language = Language::from_code("identity");
+    let mut language = Language::new();
+    language.on_code("identity");
     assert_eq!(language.step_until_finished().unwrap(), Value::nothing());
 
-    let mut language = Language::from_code("identity 127");
+    let mut language = Language::new();
+    language.on_code("identity 127");
     assert_eq!(
         language.step_until_finished().unwrap(),
         Value::Integer { value: 127 },
