@@ -25,6 +25,8 @@ fn self_recursion() {
         .down()
         .code("0")
         .down()
+        .code("apply")
+        .down()
         .code("self");
 
     // This is a rather large number of steps, given the length of the program.

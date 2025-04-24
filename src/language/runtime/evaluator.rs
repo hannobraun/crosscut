@@ -307,8 +307,7 @@ impl Evaluator {
                     .map(|stack_frame| stack_frame.root)
                     .unwrap_or_else(|| codebase.root().path);
 
-                let argument = node.evaluated_children.into_active_value();
-                self.apply_function_raw(path, argument, codebase);
+                self.finish_evaluating_node(Value::Function { body: path });
             }
             Expression::Error { .. } => {
                 self.state = RuntimeState::Error {
@@ -409,7 +408,7 @@ struct StackFrame {
 #[cfg(test)]
 mod tests {
     use crate::language::{
-        code::{Codebase, Expression, Function, NodePath},
+        code::{Children, Codebase, Expression, Function, NodePath},
         runtime::{Evaluator, RuntimeState, Value},
         tests::infra::LocatedNodeExt,
     };
@@ -469,14 +468,26 @@ mod tests {
             let recursion = change_set
                 .nodes_mut()
                 .insert(Expression::Recursion { argument: None });
-            change_set.replace(&root, &NodePath::for_root(recursion))
+            let argument =
+                change_set.nodes_mut().insert(Expression::LiteralTuple {
+                    values: Children::new([]),
+                });
+
+            let apply = change_set.nodes_mut().insert(Expression::Apply {
+                function: recursion,
+                argument,
+            });
+
+            change_set.replace(&root, &NodePath::for_root(apply))
         });
 
         let mut evaluator = Evaluator::new();
         evaluator.reset(&codebase);
         assert_eq!(evaluator.call_stack.len(), 1);
 
-        evaluator.step(&codebase);
+        evaluator.step(&codebase); // recursion
+        evaluator.step(&codebase); // argument
+        evaluator.step(&codebase); // application
         assert!(matches!(evaluator.state(), RuntimeState::Running { .. }));
         assert_eq!(evaluator.call_stack.len(), 1);
     }
