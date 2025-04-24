@@ -30,6 +30,7 @@ impl Changes {
         NewChangeSet { nodes, change_set }
     }
 
+    #[cfg(test)]
     pub fn latest_version_of<'r>(&'r self, path: &'r NodePath) -> &'r NodePath {
         let Some(i) = self.change_sets.iter().enumerate().rev().find_map(
             |(i, change_set)| {
@@ -79,6 +80,7 @@ impl NewChangeSet<'_> {
         self.change_set
     }
 
+    #[cfg(test)]
     pub fn remove(&mut self, to_remove: &NodePath) {
         self.change_set.removed.insert(to_remove.clone());
     }

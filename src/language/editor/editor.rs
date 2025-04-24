@@ -78,58 +78,6 @@ impl Editor {
                             );
                         }
                     }
-                    NodeAction::MergeWithPrevious => {
-                        if let Some(to_remove) =
-                            layout.node_before(&self.cursor.path)
-                        {
-                            let merged = [to_remove, &self.cursor.path]
-                                .map(|path| {
-                                    compiler
-                                        .codebase()
-                                        .node_at(path)
-                                        .node
-                                        .display(packages)
-                                        .to_string()
-                                })
-                                .join("");
-                            self.input = EditorInputBuffer::new(
-                                merged,
-                                &mut self.cursor.index,
-                            );
-
-                            compiler.remove(
-                                to_remove,
-                                &mut self.cursor.path,
-                                packages,
-                            );
-                        }
-                    }
-                    NodeAction::MergeWithNext => {
-                        if let Some(to_remove) =
-                            layout.node_after(&self.cursor.path)
-                        {
-                            let merged = [&self.cursor.path, to_remove]
-                                .map(|path| {
-                                    compiler
-                                        .codebase()
-                                        .node_at(path)
-                                        .node
-                                        .display(packages)
-                                        .to_string()
-                                })
-                                .join("");
-                            self.input = EditorInputBuffer::new(
-                                merged,
-                                &mut self.cursor.index,
-                            );
-
-                            compiler.remove(
-                                to_remove,
-                                &mut self.cursor.path,
-                                packages,
-                            );
-                        }
-                    }
                     NodeAction::AddChild { existing_parent } => {
                         self.cursor.path = compiler.replace(
                             &self.cursor.path,

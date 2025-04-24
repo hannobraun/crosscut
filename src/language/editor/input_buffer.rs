@@ -128,7 +128,7 @@ impl EditorInputBuffer {
             self.buffer.remove(*cursor);
             None
         } else {
-            Some(NodeAction::MergeWithPrevious)
+            None
         }
     }
 
@@ -143,7 +143,7 @@ impl EditorInputBuffer {
             self.buffer.remove(*cursor);
             None
         } else {
-            Some(NodeAction::MergeWithNext)
+            None
         }
     }
 
@@ -174,8 +174,6 @@ pub enum EditorInputEvent {
 pub enum NodeAction {
     NavigateToPrevious,
     NavigateToNext,
-    MergeWithPrevious,
-    MergeWithNext,
     AddChild { existing_parent: String },
     AddSibling { existing_sibling: String },
 }

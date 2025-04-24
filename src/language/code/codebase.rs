@@ -44,6 +44,7 @@ impl Codebase {
         }
     }
 
+    #[cfg(test)]
     pub fn latest_version_of(&self, path: &NodePath) -> NodePath {
         self.changes.latest_version_of(path).clone()
     }
@@ -52,6 +53,7 @@ impl Codebase {
         &self.errors
     }
 
+    #[cfg(test)]
     pub fn make_change<R>(
         &mut self,
         f: impl FnOnce(&mut NewChangeSet) -> R,

@@ -1,7 +1,10 @@
 use crate::language::{
-    code::{Children, Codebase, NodePath, SiblingIndex},
+    code::{Children, Codebase, NodePath},
     packages::Packages,
 };
+
+#[cfg(test)]
+use crate::language::code::SiblingIndex;
 
 use super::{replace::replace_node_and_update_parents, token::Token};
 
@@ -86,6 +89,7 @@ impl<'r> Compiler<'r> {
         self.insert_child(parent, new_sibling_token, packages)
     }
 
+    #[cfg(test)]
     pub fn remove(
         &mut self,
         to_remove: &NodePath,
@@ -207,6 +211,7 @@ impl<'r> Compiler<'r> {
     }
 }
 
+#[cfg(test)]
 fn update_sibling_index_on_remove(
     path: &NodePath,
     removed: &NodePath,
