@@ -5,7 +5,8 @@ use itertools::Itertools;
 use crate::language::{
     code::{
         CandidateForResolution, Children, CodeError, Errors, Expression,
-        Function, Literal, NewChangeSet, NodeHash, NodePath, SiblingIndex,
+        Function, Literal, NewChangeSet, NodeHash, NodePath, Nodes,
+        SiblingIndex,
     },
     packages::Packages,
 };
@@ -35,7 +36,7 @@ impl Token<'_> {
                 self.children,
             )
         } else if let Some((node, maybe_err)) =
-            resolve_keyword(self.text, &self.children)
+            resolve_keyword(self.text, &self.children, change_set.nodes_mut())
         {
             (node, maybe_err)
         } else {
@@ -63,6 +64,7 @@ impl Token<'_> {
 fn resolve_keyword(
     name: &str,
     children: &Children,
+    _: &mut Nodes,
 ) -> Option<(Expression, Option<CodeError>)> {
     match name {
         "apply" => {
