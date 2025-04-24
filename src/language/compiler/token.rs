@@ -40,7 +40,12 @@ impl Token<'_> {
         {
             (node, maybe_err)
         } else {
-            match resolve_function(self.text, self.children, packages) {
+            match resolve_function(
+                self.text,
+                self.children,
+                packages,
+                change_set.nodes_mut(),
+            ) {
                 Ok((node, maybe_err)) => (node, maybe_err),
                 Err((children, candidates)) => (
                     Expression::Error {
@@ -89,6 +94,7 @@ fn resolve_function(
     name: &str,
     children: Children,
     packages: &Packages,
+    _: &mut Nodes,
 ) -> Result<
     (Expression, Option<CodeError>),
     (Children, Vec<CandidateForResolution>),
