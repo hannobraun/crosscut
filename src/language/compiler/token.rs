@@ -101,8 +101,8 @@ fn resolve_function(
     let literal = resolve_literal(name);
 
     match (provided_function, literal) {
-        (Some(id), None) => Ok(node_with_one_child_or_error(
-            |argument| Expression::ProvidedFunction { id, argument },
+        (Some(id), None) => Ok(node_with_no_child_or_error(
+            || Expression::ProvidedFunction { id },
             name,
             children,
         )),
@@ -168,25 +168,6 @@ fn node_with_no_child_or_error(
 ) -> (Expression, Option<CodeError>) {
     if children.is_empty() {
         (node(), None)
-    } else {
-        (
-            Expression::Error {
-                node: token.to_string(),
-                children,
-            },
-            Some(CodeError::TooManyChildren),
-        )
-    }
-}
-
-fn node_with_one_child_or_error(
-    node_from_child: impl FnOnce(Option<NodeHash<Expression>>) -> Expression,
-    token: &str,
-    children: Children,
-) -> (Expression, Option<CodeError>) {
-    if children.is_multiple_children().is_none() {
-        let maybe_child = children.is_single_child().copied();
-        (node_from_child(maybe_child), None)
     } else {
         (
             Expression::Error {

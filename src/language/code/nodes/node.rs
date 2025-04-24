@@ -86,12 +86,6 @@ pub enum Expression {
     ProvidedFunction {
         /// # The ID of the provided function
         id: FunctionId,
-
-        /// # The child of the node, if any
-        ///
-        /// If the provided function node has a child, that child's output is
-        /// taken as the input of the provided function.
-        argument: Option<NodeHash<Expression>>,
     },
 
     /// # The recursive application of the current function
@@ -137,16 +131,12 @@ impl Expression {
 
             Self::Empty
             | Self::LiteralNumber { value: _ }
+            | Self::ProvidedFunction { .. }
             | Self::Recursion => false,
 
             Self::LiteralTuple { values: children }
             | Self::Error { children, .. } => {
                 children.contains_at(child, sibling_index)
-            }
-
-            Self::ProvidedFunction { argument: c, .. } => {
-                let child_index = SiblingIndex { index: 0 };
-                c.as_ref() == Some(child) && sibling_index == &child_index
             }
         }
     }
@@ -167,14 +157,11 @@ impl Expression {
 
             Self::Empty
             | Self::LiteralNumber { value: _ }
+            | Self::ProvidedFunction { .. }
             | Self::Recursion => true,
 
             Self::LiteralTuple { values: children }
             | Self::Error { children, .. } => children.is_empty(),
-
-            Self::ProvidedFunction {
-                argument: child, ..
-            } => child.is_none(),
         }
     }
 
@@ -190,14 +177,11 @@ impl Expression {
                         body: NodeHash { .. },
                     },
             }
+            | Self::ProvidedFunction { .. }
             | Self::Recursion => None,
 
             Self::LiteralTuple { values: children }
             | Self::Error { children, .. } => children.is_single_child(),
-
-            Self::ProvidedFunction {
-                argument: child, ..
-            } => child.as_ref(),
         }
     }
 
@@ -217,14 +201,11 @@ impl Expression {
 
             Self::Empty
             | Self::LiteralNumber { value: _ }
+            | Self::ProvidedFunction { .. }
             | Self::Recursion => Children::new([]),
 
             Self::LiteralTuple { values: children }
             | Self::Error { children, .. } => children.clone(),
-
-            Self::ProvidedFunction {
-                argument: child, ..
-            } => Children::new(*child),
         }
     }
 
