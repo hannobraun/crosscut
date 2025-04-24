@@ -83,6 +83,34 @@ pub enum Expression {
     /// suggests) by an entity outside of the language: either the runtime,
     /// which provides intrinsic functions; or the host, which provides host
     /// functions.
+    ///
+    /// ## Implementation Note
+    ///
+    /// Under the hood, this is handled in the following way:
+    ///
+    /// - It triggers an effect.
+    /// - This effect is processed by the runtime or host (the provider).
+    /// - The provider determined which function is being called, via the ID.
+    /// - The provider checks that the correct argument has been provided.
+    /// - The provider evaluates the function and returns the value.
+    ///
+    /// If we replaced the concept of intrinsic function with a special
+    /// `trigger` expression that triggers a provided value as an effect, that
+    /// would be better in at least the following ways:
+    ///
+    /// - The provider would just need to check which value was triggered.
+    ///   - This would remove the opportunity to provide an invalid argument.
+    ///   - It would also simplify the handling on the provider side.
+    /// - It would mesh well with the later introduction of algebraic effects,
+    ///   which would require such a feature anyway.
+    /// - Since a `trigger` expression would be required anyway, this would
+    ///   remove the redundant concept of provided functions.
+    ///
+    /// From an API perspective, this `trigger` expression could be wrapped into
+    /// a Crosscut function, preserving the same API.
+    ///
+    /// As of this writing, this is not possible. The language doesn't support
+    /// powerful enough values yet.
     ProvidedFunction {
         /// # The ID of the provided function
         id: FunctionId,
