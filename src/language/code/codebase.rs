@@ -44,11 +44,6 @@ impl Codebase {
         }
     }
 
-    #[cfg(test)]
-    pub fn latest_version_of(&self, path: &NodePath) -> NodePath {
-        self.changes.latest_version_of(path).clone()
-    }
-
     pub fn errors(&self) -> &Errors {
         &self.errors
     }

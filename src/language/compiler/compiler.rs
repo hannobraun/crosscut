@@ -3,9 +3,6 @@ use crate::language::{
     packages::Packages,
 };
 
-#[cfg(test)]
-use crate::language::code::SiblingIndex;
-
 use super::{replace::replace_node_and_update_parents, token::Token};
 
 pub struct Compiler<'r> {
@@ -89,98 +86,6 @@ impl<'r> Compiler<'r> {
         self.insert_child(parent, new_sibling_token, packages)
     }
 
-    #[cfg(test)]
-    pub fn remove(
-        &mut self,
-        to_remove: &NodePath,
-        to_update: &mut NodePath,
-        packages: &Packages,
-    ) {
-        let mut update_stack = Vec::new();
-        let mut path_to_update = to_update.clone();
-
-        let update_node_is_descendent = loop {
-            let parent = path_to_update.parent().cloned();
-
-            update_stack.push(path_to_update);
-
-            if let Some(parent) = parent {
-                if &parent == to_remove {
-                    break true;
-                } else {
-                    path_to_update = parent;
-                    continue;
-                }
-            } else {
-                break false;
-            }
-        };
-
-        let node_to_remove = self.codebase.nodes().get(to_remove.hash());
-
-        let parent = if let Some(parent) = to_remove.parent() {
-            // The node we're removing has a parent. We need to remove the
-            // reference from that parent to the node.
-
-            let parent = self.codebase.node_at(parent);
-
-            let mut children = parent.node.to_children();
-            children.replace(to_remove.hash(), node_to_remove.to_children());
-
-            let parent = self.replace_inner(
-                &parent.path,
-                &parent.node.to_token(packages),
-                children,
-                packages,
-            );
-
-            Some(parent)
-        } else {
-            self.codebase.make_change(|change_set| {
-                change_set.remove(to_remove);
-            });
-
-            None
-        };
-
-        let update_node_is_ancestor = to_update.is_ancestor_of(to_remove);
-        let update_node_is_lateral_relation =
-            !update_node_is_descendent && !update_node_is_ancestor;
-
-        if update_node_is_descendent || update_node_is_lateral_relation {
-            let to_update_new_sibling_index =
-                update_sibling_index_on_remove(to_update, to_remove);
-
-            let mut parent = if update_node_is_descendent {
-                parent
-            } else {
-                update_stack.pop();
-                Some(self.codebase.root().path)
-            };
-
-            while let Some(path) = update_stack.pop() {
-                *to_update = NodePath::new(
-                    *to_update.hash(),
-                    parent.clone(),
-                    to_update_new_sibling_index,
-                    self.codebase.nodes(),
-                );
-
-                let parent_new_sibling_index =
-                    update_sibling_index_on_remove(&path, to_remove);
-
-                parent = Some(NodePath::new(
-                    *path.hash(),
-                    parent,
-                    parent_new_sibling_index,
-                    self.codebase.nodes(),
-                ));
-            }
-        } else if update_node_is_ancestor {
-            *to_update = self.codebase.latest_version_of(to_update);
-        }
-    }
-
     pub fn replace(
         &mut self,
         to_replace: &NodePath,
@@ -208,19 +113,5 @@ impl<'r> Compiler<'r> {
                 packages,
             )
         })
-    }
-}
-
-#[cfg(test)]
-fn update_sibling_index_on_remove(
-    path: &NodePath,
-    removed: &NodePath,
-) -> SiblingIndex {
-    if path.parent() == removed.parent()
-        && path.sibling_index() > removed.sibling_index()
-    {
-        path.sibling_index().dec()
-    } else {
-        path.sibling_index()
     }
 }
