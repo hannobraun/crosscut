@@ -66,7 +66,7 @@ fn navigate_down_to_child() {
         [EditorInputEvent::MoveCursorDown],
         &mut codebase,
         &mut evaluator,
-        &Packages::new(),
+        &packages,
     );
 
     assert_eq!(editor.cursor(), &Cursor { path: b, index: 0 });
@@ -102,7 +102,7 @@ fn navigate_right_to_child() {
         [EditorInputEvent::MoveCursorRight],
         &mut codebase,
         &mut evaluator,
-        &Packages::new(),
+        &packages,
     );
 
     assert_eq!(editor.cursor(), &Cursor { path: b, index: 0 });
@@ -131,7 +131,7 @@ fn navigate_up_to_parent() {
         [EditorInputEvent::MoveCursorUp],
         &mut codebase,
         &mut evaluator,
-        &Packages::new(),
+        &packages,
     );
 
     assert_eq!(
@@ -166,7 +166,7 @@ fn navigate_left_to_parent() {
         [EditorInputEvent::MoveCursorLeft],
         &mut codebase,
         &mut evaluator,
-        &Packages::new(),
+        &packages,
     );
 
     assert_eq!(
@@ -205,7 +205,7 @@ fn navigate_down_to_next_sibling() {
         [EditorInputEvent::MoveCursorDown],
         &mut codebase,
         &mut evaluator,
-        &Packages::new(),
+        &packages,
     );
 
     assert_eq!(editor.cursor(), &Cursor { path: b, index: 0 });
@@ -239,7 +239,7 @@ fn navigate_right_to_next_sibling() {
         [EditorInputEvent::MoveCursorRight],
         &mut codebase,
         &mut evaluator,
-        &Packages::new(),
+        &packages,
     );
 
     assert_eq!(editor.cursor(), &Cursor { path: b, index: 0 });
@@ -272,7 +272,7 @@ fn navigate_up_to_previous_sibling() {
         [EditorInputEvent::MoveCursorUp],
         &mut codebase,
         &mut evaluator,
-        &Packages::new(),
+        &packages,
     );
 
     assert_eq!(editor.cursor(), &Cursor { path: a, index: 1 });
@@ -306,7 +306,7 @@ fn navigate_left_to_previous_sibling() {
         [EditorInputEvent::MoveCursorLeft],
         &mut codebase,
         &mut evaluator,
-        &Packages::new(),
+        &packages,
     );
 
     assert_eq!(editor.cursor(), &Cursor { path: a, index: 1 });
