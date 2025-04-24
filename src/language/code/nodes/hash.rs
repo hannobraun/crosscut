@@ -1,4 +1,4 @@
-use std::fmt;
+use std::{fmt, marker::PhantomData};
 
 use base64::{Engine, prelude::BASE64_URL_SAFE_NO_PAD};
 
@@ -20,20 +20,24 @@ use super::Node;
 ///
 /// [`NodePath`]: super::NodePath
 #[derive(Clone, Eq, Ord, PartialEq, PartialOrd, udigest::Digestable)]
-pub struct NodeHash {
+pub struct NodeHash<T> {
     hash: [u8; 32],
+    _t: PhantomData<T>,
 }
 
-impl NodeHash {
+impl NodeHash<Node> {
     pub(super) fn new(node: &Node) -> Self {
         let hash = udigest::hash::<blake3::Hasher>(&node).into();
-        Self { hash }
+        Self {
+            hash,
+            _t: PhantomData,
+        }
     }
 }
 
-impl Copy for NodeHash {}
+impl<T> Copy for NodeHash<T> where T: Clone {}
 
-impl fmt::Debug for NodeHash {
+impl fmt::Debug for NodeHash<Node> {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         f.debug_struct("NodeHash")
             .field("hash", &BASE64_URL_SAFE_NO_PAD.encode(self.hash))
@@ -41,7 +45,7 @@ impl fmt::Debug for NodeHash {
     }
 }
 
-impl fmt::Display for NodeHash {
+impl fmt::Display for NodeHash<Node> {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", BASE64_URL_SAFE_NO_PAD.encode(self.hash))?;
         Ok(())

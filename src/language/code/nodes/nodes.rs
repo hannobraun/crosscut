@@ -4,7 +4,7 @@ use super::{Node, NodeHash};
 
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub struct Nodes {
-    inner: BTreeMap<NodeHash, Node>,
+    inner: BTreeMap<NodeHash<Node>, Node>,
 }
 
 impl Nodes {
@@ -14,7 +14,7 @@ impl Nodes {
         }
     }
 
-    pub fn get(&self, hash: &NodeHash) -> &Node {
+    pub fn get(&self, hash: &NodeHash<Node>) -> &Node {
         let Some(node) = self.inner.get(hash) else {
             unreachable!(
                 "This is an append-only data structure. All hashes that were \
@@ -25,7 +25,7 @@ impl Nodes {
         node
     }
 
-    pub fn insert(&mut self, node: Node) -> NodeHash {
+    pub fn insert(&mut self, node: Node) -> NodeHash<Node> {
         let hash = NodeHash::new(&node);
         self.inner.insert(hash, node);
         hash

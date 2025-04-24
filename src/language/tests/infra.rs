@@ -2,7 +2,10 @@ use itertools::Itertools;
 
 use crate::language::code::{Children, LocatedNode, Node, NodeHash, Nodes};
 
-pub fn node(name: &str, children: impl IntoIterator<Item = NodeHash>) -> Node {
+pub fn node(
+    name: &str,
+    children: impl IntoIterator<Item = NodeHash<Node>>,
+) -> Node {
     let children = Children::new(children);
 
     Node::Error {

@@ -9,10 +9,10 @@ pub enum Node {
     /// # The application of a function
     Application {
         /// # The function that is being applied
-        function: NodeHash,
+        function: NodeHash<Node>,
 
         /// # The argument that the function is applied to
-        argument: NodeHash,
+        argument: NodeHash<Node>,
     },
 
     /// # An empty node
@@ -27,10 +27,10 @@ pub enum Node {
     /// Evaluates to a function value.
     LiteralFunction {
         /// # The parameter of the function
-        parameter: NodeHash,
+        parameter: NodeHash<Node>,
 
         /// # The root node of the function's body
-        body: NodeHash,
+        body: NodeHash<Node>,
     },
 
     /// # A number literal
@@ -87,7 +87,7 @@ pub enum Node {
         ///
         /// If the provided function node has a child, that child's output is
         /// taken as the input of the provided function.
-        argument: Option<NodeHash>,
+        argument: Option<NodeHash<Node>>,
     },
 
     /// # The recursive application of the current function
@@ -99,7 +99,7 @@ pub enum Node {
         ///
         /// If the recursion node has a child, that child's output is taken as
         /// the input of the applied function.
-        argument: Option<NodeHash>,
+        argument: Option<NodeHash<Node>>,
     },
 
     /// # The result of a build error
@@ -115,7 +115,7 @@ pub enum Node {
 impl Node {
     pub fn has_child_at(
         &self,
-        child: &NodeHash,
+        child: &NodeHash<Node>,
         sibling_index: &SiblingIndex,
     ) -> bool {
         match self {
@@ -172,7 +172,7 @@ impl Node {
         }
     }
 
-    pub fn has_single_child(&self) -> Option<&NodeHash> {
+    pub fn has_single_child(&self) -> Option<&NodeHash<Node>> {
         match self {
             Self::Application { .. }
             | Self::Empty

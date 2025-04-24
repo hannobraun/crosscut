@@ -1,14 +1,14 @@
 use std::{slice, vec};
 
-use super::{NodeHash, SiblingIndex};
+use super::{Node, NodeHash, SiblingIndex};
 
 #[derive(Clone, Debug, Eq, Ord, PartialEq, PartialOrd, udigest::Digestable)]
 pub struct Children {
-    pub inner: Vec<NodeHash>,
+    pub inner: Vec<NodeHash<Node>>,
 }
 
 impl Children {
-    pub fn new(children: impl IntoIterator<Item = NodeHash>) -> Self {
+    pub fn new(children: impl IntoIterator<Item = NodeHash<Node>>) -> Self {
         let inner = children.into_iter().collect();
         Self { inner }
     }
@@ -19,7 +19,7 @@ impl Children {
 
     pub fn contains_at(
         &self,
-        child: &NodeHash,
+        child: &NodeHash<Node>,
         sibling_index: &SiblingIndex,
     ) -> bool {
         self.inner
@@ -31,7 +31,7 @@ impl Children {
     /// # Access the single child of this node
     ///
     /// Returns `None`, if the node has zero or more than one children.
-    pub fn is_single_child(&self) -> Option<&NodeHash> {
+    pub fn is_single_child(&self) -> Option<&NodeHash<Node>> {
         if self.inner.len() == 1 {
             self.inner.first()
         } else {
@@ -41,7 +41,7 @@ impl Children {
 
     pub fn is_multiple_children(
         &self,
-    ) -> Option<impl Iterator<Item = &NodeHash>> {
+    ) -> Option<impl Iterator<Item = &NodeHash<Node>>> {
         if self.inner.len() > 1 {
             Some(self.inner.iter())
         } else {
@@ -55,7 +55,7 @@ impl Children {
         }
     }
 
-    pub fn add(&mut self, to_add: NodeHash) -> SiblingIndex {
+    pub fn add(&mut self, to_add: NodeHash<Node>) -> SiblingIndex {
         let index = self.next_index();
         self.inner.push(to_add);
         index
@@ -63,8 +63,8 @@ impl Children {
 
     pub fn replace(
         &mut self,
-        to_replace: &NodeHash,
-        replacements: impl IntoIterator<Item = NodeHash>,
+        to_replace: &NodeHash<Node>,
+        replacements: impl IntoIterator<Item = NodeHash<Node>>,
     ) {
         let Some(index) = self
             .inner
@@ -84,13 +84,13 @@ impl Children {
         }
     }
 
-    pub fn iter(&self) -> slice::Iter<NodeHash> {
+    pub fn iter(&self) -> slice::Iter<NodeHash<Node>> {
         self.inner.iter()
     }
 }
 
-impl<const N: usize> From<[NodeHash; N]> for Children {
-    fn from(children: [NodeHash; N]) -> Self {
+impl<const N: usize> From<[NodeHash<Node>; N]> for Children {
+    fn from(children: [NodeHash<Node>; N]) -> Self {
         Self {
             inner: children.into(),
         }
@@ -98,8 +98,8 @@ impl<const N: usize> From<[NodeHash; N]> for Children {
 }
 
 impl IntoIterator for Children {
-    type Item = NodeHash;
-    type IntoIter = vec::IntoIter<NodeHash>;
+    type Item = NodeHash<Node>;
+    type IntoIter = vec::IntoIter<NodeHash<Node>>;
 
     fn into_iter(self) -> Self::IntoIter {
         self.inner.into_iter()
@@ -107,8 +107,8 @@ impl IntoIterator for Children {
 }
 
 impl<'r> IntoIterator for &'r Children {
-    type Item = &'r NodeHash;
-    type IntoIter = slice::Iter<'r, NodeHash>;
+    type Item = &'r NodeHash<Node>;
+    type IntoIter = slice::Iter<'r, NodeHash<Node>>;
 
     fn into_iter(self) -> Self::IntoIter {
         self.iter()
@@ -140,7 +140,7 @@ mod tests {
         assert_eq!(children, Children::new([a, d, e, c]));
     }
 
-    fn test_nodes() -> [NodeHash; 5] {
+    fn test_nodes() -> [NodeHash<Node>; 5] {
         ["a", "b", "c", "d", "e"].map(|node| {
             NodeHash::new(&Node::Error {
                 node: node.to_string(),

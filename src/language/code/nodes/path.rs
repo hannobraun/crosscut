@@ -23,7 +23,7 @@ use super::{Node, NodeHash, Nodes};
 /// are responsible for making sure that such a [`NodePath`] gets updated.
 #[derive(Clone, Debug, Eq, Ord, PartialEq, PartialOrd, udigest::Digestable)]
 pub struct NodePath {
-    hash: NodeHash,
+    hash: NodeHash<Node>,
 
     /// # The path of the node's parent
     ///
@@ -51,7 +51,7 @@ pub struct NodePath {
 impl NodePath {
     #[track_caller]
     pub fn new(
-        hash: NodeHash,
+        hash: NodeHash<Node>,
         parent: Option<NodePath>,
         sibling_index: SiblingIndex,
         nodes: &Nodes,
@@ -89,7 +89,7 @@ impl NodePath {
         }
     }
 
-    pub fn for_root(hash: NodeHash) -> Self {
+    pub fn for_root(hash: NodeHash<Node>) -> Self {
         Self {
             hash,
             parent: None,
@@ -105,7 +105,7 @@ impl NodePath {
     ///
     /// But this hash is required to identify the node _uniquely_, including its
     /// version.
-    pub fn hash(&self) -> &NodeHash {
+    pub fn hash(&self) -> &NodeHash<Node> {
         &self.hash
     }
 

@@ -23,7 +23,7 @@ impl Token<'_> {
         change_set: &mut NewChangeSet,
         errors: &mut Errors,
         packages: &Packages,
-    ) -> NodeHash {
+    ) -> NodeHash<Node> {
         // We're about to need that, to correctly compile function parameters.
         let _ = self.parent;
         let _ = self.sibling_index;
@@ -208,7 +208,7 @@ fn node_with_no_child_or_error(
 }
 
 fn node_with_one_child_or_error(
-    node_from_child: impl FnOnce(Option<NodeHash>) -> Node,
+    node_from_child: impl FnOnce(Option<NodeHash<Node>>) -> Node,
     token: &str,
     children: Children,
 ) -> (Node, Option<CodeError>) {
