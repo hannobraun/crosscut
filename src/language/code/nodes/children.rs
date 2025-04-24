@@ -2,7 +2,7 @@ use std::{slice, vec};
 
 use super::{NodeHash, SiblingIndex};
 
-#[derive(Clone, Debug, Eq, PartialEq, udigest::Digestable)]
+#[derive(Clone, Debug, Eq, Ord, PartialEq, PartialOrd, udigest::Digestable)]
 pub struct Children {
     pub inner: Vec<NodeHash>,
 }

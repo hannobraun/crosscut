@@ -4,7 +4,7 @@ use crate::language::packages::{FunctionId, Packages};
 
 use super::{Children, NodeHash, SiblingIndex};
 
-#[derive(Clone, Debug, Eq, PartialEq, udigest::Digestable)]
+#[derive(Clone, Debug, Eq, Ord, PartialEq, PartialOrd, udigest::Digestable)]
 pub enum Node {
     /// # The application of a function
     Application {
