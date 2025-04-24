@@ -123,12 +123,9 @@ impl EditorInputBuffer {
         None
     }
 
-    fn remove_left(&mut self, cursor: &mut usize) -> Option<NodeAction> {
+    fn remove_left(&mut self, cursor: &mut usize) {
         if self.move_cursor_left(cursor).is_none() {
             self.buffer.remove(*cursor);
-            None
-        } else {
-            None
         }
     }
 
