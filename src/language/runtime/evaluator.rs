@@ -1,6 +1,8 @@
 use itertools::Itertools;
 
-use crate::language::code::{Codebase, Node, NodePath, SiblingIndex, Type};
+use crate::language::code::{
+    Codebase, Function, Node, NodePath, SiblingIndex, Type,
+};
 
 use super::{Effect, RuntimeState, Value};
 
@@ -227,7 +229,9 @@ impl Evaluator {
                     node.evaluated_children.into_active_value(),
                 );
             }
-            Node::LiteralFunction { parameter: _, body } => {
+            Node::LiteralFunction {
+                function: Function { parameter: _, body },
+            } => {
                 match node.evaluated_children.clone().into_active_value() {
                     value if value.is_nothing() => {}
                     active_value => {
@@ -404,7 +408,7 @@ struct StackFrame {
 #[cfg(test)]
 mod tests {
     use crate::language::{
-        code::{Codebase, Node, NodePath},
+        code::{Codebase, Function, Node, NodePath},
         runtime::{Evaluator, RuntimeState, Value},
         tests::infra::LocatedNodeExt,
     };
@@ -424,9 +428,10 @@ mod tests {
                 .insert(Node::LiteralNumber { value: 0 });
             let body = change_set.nodes_mut().insert(Node::Empty);
 
-            let function = change_set
-                .nodes_mut()
-                .insert(Node::LiteralFunction { parameter, body });
+            let function =
+                change_set.nodes_mut().insert(Node::LiteralFunction {
+                    function: Function { parameter, body },
+                });
 
             change_set.replace(&root, &NodePath::for_root(function));
         });

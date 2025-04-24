@@ -4,7 +4,7 @@ use itertools::Itertools;
 
 use crate::language::{
     code::{
-        CandidateForResolution, Children, CodeError, Errors, Literal,
+        CandidateForResolution, Children, CodeError, Errors, Function, Literal,
         NewChangeSet, Node, NodeHash, NodePath, SiblingIndex,
     },
     packages::Packages,
@@ -123,7 +123,12 @@ fn resolve_function(
                 if let Some([parameter, body]) =
                     children.iter().copied().collect_array()
                 {
-                    Ok((Node::LiteralFunction { parameter, body }, None))
+                    Ok((
+                        Node::LiteralFunction {
+                            function: Function { parameter, body },
+                        },
+                        None,
+                    ))
                 } else {
                     let expected_num = 2;
                     let num_children = children.inner.len();

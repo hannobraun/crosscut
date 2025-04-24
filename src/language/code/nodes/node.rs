@@ -4,6 +4,16 @@ use crate::language::packages::{FunctionId, Packages};
 
 use super::{Children, NodeHash, SiblingIndex};
 
+/// # A function
+#[derive(Clone, Debug, Eq, Ord, PartialEq, PartialOrd, udigest::Digestable)]
+pub struct Function {
+    /// # The parameter of the function
+    pub parameter: NodeHash<Node>,
+
+    /// # The root node of the function's body
+    pub body: NodeHash<Node>,
+}
+
 #[derive(Clone, Debug, Eq, Ord, PartialEq, PartialOrd, udigest::Digestable)]
 pub enum Node {
     /// # The application of a function
@@ -25,13 +35,7 @@ pub enum Node {
     /// # A function literal
     ///
     /// Evaluates to a function value.
-    LiteralFunction {
-        /// # The parameter of the function
-        parameter: NodeHash<Node>,
-
-        /// # The root node of the function's body
-        body: NodeHash<Node>,
-    },
+    LiteralFunction { function: Function },
 
     /// # A number literal
     ///
@@ -124,8 +128,11 @@ impl Node {
                 argument: child_b,
             }
             | Self::LiteralFunction {
-                parameter: child_a,
-                body: child_b,
+                function:
+                    Function {
+                        parameter: child_a,
+                        body: child_b,
+                    },
             } => {
                 let [index_a, index_b] =
                     [0, 1].map(|index| SiblingIndex { index });
@@ -156,8 +163,11 @@ impl Node {
                 argument: NodeHash { .. },
             }
             | Self::LiteralFunction {
-                parameter: NodeHash { .. },
-                body: NodeHash { .. },
+                function:
+                    Function {
+                        parameter: NodeHash { .. },
+                        body: NodeHash { .. },
+                    },
             } => false,
 
             Self::Empty | Self::LiteralNumber { value: _ } => true,
@@ -178,8 +188,11 @@ impl Node {
             | Self::Empty
             | Self::LiteralNumber { value: _ }
             | Self::LiteralFunction {
-                parameter: NodeHash { .. },
-                body: NodeHash { .. },
+                function:
+                    Function {
+                        parameter: NodeHash { .. },
+                        body: NodeHash { .. },
+                    },
             } => None,
 
             Self::LiteralTuple { values: children }
@@ -199,8 +212,11 @@ impl Node {
                 argument: b,
             }
             | Self::LiteralFunction {
-                parameter: a,
-                body: b,
+                function:
+                    Function {
+                        parameter: a,
+                        body: b,
+                    },
             } => Children::new([*a, *b]),
 
             Self::Empty | Self::LiteralNumber { value: _ } => Children::new([]),
