@@ -126,13 +126,14 @@ impl Language {
         self
     }
 
-    pub fn on_code(&mut self, code: &str) {
+    pub fn on_code(&mut self, code: &str) -> &mut Self {
         self.editor.on_code(
             code,
             &mut self.codebase,
             &mut self.evaluator,
             &self.packages,
         );
+        self
     }
 
     pub fn step_until_finished(&mut self) -> Result<Value, Effect> {
