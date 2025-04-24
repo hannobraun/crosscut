@@ -42,7 +42,7 @@ impl<T> fmt::Debug for NodeHash<T> {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         let type_parameter = type_name::<T>();
 
-        f.debug_struct(&format!("NodeHash<{}>", type_parameter))
+        f.debug_struct(&format!("NodeHash<{type_parameter}>"))
             .field("hash", &BASE64_URL_SAFE_NO_PAD.encode(self.hash))
             .finish()
     }
