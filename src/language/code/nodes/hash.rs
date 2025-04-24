@@ -1,4 +1,4 @@
-use std::{fmt, marker::PhantomData};
+use std::{any::type_name, fmt, marker::PhantomData};
 
 use base64::{Engine, prelude::BASE64_URL_SAFE_NO_PAD};
 
@@ -42,7 +42,7 @@ impl<T> Copy for NodeHash<T> where T: Clone {}
 
 impl<T> fmt::Debug for NodeHash<T> {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        f.debug_struct("NodeHash")
+        f.debug_struct(&format!("NodeHash<{}>", type_name::<T>()))
             .field("hash", &BASE64_URL_SAFE_NO_PAD.encode(self.hash))
             .finish()
     }
