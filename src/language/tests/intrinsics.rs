@@ -23,7 +23,7 @@ fn number_literal() {
 }
 
 #[test]
-fn identity_none() {
+fn identity() {
     // The `identity` function takes any argument and returns it unchanged.
 
     let mut language = Language::from_code("identity");
