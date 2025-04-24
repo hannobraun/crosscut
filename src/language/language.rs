@@ -119,9 +119,12 @@ use super::packages::FunctionId;
 #[cfg(test)]
 impl Language {
     pub fn from_code(code: &str) -> Self {
-        let mut language = Self::new();
-        language.on_code(code);
-        language
+        Self::new().code(code)
+    }
+
+    pub fn code(mut self, code: &str) -> Self {
+        self.on_code(code);
+        self
     }
 
     pub fn on_code(&mut self, code: &str) {
