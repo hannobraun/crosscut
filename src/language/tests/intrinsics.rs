@@ -15,7 +15,11 @@ fn eval() {
     // So far, the `eval` function can only pass `nothing` to the evaluated
     // function. Eventually, it should be able to pass any argument.
 
-    let mut language = Language::from_code("eval fn 0\n127");
+    let mut language = Language::from_code("eval fn")
+        .down()
+        .code("0")
+        .down()
+        .code("127");
 
     assert_eq!(
         language.step_until_finished().unwrap(),

@@ -27,7 +27,6 @@ impl Errors {
 
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub enum CodeError {
-    TooFewChildren,
     TooManyChildren,
     UnresolvedIdentifier {
         candidates: Vec<CandidateForResolution>,

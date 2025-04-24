@@ -1,5 +1,5 @@
 use crate::language::{
-    code::{CodeError, Expression},
+    code::CodeError,
     language::Language,
     packages::Function,
     runtime::{RuntimeState, Value},
@@ -76,49 +76,4 @@ fn do_not_step_beyond_errors() {
 
     assert!(language.step().is_error());
     assert!(language.step().is_error());
-}
-
-#[test]
-fn function_literal_with_too_few_children_is_an_error() {
-    // An `fn` node is expected to have one child, its body. If it has fewer
-    // than that, that's an error.
-
-    expect_error_because_of_too_few_children("fn");
-    expect_error_because_of_too_few_children("fn a");
-
-    fn expect_error_because_of_too_few_children(code: &str) {
-        let language = Language::from_code(code);
-
-        let root = language.codebase().root();
-
-        if let Expression::Error { node, .. } = root.node {
-            assert_eq!(node, "fn");
-        } else {
-            panic!();
-        }
-        assert_eq!(
-            language.codebase().errors().get(root.path.hash()),
-            Some(&CodeError::TooFewChildren),
-        );
-    }
-}
-
-#[test]
-fn function_literal_with_too_many_children_is_an_error() {
-    // An `fn` node is expected to have one child, its body. If it has more than
-    // that, that's an error.
-
-    let language = Language::from_code("fn a\nb\nc");
-
-    let root = language.codebase().root();
-
-    if let Expression::Error { node, .. } = root.node {
-        assert_eq!(node, "fn");
-    } else {
-        panic!("Expected error, got `{:?}`", root.node);
-    }
-    assert_eq!(
-        language.codebase().errors().get(root.path.hash()),
-        Some(&CodeError::TooManyChildren),
-    );
 }

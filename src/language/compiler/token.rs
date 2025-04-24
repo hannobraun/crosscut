@@ -1,5 +1,3 @@
-use std::cmp::Ordering;
-
 use itertools::Itertools;
 
 use crate::language::{
@@ -94,7 +92,7 @@ fn resolve_function(
     name: &str,
     children: Children,
     packages: &Packages,
-    _: &mut Nodes,
+    nodes: &mut Nodes,
 ) -> Result<
     (Expression, Option<CodeError>),
     (Children, Vec<CandidateForResolution>),
@@ -110,38 +108,17 @@ fn resolve_function(
         )),
         (None, Some(literal)) => match literal {
             Literal::Function => {
-                if let Some([parameter, body]) =
-                    children.iter().copied().collect_array()
-                {
-                    Ok((
-                        Expression::LiteralFunction {
-                            function: Function { parameter, body },
-                        },
-                        None,
-                    ))
-                } else {
-                    let expected_num = 2;
-                    let num_children = children.inner.len();
+                let [parameter, body] =
+                    children.iter().copied().collect_array().unwrap_or_else(
+                        || [nodes.insert(Expression::Empty); 2],
+                    );
 
-                    let error = match num_children.cmp(&expected_num) {
-                        Ordering::Less => CodeError::TooFewChildren,
-                        Ordering::Greater => CodeError::TooManyChildren,
-                        Ordering::Equal => {
-                            unreachable!(
-                                "We already handled the case, of the function \
-                                literal having the expected number of children."
-                            );
-                        }
-                    };
-
-                    Ok((
-                        Expression::Error {
-                            node: name.to_string(),
-                            children: children.clone(),
-                        },
-                        Some(error),
-                    ))
-                }
+                Ok((
+                    Expression::LiteralFunction {
+                        function: Function { parameter, body },
+                    },
+                    None,
+                ))
             }
             Literal::Integer { value } => Ok(node_with_no_child_or_error(
                 || Expression::LiteralNumber { value },

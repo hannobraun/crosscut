@@ -127,6 +127,11 @@ impl Language {
         self
     }
 
+    pub fn down(mut self) -> Self {
+        self.on_input(EditorInputEvent::MoveCursorDown);
+        self
+    }
+
     pub fn on_code(&mut self, code: &str) {
         self.editor.on_code(
             code,

@@ -1,5 +1,5 @@
 use crate::language::{
-    code::{Codebase, Expression},
+    code::{Codebase, Expression, Function},
     compiler::Compiler,
     editor::{Editor, EditorInputEvent::*},
     packages::Packages,
@@ -52,6 +52,34 @@ fn add_apply_node() {
     );
     assert_eq!(function.node, &node("a", []));
     assert_eq!(argument.node, &node("b", []));
+}
+
+#[test]
+fn add_fn_node() {
+    // Adding an `fn` node also creates its children.
+
+    let packages = Packages::default();
+
+    let mut codebase = Codebase::new();
+    let mut evaluator = Evaluator::new();
+
+    let mut editor = Editor::new(codebase.root().path, &codebase, &packages);
+    editor.on_code("fn", &mut codebase, &mut evaluator, &packages);
+
+    let function = codebase.root();
+    let [parameter, body] = function.expect_children(codebase.nodes());
+
+    assert_eq!(
+        function.node,
+        &Expression::LiteralFunction {
+            function: Function {
+                parameter: *parameter.path.hash(),
+                body: *body.path.hash(),
+            },
+        },
+    );
+    assert_eq!(parameter.node, &Expression::Empty);
+    assert_eq!(body.node, &Expression::Empty);
 }
 
 #[test]
