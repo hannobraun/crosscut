@@ -33,8 +33,7 @@ fn expect_clear_command_to_clear_previously_entered_code() {
 
     game_engine.enter_code("color 12");
 
-    game_engine.enter_command_mode();
-    game_engine.enter_command("clear");
+    game_engine.enter_command_mode().enter_command("clear");
     game_engine.execute_command();
 
     game_engine.enter_code("color 7");
@@ -53,8 +52,7 @@ fn expect_aborted_command_to_have_no_effect() {
 
     game_engine.enter_code("color 12");
 
-    game_engine.enter_command_mode();
-    game_engine.enter_command("clear");
+    game_engine.enter_command_mode().enter_command("clear");
     game_engine.abort_command();
 
     game_engine.enter_code("7");

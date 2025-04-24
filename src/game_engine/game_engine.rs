@@ -236,8 +236,9 @@ impl GameEngine<DebugOutputAdapter> {
         self
     }
 
-    pub fn enter_command_mode(&mut self) {
+    pub fn enter_command_mode(&mut self) -> &mut Self {
         self.on_editor_input(TerminalInputEvent::Escape).unwrap();
+        self
     }
 
     pub fn enter_command(&mut self, command: &str) {
