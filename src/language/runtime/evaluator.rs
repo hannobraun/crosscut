@@ -193,7 +193,7 @@ impl Evaluator {
                         );
                         self.eval_stack.push(node);
                     }
-                };
+                }
             }
             Expression::Empty => {
                 self.finish_evaluating_node(
