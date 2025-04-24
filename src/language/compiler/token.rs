@@ -51,7 +51,7 @@ impl Token<'_> {
             }
         };
 
-        let hash = change_set.add(node);
+        let hash = change_set.nodes_mut().insert(node);
         if let Some(error) = maybe_error {
             errors.insert(hash, error);
         }

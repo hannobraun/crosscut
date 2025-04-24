@@ -145,7 +145,9 @@ mod tests {
 
         let old_root = codebase.root().path;
         let new_root = codebase.make_change(|change_set| {
-            let a = NodePath::for_root(change_set.add(node("a", [])));
+            let a = NodePath::for_root(
+                change_set.nodes_mut().insert(node("a", [])),
+            );
             change_set.replace(&old_root, &a);
 
             a
@@ -163,8 +165,8 @@ mod tests {
 
         let root = codebase.root().path;
         let a = codebase.make_change(|change_set| {
-            let a = change_set.add(node("a", []));
-            let b = change_set.add(node("b", [a]));
+            let a = change_set.nodes_mut().insert(node("a", []));
+            let b = change_set.nodes_mut().insert(node("b", [a]));
 
             change_set.replace(&root, &NodePath::for_root(b));
 
@@ -187,7 +189,9 @@ mod tests {
 
         let root = codebase.root().path;
         let a = codebase.make_change(|change_set| {
-            let a = NodePath::for_root(change_set.add(node("a", [])));
+            let a = NodePath::for_root(
+                change_set.nodes_mut().insert(node("a", [])),
+            );
             change_set.replace(&root, &a);
 
             a
@@ -210,9 +214,9 @@ mod tests {
 
         let root = codebase.root().path;
         let (a, b, c) = codebase.make_change(|change_set| {
-            let a = change_set.add(node("a", []));
-            let b = change_set.add(node("b", []));
-            let c = change_set.add(node("c", [a, b]));
+            let a = change_set.nodes_mut().insert(node("a", []));
+            let b = change_set.nodes_mut().insert(node("b", []));
+            let c = change_set.nodes_mut().insert(node("c", [a, b]));
 
             let c = NodePath::for_root(c);
             change_set.replace(&root, &c);

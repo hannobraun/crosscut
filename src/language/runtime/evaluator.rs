@@ -419,11 +419,14 @@ mod tests {
 
         let root = codebase.root().path;
         codebase.make_change(|change_set| {
-            let parameter = change_set.add(Node::LiteralNumber { value: 0 });
-            let body = change_set.add(Node::Empty);
+            let parameter = change_set
+                .nodes_mut()
+                .insert(Node::LiteralNumber { value: 0 });
+            let body = change_set.nodes_mut().insert(Node::Empty);
 
-            let function =
-                change_set.add(Node::LiteralFunction { parameter, body });
+            let function = change_set
+                .nodes_mut()
+                .insert(Node::LiteralFunction { parameter, body });
 
             change_set.replace(&root, &NodePath::for_root(function));
         });
@@ -457,7 +460,9 @@ mod tests {
 
         let root = codebase.root().path;
         codebase.make_change(|change_set| {
-            let recursion = change_set.add(Node::Recursion { argument: None });
+            let recursion = change_set
+                .nodes_mut()
+                .insert(Node::Recursion { argument: None });
             change_set.replace(&root, &NodePath::for_root(recursion))
         });
 
