@@ -14,7 +14,7 @@ pub struct Codebase {
 
 impl Codebase {
     pub fn new() -> Self {
-        let mut nodes = Nodes::new();
+        let mut nodes = Nodes::default();
         let empty = nodes.insert(Expression::Empty);
 
         Self {

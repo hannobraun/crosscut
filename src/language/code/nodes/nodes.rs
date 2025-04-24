@@ -8,10 +8,6 @@ pub struct Nodes {
 }
 
 impl Nodes {
-    pub fn new() -> Self {
-        Self::default()
-    }
-
     pub fn get(&self, hash: &NodeHash<Expression>) -> &Expression {
         let Some(node) = self.inner.get(hash) else {
             unreachable!(

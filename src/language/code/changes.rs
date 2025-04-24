@@ -164,7 +164,7 @@ mod tests {
     #[test]
     fn circular_changes_should_work_correctly() {
         let mut changes = Changes::new();
-        let mut nodes = Nodes::new();
+        let mut nodes = Nodes::default();
 
         let [node_a, node_b] = ["a", "b"].map(|name| Expression::Error {
             node: String::from(name),
