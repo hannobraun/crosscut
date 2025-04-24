@@ -399,7 +399,7 @@ fn render_help<A: EditorOutputAdapter>(
                 intrinsic functions, or by the host.",
             )?;
         }
-        Expression::Recursion { .. } => {
+        Expression::Recursion => {
             writeln!(
                 adapter,
                 "You are editing the `{}` keyword, which calls the current \

@@ -300,7 +300,7 @@ impl Evaluator {
                 // then we still need the node.
                 self.eval_stack.push(node);
             }
-            Expression::Recursion { .. } => {
+            Expression::Recursion => {
                 let path = self
                     .call_stack
                     .pop()
@@ -465,9 +465,8 @@ mod tests {
 
         let root = codebase.root().path;
         codebase.make_change(|change_set| {
-            let recursion = change_set
-                .nodes_mut()
-                .insert(Expression::Recursion { argument: None });
+            let recursion =
+                change_set.nodes_mut().insert(Expression::Recursion);
             let argument =
                 change_set.nodes_mut().insert(Expression::LiteralTuple {
                     values: Children::new([]),

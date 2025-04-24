@@ -79,8 +79,8 @@ fn resolve_keyword(
 
             Some((Expression::Apply { function, argument }, None))
         }
-        "self" => Some(node_with_one_child_or_error(
-            |argument| Expression::Recursion { argument },
+        "self" => Some(node_with_no_child_or_error(
+            || Expression::Recursion,
             name,
             children.clone(),
         )),

@@ -98,13 +98,7 @@ pub enum Expression {
     ///
     /// Evaluating the node recursively applies the current function to the
     /// active value.
-    Recursion {
-        /// # The child of the node, if any
-        ///
-        /// If the recursion node has a child, that child's output is taken as
-        /// the input of the applied function.
-        argument: Option<NodeHash<Expression>>,
-    },
+    Recursion,
 
     /// # The result of a build error
     Error {
@@ -141,15 +135,16 @@ impl Expression {
                     || child == child_b && sibling_index == &index_b
             }
 
-            Self::Empty | Self::LiteralNumber { value: _ } => false,
+            Self::Empty
+            | Self::LiteralNumber { value: _ }
+            | Self::Recursion => false,
 
             Self::LiteralTuple { values: children }
             | Self::Error { children, .. } => {
                 children.contains_at(child, sibling_index)
             }
 
-            Self::ProvidedFunction { argument: c, .. }
-            | Self::Recursion { argument: c } => {
+            Self::ProvidedFunction { argument: c, .. } => {
                 let child_index = SiblingIndex { index: 0 };
                 c.as_ref() == Some(child) && sibling_index == &child_index
             }
@@ -170,15 +165,16 @@ impl Expression {
                     },
             } => false,
 
-            Self::Empty | Self::LiteralNumber { value: _ } => true,
+            Self::Empty
+            | Self::LiteralNumber { value: _ }
+            | Self::Recursion => true,
 
             Self::LiteralTuple { values: children }
             | Self::Error { children, .. } => children.is_empty(),
 
             Self::ProvidedFunction {
                 argument: child, ..
-            }
-            | Self::Recursion { argument: child } => child.is_none(),
+            } => child.is_none(),
         }
     }
 
@@ -193,15 +189,15 @@ impl Expression {
                         parameter: NodeHash { .. },
                         body: NodeHash { .. },
                     },
-            } => None,
+            }
+            | Self::Recursion => None,
 
             Self::LiteralTuple { values: children }
             | Self::Error { children, .. } => children.is_single_child(),
 
             Self::ProvidedFunction {
                 argument: child, ..
-            }
-            | Self::Recursion { argument: child } => child.as_ref(),
+            } => child.as_ref(),
         }
     }
 
@@ -219,15 +215,16 @@ impl Expression {
                     },
             } => Children::new([*a, *b]),
 
-            Self::Empty | Self::LiteralNumber { value: _ } => Children::new([]),
+            Self::Empty
+            | Self::LiteralNumber { value: _ }
+            | Self::Recursion => Children::new([]),
 
             Self::LiteralTuple { values: children }
             | Self::Error { children, .. } => children.clone(),
 
             Self::ProvidedFunction {
                 argument: child, ..
-            }
-            | Self::Recursion { argument: child } => Children::new(*child),
+            } => Children::new(*child),
         }
     }
 
@@ -270,7 +267,7 @@ impl fmt::Display for NodeDisplay<'_> {
                 let name = self.packages.function_name_by_id(id);
                 write!(f, "{name}")
             }
-            Expression::Recursion { .. } => {
+            Expression::Recursion => {
                 write!(f, "self")
             }
             Expression::Error { node, .. } => {
