@@ -251,17 +251,20 @@ impl GameEngine<DebugOutputAdapter> {
         self
     }
 
-    pub fn execute_command(&mut self) {
+    pub fn execute_command(&mut self) -> &mut Self {
         self.on_editor_input(TerminalInputEvent::Enter).unwrap();
+        self
     }
 
-    pub fn abort_command(&mut self) {
+    pub fn abort_command(&mut self) -> &mut Self {
         self.on_editor_input(TerminalInputEvent::Escape).unwrap();
+        self
     }
 
-    pub fn on_char(&mut self, ch: char) {
+    pub fn on_char(&mut self, ch: char) -> &mut Self {
         self.on_editor_input(TerminalInputEvent::Character { ch })
             .unwrap();
+        self
     }
 }
 
