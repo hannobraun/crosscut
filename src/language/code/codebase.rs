@@ -1,11 +1,12 @@
 use super::{
-    Changes, Errors, LocatedNode, NewChangeSet, Node, NodeHash, NodePath, Nodes,
+    Changes, Errors, Expression, LocatedNode, NewChangeSet, NodeHash, NodePath,
+    Nodes,
 };
 
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub struct Codebase {
     root: Root,
-    empty: NodeHash<Node>,
+    empty: NodeHash<Expression>,
     nodes: Nodes,
     changes: Changes,
     errors: Errors,
@@ -14,7 +15,7 @@ pub struct Codebase {
 impl Codebase {
     pub fn new() -> Self {
         let mut nodes = Nodes::new();
-        let empty = nodes.insert(Node::Empty);
+        let empty = nodes.insert(Expression::Empty);
 
         Self {
             root: Root { hash: empty },
@@ -101,7 +102,7 @@ impl Codebase {
                 // multiple children is always an error, that's what we're
                 // creating here.
 
-                let new_root = Node::Error {
+                let new_root = Expression::Error {
                     node: "".to_string(),
                     children: root.to_children(),
                 };
@@ -118,7 +119,7 @@ impl Codebase {
 
 #[derive(Clone, Debug, Eq, PartialEq)]
 struct Root {
-    hash: NodeHash<Node>,
+    hash: NodeHash<Expression>,
 }
 
 impl Root {
@@ -130,7 +131,7 @@ impl Root {
 #[cfg(test)]
 mod tests {
     use crate::language::{
-        code::{Children, Node, NodePath},
+        code::{Children, Expression, NodePath},
         tests::infra::node,
     };
 
@@ -201,7 +202,7 @@ mod tests {
         codebase.make_change(|change_set| {
             change_set.remove(&a);
         });
-        assert_eq!(codebase.root().node, &Node::Empty);
+        assert_eq!(codebase.root().node, &Expression::Empty);
     }
 
     #[test]
@@ -229,7 +230,7 @@ mod tests {
         });
         assert_eq!(
             codebase.root().node,
-            &Node::Error {
+            &Expression::Error {
                 node: "".to_string(),
                 children: Children::new([a, b]),
             },

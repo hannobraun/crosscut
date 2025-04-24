@@ -4,8 +4,8 @@ use itertools::Itertools;
 
 use crate::language::{
     code::{
-        CandidateForResolution, Children, CodeError, Errors, Function, Literal,
-        NewChangeSet, Node, NodeHash, NodePath, SiblingIndex,
+        CandidateForResolution, Children, CodeError, Errors, Expression,
+        Function, Literal, NewChangeSet, NodeHash, NodePath, SiblingIndex,
     },
     packages::Packages,
 };
@@ -23,14 +23,14 @@ impl Token<'_> {
         change_set: &mut NewChangeSet,
         errors: &mut Errors,
         packages: &Packages,
-    ) -> NodeHash<Node> {
+    ) -> NodeHash<Expression> {
         // We're about to need that, to correctly compile function parameters.
         let _ = self.parent;
         let _ = self.sibling_index;
 
         let (node, maybe_error) = if self.text.is_empty() {
             node_with_no_child_or_error(
-                || Node::Empty,
+                || Expression::Empty,
                 self.text,
                 self.children,
             )
@@ -42,7 +42,7 @@ impl Token<'_> {
             match resolve_function(self.text, self.children, packages) {
                 Ok((node, maybe_err)) => (node, maybe_err),
                 Err((children, candidates)) => (
-                    Node::Error {
+                    Expression::Error {
                         node: self.text.to_string(),
                         children,
                     },
@@ -63,7 +63,7 @@ impl Token<'_> {
 fn resolve_keyword(
     name: &str,
     children: &Children,
-) -> Option<(Node, Option<CodeError>)> {
+) -> Option<(Expression, Option<CodeError>)> {
     match name {
         "apply" => {
             let (node, maybe_error) = if children.inner.len() == 2 {
@@ -75,10 +75,10 @@ fn resolve_keyword(
                     );
                 };
 
-                (Node::Application { function, argument }, None)
+                (Expression::Application { function, argument }, None)
             } else {
                 (
-                    Node::Error {
+                    Expression::Error {
                         node: name.to_string(),
                         children: children.clone(),
                     },
@@ -95,7 +95,7 @@ fn resolve_keyword(
             Some((node, maybe_error))
         }
         "self" => Some(node_with_one_child_or_error(
-            |argument| Node::Recursion { argument },
+            |argument| Expression::Recursion { argument },
             name,
             children.clone(),
         )),
@@ -107,14 +107,16 @@ fn resolve_function(
     name: &str,
     children: Children,
     packages: &Packages,
-) -> Result<(Node, Option<CodeError>), (Children, Vec<CandidateForResolution>)>
-{
+) -> Result<
+    (Expression, Option<CodeError>),
+    (Children, Vec<CandidateForResolution>),
+> {
     let provided_function = packages.resolve_function(name);
     let literal = resolve_literal(name);
 
     match (provided_function, literal) {
         (Some(id), None) => Ok(node_with_one_child_or_error(
-            |argument| Node::ProvidedFunction { id, argument },
+            |argument| Expression::ProvidedFunction { id, argument },
             name,
             children,
         )),
@@ -124,7 +126,7 @@ fn resolve_function(
                     children.iter().copied().collect_array()
                 {
                     Ok((
-                        Node::LiteralFunction {
+                        Expression::LiteralFunction {
                             function: Function { parameter, body },
                         },
                         None,
@@ -145,7 +147,7 @@ fn resolve_function(
                     };
 
                     Ok((
-                        Node::Error {
+                        Expression::Error {
                             node: name.to_string(),
                             children: children.clone(),
                         },
@@ -154,12 +156,12 @@ fn resolve_function(
                 }
             }
             Literal::Integer { value } => Ok(node_with_no_child_or_error(
-                || Node::LiteralNumber { value },
+                || Expression::LiteralNumber { value },
                 name,
                 children,
             )),
             Literal::Tuple => {
-                Ok((Node::LiteralTuple { values: children }, None))
+                Ok((Expression::LiteralTuple { values: children }, None))
             }
         },
         (None, None) => {
@@ -195,15 +197,15 @@ fn resolve_literal(name: &str) -> Option<Literal> {
 }
 
 fn node_with_no_child_or_error(
-    node: impl FnOnce() -> Node,
+    node: impl FnOnce() -> Expression,
     token: &str,
     children: Children,
-) -> (Node, Option<CodeError>) {
+) -> (Expression, Option<CodeError>) {
     if children.is_empty() {
         (node(), None)
     } else {
         (
-            Node::Error {
+            Expression::Error {
                 node: token.to_string(),
                 children,
             },
@@ -213,16 +215,16 @@ fn node_with_no_child_or_error(
 }
 
 fn node_with_one_child_or_error(
-    node_from_child: impl FnOnce(Option<NodeHash<Node>>) -> Node,
+    node_from_child: impl FnOnce(Option<NodeHash<Expression>>) -> Expression,
     token: &str,
     children: Children,
-) -> (Node, Option<CodeError>) {
+) -> (Expression, Option<CodeError>) {
     if children.is_multiple_children().is_none() {
         let maybe_child = children.is_single_child().copied();
         (node_from_child(maybe_child), None)
     } else {
         (
-            Node::Error {
+            Expression::Error {
                 node: token.to_string(),
                 children,
             },

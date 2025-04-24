@@ -1,5 +1,5 @@
 use crate::language::{
-    code::{CodeError, Node},
+    code::{CodeError, Expression},
     language::Language,
     packages::Function,
     runtime::{RuntimeState, Value},
@@ -91,7 +91,7 @@ fn function_literal_with_too_few_children_is_an_error() {
 
         let root = language.codebase().root();
 
-        if let Node::Error { node, .. } = root.node {
+        if let Expression::Error { node, .. } = root.node {
             assert_eq!(node, "fn");
         } else {
             panic!();
@@ -112,7 +112,7 @@ fn function_literal_with_too_many_children_is_an_error() {
 
     let root = language.codebase().root();
 
-    if let Node::Error { node, .. } = root.node {
+    if let Expression::Error { node, .. } = root.node {
         assert_eq!(node, "fn");
     } else {
         panic!("Expected error, got `{:?}`", root.node);

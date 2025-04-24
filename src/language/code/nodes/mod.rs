@@ -7,7 +7,7 @@ mod path;
 pub use self::{
     children::Children,
     hash::NodeHash,
-    node::{Function, Node},
+    node::{Expression, Function},
     nodes::Nodes,
     path::{LocatedNode, NodePath, SiblingIndex},
 };

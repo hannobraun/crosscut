@@ -1,5 +1,5 @@
 use crate::language::{
-    code::{Codebase, Node},
+    code::{Codebase, Expression},
     compiler::Compiler,
     editor::{Editor, EditorInputEvent, editor::Cursor},
     packages::Packages,
@@ -33,7 +33,7 @@ fn edit_at_initial_cursor() {
     editor.on_code("2", &mut codebase, &mut evaluator, &packages);
     assert_eq!(
         codebase.node_at(&editor.cursor().path).node,
-        &Node::LiteralNumber { value: 127 },
+        &Expression::LiteralNumber { value: 127 },
     );
 }
 

@@ -1,7 +1,7 @@
 use itertools::Itertools;
 
 use crate::language::code::{
-    Codebase, Function, Node, NodePath, SiblingIndex, Type,
+    Codebase, Expression, Function, NodePath, SiblingIndex, Type,
 };
 
 use super::{Effect, RuntimeState, Value};
@@ -151,7 +151,8 @@ impl Evaluator {
         // node that can be evaluated, and that all its parents are on the
         // evaluation stack, so they can be evaluated later.
         loop {
-            if let Node::LiteralFunction { .. } | Node::Error { .. } =
+            if let Expression::LiteralFunction { .. }
+            | Expression::Error { .. } =
                 codebase.node_at(&node.syntax_node).node
             {
                 // We encountered a function literal and an error node. Either
@@ -194,7 +195,7 @@ impl Evaluator {
         };
 
         match codebase.node_at(&node.syntax_node).node {
-            Node::Application { .. } => {
+            Expression::Application { .. } => {
                 let Some([function, argument]) = node
                     .clone()
                     .evaluated_children
@@ -224,12 +225,12 @@ impl Evaluator {
 
                 self.apply_function_raw(body, argument, codebase);
             }
-            Node::Empty => {
+            Expression::Empty => {
                 self.finish_evaluating_node(
                     node.evaluated_children.into_active_value(),
                 );
             }
-            Node::LiteralFunction {
+            Expression::LiteralFunction {
                 function: Function { parameter: _, body },
             } => {
                 match node.evaluated_children.clone().into_active_value() {
@@ -254,7 +255,7 @@ impl Evaluator {
 
                 self.finish_evaluating_node(Value::Function { body });
             }
-            Node::LiteralNumber { value } => {
+            Expression::LiteralNumber { value } => {
                 match node.evaluated_children.clone().into_active_value() {
                     value if value.is_nothing() => {}
                     active_value => {
@@ -270,7 +271,7 @@ impl Evaluator {
 
                 self.finish_evaluating_node(Value::Integer { value: *value });
             }
-            Node::LiteralTuple { .. } => {
+            Expression::LiteralTuple { .. } => {
                 assert!(
                     node.children_to_evaluate.is_empty(),
                     "Due to the loop above, which puts all children of a node \
@@ -282,7 +283,7 @@ impl Evaluator {
                     values: node.evaluated_children.inner.into_iter().collect(),
                 });
             }
-            Node::ProvidedFunction { id, .. } => {
+            Expression::ProvidedFunction { id, .. } => {
                 self.state = RuntimeState::Effect {
                     effect: Effect::ProvidedFunction {
                         id: *id,
@@ -299,7 +300,7 @@ impl Evaluator {
                 // then we still need the node.
                 self.eval_stack.push(node);
             }
-            Node::Recursion { .. } => {
+            Expression::Recursion { .. } => {
                 let path = self
                     .call_stack
                     .pop()
@@ -309,7 +310,7 @@ impl Evaluator {
                 let argument = node.evaluated_children.into_active_value();
                 self.apply_function_raw(path, argument, codebase);
             }
-            Node::Error { .. } => {
+            Expression::Error { .. } => {
                 self.state = RuntimeState::Error {
                     path: node.syntax_node.clone(),
                 };
@@ -408,7 +409,7 @@ struct StackFrame {
 #[cfg(test)]
 mod tests {
     use crate::language::{
-        code::{Codebase, Function, Node, NodePath},
+        code::{Codebase, Expression, Function, NodePath},
         runtime::{Evaluator, RuntimeState, Value},
         tests::infra::LocatedNodeExt,
     };
@@ -425,11 +426,11 @@ mod tests {
         codebase.make_change(|change_set| {
             let parameter = change_set
                 .nodes_mut()
-                .insert(Node::LiteralNumber { value: 0 });
-            let body = change_set.nodes_mut().insert(Node::Empty);
+                .insert(Expression::LiteralNumber { value: 0 });
+            let body = change_set.nodes_mut().insert(Expression::Empty);
 
             let function =
-                change_set.nodes_mut().insert(Node::LiteralFunction {
+                change_set.nodes_mut().insert(Expression::LiteralFunction {
                     function: Function { parameter, body },
                 });
 
@@ -467,7 +468,7 @@ mod tests {
         codebase.make_change(|change_set| {
             let recursion = change_set
                 .nodes_mut()
-                .insert(Node::Recursion { argument: None });
+                .insert(Expression::Recursion { argument: None });
             change_set.replace(&root, &NodePath::for_root(recursion))
         });
 

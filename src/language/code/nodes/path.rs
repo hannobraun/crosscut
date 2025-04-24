@@ -1,4 +1,4 @@
-use super::{Node, NodeHash, Nodes};
+use super::{Expression, NodeHash, Nodes};
 
 /// # A unique and versioned path to a [`Node`]
 ///
@@ -23,7 +23,7 @@ use super::{Node, NodeHash, Nodes};
 /// are responsible for making sure that such a [`NodePath`] gets updated.
 #[derive(Clone, Debug, Eq, Ord, PartialEq, PartialOrd, udigest::Digestable)]
 pub struct NodePath {
-    hash: NodeHash<Node>,
+    hash: NodeHash<Expression>,
 
     /// # The path of the node's parent
     ///
@@ -51,7 +51,7 @@ pub struct NodePath {
 impl NodePath {
     #[track_caller]
     pub fn new(
-        hash: NodeHash<Node>,
+        hash: NodeHash<Expression>,
         parent: Option<NodePath>,
         sibling_index: SiblingIndex,
         nodes: &Nodes,
@@ -89,7 +89,7 @@ impl NodePath {
         }
     }
 
-    pub fn for_root(hash: NodeHash<Node>) -> Self {
+    pub fn for_root(hash: NodeHash<Expression>) -> Self {
         Self {
             hash,
             parent: None,
@@ -105,7 +105,7 @@ impl NodePath {
     ///
     /// But this hash is required to identify the node _uniquely_, including its
     /// version.
-    pub fn hash(&self) -> &NodeHash<Node> {
+    pub fn hash(&self) -> &NodeHash<Expression> {
         &self.hash
     }
 
@@ -179,7 +179,7 @@ impl SiblingIndex {
 
 #[derive(Debug, Eq, PartialEq)]
 pub struct LocatedNode<'r> {
-    pub node: &'r Node,
+    pub node: &'r Expression,
     pub path: NodePath,
 }
 

@@ -1,5 +1,5 @@
 use crate::language::{
-    code::{Children, Errors, NewChangeSet, Node, NodeHash, NodePath},
+    code::{Children, Errors, Expression, NewChangeSet, NodeHash, NodePath},
     packages::Packages,
 };
 
@@ -184,7 +184,7 @@ fn update_path(
 #[derive(Clone)]
 struct Replacement {
     replaced: NodePath,
-    replacement: NodeHash<Node>,
+    replacement: NodeHash<Expression>,
 }
 
 #[cfg(test)]

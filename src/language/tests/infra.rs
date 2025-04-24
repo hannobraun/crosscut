@@ -1,14 +1,16 @@
 use itertools::Itertools;
 
-use crate::language::code::{Children, LocatedNode, Node, NodeHash, Nodes};
+use crate::language::code::{
+    Children, Expression, LocatedNode, NodeHash, Nodes,
+};
 
 pub fn node(
     name: &str,
-    children: impl IntoIterator<Item = NodeHash<Node>>,
-) -> Node {
+    children: impl IntoIterator<Item = NodeHash<Expression>>,
+) -> Expression {
     let children = Children::new(children);
 
-    Node::Error {
+    Expression::Error {
         node: name.to_string(),
         children,
     }

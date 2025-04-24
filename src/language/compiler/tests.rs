@@ -1,5 +1,5 @@
 use crate::language::{
-    code::{Children, CodeError, Codebase, Node, NodeHash, NodePath},
+    code::{Children, CodeError, Codebase, Expression, NodeHash, NodePath},
     compiler::Compiler,
     packages::{Function, Packages},
     tests::infra::LocatedNodeExt,
@@ -259,7 +259,7 @@ fn integer_literal_with_children_is_an_error() {
     compiler.insert_child(compiler.codebase().root().path, "", &packages);
 
     let root = compiler.codebase().root();
-    if let Node::Error { node, .. } = root.node {
+    if let Expression::Error { node, .. } = root.node {
         assert_eq!(node, "127");
     } else {
         panic!();
@@ -302,12 +302,12 @@ fn updating_child_updates_parent() {
 
     fn check_parent(
         parent: NodePath,
-        children: impl IntoIterator<Item = NodeHash<Node>>,
+        children: impl IntoIterator<Item = NodeHash<Expression>>,
         codebase: &Codebase,
     ) {
         assert_eq!(
             codebase.node_at(&parent).node,
-            &Node::Error {
+            &Expression::Error {
                 node: "unresolved".to_string(),
                 children: Children::new(children),
             },
@@ -332,7 +332,7 @@ fn expect_error_on_multiple_children(token: &str, packages: &Packages) {
 
     assert_eq!(
         compiler.codebase().root().node,
-        &Node::Error {
+        &Expression::Error {
             node: token.to_string(),
             children: Children::new([a, b].map(|path| *path.hash())),
         },

@@ -8,21 +8,21 @@ use super::{Children, NodeHash, SiblingIndex};
 #[derive(Clone, Debug, Eq, Ord, PartialEq, PartialOrd, udigest::Digestable)]
 pub struct Function {
     /// # The parameter of the function
-    pub parameter: NodeHash<Node>,
+    pub parameter: NodeHash<Expression>,
 
     /// # The root node of the function's body
-    pub body: NodeHash<Node>,
+    pub body: NodeHash<Expression>,
 }
 
 #[derive(Clone, Debug, Eq, Ord, PartialEq, PartialOrd, udigest::Digestable)]
-pub enum Node {
+pub enum Expression {
     /// # The application of a function
     Application {
         /// # The function that is being applied
-        function: NodeHash<Node>,
+        function: NodeHash<Expression>,
 
         /// # The argument that the function is applied to
-        argument: NodeHash<Node>,
+        argument: NodeHash<Expression>,
     },
 
     /// # An empty node
@@ -91,7 +91,7 @@ pub enum Node {
         ///
         /// If the provided function node has a child, that child's output is
         /// taken as the input of the provided function.
-        argument: Option<NodeHash<Node>>,
+        argument: Option<NodeHash<Expression>>,
     },
 
     /// # The recursive application of the current function
@@ -103,7 +103,7 @@ pub enum Node {
         ///
         /// If the recursion node has a child, that child's output is taken as
         /// the input of the applied function.
-        argument: Option<NodeHash<Node>>,
+        argument: Option<NodeHash<Expression>>,
     },
 
     /// # The result of a build error
@@ -116,10 +116,10 @@ pub enum Node {
     },
 }
 
-impl Node {
+impl Expression {
     pub fn has_child_at(
         &self,
-        child: &NodeHash<Node>,
+        child: &NodeHash<Expression>,
         sibling_index: &SiblingIndex,
     ) -> bool {
         match self {
@@ -182,7 +182,7 @@ impl Node {
         }
     }
 
-    pub fn has_single_child(&self) -> Option<&NodeHash<Node>> {
+    pub fn has_single_child(&self) -> Option<&NodeHash<Expression>> {
         match self {
             Self::Application { .. }
             | Self::Empty
@@ -244,36 +244,36 @@ impl Node {
 }
 
 pub struct NodeDisplay<'r> {
-    node: &'r Node,
+    node: &'r Expression,
     packages: &'r Packages,
 }
 
 impl fmt::Display for NodeDisplay<'_> {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match &self.node {
-            Node::Application { .. } => {
+            Expression::Application { .. } => {
                 write!(f, "apply")
             }
-            Node::Empty => {
+            Expression::Empty => {
                 write!(f, "")
             }
-            Node::LiteralFunction { .. } => {
+            Expression::LiteralFunction { .. } => {
                 write!(f, "fn")
             }
-            Node::LiteralNumber { value } => {
+            Expression::LiteralNumber { value } => {
                 write!(f, "{value}")
             }
-            Node::LiteralTuple { .. } => {
+            Expression::LiteralTuple { .. } => {
                 write!(f, "tuple")
             }
-            Node::ProvidedFunction { id, .. } => {
+            Expression::ProvidedFunction { id, .. } => {
                 let name = self.packages.function_name_by_id(id);
                 write!(f, "{name}")
             }
-            Node::Recursion { .. } => {
+            Expression::Recursion { .. } => {
                 write!(f, "self")
             }
-            Node::Error { node, .. } => {
+            Expression::Error { node, .. } => {
                 write!(f, "{node}")
             }
         }
