@@ -13,7 +13,7 @@ fn edit_at_initial_cursor() {
     // That initialization should be correct, so editing that node actually
     // works.
 
-    let packages = Packages::new();
+    let packages = Packages::default();
 
     let mut codebase = Codebase::new();
     let mut evaluator = Evaluator::new();
@@ -41,7 +41,7 @@ fn edit_at_initial_cursor() {
 fn navigate_down_to_child() {
     // Moving the cursor down navigates to the current node's child.
 
-    let packages = Packages::new();
+    let packages = Packages::default();
 
     let mut codebase = Codebase::new();
     let mut evaluator = Evaluator::new();
@@ -77,7 +77,7 @@ fn navigate_right_to_child() {
     // Moving the cursor right while at the end of the current node navigates to
     // the child.
 
-    let packages = Packages::new();
+    let packages = Packages::default();
 
     let mut codebase = Codebase::new();
     let mut evaluator = Evaluator::new();
@@ -112,7 +112,7 @@ fn navigate_right_to_child() {
 fn navigate_up_to_parent() {
     // Moving the cursor up navigates to the current node's parent.
 
-    let packages = Packages::new();
+    let packages = Packages::default();
 
     let mut codebase = Codebase::new();
     let mut evaluator = Evaluator::new();
@@ -147,7 +147,7 @@ fn navigate_up_to_parent() {
 fn navigate_left_to_parent() {
     // Moving the cursor left navigates to the end of the current node's parent.
 
-    let packages = Packages::new();
+    let packages = Packages::default();
 
     let mut codebase = Codebase::new();
     let mut evaluator = Evaluator::new();
@@ -182,7 +182,7 @@ fn navigate_left_to_parent() {
 fn navigate_down_to_next_sibling() {
     // Moving the cursor down navigates to the current node's next sibling.
 
-    let packages = Packages::new();
+    let packages = Packages::default();
 
     let mut codebase = Codebase::new();
     let mut evaluator = Evaluator::new();
@@ -216,7 +216,7 @@ fn navigate_right_to_next_sibling() {
     // Moving the cursor right while at the end of a node that has no child,
     // navigates to the next sibling.
 
-    let packages = Packages::new();
+    let packages = Packages::default();
 
     let mut codebase = Codebase::new();
     let mut evaluator = Evaluator::new();
@@ -249,7 +249,7 @@ fn navigate_right_to_next_sibling() {
 fn navigate_up_to_previous_sibling() {
     // Moving the cursor up navigates to the current node's previous sibling.
 
-    let packages = Packages::new();
+    let packages = Packages::default();
 
     let mut codebase = Codebase::new();
     let mut evaluator = Evaluator::new();
@@ -283,7 +283,7 @@ fn navigate_left_to_previous_sibling() {
     // Moving the cursor left navigates to the end of the current node's
     // previous sibling.
 
-    let packages = Packages::new();
+    let packages = Packages::default();
 
     let mut codebase = Codebase::new();
     let mut evaluator = Evaluator::new();

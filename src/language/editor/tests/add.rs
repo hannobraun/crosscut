@@ -11,7 +11,7 @@ use crate::language::{
 fn add_child() {
     // It's possible to add a child to the current node.
 
-    let packages = Packages::new();
+    let packages = Packages::default();
 
     let mut codebase = Codebase::new();
     let mut evaluator = Evaluator::new();
@@ -42,7 +42,7 @@ fn add_child() {
 fn add_sibling() {
     // It is possible to add a sibling to a node.
 
-    let packages = Packages::new();
+    let packages = Packages::default();
 
     let mut codebase = Codebase::new();
     let mut evaluator = Evaluator::new();
@@ -78,7 +78,7 @@ fn add_sibling_to_root_node() {
     // If adding a sibling to the root node, there still needs to be a single
     // root node afterwards. So a new one is created automatically.
 
-    let packages = Packages::new();
+    let packages = Packages::default();
 
     let mut codebase = Codebase::new();
     let mut evaluator = Evaluator::new();
@@ -113,7 +113,7 @@ fn split_node_to_create_child() {
     // If we add a child while the cursor is in the middle of the current node,
     // we should split the node right there.
 
-    let packages = Packages::new();
+    let packages = Packages::default();
 
     let mut codebase = Codebase::new();
     let mut evaluator = Evaluator::new();
@@ -144,7 +144,7 @@ fn split_node_to_create_sibling() {
     // When adding a sibling while the cursor is in the middle of a node, the
     // node should be split.
 
-    let packages = Packages::new();
+    let packages = Packages::default();
 
     let mut codebase = Codebase::new();
     let mut evaluator = Evaluator::new();

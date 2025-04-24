@@ -12,7 +12,7 @@ fn merge_with_previous_sibling() {
     // When removing left, while the cursor is at the beginning of a node, that
     // node should get merged with its previous sibling.
 
-    let packages = Packages::new();
+    let packages = Packages::default();
 
     let mut codebase = Codebase::new();
     let mut evaluator = Evaluator::new();
@@ -48,7 +48,7 @@ fn merge_with_next_sibling() {
     // When removing right, while the cursor is at the end of a node, that
     // node should get merged with its next sibling.
 
-    let packages = Packages::new();
+    let packages = Packages::default();
 
     let mut codebase = Codebase::new();
     let mut evaluator = Evaluator::new();

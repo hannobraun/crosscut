@@ -7,10 +7,6 @@ pub struct Packages {
 }
 
 impl Packages {
-    pub fn new() -> Self {
-        Self::default()
-    }
-
     pub fn new_package<T>(
         &mut self,
         functions: impl IntoIterator<Item = T>,

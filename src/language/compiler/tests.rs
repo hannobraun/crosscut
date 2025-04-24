@@ -9,7 +9,7 @@ use crate::language::{
 fn insert_child() {
     // The compiler can insert a child node.
 
-    let packages = Packages::new();
+    let packages = Packages::default();
 
     let mut codebase = Codebase::new();
     let mut compiler = Compiler::new(&mut codebase);
@@ -29,7 +29,7 @@ fn insert_child_with_grandparent() {
     // Inserting a child still works, if that child's parent has a parent
     // itself.
 
-    let packages = Packages::new();
+    let packages = Packages::default();
 
     let mut codebase = Codebase::new();
     let mut compiler = Compiler::new(&mut codebase);
@@ -51,7 +51,7 @@ fn insert_child_with_grandparent() {
 fn insert_child_should_update_errors() {
     // Inserting an erroneous child should insert an error into the codebase.
 
-    let packages = Packages::new();
+    let packages = Packages::default();
 
     let mut codebase = Codebase::new();
     let mut compiler = Compiler::new(&mut codebase);
@@ -77,7 +77,7 @@ fn remove_node_and_update_path_of_ancestor() {
     // and is required to refer to the current version of the same node after
     // the update, must be updated itself.
 
-    let packages = Packages::new();
+    let packages = Packages::default();
 
     let mut codebase = Codebase::new();
     let mut compiler = Compiler::new(&mut codebase);
@@ -115,7 +115,7 @@ fn remove_node_and_update_path_of_descendent() {
     // node and is required to refer to the current version of the same node
     // after the update, must be updated itself.
 
-    let packages = Packages::new();
+    let packages = Packages::default();
 
     let mut codebase = Codebase::new();
     let mut compiler = Compiler::new(&mut codebase);
@@ -153,7 +153,7 @@ fn remove_node_and_update_path_of_lateral_relation() {
     // removed node and is required to refer to the current version of the same
     // node after the update, must be updated itself.
 
-    let packages = Packages::new();
+    let packages = Packages::default();
 
     let mut codebase = Codebase::new();
     let mut compiler = Compiler::new(&mut codebase);
@@ -182,7 +182,7 @@ fn remove_node_and_update_path_of_sibling() {
     // removed node and is required to refer to the current version of the same
     // node after the update, must be updated itself.
 
-    let packages = Packages::new();
+    let packages = Packages::default();
 
     let mut codebase = Codebase::new();
     let mut compiler = Compiler::new(&mut codebase);
@@ -211,7 +211,7 @@ fn empty_node_with_multiple_children_is_an_error() {
     // If an empty node has multiple children, then it's no longer obvious what
     // it should do. So that needs to be an error.
 
-    let packages = Packages::new();
+    let packages = Packages::default();
 
     expect_error_on_multiple_children("", &packages);
 }
@@ -228,7 +228,7 @@ fn provided_function_application_with_multiple_children_is_an_error() {
         }
     }
 
-    let mut packages = Packages::new();
+    let mut packages = Packages::default();
     packages.new_package([Provided]);
 
     expect_error_on_multiple_children("provided", &packages);
@@ -239,7 +239,7 @@ fn self_keyword_with_multiple_children_is_an_error() {
     // A self keyword can only have one child: the argument for the function
     // that it calls recursively.
 
-    let packages = Packages::new();
+    let packages = Packages::default();
 
     expect_error_on_multiple_children("self", &packages);
 }
@@ -250,7 +250,7 @@ fn integer_literal_with_children_is_an_error() {
     // to evaluate to an integer. There is nothing it could do with children,
     // except ignore them.
 
-    let packages = Packages::new();
+    let packages = Packages::default();
 
     let mut codebase = Codebase::new();
     let mut compiler = Compiler::new(&mut codebase);
@@ -275,7 +275,7 @@ fn updating_child_updates_parent() {
     // If the child of a parent node is being updated, the parent node should be
     // updated as well.
 
-    let packages = Packages::new();
+    let packages = Packages::default();
 
     let mut codebase = Codebase::new();
     let mut compiler = Compiler::new(&mut codebase);

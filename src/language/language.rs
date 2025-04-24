@@ -20,7 +20,7 @@ impl Language {
     pub fn new() -> Self {
         let codebase = Codebase::new();
         let evaluator = Evaluator::new();
-        let mut packages = Packages::new();
+        let mut packages = Packages::default();
 
         let editor = Editor::new(codebase.root().path, &codebase, &packages);
 

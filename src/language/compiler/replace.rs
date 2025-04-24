@@ -200,7 +200,7 @@ mod tests {
         // Replacing the root node should lead to the root node being
         // recompiled, and the path being updated.
 
-        let packages = Packages::new();
+        let packages = Packages::default();
         let mut codebase = Codebase::new();
 
         let mut action = ReplaceAction::start(codebase.root(), "root");
