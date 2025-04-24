@@ -360,7 +360,7 @@ fn render_help<A: EditorOutputAdapter>(
     writeln!(adapter)?;
 
     match node {
-        Expression::Application { .. } => {
+        Expression::Apply { .. } => {
             writeln!(
                 adapter,
                 "This is the application of a function to an argument.",

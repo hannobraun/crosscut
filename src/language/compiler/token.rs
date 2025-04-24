@@ -75,7 +75,7 @@ fn resolve_keyword(
                     );
                 };
 
-                (Expression::Application { function, argument }, None)
+                (Expression::Apply { function, argument }, None)
             } else {
                 (
                     Expression::Error {

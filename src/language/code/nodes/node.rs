@@ -17,7 +17,7 @@ pub struct Function {
 #[derive(Clone, Debug, Eq, Ord, PartialEq, PartialOrd, udigest::Digestable)]
 pub enum Expression {
     /// # The application of a function
-    Application {
+    Apply {
         /// # The function that is being applied
         function: NodeHash<Expression>,
 
@@ -123,7 +123,7 @@ impl Expression {
         sibling_index: &SiblingIndex,
     ) -> bool {
         match self {
-            Self::Application {
+            Self::Apply {
                 function: child_a,
                 argument: child_b,
             }
@@ -158,7 +158,7 @@ impl Expression {
 
     pub fn has_no_children(&self) -> bool {
         match self {
-            Self::Application {
+            Self::Apply {
                 function: NodeHash { .. },
                 argument: NodeHash { .. },
             }
@@ -184,7 +184,7 @@ impl Expression {
 
     pub fn has_single_child(&self) -> Option<&NodeHash<Expression>> {
         match self {
-            Self::Application { .. }
+            Self::Apply { .. }
             | Self::Empty
             | Self::LiteralNumber { value: _ }
             | Self::LiteralFunction {
@@ -207,7 +207,7 @@ impl Expression {
 
     pub fn to_children(&self) -> Children {
         match self {
-            Self::Application {
+            Self::Apply {
                 function: a,
                 argument: b,
             }
@@ -251,7 +251,7 @@ pub struct NodeDisplay<'r> {
 impl fmt::Display for NodeDisplay<'_> {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match &self.node {
-            Expression::Application { .. } => {
+            Expression::Apply { .. } => {
                 write!(f, "apply")
             }
             Expression::Empty => {

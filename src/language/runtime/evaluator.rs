@@ -195,7 +195,7 @@ impl Evaluator {
         };
 
         match codebase.node_at(&node.syntax_node).node {
-            Expression::Application { .. } => {
+            Expression::Apply { .. } => {
                 let Some([function, argument]) = node
                     .clone()
                     .evaluated_children
