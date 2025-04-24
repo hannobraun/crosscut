@@ -2,16 +2,14 @@ use std::collections::BTreeMap;
 
 use super::{Expression, NodeHash};
 
-#[derive(Clone, Debug, Eq, PartialEq)]
+#[derive(Clone, Debug, Default, Eq, PartialEq)]
 pub struct Nodes {
     inner: BTreeMap<NodeHash<Expression>, Expression>,
 }
 
 impl Nodes {
     pub fn new() -> Self {
-        Self {
-            inner: BTreeMap::new(),
-        }
+        Self::default()
     }
 
     pub fn get(&self, hash: &NodeHash<Expression>) -> &Expression {
