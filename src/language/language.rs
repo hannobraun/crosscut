@@ -116,12 +116,7 @@ use super::packages::FunctionId;
 
 #[cfg(test)]
 impl Language {
-    pub fn code(mut self, code: &str) -> Self {
-        self.on_code(code);
-        self
-    }
-
-    pub fn down(mut self) -> Self {
+    pub fn down(&mut self) -> &mut Self {
         self.on_input(EditorInputEvent::MoveCursorDown);
         self
     }
