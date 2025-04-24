@@ -68,6 +68,19 @@ impl Children {
         to_replace: &NodePath,
         replacement: NodeHash<Expression>,
     ) {
+        let Some(child) = self.inner.get(to_replace.sibling_index().index)
+        else {
+            panic!(
+                "Trying to replace a child at an index that is not present."
+            );
+        };
+
+        assert_eq!(
+            child,
+            to_replace.hash(),
+            "Trying to replace a child that is not present."
+        );
+
         let Some(index) =
             self.inner.iter().enumerate().find_map(|(i, child)| {
                 (child == to_replace.hash()).then_some(i)
