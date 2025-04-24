@@ -1,6 +1,6 @@
 use std::{slice, vec};
 
-use super::{Expression, NodeHash, SiblingIndex};
+use super::{Expression, NodeHash, NodePath, SiblingIndex};
 
 #[derive(Clone, Debug, Eq, Ord, PartialEq, PartialOrd, udigest::Digestable)]
 pub struct Children {
@@ -65,14 +65,13 @@ impl Children {
 
     pub fn replace(
         &mut self,
-        to_replace: &NodeHash<Expression>,
+        to_replace: &NodePath,
         replacements: impl IntoIterator<Item = NodeHash<Expression>>,
     ) {
-        let Some(index) = self
-            .inner
-            .iter()
-            .enumerate()
-            .find_map(|(i, child)| (child == to_replace).then_some(i))
+        let Some(index) =
+            self.inner.iter().enumerate().find_map(|(i, child)| {
+                (child == to_replace.hash()).then_some(i)
+            })
         else {
             panic!("Trying to replace child that is not present.");
         };
@@ -119,7 +118,7 @@ impl<'r> IntoIterator for &'r Children {
 
 #[cfg(test)]
 mod tests {
-    use crate::language::code::{Expression, NodeHash};
+    use crate::language::code::{Expression, NodeHash, NodePath};
 
     use super::Children;
 
@@ -137,7 +136,7 @@ mod tests {
         let [a, b, c, d, e] = test_nodes();
 
         let mut children = Children::new([a, b, c]);
-        children.replace(&b, [d, e]);
+        children.replace(&NodePath::for_root(b), [d, e]);
 
         assert_eq!(children, Children::new([a, d, e, c]));
     }
