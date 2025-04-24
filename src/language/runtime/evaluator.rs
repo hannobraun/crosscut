@@ -31,35 +31,6 @@ impl Evaluator {
         );
     }
 
-    /// # Apply a function using the current node as source
-    ///
-    /// Calling this function is appropriate, if the evaluation originates from
-    /// the current syntax node. That would typically mean, that the current
-    /// syntax node is an application of a provided function, and this
-    /// evaluation is part of handling that function application.
-    ///
-    /// If this isn't the case, please call [`Evaluator::eval_function_raw`]
-    /// instead.
-    pub fn apply_function_from_current_node(
-        &mut self,
-        body: NodePath,
-        argument: Value,
-        codebase: &Codebase,
-    ) {
-        let Some(node) = self.eval_stack.pop() else {
-            panic!(
-                "Trying to apply a function from a node, but no node is \
-                available."
-            );
-        };
-
-        self.apply_function_raw(body, argument, codebase);
-
-        self.state = RuntimeState::Running {
-            path: node.syntax_node,
-        };
-    }
-
     /// # Apply a function without considering where that might originate
     ///
     /// This function just does the bare minimum of starting the evaluation. It

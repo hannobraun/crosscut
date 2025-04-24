@@ -8,7 +8,7 @@ pub fn apply_intrinsic_function(
     intrinsic: &IntrinsicFunction,
     input: Value,
     evaluator: &mut Evaluator,
-    codebase: &Codebase,
+    _: &Codebase,
 ) {
     match intrinsic {
         IntrinsicFunction::Add => {
@@ -37,23 +37,6 @@ pub fn apply_intrinsic_function(
         IntrinsicFunction::Drop => {
             evaluator.exit_from_provided_function(Value::nothing());
         }
-        IntrinsicFunction::Eval => match input {
-            Value::Function { body } => {
-                evaluator.apply_function_from_current_node(
-                    body,
-                    // Right now, the `eval` function doesn't support
-                    // passing an argument to the function it
-                    Value::nothing(),
-                    codebase,
-                );
-            }
-            input => {
-                evaluator.trigger_effect(Effect::UnexpectedInput {
-                    expected: Type::Function,
-                    actual: input,
-                });
-            }
-        },
         IntrinsicFunction::Identity => {
             evaluator.exit_from_provided_function(input);
         }

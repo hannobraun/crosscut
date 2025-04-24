@@ -6,7 +6,6 @@ use crate::language::packages::Function;
 pub enum IntrinsicFunction {
     Add,
     Drop,
-    Eval,
     Identity,
 }
 
@@ -15,7 +14,6 @@ impl Function for IntrinsicFunction {
         match self {
             IntrinsicFunction::Add => "+",
             IntrinsicFunction::Drop => "drop",
-            IntrinsicFunction::Eval => "eval",
             IntrinsicFunction::Identity => "identity",
         }
     }

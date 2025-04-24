@@ -27,7 +27,6 @@ impl Language {
         let intrinsics = packages.new_package([
             IntrinsicFunction::Add,
             IntrinsicFunction::Drop,
-            IntrinsicFunction::Eval,
             IntrinsicFunction::Identity,
         ]);
 
