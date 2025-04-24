@@ -16,6 +16,7 @@ fn eval() {
     // function. Eventually, it should be able to pass any argument.
 
     let mut language = Language::from_code("eval fn 0\n127");
+
     assert_eq!(
         language.step_until_finished().unwrap(),
         Value::Integer { value: 127 },
