@@ -2,7 +2,7 @@ use crate::language::{
     code::{Children, CodeError, Codebase, Expression, NodeHash, NodePath},
     compiler::Compiler,
     packages::{Function, Packages},
-    tests::infra::LocatedNodeExt,
+    tests::infra::{LocatedNodeExt, node},
 };
 
 #[test]
@@ -66,6 +66,40 @@ fn insert_child_should_update_errors() {
         compiler.codebase().errors().get(unresolved.hash()),
         Some(&CodeError::UnresolvedIdentifier { candidates: vec![] }),
     );
+}
+
+#[test]
+fn replace_second_of_two_equal_children() {
+    // If two children are equal, and one is replaced, the replacement logic
+    // should correctly distinguish between them.
+
+    let packages = Packages::default();
+
+    let mut codebase = Codebase::new();
+
+    let root = codebase.root().path;
+    codebase.make_change(|change_set| {
+        let child = change_set.nodes_mut().insert(node("child", []));
+
+        let parent = change_set
+            .nodes_mut()
+            .insert(node("parent", [child, child]));
+
+        change_set.replace(&root, &NodePath::for_root(parent));
+    });
+
+    let [_, child] = codebase
+        .root()
+        .expect_children(codebase.nodes())
+        .map(|located_node| located_node.path);
+
+    let mut compiler = Compiler::new(&mut codebase);
+    compiler.replace(&child, "updated", &packages);
+
+    let [child, updated] = codebase.root().expect_children(codebase.nodes());
+
+    assert_eq!(child.node, &node("child", []));
+    assert_eq!(updated.node, &node("updated", []));
 }
 
 #[test]

@@ -81,16 +81,7 @@ impl Children {
             "Trying to replace a child that is not present."
         );
 
-        let Some(index) =
-            self.inner.iter().enumerate().find_map(|(i, child)| {
-                (child == to_replace.hash()).then_some(i)
-            })
-        else {
-            panic!("Trying to replace child that is not present.");
-        };
-
-        self.inner.remove(index);
-        self.inner.insert(index, replacement);
+        *child = replacement;
     }
 
     pub fn iter(&self) -> slice::Iter<NodeHash<Expression>> {
