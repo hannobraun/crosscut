@@ -5,7 +5,9 @@ fn define_and_evaluate() {
     // It is possible to define a function using a function literal, return that
     // function from the program, then tell the language to evaluate it.
 
-    let mut language = Language::from_code("eval fn")
+    let mut language = Language::from_code("apply")
+        .down()
+        .code("fn")
         .down()
         .code("0")
         .down()
@@ -21,7 +23,9 @@ fn define_and_evaluate() {
 fn self_recursion() {
     // A function can recurse using the `self` keyword.
 
-    let mut language = Language::from_code("eval fn")
+    let mut language = Language::from_code("apply")
+        .down()
+        .code("fn")
         .down()
         .code("0")
         .down()
