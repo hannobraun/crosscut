@@ -37,11 +37,9 @@ impl fmt::Display for Value {
                 write!(f, "fn ")?;
                 write!(f, "{}", body.hash())?;
             }
-
             Self::Integer { value } => {
                 write!(f, "{value}")?;
             }
-
             Self::Tuple { values } => {
                 display_tuple(values, f)?;
             }
