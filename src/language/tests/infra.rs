@@ -29,6 +29,13 @@ impl LocatedNodeExt for LocatedNode<'_> {
         &self,
         nodes: &'r Nodes,
     ) -> [LocatedNode<'r>; N] {
-        self.children(nodes).collect_array().unwrap()
+        let Some(children) = self.children(nodes).collect_array() else {
+            panic!(
+                "Expected {N} children but got {}.",
+                self.children(nodes).count(),
+            );
+        };
+
+        children
     }
 }
