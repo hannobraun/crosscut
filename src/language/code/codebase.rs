@@ -63,50 +63,10 @@ impl Codebase {
         let mut new_change_set = self.changes.new_change_set(&mut self.nodes);
         let value = f(&mut new_change_set, &mut self.errors);
 
-        let root_was_removed =
-            new_change_set.change_set().was_removed(&self.root.path());
         let root_was_replaced =
             new_change_set.change_set().was_replaced(&self.root.path());
 
-        // I'm not even sure this can even happen. Maybe this should become an
-        // `unreachable!`. But for now, it's probably good enough to make sure
-        // that this precondition doesn't slip through the cracks somehow.
-        assert!(
-            !(root_was_removed && root_was_replaced.is_some()),
-            "Both removing and replacing the root in the same change set is \
-            not supported.",
-        );
-
-        if root_was_removed {
-            let root = self.root().node;
-
-            if root.has_no_children() {
-                // The root node we're removing has no children, but we still
-                // need a new root node.
-
-                self.root.hash = self.empty;
-            } else if let Some(child) = root.has_single_child().copied() {
-                // The root node we're removing has exactly one child, which can
-                // become the new root node.
-
-                self.root.hash = child;
-            } else {
-                // The root node we're removing has multiple children, but we
-                // still need a single root node afterwards.
-                //
-                // Since we're just conjuring up a new node, there are no
-                // contents we could put in there. And since an empty node with
-                // multiple children is always an error, that's what we're
-                // creating here.
-
-                let new_root = Expression::Error {
-                    node: "".to_string(),
-                    children: root.to_children(),
-                };
-
-                self.root.hash = self.nodes.insert(new_root);
-            }
-        } else if let Some(new_root) = root_was_replaced {
+        if let Some(new_root) = root_was_replaced {
             self.root.hash = *new_root.hash();
         }
 

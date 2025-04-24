@@ -19,7 +19,6 @@ impl Changes {
         nodes: &'r mut Nodes,
     ) -> NewChangeSet<'r> {
         self.change_sets.push(ChangeSet {
-            removed: BTreeSet::new(),
             replacements_by_replaced: BTreeMap::new(),
         });
 
@@ -124,15 +123,10 @@ impl NewChangeSet<'_> {
 
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub struct ChangeSet {
-    removed: BTreeSet<NodePath>,
     replacements_by_replaced: BTreeMap<NodePath, NodePath>,
 }
 
 impl ChangeSet {
-    pub fn was_removed(&self, removed: &NodePath) -> bool {
-        self.removed.contains(removed)
-    }
-
     pub fn was_replaced(&self, replaced: &NodePath) -> Option<&NodePath> {
         self.replacements_by_replaced.get(replaced)
     }
