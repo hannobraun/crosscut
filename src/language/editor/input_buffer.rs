@@ -58,12 +58,12 @@ impl EditorInputBuffer {
                 if whole_node {
                     self.remove_left_whole_node(cursor);
                 } else {
-                    return self.remove_left(cursor);
+                    self.remove_left(cursor);
                 }
             }
             EditorInputEvent::RemoveRight { whole_node } => {
                 let _ = whole_node;
-                return self.remove_right(cursor);
+                self.remove_right(cursor);
             }
             EditorInputEvent::AddChild => {
                 let existing_parent = self.add_child_or_sibling(cursor);
