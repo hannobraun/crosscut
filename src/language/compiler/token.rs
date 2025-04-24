@@ -64,37 +64,14 @@ impl Token<'_> {
 fn resolve_keyword(
     name: &str,
     children: &Children,
-    _: &mut Nodes,
+    nodes: &mut Nodes,
 ) -> Option<(Expression, Option<CodeError>)> {
     match name {
         "apply" => {
-            let (node, maybe_error) = if children.inner.len() == 2 {
-                let Some([function, argument]) =
-                    children.iter().copied().collect_array()
-                else {
-                    unreachable!(
-                        "Just checked that there are exactly two children."
-                    );
-                };
+            let function = nodes.insert(Expression::Empty);
+            let argument = nodes.insert(Expression::Empty);
 
-                (Expression::Apply { function, argument }, None)
-            } else {
-                (
-                    Expression::Error {
-                        node: name.to_string(),
-                        children: children.clone(),
-                    },
-                    // We should be setting an error here, but there's no test
-                    // to cover this yet.
-                    //
-                    // It might be best to wait and see how the ongoing cleanup
-                    // of `Node` shakes out, so there hasn't been a huge rush to
-                    // get this done.
-                    None,
-                )
-            };
-
-            Some((node, maybe_error))
+            Some((Expression::Apply { function, argument }, None))
         }
         "self" => Some(node_with_one_child_or_error(
             |argument| Expression::Recursion { argument },

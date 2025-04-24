@@ -1,11 +1,37 @@
 use crate::language::{
-    code::Codebase,
+    code::{Codebase, Expression},
     compiler::Compiler,
     editor::{Editor, EditorInputEvent::*},
     packages::Packages,
     runtime::Evaluator,
     tests::infra::{LocatedNodeExt, node},
 };
+
+#[test]
+fn add_apply_node() {
+    // Adding an `apply` node also creates its children.
+
+    let packages = Packages::default();
+
+    let mut codebase = Codebase::new();
+    let mut evaluator = Evaluator::new();
+
+    let mut editor = Editor::new(codebase.root().path, &codebase, &packages);
+    editor.on_code("apply", &mut codebase, &mut evaluator, &packages);
+
+    let apply = codebase.root();
+    let [function, argument] = apply.expect_children(codebase.nodes());
+
+    assert_eq!(
+        apply.node,
+        &Expression::Apply {
+            function: *function.path.hash(),
+            argument: *argument.path.hash(),
+        },
+    );
+    assert_eq!(function.node, &Expression::Empty);
+    assert_eq!(argument.node, &Expression::Empty);
+}
 
 #[test]
 fn add_child() {
