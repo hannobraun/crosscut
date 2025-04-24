@@ -40,7 +40,7 @@ impl<T> NodeHash<T> {
 
 impl<T> Copy for NodeHash<T> where T: Clone {}
 
-impl fmt::Debug for NodeHash<Node> {
+impl<T> fmt::Debug for NodeHash<T> {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         f.debug_struct("NodeHash")
             .field("hash", &BASE64_URL_SAFE_NO_PAD.encode(self.hash))
