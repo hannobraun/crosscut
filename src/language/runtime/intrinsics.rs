@@ -1,6 +1,6 @@
 use itertools::Itertools;
 
-use crate::language::code::{Codebase, IntrinsicFunction, Type};
+use crate::language::code::{IntrinsicFunction, Type};
 
 use super::{Effect, Evaluator, Value};
 
@@ -8,7 +8,6 @@ pub fn apply_intrinsic_function(
     intrinsic: &IntrinsicFunction,
     input: Value,
     evaluator: &mut Evaluator,
-    _: &Codebase,
 ) {
     match intrinsic {
         IntrinsicFunction::Add => {

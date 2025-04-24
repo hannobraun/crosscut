@@ -95,7 +95,6 @@ impl Language {
                     intrinsic,
                     input.clone(),
                     &mut self.evaluator,
-                    &self.codebase,
                 );
             }
         }
