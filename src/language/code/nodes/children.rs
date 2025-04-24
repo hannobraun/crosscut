@@ -66,7 +66,7 @@ impl Children {
     pub fn replace(
         &mut self,
         to_replace: &NodePath,
-        replacements: impl IntoIterator<Item = NodeHash<Expression>>,
+        replacement: NodeHash<Expression>,
     ) {
         let Some(index) =
             self.inner.iter().enumerate().find_map(|(i, child)| {
@@ -77,12 +77,7 @@ impl Children {
         };
 
         self.inner.remove(index);
-
-        let mut index = index;
-        for replacement in replacements {
-            self.inner.insert(index, replacement);
-            index += 1;
-        }
+        self.inner.insert(index, replacement);
     }
 
     pub fn iter(&self) -> slice::Iter<NodeHash<Expression>> {
@@ -118,7 +113,7 @@ impl<'r> IntoIterator for &'r Children {
 
 #[cfg(test)]
 mod tests {
-    use crate::language::code::{Expression, NodeHash, NodePath};
+    use crate::language::code::{Expression, NodeHash};
 
     use super::Children;
 
@@ -129,16 +124,6 @@ mod tests {
         assert!(Children::new([]).is_single_child().is_none());
         assert!(Children::new([a]).is_single_child().is_some());
         assert!(Children::new([a, b]).is_single_child().is_none());
-    }
-
-    #[test]
-    fn replace_should_insert_replacements_at_location_of_replaced() {
-        let [a, b, c, d, e] = test_nodes();
-
-        let mut children = Children::new([a, b, c]);
-        children.replace(&NodePath::for_root(b), [d, e]);
-
-        assert_eq!(children, Children::new([a, d, e, c]));
     }
 
     fn test_nodes() -> [NodeHash<Expression>; 5] {
