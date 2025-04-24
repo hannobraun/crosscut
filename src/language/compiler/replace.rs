@@ -28,6 +28,7 @@ pub fn replace_node_and_update_parents(
     }
 }
 
+#[derive(Debug)]
 enum ReplaceAction {
     Start {
         to_replace: NodePath,
@@ -181,7 +182,7 @@ fn update_path(
     }
 }
 
-#[derive(Clone)]
+#[derive(Clone, Debug)]
 struct Replacement {
     replaced: NodePath,
     replacement: NodeHash<Expression>,
