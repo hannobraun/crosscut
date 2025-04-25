@@ -62,7 +62,9 @@ impl<T> fmt::Debug for NodeHash<T> {
     }
 }
 
-#[derive(Clone, Copy, Eq, Ord, PartialEq, PartialOrd, udigest::Digestable)]
+#[derive(
+    Clone, Copy, Debug, Eq, Ord, PartialEq, PartialOrd, udigest::Digestable,
+)]
 pub struct RawHash {
     inner: [u8; 32],
 }
