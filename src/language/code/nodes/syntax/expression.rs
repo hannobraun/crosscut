@@ -144,7 +144,11 @@ impl Expression {
             | Self::ProvidedFunction { .. }
             | Self::Recursion => false,
 
-            Self::Tuple { values: children } | Self::Error { children, .. } => {
+            Self::Tuple { values: children } => {
+                children.contains_at(child, sibling_index)
+            }
+
+            Self::Error { children, .. } => {
                 children.contains_at(child, sibling_index)
             }
         }
