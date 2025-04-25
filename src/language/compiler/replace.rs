@@ -121,8 +121,6 @@ fn compile_token(
 ) -> ReplaceAction {
     let token = Token {
         text: &token,
-        parent: path.parent(),
-        sibling_index: path.sibling_index(),
         children,
     };
     let replacement = token.compile(change_set, errors, packages);

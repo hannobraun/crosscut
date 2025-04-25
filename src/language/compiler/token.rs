@@ -3,16 +3,13 @@ use itertools::Itertools;
 use crate::language::{
     code::{
         CandidateForResolution, Children, CodeError, Errors, Expression,
-        Function, Literal, NewChangeSet, NodeHash, NodePath, Nodes,
-        SiblingIndex,
+        Function, Literal, NewChangeSet, NodeHash, Nodes,
     },
     packages::Packages,
 };
 
 pub struct Token<'r> {
     pub text: &'r str,
-    pub parent: Option<&'r NodePath>,
-    pub sibling_index: SiblingIndex,
     pub children: Children,
 }
 
@@ -23,10 +20,6 @@ impl Token<'_> {
         errors: &mut Errors,
         packages: &Packages,
     ) -> NodeHash<Expression> {
-        // We're about to need that, to correctly compile function parameters.
-        let _ = self.parent;
-        let _ = self.sibling_index;
-
         let (node, maybe_error) = if self.text.is_empty() {
             node_with_no_child_or_error(
                 || Expression::Empty,
