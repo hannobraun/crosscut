@@ -57,7 +57,7 @@ impl<T> fmt::Debug for NodeHash<T> {
         };
 
         f.debug_struct(&format!("NodeHash<{type_parameter}>"))
-            .field("hash", &BASE64_URL_SAFE_NO_PAD.encode(self.hash.inner))
+            .field("hash", &self.hash.to_string())
             .finish()
     }
 }
