@@ -33,7 +33,7 @@ fn edit_at_initial_cursor() {
     editor.on_code("2", &mut codebase, &mut evaluator, &packages);
     assert_eq!(
         codebase.node_at(&editor.cursor().path).node,
-        &Expression::LiteralNumber { value: 127 },
+        &Expression::Number { value: 127 },
     );
 }
 

@@ -121,7 +121,7 @@ fn resolve_function(
                 ))
             }
             Literal::Integer { value } => Ok(node_with_no_child_or_error(
-                || Expression::LiteralNumber { value },
+                || Expression::Number { value },
                 name,
                 children,
             )),

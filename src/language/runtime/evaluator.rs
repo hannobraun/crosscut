@@ -238,7 +238,7 @@ impl Evaluator {
 
                 self.finish_evaluating_node(Value::Function { body });
             }
-            Expression::LiteralNumber { value } => {
+            Expression::Number { value } => {
                 match node.evaluated_children.clone().into_active_value() {
                     value if value.is_nothing() => {}
                     active_value => {
@@ -396,7 +396,7 @@ mod tests {
         codebase.make_change(|change_set| {
             let parameter = change_set
                 .nodes_mut()
-                .insert(Expression::LiteralNumber { value: 0 });
+                .insert(Expression::Number { value: 0 });
             let body = change_set.nodes_mut().insert(Expression::Empty);
 
             let function =

@@ -46,7 +46,7 @@ pub enum Expression {
     /// Since a number literal takes no input and carries all the information it
     /// needs to evaluate within itself, nodes of this type do not have any
     /// children.
-    LiteralNumber {
+    Number {
         /// # The value of the number this literal evaluates to
         ///
         /// ## Implementation Note
@@ -157,7 +157,7 @@ impl Expression {
             }
 
             Self::Empty
-            | Self::LiteralNumber { value: _ }
+            | Self::Number { value: _ }
             | Self::ProvidedFunction { .. }
             | Self::Recursion => false,
 
@@ -183,7 +183,7 @@ impl Expression {
             } => false,
 
             Self::Empty
-            | Self::LiteralNumber { value: _ }
+            | Self::Number { value: _ }
             | Self::ProvidedFunction { .. }
             | Self::Recursion => true,
 
@@ -196,7 +196,7 @@ impl Expression {
         match self {
             Self::Apply { .. }
             | Self::Empty
-            | Self::LiteralNumber { value: _ }
+            | Self::Number { value: _ }
             | Self::Function {
                 function:
                     Function {
@@ -227,7 +227,7 @@ impl Expression {
             } => Children::new([*a, *b]),
 
             Self::Empty
-            | Self::LiteralNumber { value: _ }
+            | Self::Number { value: _ }
             | Self::ProvidedFunction { .. }
             | Self::Recursion => Children::new([]),
 
@@ -265,7 +265,7 @@ impl fmt::Display for NodeDisplay<'_> {
             Expression::Function { .. } => {
                 write!(f, "fn")
             }
-            Expression::LiteralNumber { value } => {
+            Expression::Number { value } => {
                 write!(f, "{value}")
             }
             Expression::LiteralTuple { .. } => {
