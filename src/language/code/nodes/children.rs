@@ -84,12 +84,3 @@ impl IntoIterator for Children {
         self.inner.into_iter()
     }
 }
-
-impl<'r> IntoIterator for &'r Children {
-    type Item = &'r NodeHash<Expression>;
-    type IntoIter = slice::Iter<'r, NodeHash<Expression>>;
-
-    fn into_iter(self) -> Self::IntoIter {
-        self.iter()
-    }
-}
