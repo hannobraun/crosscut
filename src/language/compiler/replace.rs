@@ -13,11 +13,12 @@ pub fn replace_node_and_update_parents(
     errors: &mut Errors,
     packages: &Packages,
 ) -> NodePath {
+    let replacements = Vec::new();
     let mut next_action = compile_token(
         to_replace,
         replacement_token,
         children,
-        Vec::new(),
+        replacements,
         change_set,
         errors,
         packages,
