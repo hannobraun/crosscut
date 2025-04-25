@@ -13,10 +13,11 @@ pub fn replace_node_and_update_parents(
     errors: &mut Errors,
     packages: &Packages,
 ) -> NodePath {
-    let mut next_action = ReplaceAction::Start {
-        to_replace,
-        replacement_token,
+    let mut next_action = ReplaceAction::CompileToken {
+        path: to_replace,
+        token: replacement_token,
         children,
+        replacements: Vec::new(),
     };
 
     loop {
@@ -30,11 +31,6 @@ pub fn replace_node_and_update_parents(
 
 #[derive(Debug)]
 enum ReplaceAction {
-    Start {
-        to_replace: NodePath,
-        replacement_token: String,
-        children: Children,
-    },
     CompileToken {
         path: NodePath,
         token: String,
@@ -59,14 +55,6 @@ impl ReplaceAction {
         packages: &Packages,
     ) -> Self {
         match self {
-            Self::Start {
-                to_replace,
-                replacement_token,
-                children,
-            } => {
-                // comment added to force more readable formatting
-                start(to_replace, replacement_token, children)
-            }
             Self::CompileToken {
                 path,
                 token,
@@ -94,19 +82,6 @@ impl ReplaceAction {
             }
             action @ Self::Finish { .. } => action,
         }
-    }
-}
-
-fn start(
-    to_replace: NodePath,
-    replacement_token: String,
-    children: Children,
-) -> ReplaceAction {
-    ReplaceAction::CompileToken {
-        path: to_replace,
-        token: replacement_token,
-        children,
-        replacements: Vec::new(),
     }
 }
 
@@ -204,7 +179,6 @@ mod tests {
         let mut action = ReplaceAction::start(codebase.root(), "root");
 
         codebase.make_change_with_errors(|change_set, errors| {
-            action = action.perform(change_set, errors, &packages);
             assert_eq!(action.expect_compile_token_and_extract_token(), "root");
 
             action = action.perform(change_set, errors, &packages);
@@ -230,10 +204,11 @@ mod tests {
 
     impl ReplaceActionExt for ReplaceAction {
         fn start(located_node: LocatedNode, replacement_token: &str) -> Self {
-            Self::Start {
-                to_replace: located_node.path,
-                replacement_token: replacement_token.to_string(),
+            Self::CompileToken {
+                path: located_node.path,
+                token: replacement_token.to_string(),
                 children: located_node.node.to_children(),
+                replacements: Vec::new(),
             }
         }
 
