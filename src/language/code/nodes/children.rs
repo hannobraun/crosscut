@@ -41,16 +41,6 @@ impl Children {
         }
     }
 
-    pub fn is_multiple_children(
-        &self,
-    ) -> Option<impl Iterator<Item = &NodeHash<Expression>>> {
-        if self.inner.len() > 1 {
-            Some(self.inner.iter())
-        } else {
-            None
-        }
-    }
-
     pub fn next_index(&self) -> SiblingIndex {
         SiblingIndex {
             index: self.inner.len(),
