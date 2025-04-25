@@ -62,13 +62,6 @@ impl<T> fmt::Debug for NodeHash<T> {
     }
 }
 
-impl<T> fmt::Display for NodeHash<T> {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", BASE64_URL_SAFE_NO_PAD.encode(self.hash.inner))?;
-        Ok(())
-    }
-}
-
 #[derive(Clone, Copy, Eq, Ord, PartialEq, PartialOrd, udigest::Digestable)]
 pub struct RawHash {
     inner: [u8; 32],
