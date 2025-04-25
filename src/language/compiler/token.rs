@@ -114,7 +114,7 @@ fn resolve_function(
                     );
 
                 Ok((
-                    Expression::LiteralFunction {
+                    Expression::Function {
                         function: Function { parameter, body },
                     },
                     None,

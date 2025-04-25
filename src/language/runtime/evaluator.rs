@@ -122,8 +122,7 @@ impl Evaluator {
         // node that can be evaluated, and that all its parents are on the
         // evaluation stack, so they can be evaluated later.
         loop {
-            if let Expression::LiteralFunction { .. }
-            | Expression::Error { .. } =
+            if let Expression::Function { .. } | Expression::Error { .. } =
                 codebase.node_at(&node.syntax_node).node
             {
                 // We encountered a function literal and an error node. Either
@@ -214,7 +213,7 @@ impl Evaluator {
                     node.evaluated_children.into_active_value(),
                 );
             }
-            Expression::LiteralFunction {
+            Expression::Function {
                 function: Function { parameter: _, body },
             } => {
                 match node.evaluated_children.clone().into_active_value() {
@@ -401,7 +400,7 @@ mod tests {
             let body = change_set.nodes_mut().insert(Expression::Empty);
 
             let function =
-                change_set.nodes_mut().insert(Expression::LiteralFunction {
+                change_set.nodes_mut().insert(Expression::Function {
                     function: Function { parameter, body },
                 });
 

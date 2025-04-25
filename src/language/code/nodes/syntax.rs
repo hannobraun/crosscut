@@ -34,7 +34,7 @@ pub enum Expression {
     /// # A function literal
     ///
     /// Evaluates to a function value.
-    LiteralFunction { function: Function },
+    Function { function: Function },
 
     /// # A number literal
     ///
@@ -142,7 +142,7 @@ impl Expression {
                 function: child_a,
                 argument: child_b,
             }
-            | Self::LiteralFunction {
+            | Self::Function {
                 function:
                     Function {
                         parameter: child_a,
@@ -174,7 +174,7 @@ impl Expression {
                 function: NodeHash { .. },
                 argument: NodeHash { .. },
             }
-            | Self::LiteralFunction {
+            | Self::Function {
                 function:
                     Function {
                         parameter: NodeHash { .. },
@@ -197,7 +197,7 @@ impl Expression {
             Self::Apply { .. }
             | Self::Empty
             | Self::LiteralNumber { value: _ }
-            | Self::LiteralFunction {
+            | Self::Function {
                 function:
                     Function {
                         parameter: NodeHash { .. },
@@ -218,7 +218,7 @@ impl Expression {
                 function: a,
                 argument: b,
             }
-            | Self::LiteralFunction {
+            | Self::Function {
                 function:
                     Function {
                         parameter: a,
@@ -262,7 +262,7 @@ impl fmt::Display for NodeDisplay<'_> {
             Expression::Empty => {
                 write!(f, "")
             }
-            Expression::LiteralFunction { .. } => {
+            Expression::Function { .. } => {
                 write!(f, "fn")
             }
             Expression::LiteralNumber { value } => {

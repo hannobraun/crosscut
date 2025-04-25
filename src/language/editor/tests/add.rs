@@ -71,7 +71,7 @@ fn add_fn_node() {
 
     assert_eq!(
         function.node,
-        &Expression::LiteralFunction {
+        &Expression::Function {
             function: Function {
                 parameter: *parameter.path.hash(),
                 body: *body.path.hash(),

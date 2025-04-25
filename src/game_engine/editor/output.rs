@@ -249,7 +249,7 @@ fn render_node<A: EditorOutputAdapter>(
     }
 
     let color = match node {
-        Expression::LiteralFunction { .. }
+        Expression::Function { .. }
         | Expression::LiteralNumber { .. }
         | Expression::LiteralTuple { .. } => Some(Color::DarkBlue),
         Expression::ProvidedFunction { .. } => Some(Color::DarkMagenta),
@@ -371,7 +371,7 @@ fn render_help<A: EditorOutputAdapter>(
                 making up your mind about what you want to type."
             )?;
         }
-        Expression::LiteralFunction { .. } => {
+        Expression::Function { .. } => {
             writeln!(
                 adapter,
                 "This is a function literal that produces a function value.",
