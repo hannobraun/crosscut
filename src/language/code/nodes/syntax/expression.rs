@@ -154,52 +154,6 @@ impl Expression {
         }
     }
 
-    pub fn has_no_children(&self) -> bool {
-        match self {
-            Self::Apply {
-                function: NodeHash { .. },
-                argument: NodeHash { .. },
-            }
-            | Self::Function {
-                function:
-                    Function {
-                        parameter: NodeHash { .. },
-                        body: NodeHash { .. },
-                    },
-            } => false,
-
-            Self::Empty
-            | Self::Number { value: _ }
-            | Self::ProvidedFunction { .. }
-            | Self::Recursion => true,
-
-            Self::Tuple { values: children } | Self::Error { children, .. } => {
-                children.is_empty()
-            }
-        }
-    }
-
-    pub fn has_single_child(&self) -> Option<&NodeHash<Expression>> {
-        match self {
-            Self::Apply { .. }
-            | Self::Empty
-            | Self::Number { value: _ }
-            | Self::Function {
-                function:
-                    Function {
-                        parameter: NodeHash { .. },
-                        body: NodeHash { .. },
-                    },
-            }
-            | Self::ProvidedFunction { .. }
-            | Self::Recursion => None,
-
-            Self::Tuple { values: children } | Self::Error { children, .. } => {
-                children.is_single_child()
-            }
-        }
-    }
-
     pub fn to_children(&self) -> Children {
         match self {
             Self::Apply {
