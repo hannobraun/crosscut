@@ -173,9 +173,9 @@ impl Expression {
             | Self::ProvidedFunction { .. }
             | Self::Recursion => Children::new([]),
 
-            Self::Tuple { values: children } | Self::Error { children, .. } => {
-                children.clone()
-            }
+            Self::Tuple { values: children } => children.clone(),
+
+            Self::Error { children, .. } => children.clone(),
         }
     }
 
