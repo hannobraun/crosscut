@@ -251,7 +251,7 @@ fn render_node<A: EditorOutputAdapter>(
     let color = match node {
         Expression::Function { .. }
         | Expression::Number { .. }
-        | Expression::LiteralTuple { .. } => Some(Color::DarkBlue),
+        | Expression::Tuple { .. } => Some(Color::DarkBlue),
         Expression::ProvidedFunction { .. } => Some(Color::DarkMagenta),
         Expression::Error { .. } => Some(ERROR_COLOR),
         _ => None,
@@ -384,7 +384,7 @@ fn render_help<A: EditorOutputAdapter>(
                 `{value}`.",
             )?;
         }
-        Expression::LiteralTuple { .. } => {
+        Expression::Tuple { .. } => {
             writeln!(
                 adapter,
                 "This a tuple literal that produces a tuple value which \

@@ -57,7 +57,7 @@ pub enum Expression {
     ///
     /// Tuples only exist in the language as a placeholder. I (@hannobraun)
     /// expect to replace them with record types at some point.
-    LiteralTuple {
+    Tuple {
         /// # The nodes that determine the values of the tuple literal
         ///
         /// A tuple literal can have an arbitrary number of children, each of
@@ -151,8 +151,7 @@ impl Expression {
             | Self::ProvidedFunction { .. }
             | Self::Recursion => false,
 
-            Self::LiteralTuple { values: children }
-            | Self::Error { children, .. } => {
+            Self::Tuple { values: children } | Self::Error { children, .. } => {
                 children.contains_at(child, sibling_index)
             }
         }
@@ -177,8 +176,9 @@ impl Expression {
             | Self::ProvidedFunction { .. }
             | Self::Recursion => true,
 
-            Self::LiteralTuple { values: children }
-            | Self::Error { children, .. } => children.is_empty(),
+            Self::Tuple { values: children } | Self::Error { children, .. } => {
+                children.is_empty()
+            }
         }
     }
 
@@ -197,8 +197,9 @@ impl Expression {
             | Self::ProvidedFunction { .. }
             | Self::Recursion => None,
 
-            Self::LiteralTuple { values: children }
-            | Self::Error { children, .. } => children.is_single_child(),
+            Self::Tuple { values: children } | Self::Error { children, .. } => {
+                children.is_single_child()
+            }
         }
     }
 
@@ -221,8 +222,9 @@ impl Expression {
             | Self::ProvidedFunction { .. }
             | Self::Recursion => Children::new([]),
 
-            Self::LiteralTuple { values: children }
-            | Self::Error { children, .. } => children.clone(),
+            Self::Tuple { values: children } | Self::Error { children, .. } => {
+                children.clone()
+            }
         }
     }
 
@@ -258,7 +260,7 @@ impl fmt::Display for NodeDisplay<'_> {
             Expression::Number { value } => {
                 write!(f, "{value}")
             }
-            Expression::LiteralTuple { .. } => {
+            Expression::Tuple { .. } => {
                 write!(f, "tuple")
             }
             Expression::ProvidedFunction { id, .. } => {

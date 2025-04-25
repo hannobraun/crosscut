@@ -254,7 +254,7 @@ impl Evaluator {
 
                 self.finish_evaluating_node(Value::Integer { value: *value });
             }
-            Expression::LiteralTuple { .. } => {
+            Expression::Tuple { .. } => {
                 assert!(
                     node.children_to_evaluate.is_empty(),
                     "Due to the loop above, which puts all children of a node \
@@ -438,10 +438,9 @@ mod tests {
         codebase.make_change(|change_set| {
             let recursion =
                 change_set.nodes_mut().insert(Expression::Recursion);
-            let argument =
-                change_set.nodes_mut().insert(Expression::LiteralTuple {
-                    values: Children::new([]),
-                });
+            let argument = change_set.nodes_mut().insert(Expression::Tuple {
+                values: Children::new([]),
+            });
 
             let apply = change_set.nodes_mut().insert(Expression::Apply {
                 function: recursion,

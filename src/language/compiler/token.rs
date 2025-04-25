@@ -126,7 +126,7 @@ fn resolve_function(
                 children,
             )),
             Literal::Tuple => {
-                Ok((Expression::LiteralTuple { values: children }, None))
+                Ok((Expression::Tuple { values: children }, None))
             }
         },
         (None, None) => {
