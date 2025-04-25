@@ -167,16 +167,6 @@ pub struct SiblingIndex {
     pub index: usize,
 }
 
-impl SiblingIndex {
-    pub fn dec(self) -> Self {
-        let Some(index) = self.index.checked_sub(1) else {
-            panic!("Can't decrement sibling index `{}`", self.index);
-        };
-
-        Self { index }
-    }
-}
-
 #[derive(Debug, Eq, PartialEq)]
 pub struct LocatedNode<'r> {
     pub node: &'r Expression,
