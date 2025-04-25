@@ -6,7 +6,7 @@ mod syntax;
 
 pub use self::{
     children::Children,
-    hash::NodeHash,
+    hash::{NodeHash, RawHash},
     nodes::Nodes,
     path::{LocatedNode, NodePath, SiblingIndex},
     syntax::{Expression, Function},

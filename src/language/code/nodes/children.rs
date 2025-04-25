@@ -1,6 +1,6 @@
 use std::{slice, vec};
 
-use super::{Expression, NodeHash, NodePath, SiblingIndex};
+use super::{Expression, NodeHash, NodePath, RawHash, SiblingIndex};
 
 #[derive(Clone, Debug, Eq, Ord, PartialEq, PartialOrd, udigest::Digestable)]
 pub struct Children {
@@ -21,13 +21,13 @@ impl Children {
 
     pub fn contains_at(
         &self,
-        child: &NodeHash<Expression>,
+        child: &RawHash,
         sibling_index: &SiblingIndex,
     ) -> bool {
         self.inner
             .iter()
             .enumerate()
-            .any(|(index, c)| (c == child && index == sibling_index.index))
+            .any(|(index, c)| c.raw() == child && index == sibling_index.index)
     }
 
     /// # Access the single child of this node

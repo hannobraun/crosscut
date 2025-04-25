@@ -145,11 +145,11 @@ impl Expression {
             | Self::Recursion => false,
 
             Self::Tuple { values: children } => {
-                children.contains_at(child, sibling_index)
+                children.contains_at(child.raw(), sibling_index)
             }
 
             Self::Error { children, .. } => {
-                children.contains_at(child, sibling_index)
+                children.contains_at(child.raw(), sibling_index)
             }
         }
     }
