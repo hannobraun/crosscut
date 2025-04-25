@@ -1,7 +1,7 @@
 use std::fmt;
 
 use crate::language::{
-    code::{Children, NodeHash, SiblingIndex},
+    code::{Children, NodeHash, SiblingIndex, nodes::RawHash},
     packages::{FunctionId, Packages},
 };
 
@@ -117,7 +117,7 @@ pub enum Expression {
 impl Expression {
     pub fn has_child_at(
         &self,
-        child: &NodeHash<Expression>,
+        child: &RawHash,
         sibling_index: &SiblingIndex,
     ) -> bool {
         match self {
@@ -135,8 +135,8 @@ impl Expression {
                 let [index_a, index_b] =
                     [0, 1].map(|index| SiblingIndex { index });
 
-                child == child_a && sibling_index == &index_a
-                    || child == child_b && sibling_index == &index_b
+                child == child_a.raw() && sibling_index == &index_a
+                    || child == child_b.raw() && sibling_index == &index_b
             }
 
             Self::Empty
@@ -145,11 +145,11 @@ impl Expression {
             | Self::Recursion => false,
 
             Self::Tuple { values: children } => {
-                children.contains_at(child.raw(), sibling_index)
+                children.contains_at(child, sibling_index)
             }
 
             Self::Error { children, .. } => {
-                children.contains_at(child.raw(), sibling_index)
+                children.contains_at(child, sibling_index)
             }
         }
     }
