@@ -69,3 +69,10 @@ impl<T> fmt::Display for NodeHash<T> {
 pub struct RawHash {
     inner: [u8; 32],
 }
+
+impl fmt::Display for RawHash {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", BASE64_URL_SAFE_NO_PAD.encode(self.inner))?;
+        Ok(())
+    }
+}
