@@ -67,7 +67,7 @@ impl NodePath {
                     listed among children of its supposed parent, at the given \
                     sibling index.\n\
                     \n\
-                    Trying to construct `NodePath` for hash `{hash}` with \
+                    Trying to construct `NodePath` for hash `{hash:?}` with \
                     sibling index {index}.\n\
                     \n\
                     Parent:\n\
