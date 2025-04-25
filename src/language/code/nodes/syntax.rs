@@ -1,18 +1,12 @@
+mod function;
+
+pub use self::function::Function;
+
 use std::fmt;
 
 use crate::language::packages::{FunctionId, Packages};
 
 use super::{Children, NodeHash, SiblingIndex};
-
-/// # A function
-#[derive(Clone, Debug, Eq, Ord, PartialEq, PartialOrd, udigest::Digestable)]
-pub struct Function {
-    /// # The parameter of the function
-    pub parameter: NodeHash<Expression>,
-
-    /// # The root node of the function's body
-    pub body: NodeHash<Expression>,
-}
 
 #[derive(Clone, Debug, Eq, Ord, PartialEq, PartialOrd, udigest::Digestable)]
 pub enum Expression {
