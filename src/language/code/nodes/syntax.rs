@@ -49,22 +49,6 @@ pub enum Expression {
         value: i32,
     },
 
-    /// # A tuple literal
-    ///
-    /// A literal that evaluates to a composite data type, a tuple.
-    ///
-    /// ## Implementation Note
-    ///
-    /// Tuples only exist in the language as a placeholder. I (@hannobraun)
-    /// expect to replace them with record types at some point.
-    Tuple {
-        /// # The nodes that determine the values of the tuple literal
-        ///
-        /// A tuple literal can have an arbitrary number of children, each of
-        /// which evaluates to one of the values in the tuple value.
-        values: Children,
-    },
-
     /// # The application of a provided function
     ///
     /// Evaluating this note applies a provided function to the active value.
@@ -110,6 +94,22 @@ pub enum Expression {
     /// Evaluating the node recursively applies the current function to the
     /// active value.
     Recursion,
+
+    /// # A tuple literal
+    ///
+    /// A literal that evaluates to a composite data type, a tuple.
+    ///
+    /// ## Implementation Note
+    ///
+    /// Tuples only exist in the language as a placeholder. I (@hannobraun)
+    /// expect to replace them with record types at some point.
+    Tuple {
+        /// # The nodes that determine the values of the tuple literal
+        ///
+        /// A tuple literal can have an arbitrary number of children, each of
+        /// which evaluates to one of the values in the tuple value.
+        values: Children,
+    },
 
     /// # The result of a build error
     Error {
@@ -260,15 +260,15 @@ impl fmt::Display for NodeDisplay<'_> {
             Expression::Number { value } => {
                 write!(f, "{value}")
             }
-            Expression::Tuple { .. } => {
-                write!(f, "tuple")
-            }
             Expression::ProvidedFunction { id, .. } => {
                 let name = self.packages.function_name_by_id(id);
                 write!(f, "{name}")
             }
             Expression::Recursion => {
                 write!(f, "self")
+            }
+            Expression::Tuple { .. } => {
+                write!(f, "tuple")
             }
             Expression::Error { node, .. } => {
                 write!(f, "{node}")

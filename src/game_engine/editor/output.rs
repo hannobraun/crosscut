@@ -384,13 +384,6 @@ fn render_help<A: EditorOutputAdapter>(
                 `{value}`.",
             )?;
         }
-        Expression::Tuple { .. } => {
-            writeln!(
-                adapter,
-                "This a tuple literal that produces a tuple value which \
-                contains the tuple's children.",
-            )?;
-        }
         Expression::ProvidedFunction { .. } => {
             writeln!(
                 adapter,
@@ -405,6 +398,13 @@ fn render_help<A: EditorOutputAdapter>(
                 "You are editing the `{}` keyword, which calls the current \
                 function recursively.",
                 node.display(context.packages),
+            )?;
+        }
+        Expression::Tuple { .. } => {
+            writeln!(
+                adapter,
+                "This a tuple literal that produces a tuple value which \
+                contains the tuple's children.",
             )?;
         }
         Expression::Error { .. } => {

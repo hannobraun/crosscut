@@ -254,18 +254,6 @@ impl Evaluator {
 
                 self.finish_evaluating_node(Value::Integer { value: *value });
             }
-            Expression::Tuple { .. } => {
-                assert!(
-                    node.children_to_evaluate.is_empty(),
-                    "Due to the loop above, which puts all children of a node \
-                    on the evaluation stack, on top of that node, all children \
-                    of the tuple must be evaluated by now.",
-                );
-
-                self.finish_evaluating_node(Value::Tuple {
-                    values: node.evaluated_children.inner.into_iter().collect(),
-                });
-            }
             Expression::ProvidedFunction { id, .. } => {
                 self.finish_evaluating_node(Value::ProvidedFunction {
                     id: *id,
@@ -279,6 +267,18 @@ impl Evaluator {
                     .unwrap_or_else(|| codebase.root().path);
 
                 self.finish_evaluating_node(Value::Function { body });
+            }
+            Expression::Tuple { .. } => {
+                assert!(
+                    node.children_to_evaluate.is_empty(),
+                    "Due to the loop above, which puts all children of a node \
+                    on the evaluation stack, on top of that node, all children \
+                    of the tuple must be evaluated by now.",
+                );
+
+                self.finish_evaluating_node(Value::Tuple {
+                    values: node.evaluated_children.inner.into_iter().collect(),
+                });
             }
             Expression::Error { .. } => {
                 self.state = RuntimeState::Error {
