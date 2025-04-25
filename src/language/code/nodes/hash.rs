@@ -19,7 +19,7 @@ use base64::{Engine, prelude::BASE64_URL_SAFE_NO_PAD};
 /// [`NodePath`]: super::NodePath
 #[derive(Clone, Eq, Ord, PartialEq, PartialOrd, udigest::Digestable)]
 pub struct NodeHash<T> {
-    hash: [u8; 32],
+    hash: RawHash,
     _t: PhantomData<T>,
 }
 
@@ -28,7 +28,9 @@ impl<T> NodeHash<T> {
     where
         T: udigest::Digestable,
     {
-        let hash = udigest::hash::<blake3::Hasher>(&node).into();
+        let hash = RawHash {
+            inner: udigest::hash::<blake3::Hasher>(&node).into(),
+        };
         Self {
             hash,
             _t: PhantomData,
@@ -51,14 +53,19 @@ impl<T> fmt::Debug for NodeHash<T> {
         };
 
         f.debug_struct(&format!("NodeHash<{type_parameter}>"))
-            .field("hash", &BASE64_URL_SAFE_NO_PAD.encode(self.hash))
+            .field("hash", &BASE64_URL_SAFE_NO_PAD.encode(self.hash.inner))
             .finish()
     }
 }
 
 impl<T> fmt::Display for NodeHash<T> {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", BASE64_URL_SAFE_NO_PAD.encode(self.hash))?;
+        write!(f, "{}", BASE64_URL_SAFE_NO_PAD.encode(self.hash.inner))?;
         Ok(())
     }
+}
+
+#[derive(Clone, Copy, Eq, Ord, PartialEq, PartialOrd, udigest::Digestable)]
+pub struct RawHash {
+    inner: [u8; 32],
 }
