@@ -1,13 +1,13 @@
 mod children;
 mod hash;
-mod node;
 mod nodes;
 mod path;
+mod syntax;
 
 pub use self::{
     children::Children,
     hash::NodeHash,
-    node::{Expression, Function},
     nodes::Nodes,
     path::{LocatedNode, NodePath, SiblingIndex},
+    syntax::{Expression, Function},
 };
