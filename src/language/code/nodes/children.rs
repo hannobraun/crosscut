@@ -1,4 +1,4 @@
-use std::{slice, vec};
+use std::vec;
 
 use super::{Expression, NodeHash, NodePath, RawHash, SiblingIndex};
 
@@ -63,7 +63,7 @@ impl Children {
         *child = replacement;
     }
 
-    pub fn iter(&self) -> slice::Iter<NodeHash<Expression>> {
+    pub fn iter(&self) -> impl Iterator<Item = &NodeHash<Expression>> {
         self.inner.iter()
     }
 }
