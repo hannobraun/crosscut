@@ -28,8 +28,7 @@ pub enum Expression {
     /// # An empty node
     ///
     /// Empty nodes are placeholders, while the user is editing the code. They
-    /// have no effect. They can have up to one child, and evaluate to their
-    /// input.
+    /// have no effect and evaluate to the empty tuple.
     Empty,
 
     /// # A function literal
