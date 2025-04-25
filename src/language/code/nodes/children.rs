@@ -30,17 +30,6 @@ impl Children {
             .any(|(index, c)| c.raw() == child && index == sibling_index.index)
     }
 
-    /// # Access the single child of this node
-    ///
-    /// Returns `None`, if the node has zero or more than one children.
-    pub fn is_single_child(&self) -> Option<&NodeHash<Expression>> {
-        if self.inner.len() == 1 {
-            self.inner.first()
-        } else {
-            None
-        }
-    }
-
     pub fn next_index(&self) -> SiblingIndex {
         SiblingIndex {
             index: self.inner.len(),
@@ -102,30 +91,5 @@ impl<'r> IntoIterator for &'r Children {
 
     fn into_iter(self) -> Self::IntoIter {
         self.iter()
-    }
-}
-
-#[cfg(test)]
-mod tests {
-    use crate::language::code::{Expression, NodeHash};
-
-    use super::Children;
-
-    #[test]
-    fn has_one_should_indicate_whether_there_is_one_child() {
-        let [a, b, ..] = test_nodes();
-
-        assert!(Children::new([]).is_single_child().is_none());
-        assert!(Children::new([a]).is_single_child().is_some());
-        assert!(Children::new([a, b]).is_single_child().is_none());
-    }
-
-    fn test_nodes() -> [NodeHash<Expression>; 5] {
-        ["a", "b", "c", "d", "e"].map(|node| {
-            NodeHash::new(&Expression::Error {
-                node: node.to_string(),
-                children: Children::new([]),
-            })
-        })
     }
 }
