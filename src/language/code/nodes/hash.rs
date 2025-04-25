@@ -36,6 +36,10 @@ impl<T> NodeHash<T> {
             _t: PhantomData,
         }
     }
+
+    pub fn raw(&self) -> &RawHash {
+        &self.hash
+    }
 }
 
 impl<T> Copy for NodeHash<T> where T: Clone {}
