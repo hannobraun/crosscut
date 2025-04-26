@@ -1,5 +1,7 @@
 use crate::language::{
-    code::{Children, Errors, Expression, NewChangeSet, NodeHash, NodePath},
+    code::{
+        Children, Errors, Expression, NewChangeSet, NodeHash, NodePath, Nodes,
+    },
     packages::Packages,
 };
 
@@ -19,7 +21,7 @@ pub fn replace_node_and_update_parents(
         replacement_token,
         children,
         replacements,
-        change_set,
+        change_set.nodes_mut(),
         errors,
         packages,
     );
@@ -71,7 +73,7 @@ impl ReplaceAction {
                     token,
                     children,
                     replacements,
-                    change_set,
+                    change_set.nodes_mut(),
                     errors,
                     packages,
                 )
@@ -94,7 +96,7 @@ fn compile_token(
     token: String,
     children: Children,
     mut replacements: Vec<Replacement>,
-    change_set: &mut NewChangeSet,
+    nodes: &mut Nodes,
     errors: &mut Errors,
     packages: &Packages,
 ) -> ReplaceAction {
@@ -102,7 +104,7 @@ fn compile_token(
         text: &token,
         children,
     };
-    let replacement = token.compile(change_set.nodes_mut(), errors, packages);
+    let replacement = token.compile(nodes, errors, packages);
 
     let replacement = Replacement {
         replaced: path,
@@ -110,7 +112,7 @@ fn compile_token(
     };
 
     if let Some(parent) = replacement.replaced.parent().cloned() {
-        let parent_node = change_set.nodes().get(parent.hash());
+        let parent_node = nodes.get(parent.hash());
 
         let mut next_children = parent_node.to_children();
         next_children.replace(&replacement.replaced, replacement.replacement);
