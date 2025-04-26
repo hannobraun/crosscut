@@ -3,7 +3,7 @@ use itertools::Itertools;
 use crate::language::{
     code::{
         CandidateForResolution, Children, CodeError, Errors, Expression,
-        Function, Literal, NewChangeSet, NodeHash, Nodes,
+        Function, Literal, NodeHash, Nodes,
     },
     packages::Packages,
 };
@@ -16,7 +16,7 @@ pub struct Token<'r> {
 impl Token<'_> {
     pub fn compile(
         self,
-        change_set: &mut NewChangeSet,
+        nodes: &mut Nodes,
         errors: &mut Errors,
         packages: &Packages,
     ) -> NodeHash<Expression> {
@@ -27,16 +27,11 @@ impl Token<'_> {
                 self.children,
             )
         } else if let Some((node, maybe_err)) =
-            resolve_keyword(self.text, &self.children, change_set.nodes_mut())
+            resolve_keyword(self.text, &self.children, nodes)
         {
             (node, maybe_err)
         } else {
-            match resolve_function(
-                self.text,
-                self.children,
-                packages,
-                change_set.nodes_mut(),
-            ) {
+            match resolve_function(self.text, self.children, packages, nodes) {
                 Ok((node, maybe_err)) => (node, maybe_err),
                 Err((children, candidates)) => (
                     Expression::Error {
@@ -48,7 +43,7 @@ impl Token<'_> {
             }
         };
 
-        let hash = change_set.nodes_mut().insert(node);
+        let hash = nodes.insert(node);
         if let Some(error) = maybe_error {
             errors.insert(hash, error);
         }

@@ -102,7 +102,7 @@ fn compile_token(
         text: &token,
         children,
     };
-    let replacement = token.compile(change_set, errors, packages);
+    let replacement = token.compile(change_set.nodes_mut(), errors, packages);
 
     let replacement = Replacement {
         replaced: path,
