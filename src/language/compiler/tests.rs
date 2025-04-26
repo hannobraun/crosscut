@@ -195,7 +195,7 @@ fn updating_child_updates_parent() {
     let child = compiler.replace(&child.path, "127", &packages);
 
     // After editing the child, the new parent node should be the same as the
-    // old one.
+    // old one, but with an updated child.
     let parent = compiler.codebase().root().path;
     check_parent(parent, [*child.hash()], &codebase);
 
