@@ -81,13 +81,12 @@ impl NewChangeSet<'_> {
 
     /// # Mark a node in the change set as replacing another
     ///
-    /// This method must be used in conjunction with `add`, to insert the node
-    /// in the first place. This method only tracks the replacement of nodes,
-    /// and doesn't insert them itself.
+    /// This method only tracks the replacement of nodes. It doesn't insert them
+    /// itself.
     ///
-    /// Since `add` can only provide a [`NodeHash`], not a full [`NodePath`], it
-    /// is the responsibility of the caller to construct a [`NodePath`] based on
-    /// the contextual information it has access to.
+    /// It it the responsibility of the caller to insert the new node, then
+    /// construct a [`NodePath`] for it, using the contextual information it has
+    /// access to.
     ///
     /// ## Panics
     ///
