@@ -1,4 +1,4 @@
-export const listDailyThoughts = async () => {
+export const listDailyNotes = async () => {
     const dates = [];
 
     for await (const dirEntry of Deno.readDir("content/daily")) {

@@ -32,7 +32,7 @@ Deno.serve(async (request) => {
     }
 
     if (url.pathname == "/daily") {
-        const dates = await content.listDailyThoughts();
+        const dates = await content.listDailyNotes();
         const page = dailyNotesPage(dates);
         return response.page(page);
     }
@@ -55,7 +55,7 @@ Deno.serve(async (request) => {
         const path = `content/daily/${date}.md`;
         const md = await Deno.readTextFile(path);
 
-        const dates = await content.listDailyThoughts();
+        const dates = await content.listDailyNotes();
 
         const page = singleDailyNotePage(date, md, dates);
 
