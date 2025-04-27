@@ -26,7 +26,7 @@ export const singleDailyNotePage = (
     if (new Date("2024-12-25") > new Date(date)) {
         nameExplainer = box(
             <p>
-                This thought was published {link(
+                This note was published {link(
                     "/daily/2024-12-25",
                     " before Crosscut was called Crosscut",
                 )}! If it refers to "Caterpillar", that is the old name, just so
