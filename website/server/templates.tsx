@@ -11,7 +11,7 @@ export const dailyNotesPage = (dates: string[]) => {
         "Daily Notes",
         <>
             <h2>Daily Notes</h2>
-            {dailyThoughtsExplainer()}
+            {dailyNotesExplainer()}
             <ol class="m-8">{entries}</ol>
         </>,
     );
@@ -44,7 +44,7 @@ export const singleDailyThoughtPage = (
         `Daily Note - ${date}`,
         <>
             <h2>Daily Note - {date}</h2>
-            {dailyThoughtsExplainer()}
+            {dailyNotesExplainer()}
             {nameExplainer}
             <div class="my-8">
                 <nav>
@@ -99,7 +99,7 @@ const dailyThoughtLink = (date: string, label: string) => {
     return link(url, label);
 };
 
-const dailyThoughtsExplainer = () => {
+const dailyNotesExplainer = () => {
     return box(
         <p class="prose">
             Hey, I'm Hanno! These are my daily notes on{" "}
