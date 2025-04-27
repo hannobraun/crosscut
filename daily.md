@@ -1,6 +1,6 @@
-# Daily Thoughts
+# Daily Notes
 
-Daily thoughts have moved to a website:
+Daily notes have moved to a website:
 [https://capi.hannobraun.com/daily](https://capi.hannobraun.com/daily)
 
 The sources for this website are available in this repository:
