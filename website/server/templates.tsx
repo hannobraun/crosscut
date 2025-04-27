@@ -63,7 +63,7 @@ export const singleDailyNotePage = (
 };
 
 const dailyNoteItem = (date: string) => {
-    const link = dailyThoughtLink(date, date);
+    const link = dailyNoteLink(date, date);
 
     return (
         <li class="my-4 font-bold text-lg">
@@ -82,19 +82,19 @@ const dailyNoteNavigation = (date: string, dates: string[]) => {
         <>
             {prev && (
                 <span class="col-1 justify-self-start">
-                    {dailyThoughtLink(prev, "<< previous thought")}
+                    {dailyNoteLink(prev, "<< previous thought")}
                 </span>
             )}
             {next && (
                 <span class="col-2 justify-self-end">
-                    {dailyThoughtLink(next, "next thought >>")}
+                    {dailyNoteLink(next, "next thought >>")}
                 </span>
             )}
         </>
     );
 };
 
-const dailyThoughtLink = (date: string, label: string) => {
+const dailyNoteLink = (date: string, label: string) => {
     const url = `/daily/${date}`;
     return link(url, label);
 };
