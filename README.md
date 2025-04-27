@@ -24,8 +24,8 @@ From the start, this project has been organized as a series of prototypes. Work
 just started on a new one, so as far as the implementation is concerned, we're
 back at the start, and there's nothing much to see here.
 
-You can keep up with the latest developments by reading my [daily thoughts],
-which include regular updates.
+You can keep up with the latest developments by reading my [daily notes], which
+include regular updates.
 
 ## Usage
 
@@ -48,7 +48,7 @@ This section aims to document the decisions that have gone into the language
 design. Nothing here going to be final.
 
 For more information on future design directions, consider following my
-[daily thoughts].
+[daily notes].
 
 ### Developer experience is the priority, but not an absolute one
 
@@ -244,6 +244,6 @@ liable for problems.
 See [LICENSE.md] for full details.
 
 [Snake]: games/snake/snake.capi
-[daily thoughts]: https://capi.hannobraun.com/daily
+[daily notes]: https://capi.hannobraun.com/daily
 [Zero Clause BSD License]: https://opensource.org/licenses/0BSD
 [LICENSE.md]: LICENSE.md
