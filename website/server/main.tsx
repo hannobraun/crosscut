@@ -2,7 +2,7 @@ import * as http from "@std/http";
 
 import * as content from "./content.ts";
 import * as response from "./response.ts";
-import { dailyThoughtsPage, singleDailyThoughtPage } from "./templates.tsx";
+import { dailyNotesPage, singleDailyThoughtPage } from "./templates.tsx";
 
 Deno.serve(async (request) => {
     const url = new URL(request.url);
@@ -33,7 +33,7 @@ Deno.serve(async (request) => {
 
     if (url.pathname == "/daily") {
         const dates = await content.listDailyThoughts();
-        const page = dailyThoughtsPage(dates);
+        const page = dailyNotesPage(dates);
         return response.page(page);
     }
 

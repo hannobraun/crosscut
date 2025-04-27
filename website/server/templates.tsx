@@ -1,7 +1,7 @@
 import { JSX } from "@bossley9/sjsx/jsx-runtime";
 import * as gfm from "@deno/gfm";
 
-export const dailyThoughtsPage = (dates: string[]) => {
+export const dailyNotesPage = (dates: string[]) => {
     const entries = [];
     for (const date of dates) {
         entries.push(dailyThoughtItem(date));
