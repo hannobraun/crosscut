@@ -43,14 +43,12 @@ impl<'r> Compiler<'r> {
                 parent, token, siblings, change_set, errors, packages,
             );
 
-            let child_path = NodePath::new(
+            NodePath::new(
                 child,
                 Some(parent_path),
                 sibling_index,
                 change_set.nodes(),
-            );
-
-            child_path
+            )
         })
     }
 
