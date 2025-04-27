@@ -48,15 +48,7 @@ impl Codebase {
         &self.errors
     }
 
-    #[cfg(test)]
     pub fn make_change<R>(
-        &mut self,
-        f: impl FnOnce(&mut NewChangeSet) -> R,
-    ) -> R {
-        self.make_change_with_errors(|change_set| f(change_set))
-    }
-
-    pub fn make_change_with_errors<R>(
         &mut self,
         f: impl FnOnce(&mut NewChangeSet) -> R,
     ) -> R {
