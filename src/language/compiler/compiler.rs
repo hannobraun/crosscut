@@ -24,7 +24,7 @@ impl<'r> Compiler<'r> {
         child_token: &str,
         packages: &Packages,
     ) -> NodePath {
-        self.codebase.make_change_with_errors(|change_set, errors| {
+        self.codebase.make_change_with_errors(|change_set| {
             let mut siblings =
                 change_set.nodes.get(parent.hash()).to_children();
             let sibling_index = siblings.next_index();
@@ -33,13 +33,14 @@ impl<'r> Compiler<'r> {
                 text: child_token,
                 children: Children::new([]),
             };
-            let child = token.compile(change_set.nodes, errors, packages);
+            let child =
+                token.compile(change_set.nodes, change_set.errors, packages);
 
             siblings.add(child);
 
             let token = change_set.nodes.get(parent.hash()).to_token(packages);
             let parent_path = replace_node_and_update_parents(
-                parent, token, siblings, change_set, errors, packages,
+                parent, token, siblings, change_set, packages,
             );
 
             NodePath::new(
@@ -98,13 +99,12 @@ impl<'r> Compiler<'r> {
         children: impl Into<Children>,
         packages: &Packages,
     ) -> NodePath {
-        self.codebase.make_change_with_errors(|change_set, errors| {
+        self.codebase.make_change_with_errors(|change_set| {
             replace_node_and_update_parents(
                 to_replace.clone(),
                 replacement_token.to_string(),
                 children.into(),
                 change_set,
-                errors,
                 packages,
             )
         })

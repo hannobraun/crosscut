@@ -12,7 +12,6 @@ pub fn replace_node_and_update_parents(
     replacement_token: String,
     children: Children,
     change_set: &mut NewChangeSet,
-    errors: &mut Errors,
     packages: &Packages,
 ) -> NodePath {
     let replacements = Vec::new();
@@ -22,12 +21,12 @@ pub fn replace_node_and_update_parents(
         children,
         replacements,
         change_set.nodes,
-        errors,
+        change_set.errors,
         packages,
     );
 
     loop {
-        next_action = next_action.perform(change_set, errors, packages);
+        next_action = next_action.perform(change_set, packages);
 
         if let ReplaceAction::Finish { path } = next_action {
             break path;
@@ -57,7 +56,6 @@ impl ReplaceAction {
     fn perform(
         self,
         change_set: &mut NewChangeSet,
-        errors: &mut Errors,
         packages: &Packages,
     ) -> Self {
         match self {
@@ -74,7 +72,7 @@ impl ReplaceAction {
                     children,
                     replacements,
                     change_set.nodes,
-                    errors,
+                    change_set.errors,
                     packages,
                 )
             }

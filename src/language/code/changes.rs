@@ -1,6 +1,6 @@
 use std::collections::{BTreeMap, BTreeSet};
 
-use super::{NodePath, Nodes};
+use super::{Errors, NodePath, Nodes};
 
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub struct Changes {
@@ -17,6 +17,7 @@ impl Changes {
     pub fn new_change_set<'r>(
         &'r mut self,
         nodes: &'r mut Nodes,
+        errors: &'r mut Errors,
     ) -> NewChangeSet<'r> {
         self.change_sets.push(ChangeSet {
             replacements_by_replaced: BTreeMap::new(),
@@ -26,7 +27,11 @@ impl Changes {
             unreachable!("Just pushed a change set. One _must_ be available.");
         };
 
-        NewChangeSet { nodes, change_set }
+        NewChangeSet {
+            nodes,
+            errors,
+            change_set,
+        }
     }
 
     #[cfg(test)]
@@ -63,6 +68,7 @@ impl Changes {
 #[derive(Debug)]
 pub struct NewChangeSet<'r> {
     pub nodes: &'r mut Nodes,
+    pub errors: &'r mut Errors,
 
     change_set: &'r mut ChangeSet,
 }
@@ -149,7 +155,9 @@ struct CircularDependency;
 
 #[cfg(test)]
 mod tests {
-    use crate::language::code::{Children, Expression, NodePath, Nodes};
+    use crate::language::code::{
+        Children, Errors, Expression, NodePath, Nodes,
+    };
 
     use super::Changes;
 
@@ -157,6 +165,7 @@ mod tests {
     fn circular_changes_should_work_correctly() {
         let mut changes = Changes::new();
         let mut nodes = Nodes::default();
+        let mut errors = Errors::new();
 
         let [node_a, node_b] = ["a", "b"].map(|name| Expression::Error {
             node: String::from(name),
@@ -168,7 +177,8 @@ mod tests {
         };
 
         let path_b = {
-            let mut change_set = changes.new_change_set(&mut nodes);
+            let mut change_set =
+                changes.new_change_set(&mut nodes, &mut errors);
 
             let path_b = NodePath::for_root(change_set.nodes.insert(node_b));
             change_set.replace(&path_a, &path_b);
@@ -176,7 +186,8 @@ mod tests {
             path_b
         };
         let path_a = {
-            let mut change_set = changes.new_change_set(&mut nodes);
+            let mut change_set =
+                changes.new_change_set(&mut nodes, &mut errors);
 
             let path_a = NodePath::for_root(change_set.nodes.insert(node_a));
             change_set.replace(&path_b, &path_a);

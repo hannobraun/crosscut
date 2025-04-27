@@ -53,15 +53,17 @@ impl Codebase {
         &mut self,
         f: impl FnOnce(&mut NewChangeSet) -> R,
     ) -> R {
-        self.make_change_with_errors(|change_set, _| f(change_set))
+        self.make_change_with_errors(|change_set| f(change_set))
     }
 
     pub fn make_change_with_errors<R>(
         &mut self,
-        f: impl FnOnce(&mut NewChangeSet, &mut Errors) -> R,
+        f: impl FnOnce(&mut NewChangeSet) -> R,
     ) -> R {
-        let mut new_change_set = self.changes.new_change_set(&mut self.nodes);
-        let value = f(&mut new_change_set, &mut self.errors);
+        let mut new_change_set = self
+            .changes
+            .new_change_set(&mut self.nodes, &mut self.errors);
+        let value = f(&mut new_change_set);
 
         let root_was_replaced =
             new_change_set.change_set().was_replaced(&self.root.path());
