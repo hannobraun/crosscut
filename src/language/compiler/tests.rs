@@ -209,6 +209,9 @@ fn updating_child_updates_parent() {
                 children: Children::new(children),
             },
         );
+
+        // Since a change to a child doesn't change anything substantial about
+        // the parent, any errors that had previously need to be preserved.
         assert_eq!(
             codebase.errors().get(parent.hash()),
             Some(&CodeError::UnresolvedIdentifier { candidates: vec![] }),
