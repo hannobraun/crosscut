@@ -82,12 +82,12 @@ const dailyNoteNavigation = (date: string, dates: string[]) => {
         <>
             {prev && (
                 <span class="col-1 justify-self-start">
-                    {dailyNoteLink(prev, "<< previous thought")}
+                    {dailyNoteLink(prev, "<< previous note")}
                 </span>
             )}
             {next && (
                 <span class="col-2 justify-self-end">
-                    {dailyNoteLink(next, "next thought >>")}
+                    {dailyNoteLink(next, "next note >>")}
                 </span>
             )}
         </>
