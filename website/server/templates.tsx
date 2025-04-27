@@ -17,7 +17,7 @@ export const dailyNotesPage = (dates: string[]) => {
     );
 };
 
-export const singleDailyThoughtPage = (
+export const singleDailyNotePage = (
     date: string,
     md: string,
     dates: string[],
