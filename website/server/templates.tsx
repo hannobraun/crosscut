@@ -4,7 +4,7 @@ import * as gfm from "@deno/gfm";
 export const dailyNotesPage = (dates: string[]) => {
     const entries = [];
     for (const date of dates) {
-        entries.push(dailyThoughtItem(date));
+        entries.push(dailyNoteItem(date));
     }
 
     return page(
@@ -62,7 +62,7 @@ export const singleDailyThoughtPage = (
     );
 };
 
-const dailyThoughtItem = (date: string) => {
+const dailyNoteItem = (date: string) => {
     const link = dailyThoughtLink(date, date);
 
     return (
