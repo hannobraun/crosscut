@@ -62,7 +62,8 @@ impl Changes {
 
 #[derive(Debug)]
 pub struct NewChangeSet<'r> {
-    nodes: &'r mut Nodes,
+    pub nodes: &'r mut Nodes,
+
     change_set: &'r mut ChangeSet,
 }
 
