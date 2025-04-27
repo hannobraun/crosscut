@@ -27,7 +27,7 @@ pub fn replace_node_and_update_parents(
     );
 
     loop {
-        next_action = next_action.perform(change_set, packages);
+        next_action = next_action.perform(change_set);
 
         if let ReplaceAction::Finish { path } = next_action {
             break path;
@@ -53,7 +53,7 @@ enum ReplaceAction {
 }
 
 impl ReplaceAction {
-    fn perform(self, change_set: &mut NewChangeSet, _: &Packages) -> Self {
+    fn perform(self, change_set: &mut NewChangeSet) -> Self {
         match self {
             Self::UpdateChildren {
                 path,
