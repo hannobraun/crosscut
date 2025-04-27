@@ -8,9 +8,9 @@ export const dailyThoughtsPage = (dates: string[]) => {
     }
 
     return page(
-        "Daily Thoughts",
+        "Daily Notes",
         <>
-            <h2>Daily Thoughts</h2>
+            <h2>Daily Notes</h2>
             {dailyThoughtsExplainer()}
             <ol class="m-8">{entries}</ol>
         </>,
@@ -41,9 +41,9 @@ export const singleDailyThoughtPage = (
     });
 
     return page(
-        `Daily Thought - ${date}`,
+        `Daily Note - ${date}`,
         <>
-            <h2>Daily Thought - {date}</h2>
+            <h2>Daily Note - {date}</h2>
             {dailyThoughtsExplainer()}
             {nameExplainer}
             <div class="my-8">
@@ -102,7 +102,7 @@ const dailyThoughtLink = (date: string, label: string) => {
 const dailyThoughtsExplainer = () => {
     return box(
         <p class="prose">
-            Hey, I'm Hanno! These are my daily thoughts on{" "}
+            Hey, I'm Hanno! These are my daily notes on{" "}
             {link("https://github.com/hannobraun/crosscut", "Crosscut")}, the
             programming language I'm creating. If you have any questions,
             comments, or feedback, please {email_link("get in touch")}!
@@ -114,7 +114,7 @@ const subscribe = () => {
     return box(
         <p>
             <span class="font-bold">Hey, you!</span>{" "}
-            Want to subscribe to my daily thoughts? Just{" "}
+            Want to subscribe to my daily notes? Just{" "}
             {email_link("let me know", {
                 subject:
                     "I%27d%20like%20to%20subscribe%20to%20your%20daily%20thoughts%21",
