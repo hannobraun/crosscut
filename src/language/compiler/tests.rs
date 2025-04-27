@@ -79,11 +79,9 @@ fn replace_second_of_two_equal_children() {
 
     let root = codebase.root().path;
     codebase.make_change(|change_set| {
-        let child = change_set.nodes_mut().insert(node("child", []));
+        let child = change_set.nodes.insert(node("child", []));
 
-        let parent = change_set
-            .nodes_mut()
-            .insert(node("parent", [child, child]));
+        let parent = change_set.nodes.insert(node("parent", [child, child]));
 
         change_set.replace(&root, &NodePath::for_root(parent));
     });

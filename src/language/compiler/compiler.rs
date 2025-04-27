@@ -33,7 +33,7 @@ impl<'r> Compiler<'r> {
                 text: child_token,
                 children: Children::new([]),
             };
-            let child = token.compile(change_set.nodes_mut(), errors, packages);
+            let child = token.compile(change_set.nodes, errors, packages);
 
             siblings.add(child);
 

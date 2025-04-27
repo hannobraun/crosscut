@@ -394,15 +394,13 @@ mod tests {
 
         let root = codebase.root().path;
         codebase.make_change(|change_set| {
-            let parameter = change_set
-                .nodes_mut()
-                .insert(Expression::Number { value: 0 });
-            let body = change_set.nodes_mut().insert(Expression::Empty);
+            let parameter =
+                change_set.nodes.insert(Expression::Number { value: 0 });
+            let body = change_set.nodes.insert(Expression::Empty);
 
-            let function =
-                change_set.nodes_mut().insert(Expression::Function {
-                    function: Function { parameter, body },
-                });
+            let function = change_set.nodes.insert(Expression::Function {
+                function: Function { parameter, body },
+            });
 
             change_set.replace(&root, &NodePath::for_root(function));
         });
@@ -436,13 +434,12 @@ mod tests {
 
         let root = codebase.root().path;
         codebase.make_change(|change_set| {
-            let recursion =
-                change_set.nodes_mut().insert(Expression::Recursion);
-            let argument = change_set.nodes_mut().insert(Expression::Tuple {
+            let recursion = change_set.nodes.insert(Expression::Recursion);
+            let argument = change_set.nodes.insert(Expression::Tuple {
                 values: Children::new([]),
             });
 
-            let apply = change_set.nodes_mut().insert(Expression::Apply {
+            let apply = change_set.nodes.insert(Expression::Apply {
                 function: recursion,
                 argument,
             });

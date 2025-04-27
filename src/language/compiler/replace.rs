@@ -21,7 +21,7 @@ pub fn replace_node_and_update_parents(
         replacement_token,
         children,
         replacements,
-        change_set.nodes_mut(),
+        change_set.nodes,
         errors,
         packages,
     );
@@ -73,7 +73,7 @@ impl ReplaceAction {
                     token,
                     children,
                     replacements,
-                    change_set.nodes_mut(),
+                    change_set.nodes,
                     errors,
                     packages,
                 )

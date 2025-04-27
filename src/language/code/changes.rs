@@ -68,10 +68,6 @@ pub struct NewChangeSet<'r> {
 }
 
 impl NewChangeSet<'_> {
-    pub fn nodes_mut(&mut self) -> &mut Nodes {
-        self.nodes
-    }
-
     pub fn change_set(&self) -> &ChangeSet {
         self.change_set
     }
@@ -174,8 +170,7 @@ mod tests {
         let path_b = {
             let mut change_set = changes.new_change_set(&mut nodes);
 
-            let path_b =
-                NodePath::for_root(change_set.nodes_mut().insert(node_b));
+            let path_b = NodePath::for_root(change_set.nodes.insert(node_b));
             change_set.replace(&path_a, &path_b);
 
             path_b
@@ -183,8 +178,7 @@ mod tests {
         let path_a = {
             let mut change_set = changes.new_change_set(&mut nodes);
 
-            let path_a =
-                NodePath::for_root(change_set.nodes_mut().insert(node_a));
+            let path_a = NodePath::for_root(change_set.nodes.insert(node_a));
             change_set.replace(&path_b, &path_a);
 
             path_a

@@ -100,9 +100,7 @@ mod tests {
 
         let old_root = codebase.root().path;
         let new_root = codebase.make_change(|change_set| {
-            let a = NodePath::for_root(
-                change_set.nodes_mut().insert(node("a", [])),
-            );
+            let a = NodePath::for_root(change_set.nodes.insert(node("a", [])));
             change_set.replace(&old_root, &a);
 
             a

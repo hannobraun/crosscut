@@ -16,10 +16,10 @@ fn uniquely_identify_identical_children_of_different_parents() {
 
     let root = codebase.root().path;
     let root = codebase.make_change(|change_set| {
-        let a = change_set.nodes_mut().insert(node("a", []));
-        let b = change_set.nodes_mut().insert(node("b", [a]));
-        let c = change_set.nodes_mut().insert(node("c", [a]));
-        let d = change_set.nodes_mut().insert(node("d", [b, c]));
+        let a = change_set.nodes.insert(node("a", []));
+        let b = change_set.nodes.insert(node("b", [a]));
+        let c = change_set.nodes.insert(node("c", [a]));
+        let d = change_set.nodes.insert(node("d", [b, c]));
 
         let d = NodePath::for_root(d);
         change_set.replace(&root, &d);
@@ -48,8 +48,8 @@ fn uniquely_identify_identical_siblings() {
 
     let root = codebase.root().path;
     let root = codebase.make_change(|change_set| {
-        let a = change_set.nodes_mut().insert(node("a", []));
-        let b = change_set.nodes_mut().insert(node("b", [a, a]));
+        let a = change_set.nodes.insert(node("a", []));
+        let b = change_set.nodes.insert(node("b", [a, a]));
 
         let b = NodePath::for_root(b);
         change_set.replace(&root, &b);
