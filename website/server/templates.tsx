@@ -117,7 +117,7 @@ const subscribe = () => {
             Want to subscribe to my daily notes? Just{" "}
             {email_link("let me know", {
                 subject:
-                    "I%27d%20like%20to%20subscribe%20to%20your%20daily%20thoughts%21",
+                    "I%27d%20like%20to%20subscribe%20to%20your%20daily%20notes%21",
                 body:
                     "Hey%20Hanno%2C%20please%20send%20me%20email%20every%20single%20day.",
             })}{" "}
