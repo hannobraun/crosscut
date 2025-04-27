@@ -1,6 +1,7 @@
 use crate::language::{
     code::{
-        Children, Errors, Expression, NewChangeSet, NodeHash, NodePath, Nodes,
+        Children, Errors, Expression, Function, NewChangeSet, NodeHash,
+        NodePath, Nodes,
     },
     packages::Packages,
 };
@@ -36,9 +37,8 @@ pub fn replace_node_and_update_parents(
 
 #[derive(Debug)]
 enum ReplaceAction {
-    CompileToken {
+    UpdateChildren {
         path: NodePath,
-        token: String,
         children: Children,
         replacements: Vec<Replacement>,
     },
@@ -53,27 +53,20 @@ enum ReplaceAction {
 }
 
 impl ReplaceAction {
-    fn perform(
-        self,
-        change_set: &mut NewChangeSet,
-        packages: &Packages,
-    ) -> Self {
+    fn perform(self, change_set: &mut NewChangeSet, _: &Packages) -> Self {
         match self {
-            Self::CompileToken {
+            Self::UpdateChildren {
                 path,
-                token,
                 children,
                 replacements,
             } => {
                 // comment added to force more readable formatting
-                compile_token(
+                update_children(
                     path,
-                    token,
                     children,
                     replacements,
                     change_set.nodes,
                     change_set.errors,
-                    packages,
                 )
             }
             Self::UpdatePath {
@@ -117,9 +110,88 @@ fn compile_token(
 
         replacements.push(replacement);
 
-        ReplaceAction::CompileToken {
+        ReplaceAction::UpdateChildren {
             path: parent,
-            token: parent_node.to_token(packages),
+            children: next_children,
+            replacements,
+        }
+    } else {
+        ReplaceAction::UpdatePath {
+            replacement,
+            parent: None,
+            replacements,
+        }
+    }
+}
+
+fn update_children(
+    path: NodePath,
+    children: Children,
+    mut replacements: Vec<Replacement>,
+    nodes: &mut Nodes,
+    errors: &mut Errors,
+) -> ReplaceAction {
+    let mut expression = nodes.get(path.hash()).clone();
+
+    // TASK: Add comment about panics.
+    match &mut expression {
+        Expression::Apply {
+            function: a,
+            argument: b,
+        }
+        | Expression::Function {
+            function:
+                Function {
+                    parameter: a,
+                    body: b,
+                },
+        } => {
+            let [new_a, new_b] = children.expect();
+
+            *a = new_a;
+            *b = new_b;
+        }
+
+        Expression::Empty
+        | Expression::Number { value: _ }
+        | Expression::ProvidedFunction { id: _ }
+        | Expression::Recursion => {
+            let [] = children.expect();
+        }
+
+        Expression::Tuple { values } => {
+            *values = children;
+        }
+
+        Expression::Error {
+            node: _,
+            children: c,
+        } => {
+            *c = children;
+        }
+    }
+
+    let replacement = Replacement {
+        replaced: path,
+        replacement: nodes.insert(expression),
+    };
+
+    // Updating a child doesn't change anything that could affect an error on
+    // the parent. So we need to preserve that.
+    if let Some(error) = errors.get(replacement.replaced.hash()) {
+        errors.insert(replacement.replacement, error.clone());
+    }
+
+    if let Some(parent) = replacement.replaced.parent().cloned() {
+        let parent_node = nodes.get(parent.hash());
+
+        let mut next_children = parent_node.to_children();
+        next_children.replace(&replacement.replaced, replacement.replacement);
+
+        replacements.push(replacement);
+
+        ReplaceAction::UpdateChildren {
+            path: parent,
             children: next_children,
             replacements,
         }

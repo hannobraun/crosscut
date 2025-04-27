@@ -1,5 +1,7 @@
 use std::vec;
 
+use itertools::Itertools;
+
 use super::{Expression, NodeHash, NodePath, RawHash, SiblingIndex};
 
 #[derive(Clone, Debug, Eq, Ord, PartialEq, PartialOrd, udigest::Digestable)]
@@ -61,6 +63,17 @@ impl Children {
         );
 
         *child = replacement;
+    }
+
+    #[track_caller]
+    pub fn expect<const N: usize>(self) -> [NodeHash<Expression>; N] {
+        let num_children = self.inner.len();
+
+        let Some(children) = self.inner.into_iter().collect_array() else {
+            panic!("Expected {N} children, but found {num_children}.");
+        };
+
+        children
     }
 
     pub fn iter(&self) -> impl Iterator<Item = &NodeHash<Expression>> {
