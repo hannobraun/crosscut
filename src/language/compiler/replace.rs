@@ -144,7 +144,7 @@ fn update_path(
         replacement.replacement,
         parent,
         replacement.replaced.sibling_index(),
-        change_set.nodes(),
+        change_set.nodes,
     );
 
     change_set.replace(&replacement.replaced, &path);

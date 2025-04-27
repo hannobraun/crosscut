@@ -68,10 +68,6 @@ pub struct NewChangeSet<'r> {
 }
 
 impl NewChangeSet<'_> {
-    pub fn nodes(&self) -> &Nodes {
-        self.nodes
-    }
-
     pub fn nodes_mut(&mut self) -> &mut Nodes {
         self.nodes
     }
