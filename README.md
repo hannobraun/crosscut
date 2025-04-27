@@ -64,7 +64,7 @@ And while a focus on developer experience might decrease _peak_ performance, it
 could improve performance in general, because developers have the tools and
 spare resources to make their programs run fast.
 
-The following daily thoughts provide more context:
+The following daily notes provide more context:
 [2024-08-30](https://capi.hannobraun.com/daily/2024-08-30),
 [2024-09-01](https://capi.hannobraun.com/daily/2024-09-01),
 [2024-09-02](https://capi.hannobraun.com/daily/2024-09-02),
@@ -81,7 +81,7 @@ Before that becomes necessary, I want to experiment though. At least give the
 language to chance to be more than an incremental improvement over the status
 quo.
 
-The following daily thoughts provide more context:
+The following daily notes provide more context:
 [2024-06-18](https://capi.hannobraun.com/daily/2024-06-18) and
 [2024-06-19](https://capi.hannobraun.com/daily/2024-06-19).
 
@@ -98,7 +98,7 @@ upgrade easy. But each release might introduce changes that require updates to
 Crosscut code. Where possible, users will be given ample time to make those
 changes, or they will be automated outright.
 
-The following daily thoughts provide more context:
+The following daily notes provide more context:
 [2024-05-28](https://capi.hannobraun.com/daily/2024-05-28),
 [2024-05-29](https://capi.hannobraun.com/daily/2024-05-29),
 [2024-05-31](https://capi.hannobraun.com/daily/2024-05-31),
@@ -123,7 +123,7 @@ rather their branches, to be precise) have a single exit point, which can make
 code easier to follow for the developer, but specifically allows the debugger to
 do call stack reconstruction.
 
-The following daily thoughts provide more context:
+The following daily notes provide more context:
 [2024-08-25](https://capi.hannobraun.com/daily/2024-08-25) and
 [2024-08-26](https://capi.hannobraun.com/daily/2024-08-26).
 
@@ -145,7 +145,7 @@ Later on, it will make more and more sense to add syntax sugar, thereby
 increasing convenience, while under the hood still mapping the new syntax to
 simple primitives.
 
-The following daily thoughts provide more context:
+The following daily notes provide more context:
 [2024-07-24](https://capi.hannobraun.com/daily/2024-07-24),
 [2024-08-08](https://capi.hannobraun.com/daily/2024-08-08),
 [2024-08-10](https://capi.hannobraun.com/daily/2024-08-10),
@@ -175,7 +175,7 @@ all functions pure.
 
 A lot of this is inspired by the "platform" concept in [Roc].
 
-The following daily thoughts provide more context:
+The following daily notes provide more context:
 [2024-07-02](https://capi.hannobraun.com/daily/2024-07-02),
 [2024-07-03](https://capi.hannobraun.com/daily/2024-07-03),
 [2024-07-04](https://capi.hannobraun.com/daily/2024-07-04),
@@ -196,7 +196,7 @@ type of operator. I believe postfix operators are the best option under that
 constraint, due to their combination of simplicity, conciseness, and natural
 support for chaining operations. That comes at the cost of familiarity.
 
-The following daily thoughts provide more context:
+The following daily notes provide more context:
 [2024-05-03](https://capi.hannobraun.com/daily/2024-05-03),
 [2024-05-04](https://capi.hannobraun.com/daily/2024-05-04),
 [2024-05-05](https://capi.hannobraun.com/daily/2024-05-05),
@@ -213,7 +213,7 @@ Crosscut is designed to be used with tooling and makes various trade-off that
 benefit this intended use case, at the cost of other cases where tooling is not
 available.
 
-The following daily thoughts provide more context:
+The following daily notes provide more context:
 [2024-07-21](https://capi.hannobraun.com/daily/2024-07-21),
 [2024-07-22](https://capi.hannobraun.com/daily/2024-07-22), and
 [2024-07-23](https://capi.hannobraun.com/daily/2024-07-23).
@@ -230,7 +230,7 @@ even while something else doesn't currently typecheck, for example. This could
 make day-to-day development easier. It also makes sure that the enriched version
 of the source code that the debugger displays, is always available.
 
-The following daily thoughts provide more context:
+The following daily notes provide more context:
 [2024-09-05](https://capi.hannobraun.com/daily/2024-09-05) and
 [2024-09-06](https://capi.hannobraun.com/daily/2024-09-06).
 
