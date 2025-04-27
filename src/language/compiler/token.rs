@@ -1,5 +1,3 @@
-use itertools::Itertools;
-
 use crate::language::{
     code::{
         CandidateForResolution, Children, CodeError, Errors, Expression,
@@ -59,12 +57,7 @@ fn resolve_keyword(
 ) -> Option<(Expression, Option<CodeError>)> {
     match name {
         "apply" => {
-            let [function, argument] = children
-                .iter()
-                .copied()
-                .collect_array()
-                .unwrap_or_else(|| [nodes.insert(Expression::Empty); 2]);
-
+            let [function, argument] = [nodes.insert(Expression::Empty); 2];
             Some((Expression::Apply { function, argument }, None))
         }
         "self" => Some(node_with_no_child_or_error(
@@ -96,10 +89,7 @@ fn resolve_function(
         )),
         (None, Some(literal)) => match literal {
             Literal::Function => {
-                let [parameter, body] =
-                    children.iter().copied().collect_array().unwrap_or_else(
-                        || [nodes.insert(Expression::Empty); 2],
-                    );
+                let [parameter, body] = [nodes.insert(Expression::Empty); 2];
 
                 Ok((
                     Expression::Function {

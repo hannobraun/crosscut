@@ -75,10 +75,6 @@ impl Children {
 
         children
     }
-
-    pub fn iter(&self) -> impl Iterator<Item = &NodeHash<Expression>> {
-        self.inner.iter()
-    }
 }
 
 impl<const N: usize> From<[NodeHash<Expression>; N]> for Children {
