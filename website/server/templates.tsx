@@ -54,7 +54,7 @@ export const singleDailyNotePage = (
                     {html}
                 </main>
                 <nav class="grid grid-cols-2">
-                    {dailyThoughtNavigation(date, dates)}
+                    {dailyNoteNavigation(date, dates)}
                 </nav>
             </div>
             {subscribe()}
@@ -72,7 +72,7 @@ const dailyNoteItem = (date: string) => {
     );
 };
 
-const dailyThoughtNavigation = (date: string, dates: string[]) => {
+const dailyNoteNavigation = (date: string, dates: string[]) => {
     const index = dates.findIndex((element) => element == date);
 
     const prev = dates[index + 1];
