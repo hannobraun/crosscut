@@ -1,10 +1,10 @@
 use crate::language::{
-    code::{Codebase, Expression},
+    code::Codebase,
     compiler::Compiler,
     editor::{Editor, EditorInputEvent, editor::Cursor},
     packages::Packages,
     runtime::Evaluator,
-    tests::infra::LocatedNodeExt,
+    tests::infra::{LocatedNodeExt, node},
 };
 
 #[test]
@@ -20,7 +20,7 @@ fn edit_at_initial_cursor() {
 
     {
         let root = codebase.root().path;
-        Compiler::new(&mut codebase).replace(&root, "17", &packages);
+        Compiler::new(&mut codebase).replace(&root, "ac", &packages);
     }
 
     let cursor = Cursor {
@@ -30,10 +30,10 @@ fn edit_at_initial_cursor() {
     let mut editor = Editor::new(cursor.clone(), &codebase, &packages);
     assert_eq!(editor.cursor(), &cursor);
 
-    editor.on_code("2", &mut codebase, &mut evaluator, &packages);
+    editor.on_code("b", &mut codebase, &mut evaluator, &packages);
     assert_eq!(
         codebase.node_at(&editor.cursor().path).node,
-        &Expression::Number { value: 127 },
+        &node("abc", []),
     );
 }
 
