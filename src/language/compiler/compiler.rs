@@ -41,7 +41,7 @@ impl<'r> Compiler<'r> {
             let token = change_set.nodes.get(parent.hash()).to_token(packages);
             let replacement = Token {
                 text: &token,
-                children: siblings.clone(),
+                children: siblings,
             }
             .compile(change_set.nodes, change_set.errors, packages);
             let parent_path = replace_node_and_update_parents(
