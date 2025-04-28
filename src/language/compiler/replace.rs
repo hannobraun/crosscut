@@ -30,13 +30,35 @@ pub fn replace_node_and_update_parents(
         next_action = match next_action {
             ReplaceAction::UpdateChildren { path, children } => {
                 // comment added to force more readable formatting
-                update_children(
+                let replacement = update_children(
                     path,
                     children,
                     &mut replacements,
                     change_set.nodes,
                     change_set.errors,
-                )
+                );
+
+                if let Some(parent) = replacement.replaced.parent().cloned() {
+                    let parent_node = change_set.nodes.get(parent.hash());
+
+                    let mut next_children = parent_node.to_children();
+                    next_children.replace(
+                        &replacement.replaced,
+                        replacement.replacement,
+                    );
+
+                    replacements.push(replacement);
+
+                    ReplaceAction::UpdateChildren {
+                        path: parent,
+                        children: next_children,
+                    }
+                } else {
+                    ReplaceAction::UpdatePath {
+                        replacement,
+                        parent: None,
+                    }
+                }
             }
             ReplaceAction::UpdatePath {
                 replacement,
@@ -112,10 +134,10 @@ enum ReplaceAction {
 fn update_children(
     path: NodePath,
     children: Children,
-    replacements: &mut Vec<Replacement>,
+    _: &mut Vec<Replacement>,
     nodes: &mut Nodes,
     errors: &mut Errors,
-) -> ReplaceAction {
+) -> Replacement {
     let mut expression = nodes.get(path.hash()).clone();
 
     match &mut expression {
@@ -166,24 +188,7 @@ fn update_children(
         errors.insert(replacement.replacement, error.clone());
     }
 
-    if let Some(parent) = replacement.replaced.parent().cloned() {
-        let parent_node = nodes.get(parent.hash());
-
-        let mut next_children = parent_node.to_children();
-        next_children.replace(&replacement.replaced, replacement.replacement);
-
-        replacements.push(replacement);
-
-        ReplaceAction::UpdateChildren {
-            path: parent,
-            children: next_children,
-        }
-    } else {
-        ReplaceAction::UpdatePath {
-            replacement,
-            parent: None,
-        }
-    }
+    replacement
 }
 
 fn update_path(
