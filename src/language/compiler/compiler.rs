@@ -58,7 +58,7 @@ impl<'r> Compiler<'r> {
         parent_token: &str,
         packages: &Packages,
     ) -> NodePath {
-        let children = [*child.hash()];
+        let children = Children::from([*child.hash()]);
         self.replace_inner(child, parent_token, children, packages)
     }
 
