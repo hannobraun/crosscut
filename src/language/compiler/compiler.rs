@@ -39,8 +39,17 @@ impl<'r> Compiler<'r> {
             siblings.add(child);
 
             let token = change_set.nodes.get(parent.hash()).to_token(packages);
+            let replacement = Token {
+                text: &token,
+                children: siblings.clone(),
+            }
+            .compile(change_set.nodes, change_set.errors, packages);
             let parent_path = replace_node_and_update_parents(
-                parent, &token, siblings, change_set, packages,
+                parent,
+                replacement,
+                siblings,
+                change_set,
+                packages,
             );
 
             NodePath::new(
@@ -101,9 +110,15 @@ impl<'r> Compiler<'r> {
         packages: &Packages,
     ) -> NodePath {
         self.codebase.make_change(|change_set| {
+            let replacement = Token {
+                text: replacement_token,
+                children: children.clone(),
+            }
+            .compile(change_set.nodes, change_set.errors, packages);
+
             replace_node_and_update_parents(
                 to_replace.clone(),
-                replacement_token,
+                replacement,
                 children,
                 change_set,
                 packages,
