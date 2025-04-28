@@ -15,12 +15,12 @@ pub fn replace_node_and_update_parents(
     change_set: &mut NewChangeSet,
     packages: &Packages,
 ) -> NodePath {
-    let replacements = Vec::new();
+    let mut replacements = Vec::new();
     let mut next_action = compile_token(
         to_replace,
         replacement_token,
         children,
-        replacements,
+        &mut replacements,
         change_set.nodes,
         change_set.errors,
         packages,
@@ -28,16 +28,12 @@ pub fn replace_node_and_update_parents(
 
     loop {
         next_action = match next_action {
-            ReplaceAction::UpdateChildren {
-                path,
-                children,
-                replacements,
-            } => {
+            ReplaceAction::UpdateChildren { path, children } => {
                 // comment added to force more readable formatting
                 update_children(
                     path,
                     children,
-                    replacements,
+                    &mut replacements,
                     change_set.nodes,
                     change_set.errors,
                 )
@@ -45,10 +41,9 @@ pub fn replace_node_and_update_parents(
             ReplaceAction::UpdatePath {
                 replacement,
                 parent,
-                replacements,
             } => {
                 // comment added to force more readable formatting
-                update_path(replacement, parent, replacements, change_set)
+                update_path(replacement, parent, &mut replacements, change_set)
             }
             action @ ReplaceAction::Finish { .. } => action,
         };
@@ -63,7 +58,7 @@ fn compile_token(
     path: NodePath,
     token: String,
     children: Children,
-    mut replacements: Vec<Replacement>,
+    replacements: &mut Vec<Replacement>,
     nodes: &mut Nodes,
     errors: &mut Errors,
     packages: &Packages,
@@ -90,13 +85,11 @@ fn compile_token(
         ReplaceAction::UpdateChildren {
             path: parent,
             children: next_children,
-            replacements,
         }
     } else {
         ReplaceAction::UpdatePath {
             replacement,
             parent: None,
-            replacements,
         }
     }
 }
@@ -106,12 +99,10 @@ enum ReplaceAction {
     UpdateChildren {
         path: NodePath,
         children: Children,
-        replacements: Vec<Replacement>,
     },
     UpdatePath {
         replacement: Replacement,
         parent: Option<NodePath>,
-        replacements: Vec<Replacement>,
     },
     Finish {
         path: NodePath,
@@ -121,7 +112,7 @@ enum ReplaceAction {
 fn update_children(
     path: NodePath,
     children: Children,
-    mut replacements: Vec<Replacement>,
+    replacements: &mut Vec<Replacement>,
     nodes: &mut Nodes,
     errors: &mut Errors,
 ) -> ReplaceAction {
@@ -187,13 +178,11 @@ fn update_children(
         ReplaceAction::UpdateChildren {
             path: parent,
             children: next_children,
-            replacements,
         }
     } else {
         ReplaceAction::UpdatePath {
             replacement,
             parent: None,
-            replacements,
         }
     }
 }
@@ -201,7 +190,7 @@ fn update_children(
 fn update_path(
     replacement: Replacement,
     parent: Option<NodePath>,
-    mut replacements: Vec<Replacement>,
+    replacements: &mut Vec<Replacement>,
     change_set: &mut NewChangeSet,
 ) -> ReplaceAction {
     let path = NodePath::new(
@@ -217,7 +206,6 @@ fn update_path(
         ReplaceAction::UpdatePath {
             replacement,
             parent: Some(path),
-            replacements,
         }
     } else {
         ReplaceAction::Finish { path }
