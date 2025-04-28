@@ -29,7 +29,6 @@ pub fn replace_node_and_update_parents(
     loop {
         next_action = match next_action {
             ReplaceAction::UpdateChildren { path, children } => {
-                // comment added to force more readable formatting
                 let replacement = update_children(
                     path,
                     children,
