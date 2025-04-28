@@ -93,13 +93,13 @@ mod tests {
         let mut codebase = Codebase::new();
 
         let root = codebase.root().path;
-        let new_root = codebase.make_change(|change_set| {
+        let root = codebase.make_change(|change_set| {
             let a = NodePath::for_root(change_set.nodes.insert(node("a", [])));
             change_set.replace(&root, &a);
 
             a
         });
 
-        assert_eq!(codebase.root().path, new_root);
+        assert_eq!(codebase.root().path, root);
     }
 }
