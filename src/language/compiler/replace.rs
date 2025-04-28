@@ -16,7 +16,7 @@ pub fn replace_node_and_update_parents(
     packages: &Packages,
 ) -> NodePath {
     let mut replacements = Vec::new();
-    let mut next_action = compile_token(
+    let replacement = compile_token(
         to_replace,
         replacement_token,
         children,
@@ -25,6 +25,27 @@ pub fn replace_node_and_update_parents(
         change_set.errors,
         packages,
     );
+
+    let mut next_action = if let Some(parent) =
+        replacement.replaced.parent().cloned()
+    {
+        let parent_node = change_set.nodes.get(parent.hash());
+
+        let mut next_children = parent_node.to_children();
+        next_children.replace(&replacement.replaced, replacement.replacement);
+
+        replacements.push(replacement);
+
+        ReplaceAction::UpdateChildren {
+            path: parent,
+            children: next_children,
+        }
+    } else {
+        ReplaceAction::UpdatePath {
+            replacement,
+            parent: None,
+        }
+    };
 
     loop {
         next_action = match next_action {
@@ -78,39 +99,20 @@ fn compile_token(
     path: NodePath,
     token: String,
     children: Children,
-    replacements: &mut Vec<Replacement>,
+    _: &mut Vec<Replacement>,
     nodes: &mut Nodes,
     errors: &mut Errors,
     packages: &Packages,
-) -> ReplaceAction {
+) -> Replacement {
     let token = Token {
         text: &token,
         children,
     };
     let replacement = token.compile(nodes, errors, packages);
 
-    let replacement = Replacement {
+    Replacement {
         replaced: path,
         replacement,
-    };
-
-    if let Some(parent) = replacement.replaced.parent().cloned() {
-        let parent_node = nodes.get(parent.hash());
-
-        let mut next_children = parent_node.to_children();
-        next_children.replace(&replacement.replaced, replacement.replacement);
-
-        replacements.push(replacement);
-
-        ReplaceAction::UpdateChildren {
-            path: parent,
-            children: next_children,
-        }
-    } else {
-        ReplaceAction::UpdatePath {
-            replacement,
-            parent: None,
-        }
     }
 }
 
