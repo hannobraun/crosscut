@@ -9,7 +9,6 @@ use crate::language::{
 pub fn replace_node_and_update_parents(
     to_replace: NodePath,
     replacement: NodeHash<Expression>,
-    _: Children,
     change_set: &mut NewChangeSet,
     _: &Packages,
 ) -> NodePath {

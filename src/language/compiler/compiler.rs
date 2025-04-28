@@ -47,7 +47,6 @@ impl<'r> Compiler<'r> {
             let parent_path = replace_node_and_update_parents(
                 parent,
                 replacement,
-                siblings,
                 change_set,
                 packages,
             );
@@ -119,7 +118,6 @@ impl<'r> Compiler<'r> {
             replace_node_and_update_parents(
                 to_replace.clone(),
                 replacement,
-                children,
                 change_set,
                 packages,
             )
