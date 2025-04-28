@@ -29,12 +29,14 @@ impl<'r> Compiler<'r> {
                 change_set.nodes.get(parent.hash()).to_children();
             let sibling_index = siblings.next_index();
 
-            let token = Token {
-                text: child_token,
-                children: Children::new([]),
+            let child = {
+                let token = Token {
+                    text: child_token,
+                    children: Children::new([]),
+                };
+
+                token.compile(change_set.nodes, change_set.errors, packages)
             };
-            let child =
-                token.compile(change_set.nodes, change_set.errors, packages);
 
             siblings.add(child);
 
