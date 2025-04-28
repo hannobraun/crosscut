@@ -15,7 +15,6 @@ pub fn replace_node_and_update_parents(
     change_set: &mut NewChangeSet,
     packages: &Packages,
 ) -> NodePath {
-    let mut replacements = Vec::new();
     let replacement = compile_token(
         to_replace,
         replacement_token,
@@ -25,6 +24,7 @@ pub fn replace_node_and_update_parents(
         packages,
     );
 
+    let mut replacements = Vec::new();
     let mut next_action = if let Some(parent) =
         replacement.replaced.parent().cloned()
     {
