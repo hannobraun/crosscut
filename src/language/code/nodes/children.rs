@@ -17,10 +17,6 @@ impl Children {
         Self { inner }
     }
 
-    pub fn is_empty(&self) -> bool {
-        self.inner.is_empty()
-    }
-
     pub fn contains_at(
         &self,
         child: &RawHash,

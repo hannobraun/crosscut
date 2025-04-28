@@ -80,11 +80,9 @@ fn resolve_function(
                     None,
                 ))
             }
-            Literal::Integer { value } => Ok(node_with_no_child_or_error(
-                || Expression::Number { value },
-                name,
-                children,
-            )),
+            Literal::Integer { value } => {
+                Ok((Expression::Number { value }, None))
+            }
             Literal::Tuple => {
                 Ok((Expression::Tuple { values: children }, None))
             }
@@ -118,23 +116,5 @@ fn resolve_literal(name: &str) -> Option<Literal> {
             "tuple" => Some(Literal::Tuple),
             _ => None,
         }
-    }
-}
-
-fn node_with_no_child_or_error(
-    node: impl FnOnce() -> Expression,
-    token: &str,
-    children: Children,
-) -> (Expression, Option<CodeError>) {
-    if children.is_empty() {
-        (node(), None)
-    } else {
-        (
-            Expression::Error {
-                node: token.to_string(),
-                children,
-            },
-            Some(CodeError::TooManyChildren),
-        )
     }
 }

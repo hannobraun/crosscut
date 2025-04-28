@@ -283,9 +283,6 @@ fn render_error<A: EditorOutputAdapter>(
     error: &CodeError,
 ) -> anyhow::Result<()> {
     match error {
-        CodeError::TooManyChildren => {
-            write!(adapter, "node has too many children")?;
-        }
         CodeError::UnresolvedIdentifier { candidates } => {
             write!(adapter, "unresolved identifier")?;
 
