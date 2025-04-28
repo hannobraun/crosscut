@@ -58,7 +58,8 @@ impl<'r> Compiler<'r> {
         parent_token: &str,
         packages: &Packages,
     ) -> NodePath {
-        self.replace_inner(child, parent_token, [*child.hash()], packages)
+        let children = [*child.hash()];
+        self.replace_inner(child, parent_token, children, packages)
     }
 
     pub fn insert_sibling(
