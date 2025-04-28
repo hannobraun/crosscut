@@ -55,6 +55,13 @@ impl<'r> Compiler<'r> {
                 };
 
                 let hash = change_set.nodes.insert(node);
+
+                // Adding a child doesn't change anything that could affect an
+                // error on the parent. So we need to preserve that.
+                if let Some(error) = change_set.errors.get(parent.hash()) {
+                    change_set.errors.insert(hash, error.clone());
+                }
+
                 let path =
                     replace_node_and_update_parents(parent, hash, change_set);
 
