@@ -1,5 +1,5 @@
 use crate::language::{
-    code::{Children, Codebase, Expression, NodePath},
+    code::{Codebase, Expression, NodePath},
     packages::Packages,
 };
 
@@ -80,8 +80,7 @@ impl<'r> Compiler<'r> {
         parent_token: &str,
         packages: &Packages,
     ) -> NodePath {
-        let children = Children::from([*child.hash()]);
-        self.replace_inner(child, parent_token, children, packages)
+        self.replace_inner(child, parent_token, packages)
     }
 
     pub fn insert_sibling(
@@ -111,15 +110,13 @@ impl<'r> Compiler<'r> {
         replacement_token: &str,
         packages: &Packages,
     ) -> NodePath {
-        let children = self.codebase.node_at(to_replace).node.to_children();
-        self.replace_inner(to_replace, replacement_token, children, packages)
+        self.replace_inner(to_replace, replacement_token, packages)
     }
 
     fn replace_inner(
         &mut self,
         to_replace: &NodePath,
         replacement_token: &str,
-        _: Children,
         packages: &Packages,
     ) -> NodePath {
         self.codebase.make_change(|change_set| {
