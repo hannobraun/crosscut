@@ -77,13 +77,15 @@ fn replace_second_of_two_equal_children() {
 
     let mut codebase = Codebase::new();
 
-    let root = codebase.root().path;
     codebase.make_change(|change_set| {
         let child = change_set.nodes.insert(node("child", []));
 
         let parent = change_set.nodes.insert(node("parent", [child, child]));
 
-        change_set.replace(&root, &NodePath::for_root(parent));
+        change_set.replace(
+            &change_set.root_before_change(),
+            &NodePath::for_root(parent),
+        );
     });
 
     let [_, child] = codebase

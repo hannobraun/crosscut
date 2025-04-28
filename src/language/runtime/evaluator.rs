@@ -392,7 +392,6 @@ mod tests {
 
         let mut codebase = Codebase::new();
 
-        let root = codebase.root().path;
         codebase.make_change(|change_set| {
             let parameter =
                 change_set.nodes.insert(Expression::Number { value: 0 });
@@ -402,7 +401,10 @@ mod tests {
                 function: Function { parameter, body },
             });
 
-            change_set.replace(&root, &NodePath::for_root(function));
+            change_set.replace(
+                &change_set.root_before_change(),
+                &NodePath::for_root(function),
+            );
         });
 
         let [expected_parameter, expected_body] =
@@ -432,7 +434,6 @@ mod tests {
 
         let mut codebase = Codebase::new();
 
-        let root = codebase.root().path;
         codebase.make_change(|change_set| {
             let recursion = change_set.nodes.insert(Expression::Recursion);
             let argument = change_set.nodes.insert(Expression::Tuple {
@@ -444,7 +445,10 @@ mod tests {
                 argument,
             });
 
-            change_set.replace(&root, &NodePath::for_root(apply))
+            change_set.replace(
+                &change_set.root_before_change(),
+                &NodePath::for_root(apply),
+            )
         });
 
         let mut evaluator = Evaluator::new();

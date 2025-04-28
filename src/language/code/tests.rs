@@ -14,7 +14,6 @@ fn uniquely_identify_identical_children_of_different_parents() {
 
     let mut codebase = Codebase::new();
 
-    let root = codebase.root().path;
     let root = codebase.make_change(|change_set| {
         let a = change_set.nodes.insert(node("a", []));
         let b = change_set.nodes.insert(node("b", [a]));
@@ -22,7 +21,7 @@ fn uniquely_identify_identical_children_of_different_parents() {
         let d = change_set.nodes.insert(node("d", [b, c]));
 
         let d = NodePath::for_root(d);
-        change_set.replace(&root, &d);
+        change_set.replace(&change_set.root_before_change(), &d);
 
         d
     });
@@ -46,13 +45,12 @@ fn uniquely_identify_identical_siblings() {
 
     let mut codebase = Codebase::new();
 
-    let root = codebase.root().path;
     let root = codebase.make_change(|change_set| {
         let a = change_set.nodes.insert(node("a", []));
         let b = change_set.nodes.insert(node("b", [a, a]));
 
         let b = NodePath::for_root(b);
-        change_set.replace(&root, &b);
+        change_set.replace(&change_set.root_before_change(), &b);
 
         b
     });

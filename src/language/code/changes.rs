@@ -1,6 +1,6 @@
 use std::collections::{BTreeMap, BTreeSet};
 
-use super::{Errors, NodePath, Nodes};
+use super::{Errors, Expression, NodeHash, NodePath, Nodes};
 
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub struct Changes {
@@ -16,6 +16,7 @@ impl Changes {
 
     pub fn new_change_set<'r>(
         &'r mut self,
+        root_before_change: NodeHash<Expression>,
         nodes: &'r mut Nodes,
         errors: &'r mut Errors,
     ) -> NewChangeSet<'r> {
@@ -29,6 +30,7 @@ impl Changes {
 
         NewChangeSet {
             change_set,
+            root_before_change,
             nodes,
             errors,
         }
@@ -68,6 +70,8 @@ impl Changes {
 #[derive(Debug)]
 pub struct NewChangeSet<'r> {
     change_set: &'r mut ChangeSet,
+    #[cfg_attr(not(test), allow(unused))]
+    root_before_change: NodeHash<Expression>,
 
     pub nodes: &'r mut Nodes,
     pub errors: &'r mut Errors,
@@ -76,6 +80,11 @@ pub struct NewChangeSet<'r> {
 impl NewChangeSet<'_> {
     pub fn change_set(&self) -> &ChangeSet {
         self.change_set
+    }
+
+    #[cfg(test)]
+    pub fn root_before_change(&self) -> NodePath {
+        NodePath::for_root(self.root_before_change)
     }
 
     /// # Mark a node in the change set as replacing another
@@ -178,7 +187,7 @@ mod tests {
 
         let path_b = {
             let mut change_set =
-                changes.new_change_set(&mut nodes, &mut errors);
+                changes.new_change_set(*path_a.hash(), &mut nodes, &mut errors);
 
             let path_b = NodePath::for_root(change_set.nodes.insert(node_b));
             change_set.replace(&path_a, &path_b);
@@ -187,7 +196,7 @@ mod tests {
         };
         let path_a = {
             let mut change_set =
-                changes.new_change_set(&mut nodes, &mut errors);
+                changes.new_change_set(*path_b.hash(), &mut nodes, &mut errors);
 
             let path_a = NodePath::for_root(change_set.nodes.insert(node_a));
             change_set.replace(&path_b, &path_a);

@@ -52,9 +52,11 @@ impl Codebase {
         &mut self,
         f: impl FnOnce(&mut NewChangeSet) -> R,
     ) -> R {
-        let mut new_change_set = self
-            .changes
-            .new_change_set(&mut self.nodes, &mut self.errors);
+        let mut new_change_set = self.changes.new_change_set(
+            self.root.hash,
+            &mut self.nodes,
+            &mut self.errors,
+        );
         let value = f(&mut new_change_set);
 
         let root_was_replaced =
@@ -92,10 +94,9 @@ mod tests {
 
         let mut codebase = Codebase::new();
 
-        let root = codebase.root().path;
         let root = codebase.make_change(|change_set| {
             let a = NodePath::for_root(change_set.nodes.insert(node("a", [])));
-            change_set.replace(&root, &a);
+            change_set.replace(&change_set.root_before_change(), &a);
 
             a
         });
