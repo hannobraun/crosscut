@@ -16,12 +16,11 @@ pub fn replace_node_and_update_parents(
     packages: &Packages,
 ) -> NodePath {
     let replacement = {
-        let token = Token {
+        let replacement = Token {
             text: &replacement_token,
             children,
-        };
-        let replacement =
-            token.compile(change_set.nodes, change_set.errors, packages);
+        }
+        .compile(change_set.nodes, change_set.errors, packages);
 
         Replacement {
             replaced: to_replace,
