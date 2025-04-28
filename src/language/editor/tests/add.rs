@@ -230,7 +230,8 @@ fn split_node_to_create_sibling() {
         compiler.replace(&compiler.codebase().root().path, "ab", &packages);
     }
 
-    let mut editor = Editor::new(codebase.root().path, &codebase, &packages);
+    let ab = codebase.root().path;
+    let mut editor = Editor::new(ab, &codebase, &packages);
 
     editor.on_input(
         [MoveCursorRight, AddSibling],
