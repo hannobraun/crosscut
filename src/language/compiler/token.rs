@@ -24,10 +24,8 @@ impl Token<'_> {
                 self.text,
                 self.children,
             )
-        } else if let Some((node, maybe_err)) =
-            resolve_keyword(self.text, nodes)
-        {
-            (node, maybe_err)
+        } else if let Some(node) = resolve_keyword(self.text, nodes) {
+            (node, None)
         } else {
             match resolve_function(self.text, self.children, packages, nodes) {
                 Ok((node, maybe_err)) => (node, maybe_err),
@@ -50,16 +48,13 @@ impl Token<'_> {
     }
 }
 
-fn resolve_keyword(
-    name: &str,
-    nodes: &mut Nodes,
-) -> Option<(Expression, Option<CodeError>)> {
+fn resolve_keyword(name: &str, nodes: &mut Nodes) -> Option<Expression> {
     match name {
         "apply" => {
             let [function, argument] = [nodes.insert(Expression::Empty); 2];
-            Some((Expression::Apply { function, argument }, None))
+            Some(Expression::Apply { function, argument })
         }
-        "self" => Some((Expression::Recursion, None)),
+        "self" => Some(Expression::Recursion),
         _ => None,
     }
 }
