@@ -40,7 +40,7 @@ impl<'r> Compiler<'r> {
 
             let token = change_set.nodes.get(parent.hash()).to_token(packages);
             let parent_path = replace_node_and_update_parents(
-                parent, token, siblings, change_set, packages,
+                parent, &token, siblings, change_set, packages,
             );
 
             NodePath::new(
@@ -103,7 +103,7 @@ impl<'r> Compiler<'r> {
         self.codebase.make_change(|change_set| {
             replace_node_and_update_parents(
                 to_replace.clone(),
-                replacement_token.to_string(),
+                replacement_token,
                 children,
                 change_set,
                 packages,

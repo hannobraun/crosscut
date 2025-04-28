@@ -10,14 +10,14 @@ use super::token::Token;
 
 pub fn replace_node_and_update_parents(
     to_replace: NodePath,
-    replacement_token: String,
+    replacement_token: &str,
     children: Children,
     change_set: &mut NewChangeSet,
     packages: &Packages,
 ) -> NodePath {
     let replacement = {
         let replacement = Token {
-            text: &replacement_token,
+            text: replacement_token,
             children,
         }
         .compile(change_set.nodes, change_set.errors, packages);
