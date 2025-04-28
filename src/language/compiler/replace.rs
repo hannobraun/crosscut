@@ -33,7 +33,6 @@ pub fn replace_node_and_update_parents(
                 let replacement = update_children(
                     path,
                     children,
-                    &mut replacements,
                     change_set.nodes,
                     change_set.errors,
                 );
@@ -134,7 +133,6 @@ enum ReplaceAction {
 fn update_children(
     path: NodePath,
     children: Children,
-    _: &mut Vec<Replacement>,
     nodes: &mut Nodes,
     errors: &mut Errors,
 ) -> Replacement {
