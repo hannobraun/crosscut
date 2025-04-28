@@ -28,9 +28,9 @@ impl Changes {
         };
 
         NewChangeSet {
+            change_set,
             nodes,
             errors,
-            change_set,
         }
     }
 
@@ -67,10 +67,10 @@ impl Changes {
 
 #[derive(Debug)]
 pub struct NewChangeSet<'r> {
+    change_set: &'r mut ChangeSet,
+
     pub nodes: &'r mut Nodes,
     pub errors: &'r mut Errors,
-
-    change_set: &'r mut ChangeSet,
 }
 
 impl NewChangeSet<'_> {
