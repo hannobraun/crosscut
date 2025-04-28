@@ -25,7 +25,7 @@ impl Token<'_> {
                 self.children,
             )
         } else if let Some((node, maybe_err)) =
-            resolve_keyword(self.text, &self.children, nodes)
+            resolve_keyword(self.text, nodes)
         {
             (node, maybe_err)
         } else {
@@ -52,7 +52,6 @@ impl Token<'_> {
 
 fn resolve_keyword(
     name: &str,
-    _: &Children,
     nodes: &mut Nodes,
 ) -> Option<(Expression, Option<CodeError>)> {
     match name {
