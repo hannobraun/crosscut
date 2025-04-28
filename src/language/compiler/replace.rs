@@ -27,7 +27,31 @@ pub fn replace_node_and_update_parents(
     );
 
     loop {
-        next_action = next_action.perform(change_set);
+        next_action = match next_action {
+            ReplaceAction::UpdateChildren {
+                path,
+                children,
+                replacements,
+            } => {
+                // comment added to force more readable formatting
+                update_children(
+                    path,
+                    children,
+                    replacements,
+                    change_set.nodes,
+                    change_set.errors,
+                )
+            }
+            ReplaceAction::UpdatePath {
+                replacement,
+                parent,
+                replacements,
+            } => {
+                // comment added to force more readable formatting
+                update_path(replacement, parent, replacements, change_set)
+            }
+            action @ ReplaceAction::Finish { .. } => action,
+        };
 
         if let ReplaceAction::Finish { path } = next_action {
             break path;
@@ -92,36 +116,6 @@ enum ReplaceAction {
     Finish {
         path: NodePath,
     },
-}
-
-impl ReplaceAction {
-    fn perform(self, change_set: &mut NewChangeSet) -> Self {
-        match self {
-            Self::UpdateChildren {
-                path,
-                children,
-                replacements,
-            } => {
-                // comment added to force more readable formatting
-                update_children(
-                    path,
-                    children,
-                    replacements,
-                    change_set.nodes,
-                    change_set.errors,
-                )
-            }
-            Self::UpdatePath {
-                replacement,
-                parent,
-                replacements,
-            } => {
-                // comment added to force more readable formatting
-                update_path(replacement, parent, replacements, change_set)
-            }
-            action @ Self::Finish { .. } => action,
-        }
-    }
 }
 
 fn update_children(
