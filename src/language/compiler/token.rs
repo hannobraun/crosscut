@@ -23,12 +23,12 @@ impl Token<'_> {
         } else if let Some(node) = resolve_keyword(self.text, nodes) {
             (node, None)
         } else {
-            match resolve_function(self.text, self.children, packages, nodes) {
+            match resolve_function(self.text, packages, nodes) {
                 Ok((node, maybe_err)) => (node, maybe_err),
-                Err((children, candidates)) => (
+                Err(candidates) => (
                     Expression::Error {
                         node: self.text.to_string(),
-                        children,
+                        children: self.children,
                     },
                     Some(CodeError::UnresolvedIdentifier { candidates }),
                 ),
@@ -57,13 +57,9 @@ fn resolve_keyword(name: &str, nodes: &mut Nodes) -> Option<Expression> {
 
 fn resolve_function(
     name: &str,
-    children: Children,
     packages: &Packages,
     nodes: &mut Nodes,
-) -> Result<
-    (Expression, Option<CodeError>),
-    (Children, Vec<CandidateForResolution>),
-> {
+) -> Result<(Expression, Option<CodeError>), Vec<CandidateForResolution>> {
     let provided_function = packages.resolve_function(name);
     let literal = resolve_literal(name);
 
@@ -92,7 +88,7 @@ fn resolve_function(
         },
         (None, None) => {
             let candidates = Vec::new();
-            Err((children, candidates))
+            Err(candidates)
         }
         (provided_function, literal) => {
             let mut candidates = Vec::new();
@@ -105,7 +101,7 @@ fn resolve_function(
                 candidates.push(CandidateForResolution::Literal { literal });
             }
 
-            Err((children, candidates))
+            Err(candidates)
         }
     }
 }
