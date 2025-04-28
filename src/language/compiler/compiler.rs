@@ -1,5 +1,5 @@
 use crate::language::{
-    code::{Children, Codebase, NodePath},
+    code::{Children, Codebase, Expression, NodePath},
     packages::Packages,
 };
 
@@ -25,10 +25,6 @@ impl<'r> Compiler<'r> {
         packages: &Packages,
     ) -> NodePath {
         self.codebase.make_change(|change_set| {
-            let mut siblings =
-                change_set.nodes.get(parent.hash()).to_children();
-            let sibling_index = siblings.next_index();
-
             let child = {
                 let token = Token {
                     text: child_token,
@@ -38,27 +34,32 @@ impl<'r> Compiler<'r> {
                 token.compile(change_set.nodes, change_set.errors, packages)
             };
 
-            siblings.add(child);
+            let (parent_path, sibling_index) = {
+                let mut node = change_set.nodes.get(parent.hash()).clone();
 
-            let replacement = {
-                let token =
-                    change_set.nodes.get(parent.hash()).to_token(packages);
+                let sibling_index = match &mut node {
+                    parent @ Expression::Apply { .. }
+                    | parent @ Expression::Empty
+                    | parent @ Expression::Function { .. }
+                    | parent @ Expression::Number { .. }
+                    | parent @ Expression::ProvidedFunction { .. }
+                    | parent @ Expression::Recursion => {
+                        panic!(
+                            "Can't add child to this node:\n\
+                        {parent:#?}"
+                        );
+                    }
 
-                Token {
-                    text: &token,
-                    children: siblings,
-                }
-                .compile(
-                    change_set.nodes,
-                    change_set.errors,
-                    packages,
-                )
+                    Expression::Tuple { values } => values.add(child),
+                    Expression::Error { children, .. } => children.add(child),
+                };
+
+                let hash = change_set.nodes.insert(node);
+                let path =
+                    replace_node_and_update_parents(parent, hash, change_set);
+
+                (path, sibling_index)
             };
-            let parent_path = replace_node_and_update_parents(
-                parent,
-                replacement,
-                change_set,
-            );
 
             NodePath::new(
                 child,
