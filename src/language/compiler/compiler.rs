@@ -48,7 +48,6 @@ impl<'r> Compiler<'r> {
                 parent,
                 replacement,
                 change_set,
-                packages,
             );
 
             NodePath::new(
@@ -119,7 +118,6 @@ impl<'r> Compiler<'r> {
                 to_replace.clone(),
                 replacement,
                 change_set,
-                packages,
             )
         })
     }

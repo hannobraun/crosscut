@@ -1,16 +1,12 @@
-use crate::language::{
-    code::{
-        Children, Errors, Expression, Function, NewChangeSet, NodeHash,
-        NodePath, Nodes,
-    },
-    packages::Packages,
+use crate::language::code::{
+    Children, Errors, Expression, Function, NewChangeSet, NodeHash, NodePath,
+    Nodes,
 };
 
 pub fn replace_node_and_update_parents(
     to_replace: NodePath,
     replacement: NodeHash<Expression>,
     change_set: &mut NewChangeSet,
-    _: &Packages,
 ) -> NodePath {
     let replacement = {
         Replacement {
