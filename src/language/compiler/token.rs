@@ -8,7 +8,6 @@ use crate::language::{
 
 pub struct Token<'r> {
     pub text: &'r str,
-    pub children: Children,
 }
 
 impl Token<'_> {
@@ -28,7 +27,7 @@ impl Token<'_> {
                 Err(candidates) => (
                     Expression::Error {
                         node: self.text.to_string(),
-                        children: self.children,
+                        children: Children::new([]),
                     },
                     Some(CodeError::UnresolvedIdentifier { candidates }),
                 ),

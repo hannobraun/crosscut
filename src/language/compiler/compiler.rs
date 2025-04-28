@@ -26,10 +26,7 @@ impl<'r> Compiler<'r> {
     ) -> NodePath {
         self.codebase.make_change(|change_set| {
             let child = {
-                let token = Token {
-                    text: child_token,
-                    children: Children::new([]),
-                };
+                let token = Token { text: child_token };
 
                 token.compile(change_set.nodes, change_set.errors, packages)
             };
@@ -122,13 +119,12 @@ impl<'r> Compiler<'r> {
         &mut self,
         to_replace: &NodePath,
         replacement_token: &str,
-        children: Children,
+        _: Children,
         packages: &Packages,
     ) -> NodePath {
         self.codebase.make_change(|change_set| {
             let replacement = Token {
                 text: replacement_token,
-                children,
             }
             .compile(change_set.nodes, change_set.errors, packages);
 
