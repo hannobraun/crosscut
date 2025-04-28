@@ -97,14 +97,14 @@ impl<'r> Compiler<'r> {
         &mut self,
         to_replace: &NodePath,
         replacement_token: &str,
-        children: impl Into<Children>,
+        children: Children,
         packages: &Packages,
     ) -> NodePath {
         self.codebase.make_change(|change_set| {
             replace_node_and_update_parents(
                 to_replace.clone(),
                 replacement_token.to_string(),
-                children.into(),
+                children,
                 change_set,
                 packages,
             )
