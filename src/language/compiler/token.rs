@@ -83,9 +83,12 @@ fn resolve_function(
             Literal::Integer { value } => {
                 Ok((Expression::Number { value }, None))
             }
-            Literal::Tuple => {
-                Ok((Expression::Tuple { values: children }, None))
-            }
+            Literal::Tuple => Ok((
+                Expression::Tuple {
+                    values: Children::new([]),
+                },
+                None,
+            )),
         },
         (None, None) => {
             let candidates = Vec::new();
