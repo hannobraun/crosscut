@@ -227,11 +227,12 @@ fn split_node_to_create_sibling() {
     {
         let mut compiler = Compiler::new(&mut codebase);
 
-        compiler.replace(&compiler.codebase().root().path, "ab", &packages);
+        compiler.replace(&compiler.codebase().root().path, "root", &packages);
+        compiler.insert_child(compiler.codebase().root().path, "ab", &packages);
     }
 
-    let ab = codebase.root().path;
-    let mut editor = Editor::new(ab, &codebase, &packages);
+    let [ab] = codebase.root().expect_children(codebase.nodes());
+    let mut editor = Editor::new(ab.path, &codebase, &packages);
 
     editor.on_input(
         [MoveCursorRight, AddSibling],
