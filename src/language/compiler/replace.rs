@@ -15,14 +15,19 @@ pub fn replace_node_and_update_parents(
     change_set: &mut NewChangeSet,
     packages: &Packages,
 ) -> NodePath {
-    let replacement = compile_token(
-        to_replace,
-        replacement_token,
-        children,
-        change_set.nodes,
-        change_set.errors,
-        packages,
-    );
+    let replacement = {
+        let token = Token {
+            text: &replacement_token,
+            children,
+        };
+        let replacement =
+            token.compile(change_set.nodes, change_set.errors, packages);
+
+        Replacement {
+            replaced: to_replace,
+            replacement,
+        }
+    };
 
     let mut replacements = Vec::new();
     let mut next_action = if let Some(parent) =
@@ -91,26 +96,6 @@ pub fn replace_node_and_update_parents(
         if let ReplaceAction::Finish { path } = next_action {
             break path;
         }
-    }
-}
-
-fn compile_token(
-    path: NodePath,
-    token: String,
-    children: Children,
-    nodes: &mut Nodes,
-    errors: &mut Errors,
-    packages: &Packages,
-) -> Replacement {
-    let token = Token {
-        text: &token,
-        children,
-    };
-    let replacement = token.compile(nodes, errors, packages);
-
-    Replacement {
-        replaced: path,
-        replacement,
     }
 }
 
