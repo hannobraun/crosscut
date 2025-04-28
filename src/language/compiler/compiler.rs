@@ -38,12 +38,20 @@ impl<'r> Compiler<'r> {
 
             siblings.add(child);
 
-            let token = change_set.nodes.get(parent.hash()).to_token(packages);
-            let replacement = Token {
-                text: &token,
-                children: siblings,
-            }
-            .compile(change_set.nodes, change_set.errors, packages);
+            let replacement = {
+                let token =
+                    change_set.nodes.get(parent.hash()).to_token(packages);
+
+                Token {
+                    text: &token,
+                    children: siblings,
+                }
+                .compile(
+                    change_set.nodes,
+                    change_set.errors,
+                    packages,
+                )
+            };
             let parent_path = replace_node_and_update_parents(
                 parent,
                 replacement,
