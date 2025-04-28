@@ -1,6 +1,5 @@
 use crate::language::code::{
-    Children, Errors, Expression, Function, NewChangeSet, NodeHash, NodePath,
-    Nodes,
+    Errors, Expression, Function, NewChangeSet, NodeHash, NodePath, Nodes,
 };
 
 pub fn replace_node_and_update_parents(
@@ -14,51 +13,34 @@ pub fn replace_node_and_update_parents(
     };
 
     let mut replacements = Vec::new();
-    let mut next_action = if let Some(parent) =
-        replacement.replaced.parent().cloned()
-    {
-        let parent_node = change_set.nodes.get(parent.hash());
-
-        let mut next_children = parent_node.to_children();
-        next_children.replace(&replacement.replaced, replacement.replacement);
-
-        replacements.push(replacement);
-
-        ReplaceAction::UpdateChildren {
-            path: parent,
-            children: next_children,
-        }
-    } else {
-        ReplaceAction::UpdatePath {
-            replacement,
-            parent: None,
-        }
-    };
+    let mut next_action =
+        if let Some(parent) = replacement.replaced.parent().cloned() {
+            ReplaceAction::UpdateChildren {
+                path: parent,
+                replacement,
+            }
+        } else {
+            ReplaceAction::UpdatePath {
+                replacement,
+                parent: None,
+            }
+        };
 
     loop {
         next_action = match next_action {
-            ReplaceAction::UpdateChildren { path, children } => {
+            ReplaceAction::UpdateChildren { path, replacement } => {
                 let replacement = update_children(
                     path,
-                    children,
+                    replacement,
+                    &mut replacements,
                     change_set.nodes,
                     change_set.errors,
                 );
 
                 if let Some(parent) = replacement.replaced.parent().cloned() {
-                    let parent_node = change_set.nodes.get(parent.hash());
-
-                    let mut next_children = parent_node.to_children();
-                    next_children.replace(
-                        &replacement.replaced,
-                        replacement.replacement,
-                    );
-
-                    replacements.push(replacement);
-
                     ReplaceAction::UpdateChildren {
                         path: parent,
-                        children: next_children,
+                        replacement,
                     }
                 } else {
                     ReplaceAction::UpdatePath {
@@ -85,7 +67,7 @@ pub fn replace_node_and_update_parents(
 enum ReplaceAction {
     UpdateChildren {
         path: NodePath,
-        children: Children,
+        replacement: Replacement,
     },
     UpdatePath {
         replacement: Replacement,
@@ -98,7 +80,8 @@ enum ReplaceAction {
 
 fn update_children(
     path: NodePath,
-    children: Children,
+    replacement: Replacement,
+    replacements: &mut Vec<Replacement>,
     nodes: &mut Nodes,
     errors: &mut Errors,
 ) -> Replacement {
@@ -116,30 +99,35 @@ fn update_children(
                     body: b,
                 },
         } => {
-            let [new_a, new_b] = children.expect();
-
-            *a = new_a;
-            *b = new_b;
+            if a == replacement.replaced.hash() {
+                *a = replacement.replacement;
+            } else if b == replacement.replaced.hash() {
+                *b = replacement.replacement;
+            } else {
+                panic!("Expected to replaced child, but could not find it.");
+            }
         }
 
         Expression::Empty
         | Expression::Number { value: _ }
         | Expression::ProvidedFunction { id: _ }
         | Expression::Recursion => {
-            let [] = children.expect();
+            panic!("Node has no children. Can't replace one.");
         }
 
         Expression::Tuple { values } => {
-            *values = children;
+            values.replace(&replacement.replaced, replacement.replacement);
         }
 
         Expression::Error {
             node: _,
             children: c,
         } => {
-            *c = children;
+            c.replace(&replacement.replaced, replacement.replacement);
         }
     }
+
+    replacements.push(replacement);
 
     let replacement = Replacement {
         replaced: path,
