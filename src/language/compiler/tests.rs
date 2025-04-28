@@ -112,11 +112,15 @@ fn updating_child_updates_parent() {
     let mut codebase = Codebase::new();
     let mut compiler = Compiler::new(&mut codebase);
 
-    let child =
-        compiler.replace(&compiler.codebase().root().path, "12", &packages);
-    let parent = compiler.insert_parent(&child, "unresolved", &packages);
+    let parent = compiler.replace(
+        &compiler.codebase().root().path,
+        "unresolved",
+        &packages,
+    );
+    let child = compiler.insert_child(parent.clone(), "12", &packages);
 
     // Verify our baseline assumptions about what the parent node should be.
+    let parent = compiler.codebase().root().path;
     check_parent(parent, [*child.hash()], compiler.codebase());
 
     let child = compiler
