@@ -52,7 +52,7 @@ impl Token<'_> {
 
 fn resolve_keyword(
     name: &str,
-    children: &Children,
+    _: &Children,
     nodes: &mut Nodes,
 ) -> Option<(Expression, Option<CodeError>)> {
     match name {
@@ -60,11 +60,7 @@ fn resolve_keyword(
             let [function, argument] = [nodes.insert(Expression::Empty); 2];
             Some((Expression::Apply { function, argument }, None))
         }
-        "self" => Some(node_with_no_child_or_error(
-            || Expression::Recursion,
-            name,
-            children.clone(),
-        )),
+        "self" => Some((Expression::Recursion, None)),
         _ => None,
     }
 }
