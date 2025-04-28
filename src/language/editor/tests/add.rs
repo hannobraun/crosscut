@@ -1,7 +1,7 @@
 use crate::language::{
     code::{Codebase, Expression, Function},
     compiler::Compiler,
-    editor::{Editor, EditorInputEvent::*},
+    editor::{Editor, EditorInputEvent::*, editor::Cursor},
     packages::Packages,
     runtime::Evaluator,
     tests::infra::{LocatedNodeExt, node},
@@ -232,14 +232,16 @@ fn split_node_to_create_sibling() {
     }
 
     let [ab] = codebase.root().expect_children(codebase.nodes());
-    let mut editor = Editor::new(ab.path, &codebase, &packages);
-
-    editor.on_input(
-        [MoveCursorRight, AddSibling],
-        &mut codebase,
-        &mut evaluator,
+    let mut editor = Editor::new(
+        Cursor {
+            path: ab.path,
+            index: 1,
+        },
+        &codebase,
         &packages,
     );
+
+    editor.on_input([AddSibling], &mut codebase, &mut evaluator, &packages);
 
     assert_eq!(
         codebase
