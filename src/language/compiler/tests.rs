@@ -1,7 +1,7 @@
 use crate::language::{
     code::{Children, CodeError, Codebase, Expression, NodeHash, NodePath},
     compiler::Compiler,
-    packages::{Function, Packages},
+    packages::Packages,
     tests::infra::{LocatedNodeExt, node},
 };
 
@@ -103,24 +103,6 @@ fn replace_second_of_two_equal_children() {
 }
 
 #[test]
-fn provided_function_application_with_multiple_children_is_an_error() {
-    // A provided function application can only have one child: its argument.
-
-    #[derive(Clone, Copy, Eq, Ord, PartialEq, PartialOrd)]
-    struct Provided;
-    impl Function for Provided {
-        fn name(&self) -> &str {
-            "provided"
-        }
-    }
-
-    let mut packages = Packages::default();
-    packages.new_package([Provided]);
-
-    expect_error_on_multiple_children("provided", &packages);
-}
-
-#[test]
 fn integer_literal_with_children_is_an_error() {
     // An integer literal already carries all of the information that it needs
     // to evaluate to an integer. There is nothing it could do with children,
@@ -196,30 +178,4 @@ fn updating_child_updates_parent() {
             Some(&CodeError::UnresolvedIdentifier { candidates: vec![] }),
         );
     }
-}
-
-fn expect_error_on_multiple_children(token: &str, packages: &Packages) {
-    let mut codebase = Codebase::new();
-    let mut compiler = Compiler::new(&mut codebase);
-
-    compiler.replace(&compiler.codebase().root().path, token, packages);
-
-    let a =
-        compiler.insert_child(compiler.codebase().root().path, "", packages);
-    let b =
-        compiler.insert_child(compiler.codebase().root().path, "", packages);
-
-    assert_eq!(
-        compiler.codebase().root().node,
-        &Expression::Error {
-            node: token.to_string(),
-            children: Children::new([a, b].map(|path| *path.hash())),
-        },
-    );
-
-    let error = compiler.codebase().root().path;
-    assert_eq!(
-        compiler.codebase().errors().get(error.hash()),
-        Some(&CodeError::TooManyChildren),
-    );
 }

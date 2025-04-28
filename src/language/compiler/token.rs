@@ -68,11 +68,7 @@ fn resolve_function(
     let literal = resolve_literal(name);
 
     match (provided_function, literal) {
-        (Some(id), None) => Ok(node_with_no_child_or_error(
-            || Expression::ProvidedFunction { id },
-            name,
-            children,
-        )),
+        (Some(id), None) => Ok((Expression::ProvidedFunction { id }, None)),
         (None, Some(literal)) => match literal {
             Literal::Function => {
                 let [parameter, body] = [nodes.insert(Expression::Empty); 2];
