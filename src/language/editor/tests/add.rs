@@ -226,7 +226,9 @@ fn split_node_to_create_sibling() {
 
     {
         let root = codebase.root().path;
-        Compiler::new(&mut codebase).replace(&root, "ab", &packages);
+        let mut compiler = Compiler::new(&mut codebase);
+
+        compiler.replace(&root, "ab", &packages);
     }
 
     let mut editor = Editor::new(codebase.root().path, &codebase, &packages);
