@@ -8,11 +8,9 @@ pub fn replace_node_and_update_parents(
     replacement: NodeHash<Expression>,
     change_set: &mut NewChangeSet,
 ) -> NodePath {
-    let replacement = {
-        Replacement {
-            replaced: to_replace,
-            replacement,
-        }
+    let replacement = Replacement {
+        replaced: to_replace,
+        replacement,
     };
 
     let mut replacements = Vec::new();
