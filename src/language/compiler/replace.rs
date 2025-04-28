@@ -118,7 +118,6 @@ fn update_children(
 ) -> ReplaceAction {
     let mut expression = nodes.get(path.hash()).clone();
 
-    // TASK: Add comment about panics.
     match &mut expression {
         Expression::Apply {
             function: a,
