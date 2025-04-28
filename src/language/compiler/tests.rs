@@ -14,8 +14,9 @@ fn insert_child() {
     let mut codebase = Codebase::new();
     let mut compiler = Compiler::new(&mut codebase);
 
-    let a =
-        compiler.insert_child(compiler.codebase().root().path, "a", &packages);
+    let root =
+        compiler.replace(&compiler.codebase().root().path, "root", &packages);
+    let a = compiler.insert_child(root, "a", &packages);
 
     let [child_of_root] = compiler
         .codebase()
@@ -34,8 +35,9 @@ fn insert_child_with_grandparent() {
     let mut codebase = Codebase::new();
     let mut compiler = Compiler::new(&mut codebase);
 
-    let a =
-        compiler.insert_child(compiler.codebase().root().path, "a", &packages);
+    let root =
+        compiler.replace(&compiler.codebase().root().path, "root", &packages);
+    let a = compiler.insert_child(root, "a", &packages);
     let b = compiler.insert_child(a.clone(), "b", &packages);
 
     let [child_of_root] = compiler
@@ -56,11 +58,9 @@ fn insert_child_should_update_errors() {
     let mut codebase = Codebase::new();
     let mut compiler = Compiler::new(&mut codebase);
 
-    let unresolved = compiler.insert_child(
-        compiler.codebase().root().path,
-        "unresolved",
-        &packages,
-    );
+    let root =
+        compiler.replace(&compiler.codebase().root().path, "root", &packages);
+    let unresolved = compiler.insert_child(root, "unresolved", &packages);
 
     assert_eq!(
         compiler.codebase().errors().get(unresolved.hash()),
