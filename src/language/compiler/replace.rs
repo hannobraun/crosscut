@@ -119,11 +119,8 @@ fn update_children(
             values.replace(&replacement.replaced, replacement.replacement);
         }
 
-        Expression::Error {
-            node: _,
-            children: c,
-        } => {
-            c.replace(&replacement.replaced, replacement.replacement);
+        Expression::Error { node: _, children } => {
+            children.replace(&replacement.replaced, replacement.replacement);
         }
     }
 
