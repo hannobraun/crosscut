@@ -111,7 +111,7 @@ impl<'r> Compiler<'r> {
         self.codebase.make_change(|change_set| {
             let replacement = Token {
                 text: replacement_token,
-                children: children.clone(),
+                children,
             }
             .compile(change_set.nodes, change_set.errors, packages);
 
