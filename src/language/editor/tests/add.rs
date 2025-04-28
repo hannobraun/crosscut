@@ -149,41 +149,6 @@ fn add_sibling() {
 }
 
 #[test]
-fn add_sibling_to_root_node() {
-    // If adding a sibling to the root node, there still needs to be a single
-    // root node afterwards. So a new one is created automatically.
-
-    let packages = Packages::default();
-
-    let mut codebase = Codebase::new();
-    let mut evaluator = Evaluator::new();
-
-    let a = {
-        let root = codebase.root().path;
-        Compiler::new(&mut codebase).replace(&root, "a", &packages)
-    };
-
-    let mut editor = Editor::new(a, &codebase, &packages);
-
-    editor.on_input(
-        [MoveCursorRight, AddSibling],
-        &mut codebase,
-        &mut evaluator,
-        &packages,
-    );
-    editor.on_code("b", &mut codebase, &mut evaluator, &packages);
-
-    let [a, b] = codebase.root().expect_children(codebase.nodes());
-
-    assert_eq!(
-        codebase.root().node,
-        &node("", [*a.path.hash(), *b.path.hash()]),
-    );
-    assert_eq!(a.node, &node("a", []));
-    assert_eq!(b.node, &node("b", []));
-}
-
-#[test]
 fn split_node_to_create_child() {
     // If we add a child while the cursor is in the middle of the current node,
     // we should split the node right there.

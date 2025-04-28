@@ -19,11 +19,7 @@ impl Token<'_> {
         packages: &Packages,
     ) -> NodeHash<Expression> {
         let (node, maybe_error) = if self.text.is_empty() {
-            node_with_no_child_or_error(
-                || Expression::Empty,
-                self.text,
-                self.children,
-            )
+            (Expression::Empty, None)
         } else if let Some(node) = resolve_keyword(self.text, nodes) {
             (node, None)
         } else {

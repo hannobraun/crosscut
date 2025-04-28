@@ -103,19 +103,6 @@ fn replace_second_of_two_equal_children() {
 }
 
 #[test]
-fn empty_node_with_multiple_children_is_an_error() {
-    // An empty node has rather obvious runtime semantics: Do nothing and just
-    // pass on the active value unchanged.
-    //
-    // If an empty node has multiple children, then it's no longer obvious what
-    // it should do. So that needs to be an error.
-
-    let packages = Packages::default();
-
-    expect_error_on_multiple_children("", &packages);
-}
-
-#[test]
 fn provided_function_application_with_multiple_children_is_an_error() {
     // A provided function application can only have one child: its argument.
 
