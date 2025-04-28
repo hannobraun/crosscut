@@ -74,12 +74,10 @@ pub fn replace_node_and_update_parents(
                 // comment added to force more readable formatting
                 update_path(replacement, parent, &mut replacements, change_set)
             }
-            action @ ReplaceAction::Finish { .. } => action,
+            ReplaceAction::Finish { path } => {
+                break path;
+            }
         };
-
-        if let ReplaceAction::Finish { path } = next_action {
-            break path;
-        }
     }
 }
 
