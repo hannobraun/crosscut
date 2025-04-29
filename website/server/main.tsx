@@ -5,6 +5,10 @@ import * as response from "./response.ts";
 import { dailyNotesPage, singleDailyNotePage } from "./templates.tsx";
 
 Deno.serve(async (request) => {
+    return await servePage(request);
+});
+
+async function servePage(request: Request) {
     const url = new URL(request.url);
 
     if (
@@ -65,4 +69,4 @@ Deno.serve(async (request) => {
     return http.serveDir(request, {
         fsRoot: "static",
     });
-});
+}
