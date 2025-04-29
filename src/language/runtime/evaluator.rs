@@ -442,7 +442,7 @@ mod tests {
 
         evaluator.step(&codebase); // recursion
         evaluator.step(&codebase); // argument
-        evaluator.step(&codebase); // application
+        evaluator.step(&codebase); // apply
         assert!(matches!(evaluator.state(), RuntimeState::Running { .. }));
         assert_eq!(evaluator.call_stack.len(), 1);
     }
