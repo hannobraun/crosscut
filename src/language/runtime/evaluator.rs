@@ -87,16 +87,21 @@ impl Evaluator {
     }
 
     pub fn trigger_effect(&mut self, effect: Effect) {
-        let Some(node) = self.eval_stack.last() else {
+        let Some(path) = self.state.path() else {
             panic!(
-                "Not allowed to trigger effect, if there is no active syntax \
-                node that could trigger it."
+                "Tried to trigger effect, but the runtime is not in a state \
+                that could lead to that.\n\
+                \n\
+                Expected a state that points to an expression that could be \
+                the source of the effect. Instead, got this:\n\
+                {:#?}",
+                self.state
             );
         };
 
         self.state = RuntimeState::Effect {
             effect,
-            path: node.path.clone(),
+            path: path.clone(),
         };
     }
 
