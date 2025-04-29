@@ -201,7 +201,7 @@ where
                         // Eventually, we would want something more stringent
                         // here, like expect a `main` function, or a module in a
                         // specific format. For now, this will do though.
-                        self.language.apply_function(body, Value::nothing());
+                        self.language.apply_function(body);
                         continue;
                     }
                 }

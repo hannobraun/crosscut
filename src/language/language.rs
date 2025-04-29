@@ -77,7 +77,7 @@ impl Language {
         );
     }
 
-    pub fn apply_function(&mut self, root: NodePath, _: Value) {
+    pub fn apply_function(&mut self, root: NodePath) {
         self.evaluator.apply_function_raw(root, &self.codebase);
     }
 
