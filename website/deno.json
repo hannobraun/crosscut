@@ -1,6 +1,7 @@
 {
     "tasks": {
-        "start": "deno run --unstable-kv --allow-env --allow-net --allow-read=. --watch server/main.tsx"
+         "start": "deno run --unstable-kv --allow-env --allow-net --allow-read=. --watch server/main.tsx",
+        "export-analytics": "deno run --unstable-kv --allow-write tools/export-analytics.ts"
     },
     "fmt": {
         "indentWidth": 4
