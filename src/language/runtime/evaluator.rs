@@ -169,7 +169,7 @@ impl Evaluator {
             path: node.path.clone(),
         };
 
-        match &node.kind {
+        match node.kind {
             Expression::Apply { .. } => {
                 let Some([function, argument]) = node
                     .clone()
@@ -235,7 +235,7 @@ impl Evaluator {
                 }
 
                 let body = NodePath::new(
-                    *body,
+                    body,
                     Some(node.path),
                     SiblingIndex { index: 1 },
                     codebase.nodes(),
@@ -257,12 +257,10 @@ impl Evaluator {
                     }
                 }
 
-                self.finish_evaluating_node(Value::Integer { value: *value });
+                self.finish_evaluating_node(Value::Integer { value });
             }
             Expression::ProvidedFunction { id, .. } => {
-                self.finish_evaluating_node(Value::ProvidedFunction {
-                    id: *id,
-                });
+                self.finish_evaluating_node(Value::ProvidedFunction { id });
             }
             Expression::Recursion => {
                 let body = self
