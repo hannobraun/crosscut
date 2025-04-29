@@ -114,7 +114,7 @@ impl Evaluator {
             path: node.path.clone(),
         };
 
-        match node.kind {
+        match codebase.nodes().get(node.path.hash()).clone() {
             Expression::Apply { .. } => {
                 if let Some(child) = node.children_to_evaluate.pop() {
                     self.eval_stack.push(node);
@@ -261,7 +261,6 @@ impl Evaluator {
 #[derive(Clone, Debug)]
 struct RuntimeExpression {
     path: NodePath,
-    kind: Expression,
     children_to_evaluate: Vec<NodePath>,
     evaluated_children: EvaluatedChildren,
 }
@@ -272,7 +271,6 @@ impl RuntimeExpression {
 
         Self {
             path,
-            kind: expression.node.clone(),
             children_to_evaluate: expression
                 .children(codebase.nodes())
                 .map(|located_node| located_node.path)
