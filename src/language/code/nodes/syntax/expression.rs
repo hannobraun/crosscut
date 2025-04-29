@@ -9,12 +9,12 @@ use super::Function;
 
 #[derive(Clone, Debug, Eq, Ord, PartialEq, PartialOrd, udigest::Digestable)]
 pub enum Expression {
-    /// # The application of a function
+    /// # The application of an expression to an argument
     Apply {
-        /// # The function that is being applied
+        /// # The expression that is being applied to the argument
         expression: NodeHash<Expression>,
 
-        /// # The argument that the function is applied to
+        /// # The argument that the expression is being applied to
         argument: NodeHash<Expression>,
     },
 
