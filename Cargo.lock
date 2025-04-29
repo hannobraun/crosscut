@@ -407,7 +407,6 @@ dependencies = [
  "pollster",
  "thiserror 2.0.12",
  "udigest",
- "wayland-backend",
  "wgpu",
  "winit",
 ]
