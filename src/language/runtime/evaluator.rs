@@ -111,44 +111,20 @@ impl Evaluator {
             return;
         };
 
-        // For the most part, we need to evaluate a node's children before we
-        // can evaluate the node itself. This loop makes sure that `node` is a
-        // node that can be evaluated, and that all its parents are on the
-        // evaluation stack, so they can be evaluated later.
-        loop {
-            if let Expression::Function { .. } | Expression::Error { .. } =
-                codebase.node_at(&node.path).node
-            {
-                // We encountered a function literal and an error node. Either
-                // means that we need to stop here.
-                //
-                // If this is a function literal, then not stopping here would
-                // cause the function to be evaluated right away, where it is
-                // defined, defeating the purpose of defining a function
-                // literal.
-                //
-                // With an error, things are a bit less clear-cut. Most of the
-                // time, it would make sense to evaluate any valid code up to an
-                // error. But if the error was supposed to be a function
-                // literal, then just evaluating its body would be wild and
-                // unexpected.
-                break;
-            }
-
-            let Some(child) = node.children_to_evaluate.pop() else {
-                break;
-            };
-
-            self.eval_stack.push(node);
-            node = RuntimeExpression::new(child, codebase);
-        }
-
         self.state = RuntimeState::Running {
             path: node.path.clone(),
         };
 
         match node.kind {
             RuntimeExpressionKind::Apply => {
+                if let Some(child) = node.children_to_evaluate.pop() {
+                    self.eval_stack.push(node);
+                    self.eval_stack
+                        .push(RuntimeExpression::new(child, codebase));
+
+                    return;
+                }
+
                 let Some([function, argument]) = node
                     .clone()
                     .evaluated_children
@@ -224,12 +200,13 @@ impl Evaluator {
                 self.finish_evaluating_node(Value::Function { body });
             }
             RuntimeExpressionKind::Tuple => {
-                assert!(
-                    node.children_to_evaluate.is_empty(),
-                    "Due to the loop above, which puts all children of a node \
-                    on the evaluation stack, on top of that node, all children \
-                    of the tuple must be evaluated by now.",
-                );
+                if let Some(child) = node.children_to_evaluate.pop() {
+                    self.eval_stack.push(node);
+                    self.eval_stack
+                        .push(RuntimeExpression::new(child, codebase));
+
+                    return;
+                }
 
                 self.finish_evaluating_node(Value::Tuple {
                     values: node.evaluated_children.inner.into_iter().collect(),
