@@ -276,11 +276,12 @@ impl RuntimeExpression {
             .map(|located_node| located_node.path)
             .rev()
             .collect();
+        let evaluated_children = EvaluatedChildren { inner: Vec::new() };
 
         Self {
             path,
             children_to_evaluate,
-            evaluated_children: EvaluatedChildren { inner: Vec::new() },
+            evaluated_children,
         }
     }
 }
