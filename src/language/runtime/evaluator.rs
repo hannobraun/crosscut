@@ -96,7 +96,7 @@ impl Evaluator {
 
         self.state = RuntimeState::Effect {
             effect,
-            path: node.syntax_node.clone(),
+            path: node.path.clone(),
         };
     }
 
@@ -123,7 +123,7 @@ impl Evaluator {
         // evaluation stack, so they can be evaluated later.
         loop {
             if let Expression::Function { .. } | Expression::Error { .. } =
-                codebase.node_at(&node.syntax_node).node
+                codebase.node_at(&node.path).node
             {
                 // We encountered a function literal and an error node. Either
                 // means that we need to stop here.
@@ -161,10 +161,10 @@ impl Evaluator {
         }
 
         self.state = RuntimeState::Running {
-            path: node.syntax_node.clone(),
+            path: node.path.clone(),
         };
 
-        match codebase.node_at(&node.syntax_node).node {
+        match codebase.node_at(&node.path).node {
             Expression::Apply { .. } => {
                 let Some([function, argument]) = node
                     .clone()
@@ -190,7 +190,7 @@ impl Evaluator {
                                 id,
                                 input: argument,
                             },
-                            path: node.syntax_node.clone(),
+                            path: node.path.clone(),
                         };
 
                         // A host function is not fully handled, until the
@@ -202,7 +202,7 @@ impl Evaluator {
                         self.unexpected_input(
                             Type::Function,
                             value.clone(),
-                            node.syntax_node.clone(),
+                            node.path.clone(),
                         );
                         self.eval_stack.push(node);
                     }
@@ -222,7 +222,7 @@ impl Evaluator {
                         self.unexpected_input(
                             Type::nothing(),
                             active_value,
-                            node.syntax_node.clone(),
+                            node.path.clone(),
                         );
                         self.eval_stack.push(node);
                         return;
@@ -231,7 +231,7 @@ impl Evaluator {
 
                 let body = NodePath::new(
                     *body,
-                    Some(node.syntax_node),
+                    Some(node.path),
                     SiblingIndex { index: 1 },
                     codebase.nodes(),
                 );
@@ -245,7 +245,7 @@ impl Evaluator {
                         self.unexpected_input(
                             Type::nothing(),
                             active_value,
-                            node.syntax_node.clone(),
+                            node.path.clone(),
                         );
                         self.eval_stack.push(node);
                         return;
@@ -282,7 +282,7 @@ impl Evaluator {
             }
             Expression::Error { .. } => {
                 self.state = RuntimeState::Error {
-                    path: node.syntax_node.clone(),
+                    path: node.path.clone(),
                 };
 
                 // We don't want to advance the execution in any way when
@@ -313,7 +313,7 @@ impl Evaluator {
             parent.evaluated_children.inner.push(output);
 
             RuntimeState::Running {
-                path: parent.syntax_node.clone(),
+                path: parent.path.clone(),
             }
         } else {
             RuntimeState::Finished { output }
@@ -329,7 +329,7 @@ impl Evaluator {
 
 #[derive(Clone, Debug)]
 struct RuntimeExpression {
-    syntax_node: NodePath,
+    path: NodePath,
     children_to_evaluate: Vec<NodePath>,
     evaluated_children: EvaluatedChildren,
 }
@@ -339,7 +339,7 @@ impl RuntimeExpression {
         let expression = codebase.node_at(&path);
 
         Self {
-            syntax_node: path,
+            path,
             children_to_evaluate: expression
                 .children(codebase.nodes())
                 .map(|located_node| located_node.path)
