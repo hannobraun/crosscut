@@ -18,6 +18,7 @@ impl Value {
         Self::Tuple { values: Vec::new() }
     }
 
+    #[cfg(test)]
     pub fn is_nothing(&self) -> bool {
         if let Self::Tuple { values } = self {
             values.is_empty()

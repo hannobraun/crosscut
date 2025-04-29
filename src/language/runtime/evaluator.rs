@@ -222,19 +222,6 @@ impl Evaluator {
             RuntimeExpressionKind::Function {
                 function: Function { parameter: _, body },
             } => {
-                match node.evaluated_children.clone().into_active_value() {
-                    value if value.is_nothing() => {}
-                    active_value => {
-                        self.unexpected_input(
-                            Type::nothing(),
-                            active_value,
-                            node.path.clone(),
-                        );
-                        self.eval_stack.push(node);
-                        return;
-                    }
-                }
-
                 let body = NodePath::new(
                     body,
                     Some(node.path),
@@ -245,19 +232,6 @@ impl Evaluator {
                 self.finish_evaluating_node(Value::Function { body });
             }
             RuntimeExpressionKind::Number { value } => {
-                match node.evaluated_children.clone().into_active_value() {
-                    value if value.is_nothing() => {}
-                    active_value => {
-                        self.unexpected_input(
-                            Type::nothing(),
-                            active_value,
-                            node.path.clone(),
-                        );
-                        self.eval_stack.push(node);
-                        return;
-                    }
-                }
-
                 self.finish_evaluating_node(Value::Integer { value });
             }
             RuntimeExpressionKind::ProvidedFunction { id, .. } => {
