@@ -7,6 +7,9 @@ import { dailyNotesPage, singleDailyNotePage } from "./templates.tsx";
 Deno.serve(async (request) => {
     const response = await servePage(request);
 
+    // Not awaiting the request tracking, so it doesn't block the response.
+    trackRequest(request);
+
     return response;
 });
 
@@ -71,4 +74,24 @@ async function servePage(request: Request) {
     return http.serveDir(request, {
         fsRoot: "static",
     });
+}
+
+async function trackRequest(request: Request) {
+    try {
+        const data = {
+            timestamp: new Date().toISOString(),
+            id: crypto.randomUUID(),
+            region: Deno.env.get("DENO_REGION"),
+            deploymentId: Deno.env.get("DENO_DEPLOYMENT_ID"),
+            method: request.method,
+            url: request.url,
+            userAgent: request.headers.get("user-agent"),
+            referrer: request.headers.get("referer"),
+        };
+
+        const kv = await Deno.openKv();
+        await kv.set(["analytics", data.timestamp, data.id], data);
+    } catch (error) {
+        console.error("Failed to track request:", error);
+    }
 }
