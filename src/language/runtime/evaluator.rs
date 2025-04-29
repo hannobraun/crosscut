@@ -336,11 +336,11 @@ struct RuntimeExpression {
 
 impl RuntimeExpression {
     fn new(path: NodePath, codebase: &Codebase) -> Self {
-        let root_node = codebase.node_at(&path);
+        let expression = codebase.node_at(&path);
 
         Self {
             syntax_node: path,
-            children_to_evaluate: root_node
+            children_to_evaluate: expression
                 .children(codebase.nodes())
                 .map(|located_node| located_node.path)
                 .rev()
