@@ -25,11 +25,7 @@ impl Evaluator {
 
     pub fn reset(&mut self, codebase: &Codebase) {
         *self = Self::new();
-        self.apply_function_raw(
-            codebase.root().path,
-            Value::nothing(),
-            codebase,
-        );
+        self.apply_function_raw(codebase.root().path, codebase);
     }
 
     /// # Apply a function without considering where that might originate
@@ -45,12 +41,7 @@ impl Evaluator {
     /// If there is a current node that the evaluation originates from a syntax
     /// node, please call [`Evaluator::eval_function_from_current_node`]
     /// instead.
-    pub fn apply_function_raw(
-        &mut self,
-        body: NodePath,
-        _: Value,
-        codebase: &Codebase,
-    ) {
+    pub fn apply_function_raw(&mut self, body: NodePath, codebase: &Codebase) {
         self.eval_stack
             .push(RuntimeExpression::new(body.clone(), codebase));
 
@@ -174,7 +165,7 @@ impl Evaluator {
 
                 match function {
                     Value::Function { body } => {
-                        self.apply_function_raw(body, argument, codebase);
+                        self.apply_function_raw(body, codebase);
                     }
                     Value::ProvidedFunction { id } => {
                         self.state = RuntimeState::Effect {
