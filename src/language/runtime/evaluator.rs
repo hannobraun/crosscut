@@ -51,7 +51,7 @@ impl Evaluator {
         codebase: &Codebase,
     ) {
         self.eval_stack
-            .push(RuntimeExpression::from_syntax_node(body.clone(), codebase));
+            .push(RuntimeExpression::new(body.clone(), codebase));
 
         self.call_stack.push(StackFrame {
             root: body,
@@ -157,7 +157,7 @@ impl Evaluator {
             };
 
             self.eval_stack.push(node);
-            node = RuntimeExpression::from_syntax_node(child, codebase);
+            node = RuntimeExpression::new(child, codebase);
         }
 
         self.state = RuntimeState::Running {
@@ -335,7 +335,7 @@ struct RuntimeExpression {
 }
 
 impl RuntimeExpression {
-    fn from_syntax_node(path: NodePath, codebase: &Codebase) -> Self {
+    fn new(path: NodePath, codebase: &Codebase) -> Self {
         let root_node = codebase.node_at(&path);
 
         Self {
