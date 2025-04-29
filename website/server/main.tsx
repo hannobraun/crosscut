@@ -5,7 +5,9 @@ import * as response from "./response.ts";
 import { dailyNotesPage, singleDailyNotePage } from "./templates.tsx";
 
 Deno.serve(async (request) => {
-    return await servePage(request);
+    const response = await servePage(request);
+
+    return response;
 });
 
 async function servePage(request: Request) {
