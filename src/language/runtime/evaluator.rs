@@ -270,11 +270,9 @@ impl RuntimeExpression {
     fn new(path: NodePath, codebase: &Codebase) -> Self {
         let expression = codebase.node_at(&path);
 
-        let kind = expression.node.clone();
-
         Self {
             path,
-            kind,
+            kind: expression.node.clone(),
             children_to_evaluate: expression
                 .children(codebase.nodes())
                 .map(|located_node| located_node.path)
