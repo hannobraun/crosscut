@@ -46,9 +46,9 @@ impl Token<'_> {
 fn resolve_keyword(name: &str, nodes: &mut Nodes) -> Option<Expression> {
     match name {
         "apply" => {
-            let [function, argument] = [nodes.insert(Expression::Empty); 2];
+            let [expression, argument] = [nodes.insert(Expression::Empty); 2];
             Some(Expression::Apply {
-                expression: function,
+                expression,
                 argument,
             })
         }
