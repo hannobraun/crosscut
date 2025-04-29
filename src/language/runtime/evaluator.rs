@@ -440,10 +440,12 @@ mod tests {
         evaluator.reset(&codebase);
         assert_eq!(evaluator.call_stack.len(), 1);
 
-        evaluator.step(&codebase); // recursion
-        evaluator.step(&codebase); // argument
-        evaluator.step(&codebase); // apply
-        assert!(matches!(evaluator.state(), RuntimeState::Running { .. }));
-        assert_eq!(evaluator.call_stack.len(), 1);
+        // Not sure fo how many steps the code needs to run before it starts
+        // over, but that's definitely more than enough.
+        for _ in 0..1024 {
+            evaluator.step(&codebase);
+            assert!(matches!(evaluator.state(), RuntimeState::Running { .. }));
+            assert!(evaluator.call_stack.len() <= 1);
+        }
     }
 }
