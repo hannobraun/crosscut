@@ -271,13 +271,15 @@ impl RuntimeExpression {
     fn new(path: NodePath, codebase: &Codebase) -> Self {
         let expression = codebase.node_at(&path);
 
+        let children_to_evaluate = expression
+            .children(codebase.nodes())
+            .map(|located_node| located_node.path)
+            .rev()
+            .collect();
+
         Self {
             path,
-            children_to_evaluate: expression
-                .children(codebase.nodes())
-                .map(|located_node| located_node.path)
-                .rev()
-                .collect(),
+            children_to_evaluate,
             evaluated_children: EvaluatedChildren { inner: Vec::new() },
         }
     }
