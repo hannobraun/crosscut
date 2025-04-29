@@ -114,7 +114,7 @@ impl Evaluator {
             path: node.path.clone(),
         };
 
-        match codebase.nodes().get(node.path.hash()).clone() {
+        match codebase.nodes().get(node.path.hash()) {
             Expression::Apply { .. } => {
                 if let Some(child) = node.children_to_evaluate.pop() {
                     self.eval_stack.push(node);
@@ -175,7 +175,7 @@ impl Evaluator {
                 function: Function { parameter: _, body },
             } => {
                 let body = NodePath::new(
-                    body,
+                    *body,
                     Some(node.path),
                     SiblingIndex { index: 1 },
                     codebase.nodes(),
@@ -184,10 +184,12 @@ impl Evaluator {
                 self.finish_evaluating_node(Value::Function { body });
             }
             Expression::Number { value } => {
-                self.finish_evaluating_node(Value::Integer { value });
+                self.finish_evaluating_node(Value::Integer { value: *value });
             }
             Expression::ProvidedFunction { id, .. } => {
-                self.finish_evaluating_node(Value::ProvidedFunction { id });
+                self.finish_evaluating_node(Value::ProvidedFunction {
+                    id: *id,
+                });
             }
             Expression::Recursion => {
                 let body = self
