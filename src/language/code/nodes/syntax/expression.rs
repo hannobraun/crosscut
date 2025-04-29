@@ -12,7 +12,7 @@ pub enum Expression {
     /// # The application of a function
     Apply {
         /// # The function that is being applied
-        function: NodeHash<Expression>,
+        expression: NodeHash<Expression>,
 
         /// # The argument that the function is applied to
         argument: NodeHash<Expression>,
@@ -122,7 +122,7 @@ impl Expression {
     ) -> bool {
         match self {
             Self::Apply {
-                function: child_a,
+                expression: child_a,
                 argument: child_b,
             }
             | Self::Function {
@@ -157,7 +157,7 @@ impl Expression {
     pub fn to_children(&self) -> Children {
         match self {
             Self::Apply {
-                function: a,
+                expression: a,
                 argument: b,
             }
             | Self::Function {

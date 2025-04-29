@@ -403,7 +403,7 @@ mod tests {
             });
 
             let apply = change_set.nodes.insert(Expression::Apply {
-                function: recursion,
+                expression: recursion,
                 argument,
             });
 

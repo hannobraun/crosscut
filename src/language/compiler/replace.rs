@@ -89,7 +89,7 @@ fn update_children(
 
     match &mut expression {
         Expression::Apply {
-            function: a,
+            expression: a,
             argument: b,
         }
         | Expression::Function {

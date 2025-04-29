@@ -47,7 +47,10 @@ fn resolve_keyword(name: &str, nodes: &mut Nodes) -> Option<Expression> {
     match name {
         "apply" => {
             let [function, argument] = [nodes.insert(Expression::Empty); 2];
-            Some(Expression::Apply { function, argument })
+            Some(Expression::Apply {
+                expression: function,
+                argument,
+            })
         }
         "self" => Some(Expression::Recursion),
         _ => None,

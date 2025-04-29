@@ -25,7 +25,7 @@ fn add_apply_node() {
     assert_eq!(
         apply.node,
         &Expression::Apply {
-            function: *function.path.hash(),
+            expression: *function.path.hash(),
             argument: *argument.path.hash(),
         },
     );
@@ -46,7 +46,7 @@ fn add_apply_node() {
     assert_eq!(
         apply.node,
         &Expression::Apply {
-            function: *function.path.hash(),
+            expression: *function.path.hash(),
             argument: *argument.path.hash(),
         },
     );
