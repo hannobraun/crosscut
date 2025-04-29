@@ -48,16 +48,13 @@ impl Evaluator {
     pub fn apply_function_raw(
         &mut self,
         body: NodePath,
-        argument: Value,
+        _: Value,
         codebase: &Codebase,
     ) {
         self.eval_stack
             .push(RuntimeExpression::new(body.clone(), codebase));
 
-        self.call_stack.push(StackFrame {
-            root: body,
-            argument,
-        });
+        self.call_stack.push(StackFrame { root: body });
     }
 
     pub fn exit_from_provided_function(&mut self, output: Value) {
@@ -148,17 +145,6 @@ impl Evaluator {
             }
 
             let Some(child) = node.children_to_evaluate.pop() else {
-                // Seed all leaf nodes of a function with the function argument.
-                // This is a weird thing to do, but it's how function arguments
-                // work right now. We'll have real parameters in due time.
-                if node.evaluated_children.inner.is_empty() {
-                    if let Some(stack_frame) = self.call_stack.last() {
-                        node.evaluated_children
-                            .inner
-                            .push(stack_frame.argument.clone());
-                    }
-                }
-
                 break;
             };
 
@@ -382,7 +368,6 @@ impl EvaluatedChildren {
 #[derive(Debug)]
 struct StackFrame {
     root: NodePath,
-    argument: Value,
 }
 
 #[cfg(test)]
