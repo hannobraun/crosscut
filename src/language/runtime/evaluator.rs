@@ -1,7 +1,8 @@
 use itertools::Itertools;
 
-use crate::language::code::{
-    Codebase, Expression, Function, NodePath, SiblingIndex, Type,
+use crate::language::{
+    code::{Codebase, Expression, Function, NodePath, SiblingIndex, Type},
+    packages::FunctionId,
 };
 
 use super::{Effect, RuntimeState, Value};
@@ -170,7 +171,7 @@ impl Evaluator {
         };
 
         match node.kind {
-            Expression::Apply { .. } => {
+            RuntimeExpressionKind::Apply => {
                 let Some([function, argument]) = node
                     .clone()
                     .evaluated_children
@@ -213,12 +214,12 @@ impl Evaluator {
                     }
                 }
             }
-            Expression::Empty => {
+            RuntimeExpressionKind::Empty => {
                 self.finish_evaluating_node(
                     node.evaluated_children.into_active_value(),
                 );
             }
-            Expression::Function {
+            RuntimeExpressionKind::Function {
                 function: Function { parameter: _, body },
             } => {
                 match node.evaluated_children.clone().into_active_value() {
@@ -243,7 +244,7 @@ impl Evaluator {
 
                 self.finish_evaluating_node(Value::Function { body });
             }
-            Expression::Number { value } => {
+            RuntimeExpressionKind::Number { value } => {
                 match node.evaluated_children.clone().into_active_value() {
                     value if value.is_nothing() => {}
                     active_value => {
@@ -259,10 +260,10 @@ impl Evaluator {
 
                 self.finish_evaluating_node(Value::Integer { value });
             }
-            Expression::ProvidedFunction { id, .. } => {
+            RuntimeExpressionKind::ProvidedFunction { id, .. } => {
                 self.finish_evaluating_node(Value::ProvidedFunction { id });
             }
-            Expression::Recursion => {
+            RuntimeExpressionKind::Recursion => {
                 let body = self
                     .call_stack
                     .pop()
@@ -271,7 +272,7 @@ impl Evaluator {
 
                 self.finish_evaluating_node(Value::Function { body });
             }
-            Expression::Tuple { .. } => {
+            RuntimeExpressionKind::Tuple => {
                 assert!(
                     node.children_to_evaluate.is_empty(),
                     "Due to the loop above, which puts all children of a node \
@@ -283,7 +284,7 @@ impl Evaluator {
                     values: node.evaluated_children.inner.into_iter().collect(),
                 });
             }
-            Expression::Error { .. } => {
+            RuntimeExpressionKind::Error => {
                 self.state = RuntimeState::Error {
                     path: node.path.clone(),
                 };
@@ -333,7 +334,7 @@ impl Evaluator {
 #[derive(Clone, Debug)]
 struct RuntimeExpression {
     path: NodePath,
-    kind: Expression,
+    kind: RuntimeExpressionKind,
     children_to_evaluate: Vec<NodePath>,
     evaluated_children: EvaluatedChildren,
 }
@@ -342,7 +343,22 @@ impl RuntimeExpression {
     fn new(path: NodePath, codebase: &Codebase) -> Self {
         let expression = codebase.node_at(&path);
 
-        let kind = expression.node.clone();
+        let kind = match expression.node.clone() {
+            Expression::Apply { .. } => RuntimeExpressionKind::Apply,
+            Expression::Empty => RuntimeExpressionKind::Empty,
+            Expression::Function { function } => {
+                RuntimeExpressionKind::Function { function }
+            }
+            Expression::Number { value } => {
+                RuntimeExpressionKind::Number { value }
+            }
+            Expression::ProvidedFunction { id } => {
+                RuntimeExpressionKind::ProvidedFunction { id }
+            }
+            Expression::Recursion => RuntimeExpressionKind::Recursion,
+            Expression::Tuple { .. } => RuntimeExpressionKind::Tuple,
+            Expression::Error { .. } => RuntimeExpressionKind::Error,
+        };
 
         Self {
             path,
@@ -355,6 +371,18 @@ impl RuntimeExpression {
             evaluated_children: EvaluatedChildren { inner: Vec::new() },
         }
     }
+}
+
+#[derive(Clone, Debug)]
+enum RuntimeExpressionKind {
+    Apply,
+    Empty,
+    Function { function: Function },
+    Number { value: i32 },
+    ProvidedFunction { id: FunctionId },
+    Recursion,
+    Tuple,
+    Error,
 }
 
 #[derive(Clone, Debug)]
