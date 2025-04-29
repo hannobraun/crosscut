@@ -1,6 +1,6 @@
 {
     "tasks": {
-        "start": "deno run --allow-env --allow-net --allow-read=. --watch server/main.tsx"
+        "start": "deno run --unstable-kv --allow-env --allow-net --allow-read=. --watch server/main.tsx"
     },
     "fmt": {
         "indentWidth": 4
