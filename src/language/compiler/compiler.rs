@@ -43,7 +43,7 @@ impl<'r> Compiler<'r> {
                     | parent @ Expression::Recursion => {
                         panic!(
                             "Can't add child to this node:\n\
-                        {parent:#?}"
+                            {parent:#?}"
                         );
                     }
 
