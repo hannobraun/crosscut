@@ -104,7 +104,7 @@ fn update_children(
             } else if b == replacement.replaced.hash() {
                 *b = replacement.replacement;
             } else {
-                panic!("Expected to replaced child, but could not find it.");
+                panic!("Expected to replace child, but could not find it.");
             }
         }
 
