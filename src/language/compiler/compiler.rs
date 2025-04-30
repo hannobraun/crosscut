@@ -47,10 +47,8 @@ impl<'r> Compiler<'r> {
                         );
                     }
 
-                    Expression::Tuple { values: children } => {
-                        children.add(child)
-                    }
-                    Expression::Error { children, .. } => children.add(child),
+                    Expression::Tuple { values: children }
+                    | Expression::Error { children, .. } => children.add(child),
                 };
 
                 let hash = change_set.nodes.insert(node);
