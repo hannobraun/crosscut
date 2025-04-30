@@ -115,8 +115,8 @@ fn update_children(
             panic!("Node has no children. Can't replace one.");
         }
 
-        Expression::Tuple { values } => {
-            values.replace(&replacement.replaced, replacement.replacement);
+        Expression::Tuple { values: children } => {
+            children.replace(&replacement.replaced, replacement.replacement);
         }
 
         Expression::Error { node: _, children } => {
