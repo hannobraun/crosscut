@@ -1,5 +1,8 @@
-use crate::language::code::{
-    Errors, Expression, Function, NewChangeSet, NodeHash, NodePath, Nodes,
+use crate::language::{
+    code::{
+        Errors, Expression, Function, NewChangeSet, NodeHash, NodePath, Nodes,
+    },
+    packages::FunctionId,
 };
 
 pub fn replace_node_and_update_parents(
@@ -110,13 +113,18 @@ fn update_children(
 
         Expression::Empty
         | Expression::Number { value: _ }
-        | Expression::ProvidedFunction { id: _ }
+        | Expression::ProvidedFunction {
+            id: FunctionId { .. },
+        }
         | Expression::Recursion => {
             panic!("Node has no children. Can't replace one.");
         }
 
         Expression::Tuple { values: children }
-        | Expression::Error { node: _, children } => {
+        | Expression::Error {
+            node: String { .. },
+            children,
+        } => {
             children.replace(&replacement.replaced, replacement.replacement);
         }
     }
