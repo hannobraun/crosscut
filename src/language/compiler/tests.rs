@@ -13,7 +13,7 @@ fn insert_child() {
     let mut codebase = Codebase::new();
 
     codebase.make_change(|change_set| {
-        let parent = change_set.nodes.insert(error("parent"));
+        let parent = change_set.nodes.insert(expression("parent", []));
 
         change_set.replace(
             &change_set.root_before_change(),
