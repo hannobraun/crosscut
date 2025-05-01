@@ -46,8 +46,11 @@ fn navigate_down_to_child() {
     let child = {
         let mut compiler = Compiler::new(&mut codebase);
 
-        let parent =
-            compiler.replace(&compiler.codebase().root().path, "a", &packages);
+        let parent = compiler.replace(
+            &compiler.codebase().root().path,
+            "parent",
+            &packages,
+        );
         compiler.insert_child(parent, "b", &packages)
     };
 
