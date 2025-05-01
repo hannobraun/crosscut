@@ -10,7 +10,6 @@ fn insert_child() {
     // The compiler can insert a child node.
 
     let packages = Packages::default();
-
     let mut codebase = Codebase::new();
 
     codebase.make_change(|change_set| {
