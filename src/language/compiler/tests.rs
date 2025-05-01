@@ -45,8 +45,8 @@ fn insert_child_with_grandparent() {
 
     let grandparent =
         compiler.replace(&compiler.codebase().root().path, "root", &packages);
-    let a = compiler.insert_child(grandparent, "a", &packages);
-    let b = compiler.insert_child(a.clone(), "b", &packages);
+    let parent = compiler.insert_child(grandparent, "a", &packages);
+    let b = compiler.insert_child(parent.clone(), "b", &packages);
 
     let [child_of_root] = compiler
         .codebase()
