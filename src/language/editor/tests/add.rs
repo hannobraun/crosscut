@@ -143,14 +143,14 @@ fn add_sibling() {
         &mut evaluator,
         &packages,
     );
-    editor.on_code("c", &mut codebase, &mut evaluator, &packages);
+    editor.on_code("b", &mut codebase, &mut evaluator, &packages);
 
     let a = codebase.root();
     let [b, c] = a.expect_children(codebase.nodes());
 
     assert_eq!(a.node, &tuple([*b.path.hash(), *c.path.hash()]));
     assert_eq!(b.node, &error("a", []));
-    assert_eq!(c.node, &error("c", []));
+    assert_eq!(c.node, &error("b", []));
 }
 
 #[test]
