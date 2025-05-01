@@ -66,8 +66,8 @@ impl EditorInputBuffer {
                 self.remove_right(cursor);
             }
             EditorInputEvent::AddChild => {
-                let existing_parent = self.add_child_or_sibling(cursor);
-                return Some(NodeAction::AddChild { existing_parent });
+                self.add_child_or_sibling(cursor);
+                return Some(NodeAction::AddChild);
             }
             EditorInputEvent::AddSibling => {
                 let existing_sibling = self.add_child_or_sibling(cursor);
@@ -168,7 +168,7 @@ pub enum EditorInputEvent {
 pub enum NodeAction {
     NavigateToPrevious,
     NavigateToNext,
-    AddChild { existing_parent: String },
+    AddChild,
     AddSibling { existing_sibling: String },
 }
 

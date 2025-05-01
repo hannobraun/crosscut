@@ -154,37 +154,6 @@ fn add_sibling() {
 }
 
 #[test]
-fn split_node_to_create_child() {
-    // If we add a child while the cursor is in the middle of the current node,
-    // we should split the node right there.
-
-    let packages = Packages::default();
-
-    let mut codebase = Codebase::new();
-    let mut evaluator = Evaluator::new();
-
-    let root = {
-        let root = codebase.root().path;
-        Compiler::new(&mut codebase).replace(&root, "ab", &packages)
-    };
-
-    let mut editor = Editor::new(root, &codebase, &packages);
-
-    editor.on_input(
-        [MoveCursorRight, AddChild],
-        &mut codebase,
-        &mut evaluator,
-        &packages,
-    );
-
-    let a = codebase.root();
-    let [b] = a.expect_children(codebase.nodes());
-
-    assert_eq!(a.node, &error("a", [*b.path.hash()]));
-    assert_eq!(b.node, &error("b", []));
-}
-
-#[test]
 fn split_node_to_create_sibling() {
     // When adding a sibling while the cursor is in the middle of a node, the
     // node should be split.

@@ -78,13 +78,7 @@ impl Editor {
                             );
                         }
                     }
-                    NodeAction::AddChild { existing_parent } => {
-                        self.cursor.path = compiler.replace(
-                            &self.cursor.path,
-                            &existing_parent,
-                            packages,
-                        );
-
+                    NodeAction::AddChild => {
                         self.cursor.path = compiler.insert_child(
                             self.cursor.path.clone(),
                             self.input.buffer(),
