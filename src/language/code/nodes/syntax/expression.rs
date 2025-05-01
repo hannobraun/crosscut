@@ -230,10 +230,8 @@ impl fmt::Display for NodeDisplay<'_> {
             Expression::Tuple { .. } => {
                 write!(f, "tuple")
             }
-            Expression::UnresolvedIdentifier {
-                identifier: node, ..
-            } => {
-                write!(f, "{node}")
+            Expression::UnresolvedIdentifier { identifier, .. } => {
+                write!(f, "{identifier}")
             }
             Expression::Test { name, .. } => {
                 write!(f, "{name}")
