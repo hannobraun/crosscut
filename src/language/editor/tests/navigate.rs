@@ -91,15 +91,18 @@ fn navigate_right_to_child() {
     let b = {
         let mut compiler = Compiler::new(&mut codebase);
 
-        let a =
-            compiler.replace(&compiler.codebase().root().path, "a", &packages);
+        let a = compiler.replace(
+            &compiler.codebase().root().path,
+            "parent",
+            &packages,
+        );
         compiler.insert_child(a, "b", &packages)
     };
 
     let mut editor = Editor::new(
         Cursor {
             path: codebase.root().path,
-            index: 1,
+            index: "parent".len(),
         },
         &codebase,
         &packages,
