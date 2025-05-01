@@ -104,9 +104,9 @@ pub enum Expression {
         values: Children,
     },
 
-    /// # The result of a build error
+    /// # An unresolved identifier
     UnresolvedIdentifier {
-        /// # The original token that couldn't be compiled correctly
+        /// # The identifier that could not be resolved
         identifier: String,
     },
 
