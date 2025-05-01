@@ -43,7 +43,7 @@ fn navigate_down_to_child() {
     let mut codebase = Codebase::new();
     let mut evaluator = Evaluator::new();
 
-    let b = {
+    let child = {
         let mut compiler = Compiler::new(&mut codebase);
 
         let parent =
@@ -66,7 +66,13 @@ fn navigate_down_to_child() {
         &packages,
     );
 
-    assert_eq!(editor.cursor(), &Cursor { path: b, index: 0 });
+    assert_eq!(
+        editor.cursor(),
+        &Cursor {
+            path: child,
+            index: 0,
+        },
+    );
 }
 
 #[test]
