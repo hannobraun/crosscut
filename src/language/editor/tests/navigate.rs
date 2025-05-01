@@ -158,7 +158,7 @@ fn navigate_left_to_parent() {
     let mut codebase = Codebase::new();
     let mut evaluator = Evaluator::new();
 
-    let b = {
+    let child = {
         let mut compiler = Compiler::new(&mut codebase);
 
         let parent =
@@ -166,8 +166,14 @@ fn navigate_left_to_parent() {
         compiler.insert_child(parent, "b", &packages)
     };
 
-    let mut editor =
-        Editor::new(Cursor { path: b, index: 0 }, &codebase, &packages);
+    let mut editor = Editor::new(
+        Cursor {
+            path: child,
+            index: 0,
+        },
+        &codebase,
+        &packages,
+    );
     editor.on_input(
         [EditorInputEvent::MoveCursorLeft],
         &mut codebase,
