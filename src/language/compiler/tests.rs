@@ -110,18 +110,25 @@ fn updating_child_updates_parent() {
     let packages = Packages::default();
 
     let mut codebase = Codebase::new();
+
+    codebase.make_change(|change_set| {
+        let child = change_set.nodes.insert(Expression::Number { value: 12 });
+        let parent = change_set.nodes.insert(error("unresolved", [child]));
+
+        change_set.errors.insert(
+            parent,
+            CodeError::UnresolvedIdentifier {
+                candidates: Vec::new(),
+            },
+        );
+
+        change_set.replace(
+            &change_set.root_before_change(),
+            &NodePath::for_root(parent),
+        );
+    });
+
     let mut compiler = Compiler::new(&mut codebase);
-
-    let parent = compiler.replace(
-        &compiler.codebase().root().path,
-        "unresolved",
-        &packages,
-    );
-    let child = compiler.insert_child(parent.clone(), "12", &packages);
-
-    // Verify our baseline assumptions about what the parent node should be.
-    let parent = compiler.codebase().root().path;
-    check_parent(parent, [*child.hash()], compiler.codebase());
 
     let child = compiler
         .codebase()
