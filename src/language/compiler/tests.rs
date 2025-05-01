@@ -41,13 +41,19 @@ fn insert_child_with_grandparent() {
     let packages = Packages::default();
 
     let mut codebase = Codebase::new();
+
+    codebase.make_change(|change_set| {
+        let grandparent = change_set.nodes.insert(error("grandparent"));
+
+        change_set.replace(
+            &change_set.root_before_change(),
+            &NodePath::for_root(grandparent),
+        );
+    });
+
     let mut compiler = Compiler::new(&mut codebase);
 
-    let grandparent = compiler.replace(
-        &compiler.codebase().root().path,
-        "grandparent",
-        &packages,
-    );
+    let grandparent = compiler.codebase().root().path;
     let parent = compiler.insert_child(grandparent, "parent", &packages);
     let child = compiler.insert_child(parent.clone(), "child", &packages);
 
