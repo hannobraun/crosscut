@@ -51,7 +51,7 @@ fn navigate_down_to_child() {
             "parent",
             &packages,
         );
-        compiler.insert_child(parent, "b", &packages)
+        compiler.insert_child(parent, "child", &packages)
     };
 
     let mut editor = Editor::new(
