@@ -4,7 +4,7 @@ use crate::language::{
     editor::{Editor, EditorInputEvent::*, editor::Cursor},
     packages::Packages,
     runtime::Evaluator,
-    tests::infra::{LocatedNodeExt, node},
+    tests::infra::{LocatedNodeExt, error},
 };
 
 #[test]
@@ -50,8 +50,8 @@ fn add_apply_node() {
             argument: *argument.path.hash(),
         },
     );
-    assert_eq!(function.node, &node("a", []));
-    assert_eq!(argument.node, &node("b", []));
+    assert_eq!(function.node, &error("a", []));
+    assert_eq!(argument.node, &error("b", []));
 }
 
 #[test]
@@ -109,8 +109,8 @@ fn add_child() {
     let a = codebase.root();
     let [b] = a.expect_children(codebase.nodes());
 
-    assert_eq!(a.node, &node("a", [*b.path.hash()]));
-    assert_eq!(b.node, &node("b", []));
+    assert_eq!(a.node, &error("a", [*b.path.hash()]));
+    assert_eq!(b.node, &error("b", []));
 }
 
 #[test]
@@ -143,9 +143,9 @@ fn add_sibling() {
     let a = codebase.root();
     let [b, c] = a.expect_children(codebase.nodes());
 
-    assert_eq!(a.node, &node("a", [*b.path.hash(), *c.path.hash()]));
-    assert_eq!(b.node, &node("b", []));
-    assert_eq!(c.node, &node("c", []));
+    assert_eq!(a.node, &error("a", [*b.path.hash(), *c.path.hash()]));
+    assert_eq!(b.node, &error("b", []));
+    assert_eq!(c.node, &error("c", []));
 }
 
 #[test]
@@ -175,8 +175,8 @@ fn split_node_to_create_child() {
     let a = codebase.root();
     let [b] = a.expect_children(codebase.nodes());
 
-    assert_eq!(a.node, &node("a", [*b.path.hash()]));
-    assert_eq!(b.node, &node("b", []));
+    assert_eq!(a.node, &error("a", [*b.path.hash()]));
+    assert_eq!(b.node, &error("b", []));
 }
 
 #[test]
@@ -214,6 +214,6 @@ fn split_node_to_create_sibling() {
             .children(codebase.nodes())
             .map(|located_node| located_node.node)
             .collect::<Vec<_>>(),
-        vec![&node("a", []), &node("b", [])],
+        vec![&error("a", []), &error("b", [])],
     );
 }

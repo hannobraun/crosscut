@@ -2,7 +2,7 @@ use crate::language::{
     code::{Children, CodeError, Codebase, Expression, NodeHash, NodePath},
     compiler::Compiler,
     packages::Packages,
-    tests::infra::{LocatedNodeExt, node},
+    tests::infra::{LocatedNodeExt, error},
 };
 
 #[test]
@@ -78,9 +78,9 @@ fn replace_second_of_two_equal_children() {
     let mut codebase = Codebase::new();
 
     codebase.make_change(|change_set| {
-        let child = change_set.nodes.insert(node("child", []));
+        let child = change_set.nodes.insert(error("child", []));
 
-        let parent = change_set.nodes.insert(node("parent", [child, child]));
+        let parent = change_set.nodes.insert(error("parent", [child, child]));
 
         change_set.replace(
             &change_set.root_before_change(),
@@ -98,8 +98,8 @@ fn replace_second_of_two_equal_children() {
 
     let [child, updated] = codebase.root().expect_children(codebase.nodes());
 
-    assert_eq!(child.node, &node("child", []));
-    assert_eq!(updated.node, &node("updated", []));
+    assert_eq!(child.node, &error("child", []));
+    assert_eq!(updated.node, &error("updated", []));
 }
 
 #[test]
