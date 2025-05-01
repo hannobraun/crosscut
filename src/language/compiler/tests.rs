@@ -1,5 +1,5 @@
 use crate::language::{
-    code::{Children, CodeError, Codebase, Expression, NodeHash, NodePath},
+    code::{CodeError, Codebase, Expression, NodeHash, NodePath},
     compiler::Compiler,
     packages::Packages,
     tests::infra::{LocatedNodeExt, error},
@@ -143,10 +143,7 @@ fn updating_child_updates_parent() {
     ) {
         assert_eq!(
             codebase.node_at(&parent).node,
-            &Expression::Error {
-                node: "unresolved".to_string(),
-                children: Children::new(children),
-            },
+            &error("unresolved", children)
         );
 
         // Since a change to a child doesn't change anything substantial about
