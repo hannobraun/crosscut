@@ -137,7 +137,7 @@ fn navigate_up_to_parent() {
 
         let parent = compiler.replace(
             &compiler.codebase().root().path,
-            "parent",
+            "tuple",
             &packages,
         );
         compiler.insert_child(parent, "child", &packages)
@@ -162,7 +162,7 @@ fn navigate_up_to_parent() {
         editor.cursor(),
         &Cursor {
             path: codebase.root().path,
-            index: "parent".len(),
+            index: "tuple".len(),
         },
     );
 }
