@@ -70,8 +70,8 @@ impl EditorInputBuffer {
                 return Some(NodeAction::AddChild);
             }
             EditorInputEvent::AddSibling => {
-                let existing_sibling = self.add_child_or_sibling(cursor);
-                return Some(NodeAction::AddSibling { existing_sibling });
+                self.add_child_or_sibling(cursor);
+                return Some(NodeAction::AddSibling);
             }
         }
 
@@ -169,7 +169,7 @@ pub enum NodeAction {
     NavigateToPrevious,
     NavigateToNext,
     AddChild,
-    AddSibling { existing_sibling: String },
+    AddSibling,
 }
 
 #[cfg(test)]

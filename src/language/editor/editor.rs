@@ -85,13 +85,7 @@ impl Editor {
                             packages,
                         );
                     }
-                    NodeAction::AddSibling { existing_sibling } => {
-                        self.cursor.path = compiler.replace(
-                            &self.cursor.path,
-                            &existing_sibling,
-                            packages,
-                        );
-
+                    NodeAction::AddSibling => {
                         self.cursor.path = compiler.insert_sibling(
                             &self.cursor.path,
                             self.input.buffer(),
