@@ -35,15 +35,15 @@ impl<'r> Compiler<'r> {
                 let mut node = change_set.nodes.get(parent.hash()).clone();
 
                 let sibling_index = match &mut node {
-                    parent @ Expression::Apply { .. }
-                    | parent @ Expression::Empty
-                    | parent @ Expression::Function { .. }
-                    | parent @ Expression::Number { .. }
-                    | parent @ Expression::ProvidedFunction { .. }
-                    | parent @ Expression::Recursion => {
+                    Expression::Apply { .. }
+                    | Expression::Empty
+                    | Expression::Function { .. }
+                    | Expression::Number { .. }
+                    | Expression::ProvidedFunction { .. }
+                    | Expression::Recursion => {
                         panic!(
                             "Can't add child to this node:\n\
-                            {parent:#?}"
+                            {node:#?}"
                         );
                     }
 
