@@ -161,9 +161,9 @@ fn navigate_left_to_parent() {
     let b = {
         let mut compiler = Compiler::new(&mut codebase);
 
-        let a =
+        let parent =
             compiler.replace(&compiler.codebase().root().path, "a", &packages);
-        compiler.insert_child(a, "b", &packages)
+        compiler.insert_child(parent, "b", &packages)
     };
 
     let mut editor =
