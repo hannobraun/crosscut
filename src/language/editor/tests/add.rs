@@ -96,7 +96,8 @@ fn add_child() {
         Compiler::new(&mut codebase).replace(&root, "a", &packages)
     };
 
-    let mut editor = Editor::new(a, &codebase, &packages);
+    let mut editor =
+        Editor::new(Cursor { path: a, index: 0 }, &codebase, &packages);
 
     editor.on_input(
         [MoveCursorRight, AddChild],
