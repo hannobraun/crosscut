@@ -43,8 +43,11 @@ fn insert_child_with_grandparent() {
     let mut codebase = Codebase::new();
     let mut compiler = Compiler::new(&mut codebase);
 
-    let grandparent =
-        compiler.replace(&compiler.codebase().root().path, "root", &packages);
+    let grandparent = compiler.replace(
+        &compiler.codebase().root().path,
+        "grandparent",
+        &packages,
+    );
     let parent = compiler.insert_child(grandparent, "a", &packages);
     let child = compiler.insert_child(parent.clone(), "b", &packages);
 
