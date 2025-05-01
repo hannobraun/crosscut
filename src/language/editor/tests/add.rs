@@ -127,8 +127,11 @@ fn add_sibling() {
     let b = {
         let mut compiler = Compiler::new(&mut codebase);
 
-        let a =
-            compiler.replace(&compiler.codebase().root().path, "a", &packages);
+        let a = compiler.replace(
+            &compiler.codebase().root().path,
+            "tuple",
+            &packages,
+        );
         compiler.insert_child(a, "b", &packages)
     };
 
@@ -145,7 +148,7 @@ fn add_sibling() {
     let a = codebase.root();
     let [b, c] = a.expect_children(codebase.nodes());
 
-    assert_eq!(a.node, &error("a", [*b.path.hash(), *c.path.hash()]));
+    assert_eq!(a.node, &tuple([*b.path.hash(), *c.path.hash()]));
     assert_eq!(b.node, &error("b", []));
     assert_eq!(c.node, &error("c", []));
 }
