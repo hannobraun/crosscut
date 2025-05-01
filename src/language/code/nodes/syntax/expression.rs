@@ -105,7 +105,7 @@ pub enum Expression {
     },
 
     /// # The result of a build error
-    Error {
+    UnresolvedIdentifier {
         /// # The original token that couldn't be compiled correctly
         node: String,
     },
@@ -154,7 +154,7 @@ impl Expression {
             | Self::Number { value: _ }
             | Self::ProvidedFunction { .. }
             | Self::Recursion
-            | Self::Error { .. } => false,
+            | Self::UnresolvedIdentifier { .. } => false,
 
             Self::Tuple { values: children } | Self::Test { children, .. } => {
                 children.contains_at(child, sibling_index)
@@ -180,7 +180,7 @@ impl Expression {
             | Self::Number { value: _ }
             | Self::ProvidedFunction { .. }
             | Self::Recursion
-            | Self::Error { .. } => Children::new([]),
+            | Self::UnresolvedIdentifier { .. } => Children::new([]),
 
             Self::Tuple { values: children } | Self::Test { children, .. } => {
                 children.clone()
@@ -230,7 +230,7 @@ impl fmt::Display for NodeDisplay<'_> {
             Expression::Tuple { .. } => {
                 write!(f, "tuple")
             }
-            Expression::Error { node, .. } => {
+            Expression::UnresolvedIdentifier { node, .. } => {
                 write!(f, "{node}")
             }
             Expression::Test { name, .. } => {

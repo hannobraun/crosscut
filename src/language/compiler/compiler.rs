@@ -41,7 +41,7 @@ impl<'r> Compiler<'r> {
                     | Expression::Number { .. }
                     | Expression::ProvidedFunction { .. }
                     | Expression::Recursion
-                    | Expression::Error { .. } => {
+                    | Expression::UnresolvedIdentifier { .. } => {
                         panic!(
                             "Can't add child to this node:\n\
                             {node:#?}"

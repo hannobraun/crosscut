@@ -23,7 +23,7 @@ pub fn tuple(
 }
 
 pub fn error(name: &str) -> Expression {
-    Expression::Error {
+    Expression::UnresolvedIdentifier {
         node: name.to_string(),
     }
 }

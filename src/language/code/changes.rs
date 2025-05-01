@@ -174,9 +174,10 @@ mod tests {
         let mut nodes = Nodes::default();
         let mut errors = Errors::new();
 
-        let [node_a, node_b] = ["a", "b"].map(|name| Expression::Error {
-            node: String::from(name),
-        });
+        let [node_a, node_b] =
+            ["a", "b"].map(|name| Expression::UnresolvedIdentifier {
+                node: String::from(name),
+            });
         let path_a = {
             let hash = nodes.insert(node_a.clone());
             NodePath::for_root(hash)

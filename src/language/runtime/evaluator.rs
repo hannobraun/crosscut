@@ -213,7 +213,7 @@ impl Evaluator {
                     values: node.evaluated_children.inner.into_iter().collect(),
                 });
             }
-            Expression::Error { .. } => {
+            Expression::UnresolvedIdentifier { .. } => {
                 self.state = RuntimeState::Error {
                     path: node.path.clone(),
                 };

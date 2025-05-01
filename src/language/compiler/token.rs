@@ -25,7 +25,7 @@ impl Token<'_> {
             match resolve_function(self.text, packages, nodes) {
                 Ok((node, maybe_err)) => (node, maybe_err),
                 Err(candidates) => (
-                    Expression::Error {
+                    Expression::UnresolvedIdentifier {
                         node: self.text.to_string(),
                     },
                     Some(CodeError::UnresolvedIdentifier { candidates }),

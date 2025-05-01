@@ -117,7 +117,7 @@ fn update_children(
             id: FunctionId { .. },
         }
         | Expression::Recursion
-        | Expression::Error {
+        | Expression::UnresolvedIdentifier {
             node: String { .. },
         } => {
             panic!("Node has no children. Can't replace one.");

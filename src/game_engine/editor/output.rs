@@ -253,7 +253,7 @@ fn render_node<A: EditorOutputAdapter>(
         | Expression::Number { .. }
         | Expression::Tuple { .. } => Some(Color::DarkBlue),
         Expression::ProvidedFunction { .. } => Some(Color::DarkMagenta),
-        Expression::Error { .. } => Some(ERROR_COLOR),
+        Expression::UnresolvedIdentifier { .. } => Some(ERROR_COLOR),
         _ => None,
     };
 
@@ -404,7 +404,7 @@ fn render_help<A: EditorOutputAdapter>(
                 contains the tuple's children.",
             )?;
         }
-        Expression::Error { .. } => {
+        Expression::UnresolvedIdentifier { .. } => {
             writeln!(adapter, "You are editing an erroneous syntax node.",)?;
         }
         Expression::Test { .. } => {
