@@ -1,4 +1,4 @@
-use std::{cmp::min, mem};
+use std::cmp::min;
 
 #[derive(Debug, Eq, PartialEq)]
 pub struct EditorInputBuffer {
@@ -142,10 +142,7 @@ impl EditorInputBuffer {
     }
 
     fn add_child_or_sibling(&mut self, cursor: &mut usize) {
-        let mut old_buffer = mem::take(&mut self.buffer);
-        let new_buffer = old_buffer.split_off(*cursor);
-
-        *self = Self::new(new_buffer, cursor);
+        *self = Self::new(String::new(), cursor);
     }
 }
 
@@ -349,20 +346,6 @@ mod tests {
     }
 
     #[test]
-    fn add_parent_at_cursor() {
-        let mut input = EditorInputBuffer::empty();
-        let mut cursor = 0;
-
-        input.update(Insert { ch: '1' }, &mut cursor);
-        input.update(Insert { ch: '2' }, &mut cursor);
-        assert_eq!(input.buffer(), "12");
-
-        input.update(MoveCursorLeft, &mut cursor);
-        input.update(AddChild, &mut cursor);
-        assert_eq!(input.buffer(), "2");
-    }
-
-    #[test]
     fn add_sibling() {
         let mut input = EditorInputBuffer::empty();
         let mut cursor = 0;
@@ -372,19 +355,5 @@ mod tests {
 
         input.update(AddSibling, &mut cursor);
         assert_eq!(input.buffer(), "");
-    }
-
-    #[test]
-    fn add_sibling_at_cursor() {
-        let mut input = EditorInputBuffer::empty();
-        let mut cursor = 0;
-
-        input.update(Insert { ch: '1' }, &mut cursor);
-        input.update(Insert { ch: '2' }, &mut cursor);
-        assert_eq!(input.buffer(), "12");
-
-        input.update(MoveCursorLeft, &mut cursor);
-        input.update(AddSibling, &mut cursor);
-        assert_eq!(input.buffer(), "2");
     }
 }
