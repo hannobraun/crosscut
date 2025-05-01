@@ -43,7 +43,8 @@ fn insert_child_with_grandparent() {
     let mut codebase = Codebase::new();
 
     codebase.make_change(|change_set| {
-        let grandparent = change_set.nodes.insert(error("grandparent"));
+        let grandparent =
+            change_set.nodes.insert(expression("grandparent", []));
 
         change_set.replace(
             &change_set.root_before_change(),
