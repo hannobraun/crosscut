@@ -124,7 +124,7 @@ fn add_sibling() {
     let mut codebase = Codebase::new();
     let mut evaluator = Evaluator::new();
 
-    let b = {
+    let a = {
         let mut compiler = Compiler::new(&mut codebase);
 
         let a = compiler.replace(
@@ -135,7 +135,7 @@ fn add_sibling() {
         compiler.insert_child(a, "a", &packages)
     };
 
-    let mut editor = Editor::new(b, &codebase, &packages);
+    let mut editor = Editor::new(a, &codebase, &packages);
 
     editor.on_input(
         [MoveCursorRight, AddSibling],
