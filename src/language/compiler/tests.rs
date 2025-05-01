@@ -80,7 +80,9 @@ fn replace_second_of_two_equal_children() {
     codebase.make_change(|change_set| {
         let child = change_set.nodes.insert(error("child", []));
 
-        let parent = change_set.nodes.insert(error("parent", [child, child]));
+        let parent = change_set
+            .nodes
+            .insert(expression("parent", [child, child]));
 
         change_set.replace(
             &change_set.root_before_change(),
