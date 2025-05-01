@@ -4,7 +4,7 @@ use crate::language::code::{
     Children, Expression, LocatedNode, NodeHash, Nodes,
 };
 
-pub fn node(
+pub fn expression(
     name: &str,
     children: impl IntoIterator<Item = NodeHash<Expression>>,
 ) -> Expression {
