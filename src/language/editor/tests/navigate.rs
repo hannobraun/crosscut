@@ -48,7 +48,7 @@ fn navigate_down_to_child() {
 
         let parent = compiler.replace(
             &compiler.codebase().root().path,
-            "parent",
+            "tuple",
             &packages,
         );
         compiler.insert_child(parent, "child", &packages)
