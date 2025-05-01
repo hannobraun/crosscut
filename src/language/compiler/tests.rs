@@ -39,7 +39,6 @@ fn insert_child_with_grandparent() {
     // itself.
 
     let packages = Packages::default();
-
     let mut codebase = Codebase::new();
 
     codebase.make_change(|change_set| {
