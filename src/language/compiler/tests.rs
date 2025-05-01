@@ -77,7 +77,7 @@ fn insert_child_should_update_errors() {
     let mut compiler = Compiler::new(&mut codebase);
 
     let root =
-        compiler.replace(&compiler.codebase().root().path, "root", &packages);
+        compiler.replace(&compiler.codebase().root().path, "tuple", &packages);
     let unresolved = compiler.insert_child(root, "unresolved", &packages);
 
     assert_eq!(
