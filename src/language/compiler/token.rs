@@ -26,7 +26,7 @@ impl Token<'_> {
                 Ok((node, maybe_err)) => (node, maybe_err),
                 Err(candidates) => (
                     Expression::UnresolvedIdentifier {
-                        node: self.text.to_string(),
+                        identifier: self.text.to_string(),
                     },
                     Some(CodeError::UnresolvedIdentifier { candidates }),
                 ),

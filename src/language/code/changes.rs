@@ -176,7 +176,7 @@ mod tests {
 
         let [node_a, node_b] =
             ["a", "b"].map(|name| Expression::UnresolvedIdentifier {
-                node: String::from(name),
+                identifier: String::from(name),
             });
         let path_a = {
             let hash = nodes.insert(node_a.clone());

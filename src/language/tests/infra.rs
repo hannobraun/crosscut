@@ -24,7 +24,7 @@ pub fn tuple(
 
 pub fn error(name: &str) -> Expression {
     Expression::UnresolvedIdentifier {
-        node: name.to_string(),
+        identifier: name.to_string(),
     }
 }
 

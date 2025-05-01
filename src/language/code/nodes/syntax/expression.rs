@@ -107,7 +107,7 @@ pub enum Expression {
     /// # The result of a build error
     UnresolvedIdentifier {
         /// # The original token that couldn't be compiled correctly
-        node: String,
+        identifier: String,
     },
 
     /// # An expression that can be used for testing
@@ -230,7 +230,9 @@ impl fmt::Display for NodeDisplay<'_> {
             Expression::Tuple { .. } => {
                 write!(f, "tuple")
             }
-            Expression::UnresolvedIdentifier { node, .. } => {
+            Expression::UnresolvedIdentifier {
+                identifier: node, ..
+            } => {
                 write!(f, "{node}")
             }
             Expression::Test { name, .. } => {
