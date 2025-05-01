@@ -135,9 +135,9 @@ fn navigate_up_to_parent() {
     let child = {
         let mut compiler = Compiler::new(&mut codebase);
 
-        let a =
+        let parent =
             compiler.replace(&compiler.codebase().root().path, "a", &packages);
-        compiler.insert_child(a, "b", &packages)
+        compiler.insert_child(parent, "b", &packages)
     };
 
     let mut editor = Editor::new(
