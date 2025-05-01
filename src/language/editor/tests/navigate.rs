@@ -161,8 +161,11 @@ fn navigate_left_to_parent() {
     let child = {
         let mut compiler = Compiler::new(&mut codebase);
 
-        let parent =
-            compiler.replace(&compiler.codebase().root().path, "a", &packages);
+        let parent = compiler.replace(
+            &compiler.codebase().root().path,
+            "parent",
+            &packages,
+        );
         compiler.insert_child(parent, "b", &packages)
     };
 
@@ -185,7 +188,7 @@ fn navigate_left_to_parent() {
         editor.cursor(),
         &Cursor {
             path: codebase.root().path,
-            index: 1
+            index: "parent".len(),
         },
     );
 }
