@@ -14,6 +14,14 @@ pub fn expression(
     }
 }
 
+pub fn tuple(
+    values: impl IntoIterator<Item = NodeHash<Expression>>,
+) -> Expression {
+    Expression::Tuple {
+        values: Children::new(values),
+    }
+}
+
 pub fn error(
     name: &str,
     children: impl IntoIterator<Item = NodeHash<Expression>>,

@@ -1,10 +1,10 @@
 use crate::language::{
-    code::{Children, Codebase, Expression, Function},
+    code::{Codebase, Expression, Function},
     compiler::Compiler,
     editor::{Editor, EditorInputEvent::*, editor::Cursor},
     packages::Packages,
     runtime::Evaluator,
-    tests::infra::{LocatedNodeExt, error},
+    tests::infra::{LocatedNodeExt, error, tuple},
 };
 
 #[test]
@@ -111,12 +111,7 @@ fn add_child() {
     let parent = codebase.root();
     let [child] = parent.expect_children(codebase.nodes());
 
-    assert_eq!(
-        parent.node,
-        &Expression::Tuple {
-            values: Children::from([*child.path.hash()]),
-        },
-    );
+    assert_eq!(parent.node, &tuple([*child.path.hash()]));
     assert_eq!(child.node, &error("child", []));
 }
 
