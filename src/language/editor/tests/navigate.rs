@@ -250,7 +250,7 @@ fn navigate_right_to_next_sibling() {
     {
         let mut compiler = Compiler::new(&mut codebase);
 
-        compiler.replace(&compiler.codebase().root().path, "root", &packages);
+        compiler.replace(&compiler.codebase().root().path, "tuple", &packages);
 
         compiler.insert_child(compiler.codebase().root().path, "a", &packages);
         compiler.insert_child(compiler.codebase().root().path, "b", &packages);
