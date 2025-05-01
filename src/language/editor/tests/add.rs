@@ -127,12 +127,12 @@ fn add_sibling() {
     let a = {
         let mut compiler = Compiler::new(&mut codebase);
 
-        let a = compiler.replace(
+        let parent = compiler.replace(
             &compiler.codebase().root().path,
             "tuple",
             &packages,
         );
-        compiler.insert_child(a, "a", &packages)
+        compiler.insert_child(parent, "a", &packages)
     };
 
     let mut editor = Editor::new(a, &codebase, &packages);
