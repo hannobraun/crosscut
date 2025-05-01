@@ -106,7 +106,7 @@ fn add_child() {
     );
 
     editor.on_input([AddChild], &mut codebase, &mut evaluator, &packages);
-    editor.on_code("b", &mut codebase, &mut evaluator, &packages);
+    editor.on_code("child", &mut codebase, &mut evaluator, &packages);
 
     let a = codebase.root();
     let [b] = a.expect_children(codebase.nodes());
@@ -117,7 +117,7 @@ fn add_child() {
             values: Children::from([*b.path.hash()]),
         },
     );
-    assert_eq!(b.node, &error("b", []));
+    assert_eq!(b.node, &error("child", []));
 }
 
 #[test]
