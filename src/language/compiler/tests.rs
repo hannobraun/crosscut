@@ -108,7 +108,6 @@ fn updating_child_updates_parent() {
     // updated as well.
 
     let packages = Packages::default();
-
     let mut codebase = Codebase::new();
 
     codebase.make_change(|change_set| {
