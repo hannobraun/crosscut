@@ -2,7 +2,7 @@ use itertools::Itertools;
 
 use crate::language::{
     code::NodePath,
-    tests::infra::{LocatedNodeExt, error},
+    tests::infra::{LocatedNodeExt, error, node},
 };
 
 use super::Codebase;
@@ -15,10 +15,10 @@ fn uniquely_identify_identical_children_of_different_parents() {
     let mut codebase = Codebase::new();
 
     let root = codebase.make_change(|change_set| {
-        let a = change_set.nodes.insert(error("a", []));
-        let b = change_set.nodes.insert(error("b", [a]));
-        let c = change_set.nodes.insert(error("c", [a]));
-        let d = change_set.nodes.insert(error("d", [b, c]));
+        let a = change_set.nodes.insert(node("a", []));
+        let b = change_set.nodes.insert(node("b", [a]));
+        let c = change_set.nodes.insert(node("c", [a]));
+        let d = change_set.nodes.insert(node("d", [b, c]));
 
         let d = NodePath::for_root(d);
         change_set.replace(&change_set.root_before_change(), &d);
