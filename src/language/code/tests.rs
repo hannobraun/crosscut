@@ -2,7 +2,7 @@ use itertools::Itertools;
 
 use crate::language::{
     code::NodePath,
-    tests::infra::{LocatedNodeExt, error, expression},
+    tests::infra::{LocatedNodeExt, expression},
 };
 
 use super::Codebase;
@@ -46,8 +46,8 @@ fn uniquely_identify_identical_siblings() {
     let mut codebase = Codebase::new();
 
     let root = codebase.make_change(|change_set| {
-        let a = change_set.nodes.insert(error("a", []));
-        let b = change_set.nodes.insert(error("b", [a, a]));
+        let a = change_set.nodes.insert(expression("a", []));
+        let b = change_set.nodes.insert(expression("b", [a, a]));
 
         let b = NodePath::for_root(b);
         change_set.replace(&change_set.root_before_change(), &b);
