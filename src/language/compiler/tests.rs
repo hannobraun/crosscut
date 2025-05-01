@@ -48,7 +48,7 @@ fn insert_child_with_grandparent() {
         "grandparent",
         &packages,
     );
-    let parent = compiler.insert_child(grandparent, "a", &packages);
+    let parent = compiler.insert_child(grandparent, "parent", &packages);
     let child = compiler.insert_child(parent.clone(), "b", &packages);
 
     let [child_of_root] = compiler
