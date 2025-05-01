@@ -40,7 +40,8 @@ impl<'r> Compiler<'r> {
                     | Expression::Function { .. }
                     | Expression::Number { .. }
                     | Expression::ProvidedFunction { .. }
-                    | Expression::Recursion => {
+                    | Expression::Recursion
+                    | Expression::Error { .. } => {
                         panic!(
                             "Can't add child to this node:\n\
                             {node:#?}"
@@ -48,7 +49,6 @@ impl<'r> Compiler<'r> {
                     }
 
                     Expression::Tuple { values: children }
-                    | Expression::Error { children, .. }
                     | Expression::Test { children, .. } => children.add(child),
                 };
 

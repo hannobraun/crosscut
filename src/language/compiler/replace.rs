@@ -116,15 +116,14 @@ fn update_children(
         | Expression::ProvidedFunction {
             id: FunctionId { .. },
         }
-        | Expression::Recursion => {
+        | Expression::Recursion
+        | Expression::Error {
+            node: String { .. },
+        } => {
             panic!("Node has no children. Can't replace one.");
         }
 
         Expression::Tuple { values: children }
-        | Expression::Error {
-            node: String { .. },
-            children,
-        }
         | Expression::Test {
             name: String { .. },
             children,

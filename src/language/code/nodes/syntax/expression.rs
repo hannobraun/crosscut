@@ -108,9 +108,6 @@ pub enum Expression {
     Error {
         /// # The original token that couldn't be compiled correctly
         node: String,
-
-        /// # The children of this node
-        children: Children,
     },
 
     /// # An expression that can be used for testing
@@ -156,11 +153,10 @@ impl Expression {
             Self::Empty
             | Self::Number { value: _ }
             | Self::ProvidedFunction { .. }
-            | Self::Recursion => false,
+            | Self::Recursion
+            | Self::Error { .. } => false,
 
-            Self::Tuple { values: children }
-            | Self::Error { children, .. }
-            | Self::Test { children, .. } => {
+            Self::Tuple { values: children } | Self::Test { children, .. } => {
                 children.contains_at(child, sibling_index)
             }
         }
@@ -183,11 +179,12 @@ impl Expression {
             Self::Empty
             | Self::Number { value: _ }
             | Self::ProvidedFunction { .. }
-            | Self::Recursion => Children::new([]),
+            | Self::Recursion
+            | Self::Error { .. } => Children::new([]),
 
-            Self::Tuple { values: children }
-            | Self::Error { children, .. }
-            | Self::Test { children, .. } => children.clone(),
+            Self::Tuple { values: children } | Self::Test { children, .. } => {
+                children.clone()
+            }
         }
     }
 

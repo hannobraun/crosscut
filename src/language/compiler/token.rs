@@ -27,7 +27,6 @@ impl Token<'_> {
                 Err(candidates) => (
                     Expression::Error {
                         node: self.text.to_string(),
-                        children: Children::new([]),
                     },
                     Some(CodeError::UnresolvedIdentifier { candidates }),
                 ),

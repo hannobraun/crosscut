@@ -25,7 +25,6 @@ pub fn tuple(
 pub fn error(name: &str) -> Expression {
     Expression::Error {
         node: name.to_string(),
-        children: Children::new([]),
     }
 }
 

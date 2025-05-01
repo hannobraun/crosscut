@@ -1,8 +1,5 @@
 use crate::language::{
-    code::CodeError,
-    language::Language,
-    packages::Function,
-    runtime::{RuntimeState, Value},
+    code::CodeError, language::Language, runtime::Value,
     tests::infra::LocatedNodeExt,
 };
 
@@ -47,29 +44,6 @@ fn fixing_syntax_node_should_remove_error() {
     let resolved = language.codebase().root().path;
     assert_eq!(language.codebase().errors().get(resolved.hash()), None);
     assert_eq!(language.step_until_finished().unwrap(), Value::nothing());
-}
-
-#[test]
-fn children_of_error_should_not_be_evaluated() {
-    // Most of the time, it would make sense to evaluate any valid code, until
-    // an error is encountered. But some of the time, the erroneous node might
-    // be intended as a function literal. And then just starting to execute the
-    // erroneous function where it's defined, would be wild and unexpected.
-
-    #[derive(Clone, Copy, Eq, Ord, PartialEq, PartialOrd)]
-    struct Ping;
-    impl Function for Ping {
-        fn name(&self) -> &str {
-            "ping"
-        }
-    }
-
-    let mut language = Language::new();
-    language.packages_mut().new_package([Ping]);
-
-    language.code("unresolved ping");
-
-    assert!(matches!(language.step(), RuntimeState::Error { .. }));
 }
 
 #[test]
