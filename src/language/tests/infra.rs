@@ -8,11 +8,9 @@ pub fn expression(
     name: &str,
     children: impl IntoIterator<Item = NodeHash<Expression>>,
 ) -> Expression {
-    let children = Children::new(children);
-
     Expression::Test {
         name: name.to_string(),
-        children,
+        children: Children::new(children),
     }
 }
 
