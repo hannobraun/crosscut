@@ -1,5 +1,5 @@
 use crate::language::{
-    code::{Codebase, Expression, Function},
+    code::{Children, Codebase, Expression, Function},
     compiler::Compiler,
     editor::{Editor, EditorInputEvent::*, editor::Cursor},
     packages::Packages,
@@ -93,13 +93,13 @@ fn add_child() {
 
     let a = {
         let root = codebase.root().path;
-        Compiler::new(&mut codebase).replace(&root, "a", &packages)
+        Compiler::new(&mut codebase).replace(&root, "tuple", &packages)
     };
 
     let mut editor = Editor::new(
         Cursor {
             path: a,
-            index: "a".len(),
+            index: "tuple".len(),
         },
         &codebase,
         &packages,
@@ -111,7 +111,12 @@ fn add_child() {
     let a = codebase.root();
     let [b] = a.expect_children(codebase.nodes());
 
-    assert_eq!(a.node, &error("a", [*b.path.hash()]));
+    assert_eq!(
+        a.node,
+        &Expression::Tuple {
+            values: Children::from([*b.path.hash()]),
+        },
+    );
     assert_eq!(b.node, &error("b", []));
 }
 
