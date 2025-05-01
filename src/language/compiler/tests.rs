@@ -23,8 +23,8 @@ fn insert_child() {
 
     let mut compiler = Compiler::new(&mut codebase);
 
-    let root = compiler.codebase().root().path;
-    let a = compiler.insert_child(root, "a", &packages);
+    let a =
+        compiler.insert_child(compiler.codebase().root().path, "a", &packages);
 
     let [child_of_root] = compiler
         .codebase()
