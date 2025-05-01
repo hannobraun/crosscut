@@ -109,15 +109,15 @@ fn add_child() {
     editor.on_code("child", &mut codebase, &mut evaluator, &packages);
 
     let tuple = codebase.root();
-    let [b] = tuple.expect_children(codebase.nodes());
+    let [child] = tuple.expect_children(codebase.nodes());
 
     assert_eq!(
         tuple.node,
         &Expression::Tuple {
-            values: Children::from([*b.path.hash()]),
+            values: Children::from([*child.path.hash()]),
         },
     );
-    assert_eq!(b.node, &error("child", []));
+    assert_eq!(child.node, &error("child", []));
 }
 
 #[test]
