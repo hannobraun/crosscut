@@ -46,7 +46,7 @@ fn insert_child_with_grandparent() {
     let grandparent =
         compiler.replace(&compiler.codebase().root().path, "root", &packages);
     let parent = compiler.insert_child(grandparent, "a", &packages);
-    let b = compiler.insert_child(parent.clone(), "b", &packages);
+    let child = compiler.insert_child(parent.clone(), "b", &packages);
 
     let [child_of_root] = compiler
         .codebase()
@@ -54,7 +54,7 @@ fn insert_child_with_grandparent() {
         .expect_children(compiler.codebase().nodes());
     let [grandchild_of_root] =
         child_of_root.expect_children(compiler.codebase().nodes());
-    assert_eq!(grandchild_of_root.path, b);
+    assert_eq!(grandchild_of_root.path, child);
 }
 
 #[test]
