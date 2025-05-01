@@ -31,10 +31,7 @@ fn edit_at_initial_cursor() {
     assert_eq!(editor.cursor(), &cursor);
 
     editor.on_code("b", &mut codebase, &mut evaluator, &packages);
-    assert_eq!(
-        codebase.node_at(&editor.cursor().path).node,
-        &error("abc", []),
-    );
+    assert_eq!(codebase.node_at(&editor.cursor().path).node, &error("abc"));
 }
 
 #[test]

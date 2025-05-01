@@ -95,7 +95,7 @@ mod tests {
         let mut codebase = Codebase::new();
 
         let root = codebase.make_change(|change_set| {
-            let a = NodePath::for_root(change_set.nodes.insert(error("a", [])));
+            let a = NodePath::for_root(change_set.nodes.insert(error("a")));
             change_set.replace(&change_set.root_before_change(), &a);
 
             a

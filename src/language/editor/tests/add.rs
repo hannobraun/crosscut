@@ -50,8 +50,8 @@ fn add_apply_node() {
             argument: *argument.path.hash(),
         },
     );
-    assert_eq!(function.node, &error("a", []));
-    assert_eq!(argument.node, &error("b", []));
+    assert_eq!(function.node, &error("a"));
+    assert_eq!(argument.node, &error("b"));
 }
 
 #[test]
@@ -112,7 +112,7 @@ fn add_child() {
     let [child] = parent.expect_children(codebase.nodes());
 
     assert_eq!(parent.node, &tuple([*child.path.hash()]));
-    assert_eq!(child.node, &error("child", []));
+    assert_eq!(child.node, &error("child"));
 }
 
 #[test]
@@ -149,6 +149,6 @@ fn add_sibling() {
     let [a, b] = parent.expect_children(codebase.nodes());
 
     assert_eq!(parent.node, &tuple([*a.path.hash(), *b.path.hash()]));
-    assert_eq!(a.node, &error("a", []));
-    assert_eq!(b.node, &error("b", []));
+    assert_eq!(a.node, &error("a"));
+    assert_eq!(b.node, &error("b"));
 }

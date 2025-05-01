@@ -22,11 +22,8 @@ pub fn tuple(
     }
 }
 
-pub fn error(
-    name: &str,
-    children: impl IntoIterator<Item = NodeHash<Expression>>,
-) -> Expression {
-    let children = Children::new(children);
+pub fn error(name: &str) -> Expression {
+    let children = Children::new([]);
 
     Expression::Error {
         node: name.to_string(),
