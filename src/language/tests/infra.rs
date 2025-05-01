@@ -22,7 +22,7 @@ pub fn tuple(
     }
 }
 
-pub fn error(identifier: &str) -> Expression {
+pub fn unresolved(identifier: &str) -> Expression {
     Expression::UnresolvedIdentifier {
         identifier: identifier.to_string(),
     }
