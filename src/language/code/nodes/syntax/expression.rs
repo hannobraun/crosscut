@@ -112,6 +112,20 @@ pub enum Expression {
         /// # The children of this node
         children: Children,
     },
+
+    /// # An expression that can be used for testing
+    ///
+    /// It has a name, making it possible to clearly identify it within a test
+    /// scenario; and has an arbitrary number of children, making it suitable
+    /// for editing tests.
+    #[cfg_attr(not(test), allow(dead_code))]
+    Test {
+        /// # The name of the test expression
+        name: String,
+
+        /// # The children of the test expression
+        children: Children,
+    },
 }
 
 impl Expression {
@@ -144,7 +158,9 @@ impl Expression {
             | Self::ProvidedFunction { .. }
             | Self::Recursion => false,
 
-            Self::Tuple { values: children } | Self::Error { children, .. } => {
+            Self::Tuple { values: children }
+            | Self::Error { children, .. }
+            | Self::Test { children, .. } => {
                 children.contains_at(child, sibling_index)
             }
         }
@@ -169,9 +185,9 @@ impl Expression {
             | Self::ProvidedFunction { .. }
             | Self::Recursion => Children::new([]),
 
-            Self::Tuple { values: children } | Self::Error { children, .. } => {
-                children.clone()
-            }
+            Self::Tuple { values: children }
+            | Self::Error { children, .. }
+            | Self::Test { children, .. } => children.clone(),
         }
     }
 
@@ -219,6 +235,9 @@ impl fmt::Display for NodeDisplay<'_> {
             }
             Expression::Error { node, .. } => {
                 write!(f, "{node}")
+            }
+            Expression::Test { name, .. } => {
+                write!(f, "{name}")
             }
         }
     }

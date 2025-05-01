@@ -124,6 +124,10 @@ fn update_children(
         | Expression::Error {
             node: String { .. },
             children,
+        }
+        | Expression::Test {
+            name: String { .. },
+            children,
         } => {
             children.replace(&replacement.replaced, replacement.replacement);
         }

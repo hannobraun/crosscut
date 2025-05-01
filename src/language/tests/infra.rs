@@ -4,6 +4,18 @@ use crate::language::code::{
     Children, Expression, LocatedNode, NodeHash, Nodes,
 };
 
+pub fn node(
+    name: &str,
+    children: impl IntoIterator<Item = NodeHash<Expression>>,
+) -> Expression {
+    let children = Children::new(children);
+
+    Expression::Test {
+        name: name.to_string(),
+        children,
+    }
+}
+
 pub fn error(
     name: &str,
     children: impl IntoIterator<Item = NodeHash<Expression>>,

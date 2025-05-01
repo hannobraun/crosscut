@@ -407,6 +407,13 @@ fn render_help<A: EditorOutputAdapter>(
         Expression::Error { .. } => {
             writeln!(adapter, "You are editing an erroneous syntax node.",)?;
         }
+        Expression::Test { .. } => {
+            writeln!(
+                adapter,
+                "You are editing an expression that should only be used for \
+                testing. This is a bug."
+            )?;
+        }
     }
 
     Ok(())

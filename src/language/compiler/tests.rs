@@ -2,7 +2,7 @@ use crate::language::{
     code::{CodeError, Codebase, Expression, NodeHash, NodePath},
     compiler::Compiler,
     packages::Packages,
-    tests::infra::{LocatedNodeExt, error},
+    tests::infra::{LocatedNodeExt, error, node},
 };
 
 #[test]
@@ -112,7 +112,7 @@ fn updating_child_updates_parent() {
 
     codebase.make_change(|change_set| {
         let child = change_set.nodes.insert(Expression::Number { value: 12 });
-        let parent = change_set.nodes.insert(error("unresolved", [child]));
+        let parent = change_set.nodes.insert(node("unresolved", [child]));
 
         change_set.errors.insert(
             parent,
@@ -149,7 +149,7 @@ fn updating_child_updates_parent() {
     ) {
         assert_eq!(
             codebase.node_at(&parent).node,
-            &error("unresolved", children)
+            &node("unresolved", children)
         );
 
         // Since a change to a child doesn't change anything substantial about

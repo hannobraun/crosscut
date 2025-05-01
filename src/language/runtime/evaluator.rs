@@ -223,6 +223,11 @@ impl Evaluator {
                 // from the evaluation stack earlier to where it was.
                 self.eval_stack.push(node);
             }
+            Expression::Test { .. } => {
+                // For now, tests don't expect a specific runtime behavior out
+                // of these expressions. So let's just use a placeholder here.
+                self.finish_evaluating_node(Value::nothing());
+            }
         }
     }
 

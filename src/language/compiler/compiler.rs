@@ -48,7 +48,8 @@ impl<'r> Compiler<'r> {
                     }
 
                     Expression::Tuple { values: children }
-                    | Expression::Error { children, .. } => children.add(child),
+                    | Expression::Error { children, .. }
+                    | Expression::Test { children, .. } => children.add(child),
                 };
 
                 let hash = change_set.nodes.insert(node);
