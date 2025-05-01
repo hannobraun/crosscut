@@ -141,13 +141,11 @@ impl EditorInputBuffer {
         }
     }
 
-    fn add_child_or_sibling(&mut self, cursor: &mut usize) -> String {
+    fn add_child_or_sibling(&mut self, cursor: &mut usize) {
         let mut old_buffer = mem::take(&mut self.buffer);
         let new_buffer = old_buffer.split_off(*cursor);
 
         *self = Self::new(new_buffer, cursor);
-
-        old_buffer
     }
 }
 
