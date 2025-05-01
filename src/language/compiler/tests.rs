@@ -12,10 +12,19 @@ fn insert_child() {
     let packages = Packages::default();
 
     let mut codebase = Codebase::new();
+
+    codebase.make_change(|change_set| {
+        let parent = change_set.nodes.insert(error("parent"));
+
+        change_set.replace(
+            &change_set.root_before_change(),
+            &NodePath::for_root(parent),
+        );
+    });
+
     let mut compiler = Compiler::new(&mut codebase);
 
-    let root =
-        compiler.replace(&compiler.codebase().root().path, "root", &packages);
+    let root = compiler.codebase().root().path;
     let a = compiler.insert_child(root, "a", &packages);
 
     let [child_of_root] = compiler
