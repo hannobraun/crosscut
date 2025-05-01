@@ -93,7 +93,7 @@ fn navigate_right_to_child() {
 
         let parent = compiler.replace(
             &compiler.codebase().root().path,
-            "parent",
+            "tuple",
             &packages,
         );
         compiler.insert_child(parent, "child", &packages)
@@ -102,7 +102,7 @@ fn navigate_right_to_child() {
     let mut editor = Editor::new(
         Cursor {
             path: codebase.root().path,
-            index: "parent".len(),
+            index: "tuple".len(),
         },
         &codebase,
         &packages,
