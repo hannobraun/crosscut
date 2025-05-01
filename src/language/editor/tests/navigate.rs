@@ -132,7 +132,7 @@ fn navigate_up_to_parent() {
     let mut codebase = Codebase::new();
     let mut evaluator = Evaluator::new();
 
-    let b = {
+    let child = {
         let mut compiler = Compiler::new(&mut codebase);
 
         let a =
@@ -140,8 +140,14 @@ fn navigate_up_to_parent() {
         compiler.insert_child(a, "b", &packages)
     };
 
-    let mut editor =
-        Editor::new(Cursor { path: b, index: 1 }, &codebase, &packages);
+    let mut editor = Editor::new(
+        Cursor {
+            path: child,
+            index: 1,
+        },
+        &codebase,
+        &packages,
+    );
     editor.on_input(
         [EditorInputEvent::MoveCursorUp],
         &mut codebase,
