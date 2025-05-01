@@ -91,14 +91,14 @@ fn add_child() {
     let mut codebase = Codebase::new();
     let mut evaluator = Evaluator::new();
 
-    let a = {
+    let tuple = {
         let root = codebase.root().path;
         Compiler::new(&mut codebase).replace(&root, "tuple", &packages)
     };
 
     let mut editor = Editor::new(
         Cursor {
-            path: a,
+            path: tuple,
             index: "tuple".len(),
         },
         &codebase,
