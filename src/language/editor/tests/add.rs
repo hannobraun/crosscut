@@ -132,7 +132,7 @@ fn add_sibling() {
             "tuple",
             &packages,
         );
-        compiler.insert_child(a, "b", &packages)
+        compiler.insert_child(a, "a", &packages)
     };
 
     let mut editor = Editor::new(b, &codebase, &packages);
@@ -149,7 +149,7 @@ fn add_sibling() {
     let [b, c] = a.expect_children(codebase.nodes());
 
     assert_eq!(a.node, &tuple([*b.path.hash(), *c.path.hash()]));
-    assert_eq!(b.node, &error("b", []));
+    assert_eq!(b.node, &error("a", []));
     assert_eq!(c.node, &error("c", []));
 }
 
