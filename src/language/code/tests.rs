@@ -18,7 +18,7 @@ fn uniquely_identify_identical_children_of_different_parents() {
         let a = change_set.nodes.insert(expression("a", []));
 
         let parent_a = change_set.nodes.insert(expression("parent_a", [a]));
-        let parent_b = change_set.nodes.insert(expression("c", [a]));
+        let parent_b = change_set.nodes.insert(expression("parent_b", [a]));
 
         let root = change_set
             .nodes
