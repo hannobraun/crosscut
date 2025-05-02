@@ -17,16 +17,18 @@ impl Token<'_> {
         errors: &mut Errors,
         packages: &Packages,
     ) -> NodeHash<Expression> {
-        let (node, maybe_error) = if self.text.is_empty() {
+        let token = self;
+
+        let (node, maybe_error) = if token.text.is_empty() {
             (Expression::Empty, None)
-        } else if let Some(node) = resolve_keyword(self.text, nodes) {
+        } else if let Some(node) = resolve_keyword(token.text, nodes) {
             (node, None)
         } else {
-            match resolve_function(self.text, packages, nodes) {
+            match resolve_function(token.text, packages, nodes) {
                 Ok((node, maybe_err)) => (node, maybe_err),
                 Err(candidates) => (
                     Expression::UnresolvedIdentifier {
-                        identifier: self.text.to_string(),
+                        identifier: token.text.to_string(),
                     },
                     Some(CodeError::UnresolvedIdentifier { candidates }),
                 ),
