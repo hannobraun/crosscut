@@ -14,7 +14,7 @@ fn uniquely_identify_identical_children_of_different_parents() {
 
     let mut codebase = Codebase::new();
 
-    let root = codebase.make_change(|change_set| {
+    codebase.make_change(|change_set| {
         let a = change_set.nodes.insert(expression("a", []));
         let b = change_set.nodes.insert(expression("b", [a]));
         let c = change_set.nodes.insert(expression("c", [a]));
@@ -22,12 +22,10 @@ fn uniquely_identify_identical_children_of_different_parents() {
 
         let root = NodePath::for_root(root);
         change_set.replace(&change_set.root_before_change(), &root);
-
-        root
     });
 
     let [a1, a2] = codebase
-        .node_at(&root)
+        .node_at(&codebase.root().path)
         .children(codebase.nodes())
         .map(|b_or_c| {
             let [a] = b_or_c.expect_children(codebase.nodes());
