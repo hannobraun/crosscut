@@ -1,6 +1,6 @@
 mod compiler;
+mod expression;
 mod replace;
-mod token;
 
 pub use self::compiler::Compiler;
 
