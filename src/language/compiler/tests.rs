@@ -149,12 +149,10 @@ fn updating_child_updates_parent() {
 
     let mut compiler = Compiler::new(&mut codebase);
 
-    let child = compiler
+    let [child] = compiler
         .codebase()
         .root()
-        .children(compiler.codebase().nodes())
-        .next()
-        .unwrap();
+        .expect_children(compiler.codebase().nodes());
     let child = compiler.replace(&child.path, "127", &packages);
 
     // After editing the child, the new parent node should be the same as the
