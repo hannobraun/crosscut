@@ -8,7 +8,7 @@ pub struct EditorLayout {
 impl EditorLayout {
     pub fn new(root: LocatedNode, nodes: &Nodes) -> Self {
         let mut nodes_from_root = Vec::new();
-        collect_nodes_from_root(root, 0, &mut nodes_from_root, nodes, false);
+        collect_nodes_from_root(root, 0, &mut nodes_from_root, nodes);
 
         let lines = nodes_from_root
             .into_iter()
@@ -76,24 +76,13 @@ fn collect_nodes_from_root(
     distance_from_root: u32,
     nodes_from_root: &mut Vec<NodeInLayout>,
     nodes: &Nodes,
-    postfix: bool,
 ) {
     nodes_from_root.push(NodeInLayout {
         path: node.path.clone(),
         distance_from_root,
     });
 
-    let children = if postfix {
-        // By rendering leaves first, root at the end, we are essentially
-        // inverting the tree, compared to how we usually think about trees. We
-        // do _not_ want to invert the order of a node's children though.
-        // Otherwise, when working on code that adds/removes children, our
-        // intuition won't match how we think about this when manipulating
-        // children in the editor.
-        node.children(nodes).rev().collect::<Vec<_>>()
-    } else {
-        node.children(nodes).collect::<Vec<_>>()
-    };
+    let children = node.children(nodes).collect::<Vec<_>>();
 
     for child in children {
         collect_nodes_from_root(
@@ -101,7 +90,6 @@ fn collect_nodes_from_root(
             distance_from_root + 1,
             nodes_from_root,
             nodes,
-            postfix,
         );
     }
 }
