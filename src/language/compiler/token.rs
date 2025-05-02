@@ -10,38 +10,36 @@ pub struct Token<'r> {
     pub text: &'r str,
 }
 
-impl Token<'_> {
-    pub fn compile(
-        self,
-        nodes: &mut Nodes,
-        errors: &mut Errors,
-        packages: &Packages,
-    ) -> NodeHash<Expression> {
-        let token = self.text;
+pub fn compile(
+    token: Token,
+    nodes: &mut Nodes,
+    errors: &mut Errors,
+    packages: &Packages,
+) -> NodeHash<Expression> {
+    let token = token.text;
 
-        let (node, maybe_error) = if token.is_empty() {
-            (Expression::Empty, None)
-        } else if let Some(node) = resolve_keyword(token, nodes) {
-            (node, None)
-        } else {
-            match resolve_function(token, packages, nodes) {
-                Ok((node, maybe_err)) => (node, maybe_err),
-                Err(candidates) => (
-                    Expression::UnresolvedIdentifier {
-                        identifier: token.to_string(),
-                    },
-                    Some(CodeError::UnresolvedIdentifier { candidates }),
-                ),
-            }
-        };
-
-        let hash = nodes.insert(node);
-        if let Some(error) = maybe_error {
-            errors.insert(hash, error);
+    let (node, maybe_error) = if token.is_empty() {
+        (Expression::Empty, None)
+    } else if let Some(node) = resolve_keyword(token, nodes) {
+        (node, None)
+    } else {
+        match resolve_function(token, packages, nodes) {
+            Ok((node, maybe_err)) => (node, maybe_err),
+            Err(candidates) => (
+                Expression::UnresolvedIdentifier {
+                    identifier: token.to_string(),
+                },
+                Some(CodeError::UnresolvedIdentifier { candidates }),
+            ),
         }
+    };
 
-        hash
+    let hash = nodes.insert(node);
+    if let Some(error) = maybe_error {
+        errors.insert(hash, error);
     }
+
+    hash
 }
 
 fn resolve_keyword(name: &str, nodes: &mut Nodes) -> Option<Expression> {
