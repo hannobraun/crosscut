@@ -5,7 +5,7 @@ use crate::language::{
 
 use super::{
     replace::replace_node_and_update_parents,
-    token::{Token, compile},
+    token::{self, Token},
 };
 
 pub struct Compiler<'r> {
@@ -31,7 +31,12 @@ impl<'r> Compiler<'r> {
             let child = {
                 let token = Token { text: child_token };
 
-                compile(token, change_set.nodes, change_set.errors, packages)
+                token::compile(
+                    token,
+                    change_set.nodes,
+                    change_set.errors,
+                    packages,
+                )
             };
 
             let (parent_path, sibling_index) = {
@@ -124,7 +129,7 @@ impl<'r> Compiler<'r> {
         packages: &Packages,
     ) -> NodePath {
         self.codebase.make_change(|change_set| {
-            let replacement = compile(
+            let replacement = token::compile(
                 Token {
                     text: replacement_token,
                 },
