@@ -1,5 +1,3 @@
-use itertools::Itertools;
-
 use crate::language::{
     code::NodePath,
     tests::infra::{LocatedNodeExt, expression},
@@ -30,15 +28,12 @@ fn uniquely_identify_identical_children_of_different_parents() {
         );
     });
 
-    let [a1, a2] = codebase
-        .node_at(&codebase.root().path)
-        .children(codebase.nodes())
-        .map(|b_or_c| {
-            let [a] = b_or_c.expect_children(codebase.nodes());
-            a
-        })
-        .collect_array()
-        .unwrap();
+    let [parent_a, parent_b] =
+        codebase.root().expect_children(codebase.nodes());
+    let [a1, a2] = [parent_a, parent_b].map(|b_or_c| {
+        let [a] = b_or_c.expect_children(codebase.nodes());
+        a
+    });
 
     assert_ne!(a1, a2);
 }
