@@ -20,8 +20,10 @@ fn uniquely_identify_identical_children_of_different_parents() {
         let c = change_set.nodes.insert(expression("c", [a]));
         let root = change_set.nodes.insert(expression("root", [b, c]));
 
-        let root = NodePath::for_root(root);
-        change_set.replace(&change_set.root_before_change(), &root);
+        change_set.replace(
+            &change_set.root_before_change(),
+            &NodePath::for_root(root),
+        );
     });
 
     let [a1, a2] = codebase
