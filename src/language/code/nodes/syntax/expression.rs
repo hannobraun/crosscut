@@ -162,7 +162,7 @@ impl Expression {
         }
     }
 
-    pub fn to_children(&self) -> Children {
+    pub fn to_children(&self) -> Vec<NodeHash<Expression>> {
         match self {
             Self::Apply {
                 expression: a,
@@ -174,16 +174,16 @@ impl Expression {
                         parameter: a,
                         body: b,
                     },
-            } => Children::new([*a, *b]),
+            } => vec![*a, *b],
 
             Self::Empty
             | Self::Number { value: _ }
             | Self::ProvidedFunction { .. }
             | Self::Recursion
-            | Self::UnresolvedIdentifier { .. } => Children::new([]),
+            | Self::UnresolvedIdentifier { .. } => vec![],
 
             Self::Tuple { values: children } | Self::Test { children, .. } => {
-                children.clone()
+                children.inner.clone()
             }
         }
     }
