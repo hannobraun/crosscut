@@ -30,8 +30,8 @@ fn uniquely_identify_identical_children_of_different_parents() {
 
     let [parent_a, parent_b] =
         codebase.root().expect_children(codebase.nodes());
-    let [a1, a2] = [parent_a, parent_b].map(|b_or_c| {
-        let [a] = b_or_c.expect_children(codebase.nodes());
+    let [a1, a2] = [parent_a, parent_b].map(|parent| {
+        let [a] = parent.expect_children(codebase.nodes());
         a
     });
 
