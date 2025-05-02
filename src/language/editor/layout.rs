@@ -82,7 +82,8 @@ fn collect_nodes_from_root(
         distance_from_root,
     });
 
-    let children = node.children(nodes).collect::<Vec<_>>();
+    let mut children = Vec::new();
+    children.extend(node.children(nodes));
 
     for child in children {
         collect_nodes_from_root(
