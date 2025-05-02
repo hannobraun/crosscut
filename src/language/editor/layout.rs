@@ -1,4 +1,4 @@
-use crate::language::code::{Codebase, LocatedNode, NodePath, Nodes};
+use crate::language::code::{Codebase, LocatedNode, NodePath};
 
 #[derive(Debug)]
 pub struct EditorLayout {
@@ -8,12 +8,7 @@ pub struct EditorLayout {
 impl EditorLayout {
     pub fn new(root: LocatedNode, codebase: &Codebase) -> Self {
         let mut nodes_from_root = Vec::new();
-        collect_nodes_from_root(
-            root,
-            0,
-            &mut nodes_from_root,
-            codebase.nodes(),
-        );
+        collect_nodes_from_root(root, 0, &mut nodes_from_root, codebase);
 
         let lines = nodes_from_root
             .into_iter()
@@ -80,7 +75,7 @@ fn collect_nodes_from_root(
     node: LocatedNode,
     distance_from_root: u32,
     nodes_from_root: &mut Vec<NodeInLayout>,
-    nodes: &Nodes,
+    codebase: &Codebase,
 ) {
     nodes_from_root.push(NodeInLayout {
         path: node.path.clone(),
@@ -88,14 +83,14 @@ fn collect_nodes_from_root(
     });
 
     let mut children = Vec::new();
-    children.extend(node.children(nodes));
+    children.extend(node.children(codebase.nodes()));
 
     for child in children {
         collect_nodes_from_root(
             child,
             distance_from_root + 1,
             nodes_from_root,
-            nodes,
+            codebase,
         );
     }
 }
