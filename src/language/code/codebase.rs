@@ -30,14 +30,14 @@ impl Codebase {
         &self.nodes
     }
 
-    pub fn root(&self) -> LocatedNode {
+    pub fn root(&self) -> LocatedNode<Expression> {
         LocatedNode {
             node: self.nodes.get(&self.root.hash),
             path: self.root.path(),
         }
     }
 
-    pub fn node_at(&self, path: &NodePath) -> LocatedNode {
+    pub fn node_at(&self, path: &NodePath) -> LocatedNode<Expression> {
         LocatedNode {
             node: self.nodes.get(path.hash()),
             path: path.clone(),
