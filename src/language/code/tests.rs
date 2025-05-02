@@ -15,10 +15,10 @@ fn uniquely_identify_identical_children_of_different_parents() {
     let mut codebase = Codebase::new();
 
     codebase.make_change(|change_set| {
-        let a = change_set.nodes.insert(expression("a", []));
+        let child = change_set.nodes.insert(expression("a", []));
 
-        let parent_a = change_set.nodes.insert(expression("parent_a", [a]));
-        let parent_b = change_set.nodes.insert(expression("parent_b", [a]));
+        let parent_a = change_set.nodes.insert(expression("parent_a", [child]));
+        let parent_b = change_set.nodes.insert(expression("parent_b", [child]));
 
         let root = change_set
             .nodes
