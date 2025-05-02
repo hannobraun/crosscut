@@ -16,8 +16,10 @@ fn uniquely_identify_identical_children_of_different_parents() {
 
     codebase.make_change(|change_set| {
         let a = change_set.nodes.insert(expression("a", []));
+
         let b = change_set.nodes.insert(expression("b", [a]));
         let c = change_set.nodes.insert(expression("c", [a]));
+
         let root = change_set.nodes.insert(expression("root", [b, c]));
 
         change_set.replace(
