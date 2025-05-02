@@ -29,10 +29,8 @@ impl<'r> Compiler<'r> {
     ) -> NodePath {
         self.codebase.make_change(|change_set| {
             let child = {
-                let token = Token { text: child_token };
-
                 token::compile(
-                    token,
+                    Token { text: child_token },
                     change_set.nodes,
                     change_set.errors,
                     packages,
