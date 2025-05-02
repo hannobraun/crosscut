@@ -166,7 +166,7 @@ impl LocatedNode<'_, Expression> {
         nodes: &'r Nodes,
     ) -> impl DoubleEndedIterator<Item = LocatedNode<'r, Expression>> {
         self.node
-            .to_children()
+            .children()
             .into_iter()
             .enumerate()
             .map(|(index, hash)| {

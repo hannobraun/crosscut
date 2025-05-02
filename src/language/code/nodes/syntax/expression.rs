@@ -162,7 +162,7 @@ impl Expression {
         }
     }
 
-    pub fn to_children(&self) -> Vec<NodeHash<Expression>> {
+    pub fn children(&self) -> Vec<NodeHash<Expression>> {
         match self {
             Self::Apply {
                 expression: a,
