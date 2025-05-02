@@ -3,10 +3,7 @@ use crate::language::{
     packages::Packages,
 };
 
-use super::{
-    replace::replace_node_and_update_parents,
-    token::{self, Token},
-};
+use super::{replace::replace_node_and_update_parents, token};
 
 pub struct Compiler<'r> {
     codebase: &'r mut Codebase,
@@ -30,7 +27,7 @@ impl<'r> Compiler<'r> {
         self.codebase.make_change(|change_set| {
             let child = {
                 token::compile(
-                    Token { text: child_token },
+                    child_token,
                     change_set.nodes,
                     change_set.errors,
                     packages,
@@ -128,9 +125,7 @@ impl<'r> Compiler<'r> {
     ) -> NodePath {
         self.codebase.make_change(|change_set| {
             let replacement = token::compile(
-                Token {
-                    text: replacement_token,
-                },
+                replacement_token,
                 change_set.nodes,
                 change_set.errors,
                 packages,

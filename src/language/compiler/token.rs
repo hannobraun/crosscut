@@ -6,18 +6,12 @@ use crate::language::{
     packages::Packages,
 };
 
-pub struct Token<'r> {
-    pub text: &'r str,
-}
-
 pub fn compile(
-    token: Token,
+    token: &str,
     nodes: &mut Nodes,
     errors: &mut Errors,
     packages: &Packages,
 ) -> NodeHash<Expression> {
-    let token = token.text;
-
     let (node, maybe_error) = if token.is_empty() {
         (Expression::Empty, None)
     } else if let Some(node) = resolve_keyword(token, nodes) {
