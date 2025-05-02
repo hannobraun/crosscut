@@ -274,9 +274,8 @@ struct RuntimeExpression {
 
 impl RuntimeExpression {
     fn new(path: NodePath, codebase: &Codebase) -> Self {
-        let expression = codebase.node_at(&path);
-
-        let children_to_evaluate = expression
+        let children_to_evaluate = codebase
+            .node_at(&path)
             .children(codebase.nodes())
             .map(|located_node| located_node.path)
             .rev()
