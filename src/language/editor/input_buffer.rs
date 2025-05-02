@@ -334,7 +334,7 @@ mod tests {
     }
 
     #[test]
-    fn add_parent() {
+    fn add_child() {
         let mut input = EditorInputBuffer::empty();
         let mut cursor = 0;
 
