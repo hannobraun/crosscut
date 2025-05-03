@@ -61,7 +61,7 @@ impl Language {
 
     pub fn on_input(&mut self, event: EditorInputEvent) {
         self.editor.on_input(
-            [event],
+            event,
             &mut self.codebase,
             &mut self.evaluator,
             &self.packages,

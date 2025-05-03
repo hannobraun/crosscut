@@ -66,7 +66,7 @@ fn navigate_down_to_child() {
         &packages,
     );
     editor.on_input(
-        [EditorInputEvent::MoveCursorDown],
+        EditorInputEvent::MoveCursorDown,
         &mut codebase,
         &mut evaluator,
         &packages,
@@ -111,7 +111,7 @@ fn navigate_right_to_child() {
         &packages,
     );
     editor.on_input(
-        [EditorInputEvent::MoveCursorRight],
+        EditorInputEvent::MoveCursorRight,
         &mut codebase,
         &mut evaluator,
         &packages,
@@ -155,7 +155,7 @@ fn navigate_up_to_parent() {
         &packages,
     );
     editor.on_input(
-        [EditorInputEvent::MoveCursorUp],
+        EditorInputEvent::MoveCursorUp,
         &mut codebase,
         &mut evaluator,
         &packages,
@@ -199,7 +199,7 @@ fn navigate_left_to_parent() {
         &packages,
     );
     editor.on_input(
-        [EditorInputEvent::MoveCursorLeft],
+        EditorInputEvent::MoveCursorLeft,
         &mut codebase,
         &mut evaluator,
         &packages,
@@ -240,7 +240,7 @@ fn navigate_down_to_next_sibling() {
     let mut editor =
         Editor::new(Cursor { path: a, index: 0 }, &codebase, &packages);
     editor.on_input(
-        [EditorInputEvent::MoveCursorDown],
+        EditorInputEvent::MoveCursorDown,
         &mut codebase,
         &mut evaluator,
         &packages,
@@ -276,7 +276,7 @@ fn navigate_right_to_next_sibling() {
     let mut editor =
         Editor::new(Cursor { path: a, index: 1 }, &codebase, &packages);
     editor.on_input(
-        [EditorInputEvent::MoveCursorRight],
+        EditorInputEvent::MoveCursorRight,
         &mut codebase,
         &mut evaluator,
         &packages,
@@ -311,7 +311,7 @@ fn navigate_up_to_previous_sibling() {
     let mut editor =
         Editor::new(Cursor { path: b, index: 1 }, &codebase, &packages);
     editor.on_input(
-        [EditorInputEvent::MoveCursorUp],
+        EditorInputEvent::MoveCursorUp,
         &mut codebase,
         &mut evaluator,
         &packages,
@@ -347,7 +347,7 @@ fn navigate_left_to_previous_sibling() {
     let mut editor =
         Editor::new(Cursor { path: b, index: 0 }, &codebase, &packages);
     editor.on_input(
-        [EditorInputEvent::MoveCursorLeft],
+        EditorInputEvent::MoveCursorLeft,
         &mut codebase,
         &mut evaluator,
         &packages,

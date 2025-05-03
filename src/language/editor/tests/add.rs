@@ -34,10 +34,10 @@ fn add_apply_node() {
 
     // The apply node's children can then be edited.
 
-    editor.on_input([MoveCursorDown], &mut codebase, &mut evaluator, &packages);
+    editor.on_input(MoveCursorDown, &mut codebase, &mut evaluator, &packages);
     editor.on_code("a", &mut codebase, &mut evaluator, &packages);
 
-    editor.on_input([MoveCursorDown], &mut codebase, &mut evaluator, &packages);
+    editor.on_input(MoveCursorDown, &mut codebase, &mut evaluator, &packages);
     editor.on_code("b", &mut codebase, &mut evaluator, &packages);
 
     let apply = codebase.root();
@@ -105,7 +105,7 @@ fn add_child() {
         &packages,
     );
 
-    editor.on_input([AddChild], &mut codebase, &mut evaluator, &packages);
+    editor.on_input(AddChild, &mut codebase, &mut evaluator, &packages);
     editor.on_code("child", &mut codebase, &mut evaluator, &packages);
 
     let parent = codebase.root();
@@ -138,7 +138,7 @@ fn add_sibling() {
     let mut editor =
         Editor::new(Cursor { path: a, index: 1 }, &codebase, &packages);
 
-    editor.on_input([AddSibling], &mut codebase, &mut evaluator, &packages);
+    editor.on_input(AddSibling, &mut codebase, &mut evaluator, &packages);
     editor.on_code("b", &mut codebase, &mut evaluator, &packages);
 
     let parent = codebase.root();

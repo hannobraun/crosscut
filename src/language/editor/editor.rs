@@ -39,7 +39,7 @@ impl Editor {
 
     pub fn on_input(
         &mut self,
-        events: impl IntoIterator<Item = EditorInputEvent>,
+        event: EditorInputEvent,
         codebase: &mut Codebase,
         evaluator: &mut Evaluator,
         packages: &Packages,
@@ -47,67 +47,57 @@ impl Editor {
         let layout = EditorLayout::new(codebase.root(), codebase);
         let mut compiler = Compiler::new(codebase);
 
-        for event in events {
-            if let Some(action) =
-                self.input.update(event, &mut self.cursor.index)
-            {
-                // This code results in non-intuitive cursor movement, if using
-                // the up and down keys. This is tracked here:
-                // https://github.com/hannobraun/crosscut/issues/71
-                match action {
-                    NodeAction::NavigateToPrevious => {
-                        if let Some(previous) =
-                            layout.node_before(&self.cursor.path)
-                        {
-                            self.navigate_to(
-                                previous.clone(),
-                                compiler.codebase(),
-                                packages,
-                            );
-                            self.input
-                                .move_cursor_to_end(&mut self.cursor.index);
-                        }
-                    }
-                    NodeAction::NavigateToNext => {
-                        if let Some(next) = layout.node_after(&self.cursor.path)
-                        {
-                            self.navigate_to(
-                                next.clone(),
-                                compiler.codebase(),
-                                packages,
-                            );
-                        }
-                    }
-                    NodeAction::AddChild => {
-                        self.cursor.path = compiler.insert_child(
-                            self.cursor.path.clone(),
-                            self.input.buffer(),
+        if let Some(action) = self.input.update(event, &mut self.cursor.index) {
+            // This code results in non-intuitive cursor movement, if using
+            // the up and down keys. This is tracked here:
+            // https://github.com/hannobraun/crosscut/issues/71
+            match action {
+                NodeAction::NavigateToPrevious => {
+                    if let Some(previous) =
+                        layout.node_before(&self.cursor.path)
+                    {
+                        self.navigate_to(
+                            previous.clone(),
+                            compiler.codebase(),
                             packages,
                         );
+                        self.input.move_cursor_to_end(&mut self.cursor.index);
                     }
-                    NodeAction::AddSibling => {
-                        self.cursor.path = compiler.insert_sibling(
-                            &self.cursor.path,
-                            self.input.buffer(),
+                }
+                NodeAction::NavigateToNext => {
+                    if let Some(next) = layout.node_after(&self.cursor.path) {
+                        self.navigate_to(
+                            next.clone(),
+                            compiler.codebase(),
                             packages,
                         );
                     }
                 }
+                NodeAction::AddChild => {
+                    self.cursor.path = compiler.insert_child(
+                        self.cursor.path.clone(),
+                        self.input.buffer(),
+                        packages,
+                    );
+                }
+                NodeAction::AddSibling => {
+                    self.cursor.path = compiler.insert_sibling(
+                        &self.cursor.path,
+                        self.input.buffer(),
+                        packages,
+                    );
+                }
             }
-
-            self.cursor.path = compiler.replace(
-                &self.cursor.path,
-                self.input.buffer(),
-                packages,
-            );
-
-            let root = compiler.codebase().root().path;
-            assert!(
-                self.cursor.path == root
-                    || root.is_ancestor_of(&self.cursor.path),
-                "Editor is no longer editing a current node after update.",
-            );
         }
+
+        self.cursor.path =
+            compiler.replace(&self.cursor.path, self.input.buffer(), packages);
+
+        let root = compiler.codebase().root().path;
+        assert!(
+            self.cursor.path == root || root.is_ancestor_of(&self.cursor.path),
+            "Editor is no longer editing a current node after update.",
+        );
 
         // Unconditionally resetting the interpreter like this, is not going to
         // work long-term. What we actually want to do here, is hot-reload the
@@ -170,7 +160,7 @@ impl Editor {
                 EditorInputEvent::Insert { ch }
             };
 
-            self.on_input([event], codebase, evaluator, packages);
+            self.on_input(event, codebase, evaluator, packages);
         }
     }
 }
