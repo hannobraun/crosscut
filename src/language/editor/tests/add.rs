@@ -136,14 +136,9 @@ fn add_sibling() {
     };
 
     let mut editor =
-        Editor::new(Cursor { path: a, index: 0 }, &codebase, &packages);
+        Editor::new(Cursor { path: a, index: 1 }, &codebase, &packages);
 
-    editor.on_input(
-        [MoveCursorRight, AddSibling],
-        &mut codebase,
-        &mut evaluator,
-        &packages,
-    );
+    editor.on_input([AddSibling], &mut codebase, &mut evaluator, &packages);
     editor.on_code("b", &mut codebase, &mut evaluator, &packages);
 
     let parent = codebase.root();
