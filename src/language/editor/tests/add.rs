@@ -1,5 +1,5 @@
 use crate::language::{
-    code::{Codebase, Expression, Function},
+    code::{Codebase, Expression},
     compiler::Compiler,
     editor::{Editor, EditorInputEvent::*, editor::Cursor},
     packages::Packages,
@@ -72,10 +72,8 @@ fn add_fn_node() {
     assert_eq!(
         function.node,
         &Expression::Function {
-            function: Function {
-                parameter: *parameter.path.hash(),
-                body: *body.path.hash(),
-            },
+            parameter: *parameter.path.hash(),
+            body: *body.path.hash(),
         },
     );
     assert_eq!(parameter.node, &Expression::Empty);

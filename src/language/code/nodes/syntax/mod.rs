@@ -1,4 +1,3 @@
 mod expression;
-mod function;
 
-pub use self::{expression::Expression, function::Function};
+pub use self::expression::Expression;

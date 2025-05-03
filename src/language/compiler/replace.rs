@@ -1,7 +1,5 @@
 use crate::language::{
-    code::{
-        Errors, Expression, Function, NewChangeSet, NodeHash, NodePath, Nodes,
-    },
+    code::{Errors, Expression, NewChangeSet, NodeHash, NodePath, Nodes},
     packages::FunctionId,
 };
 
@@ -96,11 +94,8 @@ fn update_children(
             argument: b,
         }
         | Expression::Function {
-            function:
-                Function {
-                    parameter: a,
-                    body: b,
-                },
+            parameter: a,
+            body: b,
         } => {
             if a == replacement.replaced.hash() {
                 *a = replacement.replacement;

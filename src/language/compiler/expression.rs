@@ -1,7 +1,7 @@
 use crate::language::{
     code::{
         CandidateForResolution, Children, CodeError, Errors, Expression,
-        Function, Literal, NodeHash, Nodes,
+        Literal, NodeHash, Nodes,
     },
     packages::Packages,
 };
@@ -64,12 +64,7 @@ fn resolve_function(
             Literal::Function => {
                 let [parameter, body] = [nodes.insert(Expression::Empty); 2];
 
-                Ok((
-                    Expression::Function {
-                        function: Function { parameter, body },
-                    },
-                    None,
-                ))
+                Ok((Expression::Function { parameter, body }, None))
             }
             Literal::Integer { value } => {
                 Ok((Expression::Number { value }, None))

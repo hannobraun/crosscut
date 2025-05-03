@@ -1,7 +1,7 @@
 use itertools::Itertools;
 
 use crate::language::code::{
-    Codebase, Expression, Function, NodePath, SiblingIndex, Type,
+    Codebase, Expression, NodePath, SiblingIndex, Type,
 };
 
 use super::{Effect, RuntimeState, Value};
@@ -171,9 +171,7 @@ impl Evaluator {
                     node.evaluated_children.into_active_value(),
                 );
             }
-            Expression::Function {
-                function: Function { parameter: _, body },
-            } => {
+            Expression::Function { parameter: _, body } => {
                 let body = NodePath::new(
                     *body,
                     Some(node.path),
@@ -318,7 +316,7 @@ struct StackFrame {
 #[cfg(test)]
 mod tests {
     use crate::language::{
-        code::{Children, Codebase, Expression, Function, NodePath},
+        code::{Children, Codebase, Expression, NodePath},
         runtime::{Evaluator, RuntimeState, Value},
         tests::infra::LocatedNodeExt,
     };
@@ -336,9 +334,9 @@ mod tests {
                 change_set.nodes.insert(Expression::Number { value: 0 });
             let body = change_set.nodes.insert(Expression::Empty);
 
-            let function = change_set.nodes.insert(Expression::Function {
-                function: Function { parameter, body },
-            });
+            let function = change_set
+                .nodes
+                .insert(Expression::Function { parameter, body });
 
             change_set.replace(
                 &change_set.root_before_change(),

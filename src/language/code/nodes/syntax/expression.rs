@@ -5,8 +5,6 @@ use crate::language::{
     packages::{FunctionId, Packages},
 };
 
-use super::Function;
-
 #[derive(Clone, Debug, Eq, Ord, PartialEq, PartialOrd, udigest::Digestable)]
 pub enum Expression {
     /// # The application of an expression to an argument
@@ -27,7 +25,13 @@ pub enum Expression {
     /// # A function literal
     ///
     /// Evaluates to a function value.
-    Function { function: Function },
+    Function {
+        /// # The parameter of the function
+        parameter: NodeHash<Expression>,
+
+        /// # The root node of the function's body
+        body: NodeHash<Expression>,
+    },
 
     /// # A number literal
     Number {
@@ -137,11 +141,8 @@ impl Expression {
                 argument: child_b,
             }
             | Self::Function {
-                function:
-                    Function {
-                        parameter: child_a,
-                        body: child_b,
-                    },
+                parameter: child_a,
+                body: child_b,
             } => {
                 let [index_a, index_b] =
                     [0, 1].map(|index| SiblingIndex { index });
@@ -169,11 +170,8 @@ impl Expression {
                 argument: b,
             }
             | Self::Function {
-                function:
-                    Function {
-                        parameter: a,
-                        body: b,
-                    },
+                parameter: a,
+                body: b,
             } => vec![*a, *b],
 
             Self::Empty
