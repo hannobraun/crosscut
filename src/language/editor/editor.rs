@@ -103,7 +103,7 @@ impl Editor {
         // work long-term. What we actually want to do here, is hot-reload the
         // changed code.
         //
-        // For now, it doesn't seem like the difference is actually observable
+        // For now, it seems like the difference is actually not observable
         // though, due to the limited nature of the language.
         evaluator.reset(compiler.codebase());
     }
