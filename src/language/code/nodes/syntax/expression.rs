@@ -190,20 +190,23 @@ impl Expression {
         self.display(packages).to_string()
     }
 
-    pub fn display<'r>(&'r self, packages: &'r Packages) -> NodeDisplay<'r> {
-        NodeDisplay {
+    pub fn display<'r>(
+        &'r self,
+        packages: &'r Packages,
+    ) -> ExpressionDisplay<'r> {
+        ExpressionDisplay {
             node: self,
             packages,
         }
     }
 }
 
-pub struct NodeDisplay<'r> {
+pub struct ExpressionDisplay<'r> {
     node: &'r Expression,
     packages: &'r Packages,
 }
 
-impl fmt::Display for NodeDisplay<'_> {
+impl fmt::Display for ExpressionDisplay<'_> {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match &self.node {
             Expression::Apply { .. } => {
