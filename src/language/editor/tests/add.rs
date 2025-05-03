@@ -135,7 +135,8 @@ fn add_sibling() {
         compiler.insert_child(parent, "a", &packages)
     };
 
-    let mut editor = Editor::new(a, &codebase, &packages);
+    let mut editor =
+        Editor::new(Cursor { path: a, index: 0 }, &codebase, &packages);
 
     editor.on_input(
         [MoveCursorRight, AddSibling],
