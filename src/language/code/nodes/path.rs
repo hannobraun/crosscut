@@ -155,16 +155,16 @@ pub struct SiblingIndex {
 }
 
 #[derive(Debug, Eq, PartialEq)]
-pub struct LocatedNode<'r, T> {
-    pub node: &'r T,
+pub struct LocatedNode<T> {
+    pub node: T,
     pub path: NodePath,
 }
 
-impl LocatedNode<'_, Expression> {
+impl LocatedNode<&Expression> {
     pub fn children<'r>(
         &self,
         nodes: &'r Nodes,
-    ) -> impl DoubleEndedIterator<Item = LocatedNode<'r, Expression>> {
+    ) -> impl DoubleEndedIterator<Item = LocatedNode<&'r Expression>> {
         self.node
             .children()
             .into_iter()
