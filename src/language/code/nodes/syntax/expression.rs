@@ -180,9 +180,9 @@ impl Expression {
             | Self::Recursion
             | Self::UnresolvedIdentifier { .. } => vec![],
 
-            Self::Tuple { values: children } | Self::Test { children, .. } => {
-                children.inner.clone()
-            }
+            Self::Tuple { values: children } => children.inner.clone(),
+
+            Self::Test { children, .. } => children.inner.clone(),
         }
     }
 
