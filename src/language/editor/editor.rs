@@ -48,8 +48,8 @@ impl Editor {
         let mut compiler = Compiler::new(codebase);
 
         if let Some(action) = self.input.update(event, &mut self.cursor.index) {
-            // This code results in non-intuitive cursor movement, if using
-            // the up and down keys. This is tracked here:
+            // This code results in non-intuitive cursor movement, if using the
+            // up and down keys. This is tracked here:
             // https://github.com/hannobraun/crosscut/issues/71
             match action {
                 NodeAction::NavigateToPrevious => {
