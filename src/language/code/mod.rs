@@ -18,4 +18,7 @@ pub use self::{
 };
 
 #[cfg(test)]
+pub use self::nodes::Borrowed;
+
+#[cfg(test)]
 mod tests;

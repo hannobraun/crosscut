@@ -1,3 +1,3 @@
 mod expression;
 
-pub use self::expression::{ChildOfExpression, Expression};
+pub use self::expression::{Borrowed, ChildOfExpression, Expression};

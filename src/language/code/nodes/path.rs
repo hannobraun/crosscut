@@ -1,4 +1,4 @@
-use super::{ChildOfExpression, Expression, NodeHash, Nodes};
+use super::{Borrowed, ChildOfExpression, Expression, NodeHash, Nodes};
 
 /// # A unique and versioned path to a [`Node`]
 ///
@@ -164,7 +164,7 @@ impl LocatedNode<&Expression> {
     pub fn children<'r>(
         &self,
         nodes: &'r Nodes,
-    ) -> impl DoubleEndedIterator<Item = LocatedNode<ChildOfExpression<'r>>>
+    ) -> impl DoubleEndedIterator<Item = LocatedNode<ChildOfExpression<Borrowed<'r>>>>
     {
         self.node
             .children()

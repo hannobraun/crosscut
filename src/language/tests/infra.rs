@@ -1,7 +1,8 @@
 use itertools::Itertools;
 
 use crate::language::code::{
-    ChildOfExpression, Children, Expression, LocatedNode, NodeHash, Nodes,
+    Borrowed, ChildOfExpression, Children, Expression, LocatedNode, NodeHash,
+    Nodes,
 };
 
 pub fn expression(
@@ -32,7 +33,7 @@ pub trait ExpectChildren {
     fn expect_children<'r, const N: usize>(
         &self,
         nodes: &'r Nodes,
-    ) -> [LocatedNode<ChildOfExpression<'r>>; N];
+    ) -> [LocatedNode<ChildOfExpression<Borrowed<'r>>>; N];
 }
 
 impl ExpectChildren for LocatedNode<&Expression> {
@@ -40,7 +41,7 @@ impl ExpectChildren for LocatedNode<&Expression> {
     fn expect_children<'r, const N: usize>(
         &self,
         nodes: &'r Nodes,
-    ) -> [LocatedNode<ChildOfExpression<'r>>; N] {
+    ) -> [LocatedNode<ChildOfExpression<Borrowed<'r>>>; N] {
         let Some(children) = self.children(nodes).collect_array() else {
             panic!(
                 "Expected {N} children but got {}.",
@@ -56,7 +57,7 @@ pub trait ExpectExpression<'r> {
     fn expect_expression(self) -> LocatedNode<&'r Expression>;
 }
 
-impl<'r> ExpectExpression<'r> for LocatedNode<ChildOfExpression<'r>> {
+impl<'r> ExpectExpression<'r> for LocatedNode<ChildOfExpression<Borrowed<'r>>> {
     fn expect_expression(self) -> LocatedNode<&'r Expression> {
         let ChildOfExpression::Expression(node) = self.node;
 

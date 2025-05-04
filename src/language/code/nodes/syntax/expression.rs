@@ -1,4 +1,4 @@
-use std::fmt;
+use std::{fmt, marker::PhantomData};
 
 use crate::language::{
     code::{Children, NodeHash, SiblingIndex, nodes::RawHash},
@@ -202,8 +202,24 @@ impl Expression {
 }
 
 #[derive(Debug, Eq, PartialEq)]
-pub enum ChildOfExpression<'r> {
-    Expression(&'r Expression),
+pub enum ChildOfExpression<T: Form> {
+    Expression(T::Form<Expression>),
+}
+
+pub trait Form {
+    type Form<T>
+    where
+        T: 'static;
+}
+
+#[derive(Debug, Eq, PartialEq)]
+pub struct Borrowed<'r>(PhantomData<&'r ()>);
+
+impl<'r> Form for Borrowed<'r> {
+    type Form<T>
+        = &'r T
+    where
+        T: 'static;
 }
 
 pub struct ExpressionDisplay<'r> {

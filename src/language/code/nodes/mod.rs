@@ -9,5 +9,5 @@ pub use self::{
     hash::{NodeHash, RawHash},
     nodes::Nodes,
     path::{LocatedNode, NodePath, SiblingIndex},
-    syntax::{ChildOfExpression, Expression},
+    syntax::{Borrowed, ChildOfExpression, Expression},
 };
