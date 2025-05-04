@@ -4,7 +4,7 @@ use crate::language::{
     editor::{Editor, EditorInputEvent::*, editor::Cursor},
     packages::Packages,
     runtime::Evaluator,
-    tests::infra::{LocatedNodeExt, tuple, unresolved},
+    tests::infra::{ExpectChildren, tuple, unresolved},
 };
 
 #[test]

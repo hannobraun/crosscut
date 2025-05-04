@@ -28,14 +28,14 @@ pub fn unresolved(identifier: &str) -> Expression {
     }
 }
 
-pub trait LocatedNodeExt {
+pub trait ExpectChildren {
     fn expect_children<'r, const N: usize>(
         &self,
         nodes: &'r Nodes,
     ) -> [LocatedNode<&'r Expression>; N];
 }
 
-impl LocatedNodeExt for LocatedNode<&Expression> {
+impl ExpectChildren for LocatedNode<&Expression> {
     #[track_caller]
     fn expect_children<'r, const N: usize>(
         &self,

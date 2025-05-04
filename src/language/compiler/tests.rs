@@ -2,7 +2,7 @@ use crate::language::{
     code::{CodeError, Codebase, Expression, NodeHash, NodePath},
     compiler::Compiler,
     packages::Packages,
-    tests::infra::{LocatedNodeExt, expression, unresolved},
+    tests::infra::{ExpectChildren, expression, unresolved},
 };
 
 #[test]

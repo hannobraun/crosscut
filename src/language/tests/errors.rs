@@ -1,6 +1,6 @@
 use crate::language::{
     code::CodeError, language::Language, runtime::Value,
-    tests::infra::LocatedNodeExt,
+    tests::infra::ExpectChildren,
 };
 
 #[test]

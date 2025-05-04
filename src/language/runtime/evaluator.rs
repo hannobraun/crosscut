@@ -318,7 +318,7 @@ mod tests {
     use crate::language::{
         code::{Children, Codebase, Expression, NodePath},
         runtime::{Evaluator, RuntimeState, Value},
-        tests::infra::LocatedNodeExt,
+        tests::infra::ExpectChildren,
     };
 
     #[test]

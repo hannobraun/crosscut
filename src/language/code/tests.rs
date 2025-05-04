@@ -1,6 +1,6 @@
 use crate::language::{
     code::NodePath,
-    tests::infra::{LocatedNodeExt, expression},
+    tests::infra::{ExpectChildren, expression},
 };
 
 use super::Codebase;
