@@ -11,3 +11,6 @@ pub use self::{
     path::{LocatedNode, NodePath, SiblingIndex},
     syntax::Expression,
 };
+
+#[cfg(test)]
+pub use self::syntax::ChildOfExpression;

@@ -1,7 +1,7 @@
 use itertools::Itertools;
 
 use crate::language::code::{
-    Children, Expression, LocatedNode, NodeHash, Nodes,
+    ChildOfExpression, Children, Expression, LocatedNode, NodeHash, Nodes,
 };
 
 pub fn expression(
@@ -32,7 +32,7 @@ pub trait ExpectChildren {
     fn expect_children<'r, const N: usize>(
         &self,
         nodes: &'r Nodes,
-    ) -> [LocatedNode<&'r Expression>; N];
+    ) -> [LocatedNode<ChildOfExpression<'r>>; N];
 }
 
 impl ExpectChildren for LocatedNode<&Expression> {
@@ -40,7 +40,7 @@ impl ExpectChildren for LocatedNode<&Expression> {
     fn expect_children<'r, const N: usize>(
         &self,
         nodes: &'r Nodes,
-    ) -> [LocatedNode<&'r Expression>; N] {
+    ) -> [LocatedNode<ChildOfExpression<'r>>; N] {
         let Some(children) = self.children(nodes).collect_array() else {
             panic!(
                 "Expected {N} children but got {}.",
@@ -48,6 +48,24 @@ impl ExpectChildren for LocatedNode<&Expression> {
             );
         };
 
-        children
+        children.map(|child| LocatedNode {
+            node: ChildOfExpression::Expression(child.node),
+            path: child.path,
+        })
+    }
+}
+
+pub trait ExpectExpression<'r> {
+    fn expect_expression(self) -> LocatedNode<&'r Expression>;
+}
+
+impl<'r> ExpectExpression<'r> for LocatedNode<ChildOfExpression<'r>> {
+    fn expect_expression(self) -> LocatedNode<&'r Expression> {
+        let ChildOfExpression::Expression(node) = self.node;
+
+        LocatedNode {
+            node,
+            path: self.path,
+        }
     }
 }

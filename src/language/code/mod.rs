@@ -18,4 +18,7 @@ pub use self::{
 };
 
 #[cfg(test)]
+pub use self::nodes::ChildOfExpression;
+
+#[cfg(test)]
 mod tests;

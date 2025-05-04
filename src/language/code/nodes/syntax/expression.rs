@@ -201,6 +201,12 @@ impl Expression {
     }
 }
 
+#[cfg(test)]
+#[derive(Debug, Eq, PartialEq)]
+pub enum ChildOfExpression<'r> {
+    Expression(&'r Expression),
+}
+
 pub struct ExpressionDisplay<'r> {
     node: &'r Expression,
     packages: &'r Packages,

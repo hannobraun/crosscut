@@ -4,7 +4,7 @@ use crate::language::{
     editor::{Editor, EditorInputEvent::*, editor::Cursor},
     packages::Packages,
     runtime::Evaluator,
-    tests::infra::{ExpectChildren, tuple, unresolved},
+    tests::infra::{ExpectChildren, ExpectExpression, tuple, unresolved},
 };
 
 #[test]
@@ -20,7 +20,9 @@ fn add_apply_node() {
     editor.on_code("apply", &mut codebase, &mut evaluator, &packages);
 
     let apply = codebase.root();
-    let [function, argument] = apply.expect_children(codebase.nodes());
+    let [function, argument] = apply
+        .expect_children(codebase.nodes())
+        .map(|child| child.expect_expression());
 
     assert_eq!(
         apply.node,
@@ -41,7 +43,9 @@ fn add_apply_node() {
     editor.on_code("b", &mut codebase, &mut evaluator, &packages);
 
     let apply = codebase.root();
-    let [function, argument] = apply.expect_children(codebase.nodes());
+    let [function, argument] = apply
+        .expect_children(codebase.nodes())
+        .map(|child| child.expect_expression());
 
     assert_eq!(
         apply.node,
@@ -67,7 +71,9 @@ fn add_fn_node() {
     editor.on_code("fn", &mut codebase, &mut evaluator, &packages);
 
     let function = codebase.root();
-    let [parameter, body] = function.expect_children(codebase.nodes());
+    let [parameter, body] = function
+        .expect_children(codebase.nodes())
+        .map(|child| child.expect_expression());
 
     assert_eq!(
         function.node,
@@ -107,7 +113,9 @@ fn add_child() {
     editor.on_code("child", &mut codebase, &mut evaluator, &packages);
 
     let parent = codebase.root();
-    let [child] = parent.expect_children(codebase.nodes());
+    let [child] = parent
+        .expect_children(codebase.nodes())
+        .map(|child| child.expect_expression());
 
     assert_eq!(parent.node, &tuple([*child.path.hash()]));
     assert_eq!(child.node, &unresolved("child"));
@@ -140,7 +148,9 @@ fn add_sibling() {
     editor.on_code("b", &mut codebase, &mut evaluator, &packages);
 
     let parent = codebase.root();
-    let [a, b] = parent.expect_children(codebase.nodes());
+    let [a, b] = parent
+        .expect_children(codebase.nodes())
+        .map(|child| child.expect_expression());
 
     assert_eq!(parent.node, &tuple([*a.path.hash(), *b.path.hash()]));
     assert_eq!(a.node, &unresolved("a"));
