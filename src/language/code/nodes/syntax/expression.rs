@@ -172,7 +172,7 @@ impl Expression {
             | Self::Function {
                 parameter: a,
                 body: b,
-            } => vec![*a, *b],
+            } => [*a, *b].into(),
 
             Self::Empty
             | Self::Number { value: _ }
