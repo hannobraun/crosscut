@@ -11,14 +11,11 @@ pub use self::{
     errors::{CandidateForResolution, CodeError, Errors, Literal},
     intrinsics::IntrinsicFunction,
     nodes::{
-        Children, Expression, LocatedNode, NodeHash, NodePath, Nodes,
-        SiblingIndex,
+        ChildOfExpression, Children, Expression, LocatedNode, NodeHash,
+        NodePath, Nodes, SiblingIndex,
     },
     types::{Type, display_tuple},
 };
-
-#[cfg(test)]
-pub use self::nodes::ChildOfExpression;
 
 #[cfg(test)]
 mod tests;

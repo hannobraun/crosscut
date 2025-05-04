@@ -1,4 +1,6 @@
-use crate::language::code::{Codebase, Expression, LocatedNode, NodePath};
+use crate::language::code::{
+    ChildOfExpression, Codebase, Expression, LocatedNode, NodePath,
+};
 
 #[derive(Debug)]
 pub struct EditorLayout {
@@ -86,8 +88,13 @@ fn collect_nodes_from_root(
     children.extend(node.children(codebase.nodes()));
 
     for child in children {
+        let ChildOfExpression::Expression(node) = child.node;
+
         collect_nodes_from_root(
-            child,
+            LocatedNode {
+                node,
+                path: child.path,
+            },
             distance_from_root + 1,
             nodes_from_root,
             codebase,

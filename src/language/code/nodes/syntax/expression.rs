@@ -201,7 +201,6 @@ impl Expression {
     }
 }
 
-#[cfg(test)]
 #[derive(Debug, Eq, PartialEq)]
 pub enum ChildOfExpression<'r> {
     Expression(&'r Expression),

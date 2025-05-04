@@ -48,10 +48,7 @@ impl ExpectChildren for LocatedNode<&Expression> {
             );
         };
 
-        children.map(|child| LocatedNode {
-            node: ChildOfExpression::Expression(child.node),
-            path: child.path,
-        })
+        children
     }
 }
 

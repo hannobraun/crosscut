@@ -9,8 +9,5 @@ pub use self::{
     hash::{NodeHash, RawHash},
     nodes::Nodes,
     path::{LocatedNode, NodePath, SiblingIndex},
-    syntax::Expression,
+    syntax::{ChildOfExpression, Expression},
 };
-
-#[cfg(test)]
-pub use self::syntax::ChildOfExpression;
