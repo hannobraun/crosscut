@@ -170,7 +170,8 @@ impl LocatedNode<&Expression> {
             .children()
             .into_iter()
             .enumerate()
-            .map(|(index, hash)| {
+            .map(|(index, child)| {
+                let hash = child;
                 let node = nodes.get(&hash);
 
                 LocatedNode {
