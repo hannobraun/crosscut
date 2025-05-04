@@ -163,7 +163,7 @@ impl Expression {
         }
     }
 
-    pub fn children(&self) -> Vec<NodeHash<Expression>> {
+    pub fn children(&self) -> Vec<ChildOfExpression<ViaHash>> {
         match self {
             Self::Apply {
                 expression: a,
@@ -172,7 +172,7 @@ impl Expression {
             | Self::Function {
                 parameter: a,
                 body: b,
-            } => [*a, *b].into(),
+            } => [*a, *b].map(ChildOfExpression::Expression).into(),
 
             Self::Empty
             | Self::Number { value: _ }
@@ -180,9 +180,19 @@ impl Expression {
             | Self::Recursion
             | Self::UnresolvedIdentifier { .. } => vec![],
 
-            Self::Tuple { values } => values.inner.clone(),
+            Self::Tuple { values } => values
+                .inner
+                .iter()
+                .copied()
+                .map(ChildOfExpression::Expression)
+                .collect(),
 
-            Self::Test { children, .. } => children.inner.clone(),
+            Self::Test { children, .. } => children
+                .inner
+                .iter()
+                .copied()
+                .map(ChildOfExpression::Expression)
+                .collect(),
         }
     }
 
@@ -218,6 +228,15 @@ pub struct Borrowed<'r>(PhantomData<&'r ()>);
 impl<'r> Form for Borrowed<'r> {
     type Form<T>
         = &'r T
+    where
+        T: 'static;
+}
+
+pub struct ViaHash;
+
+impl Form for ViaHash {
+    type Form<T>
+        = NodeHash<T>
     where
         T: 'static;
 }

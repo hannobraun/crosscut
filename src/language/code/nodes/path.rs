@@ -171,7 +171,7 @@ impl LocatedNode<&Expression> {
             .into_iter()
             .enumerate()
             .map(|(index, child)| {
-                let hash = child;
+                let ChildOfExpression::Expression(hash) = child;
                 let node = nodes.get(&hash);
 
                 LocatedNode {
