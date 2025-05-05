@@ -40,7 +40,7 @@ impl Children {
 
     pub fn replace(
         &mut self,
-        to_replace: &NodePath,
+        to_replace: &NodePath<Expression>,
         replacement: NodeHash<Expression>,
     ) {
         let Some(child) = self.inner.get_mut(to_replace.sibling_index().index)

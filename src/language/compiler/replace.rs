@@ -4,10 +4,10 @@ use crate::language::{
 };
 
 pub fn replace_node_and_update_parents(
-    to_replace: NodePath,
+    to_replace: NodePath<Expression>,
     replacement: NodeHash<Expression>,
     change_set: &mut NewChangeSet,
-) -> NodePath {
+) -> NodePath<Expression> {
     let replacement = Replacement {
         replaced: to_replace,
         replacement,
@@ -67,20 +67,20 @@ pub fn replace_node_and_update_parents(
 #[derive(Debug)]
 enum ReplaceAction {
     UpdateChildren {
-        path: NodePath,
+        path: NodePath<Expression>,
         replacement: Replacement,
     },
     UpdatePath {
         replacement: Replacement,
-        parent: Option<NodePath>,
+        parent: Option<NodePath<Expression>>,
     },
     Finish {
-        path: NodePath,
+        path: NodePath<Expression>,
     },
 }
 
 fn update_children(
-    path: NodePath,
+    path: NodePath<Expression>,
     replacement: Replacement,
     replacements: &mut Vec<Replacement>,
     nodes: &mut Nodes,
@@ -145,7 +145,7 @@ fn update_children(
 
 fn update_path(
     replacement: Replacement,
-    parent: Option<NodePath>,
+    parent: Option<NodePath<Expression>>,
     replacements: &mut Vec<Replacement>,
     change_set: &mut NewChangeSet,
 ) -> ReplaceAction {
@@ -170,6 +170,6 @@ fn update_path(
 
 #[derive(Clone, Debug)]
 struct Replacement {
-    replaced: NodePath,
+    replaced: NodePath<Expression>,
     replacement: NodeHash<Expression>,
 }

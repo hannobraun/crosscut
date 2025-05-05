@@ -27,7 +27,10 @@ impl EditorLayout {
         Self { lines }
     }
 
-    pub fn node_before(&self, path: &NodePath) -> Option<&NodePath> {
+    pub fn node_before(
+        &self,
+        path: &NodePath<Expression>,
+    ) -> Option<&NodePath<Expression>> {
         let line_index = self.line_index_of_node(path)?;
 
         let line_index_before = line_index.checked_sub(1)?;
@@ -36,7 +39,10 @@ impl EditorLayout {
         Some(&line_before.node.path)
     }
 
-    pub fn node_after(&self, path: &NodePath) -> Option<&NodePath> {
+    pub fn node_after(
+        &self,
+        path: &NodePath<Expression>,
+    ) -> Option<&NodePath<Expression>> {
         let line_index = self.line_index_of_node(path)?;
 
         let line_index_after = line_index.checked_add(1)?;
@@ -45,7 +51,7 @@ impl EditorLayout {
         Some(&line_after.node.path)
     }
 
-    fn line_index_of_node(&self, path: &NodePath) -> Option<usize> {
+    fn line_index_of_node(&self, path: &NodePath<Expression>) -> Option<usize> {
         self.lines.iter().enumerate().find_map(|(index, line)| {
             (&line.node.path == path).then_some(index)
         })
@@ -69,7 +75,7 @@ impl EditorLine {
 
 #[derive(Debug)]
 pub struct NodeInLayout {
-    pub path: NodePath,
+    pub path: NodePath<Expression>,
     pub distance_from_root: u32,
 }
 

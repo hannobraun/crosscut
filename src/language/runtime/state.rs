@@ -1,14 +1,23 @@
-use crate::language::code::NodePath;
+use crate::language::code::{Expression, NodePath};
 
 use super::{Effect, Value};
 
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub enum RuntimeState {
     Started,
-    Running { path: NodePath },
-    Effect { effect: Effect, path: NodePath },
-    Finished { output: Value },
-    Error { path: NodePath },
+    Running {
+        path: NodePath<Expression>,
+    },
+    Effect {
+        effect: Effect,
+        path: NodePath<Expression>,
+    },
+    Finished {
+        output: Value,
+    },
+    Error {
+        path: NodePath<Expression>,
+    },
 }
 
 impl RuntimeState {
@@ -30,7 +39,7 @@ impl RuntimeState {
         matches!(self, Self::Error { .. })
     }
 
-    pub fn path(&self) -> Option<&NodePath> {
+    pub fn path(&self) -> Option<&NodePath<Expression>> {
         match self {
             Self::Started => None,
             Self::Running { path, .. } => Some(path),

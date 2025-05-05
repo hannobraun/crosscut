@@ -165,7 +165,7 @@ fn updating_child_updates_parent() {
     check_parent(parent, [*child.hash()], &codebase);
 
     fn check_parent(
-        parent: NodePath,
+        parent: NodePath<Expression>,
         children: impl IntoIterator<Item = NodeHash<Expression>>,
         codebase: &Codebase,
     ) {

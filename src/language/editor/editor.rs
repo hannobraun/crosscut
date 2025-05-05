@@ -1,5 +1,5 @@
 use crate::language::{
-    code::{Codebase, NodePath},
+    code::{Codebase, Expression, NodePath},
     compiler::Compiler,
     packages::Packages,
     runtime::Evaluator,
@@ -167,12 +167,12 @@ impl Editor {
 
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub struct Cursor {
-    pub path: NodePath,
+    pub path: NodePath<Expression>,
     pub index: usize,
 }
 
-impl From<NodePath> for Cursor {
-    fn from(path: NodePath) -> Self {
+impl From<NodePath<Expression>> for Cursor {
+    fn from(path: NodePath<Expression>) -> Self {
         Self { path, index: 0 }
     }
 }

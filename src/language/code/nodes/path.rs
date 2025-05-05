@@ -22,8 +22,8 @@ use super::{Borrowed, ChildOfExpression, Expression, NodeHash, Nodes};
 /// current syntax tree will be invalidated any change to the syntax tree**. You
 /// are responsible for making sure that such a [`NodePath`] gets updated.
 #[derive(Clone, Debug, Eq, Ord, PartialEq, PartialOrd, udigest::Digestable)]
-pub struct NodePath {
-    hash: NodeHash<Expression>,
+pub struct NodePath<T> {
+    hash: NodeHash<T>,
 
     /// # The path of the node's parent
     ///
@@ -42,17 +42,17 @@ pub struct NodePath {
     /// This would remove the need for heap allocation here, as well as allow
     /// [`NodePath`] to be `Copy` again. On the other hand, it would make it
     /// more complicated to find the parent of a node, given its `NodePath`.
-    parent: Option<Box<NodePath>>,
+    parent: Option<Box<NodePath<Expression>>>,
 
     /// # The index of the node among its siblings
     sibling_index: SiblingIndex,
 }
 
-impl NodePath {
+impl NodePath<Expression> {
     #[track_caller]
     pub fn new(
         hash: NodeHash<Expression>,
-        parent: Option<NodePath>,
+        parent: Option<NodePath<Expression>>,
         sibling_index: SiblingIndex,
         nodes: &Nodes,
     ) -> Self {
@@ -113,7 +113,7 @@ impl NodePath {
     ///
     /// This is required to distinguish between identical nodes whose hash is
     /// the same, but that have different parents.
-    pub fn parent(&self) -> Option<&NodePath> {
+    pub fn parent(&self) -> Option<&NodePath<Expression>> {
         self.parent.as_deref()
     }
 
@@ -121,7 +121,10 @@ impl NodePath {
         self.sibling_index
     }
 
-    pub fn is_ancestor_of(&self, possible_descendant: &NodePath) -> bool {
+    pub fn is_ancestor_of(
+        &self,
+        possible_descendant: &NodePath<Expression>,
+    ) -> bool {
         let mut maybe_parent = possible_descendant.parent.as_deref();
 
         while let Some(parent) = maybe_parent {
@@ -157,7 +160,7 @@ pub struct SiblingIndex {
 #[derive(Debug, Eq, PartialEq)]
 pub struct LocatedNode<T> {
     pub node: T,
-    pub path: NodePath,
+    pub path: NodePath<Expression>,
 }
 
 impl LocatedNode<&Expression> {

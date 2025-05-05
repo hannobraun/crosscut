@@ -1,13 +1,13 @@
 use std::fmt;
 
 use crate::language::{
-    code::{NodePath, display_tuple},
+    code::{Expression, NodePath, display_tuple},
     packages::FunctionId,
 };
 
 #[derive(Clone, Debug, Eq, PartialEq, udigest::Digestable)]
 pub enum Value {
-    Function { body: NodePath },
+    Function { body: NodePath<Expression> },
     Integer { value: i32 },
     ProvidedFunction { id: FunctionId },
     Tuple { values: Vec<Value> },
@@ -27,7 +27,7 @@ impl Value {
         }
     }
 
-    pub fn into_function_body(self) -> Result<NodePath, Self> {
+    pub fn into_function_body(self) -> Result<NodePath<Expression>, Self> {
         match self {
             Value::Function { body } => Ok(body),
             _ => Err(self),

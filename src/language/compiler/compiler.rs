@@ -20,10 +20,10 @@ impl<'r> Compiler<'r> {
 
     pub fn insert_child(
         &mut self,
-        parent: NodePath,
+        parent: NodePath<Expression>,
         child_token: &str,
         packages: &Packages,
-    ) -> NodePath {
+    ) -> NodePath<Expression> {
         self.codebase.make_change(|change_set| {
             let child = {
                 expression::compile(
@@ -80,19 +80,19 @@ impl<'r> Compiler<'r> {
 
     pub fn insert_parent(
         &mut self,
-        child: &NodePath,
+        child: &NodePath<Expression>,
         parent_token: &str,
         packages: &Packages,
-    ) -> NodePath {
+    ) -> NodePath<Expression> {
         self.replace_inner(child, parent_token, packages)
     }
 
     pub fn insert_sibling(
         &mut self,
-        existing_sibling: &NodePath,
+        existing_sibling: &NodePath<Expression>,
         new_sibling_token: &str,
         packages: &Packages,
-    ) -> NodePath {
+    ) -> NodePath<Expression> {
         let parent = existing_sibling.parent().cloned().unwrap_or_else(|| {
             // The node we're adding a sibling for has no parent, meaning it is
             // the root of the syntax tree.
@@ -110,19 +110,19 @@ impl<'r> Compiler<'r> {
 
     pub fn replace(
         &mut self,
-        to_replace: &NodePath,
+        to_replace: &NodePath<Expression>,
         replacement_token: &str,
         packages: &Packages,
-    ) -> NodePath {
+    ) -> NodePath<Expression> {
         self.replace_inner(to_replace, replacement_token, packages)
     }
 
     fn replace_inner(
         &mut self,
-        to_replace: &NodePath,
+        to_replace: &NodePath<Expression>,
         replacement_token: &str,
         packages: &Packages,
-    ) -> NodePath {
+    ) -> NodePath<Expression> {
         self.codebase.make_change(|change_set| {
             let replacement = expression::compile(
                 replacement_token,

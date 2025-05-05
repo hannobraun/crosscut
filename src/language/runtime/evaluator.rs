@@ -40,7 +40,11 @@ impl Evaluator {
     /// If there is a current node that the evaluation originates from a syntax
     /// node, please call [`Evaluator::eval_function_from_current_node`]
     /// instead.
-    pub fn apply_function_raw(&mut self, body: NodePath, codebase: &Codebase) {
+    pub fn apply_function_raw(
+        &mut self,
+        body: NodePath<Expression>,
+        codebase: &Codebase,
+    ) {
         self.eval_stack
             .push(RuntimeExpression::new(body.clone(), codebase));
 
@@ -233,7 +237,7 @@ impl Evaluator {
         &mut self,
         expected: Type,
         actual: Value,
-        path: NodePath,
+        path: NodePath<Expression>,
     ) {
         self.state = RuntimeState::Effect {
             effect: Effect::UnexpectedInput { expected, actual },
@@ -265,13 +269,13 @@ impl Evaluator {
 
 #[derive(Clone, Debug)]
 struct RuntimeExpression {
-    path: NodePath,
-    children_to_evaluate: Vec<NodePath>,
+    path: NodePath<Expression>,
+    children_to_evaluate: Vec<NodePath<Expression>>,
     evaluated_children: EvaluatedChildren,
 }
 
 impl RuntimeExpression {
-    fn new(path: NodePath, codebase: &Codebase) -> Self {
+    fn new(path: NodePath<Expression>, codebase: &Codebase) -> Self {
         let children_to_evaluate = codebase
             .node_at(&path)
             .children(codebase.nodes())
@@ -310,7 +314,7 @@ impl EvaluatedChildren {
 
 #[derive(Debug)]
 struct StackFrame {
-    root: NodePath,
+    root: NodePath<Expression>,
 }
 
 #[cfg(test)]

@@ -37,7 +37,10 @@ impl Codebase {
         }
     }
 
-    pub fn node_at(&self, path: &NodePath) -> LocatedNode<&Expression> {
+    pub fn node_at(
+        &self,
+        path: &NodePath<Expression>,
+    ) -> LocatedNode<&Expression> {
         LocatedNode {
             node: self.nodes.get(path.hash()),
             path: path.clone(),
@@ -76,7 +79,7 @@ struct Root {
 }
 
 impl Root {
-    fn path(&self) -> NodePath {
+    fn path(&self) -> NodePath<Expression> {
         NodePath::for_root(self.hash)
     }
 }

@@ -233,7 +233,7 @@ fn render_line<A: EditorOutputAdapter>(
 }
 
 fn render_node<A: EditorOutputAdapter>(
-    path: &NodePath,
+    path: &NodePath<Expression>,
     adapter: &mut A,
     context: &mut RenderContext,
 ) -> anyhow::Result<()> {
