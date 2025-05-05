@@ -1,4 +1,6 @@
-use super::{Borrowed, ChildOfExpression, Expression, NodeHash, Nodes};
+use super::{
+    Borrowed, ChildOfExpression, Expression, NodeHash, Nodes, SyntaxNode,
+};
 
 /// # A unique and versioned path to a [`Node`]
 ///
@@ -22,7 +24,7 @@ use super::{Borrowed, ChildOfExpression, Expression, NodeHash, Nodes};
 /// current syntax tree will be invalidated any change to the syntax tree**. You
 /// are responsible for making sure that such a [`NodePath`] gets updated.
 #[derive(Clone, Debug, Eq, Ord, PartialEq, PartialOrd, udigest::Digestable)]
-pub struct NodePath<T> {
+pub struct NodePath<T: SyntaxNode> {
     hash: NodeHash<T>,
 
     /// # The path of the node's parent
