@@ -1,3 +1,5 @@
+use core::fmt;
+
 use super::{
     Borrowed, ChildOfExpression, Expression, NodeHash, Nodes, SyntaxNode,
 };
@@ -23,7 +25,7 @@ use super::{
 /// That means **any [`NodePath`] that you expect to point to a node within the
 /// current syntax tree will be invalidated any change to the syntax tree**. You
 /// are responsible for making sure that such a [`NodePath`] gets updated.
-#[derive(Debug, Eq, Ord, PartialEq, PartialOrd, udigest::Digestable)]
+#[derive(Eq, Ord, PartialEq, PartialOrd, udigest::Digestable)]
 pub struct NodePath<T: SyntaxNode> {
     hash: NodeHash<T>,
 
@@ -148,6 +150,22 @@ impl<T: SyntaxNode> Clone for NodePath<T> {
             parent: self.parent.clone(),
             sibling_index: self.sibling_index,
         }
+    }
+}
+
+impl<T: SyntaxNode> fmt::Debug for NodePath<T> {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        let Self {
+            hash,
+            parent,
+            sibling_index,
+        } = self;
+
+        f.debug_struct("NodePath")
+            .field("hash", hash)
+            .field("parent", parent)
+            .field("sibling_index", sibling_index)
+            .finish()
     }
 }
 
