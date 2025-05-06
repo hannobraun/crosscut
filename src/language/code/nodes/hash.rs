@@ -59,7 +59,9 @@ impl<T> Ord for NodeHash<T> {
 
 impl<T> PartialEq for NodeHash<T> {
     fn eq(&self, other: &Self) -> bool {
-        self.hash == other.hash && self.t == other.t
+        let Self { hash, t } = self;
+
+        hash == &other.hash && t == &other.t
     }
 }
 
