@@ -1,4 +1,5 @@
 use core::fmt;
+use std::cmp;
 
 use super::{
     Borrowed, ChildOfExpression, Expression, NodeHash, Nodes, SyntaxNode,
@@ -25,7 +26,7 @@ use super::{
 /// That means **any [`NodePath`] that you expect to point to a node within the
 /// current syntax tree will be invalidated any change to the syntax tree**. You
 /// are responsible for making sure that such a [`NodePath`] gets updated.
-#[derive(Ord, PartialOrd, udigest::Digestable)]
+#[derive(udigest::Digestable)]
 pub struct NodePath<T: SyntaxNode> {
     hash: NodeHash<T>,
 
@@ -155,6 +156,30 @@ impl<T: SyntaxNode> Clone for NodePath<T> {
 
 impl<T: SyntaxNode> Eq for NodePath<T> {}
 
+impl<T: SyntaxNode> Ord for NodePath<T> {
+    fn cmp(&self, other: &Self) -> cmp::Ordering {
+        let Self {
+            hash,
+            parent,
+            sibling_index,
+        } = self;
+
+        match hash.cmp(&other.hash) {
+            cmp::Ordering::Equal => {}
+            ordering => {
+                return ordering;
+            }
+        }
+        match parent.cmp(&other.parent) {
+            cmp::Ordering::Equal => {}
+            ordering => {
+                return ordering;
+            }
+        }
+        sibling_index.cmp(&other.sibling_index)
+    }
+}
+
 impl<T: SyntaxNode> PartialEq for NodePath<T> {
     fn eq(&self, other: &Self) -> bool {
         let Self {
@@ -166,6 +191,12 @@ impl<T: SyntaxNode> PartialEq for NodePath<T> {
         hash == &other.hash
             && parent == &other.parent
             && sibling_index == &other.sibling_index
+    }
+}
+
+impl<T: SyntaxNode> PartialOrd for NodePath<T> {
+    fn partial_cmp(&self, other: &Self) -> Option<cmp::Ordering> {
+        Some(self.cmp(other))
     }
 }
 
