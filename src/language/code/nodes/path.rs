@@ -52,36 +52,6 @@ pub struct NodePath<T: SyntaxNode> {
     sibling_index: SiblingIndex,
 }
 
-impl<T: SyntaxNode> udigest::Digestable for NodePath<T> {
-    fn unambiguously_encode<B: udigest::Buffer>(
-        &self,
-        encoder: udigest::encoding::EncodeValue<B>,
-    ) {
-        let Self {
-            hash,
-            parent,
-            sibling_index,
-        } = self;
-
-        let mut encoder = encoder.encode_struct();
-
-        {
-            let encoder = encoder.add_field("hash");
-            hash.unambiguously_encode(encoder);
-        }
-        {
-            let encoder = encoder.add_field("parent");
-            parent.unambiguously_encode(encoder);
-        }
-        {
-            let encoder = encoder.add_field("sibling_index");
-            sibling_index.unambiguously_encode(encoder);
-        }
-
-        encoder.finish();
-    }
-}
-
 impl NodePath<Expression> {
     #[track_caller]
     pub fn new(
@@ -242,6 +212,36 @@ impl<T: SyntaxNode> fmt::Debug for NodePath<T> {
             .field("parent", parent)
             .field("sibling_index", sibling_index)
             .finish()
+    }
+}
+
+impl<T: SyntaxNode> udigest::Digestable for NodePath<T> {
+    fn unambiguously_encode<B: udigest::Buffer>(
+        &self,
+        encoder: udigest::encoding::EncodeValue<B>,
+    ) {
+        let Self {
+            hash,
+            parent,
+            sibling_index,
+        } = self;
+
+        let mut encoder = encoder.encode_struct();
+
+        {
+            let encoder = encoder.add_field("hash");
+            hash.unambiguously_encode(encoder);
+        }
+        {
+            let encoder = encoder.add_field("parent");
+            parent.unambiguously_encode(encoder);
+        }
+        {
+            let encoder = encoder.add_field("sibling_index");
+            sibling_index.unambiguously_encode(encoder);
+        }
+
+        encoder.finish();
     }
 }
 
