@@ -30,6 +30,7 @@ impl<T> NodeHash<T> {
         let hash = RawHash {
             inner: udigest::hash::<blake3::Hasher>(&node).into(),
         };
+
         Self {
             hash,
             t: PhantomData,
