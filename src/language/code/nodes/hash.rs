@@ -92,7 +92,20 @@ impl<T> udigest::Digestable for NodeHash<T> {
         &self,
         encoder: udigest::encoding::EncodeValue<B>,
     ) {
-        self.hash.unambiguously_encode(encoder);
+        let Self { hash, t } = self;
+
+        let mut encoder = encoder.encode_struct();
+
+        {
+            let encoder = encoder.add_field("hash");
+            hash.unambiguously_encode(encoder);
+        }
+        {
+            let encoder = encoder.add_field("t");
+            t.unambiguously_encode(encoder);
+        }
+
+        encoder.finish();
     }
 }
 
