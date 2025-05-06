@@ -17,7 +17,6 @@ use base64::{Engine, prelude::BASE64_URL_SAFE_NO_PAD};
 /// [`NodePath`].
 ///
 /// [`NodePath`]: super::NodePath
-#[derive(udigest::Digestable)]
 pub struct NodeHash<T> {
     hash: RawHash,
     t: PhantomData<T>,
@@ -85,6 +84,15 @@ impl<T> fmt::Debug for NodeHash<T> {
         f.debug_struct(&format!("NodeHash<{type_parameter}>"))
             .field("hash", &self.hash.to_string())
             .finish()
+    }
+}
+
+impl<T> udigest::Digestable for NodeHash<T> {
+    fn unambiguously_encode<B: udigest::Buffer>(
+        &self,
+        encoder: udigest::encoding::EncodeValue<B>,
+    ) {
+        self.hash.unambiguously_encode(encoder);
     }
 }
 
