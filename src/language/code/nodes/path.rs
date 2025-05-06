@@ -170,7 +170,7 @@ impl<T: SyntaxNode> PartialEq for NodePath<T> {
 }
 
 impl<T: SyntaxNode> fmt::Debug for NodePath<T> {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         let Self {
             hash,
             parent,
