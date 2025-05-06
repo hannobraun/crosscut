@@ -1,4 +1,4 @@
-use std::{any::type_name, fmt, marker::PhantomData};
+use std::{any::type_name, cmp, fmt, marker::PhantomData};
 
 use base64::{Engine, prelude::BASE64_URL_SAFE_NO_PAD};
 
@@ -17,7 +17,7 @@ use base64::{Engine, prelude::BASE64_URL_SAFE_NO_PAD};
 /// [`NodePath`].
 ///
 /// [`NodePath`]: super::NodePath
-#[derive(Ord, PartialOrd, udigest::Digestable)]
+#[derive(udigest::Digestable)]
 pub struct NodeHash<T> {
     hash: RawHash,
     t: PhantomData<T>,
@@ -52,9 +52,21 @@ impl<T> Clone for NodeHash<T> {
 
 impl<T> Eq for NodeHash<T> {}
 
+impl<T> Ord for NodeHash<T> {
+    fn cmp(&self, other: &Self) -> cmp::Ordering {
+        self.hash.cmp(&other.hash)
+    }
+}
+
 impl<T> PartialEq for NodeHash<T> {
     fn eq(&self, other: &Self) -> bool {
         self.hash == other.hash && self.t == other.t
+    }
+}
+
+impl<T> PartialOrd for NodeHash<T> {
+    fn partial_cmp(&self, other: &Self) -> Option<cmp::Ordering> {
+        Some(self.cmp(other))
     }
 }
 
