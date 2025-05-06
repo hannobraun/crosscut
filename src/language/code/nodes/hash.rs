@@ -20,7 +20,7 @@ use base64::{Engine, prelude::BASE64_URL_SAFE_NO_PAD};
 #[derive(Eq, Ord, PartialEq, PartialOrd, udigest::Digestable)]
 pub struct NodeHash<T> {
     hash: RawHash,
-    _t: PhantomData<T>,
+    t: PhantomData<T>,
 }
 
 impl<T> NodeHash<T> {
@@ -33,7 +33,7 @@ impl<T> NodeHash<T> {
         };
         Self {
             hash,
-            _t: PhantomData,
+            t: PhantomData,
         }
     }
 
@@ -48,7 +48,7 @@ impl<T> Clone for NodeHash<T> {
     fn clone(&self) -> Self {
         Self {
             hash: self.hash,
-            _t: self._t,
+            t: self.t,
         }
     }
 }
