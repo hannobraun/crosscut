@@ -25,7 +25,7 @@ use super::{
 /// That means **any [`NodePath`] that you expect to point to a node within the
 /// current syntax tree will be invalidated any change to the syntax tree**. You
 /// are responsible for making sure that such a [`NodePath`] gets updated.
-#[derive(Eq, Ord, PartialOrd, udigest::Digestable)]
+#[derive(Ord, PartialOrd, udigest::Digestable)]
 pub struct NodePath<T: SyntaxNode> {
     hash: NodeHash<T>,
 
@@ -152,6 +152,8 @@ impl<T: SyntaxNode> Clone for NodePath<T> {
         }
     }
 }
+
+impl<T: SyntaxNode> Eq for NodePath<T> {}
 
 impl<T: SyntaxNode> PartialEq for NodePath<T> {
     fn eq(&self, other: &Self) -> bool {
