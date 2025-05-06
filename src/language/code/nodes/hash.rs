@@ -17,7 +17,7 @@ use base64::{Engine, prelude::BASE64_URL_SAFE_NO_PAD};
 /// [`NodePath`].
 ///
 /// [`NodePath`]: super::NodePath
-#[derive(Clone, Eq, Ord, PartialEq, PartialOrd, udigest::Digestable)]
+#[derive(Eq, Ord, PartialEq, PartialOrd, udigest::Digestable)]
 pub struct NodeHash<T> {
     hash: RawHash,
     _t: PhantomData<T>,
@@ -43,6 +43,15 @@ impl<T> NodeHash<T> {
 }
 
 impl<T> Copy for NodeHash<T> where T: Clone {}
+
+impl<T> Clone for NodeHash<T> {
+    fn clone(&self) -> Self {
+        Self {
+            hash: self.hash,
+            _t: self._t,
+        }
+    }
+}
 
 impl<T> fmt::Debug for NodeHash<T> {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
