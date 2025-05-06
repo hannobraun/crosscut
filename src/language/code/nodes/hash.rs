@@ -42,14 +42,11 @@ impl<T> NodeHash<T> {
     }
 }
 
-impl<T> Copy for NodeHash<T> where T: Clone {}
+impl<T> Copy for NodeHash<T> {}
 
 impl<T> Clone for NodeHash<T> {
     fn clone(&self) -> Self {
-        Self {
-            hash: self.hash,
-            t: self.t,
-        }
+        *self
     }
 }
 
