@@ -81,8 +81,10 @@ impl<T> fmt::Debug for NodeHash<T> {
             }
         };
 
+        let Self { hash, t: _ } = self;
+
         f.debug_struct(&format!("NodeHash<{type_parameter}>"))
-            .field("hash", &self.hash.to_string())
+            .field("hash", &hash.to_string())
             .finish()
     }
 }
