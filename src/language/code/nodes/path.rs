@@ -283,15 +283,16 @@ impl LocatedNode<&Expression> {
                 let ChildOfExpression::Expression(hash) = child;
 
                 let node = nodes.get(&hash);
+                let path = NodePath::new(
+                    hash,
+                    Some(self.path.clone()),
+                    SiblingIndex { index },
+                    nodes,
+                );
 
                 LocatedNode {
                     node: ChildOfExpression::Expression(node),
-                    path: NodePath::new(
-                        hash,
-                        Some(self.path.clone()),
-                        SiblingIndex { index },
-                        nodes,
-                    ),
+                    path,
                 }
             })
     }
