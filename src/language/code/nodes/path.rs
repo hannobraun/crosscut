@@ -1,9 +1,7 @@
 use core::fmt;
 use std::cmp;
 
-use super::{
-    Borrowed, ChildOfExpression, Expression, NodeHash, Nodes, SyntaxNode,
-};
+use super::{Borrowed, ChildOfExpression, Expression, NodeHash, Nodes};
 
 /// # A unique and versioned path to a [`Node`]
 ///
@@ -26,7 +24,7 @@ use super::{
 /// That means **any [`NodePath`] that you expect to point to a node within the
 /// current syntax tree will be invalidated any change to the syntax tree**. You
 /// are responsible for making sure that such a [`NodePath`] gets updated.
-pub struct NodePath<T: SyntaxNode> {
+pub struct NodePath<T> {
     hash: NodeHash<T>,
 
     /// # The path of the node's parent
@@ -143,7 +141,7 @@ impl NodePath<Expression> {
     }
 }
 
-impl<T: SyntaxNode> Clone for NodePath<T> {
+impl<T> Clone for NodePath<T> {
     fn clone(&self) -> Self {
         Self {
             hash: self.hash,
@@ -153,9 +151,9 @@ impl<T: SyntaxNode> Clone for NodePath<T> {
     }
 }
 
-impl<T: SyntaxNode> Eq for NodePath<T> {}
+impl<T> Eq for NodePath<T> {}
 
-impl<T: SyntaxNode> Ord for NodePath<T> {
+impl<T> Ord for NodePath<T> {
     fn cmp(&self, other: &Self) -> cmp::Ordering {
         let Self {
             hash,
@@ -179,7 +177,7 @@ impl<T: SyntaxNode> Ord for NodePath<T> {
     }
 }
 
-impl<T: SyntaxNode> PartialEq for NodePath<T> {
+impl<T> PartialEq for NodePath<T> {
     fn eq(&self, other: &Self) -> bool {
         let Self {
             hash,
@@ -193,13 +191,13 @@ impl<T: SyntaxNode> PartialEq for NodePath<T> {
     }
 }
 
-impl<T: SyntaxNode> PartialOrd for NodePath<T> {
+impl<T> PartialOrd for NodePath<T> {
     fn partial_cmp(&self, other: &Self) -> Option<cmp::Ordering> {
         Some(self.cmp(other))
     }
 }
 
-impl<T: SyntaxNode> fmt::Debug for NodePath<T> {
+impl<T> fmt::Debug for NodePath<T> {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         let Self {
             hash,
@@ -215,7 +213,7 @@ impl<T: SyntaxNode> fmt::Debug for NodePath<T> {
     }
 }
 
-impl<T: SyntaxNode> udigest::Digestable for NodePath<T> {
+impl<T> udigest::Digestable for NodePath<T> {
     fn unambiguously_encode<B: udigest::Buffer>(
         &self,
         encoder: udigest::encoding::EncodeValue<B>,

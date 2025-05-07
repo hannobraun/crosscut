@@ -5,8 +5,6 @@ use crate::language::{
     packages::{FunctionId, Packages},
 };
 
-use super::SyntaxNode;
-
 #[derive(Clone, Debug, Eq, Ord, PartialEq, PartialOrd, udigest::Digestable)]
 pub enum Expression {
     /// # The application of an expression to an argument
@@ -212,8 +210,6 @@ impl Expression {
         }
     }
 }
-
-impl SyntaxNode for Expression {}
 
 #[derive(Debug, Eq, PartialEq)]
 pub enum ChildOfExpression<T: Form> {
