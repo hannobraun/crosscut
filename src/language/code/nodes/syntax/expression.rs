@@ -187,7 +187,7 @@ impl Expression {
                 .iter()
                 .copied()
                 .map(ChildOfExpression::Expression)
-                .collect(),
+                .collect::<Vec<_>>(),
 
             Self::Test { children, .. } => children
                 .inner
