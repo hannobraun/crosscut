@@ -281,6 +281,7 @@ impl LocatedNode<&Expression> {
             .enumerate()
             .map(|(index, child)| {
                 let ChildOfExpression::Expression(hash) = child;
+
                 let node = nodes.get(&hash);
 
                 LocatedNode {
