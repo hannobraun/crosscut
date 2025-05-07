@@ -282,7 +282,10 @@ impl LocatedNode<&Expression> {
             .map(|(index, child)| {
                 let ChildOfExpression::Expression(hash) = child;
 
-                let node = nodes.get(&hash);
+                let node = {
+                    let node = nodes.get(&hash);
+                    ChildOfExpression::Expression(node)
+                };
                 let path = NodePath::new(
                     hash,
                     Some(self.path.clone()),
@@ -290,10 +293,7 @@ impl LocatedNode<&Expression> {
                     nodes,
                 );
 
-                LocatedNode {
-                    node: ChildOfExpression::Expression(node),
-                    path,
-                }
+                LocatedNode { node, path }
             })
     }
 }
