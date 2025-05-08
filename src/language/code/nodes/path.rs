@@ -1,7 +1,9 @@
 use core::fmt;
 use std::cmp;
 
-use super::{Borrowed, ChildOfExpression, Expression, NodeHash, Nodes};
+use super::{
+    Borrowed, ChildOfExpression, Expression, NodeHash, Nodes, RawHash,
+};
 
 /// # A unique and versioned path to a [`Node`]
 ///
@@ -26,6 +28,7 @@ use super::{Borrowed, ChildOfExpression, Expression, NodeHash, Nodes};
 /// are responsible for making sure that such a [`NodePath`] gets updated.
 pub struct NodePath<T> {
     hash: NodeHash<T>,
+    parent2: Option<RawHash>,
 
     /// # The path of the node's parent
     ///
@@ -85,6 +88,7 @@ impl NodePath<Expression> {
 
         Self {
             hash,
+            parent2: parent.as_ref().map(RawHash::new),
             parent: parent.map(Box::new),
             sibling_index,
         }
@@ -93,6 +97,7 @@ impl NodePath<Expression> {
     pub fn for_root(hash: NodeHash<Expression>) -> Self {
         Self {
             hash,
+            parent2: None,
             parent: None,
             sibling_index: SiblingIndex { index: 0 },
         }
@@ -144,6 +149,7 @@ impl<T> Clone for NodePath<T> {
     fn clone(&self) -> Self {
         Self {
             hash: self.hash,
+            parent2: self.parent2,
             parent: self.parent.clone(),
             sibling_index: self.sibling_index,
         }
@@ -156,11 +162,18 @@ impl<T> Ord for NodePath<T> {
     fn cmp(&self, other: &Self) -> cmp::Ordering {
         let Self {
             hash,
+            parent2,
             parent,
             sibling_index,
         } = self;
 
         match hash.cmp(&other.hash) {
+            cmp::Ordering::Equal => {}
+            ordering => {
+                return ordering;
+            }
+        }
+        match parent2.cmp(&other.parent2) {
             cmp::Ordering::Equal => {}
             ordering => {
                 return ordering;
@@ -180,11 +193,13 @@ impl<T> PartialEq for NodePath<T> {
     fn eq(&self, other: &Self) -> bool {
         let Self {
             hash,
+            parent2,
             parent,
             sibling_index,
         } = self;
 
         hash == &other.hash
+            && parent2 == &other.parent2
             && parent == &other.parent
             && sibling_index == &other.sibling_index
     }
@@ -200,12 +215,14 @@ impl<T> fmt::Debug for NodePath<T> {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         let Self {
             hash,
+            parent2,
             parent,
             sibling_index,
         } = self;
 
         f.debug_struct("NodePath")
             .field("hash", hash)
+            .field("parent2", parent2)
             .field("parent", parent)
             .field("sibling_index", sibling_index)
             .finish()
@@ -219,6 +236,7 @@ impl<T> udigest::Digestable for NodePath<T> {
     ) {
         let Self {
             hash,
+            parent2,
             parent,
             sibling_index,
         } = self;
@@ -228,6 +246,10 @@ impl<T> udigest::Digestable for NodePath<T> {
         {
             let encoder = encoder.add_field("hash");
             hash.unambiguously_encode(encoder);
+        }
+        {
+            let encoder = encoder.add_field("parent2");
+            parent2.unambiguously_encode(encoder);
         }
         {
             let encoder = encoder.add_field("parent");
