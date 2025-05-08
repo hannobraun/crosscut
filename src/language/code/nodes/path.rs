@@ -49,7 +49,7 @@ pub struct NodePath<T> {
     /// more complicated to find the parent of a node, given its `NodePath`.
     parent: Option<Box<NodePath<Expression>>>,
 
-    sibling_index: SiblingIndex,
+    sibling_index: Option<SiblingIndex>,
 }
 
 impl NodePath<Expression> {
@@ -57,10 +57,12 @@ impl NodePath<Expression> {
     pub fn new(
         hash: NodeHash<Expression>,
         parent: Option<NodePath<Expression>>,
-        sibling_index: SiblingIndex,
+        sibling_index: Option<SiblingIndex>,
         nodes: &Nodes,
     ) -> Self {
-        if let Some(parent_path) = &parent {
+        if let (Some(parent_path), Some(sibling_index)) =
+            (&parent, sibling_index)
+        {
             let parent_node = nodes.get(&parent_path.hash);
 
             if !parent_node.has_child_at(hash.raw(), &sibling_index) {
@@ -101,7 +103,7 @@ impl NodePath<Expression> {
             hash,
             parent2: None,
             parent: None,
-            sibling_index: SiblingIndex { index: 0 },
+            sibling_index: None,
         }
     }
 
@@ -126,7 +128,7 @@ impl NodePath<Expression> {
     }
 
     pub fn sibling_index(&self) -> Option<SiblingIndex> {
-        Some(self.sibling_index)
+        self.sibling_index
     }
 
     pub fn is_ancestor_of(
@@ -318,7 +320,7 @@ impl LocatedNode<&Expression> {
                 let path = NodePath::new(
                     hash,
                     Some(self.path.clone()),
-                    SiblingIndex { index },
+                    Some(SiblingIndex { index }),
                     nodes,
                 );
 
