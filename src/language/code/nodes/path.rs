@@ -98,7 +98,7 @@ impl NodePath<Expression> {
                 Parent {
                     hash: *path.hash.raw(),
                     sibling_index,
-                    inner: RawHash::new(path),
+                    inner: RawHash::new(&path.parent2),
                 }
             }),
             parent: parent.map(Box::new),
