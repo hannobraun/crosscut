@@ -213,7 +213,9 @@ impl Expression {
     }
 }
 
-impl SyntaxNode for Expression {}
+impl SyntaxNode for Expression {
+    type Parent = Expression;
+}
 
 #[derive(Debug, Eq, PartialEq)]
 pub enum ChildOfExpression<T: Form> {

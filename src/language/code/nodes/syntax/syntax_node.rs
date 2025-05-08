@@ -1,1 +1,3 @@
-pub trait SyntaxNode {}
+pub trait SyntaxNode {
+    type Parent;
+}

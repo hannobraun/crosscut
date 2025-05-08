@@ -28,7 +28,7 @@ use super::{
 /// are responsible for making sure that such a [`NodePath`] gets updated.
 pub struct NodePath<T: SyntaxNode> {
     hash: NodeHash<T>,
-    parent2: Option<Parent>,
+    parent2: Option<Parent<T::Parent>>,
 
     /// # The path of the node's parent
     ///
@@ -96,7 +96,7 @@ impl NodePath<Expression> {
                 };
 
                 Parent {
-                    hash: *path.hash.raw(),
+                    hash: path.hash,
                     sibling_index,
                     parent: RawHash::new(&path.parent2),
                 }
@@ -257,29 +257,29 @@ impl<T: SyntaxNode> udigest::Digestable for NodePath<T> {
     }
 }
 
-pub struct Parent {
-    hash: RawHash,
+pub struct Parent<T> {
+    hash: NodeHash<T>,
     sibling_index: SiblingIndex,
     parent: RawHash,
 }
 
-impl Copy for Parent {}
+impl<T> Copy for Parent<T> {}
 
-impl Clone for Parent {
+impl<T> Clone for Parent<T> {
     fn clone(&self) -> Self {
         *self
     }
 }
 
-impl Eq for Parent {}
+impl<T> Eq for Parent<T> {}
 
-impl Ord for Parent {
+impl<T> Ord for Parent<T> {
     fn cmp(&self, other: &Self) -> cmp::Ordering {
         self.hash.cmp(&other.hash)
     }
 }
 
-impl PartialEq for Parent {
+impl<T> PartialEq for Parent<T> {
     fn eq(&self, other: &Self) -> bool {
         let Self {
             hash,
@@ -293,13 +293,13 @@ impl PartialEq for Parent {
     }
 }
 
-impl PartialOrd for Parent {
+impl<T> PartialOrd for Parent<T> {
     fn partial_cmp(&self, other: &Self) -> Option<cmp::Ordering> {
         Some(self.cmp(other))
     }
 }
 
-impl fmt::Debug for Parent {
+impl<T> fmt::Debug for Parent<T> {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         let Self {
             hash,
@@ -315,7 +315,7 @@ impl fmt::Debug for Parent {
     }
 }
 
-impl udigest::Digestable for Parent {
+impl<T> udigest::Digestable for Parent<T> {
     fn unambiguously_encode<B: udigest::Buffer>(
         &self,
         encoder: udigest::encoding::EncodeValue<B>,
