@@ -142,7 +142,7 @@ impl NodePath<Expression> {
     }
 
     pub fn sibling_index(&self) -> Option<SiblingIndex> {
-        self.parent2().map(|parent| parent.sibling_index)
+        self.parent2().map(|parent| parent.sibling_index())
     }
 
     pub fn is_ancestor_of(
@@ -269,6 +269,12 @@ pub struct Parent<T> {
     hash: NodeHash<T>,
     sibling_index: SiblingIndex,
     parent: RawHash,
+}
+
+impl<T> Parent<T> {
+    pub fn sibling_index(&self) -> SiblingIndex {
+        self.sibling_index
+    }
 }
 
 impl<T> Copy for Parent<T> {}
