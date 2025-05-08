@@ -83,10 +83,9 @@ impl NodePath<Expression> {
             }
         }
 
-        let parent = parent.map(Box::new);
         Self {
             hash,
-            parent,
+            parent: parent.map(Box::new),
             sibling_index,
         }
     }
