@@ -268,12 +268,14 @@ impl<T> udigest::Digestable for NodePath<T> {
     Clone, Copy, Debug, Eq, Ord, PartialEq, PartialOrd, udigest::Digestable,
 )]
 pub struct Parent {
+    hash: RawHash,
     inner: RawHash,
 }
 
 impl Parent {
     pub fn new<T>(path: &NodePath<T>) -> Self {
         Self {
+            hash: *path.hash.raw(),
             inner: RawHash::new(path),
         }
     }
