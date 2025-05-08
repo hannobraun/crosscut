@@ -28,7 +28,7 @@ impl<T> NodeHash<T> {
         T: udigest::Digestable,
     {
         let hash = RawHash {
-            inner: udigest::hash::<blake3::Hasher>(&node).into(),
+            inner: udigest::hash::<blake3::Hasher>(node).into(),
         };
 
         Self {
