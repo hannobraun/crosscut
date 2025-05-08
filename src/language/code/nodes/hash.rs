@@ -50,7 +50,15 @@ impl<T> Eq for NodeHash<T> {}
 
 impl<T> Ord for NodeHash<T> {
     fn cmp(&self, other: &Self) -> cmp::Ordering {
-        self.hash.cmp(&other.hash)
+        let Self { hash, t } = self;
+
+        match hash.cmp(&other.hash) {
+            cmp::Ordering::Equal => {}
+            ordering => {
+                return ordering;
+            }
+        }
+        t.cmp(&other.t)
     }
 }
 
