@@ -125,6 +125,14 @@ impl NodePath<Expression> {
         &self.hash
     }
 
+    /// # The node's parent
+    ///
+    /// This is required to distinguish between identical nodes whose hash is
+    /// the same, but that have different parents.
+    pub fn parent2(&self) -> Option<&Parent<Expression>> {
+        self.parent2.as_ref()
+    }
+
     /// # The path of the node's parent
     ///
     /// This is required to distinguish between identical nodes whose hash is
@@ -134,7 +142,7 @@ impl NodePath<Expression> {
     }
 
     pub fn sibling_index(&self) -> Option<SiblingIndex> {
-        self.parent2.map(|parent| parent.sibling_index)
+        self.parent2().map(|parent| parent.sibling_index)
     }
 
     pub fn is_ancestor_of(
