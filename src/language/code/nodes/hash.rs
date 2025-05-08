@@ -23,7 +23,7 @@ pub struct NodeHash<T> {
 }
 
 impl<T> NodeHash<T> {
-    pub(super) fn new(node: &T) -> Self
+    pub fn new(node: &T) -> Self
     where
         T: udigest::Digestable,
     {
