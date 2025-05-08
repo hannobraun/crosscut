@@ -48,8 +48,6 @@ pub struct NodePath<T> {
     /// [`NodePath`] to be `Copy` again. On the other hand, it would make it
     /// more complicated to find the parent of a node, given its `NodePath`.
     parent: Option<Box<NodePath<Expression>>>,
-
-    sibling_index: Option<SiblingIndex>,
 }
 
 impl NodePath<Expression> {
@@ -89,12 +87,21 @@ impl NodePath<Expression> {
 
         Self {
             hash,
-            parent2: parent.as_ref().map(|path| Parent {
-                hash: *path.hash.raw(),
-                inner: RawHash::new(path),
+            parent2: parent.as_ref().map(|path| {
+                let Some(sibling_index) = sibling_index else {
+                    // Some temporary unpleasantness, while I'm refactoring.
+                    panic!(
+                        "Must provide a sibling index when providing a parent."
+                    );
+                };
+
+                Parent {
+                    hash: *path.hash.raw(),
+                    sibling_index,
+                    inner: RawHash::new(path),
+                }
             }),
             parent: parent.map(Box::new),
-            sibling_index,
         }
     }
 
@@ -103,7 +110,6 @@ impl NodePath<Expression> {
             hash,
             parent2: None,
             parent: None,
-            sibling_index: None,
         }
     }
 
@@ -128,7 +134,7 @@ impl NodePath<Expression> {
     }
 
     pub fn sibling_index(&self) -> Option<SiblingIndex> {
-        self.sibling_index
+        self.parent2.map(|parent| parent.sibling_index)
     }
 
     pub fn is_ancestor_of(
@@ -155,7 +161,6 @@ impl<T> Clone for NodePath<T> {
             hash: self.hash,
             parent2: self.parent2,
             parent: self.parent.clone(),
-            sibling_index: self.sibling_index,
         }
     }
 }
@@ -168,7 +173,6 @@ impl<T> Ord for NodePath<T> {
             hash,
             parent2,
             parent,
-            sibling_index,
         } = self;
 
         match hash.cmp(&other.hash) {
@@ -183,13 +187,7 @@ impl<T> Ord for NodePath<T> {
                 return ordering;
             }
         }
-        match parent.cmp(&other.parent) {
-            cmp::Ordering::Equal => {}
-            ordering => {
-                return ordering;
-            }
-        }
-        sibling_index.cmp(&other.sibling_index)
+        parent.cmp(&other.parent)
     }
 }
 
@@ -199,13 +197,11 @@ impl<T> PartialEq for NodePath<T> {
             hash,
             parent2,
             parent,
-            sibling_index,
         } = self;
 
         hash == &other.hash
             && parent2 == &other.parent2
             && parent == &other.parent
-            && sibling_index == &other.sibling_index
     }
 }
 
@@ -221,14 +217,12 @@ impl<T> fmt::Debug for NodePath<T> {
             hash,
             parent2,
             parent,
-            sibling_index,
         } = self;
 
         f.debug_struct("NodePath")
             .field("hash", hash)
             .field("parent2", parent2)
             .field("parent", parent)
-            .field("sibling_index", sibling_index)
             .finish()
     }
 }
@@ -242,7 +236,6 @@ impl<T> udigest::Digestable for NodePath<T> {
             hash,
             parent2,
             parent,
-            sibling_index,
         } = self;
 
         let mut encoder = encoder.encode_struct();
@@ -259,10 +252,6 @@ impl<T> udigest::Digestable for NodePath<T> {
             let encoder = encoder.add_field("parent");
             parent.unambiguously_encode(encoder);
         }
-        {
-            let encoder = encoder.add_field("sibling_index");
-            sibling_index.unambiguously_encode(encoder);
-        }
 
         encoder.finish();
     }
@@ -273,6 +262,7 @@ impl<T> udigest::Digestable for NodePath<T> {
 )]
 pub struct Parent {
     hash: RawHash,
+    sibling_index: SiblingIndex,
     inner: RawHash,
 }
 
