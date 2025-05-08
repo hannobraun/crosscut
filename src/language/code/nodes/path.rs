@@ -2,7 +2,7 @@ use core::fmt;
 use std::cmp;
 
 use super::{
-    Borrowed, ChildOfExpression, Expression, NodeHash, Nodes, hash::ParentHash,
+    Borrowed, ChildOfExpression, Expression, NodeHash, Nodes, RawHash,
 };
 
 /// # A unique and versioned path to a [`Node`]
@@ -261,6 +261,21 @@ impl<T> udigest::Digestable for NodePath<T> {
         }
 
         encoder.finish();
+    }
+}
+
+#[derive(
+    Clone, Copy, Debug, Eq, Ord, PartialEq, PartialOrd, udigest::Digestable,
+)]
+pub struct ParentHash {
+    inner: RawHash,
+}
+
+impl ParentHash {
+    pub fn new<T>(path: &NodePath<T>) -> Self {
+        Self {
+            inner: RawHash::new(path),
+        }
     }
 }
 

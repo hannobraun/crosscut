@@ -2,8 +2,6 @@ use std::{any::type_name, cmp, fmt, marker::PhantomData};
 
 use base64::{Engine, prelude::BASE64_URL_SAFE_NO_PAD};
 
-use super::NodePath;
-
 /// # The hash of a syntax node
 ///
 /// The purpose of this type is to serve as a building block for identifying
@@ -109,21 +107,6 @@ impl<T> udigest::Digestable for NodeHash<T> {
         }
 
         encoder.finish();
-    }
-}
-
-#[derive(
-    Clone, Copy, Debug, Eq, Ord, PartialEq, PartialOrd, udigest::Digestable,
-)]
-pub struct ParentHash {
-    inner: RawHash,
-}
-
-impl ParentHash {
-    pub fn new<T>(path: &NodePath<T>) -> Self {
-        Self {
-            inner: RawHash::new(path),
-        }
     }
 }
 
