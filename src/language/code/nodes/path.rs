@@ -87,7 +87,10 @@ impl NodePath<Expression> {
 
         Self {
             hash,
-            parent2: parent.as_ref().map(Parent::new),
+            parent2: parent.as_ref().map(|path| Parent {
+                hash: *path.hash.raw(),
+                inner: RawHash::new(path),
+            }),
             parent: parent.map(Box::new),
             sibling_index,
         }
@@ -269,15 +272,6 @@ impl<T> udigest::Digestable for NodePath<T> {
 pub struct Parent {
     hash: RawHash,
     inner: RawHash,
-}
-
-impl Parent {
-    pub fn new<T>(path: &NodePath<T>) -> Self {
-        Self {
-            hash: *path.hash.raw(),
-            inner: RawHash::new(path),
-        }
-    }
 }
 
 /// # The index of a node among its siblings
