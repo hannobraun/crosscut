@@ -2,7 +2,7 @@ use core::fmt;
 use std::cmp;
 
 use super::{
-    Borrowed, ChildOfExpression, Expression, NodeHash, Nodes, RawHash,
+    Borrowed, ChildOfExpression, Expression, NodeHash, Nodes, hash::ParentHash,
 };
 
 /// # A unique and versioned path to a [`Node`]
@@ -28,7 +28,7 @@ use super::{
 /// are responsible for making sure that such a [`NodePath`] gets updated.
 pub struct NodePath<T> {
     hash: NodeHash<T>,
-    parent2: Option<RawHash>,
+    parent2: Option<ParentHash>,
 
     /// # The path of the node's parent
     ///
@@ -88,7 +88,7 @@ impl NodePath<Expression> {
 
         Self {
             hash,
-            parent2: parent.as_ref().map(RawHash::new),
+            parent2: parent.as_ref().map(ParentHash::new),
             parent: parent.map(Box::new),
             sibling_index,
         }
