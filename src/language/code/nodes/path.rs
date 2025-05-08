@@ -141,10 +141,6 @@ impl NodePath<Expression> {
         self.parent.as_deref()
     }
 
-    pub fn sibling_index(&self) -> Option<SiblingIndex> {
-        self.parent2().map(|parent| parent.sibling_index())
-    }
-
     pub fn is_ancestor_of(
         &self,
         possible_descendant: &NodePath<Expression>,

@@ -152,7 +152,10 @@ fn update_path(
     let path = NodePath::new(
         replacement.replacement,
         parent,
-        replacement.replaced.sibling_index(),
+        replacement
+            .replaced
+            .parent2()
+            .map(|parent| parent.sibling_index()),
         change_set.nodes,
     );
 
