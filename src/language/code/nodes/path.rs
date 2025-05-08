@@ -1,5 +1,4 @@
-use core::fmt;
-use std::cmp;
+use std::{cmp, fmt};
 
 use super::{
     Borrowed, ChildOfExpression, Expression, NodeHash, Nodes, RawHash,
