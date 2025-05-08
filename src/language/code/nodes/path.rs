@@ -49,7 +49,6 @@ pub struct NodePath<T> {
     /// more complicated to find the parent of a node, given its `NodePath`.
     parent: Option<Box<NodePath<Expression>>>,
 
-    /// # The index of the node among its siblings
     sibling_index: SiblingIndex,
 }
 
