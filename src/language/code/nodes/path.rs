@@ -125,8 +125,8 @@ impl NodePath<Expression> {
         self.parent.as_deref()
     }
 
-    pub fn sibling_index(&self) -> SiblingIndex {
-        self.sibling_index
+    pub fn sibling_index(&self) -> Option<SiblingIndex> {
+        Some(self.sibling_index)
     }
 
     pub fn is_ancestor_of(
