@@ -118,7 +118,7 @@ pub struct RawHash {
 }
 
 impl RawHash {
-    fn new<T>(value: &T) -> Self
+    pub fn new<T>(value: &T) -> Self
     where
         T: udigest::Digestable,
     {
