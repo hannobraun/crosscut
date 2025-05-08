@@ -27,10 +27,8 @@ impl<T> NodeHash<T> {
     where
         T: udigest::Digestable,
     {
-        let hash = RawHash::new(node);
-
         Self {
-            hash,
+            hash: RawHash::new(node),
             t: PhantomData,
         }
     }
