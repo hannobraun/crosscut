@@ -151,9 +151,10 @@ fn update_path(
 ) -> ReplaceAction {
     let path = NodePath::new(
         replacement.replacement,
-        parent.as_ref().map(NodePath::to_parent),
+        parent.as_ref().map(NodePath::to_parent).and_then(|parent| {
+            Some((parent, replacement.replaced.sibling_index()?))
+        }),
         parent,
-        replacement.replaced.sibling_index(),
         change_set.nodes,
     );
 

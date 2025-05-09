@@ -178,9 +178,8 @@ impl Evaluator {
             Expression::Function { parameter: _, body } => {
                 let body = NodePath::new(
                     *body,
-                    Some(node.path.to_parent()),
+                    Some((node.path.to_parent(), SiblingIndex { index: 1 })),
                     Some(node.path),
-                    Some(SiblingIndex { index: 1 }),
                     codebase.nodes(),
                 );
 

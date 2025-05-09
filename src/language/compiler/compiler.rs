@@ -71,9 +71,8 @@ impl<'r> Compiler<'r> {
 
             NodePath::new(
                 child,
-                Some(parent_path.to_parent()),
+                Some((parent_path.to_parent(), sibling_index)),
                 Some(parent_path),
-                Some(sibling_index),
                 change_set.nodes,
             )
         })

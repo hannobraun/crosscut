@@ -51,13 +51,12 @@ impl NodePath<Expression> {
     #[track_caller]
     pub fn new(
         hash: NodeHash<Expression>,
-        parent2: Option<Parent<Expression>>,
+        parent2: Option<(Parent<Expression>, SiblingIndex)>,
         parent: Option<NodePath<Expression>>,
-        sibling_index: Option<SiblingIndex>,
         nodes: &Nodes,
     ) -> Self {
-        if let (Some(parent_path), Some(sibling_index)) =
-            (&parent, sibling_index)
+        if let (Some(parent_path), Some((_, sibling_index))) =
+            (&parent, parent2)
         {
             let parent_node = nodes.get(&parent_path.hash);
 
@@ -85,16 +84,7 @@ impl NodePath<Expression> {
 
         Self {
             hash,
-            parent2: parent2.map(|parent| {
-                let Some(sibling_index) = sibling_index else {
-                    // Some temporary unpleasantness, while I'm refactoring.
-                    panic!(
-                        "Must provide a sibling index when providing a parent."
-                    );
-                };
-
-                (parent, sibling_index)
-            }),
+            parent2,
             parent: parent.map(Box::new),
         }
     }
