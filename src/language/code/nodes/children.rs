@@ -46,7 +46,7 @@ impl Children {
         let Some(child) = self.inner.get_mut(
             to_replace
                 .parent2()
-                .map(|parent| parent.sibling_index())
+                .map(|parent| parent.sibling_index)
                 .unwrap()
                 .index,
         ) else {

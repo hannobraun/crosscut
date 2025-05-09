@@ -264,12 +264,6 @@ pub struct Parent<T> {
     pub parent: RawHash,
 }
 
-impl<T> Parent<T> {
-    pub fn sibling_index(&self) -> SiblingIndex {
-        self.sibling_index
-    }
-}
-
 impl<T> Copy for Parent<T> {}
 
 impl<T> Clone for Parent<T> {

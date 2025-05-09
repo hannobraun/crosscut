@@ -155,7 +155,7 @@ fn update_path(
         replacement
             .replaced
             .parent2()
-            .map(|parent| parent.sibling_index()),
+            .map(|parent| parent.sibling_index),
         change_set.nodes,
     );
 
