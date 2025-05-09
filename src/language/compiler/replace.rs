@@ -164,10 +164,12 @@ fn update_path(
     change_set.replace(&replacement.replaced, &path);
 
     if let Some(replacement) = replacements.pop() {
+        let sibling_index = replacement.replaced.sibling_index();
+
         ReplaceAction::UpdatePath {
             replacement: replacement.clone(),
             parent: Some(path).and_then(|path| {
-                let sibling_index = replacement.replaced.sibling_index()?;
+                let sibling_index = sibling_index?;
                 Some((path, sibling_index))
             }),
         }
