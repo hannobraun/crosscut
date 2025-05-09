@@ -27,6 +27,7 @@ impl LocatedNode<&Expression> {
                 };
                 let path = NodePath::new(
                     hash,
+                    Some(self.path.to_parent()),
                     Some(self.path.clone()),
                     Some(SiblingIndex { index }),
                     nodes,

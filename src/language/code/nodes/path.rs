@@ -51,6 +51,7 @@ impl NodePath<Expression> {
     #[track_caller]
     pub fn new(
         hash: NodeHash<Expression>,
+        parent2: Option<Parent<Expression>>,
         parent: Option<NodePath<Expression>>,
         sibling_index: Option<SiblingIndex>,
         nodes: &Nodes,
@@ -84,15 +85,13 @@ impl NodePath<Expression> {
 
         Self {
             hash,
-            parent2: parent.as_ref().map(|path| {
+            parent2: parent2.map(|parent| {
                 let Some(sibling_index) = sibling_index else {
                     // Some temporary unpleasantness, while I'm refactoring.
                     panic!(
                         "Must provide a sibling index when providing a parent."
                     );
                 };
-
-                let parent = path.to_parent();
 
                 (parent, sibling_index)
             }),
