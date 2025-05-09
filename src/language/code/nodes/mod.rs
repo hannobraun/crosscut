@@ -12,7 +12,6 @@ pub use self::{
     located::LocatedNode,
     nodes::Nodes,
     parent::Parent,
-    parent::SiblingIndex,
-    path::NodePath,
+    path::{NodePath, SiblingIndex},
     syntax::{Borrowed, ChildOfExpression, Expression, SyntaxNode},
 };
