@@ -1,5 +1,6 @@
 mod children;
 mod hash;
+mod located;
 mod nodes;
 mod path;
 mod syntax;
@@ -7,7 +8,8 @@ mod syntax;
 pub use self::{
     children::Children,
     hash::{NodeHash, RawHash},
+    located::LocatedNode,
     nodes::Nodes,
-    path::{LocatedNode, NodePath, SiblingIndex},
+    path::{NodePath, SiblingIndex},
     syntax::{Borrowed, ChildOfExpression, Expression, SyntaxNode},
 };
