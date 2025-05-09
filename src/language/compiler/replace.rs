@@ -167,7 +167,7 @@ fn update_path(
         let sibling_index = replacement.replaced.sibling_index();
 
         ReplaceAction::UpdatePath {
-            replacement: replacement.clone(),
+            replacement,
             parent: Some(path).and_then(|path| {
                 let sibling_index = sibling_index?;
                 Some((path, sibling_index))
