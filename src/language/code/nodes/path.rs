@@ -125,6 +125,14 @@ impl NodePath<Expression> {
             .map(|&(_, sibling_index)| sibling_index)
     }
 
+    /// # The node's parent
+    ///
+    /// This is required to distinguish between identical nodes whose hash is
+    /// the same, but that have different parents.
+    pub fn parent2(&self) -> Option<&Parent<Expression>> {
+        self.parent2.as_ref().map(|(parent, _)| parent)
+    }
+
     /// # The path of the node's parent
     ///
     /// This is required to distinguish between identical nodes whose hash is
@@ -153,7 +161,7 @@ impl NodePath<Expression> {
     pub fn to_parent(&self) -> Parent<Expression> {
         Parent {
             hash: self.hash,
-            parent: RawHash::new(&self.parent2),
+            parent: RawHash::new(&self.parent2()),
         }
     }
 }
