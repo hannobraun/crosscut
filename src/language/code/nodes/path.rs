@@ -259,9 +259,9 @@ impl<T: SyntaxNode> udigest::Digestable for NodePath<T> {
 }
 
 pub struct Parent<T> {
-    hash: NodeHash<T>,
-    sibling_index: SiblingIndex,
-    parent: RawHash,
+    pub hash: NodeHash<T>,
+    pub sibling_index: SiblingIndex,
+    pub parent: RawHash,
 }
 
 impl<T> Parent<T> {
