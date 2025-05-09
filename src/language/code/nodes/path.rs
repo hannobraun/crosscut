@@ -96,7 +96,6 @@ impl NodePath<Expression> {
 
                 let parent = Parent {
                     hash: path.hash,
-                    sibling_index,
                     parent: RawHash::new(&path.parent2),
                 };
 

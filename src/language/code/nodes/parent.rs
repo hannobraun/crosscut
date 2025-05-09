@@ -4,7 +4,6 @@ use super::{NodeHash, RawHash};
 
 pub struct Parent<T> {
     pub hash: NodeHash<T>,
-    pub sibling_index: SiblingIndex,
     pub parent: RawHash,
 }
 
@@ -26,15 +25,9 @@ impl<T> Ord for Parent<T> {
 
 impl<T> PartialEq for Parent<T> {
     fn eq(&self, other: &Self) -> bool {
-        let Self {
-            hash,
-            sibling_index,
-            parent,
-        } = self;
+        let Self { hash, parent } = self;
 
-        hash == &other.hash
-            && sibling_index == &other.sibling_index
-            && parent == &other.parent
+        hash == &other.hash && parent == &other.parent
     }
 }
 
@@ -46,15 +39,10 @@ impl<T> PartialOrd for Parent<T> {
 
 impl<T> fmt::Debug for Parent<T> {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        let Self {
-            hash,
-            sibling_index,
-            parent,
-        } = self;
+        let Self { hash, parent } = self;
 
         f.debug_struct("Parent")
             .field("hash", &hash)
-            .field("sibling_index", &sibling_index)
             .field("parent", &parent)
             .finish()
     }
@@ -65,21 +53,13 @@ impl<T> udigest::Digestable for Parent<T> {
         &self,
         encoder: udigest::encoding::EncodeValue<B>,
     ) {
-        let Self {
-            hash,
-            sibling_index,
-            parent,
-        } = self;
+        let Self { hash, parent } = self;
 
         let mut encoder = encoder.encode_struct();
 
         {
             let encoder = encoder.add_field("hash");
             hash.unambiguously_encode(encoder);
-        }
-        {
-            let encoder = encoder.add_field("sibling_index");
-            sibling_index.unambiguously_encode(encoder);
         }
         {
             let encoder = encoder.add_field("parent");
