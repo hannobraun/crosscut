@@ -27,7 +27,7 @@ use super::{
 /// are responsible for making sure that such a [`NodePath`] gets updated.
 pub struct NodePath<T: SyntaxNode> {
     hash: NodeHash<T>,
-    parent2: Option<Parent<T::Parent>>,
+    parent2: Option<(Parent<T::Parent>, SiblingIndex)>,
 
     /// # The path of the node's parent
     ///
@@ -94,11 +94,13 @@ impl NodePath<Expression> {
                     );
                 };
 
-                Parent {
+                let parent = Parent {
                     hash: path.hash,
                     sibling_index,
                     parent: RawHash::new(&path.parent2),
-                }
+                };
+
+                (parent, sibling_index)
             }),
             parent: parent.map(Box::new),
         }
@@ -129,7 +131,7 @@ impl NodePath<Expression> {
     /// This is required to distinguish between identical nodes whose hash is
     /// the same, but that have different parents.
     pub fn parent2(&self) -> Option<&Parent<Expression>> {
-        self.parent2.as_ref()
+        self.parent2.as_ref().map(|(parent, _)| parent)
     }
 
     /// # The path of the node's parent
