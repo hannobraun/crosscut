@@ -43,13 +43,10 @@ impl Children {
         to_replace: &NodePath<Expression>,
         replacement: NodeHash<Expression>,
     ) {
-        let Some(child) = self.inner.get_mut(
-            to_replace
-                .parent2()
-                .map(|parent| parent.sibling_index)
-                .unwrap()
-                .index,
-        ) else {
+        let Some(child) = self
+            .inner
+            .get_mut(to_replace.sibling_index().unwrap().index)
+        else {
             panic!(
                 "Trying to replace a child at an index that is not present."
             );
