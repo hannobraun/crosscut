@@ -92,10 +92,7 @@ impl NodePath<Expression> {
                     );
                 };
 
-                let parent = Parent {
-                    hash: path.hash,
-                    parent: RawHash::new(&path.parent2),
-                };
+                let parent = path.to_parent();
 
                 (parent, sibling_index)
             }),
@@ -152,6 +149,13 @@ impl NodePath<Expression> {
         }
 
         false
+    }
+
+    pub fn to_parent(&self) -> Parent<Expression> {
+        Parent {
+            hash: self.hash,
+            parent: RawHash::new(&self.parent2),
+        }
     }
 }
 
