@@ -164,14 +164,16 @@ fn update_path(
     change_set.replace(&replacement.replaced, &path);
 
     if let Some(replacement) = replacements.pop() {
-        let sibling_index = replacement.replaced.sibling_index();
+        let Some(sibling_index) = replacement.replaced.sibling_index() else {
+            unreachable!(
+                "The replaced node has a parent, so it must have a sibling \
+                index."
+            );
+        };
 
         ReplaceAction::UpdatePath {
             replacement,
-            parent: Some(path).and_then(|path| {
-                let sibling_index = sibling_index?;
-                Some((path, sibling_index))
-            }),
+            parent: Some(path).map(|path| (path, sibling_index)),
         }
     } else {
         ReplaceAction::Finish { path }
