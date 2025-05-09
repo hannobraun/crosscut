@@ -1,5 +1,8 @@
 use crate::language::{
-    code::{Errors, Expression, NewChangeSet, NodeHash, NodePath, Nodes},
+    code::{
+        Errors, Expression, NewChangeSet, NodeHash, NodePath, Nodes,
+        SiblingIndex,
+    },
     packages::FunctionId,
 };
 
@@ -72,7 +75,7 @@ enum ReplaceAction {
     },
     UpdatePath {
         replacement: Replacement,
-        parent: Option<NodePath<Expression>>,
+        parent: Option<(NodePath<Expression>, SiblingIndex)>,
     },
     Finish {
         path: NodePath<Expression>,
@@ -145,17 +148,16 @@ fn update_children(
 
 fn update_path(
     replacement: Replacement,
-    parent: Option<NodePath<Expression>>,
+    parent: Option<(NodePath<Expression>, SiblingIndex)>,
     replacements: &mut Vec<Replacement>,
     change_set: &mut NewChangeSet,
 ) -> ReplaceAction {
     let path = NodePath::new(
         replacement.replacement,
-        parent.as_ref().and_then(|path| {
-            let sibling_index = replacement.replaced.sibling_index()?;
-            Some((path.to_parent(), sibling_index))
-        }),
-        parent,
+        parent
+            .as_ref()
+            .map(|(path, sibling_index)| (path.to_parent(), *sibling_index)),
+        parent.map(|(path, _)| path),
         change_set.nodes,
     );
 
@@ -163,8 +165,11 @@ fn update_path(
 
     if let Some(replacement) = replacements.pop() {
         ReplaceAction::UpdatePath {
-            replacement,
-            parent: Some(path),
+            replacement: replacement.clone(),
+            parent: Some(path).and_then(|path| {
+                let sibling_index = replacement.replaced.sibling_index()?;
+                Some((path, sibling_index))
+            }),
         }
     } else {
         ReplaceAction::Finish { path }
