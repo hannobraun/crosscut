@@ -3,8 +3,8 @@ use std::{cmp, fmt};
 use super::{NodeHash, RawHash};
 
 pub struct Parent<T> {
-    pub hash: NodeHash<T>,
-    pub parent: RawHash,
+    hash: NodeHash<T>,
+    parent: RawHash,
 }
 
 impl<T> Parent<T> {
