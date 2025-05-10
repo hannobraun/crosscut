@@ -8,7 +8,11 @@ pub struct Parent<T> {
 }
 
 impl<T> Parent<T> {
-    pub(super) fn new(hash: NodeHash<T>, parent: RawHash) -> Self {
+    pub(super) fn new<P>(
+        hash: NodeHash<T>,
+        parent: Option<&Parent<P>>,
+    ) -> Self {
+        let parent = RawHash::new(&parent);
         Self { hash, parent }
     }
 }

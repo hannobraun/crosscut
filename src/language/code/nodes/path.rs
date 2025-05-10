@@ -1,6 +1,6 @@
 use std::{cmp, fmt};
 
-use super::{Expression, NodeHash, Nodes, Parent, RawHash, SyntaxNode};
+use super::{Expression, NodeHash, Nodes, Parent, SyntaxNode};
 
 /// # A unique and versioned path to a [`Node`]
 ///
@@ -149,7 +149,7 @@ impl NodePath<Expression> {
     }
 
     pub fn to_parent(&self) -> Parent<Expression> {
-        Parent::new(self.hash, RawHash::new(&self.parent2()))
+        Parent::new(self.hash, self.parent2())
     }
 }
 
