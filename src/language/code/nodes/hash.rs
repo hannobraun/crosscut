@@ -23,6 +23,11 @@ pub struct NodeHash<T> {
 }
 
 impl<T> NodeHash<T> {
+    /// # Compute the hash of a node
+    ///
+    /// This must not be available outside of `super`, since `Nodes` relies on
+    /// the fact that no hashes can get created for nodes that have not been
+    /// inserted.
     pub(super) fn new(node: &T) -> Self
     where
         T: udigest::Digestable,
