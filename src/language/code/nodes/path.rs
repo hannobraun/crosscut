@@ -149,10 +149,7 @@ impl NodePath<Expression> {
     }
 
     pub fn to_parent(&self) -> Parent<Expression> {
-        Parent {
-            hash: self.hash,
-            parent: RawHash::new(&self.parent2()),
-        }
+        Parent::new(self.hash, RawHash::new(&self.parent2()))
     }
 }
 

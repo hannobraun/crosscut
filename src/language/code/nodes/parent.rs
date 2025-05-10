@@ -7,6 +7,12 @@ pub struct Parent<T> {
     pub parent: RawHash,
 }
 
+impl<T> Parent<T> {
+    pub(super) fn new(hash: NodeHash<T>, parent: RawHash) -> Self {
+        Self { hash, parent }
+    }
+}
+
 impl<T> Copy for Parent<T> {}
 
 impl<T> Clone for Parent<T> {
