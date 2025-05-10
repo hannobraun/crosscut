@@ -56,11 +56,11 @@ impl NodePath<Expression> {
         nodes: &Nodes,
     ) -> Self {
         if let (Some(parent_path), Some((_, sibling_index))) =
-            (&parent, parent2)
+            (&parent, &parent2)
         {
             let parent_node = nodes.get(&parent_path.hash);
 
-            if !parent_node.has_child_at(hash.raw(), &sibling_index) {
+            if !parent_node.has_child_at(hash.raw(), sibling_index) {
                 let index = sibling_index.index;
 
                 panic!(
