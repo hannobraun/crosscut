@@ -1,7 +1,9 @@
 mod expression;
+mod form;
 mod syntax_node;
 
 pub use self::{
-    expression::{Borrowed, ChildOfExpression, Expression},
+    expression::{ChildOfExpression, Expression},
+    form::{Borrowed, Form, ViaHash},
     syntax_node::SyntaxNode,
 };

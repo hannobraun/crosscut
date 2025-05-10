@@ -1,11 +1,11 @@
-use std::{fmt, marker::PhantomData};
+use std::fmt;
 
 use crate::language::{
     code::{Children, NodeHash, SiblingIndex, nodes::RawHash},
     packages::{FunctionId, Packages},
 };
 
-use super::SyntaxNode;
+use super::{Form, SyntaxNode, ViaHash};
 
 #[derive(Clone, Debug, Eq, Ord, PartialEq, PartialOrd, udigest::Digestable)]
 pub enum Expression {
@@ -220,31 +220,6 @@ impl SyntaxNode for Expression {
 #[derive(Debug, Eq, PartialEq)]
 pub enum ChildOfExpression<T: Form> {
     Expression(T::Form<Expression>),
-}
-
-pub trait Form {
-    type Form<T>
-    where
-        T: 'static;
-}
-
-#[derive(Debug, Eq, PartialEq)]
-pub struct Borrowed<'r>(PhantomData<&'r ()>);
-
-impl<'r> Form for Borrowed<'r> {
-    type Form<T>
-        = &'r T
-    where
-        T: 'static;
-}
-
-pub struct ViaHash;
-
-impl Form for ViaHash {
-    type Form<T>
-        = NodeHash<T>
-    where
-        T: 'static;
 }
 
 pub struct ExpressionDisplay<'r> {
