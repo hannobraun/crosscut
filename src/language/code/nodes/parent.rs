@@ -15,6 +15,10 @@ impl<T> Parent<T> {
         let parent = RawHash::new(&parent);
         Self { hash, parent }
     }
+
+    pub fn hash(&self) -> &NodeHash<T> {
+        &self.hash
+    }
 }
 
 impl<T> Copy for Parent<T> {}
