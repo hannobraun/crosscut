@@ -1,4 +1,4 @@
-use std::{cmp, fmt, ops::Deref};
+use std::ops::Deref;
 
 use super::{Expression, NodeHash, Nodes};
 
@@ -23,6 +23,7 @@ use super::{Expression, NodeHash, Nodes};
 /// That means **any [`NodePath`] that you expect to point to a node within the
 /// current syntax tree will be invalidated any change to the syntax tree**. You
 /// are responsible for making sure that such a [`NodePath`] gets updated.
+#[derive(Clone, Debug, Eq, Ord, PartialEq, PartialOrd, udigest::Digestable)]
 pub struct NodePath {
     hash: NodeHash<Expression>,
 
@@ -129,78 +130,6 @@ impl NodePath {
         }
 
         false
-    }
-}
-
-impl Clone for NodePath {
-    fn clone(&self) -> Self {
-        Self {
-            hash: self.hash,
-            parent: self.parent.clone(),
-        }
-    }
-}
-
-impl Eq for NodePath {}
-
-impl Ord for NodePath {
-    fn cmp(&self, other: &Self) -> cmp::Ordering {
-        let Self { hash, parent } = self;
-
-        match hash.cmp(&other.hash) {
-            cmp::Ordering::Equal => {}
-            ordering => {
-                return ordering;
-            }
-        }
-        parent.cmp(&other.parent)
-    }
-}
-
-impl PartialEq for NodePath {
-    fn eq(&self, other: &Self) -> bool {
-        let Self { hash, parent } = self;
-
-        hash == &other.hash && parent == &other.parent
-    }
-}
-
-impl PartialOrd for NodePath {
-    fn partial_cmp(&self, other: &Self) -> Option<cmp::Ordering> {
-        Some(self.cmp(other))
-    }
-}
-
-impl fmt::Debug for NodePath {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        let Self { hash, parent } = self;
-
-        f.debug_struct("NodePath")
-            .field("hash", hash)
-            .field("parent", parent)
-            .finish()
-    }
-}
-
-impl udigest::Digestable for NodePath {
-    fn unambiguously_encode<B: udigest::Buffer>(
-        &self,
-        encoder: udigest::encoding::EncodeValue<B>,
-    ) {
-        let Self { hash, parent } = self;
-
-        let mut encoder = encoder.encode_struct();
-
-        {
-            let encoder = encoder.add_field("hash");
-            hash.unambiguously_encode(encoder);
-        }
-        {
-            let encoder = encoder.add_field("parent");
-            parent.unambiguously_encode(encoder);
-        }
-
-        encoder.finish();
     }
 }
 
