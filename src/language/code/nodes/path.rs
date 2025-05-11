@@ -1,4 +1,4 @@
-use std::{cmp, fmt};
+use std::{cmp, fmt, ops::Deref};
 
 use super::{Expression, NodeHash, Nodes, Parent, SyntaxNode};
 
@@ -129,14 +129,14 @@ impl NodePath<Expression> {
         &self,
         possible_descendant: &NodePath<Expression>,
     ) -> bool {
-        let mut maybe_parent = possible_descendant.parent.as_deref();
+        let mut maybe_parent = possible_descendant.parent.as_ref();
 
         while let Some(parent) = maybe_parent {
-            if parent == self {
+            if parent.deref() == self {
                 return true;
             }
 
-            maybe_parent = parent.parent.as_deref();
+            maybe_parent = parent.parent.as_ref();
         }
 
         false
