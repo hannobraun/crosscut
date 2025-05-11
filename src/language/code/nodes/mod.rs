@@ -7,7 +7,7 @@ mod syntax;
 
 pub use self::{
     children::Children,
-    hash::{NodeHash, RawHash},
+    hash::NodeHash,
     located::LocatedNode,
     nodes::Nodes,
     path::{NodePath, SiblingIndex},

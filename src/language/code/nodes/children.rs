@@ -1,6 +1,6 @@
 use std::vec;
 
-use super::{NodeHash, NodePath, RawHash, SiblingIndex};
+use super::{NodeHash, NodePath, SiblingIndex};
 
 #[derive(Clone, Debug, Eq, Ord, PartialEq, PartialOrd, udigest::Digestable)]
 pub struct Children {
@@ -15,13 +15,13 @@ impl Children {
 
     pub fn contains_at(
         &self,
-        child: &RawHash,
+        child: &NodeHash,
         sibling_index: &SiblingIndex,
     ) -> bool {
         self.inner
             .iter()
             .enumerate()
-            .any(|(index, c)| c.raw() == child && index == sibling_index.index)
+            .any(|(index, c)| c == child && index == sibling_index.index)
     }
 
     pub fn next_index(&self) -> SiblingIndex {

@@ -160,7 +160,7 @@ impl Expression {
             | Self::UnresolvedIdentifier { .. } => false,
 
             Self::Tuple { values: children } | Self::Test { children, .. } => {
-                children.contains_at(child.raw(), sibling_index)
+                children.contains_at(child, sibling_index)
             }
         }
     }
