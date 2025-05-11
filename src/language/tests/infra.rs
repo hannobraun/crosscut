@@ -1,27 +1,27 @@
 use itertools::Itertools;
 
 use crate::language::code::{
-    Children, Expression, LocatedNode, NodeHash, Nodes,
+    Children, LocatedNode, NodeHash, Nodes, SyntaxNode,
 };
 
 pub fn expression(
     name: &str,
     children: impl IntoIterator<Item = NodeHash>,
-) -> Expression {
-    Expression::Test {
+) -> SyntaxNode {
+    SyntaxNode::Test {
         name: name.to_string(),
         children: Children::new(children),
     }
 }
 
-pub fn tuple(values: impl IntoIterator<Item = NodeHash>) -> Expression {
-    Expression::Tuple {
+pub fn tuple(values: impl IntoIterator<Item = NodeHash>) -> SyntaxNode {
+    SyntaxNode::Tuple {
         values: Children::new(values),
     }
 }
 
-pub fn unresolved(identifier: &str) -> Expression {
-    Expression::UnresolvedIdentifier {
+pub fn unresolved(identifier: &str) -> SyntaxNode {
+    SyntaxNode::UnresolvedIdentifier {
         identifier: identifier.to_string(),
     }
 }

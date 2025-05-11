@@ -164,7 +164,7 @@ struct CircularDependency;
 
 #[cfg(test)]
 mod tests {
-    use crate::language::code::{Errors, Expression, NodePath, Nodes};
+    use crate::language::code::{Errors, NodePath, Nodes, SyntaxNode};
 
     use super::Changes;
 
@@ -175,7 +175,7 @@ mod tests {
         let mut errors = Errors::new();
 
         let [node_a, node_b] =
-            ["a", "b"].map(|identifier| Expression::UnresolvedIdentifier {
+            ["a", "b"].map(|identifier| SyntaxNode::UnresolvedIdentifier {
                 identifier: String::from(identifier),
             });
         let path_a = {

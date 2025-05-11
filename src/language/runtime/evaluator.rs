@@ -1,7 +1,7 @@
 use itertools::Itertools;
 
 use crate::language::code::{
-    Codebase, Expression, NodePath, SiblingIndex, Type,
+    Codebase, NodePath, SiblingIndex, SyntaxNode, Type,
 };
 
 use super::{Effect, RuntimeState, Value};
@@ -115,7 +115,7 @@ impl Evaluator {
         };
 
         match codebase.nodes().get(node.path.hash()) {
-            Expression::Apply { .. } => {
+            SyntaxNode::Apply { .. } => {
                 if let Some(child) = node.children_to_evaluate.pop() {
                     self.eval_stack.push(node);
                     self.eval_stack
@@ -166,12 +166,12 @@ impl Evaluator {
                     }
                 }
             }
-            Expression::Empty => {
+            SyntaxNode::Empty => {
                 self.finish_evaluating_node(
                     node.evaluated_children.into_active_value(),
                 );
             }
-            Expression::Function { parameter: _, body } => {
+            SyntaxNode::Function { parameter: _, body } => {
                 let body = NodePath::new(
                     *body,
                     Some((node.path, SiblingIndex { index: 1 })),
@@ -180,15 +180,15 @@ impl Evaluator {
 
                 self.finish_evaluating_node(Value::Function { body });
             }
-            Expression::Number { value } => {
+            SyntaxNode::Number { value } => {
                 self.finish_evaluating_node(Value::Integer { value: *value });
             }
-            Expression::ProvidedFunction { id, .. } => {
+            SyntaxNode::ProvidedFunction { id, .. } => {
                 self.finish_evaluating_node(Value::ProvidedFunction {
                     id: *id,
                 });
             }
-            Expression::Recursion => {
+            SyntaxNode::Recursion => {
                 let body = self
                     .call_stack
                     .pop()
@@ -197,7 +197,7 @@ impl Evaluator {
 
                 self.finish_evaluating_node(Value::Function { body });
             }
-            Expression::Tuple { .. } => {
+            SyntaxNode::Tuple { .. } => {
                 if let Some(child) = node.children_to_evaluate.pop() {
                     self.eval_stack.push(node);
                     self.eval_stack
@@ -210,7 +210,7 @@ impl Evaluator {
                     values: node.evaluated_children.inner.into_iter().collect(),
                 });
             }
-            Expression::UnresolvedIdentifier { .. } => {
+            SyntaxNode::UnresolvedIdentifier { .. } => {
                 self.state = RuntimeState::Error {
                     path: node.path.clone(),
                 };
@@ -220,7 +220,7 @@ impl Evaluator {
                 // from the evaluation stack earlier to where it was.
                 self.eval_stack.push(node);
             }
-            Expression::Test { .. } => {
+            SyntaxNode::Test { .. } => {
                 // For now, tests don't expect a specific runtime behavior out
                 // of these expressions. So let's just use a placeholder here.
                 self.finish_evaluating_node(Value::nothing());
@@ -315,7 +315,7 @@ struct StackFrame {
 #[cfg(test)]
 mod tests {
     use crate::language::{
-        code::{Children, Codebase, Expression, NodePath},
+        code::{Children, Codebase, NodePath, SyntaxNode},
         runtime::{Evaluator, RuntimeState, Value},
         tests::infra::ExpectChildren,
     };
@@ -330,12 +330,12 @@ mod tests {
 
         codebase.make_change(|change_set| {
             let parameter =
-                change_set.nodes.insert(Expression::Number { value: 0 });
-            let body = change_set.nodes.insert(Expression::Empty);
+                change_set.nodes.insert(SyntaxNode::Number { value: 0 });
+            let body = change_set.nodes.insert(SyntaxNode::Empty);
 
             let function = change_set
                 .nodes
-                .insert(Expression::Function { parameter, body });
+                .insert(SyntaxNode::Function { parameter, body });
 
             change_set.replace(
                 &change_set.root_before_change(),
@@ -371,12 +371,12 @@ mod tests {
         let mut codebase = Codebase::new();
 
         codebase.make_change(|change_set| {
-            let recursion = change_set.nodes.insert(Expression::Recursion);
-            let argument = change_set.nodes.insert(Expression::Tuple {
+            let recursion = change_set.nodes.insert(SyntaxNode::Recursion);
+            let argument = change_set.nodes.insert(SyntaxNode::Tuple {
                 values: Children::new([]),
             });
 
-            let apply = change_set.nodes.insert(Expression::Apply {
+            let apply = change_set.nodes.insert(SyntaxNode::Apply {
                 expression: recursion,
                 argument,
             });

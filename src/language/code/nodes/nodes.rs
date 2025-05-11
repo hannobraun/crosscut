@@ -1,14 +1,14 @@
 use std::collections::BTreeMap;
 
-use super::{Expression, NodeHash};
+use super::{NodeHash, SyntaxNode};
 
 #[derive(Clone, Debug, Default, Eq, PartialEq)]
 pub struct Nodes {
-    inner: BTreeMap<NodeHash, Expression>,
+    inner: BTreeMap<NodeHash, SyntaxNode>,
 }
 
 impl Nodes {
-    pub fn get(&self, hash: &NodeHash) -> &Expression {
+    pub fn get(&self, hash: &NodeHash) -> &SyntaxNode {
         let Some(node) = self.inner.get(hash) else {
             unreachable!(
                 "This is an append-only data structure. All hashes that were \
@@ -19,7 +19,7 @@ impl Nodes {
         node
     }
 
-    pub fn insert(&mut self, node: Expression) -> NodeHash {
+    pub fn insert(&mut self, node: SyntaxNode) -> NodeHash {
         let hash = NodeHash::new(&node);
         self.inner.insert(hash, node);
         hash

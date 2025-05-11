@@ -11,8 +11,8 @@ pub use self::{
     errors::{CandidateForResolution, CodeError, Errors, Literal},
     intrinsics::IntrinsicFunction,
     nodes::{
-        Children, Expression, LocatedNode, NodeHash, NodePath, Nodes,
-        SiblingIndex,
+        Children, LocatedNode, NodeHash, NodePath, Nodes, SiblingIndex,
+        SyntaxNode,
     },
     types::{Type, display_tuple},
 };

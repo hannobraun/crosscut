@@ -8,7 +8,7 @@ use crate::language::{
 use super::{Form, ViaHash};
 
 #[derive(Clone, Debug, Eq, Ord, PartialEq, PartialOrd, udigest::Digestable)]
-pub enum Expression {
+pub enum SyntaxNode {
     /// # The application of an expression to an argument
     Apply {
         /// # The expression that is being applied to the argument
@@ -131,7 +131,7 @@ pub enum Expression {
     },
 }
 
-impl Expression {
+impl SyntaxNode {
     pub fn has_child_at(
         &self,
         child: &NodeHash,
@@ -215,43 +215,43 @@ impl Expression {
 
 #[derive(Debug, Eq, PartialEq)]
 pub enum ChildOfExpression<T: Form> {
-    Expression(T::Form<Expression>),
+    Expression(T::Form<SyntaxNode>),
 }
 
 pub struct ExpressionDisplay<'r> {
-    node: &'r Expression,
+    node: &'r SyntaxNode,
     packages: &'r Packages,
 }
 
 impl fmt::Display for ExpressionDisplay<'_> {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match &self.node {
-            Expression::Apply { .. } => {
+            SyntaxNode::Apply { .. } => {
                 write!(f, "apply")
             }
-            Expression::Empty => {
+            SyntaxNode::Empty => {
                 write!(f, "")
             }
-            Expression::Function { .. } => {
+            SyntaxNode::Function { .. } => {
                 write!(f, "fn")
             }
-            Expression::Number { value } => {
+            SyntaxNode::Number { value } => {
                 write!(f, "{value}")
             }
-            Expression::ProvidedFunction { id, .. } => {
+            SyntaxNode::ProvidedFunction { id, .. } => {
                 let name = self.packages.function_name_by_id(id);
                 write!(f, "{name}")
             }
-            Expression::Recursion => {
+            SyntaxNode::Recursion => {
                 write!(f, "self")
             }
-            Expression::Tuple { .. } => {
+            SyntaxNode::Tuple { .. } => {
                 write!(f, "tuple")
             }
-            Expression::UnresolvedIdentifier { identifier, .. } => {
+            SyntaxNode::UnresolvedIdentifier { identifier, .. } => {
                 write!(f, "{identifier}")
             }
-            Expression::Test { name, .. } => {
+            SyntaxNode::Test { name, .. } => {
                 write!(f, "{name}")
             }
         }

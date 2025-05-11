@@ -1,5 +1,5 @@
 use crate::language::{
-    code::{Codebase, Expression},
+    code::{Codebase, SyntaxNode},
     compiler::Compiler,
     editor::{Editor, EditorInputEvent::*, editor::Cursor},
     packages::Packages,
@@ -24,13 +24,13 @@ fn add_apply_node() {
 
     assert_eq!(
         apply.node,
-        &Expression::Apply {
+        &SyntaxNode::Apply {
             expression: *function.path.hash(),
             argument: *argument.path.hash(),
         },
     );
-    assert_eq!(function.node, &Expression::Empty);
-    assert_eq!(argument.node, &Expression::Empty);
+    assert_eq!(function.node, &SyntaxNode::Empty);
+    assert_eq!(argument.node, &SyntaxNode::Empty);
 
     // The apply node's children can then be edited.
 
@@ -45,7 +45,7 @@ fn add_apply_node() {
 
     assert_eq!(
         apply.node,
-        &Expression::Apply {
+        &SyntaxNode::Apply {
             expression: *function.path.hash(),
             argument: *argument.path.hash(),
         },
@@ -71,13 +71,13 @@ fn add_fn_node() {
 
     assert_eq!(
         function.node,
-        &Expression::Function {
+        &SyntaxNode::Function {
             parameter: *parameter.path.hash(),
             body: *body.path.hash(),
         },
     );
-    assert_eq!(parameter.node, &Expression::Empty);
-    assert_eq!(body.node, &Expression::Empty);
+    assert_eq!(parameter.node, &SyntaxNode::Empty);
+    assert_eq!(body.node, &SyntaxNode::Empty);
 }
 
 #[test]

@@ -4,7 +4,7 @@ use crate::{
     io::editor::output::{Cursor, EditorOutputAdapter},
     language::{
         code::{
-            CandidateForResolution, CodeError, Codebase, Expression, NodePath,
+            CandidateForResolution, CodeError, Codebase, NodePath, SyntaxNode,
         },
         editor::{Editor, EditorLayout, EditorLine},
         language::Language,
@@ -247,11 +247,11 @@ fn render_node<A: EditorOutputAdapter>(
     }
 
     let color = match node {
-        Expression::Function { .. }
-        | Expression::Number { .. }
-        | Expression::Tuple { .. } => Some(Color::DarkBlue),
-        Expression::ProvidedFunction { .. } => Some(Color::DarkMagenta),
-        Expression::UnresolvedIdentifier { .. } => Some(ERROR_COLOR),
+        SyntaxNode::Function { .. }
+        | SyntaxNode::Number { .. }
+        | SyntaxNode::Tuple { .. } => Some(Color::DarkBlue),
+        SyntaxNode::ProvidedFunction { .. } => Some(Color::DarkMagenta),
+        SyntaxNode::UnresolvedIdentifier { .. } => Some(ERROR_COLOR),
         _ => None,
     };
 
@@ -352,13 +352,13 @@ fn render_help<A: EditorOutputAdapter>(
     writeln!(adapter)?;
 
     match node {
-        Expression::Apply { .. } => {
+        SyntaxNode::Apply { .. } => {
             writeln!(
                 adapter,
                 "This is the application of a function to an argument.",
             )?;
         }
-        Expression::Empty => {
+        SyntaxNode::Empty => {
             writeln!(
                 adapter,
                 "You are editing an empty syntax node. Those get completely \
@@ -366,20 +366,20 @@ fn render_help<A: EditorOutputAdapter>(
                 making up your mind about what you want to type."
             )?;
         }
-        Expression::Function { .. } => {
+        SyntaxNode::Function { .. } => {
             writeln!(
                 adapter,
                 "This is a function literal that produces a function value.",
             )?;
         }
-        Expression::Number { value } => {
+        SyntaxNode::Number { value } => {
             writeln!(
                 adapter,
                 "This is an integer literal that produces the integer value \
                 `{value}`.",
             )?;
         }
-        Expression::ProvidedFunction { .. } => {
+        SyntaxNode::ProvidedFunction { .. } => {
             writeln!(
                 adapter,
                 "This expression is the application of a provided function. \
@@ -387,7 +387,7 @@ fn render_help<A: EditorOutputAdapter>(
                 intrinsic functions, or by the host.",
             )?;
         }
-        Expression::Recursion => {
+        SyntaxNode::Recursion => {
             writeln!(
                 adapter,
                 "You are editing the `{}` keyword, which calls the current \
@@ -395,17 +395,17 @@ fn render_help<A: EditorOutputAdapter>(
                 node.display(context.packages),
             )?;
         }
-        Expression::Tuple { .. } => {
+        SyntaxNode::Tuple { .. } => {
             writeln!(
                 adapter,
                 "This a tuple literal that produces a tuple value which \
                 contains the tuple's children.",
             )?;
         }
-        Expression::UnresolvedIdentifier { .. } => {
+        SyntaxNode::UnresolvedIdentifier { .. } => {
             writeln!(adapter, "You are editing an erroneous syntax node.",)?;
         }
-        Expression::Test { .. } => {
+        SyntaxNode::Test { .. } => {
             writeln!(
                 adapter,
                 "You are editing an expression that should only be used for \

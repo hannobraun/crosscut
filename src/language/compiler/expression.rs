@@ -1,7 +1,7 @@
 use crate::language::{
     code::{
-        CandidateForResolution, Children, CodeError, Errors, Expression,
-        Literal, NodeHash, Nodes,
+        CandidateForResolution, Children, CodeError, Errors, Literal, NodeHash,
+        Nodes, SyntaxNode,
     },
     packages::Packages,
 };
@@ -13,14 +13,14 @@ pub fn compile(
     packages: &Packages,
 ) -> NodeHash {
     let (node, maybe_error) = if token.is_empty() {
-        (Expression::Empty, None)
+        (SyntaxNode::Empty, None)
     } else if let Some(node) = resolve_keyword(token, nodes) {
         (node, None)
     } else {
         match resolve_function(token, packages, nodes) {
             Ok((node, maybe_err)) => (node, maybe_err),
             Err(candidates) => (
-                Expression::UnresolvedIdentifier {
+                SyntaxNode::UnresolvedIdentifier {
                     identifier: token.to_string(),
                 },
                 Some(CodeError::UnresolvedIdentifier { candidates }),
@@ -36,16 +36,16 @@ pub fn compile(
     hash
 }
 
-fn resolve_keyword(name: &str, nodes: &mut Nodes) -> Option<Expression> {
+fn resolve_keyword(name: &str, nodes: &mut Nodes) -> Option<SyntaxNode> {
     match name {
         "apply" => {
-            let [expression, argument] = [nodes.insert(Expression::Empty); 2];
-            Some(Expression::Apply {
+            let [expression, argument] = [nodes.insert(SyntaxNode::Empty); 2];
+            Some(SyntaxNode::Apply {
                 expression,
                 argument,
             })
         }
-        "self" => Some(Expression::Recursion),
+        "self" => Some(SyntaxNode::Recursion),
         _ => None,
     }
 }
@@ -54,23 +54,23 @@ fn resolve_function(
     name: &str,
     packages: &Packages,
     nodes: &mut Nodes,
-) -> Result<(Expression, Option<CodeError>), Vec<CandidateForResolution>> {
+) -> Result<(SyntaxNode, Option<CodeError>), Vec<CandidateForResolution>> {
     let provided_function = packages.resolve_function(name);
     let literal = resolve_literal(name);
 
     match (provided_function, literal) {
-        (Some(id), None) => Ok((Expression::ProvidedFunction { id }, None)),
+        (Some(id), None) => Ok((SyntaxNode::ProvidedFunction { id }, None)),
         (None, Some(literal)) => match literal {
             Literal::Function => {
-                let [parameter, body] = [nodes.insert(Expression::Empty); 2];
+                let [parameter, body] = [nodes.insert(SyntaxNode::Empty); 2];
 
-                Ok((Expression::Function { parameter, body }, None))
+                Ok((SyntaxNode::Function { parameter, body }, None))
             }
             Literal::Integer { value } => {
-                Ok((Expression::Number { value }, None))
+                Ok((SyntaxNode::Number { value }, None))
             }
             Literal::Tuple => Ok((
-                Expression::Tuple {
+                SyntaxNode::Tuple {
                     values: Children::new([]),
                 },
                 None,

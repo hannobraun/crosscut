@@ -1,6 +1,6 @@
 use super::{
-    Changes, Errors, Expression, LocatedNode, NewChangeSet, NodeHash, NodePath,
-    Nodes,
+    Changes, Errors, LocatedNode, NewChangeSet, NodeHash, NodePath, Nodes,
+    SyntaxNode,
 };
 
 #[derive(Clone, Debug, Eq, PartialEq)]
@@ -15,7 +15,7 @@ pub struct Codebase {
 impl Codebase {
     pub fn new() -> Self {
         let mut nodes = Nodes::default();
-        let empty = nodes.insert(Expression::Empty);
+        let empty = nodes.insert(SyntaxNode::Empty);
 
         Self {
             root: Root { hash: empty },

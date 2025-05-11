@@ -1,7 +1,7 @@
 use crate::language::{
     code::{
-        Errors, Expression, NewChangeSet, NodeHash, NodePath, Nodes,
-        SiblingIndex,
+        Errors, NewChangeSet, NodeHash, NodePath, Nodes, SiblingIndex,
+        SyntaxNode,
     },
     packages::FunctionId,
 };
@@ -92,11 +92,11 @@ fn update_children(
     let mut expression = nodes.get(path.hash()).clone();
 
     match &mut expression {
-        Expression::Apply {
+        SyntaxNode::Apply {
             expression: a,
             argument: b,
         }
-        | Expression::Function {
+        | SyntaxNode::Function {
             parameter: a,
             body: b,
         } => {
@@ -109,20 +109,20 @@ fn update_children(
             }
         }
 
-        Expression::Empty
-        | Expression::Number { value: _ }
-        | Expression::ProvidedFunction {
+        SyntaxNode::Empty
+        | SyntaxNode::Number { value: _ }
+        | SyntaxNode::ProvidedFunction {
             id: FunctionId { .. },
         }
-        | Expression::Recursion
-        | Expression::UnresolvedIdentifier {
+        | SyntaxNode::Recursion
+        | SyntaxNode::UnresolvedIdentifier {
             identifier: String { .. },
         } => {
             panic!("Node has no children. Can't replace one.");
         }
 
-        Expression::Tuple { values: children }
-        | Expression::Test {
+        SyntaxNode::Tuple { values: children }
+        | SyntaxNode::Test {
             name: String { .. },
             children,
         } => {

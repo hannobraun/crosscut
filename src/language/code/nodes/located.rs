@@ -1,8 +1,8 @@
-use super::{ChildOfExpression, Expression, NodePath, Nodes, SiblingIndex};
+use super::{ChildOfExpression, NodePath, Nodes, SiblingIndex, SyntaxNode};
 
 #[derive(Debug, Eq, PartialEq)]
 pub struct LocatedNode<'r> {
-    pub node: &'r Expression,
+    pub node: &'r SyntaxNode,
     pub path: NodePath,
 }
 

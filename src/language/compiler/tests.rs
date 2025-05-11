@@ -1,5 +1,5 @@
 use crate::language::{
-    code::{CodeError, Codebase, Expression, NodeHash, NodePath},
+    code::{CodeError, Codebase, NodeHash, NodePath, SyntaxNode},
     compiler::Compiler,
     packages::Packages,
     tests::infra::{ExpectChildren, expression, unresolved},
@@ -131,7 +131,7 @@ fn updating_child_updates_parent() {
     let mut codebase = Codebase::new();
 
     codebase.make_change(|change_set| {
-        let child = change_set.nodes.insert(Expression::Number { value: 12 });
+        let child = change_set.nodes.insert(SyntaxNode::Number { value: 12 });
         let parent = change_set.nodes.insert(expression("unresolved", [child]));
 
         change_set.errors.insert(

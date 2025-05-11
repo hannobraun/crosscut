@@ -1,5 +1,5 @@
 use crate::language::{
-    code::{Codebase, Expression, NodePath},
+    code::{Codebase, NodePath, SyntaxNode},
     packages::Packages,
 };
 
@@ -38,21 +38,21 @@ impl<'r> Compiler<'r> {
                 let mut node = change_set.nodes.get(parent.hash()).clone();
 
                 let sibling_index = match &mut node {
-                    Expression::Apply { .. }
-                    | Expression::Empty
-                    | Expression::Function { .. }
-                    | Expression::Number { .. }
-                    | Expression::ProvidedFunction { .. }
-                    | Expression::Recursion
-                    | Expression::UnresolvedIdentifier { .. } => {
+                    SyntaxNode::Apply { .. }
+                    | SyntaxNode::Empty
+                    | SyntaxNode::Function { .. }
+                    | SyntaxNode::Number { .. }
+                    | SyntaxNode::ProvidedFunction { .. }
+                    | SyntaxNode::Recursion
+                    | SyntaxNode::UnresolvedIdentifier { .. } => {
                         panic!(
                             "Can't add child to this node:\n\
                             {node:#?}"
                         );
                     }
 
-                    Expression::Tuple { values: children }
-                    | Expression::Test { children, .. } => children.add(child),
+                    SyntaxNode::Tuple { values: children }
+                    | SyntaxNode::Test { children, .. } => children.add(child),
                 };
 
                 let hash = change_set.nodes.insert(node);
