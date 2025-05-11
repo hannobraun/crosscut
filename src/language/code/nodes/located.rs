@@ -1,6 +1,4 @@
-use super::{
-    Borrowed, ChildOfExpression, Expression, NodePath, Nodes, SiblingIndex,
-};
+use super::{ChildOfExpression, Expression, NodePath, Nodes, SiblingIndex};
 
 #[derive(Debug, Eq, PartialEq)]
 pub struct LocatedNode<T> {
@@ -12,8 +10,7 @@ impl LocatedNode<&Expression> {
     pub fn children<'r>(
         &self,
         nodes: &'r Nodes,
-    ) -> impl DoubleEndedIterator<Item = LocatedNode<ChildOfExpression<Borrowed<'r>>>>
-    {
+    ) -> impl DoubleEndedIterator<Item = LocatedNode<&'r Expression>> {
         self.node
             .children()
             .into_iter()
@@ -21,10 +18,7 @@ impl LocatedNode<&Expression> {
             .map(|(index, child)| {
                 let ChildOfExpression::Expression(hash) = child;
 
-                let node = {
-                    let node = nodes.get(&hash);
-                    ChildOfExpression::Expression(node)
-                };
+                let node = nodes.get(&hash);
                 let path = NodePath::new(
                     hash,
                     Some((self.path.clone(), SiblingIndex { index })),

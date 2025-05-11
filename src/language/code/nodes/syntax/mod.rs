@@ -3,5 +3,5 @@ mod form;
 
 pub use self::{
     expression::{ChildOfExpression, Expression},
-    form::{Borrowed, Form, ViaHash},
+    form::{Form, ViaHash},
 };

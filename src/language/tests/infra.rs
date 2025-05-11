@@ -1,7 +1,7 @@
 use itertools::Itertools;
 
 use crate::language::code::{
-    ChildOfExpression, Children, Expression, LocatedNode, NodeHash, Nodes,
+    Children, Expression, LocatedNode, NodeHash, Nodes,
 };
 
 pub fn expression(
@@ -49,7 +49,7 @@ impl ExpectChildren for LocatedNode<&Expression> {
         };
 
         children.map(|child| {
-            let ChildOfExpression::Expression(node) = child.node;
+            let node = child.node;
 
             LocatedNode {
                 node,
