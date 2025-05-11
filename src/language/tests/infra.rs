@@ -33,7 +33,7 @@ pub trait ExpectChildren {
     fn expect_children<'r, const N: usize>(
         &self,
         nodes: &'r Nodes,
-    ) -> [LocatedNode<ChildOfExpression<Borrowed<'r>>>; N];
+    ) -> [LocatedNode<&'r Expression>; N];
 }
 
 impl ExpectChildren for LocatedNode<&Expression> {
@@ -41,7 +41,7 @@ impl ExpectChildren for LocatedNode<&Expression> {
     fn expect_children<'r, const N: usize>(
         &self,
         nodes: &'r Nodes,
-    ) -> [LocatedNode<ChildOfExpression<Borrowed<'r>>>; N] {
+    ) -> [LocatedNode<&'r Expression>; N] {
         let Some(children) = self.children(nodes).collect_array() else {
             panic!(
                 "Expected {N} children but got {}.",
@@ -49,7 +49,7 @@ impl ExpectChildren for LocatedNode<&Expression> {
             );
         };
 
-        children
+        children.map(|child| child.expect_expression())
     }
 }
 

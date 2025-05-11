@@ -2,7 +2,7 @@ use crate::language::{
     code::{CodeError, Codebase, Expression, NodeHash, NodePath},
     compiler::Compiler,
     packages::Packages,
-    tests::infra::{ExpectChildren, ExpectExpression, expression, unresolved},
+    tests::infra::{ExpectChildren, expression, unresolved},
 };
 
 #[test]
@@ -62,9 +62,8 @@ fn insert_child_with_grandparent() {
         .codebase()
         .root()
         .expect_children(compiler.codebase().nodes());
-    let [grandchild_of_root] = child_of_root
-        .expect_expression()
-        .expect_children(compiler.codebase().nodes());
+    let [grandchild_of_root] =
+        child_of_root.expect_children(compiler.codebase().nodes());
     assert_eq!(grandchild_of_root.path, child);
 }
 
@@ -120,7 +119,7 @@ fn replace_second_of_two_equal_children() {
     let [child, updated] = codebase
         .root()
         .expect_children(codebase.nodes())
-        .map(|child| child.expect_expression());
+        .map(|child| child);
 
     assert_eq!(child.node, &unresolved("child"));
     assert_eq!(updated.node, &unresolved("updated"));

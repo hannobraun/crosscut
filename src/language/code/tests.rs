@@ -1,6 +1,6 @@
 use crate::language::{
     code::NodePath,
-    tests::infra::{ExpectChildren, ExpectExpression, expression},
+    tests::infra::{ExpectChildren, expression},
 };
 
 use super::Codebase;
@@ -31,8 +31,7 @@ fn uniquely_identify_identical_children_of_different_parents() {
     let [parent_a, parent_b] =
         codebase.root().expect_children(codebase.nodes());
     let [child_a, child_b] = [parent_a, parent_b].map(|parent| {
-        let [child] =
-            parent.expect_expression().expect_children(codebase.nodes());
+        let [child] = parent.expect_children(codebase.nodes());
         child
     });
 
