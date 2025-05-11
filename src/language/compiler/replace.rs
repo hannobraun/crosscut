@@ -152,14 +152,7 @@ fn update_path(
     replacements: &mut Vec<Replacement>,
     change_set: &mut NewChangeSet,
 ) -> ReplaceAction {
-    let path = NodePath::new(
-        replacement.replacement,
-        parent
-            .as_ref()
-            .map(|(path, sibling_index)| (path.to_parent(), *sibling_index)),
-        parent,
-        change_set.nodes,
-    );
+    let path = NodePath::new(replacement.replacement, parent, change_set.nodes);
 
     change_set.replace(&replacement.replaced, &path);
 

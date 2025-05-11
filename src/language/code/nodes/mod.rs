@@ -11,7 +11,6 @@ pub use self::{
     hash::{NodeHash, RawHash},
     located::LocatedNode,
     nodes::Nodes,
-    parent::Parent,
     path::{NodePath, SiblingIndex},
     syntax::{Borrowed, ChildOfExpression, Expression, SyntaxNode},
 };

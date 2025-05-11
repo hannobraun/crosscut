@@ -1,6 +1,6 @@
 use std::{cmp, fmt, ops::Deref};
 
-use super::{Expression, NodeHash, Nodes, Parent, SyntaxNode};
+use super::{Expression, NodeHash, Nodes, SyntaxNode};
 
 /// # A unique and versioned path to a [`Node`]
 ///
@@ -25,7 +25,6 @@ use super::{Expression, NodeHash, Nodes, Parent, SyntaxNode};
 /// are responsible for making sure that such a [`NodePath`] gets updated.
 pub struct NodePath<T: SyntaxNode> {
     hash: NodeHash<T>,
-    parent2: Option<(Parent<T::Parent>, SiblingIndex)>,
 
     /// # The path of the node's parent
     ///
@@ -51,7 +50,6 @@ impl NodePath<Expression> {
     #[track_caller]
     pub fn new(
         hash: NodeHash<Expression>,
-        parent2: Option<(Parent<Expression>, SiblingIndex)>,
         parent: Option<(NodePath<Expression>, SiblingIndex)>,
         nodes: &Nodes,
     ) -> Self {
@@ -82,18 +80,13 @@ impl NodePath<Expression> {
 
         Self {
             hash,
-            parent2,
             parent: parent
                 .map(|(path, sibling_index)| (Box::new(path), sibling_index)),
         }
     }
 
     pub fn for_root(hash: NodeHash<Expression>) -> Self {
-        Self {
-            hash,
-            parent2: None,
-            parent: None,
-        }
+        Self { hash, parent: None }
     }
 
     /// # The hash of the node that this path uniquely identifies
@@ -112,14 +105,6 @@ impl NodePath<Expression> {
         self.parent
             .as_ref()
             .map(|&(_, sibling_index)| sibling_index)
-    }
-
-    /// # The node's parent
-    ///
-    /// This is required to distinguish between identical nodes whose hash is
-    /// the same, but that have different parents.
-    pub fn parent2(&self) -> Option<&Parent<Expression>> {
-        self.parent2.as_ref().map(|(parent, _)| parent)
     }
 
     /// # The path of the node's parent
@@ -146,17 +131,12 @@ impl NodePath<Expression> {
 
         false
     }
-
-    pub fn to_parent(&self) -> Parent<Expression> {
-        Parent::new(self.hash, self.parent2())
-    }
 }
 
 impl<T: SyntaxNode> Clone for NodePath<T> {
     fn clone(&self) -> Self {
         Self {
             hash: self.hash,
-            parent2: self.parent2,
             parent: self.parent.clone(),
         }
     }
@@ -166,19 +146,9 @@ impl<T: SyntaxNode> Eq for NodePath<T> {}
 
 impl<T: SyntaxNode> Ord for NodePath<T> {
     fn cmp(&self, other: &Self) -> cmp::Ordering {
-        let Self {
-            hash,
-            parent2,
-            parent,
-        } = self;
+        let Self { hash, parent } = self;
 
         match hash.cmp(&other.hash) {
-            cmp::Ordering::Equal => {}
-            ordering => {
-                return ordering;
-            }
-        }
-        match parent2.cmp(&other.parent2) {
             cmp::Ordering::Equal => {}
             ordering => {
                 return ordering;
@@ -190,15 +160,9 @@ impl<T: SyntaxNode> Ord for NodePath<T> {
 
 impl<T: SyntaxNode> PartialEq for NodePath<T> {
     fn eq(&self, other: &Self) -> bool {
-        let Self {
-            hash,
-            parent2,
-            parent,
-        } = self;
+        let Self { hash, parent } = self;
 
-        hash == &other.hash
-            && parent2 == &other.parent2
-            && parent == &other.parent
+        hash == &other.hash && parent == &other.parent
     }
 }
 
@@ -210,15 +174,10 @@ impl<T: SyntaxNode> PartialOrd for NodePath<T> {
 
 impl<T: SyntaxNode> fmt::Debug for NodePath<T> {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        let Self {
-            hash,
-            parent2,
-            parent,
-        } = self;
+        let Self { hash, parent } = self;
 
         f.debug_struct("NodePath")
             .field("hash", hash)
-            .field("parent2", parent2)
             .field("parent", parent)
             .finish()
     }
@@ -229,21 +188,13 @@ impl<T: SyntaxNode> udigest::Digestable for NodePath<T> {
         &self,
         encoder: udigest::encoding::EncodeValue<B>,
     ) {
-        let Self {
-            hash,
-            parent2,
-            parent,
-        } = self;
+        let Self { hash, parent } = self;
 
         let mut encoder = encoder.encode_struct();
 
         {
             let encoder = encoder.add_field("hash");
             hash.unambiguously_encode(encoder);
-        }
-        {
-            let encoder = encoder.add_field("parent2");
-            parent2.unambiguously_encode(encoder);
         }
         {
             let encoder = encoder.add_field("parent");
