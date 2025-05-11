@@ -87,10 +87,7 @@ fn collect_nodes_from_root(
 
     for child in children {
         collect_nodes_from_root(
-            LocatedNode {
-                node: child.node,
-                path: child.path,
-            },
+            child,
             distance_from_root + 1,
             nodes_from_root,
             codebase,
