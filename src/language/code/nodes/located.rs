@@ -16,11 +16,9 @@ impl LocatedNode<'_> {
             .into_iter()
             .enumerate()
             .map(|(index, child)| {
-                let hash = child;
-
-                let node = nodes.get(&hash);
+                let node = nodes.get(&child);
                 let path = NodePath::new(
-                    hash,
+                    child,
                     Some((self.path.clone(), SiblingIndex { index })),
                     nodes,
                 );
