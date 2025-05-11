@@ -1,4 +1,4 @@
-use std::{fmt, marker::PhantomData};
+use std::fmt;
 
 use base64::{Engine, prelude::BASE64_URL_SAFE_NO_PAD};
 
@@ -22,7 +22,6 @@ use base64::{Engine, prelude::BASE64_URL_SAFE_NO_PAD};
 )]
 pub struct NodeHash {
     hash: RawHash,
-    t: PhantomData<()>,
 }
 
 impl NodeHash {
@@ -37,7 +36,6 @@ impl NodeHash {
     {
         Self {
             hash: RawHash::new(node),
-            t: PhantomData,
         }
     }
 
