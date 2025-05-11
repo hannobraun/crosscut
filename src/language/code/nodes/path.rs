@@ -55,7 +55,7 @@ impl NodePath<Expression> {
         parent: Option<(NodePath<Expression>, SiblingIndex)>,
         nodes: &Nodes,
     ) -> Self {
-        if let Some((parent, sibling_index)) = &parent2 {
+        if let Some((parent, sibling_index)) = &parent {
             let parent_node = nodes.get(parent.hash());
 
             if !parent_node.has_child_at(hash.raw(), sibling_index) {
