@@ -38,9 +38,12 @@ impl NodeHash {
             hash: RawHash::new(node),
         }
     }
+}
 
-    pub fn raw(&self) -> &RawHash {
-        &self.hash
+impl fmt::Display for NodeHash {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", BASE64_URL_SAFE_NO_PAD.encode(self.hash.inner))?;
+        Ok(())
     }
 }
 
@@ -59,12 +62,5 @@ impl RawHash {
         Self {
             inner: udigest::hash::<blake3::Hasher>(value).into(),
         }
-    }
-}
-
-impl fmt::Display for RawHash {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", BASE64_URL_SAFE_NO_PAD.encode(self.inner))?;
-        Ok(())
     }
 }
