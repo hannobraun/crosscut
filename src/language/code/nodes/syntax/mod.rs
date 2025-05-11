@@ -1,3 +1,3 @@
-mod expression;
+mod node;
 
-pub use self::expression::SyntaxNode;
+pub use self::node::SyntaxNode;
