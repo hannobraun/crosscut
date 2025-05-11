@@ -5,8 +5,6 @@ use crate::language::{
     packages::{FunctionId, Packages},
 };
 
-use super::{Form, ViaHash};
-
 /// # Structured but untyped representation of a syntax node
 ///
 /// This representation is structured, in the sense that for each type of node
@@ -187,7 +185,7 @@ impl SyntaxNode {
         }
     }
 
-    pub fn children(&self) -> Vec<ChildOfExpression<ViaHash>> {
+    pub fn children(&self) -> Vec<NodeHash> {
         match self {
             Self::Apply {
                 expression: a,
@@ -196,7 +194,7 @@ impl SyntaxNode {
             | Self::Function {
                 parameter: a,
                 body: b,
-            } => [*a, *b].map(ChildOfExpression::Expression).into(),
+            } => [*a, *b].into(),
 
             Self::Empty
             | Self::Number { value: _ }
@@ -204,19 +202,9 @@ impl SyntaxNode {
             | Self::Recursion
             | Self::UnresolvedIdentifier { .. } => vec![],
 
-            Self::Tuple { values } => values
-                .inner
-                .iter()
-                .copied()
-                .map(ChildOfExpression::Expression)
-                .collect::<Vec<_>>(),
+            Self::Tuple { values } => values.inner.clone(),
 
-            Self::Test { children, .. } => children
-                .inner
-                .iter()
-                .copied()
-                .map(ChildOfExpression::Expression)
-                .collect(),
+            Self::Test { children, .. } => children.inner.clone(),
         }
     }
 
@@ -236,9 +224,7 @@ impl SyntaxNode {
 }
 
 #[derive(Debug, Eq, PartialEq)]
-pub enum ChildOfExpression<T: Form> {
-    Expression(T::Form<SyntaxNode>),
-}
+pub enum ChildOfExpression {}
 
 pub struct ExpressionDisplay<'r> {
     node: &'r SyntaxNode,

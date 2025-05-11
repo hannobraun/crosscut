@@ -1,4 +1,4 @@
-use super::{ChildOfExpression, NodePath, Nodes, SiblingIndex, SyntaxNode};
+use super::{NodePath, Nodes, SiblingIndex, SyntaxNode};
 
 #[derive(Debug, Eq, PartialEq)]
 pub struct LocatedNode<'r> {
@@ -16,7 +16,7 @@ impl LocatedNode<'_> {
             .into_iter()
             .enumerate()
             .map(|(index, child)| {
-                let ChildOfExpression::Expression(hash) = child;
+                let hash = child;
 
                 let node = nodes.get(&hash);
                 let path = NodePath::new(
