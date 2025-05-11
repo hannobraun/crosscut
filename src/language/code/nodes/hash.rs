@@ -2,6 +2,8 @@ use std::{any::type_name, cmp, fmt, marker::PhantomData};
 
 use base64::{Engine, prelude::BASE64_URL_SAFE_NO_PAD};
 
+use super::Expression;
+
 /// # The hash of a syntax node
 ///
 /// The purpose of this type is to serve as a building block for identifying
@@ -22,13 +24,13 @@ pub struct NodeHash<T> {
     t: PhantomData<T>,
 }
 
-impl<T> NodeHash<T> {
+impl NodeHash<Expression> {
     /// # Compute the hash of a node
     ///
     /// This must not be available outside of `super`, since `Nodes` relies on
     /// the fact that no hashes can get created for nodes that have not been
     /// inserted.
-    pub(super) fn new(node: &T) -> Self
+    pub(super) fn new<T>(node: &T) -> Self
     where
         T: udigest::Digestable,
     {
