@@ -79,7 +79,7 @@ impl NodePath<Expression> {
         Self {
             hash,
             parent2,
-            parent: parent.map(Box::new).map(|path| (path, parent2.unwrap().1)),
+            parent: parent.map(|path| (Box::new(path), parent2.unwrap().1)),
         }
     }
 
