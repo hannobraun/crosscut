@@ -5,7 +5,7 @@ use super::{
 #[derive(Debug, Eq, PartialEq)]
 pub struct LocatedNode<T> {
     pub node: T,
-    pub path: NodePath<Expression>,
+    pub path: NodePath,
 }
 
 impl LocatedNode<&Expression> {

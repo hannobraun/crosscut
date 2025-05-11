@@ -1,5 +1,5 @@
 use super::{
-    code::{Codebase, Expression, IntrinsicFunction, NodePath},
+    code::{Codebase, IntrinsicFunction, NodePath},
     editor::{Editor, EditorCommand, EditorInputEvent},
     packages::{Package, Packages},
     runtime::{
@@ -77,7 +77,7 @@ impl Language {
         );
     }
 
-    pub fn apply_function(&mut self, root: NodePath<Expression>) {
+    pub fn apply_function(&mut self, root: NodePath) {
         self.evaluator.apply_function_raw(root, &self.codebase);
     }
 

@@ -23,8 +23,8 @@ use super::{Expression, NodeHash, Nodes};
 /// That means **any [`NodePath`] that you expect to point to a node within the
 /// current syntax tree will be invalidated any change to the syntax tree**. You
 /// are responsible for making sure that such a [`NodePath`] gets updated.
-pub struct NodePath<T> {
-    hash: NodeHash<T>,
+pub struct NodePath {
+    hash: NodeHash<Expression>,
 
     /// # The path of the node's parent
     ///
@@ -45,14 +45,14 @@ pub struct NodePath<T> {
     /// more bookkeeping in `Codebase` or `Nodes` to compensate.
     ///
     /// When I tried this approach, it didn't seem worth the trouble.
-    parent: Option<(Box<NodePath<Expression>>, SiblingIndex)>,
+    parent: Option<(Box<NodePath>, SiblingIndex)>,
 }
 
-impl NodePath<Expression> {
+impl NodePath {
     #[track_caller]
     pub fn new(
         hash: NodeHash<Expression>,
-        parent: Option<(NodePath<Expression>, SiblingIndex)>,
+        parent: Option<(NodePath, SiblingIndex)>,
         nodes: &Nodes,
     ) -> Self {
         if let Some((parent_path, sibling_index)) = &parent {
@@ -113,14 +113,11 @@ impl NodePath<Expression> {
     ///
     /// This is required to distinguish between identical nodes whose hash is
     /// the same, but that have different parents.
-    pub fn parent(&self) -> Option<&NodePath<Expression>> {
+    pub fn parent(&self) -> Option<&NodePath> {
         self.parent.as_ref().map(|(path, _)| path.deref())
     }
 
-    pub fn is_ancestor_of(
-        &self,
-        possible_descendant: &NodePath<Expression>,
-    ) -> bool {
+    pub fn is_ancestor_of(&self, possible_descendant: &NodePath) -> bool {
         let mut maybe_parent = possible_descendant.parent.as_ref();
 
         while let Some((parent, _)) = maybe_parent {
@@ -135,7 +132,7 @@ impl NodePath<Expression> {
     }
 }
 
-impl<T> Clone for NodePath<T> {
+impl Clone for NodePath {
     fn clone(&self) -> Self {
         Self {
             hash: self.hash,
@@ -144,9 +141,9 @@ impl<T> Clone for NodePath<T> {
     }
 }
 
-impl<T> Eq for NodePath<T> {}
+impl Eq for NodePath {}
 
-impl<T> Ord for NodePath<T> {
+impl Ord for NodePath {
     fn cmp(&self, other: &Self) -> cmp::Ordering {
         let Self { hash, parent } = self;
 
@@ -160,7 +157,7 @@ impl<T> Ord for NodePath<T> {
     }
 }
 
-impl<T> PartialEq for NodePath<T> {
+impl PartialEq for NodePath {
     fn eq(&self, other: &Self) -> bool {
         let Self { hash, parent } = self;
 
@@ -168,13 +165,13 @@ impl<T> PartialEq for NodePath<T> {
     }
 }
 
-impl<T> PartialOrd for NodePath<T> {
+impl PartialOrd for NodePath {
     fn partial_cmp(&self, other: &Self) -> Option<cmp::Ordering> {
         Some(self.cmp(other))
     }
 }
 
-impl<T> fmt::Debug for NodePath<T> {
+impl fmt::Debug for NodePath {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         let Self { hash, parent } = self;
 
@@ -185,7 +182,7 @@ impl<T> fmt::Debug for NodePath<T> {
     }
 }
 
-impl<T> udigest::Digestable for NodePath<T> {
+impl udigest::Digestable for NodePath {
     fn unambiguously_encode<B: udigest::Buffer>(
         &self,
         encoder: udigest::encoding::EncodeValue<B>,

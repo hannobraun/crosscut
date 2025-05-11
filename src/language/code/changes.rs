@@ -37,10 +37,7 @@ impl Changes {
     }
 
     #[cfg(test)]
-    pub fn latest_version_of<'r>(
-        &'r self,
-        path: &'r NodePath<Expression>,
-    ) -> &'r NodePath<Expression> {
+    pub fn latest_version_of<'r>(&'r self, path: &'r NodePath) -> &'r NodePath {
         let Some(i) = self.change_sets.iter().enumerate().rev().find_map(
             |(i, change_set)| {
                 change_set
@@ -86,7 +83,7 @@ impl NewChangeSet<'_> {
     }
 
     #[cfg(test)]
-    pub fn root_before_change(&self) -> NodePath<Expression> {
+    pub fn root_before_change(&self) -> NodePath {
         NodePath::for_root(self.root_before_change)
     }
 
@@ -108,11 +105,7 @@ impl NewChangeSet<'_> {
     /// While such a cycle is perfectly fine, if spread over multiple change
     /// sets, it must not occur within a single change set. This case would be
     /// considered a bug in the caller of this method.
-    pub fn replace(
-        &mut self,
-        to_replace: &NodePath<Expression>,
-        replacement: &NodePath<Expression>,
-    ) {
+    pub fn replace(&mut self, to_replace: &NodePath, replacement: &NodePath) {
         if replacement != to_replace {
             // Nodes are "replaced" by identical ones all the time. Making the
             // caller responsible for checking that would be onerous.
@@ -137,22 +130,18 @@ impl NewChangeSet<'_> {
 
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub struct ChangeSet {
-    replacements_by_replaced:
-        BTreeMap<NodePath<Expression>, NodePath<Expression>>,
+    replacements_by_replaced: BTreeMap<NodePath, NodePath>,
 }
 
 impl ChangeSet {
-    pub fn was_replaced(
-        &self,
-        replaced: &NodePath<Expression>,
-    ) -> Option<&NodePath<Expression>> {
+    pub fn was_replaced(&self, replaced: &NodePath) -> Option<&NodePath> {
         self.replacements_by_replaced.get(replaced)
     }
 
     fn latest_version_of<'r>(
         &'r self,
-        path: &'r NodePath<Expression>,
-    ) -> Result<&'r NodePath<Expression>, CircularDependency> {
+        path: &'r NodePath,
+    ) -> Result<&'r NodePath, CircularDependency> {
         let mut already_seen = BTreeSet::new();
         let mut latest_known = path;
 
