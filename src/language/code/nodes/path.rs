@@ -71,7 +71,11 @@ impl NodePath<Expression> {
                     \n\
                     Parent:\n\
                     \n\
-                    {parent_node:#?}",
+                    {parent_node:#?}\n\
+                    \n\
+                    At path:\n\
+                    \n\
+                    {parent_path:#?}",
                 );
             }
         }
