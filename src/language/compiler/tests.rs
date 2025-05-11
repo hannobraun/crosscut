@@ -116,10 +116,7 @@ fn replace_second_of_two_equal_children() {
     let mut compiler = Compiler::new(&mut codebase);
     compiler.replace(&child, "updated", &packages);
 
-    let [child, updated] = codebase
-        .root()
-        .expect_children(codebase.nodes())
-        .map(|child| child);
+    let [child, updated] = codebase.root().expect_children(codebase.nodes());
 
     assert_eq!(child.node, &unresolved("child"));
     assert_eq!(updated.node, &unresolved("updated"));
