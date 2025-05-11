@@ -223,9 +223,6 @@ impl SyntaxNode {
     }
 }
 
-#[derive(Debug, Eq, PartialEq)]
-pub enum ChildOfExpression {}
-
 pub struct ExpressionDisplay<'r> {
     node: &'r SyntaxNode,
     packages: &'r Packages,
