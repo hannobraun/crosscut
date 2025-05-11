@@ -21,7 +21,7 @@ use base64::{Engine, prelude::BASE64_URL_SAFE_NO_PAD};
     Clone, Copy, Debug, Eq, Ord, PartialEq, PartialOrd, udigest::Digestable,
 )]
 pub struct NodeHash {
-    hash: RawHash,
+    inner: [u8; 32],
 }
 
 impl NodeHash {
@@ -35,23 +35,14 @@ impl NodeHash {
         T: udigest::Digestable,
     {
         Self {
-            hash: RawHash {
-                inner: udigest::hash::<blake3::Hasher>(node).into(),
-            },
+            inner: udigest::hash::<blake3::Hasher>(node).into(),
         }
     }
 }
 
 impl fmt::Display for NodeHash {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", BASE64_URL_SAFE_NO_PAD.encode(self.hash.inner))?;
+        write!(f, "{}", BASE64_URL_SAFE_NO_PAD.encode(self.inner))?;
         Ok(())
     }
-}
-
-#[derive(
-    Clone, Copy, Debug, Eq, Ord, PartialEq, PartialOrd, udigest::Digestable,
-)]
-pub struct RawHash {
-    inner: [u8; 32],
 }
