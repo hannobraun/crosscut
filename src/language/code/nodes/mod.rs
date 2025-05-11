@@ -11,5 +11,5 @@ pub use self::{
     located::LocatedNode,
     nodes::Nodes,
     path::{NodePath, SiblingIndex},
-    syntax::{Borrowed, ChildOfExpression, Expression, SyntaxNode},
+    syntax::{Borrowed, ChildOfExpression, Expression},
 };

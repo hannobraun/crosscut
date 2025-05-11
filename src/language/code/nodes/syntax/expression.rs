@@ -5,7 +5,7 @@ use crate::language::{
     packages::{FunctionId, Packages},
 };
 
-use super::{Form, SyntaxNode, ViaHash};
+use super::{Form, ViaHash};
 
 #[derive(Clone, Debug, Eq, Ord, PartialEq, PartialOrd, udigest::Digestable)]
 pub enum Expression {
@@ -211,10 +211,6 @@ impl Expression {
             packages,
         }
     }
-}
-
-impl SyntaxNode for Expression {
-    type Parent = Expression;
 }
 
 #[derive(Debug, Eq, PartialEq)]
