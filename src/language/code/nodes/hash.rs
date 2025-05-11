@@ -1,4 +1,4 @@
-use std::{cmp, fmt, marker::PhantomData};
+use std::{fmt, marker::PhantomData};
 
 use base64::{Engine, prelude::BASE64_URL_SAFE_NO_PAD};
 
@@ -17,6 +17,9 @@ use base64::{Engine, prelude::BASE64_URL_SAFE_NO_PAD};
 /// [`NodePath`].
 ///
 /// [`NodePath`]: super::NodePath
+#[derive(
+    Clone, Copy, Debug, Eq, Ord, PartialEq, PartialOrd, udigest::Digestable,
+)]
 pub struct NodeHash {
     hash: RawHash,
     t: PhantomData<()>,
@@ -40,76 +43,6 @@ impl NodeHash {
 
     pub fn raw(&self) -> &RawHash {
         &self.hash
-    }
-}
-
-impl Copy for NodeHash {}
-
-impl Clone for NodeHash {
-    fn clone(&self) -> Self {
-        *self
-    }
-}
-
-impl Eq for NodeHash {}
-
-impl Ord for NodeHash {
-    fn cmp(&self, other: &Self) -> cmp::Ordering {
-        let Self { hash, t } = self;
-
-        match hash.cmp(&other.hash) {
-            cmp::Ordering::Equal => {}
-            ordering => {
-                return ordering;
-            }
-        }
-        t.cmp(&other.t)
-    }
-}
-
-impl PartialEq for NodeHash {
-    fn eq(&self, other: &Self) -> bool {
-        let Self { hash, t } = self;
-
-        hash == &other.hash && t == &other.t
-    }
-}
-
-impl PartialOrd for NodeHash {
-    fn partial_cmp(&self, other: &Self) -> Option<cmp::Ordering> {
-        Some(self.cmp(other))
-    }
-}
-
-impl fmt::Debug for NodeHash {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        let Self { hash, t: _ } = self;
-
-        f.debug_struct("NodeHash")
-            .field("hash", &hash.to_string())
-            .finish()
-    }
-}
-
-impl udigest::Digestable for NodeHash {
-    fn unambiguously_encode<B: udigest::Buffer>(
-        &self,
-        encoder: udigest::encoding::EncodeValue<B>,
-    ) {
-        let Self { hash, t } = self;
-
-        let mut encoder = encoder.encode_struct();
-
-        {
-            let encoder = encoder.add_field("hash");
-            hash.unambiguously_encode(encoder);
-        }
-        {
-            let encoder = encoder.add_field("t");
-            t.unambiguously_encode(encoder);
-        }
-
-        encoder.finish();
     }
 }
 
