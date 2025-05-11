@@ -48,9 +48,6 @@ impl ExpectChildren for LocatedNode<&Expression> {
             );
         };
 
-        children.map(|child| LocatedNode {
-            node: child.node,
-            path: child.path,
-        })
+        children.map(|child| child)
     }
 }
