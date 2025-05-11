@@ -105,7 +105,7 @@ impl NodePath<Expression> {
     }
 
     pub fn sibling_index(&self) -> Option<SiblingIndex> {
-        self.parent2
+        self.parent
             .as_ref()
             .map(|&(_, sibling_index)| sibling_index)
     }
