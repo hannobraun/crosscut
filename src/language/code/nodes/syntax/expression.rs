@@ -194,7 +194,7 @@ impl SyntaxNode {
             | Self::Function {
                 parameter: a,
                 body: b,
-            } => [*a, *b].into(),
+            } => vec![*a, *b],
 
             Self::Empty
             | Self::Number { value: _ }
