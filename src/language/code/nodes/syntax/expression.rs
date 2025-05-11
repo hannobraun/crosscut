@@ -7,6 +7,28 @@ use crate::language::{
 
 use super::{Form, ViaHash};
 
+/// # Structured but untyped representation of a syntax node
+///
+/// This representation is structured, in the sense that for each type of node
+/// the number and role of children is known. But it is untyped, in the sense
+/// that all children are a generic `SyntaxNode` again, instead of a more
+/// specific type that restricts the child to a valid value.
+///
+/// ## Implementation Note
+///
+/// In principle, a typed representation would be preferable, but this would
+/// make dealing with syntax nodes in a uniform way much more difficult,
+/// significantly increasing the complexity of code that needs to do so.
+/// Specifically, there are two reasons for that:
+///
+/// - The need to deal with multiple types of nodes in some places. For example,
+///   storage might require dealing with multiple maps, one per type of node.
+/// - The need to make some types that use nodes generic, which in turn requires
+///   advanced infrastructure for abstracting over those types.
+///
+/// Experience has shown that, pending further insights that might this more
+/// tenable, a typed representation is not desirable as a base layer, for these
+/// reasons.
 #[derive(Clone, Debug, Eq, Ord, PartialEq, PartialOrd, udigest::Digestable)]
 pub enum SyntaxNode {
     /// # The application of an expression to an argument
