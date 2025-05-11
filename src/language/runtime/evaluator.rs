@@ -179,7 +179,7 @@ impl Evaluator {
                 let body = NodePath::new(
                     *body,
                     Some((node.path.to_parent(), SiblingIndex { index: 1 })),
-                    Some(node.path),
+                    Some((node.path, SiblingIndex { index: 1 })),
                     codebase.nodes(),
                 );
 

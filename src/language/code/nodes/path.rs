@@ -52,7 +52,7 @@ impl NodePath<Expression> {
     pub fn new(
         hash: NodeHash<Expression>,
         parent2: Option<(Parent<Expression>, SiblingIndex)>,
-        parent: Option<NodePath<Expression>>,
+        parent: Option<(NodePath<Expression>, SiblingIndex)>,
         nodes: &Nodes,
     ) -> Self {
         if let Some((parent, sibling_index)) = &parent2 {
@@ -79,7 +79,8 @@ impl NodePath<Expression> {
         Self {
             hash,
             parent2,
-            parent: parent.map(|path| (Box::new(path), parent2.unwrap().1)),
+            parent: parent
+                .map(|(path, sibling_index)| (Box::new(path), sibling_index)),
         }
     }
 
