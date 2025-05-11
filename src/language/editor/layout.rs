@@ -86,11 +86,9 @@ fn collect_nodes_from_root(
     children.extend(node.children(codebase.nodes()));
 
     for child in children {
-        let node = child.node;
-
         collect_nodes_from_root(
             LocatedNode {
-                node,
+                node: child.node,
                 path: child.path,
             },
             distance_from_root + 1,
