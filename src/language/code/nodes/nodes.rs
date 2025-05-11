@@ -4,11 +4,11 @@ use super::{Expression, NodeHash};
 
 #[derive(Clone, Debug, Default, Eq, PartialEq)]
 pub struct Nodes {
-    inner: BTreeMap<NodeHash<Expression>, Expression>,
+    inner: BTreeMap<NodeHash, Expression>,
 }
 
 impl Nodes {
-    pub fn get(&self, hash: &NodeHash<Expression>) -> &Expression {
+    pub fn get(&self, hash: &NodeHash) -> &Expression {
         let Some(node) = self.inner.get(hash) else {
             unreachable!(
                 "This is an append-only data structure. All hashes that were \
@@ -19,7 +19,7 @@ impl Nodes {
         node
     }
 
-    pub fn insert(&mut self, node: Expression) -> NodeHash<Expression> {
+    pub fn insert(&mut self, node: Expression) -> NodeHash {
         let hash = NodeHash::new(&node);
         self.inner.insert(hash, node);
         hash

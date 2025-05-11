@@ -8,7 +8,7 @@ use crate::language::{
 
 pub fn replace_node_and_update_parents(
     to_replace: NodePath,
-    replacement: NodeHash<Expression>,
+    replacement: NodeHash,
     change_set: &mut NewChangeSet,
 ) -> NodePath {
     let replacement = Replacement {
@@ -176,5 +176,5 @@ fn update_path(
 #[derive(Clone, Debug)]
 struct Replacement {
     replaced: NodePath,
-    replacement: NodeHash<Expression>,
+    replacement: NodeHash,
 }

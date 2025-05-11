@@ -22,7 +22,7 @@ pub struct ViaHash;
 
 impl Form for ViaHash {
     type Form<T>
-        = NodeHash<T>
+        = NodeHash
     where
         T: 'static;
 }

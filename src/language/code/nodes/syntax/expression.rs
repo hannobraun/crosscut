@@ -12,10 +12,10 @@ pub enum Expression {
     /// # The application of an expression to an argument
     Apply {
         /// # The expression that is being applied to the argument
-        expression: NodeHash<Expression>,
+        expression: NodeHash,
 
         /// # The argument that the expression is being applied to
-        argument: NodeHash<Expression>,
+        argument: NodeHash,
     },
 
     /// # An empty node
@@ -29,10 +29,10 @@ pub enum Expression {
     /// Evaluates to a function value.
     Function {
         /// # The parameter of the function
-        parameter: NodeHash<Expression>,
+        parameter: NodeHash,
 
         /// # The root node of the function's body
-        body: NodeHash<Expression>,
+        body: NodeHash,
     },
 
     /// # A number literal

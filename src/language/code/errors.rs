@@ -2,11 +2,11 @@ use std::collections::BTreeMap;
 
 use crate::language::packages::FunctionId;
 
-use super::{Expression, NodeHash};
+use super::NodeHash;
 
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub struct Errors {
-    inner: BTreeMap<NodeHash<Expression>, CodeError>,
+    inner: BTreeMap<NodeHash, CodeError>,
 }
 
 impl Errors {
@@ -16,11 +16,11 @@ impl Errors {
         }
     }
 
-    pub fn get(&self, hash: &NodeHash<Expression>) -> Option<&CodeError> {
+    pub fn get(&self, hash: &NodeHash) -> Option<&CodeError> {
         self.inner.get(hash)
     }
 
-    pub fn insert(&mut self, hash: NodeHash<Expression>, error: CodeError) {
+    pub fn insert(&mut self, hash: NodeHash, error: CodeError) {
         self.inner.insert(hash, error);
     }
 }

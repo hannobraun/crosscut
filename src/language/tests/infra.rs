@@ -6,7 +6,7 @@ use crate::language::code::{
 
 pub fn expression(
     name: &str,
-    children: impl IntoIterator<Item = NodeHash<Expression>>,
+    children: impl IntoIterator<Item = NodeHash>,
 ) -> Expression {
     Expression::Test {
         name: name.to_string(),
@@ -14,9 +14,7 @@ pub fn expression(
     }
 }
 
-pub fn tuple(
-    values: impl IntoIterator<Item = NodeHash<Expression>>,
-) -> Expression {
+pub fn tuple(values: impl IntoIterator<Item = NodeHash>) -> Expression {
     Expression::Tuple {
         values: Children::new(values),
     }

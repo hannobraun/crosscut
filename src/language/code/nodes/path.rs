@@ -1,6 +1,6 @@
 use std::ops::Deref;
 
-use super::{Expression, NodeHash, Nodes};
+use super::{NodeHash, Nodes};
 
 /// # A unique and versioned path to a [`Node`]
 ///
@@ -25,7 +25,7 @@ use super::{Expression, NodeHash, Nodes};
 /// are responsible for making sure that such a [`NodePath`] gets updated.
 #[derive(Clone, Debug, Eq, Ord, PartialEq, PartialOrd, udigest::Digestable)]
 pub struct NodePath {
-    hash: NodeHash<Expression>,
+    hash: NodeHash,
 
     /// # The path of the node's parent
     ///
@@ -52,7 +52,7 @@ pub struct NodePath {
 impl NodePath {
     #[track_caller]
     pub fn new(
-        hash: NodeHash<Expression>,
+        hash: NodeHash,
         parent: Option<(NodePath, SiblingIndex)>,
         nodes: &Nodes,
     ) -> Self {
@@ -88,7 +88,7 @@ impl NodePath {
         }
     }
 
-    pub fn for_root(hash: NodeHash<Expression>) -> Self {
+    pub fn for_root(hash: NodeHash) -> Self {
         Self { hash, parent: None }
     }
 
@@ -100,7 +100,7 @@ impl NodePath {
     ///
     /// But this hash is required to identify the node _uniquely_, including its
     /// version.
-    pub fn hash(&self) -> &NodeHash<Expression> {
+    pub fn hash(&self) -> &NodeHash {
         &self.hash
     }
 

@@ -1,8 +1,6 @@
-use std::{any::type_name, cmp, fmt, marker::PhantomData};
+use std::{cmp, fmt, marker::PhantomData};
 
 use base64::{Engine, prelude::BASE64_URL_SAFE_NO_PAD};
-
-use super::Expression;
 
 /// # The hash of a syntax node
 ///
@@ -19,12 +17,12 @@ use super::Expression;
 /// [`NodePath`].
 ///
 /// [`NodePath`]: super::NodePath
-pub struct NodeHash<T> {
+pub struct NodeHash {
     hash: RawHash,
-    t: PhantomData<T>,
+    t: PhantomData<()>,
 }
 
-impl NodeHash<Expression> {
+impl NodeHash {
     /// # Compute the hash of a node
     ///
     /// This must not be available outside of `super`, since `Nodes` relies on
@@ -45,17 +43,17 @@ impl NodeHash<Expression> {
     }
 }
 
-impl<T> Copy for NodeHash<T> {}
+impl Copy for NodeHash {}
 
-impl<T> Clone for NodeHash<T> {
+impl Clone for NodeHash {
     fn clone(&self) -> Self {
         *self
     }
 }
 
-impl<T> Eq for NodeHash<T> {}
+impl Eq for NodeHash {}
 
-impl<T> Ord for NodeHash<T> {
+impl Ord for NodeHash {
     fn cmp(&self, other: &Self) -> cmp::Ordering {
         let Self { hash, t } = self;
 
@@ -69,7 +67,7 @@ impl<T> Ord for NodeHash<T> {
     }
 }
 
-impl<T> PartialEq for NodeHash<T> {
+impl PartialEq for NodeHash {
     fn eq(&self, other: &Self) -> bool {
         let Self { hash, t } = self;
 
@@ -77,33 +75,23 @@ impl<T> PartialEq for NodeHash<T> {
     }
 }
 
-impl<T> PartialOrd for NodeHash<T> {
+impl PartialOrd for NodeHash {
     fn partial_cmp(&self, other: &Self) -> Option<cmp::Ordering> {
         Some(self.cmp(other))
     }
 }
 
-impl<T> fmt::Debug for NodeHash<T> {
+impl fmt::Debug for NodeHash {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        let type_parameter = {
-            let type_name = type_name::<T>();
-
-            if let Some((_, type_parameter)) = type_name.rsplit_once("::") {
-                type_parameter
-            } else {
-                type_name
-            }
-        };
-
         let Self { hash, t: _ } = self;
 
-        f.debug_struct(&format!("NodeHash<{type_parameter}>"))
+        f.debug_struct("NodeHash")
             .field("hash", &hash.to_string())
             .finish()
     }
 }
 
-impl<T> udigest::Digestable for NodeHash<T> {
+impl udigest::Digestable for NodeHash {
     fn unambiguously_encode<B: udigest::Buffer>(
         &self,
         encoder: udigest::encoding::EncodeValue<B>,

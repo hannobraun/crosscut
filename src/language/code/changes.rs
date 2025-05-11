@@ -1,6 +1,6 @@
 use std::collections::{BTreeMap, BTreeSet};
 
-use super::{Errors, Expression, NodeHash, NodePath, Nodes};
+use super::{Errors, NodeHash, NodePath, Nodes};
 
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub struct Changes {
@@ -16,7 +16,7 @@ impl Changes {
 
     pub fn new_change_set<'r>(
         &'r mut self,
-        root_before_change: NodeHash<Expression>,
+        root_before_change: NodeHash,
         nodes: &'r mut Nodes,
         errors: &'r mut Errors,
     ) -> NewChangeSet<'r> {
@@ -71,7 +71,7 @@ impl Changes {
 pub struct NewChangeSet<'r> {
     change_set: &'r mut ChangeSet,
     #[cfg_attr(not(test), allow(unused))]
-    root_before_change: NodeHash<Expression>,
+    root_before_change: NodeHash,
 
     pub nodes: &'r mut Nodes,
     pub errors: &'r mut Errors,

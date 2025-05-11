@@ -162,7 +162,7 @@ fn updating_child_updates_parent() {
 
     fn check_parent(
         parent: NodePath,
-        children: impl IntoIterator<Item = NodeHash<Expression>>,
+        children: impl IntoIterator<Item = NodeHash>,
         codebase: &Codebase,
     ) {
         assert_eq!(

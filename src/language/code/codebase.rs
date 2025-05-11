@@ -6,7 +6,7 @@ use super::{
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub struct Codebase {
     root: Root,
-    empty: NodeHash<Expression>,
+    empty: NodeHash,
     nodes: Nodes,
     changes: Changes,
     errors: Errors,
@@ -72,7 +72,7 @@ impl Codebase {
 
 #[derive(Clone, Debug, Eq, PartialEq)]
 struct Root {
-    hash: NodeHash<Expression>,
+    hash: NodeHash,
 }
 
 impl Root {

@@ -1,16 +1,14 @@
 use std::vec;
 
-use super::{Expression, NodeHash, NodePath, RawHash, SiblingIndex};
+use super::{NodeHash, NodePath, RawHash, SiblingIndex};
 
 #[derive(Clone, Debug, Eq, Ord, PartialEq, PartialOrd, udigest::Digestable)]
 pub struct Children {
-    pub inner: Vec<NodeHash<Expression>>,
+    pub inner: Vec<NodeHash>,
 }
 
 impl Children {
-    pub fn new(
-        children: impl IntoIterator<Item = NodeHash<Expression>>,
-    ) -> Self {
+    pub fn new(children: impl IntoIterator<Item = NodeHash>) -> Self {
         let inner = children.into_iter().collect();
         Self { inner }
     }
@@ -32,17 +30,13 @@ impl Children {
         }
     }
 
-    pub fn add(&mut self, to_add: NodeHash<Expression>) -> SiblingIndex {
+    pub fn add(&mut self, to_add: NodeHash) -> SiblingIndex {
         let index = self.next_index();
         self.inner.push(to_add);
         index
     }
 
-    pub fn replace(
-        &mut self,
-        to_replace: &NodePath,
-        replacement: NodeHash<Expression>,
-    ) {
+    pub fn replace(&mut self, to_replace: &NodePath, replacement: NodeHash) {
         let Some(child) = self
             .inner
             .get_mut(to_replace.sibling_index().unwrap().index)
@@ -62,8 +56,8 @@ impl Children {
     }
 }
 
-impl<const N: usize> From<[NodeHash<Expression>; N]> for Children {
-    fn from(children: [NodeHash<Expression>; N]) -> Self {
+impl<const N: usize> From<[NodeHash; N]> for Children {
+    fn from(children: [NodeHash; N]) -> Self {
         Self {
             inner: children.into(),
         }
@@ -71,8 +65,8 @@ impl<const N: usize> From<[NodeHash<Expression>; N]> for Children {
 }
 
 impl IntoIterator for Children {
-    type Item = NodeHash<Expression>;
-    type IntoIter = vec::IntoIter<NodeHash<Expression>>;
+    type Item = NodeHash;
+    type IntoIter = vec::IntoIter<NodeHash>;
 
     fn into_iter(self) -> Self::IntoIter {
         self.inner.into_iter()

@@ -11,7 +11,7 @@ pub fn compile(
     nodes: &mut Nodes,
     errors: &mut Errors,
     packages: &Packages,
-) -> NodeHash<Expression> {
+) -> NodeHash {
     let (node, maybe_error) = if token.is_empty() {
         (Expression::Empty, None)
     } else if let Some(node) = resolve_keyword(token, nodes) {
