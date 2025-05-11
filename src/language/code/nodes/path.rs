@@ -23,7 +23,7 @@ use super::{Expression, NodeHash, Nodes, SyntaxNode};
 /// That means **any [`NodePath`] that you expect to point to a node within the
 /// current syntax tree will be invalidated any change to the syntax tree**. You
 /// are responsible for making sure that such a [`NodePath`] gets updated.
-pub struct NodePath<T: SyntaxNode> {
+pub struct NodePath<T> {
     hash: NodeHash<T>,
 
     /// # The path of the node's parent
