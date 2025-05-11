@@ -32,15 +32,15 @@ pub trait ExpectChildren {
     fn expect_children<'r, const N: usize>(
         &self,
         nodes: &'r Nodes,
-    ) -> [LocatedNode<&'r Expression>; N];
+    ) -> [LocatedNode<'r>; N];
 }
 
-impl ExpectChildren for LocatedNode<&Expression> {
+impl ExpectChildren for LocatedNode<'_> {
     #[track_caller]
     fn expect_children<'r, const N: usize>(
         &self,
         nodes: &'r Nodes,
-    ) -> [LocatedNode<&'r Expression>; N] {
+    ) -> [LocatedNode<'r>; N] {
         let Some(children) = self.children(nodes).collect_array() else {
             panic!(
                 "Expected {N} children but got {}.",

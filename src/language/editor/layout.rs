@@ -1,4 +1,4 @@
-use crate::language::code::{Codebase, Expression, LocatedNode, NodePath};
+use crate::language::code::{Codebase, LocatedNode, NodePath};
 
 #[derive(Debug)]
 pub struct EditorLayout {
@@ -6,7 +6,7 @@ pub struct EditorLayout {
 }
 
 impl EditorLayout {
-    pub fn new(root: LocatedNode<&Expression>, codebase: &Codebase) -> Self {
+    pub fn new(root: LocatedNode, codebase: &Codebase) -> Self {
         let mut nodes_from_root = Vec::new();
         collect_nodes_from_root(root, 0, &mut nodes_from_root, codebase);
 
@@ -72,7 +72,7 @@ pub struct NodeInLayout {
 }
 
 fn collect_nodes_from_root(
-    node: LocatedNode<&Expression>,
+    node: LocatedNode,
     distance_from_root: u32,
     nodes_from_root: &mut Vec<NodeInLayout>,
     codebase: &Codebase,

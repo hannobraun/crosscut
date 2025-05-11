@@ -1,16 +1,16 @@
 use super::{ChildOfExpression, Expression, NodePath, Nodes, SiblingIndex};
 
 #[derive(Debug, Eq, PartialEq)]
-pub struct LocatedNode<T> {
-    pub node: T,
+pub struct LocatedNode<'r> {
+    pub node: &'r Expression,
     pub path: NodePath,
 }
 
-impl LocatedNode<&Expression> {
+impl LocatedNode<'_> {
     pub fn children<'r>(
         &self,
         nodes: &'r Nodes,
-    ) -> impl DoubleEndedIterator<Item = LocatedNode<&'r Expression>> {
+    ) -> impl DoubleEndedIterator<Item = LocatedNode<'r>> {
         self.node
             .children()
             .into_iter()
