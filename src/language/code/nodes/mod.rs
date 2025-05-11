@@ -2,7 +2,6 @@ mod children;
 mod hash;
 mod located;
 mod nodes;
-mod parent;
 mod path;
 mod syntax;
 
