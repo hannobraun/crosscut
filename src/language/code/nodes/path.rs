@@ -34,15 +34,17 @@ pub struct NodePath<T: SyntaxNode> {
     /// expensive (in terms of performance, due to memory allocations) and
     /// inconvenient (as it prevents this type from being `Copy`).
     ///
-    /// I initially considered this to be the right trade-off, but I've had a
-    /// new idea since then: Use a hash here, let's call it `ParentHash`, that
-    /// includes both the parent's `NodeHash` and an `Option<ParentHash>`, for
-    /// the grandparent (which would then recursively include the whole
-    /// lineage).
+    /// It would also be possible to use a hash here,let's call it
+    /// `ParentHash`, that includes both the parent's `NodeHash` and an
+    /// `Option<ParentHash>`, for the grandparent (which would then recursively
+    /// include the whole lineage).
     ///
     /// This would remove the need for heap allocation here, as well as allow
-    /// [`NodePath`] to be `Copy` again. On the other hand, it would make it
-    /// more complicated to find the parent of a node, given its `NodePath`.
+    /// [`NodePath`] to be `Copy` again. But it would make it more complicated
+    /// to find the parent of a node, given its `NodePath`, and we'd need much
+    /// more bookkeeping in `Codebase` or `Nodes` to compensate.
+    ///
+    /// When I tried this approach, it didn't seem worth the trouble.
     parent: Option<(Box<NodePath<Expression>>, SiblingIndex)>,
 }
 
