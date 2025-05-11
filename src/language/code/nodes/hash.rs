@@ -35,7 +35,9 @@ impl NodeHash {
         T: udigest::Digestable,
     {
         Self {
-            hash: RawHash::new(node),
+            hash: RawHash {
+                inner: udigest::hash::<blake3::Hasher>(node).into(),
+            },
         }
     }
 }
@@ -52,15 +54,4 @@ impl fmt::Display for NodeHash {
 )]
 pub struct RawHash {
     inner: [u8; 32],
-}
-
-impl RawHash {
-    pub fn new<T>(value: &T) -> Self
-    where
-        T: udigest::Digestable,
-    {
-        Self {
-            inner: udigest::hash::<blake3::Hasher>(value).into(),
-        }
-    }
 }
