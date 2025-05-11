@@ -44,7 +44,7 @@ pub struct NodePath<T: SyntaxNode> {
     /// This would remove the need for heap allocation here, as well as allow
     /// [`NodePath`] to be `Copy` again. On the other hand, it would make it
     /// more complicated to find the parent of a node, given its `NodePath`.
-    parent: Option<Box<NodePath<Expression>>>,
+    parent: Option<(Box<NodePath<Expression>>, SiblingIndex)>,
 }
 
 impl NodePath<Expression> {
@@ -79,7 +79,7 @@ impl NodePath<Expression> {
         Self {
             hash,
             parent2,
-            parent: parent.map(Box::new),
+            parent: parent.map(Box::new).map(|path| (path, parent2.unwrap().1)),
         }
     }
 
@@ -122,7 +122,7 @@ impl NodePath<Expression> {
     /// This is required to distinguish between identical nodes whose hash is
     /// the same, but that have different parents.
     pub fn parent(&self) -> Option<&NodePath<Expression>> {
-        self.parent.as_deref()
+        self.parent.as_ref().map(|(path, _)| path.deref())
     }
 
     pub fn is_ancestor_of(
@@ -131,7 +131,7 @@ impl NodePath<Expression> {
     ) -> bool {
         let mut maybe_parent = possible_descendant.parent.as_ref();
 
-        while let Some(parent) = maybe_parent {
+        while let Some((parent, _)) = maybe_parent {
             if parent.deref() == self {
                 return true;
             }
