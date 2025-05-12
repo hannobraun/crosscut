@@ -179,7 +179,11 @@ impl SyntaxNode {
             | Self::Recursion
             | Self::UnresolvedIdentifier { .. } => false,
 
-            Self::Tuple { values: children } | Self::Test { children, .. } => {
+            Self::Tuple { values: children } => {
+                children.contains_at(child, sibling_index)
+            }
+
+            Self::Test { children, .. } => {
                 children.contains_at(child, sibling_index)
             }
         }
