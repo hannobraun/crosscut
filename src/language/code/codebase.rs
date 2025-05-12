@@ -14,10 +14,10 @@ pub struct Codebase {
 impl Codebase {
     pub fn new() -> Self {
         let mut nodes = Nodes::default();
-        let empty = nodes.insert(SyntaxNode::Empty);
+        let root = nodes.insert(SyntaxNode::Empty);
 
         Self {
-            root: Root { hash: empty },
+            root: Root { hash: root },
             nodes,
             changes: Changes::new(),
             errors: Errors::new(),
