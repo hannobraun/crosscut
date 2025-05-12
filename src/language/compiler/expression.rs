@@ -69,12 +69,11 @@ fn resolve_function(
             Literal::Integer { value } => {
                 Ok((SyntaxNode::Number { value }, None))
             }
-            Literal::Tuple => Ok((
-                SyntaxNode::Tuple {
-                    values: Children::new([]),
-                },
-                None,
-            )),
+            Literal::Tuple => {
+                let values = Children::new([]);
+
+                Ok((SyntaxNode::Tuple { values }, None))
+            }
         },
         (None, None) => {
             let candidates = Vec::new();
