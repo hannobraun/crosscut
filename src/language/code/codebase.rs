@@ -6,7 +6,6 @@ use super::{
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub struct Codebase {
     root: Root,
-    empty: NodeHash,
     nodes: Nodes,
     changes: Changes,
     errors: Errors,
@@ -19,7 +18,6 @@ impl Codebase {
 
         Self {
             root: Root { hash: empty },
-            empty,
             nodes,
             changes: Changes::new(),
             errors: Errors::new(),
