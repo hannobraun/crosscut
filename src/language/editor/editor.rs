@@ -149,7 +149,7 @@ impl Editor {
         packages: &Packages,
     ) {
         for ch in code.chars() {
-            let event = if ch == ' ' || ch == '\n' {
+            let event = if ch.is_whitespace() {
                 EditorInputEvent::MoveCursorDown
             } else {
                 EditorInputEvent::Insert { ch }
