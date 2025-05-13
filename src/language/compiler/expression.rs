@@ -13,8 +13,8 @@ pub fn compile(
         (SyntaxNode::Empty, None)
     } else if let Some(node) = resolve_keyword(token, nodes) {
         (node, None)
-    } else if let Some(literal) = resolve_literal(token, nodes) {
-        (literal, None)
+    } else if let Some(node) = resolve_literal(token, nodes) {
+        (node, None)
     } else {
         match resolve_function(token, packages) {
             Some(node) => (node, None),
