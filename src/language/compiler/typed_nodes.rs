@@ -4,7 +4,9 @@ pub struct Function;
 
 impl Function {
     pub fn to_node(&self, nodes: &mut Nodes) -> SyntaxNode {
-        let [parameter, body] = [nodes.insert(SyntaxNode::Empty); 2];
+        let parameter = nodes.insert(SyntaxNode::Empty);
+        let body = nodes.insert(SyntaxNode::Empty);
+
         SyntaxNode::Function { parameter, body }
     }
 }
