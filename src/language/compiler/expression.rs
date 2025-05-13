@@ -74,7 +74,7 @@ fn resolve_literal(name: &str, _: &mut Nodes) -> Option<Literal> {
 }
 
 fn resolve_function(name: &str, packages: &Packages) -> Option<SyntaxNode> {
-    let provided_function = packages.resolve_function(name);
-
-    provided_function.map(|id| SyntaxNode::ProvidedFunction { id })
+    packages
+        .resolve_function(name)
+        .map(|id| SyntaxNode::ProvidedFunction { id })
 }
