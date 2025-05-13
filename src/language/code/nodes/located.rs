@@ -26,4 +26,15 @@ impl LocatedNode<'_> {
                 LocatedNode { node, path }
             })
     }
+
+    /// # The children of the node that are expressions and its inputs
+    ///
+    /// These are the children that must be evaluated before the node can be
+    /// evaluated.
+    pub fn inputs<'r>(
+        &self,
+        nodes: &'r Nodes,
+    ) -> impl DoubleEndedIterator<Item = LocatedNode<'r>> {
+        self.children(nodes)
+    }
 }
