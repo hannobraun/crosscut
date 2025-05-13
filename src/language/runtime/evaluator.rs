@@ -334,11 +334,11 @@ mod tests {
             let body = change_set.nodes.insert(SyntaxNode::Empty);
 
             let node = SyntaxNode::Function { parameter, body };
-            let function = change_set.nodes.insert(node);
+            let hash = change_set.nodes.insert(node);
 
             change_set.replace(
                 &change_set.root_before_change(),
-                &NodePath::for_root(function),
+                &NodePath::for_root(hash),
             );
         });
 
