@@ -333,9 +333,8 @@ mod tests {
             let parameter = change_set.nodes.insert(SyntaxNode::Empty);
             let body = change_set.nodes.insert(SyntaxNode::Empty);
 
-            let function = change_set
-                .nodes
-                .insert(SyntaxNode::Function { parameter, body });
+            let node = SyntaxNode::Function { parameter, body };
+            let function = change_set.nodes.insert(node);
 
             change_set.replace(
                 &change_set.root_before_change(),
