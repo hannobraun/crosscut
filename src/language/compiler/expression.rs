@@ -1,7 +1,9 @@
 use crate::language::{
-    code::{Children, CodeError, Errors, NodeHash, Nodes, SyntaxNode},
+    code::{CodeError, Errors, NodeHash, Nodes, SyntaxNode},
     packages::Packages,
 };
+
+use super::typed_nodes::Tuple;
 
 pub fn compile(
     token: &str,
@@ -57,10 +59,7 @@ fn resolve_literal(name: &str, nodes: &mut Nodes) -> Option<SyntaxNode> {
                 let [parameter, body] = [nodes.insert(SyntaxNode::Empty); 2];
                 Some(SyntaxNode::Function { parameter, body })
             }
-            "tuple" => {
-                let values = Children::new([]);
-                Some(SyntaxNode::Tuple { values })
-            }
+            "tuple" => Some(Tuple.to_node()),
             _ => None,
         }
     }
