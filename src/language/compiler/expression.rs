@@ -28,7 +28,7 @@ pub fn compile(
             }
         }
     } else {
-        match resolve_function(token, packages, nodes) {
+        match resolve_function(token, packages) {
             Some(node) => (node, None),
             None => (
                 SyntaxNode::UnresolvedIdentifier {
@@ -61,11 +61,7 @@ fn resolve_keyword(name: &str, nodes: &mut Nodes) -> Option<SyntaxNode> {
     }
 }
 
-fn resolve_function(
-    name: &str,
-    packages: &Packages,
-    _: &mut Nodes,
-) -> Option<SyntaxNode> {
+fn resolve_function(name: &str, packages: &Packages) -> Option<SyntaxNode> {
     let provided_function = packages.resolve_function(name);
 
     provided_function.map(|id| SyntaxNode::ProvidedFunction { id })
