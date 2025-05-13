@@ -56,7 +56,7 @@ fn resolve_function(
     nodes: &mut Nodes,
 ) -> Result<(SyntaxNode, Option<CodeError>), Vec<CandidateForResolution>> {
     let provided_function = packages.resolve_function(name);
-    let literal = resolve_literal(name);
+    let literal = resolve_literal(name, nodes);
 
     match (provided_function, literal) {
         (Some(id), None) => Ok((SyntaxNode::ProvidedFunction { id }, None)),
@@ -95,7 +95,7 @@ fn resolve_function(
     }
 }
 
-fn resolve_literal(name: &str) -> Option<Literal> {
+fn resolve_literal(name: &str, _: &mut Nodes) -> Option<Literal> {
     if let Ok(value) = name.parse() {
         Some(Literal::Integer { value })
     } else {
