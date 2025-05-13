@@ -330,8 +330,7 @@ mod tests {
         let mut codebase = Codebase::new();
 
         codebase.make_change(|change_set| {
-            let parameter =
-                change_set.nodes.insert(SyntaxNode::Number { value: 0 });
+            let parameter = change_set.nodes.insert(SyntaxNode::Empty);
             let body = change_set.nodes.insert(SyntaxNode::Empty);
 
             let function = change_set
