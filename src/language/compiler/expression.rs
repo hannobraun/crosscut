@@ -13,6 +13,20 @@ pub fn compile(
         (SyntaxNode::Empty, None)
     } else if let Some(node) = resolve_keyword(token, nodes) {
         (node, None)
+    } else if let Some(literal) = resolve_literal(token, nodes) {
+        match literal {
+            Literal::Function => {
+                let [parameter, body] = [nodes.insert(SyntaxNode::Empty); 2];
+
+                (SyntaxNode::Function { parameter, body }, None)
+            }
+            Literal::Integer { value } => (SyntaxNode::Number { value }, None),
+            Literal::Tuple => {
+                let values = Children::new([]);
+
+                (SyntaxNode::Tuple { values }, None)
+            }
+        }
     } else {
         match resolve_function(token, packages, nodes) {
             Some(node) => (node, None),
@@ -50,28 +64,11 @@ fn resolve_keyword(name: &str, nodes: &mut Nodes) -> Option<SyntaxNode> {
 fn resolve_function(
     name: &str,
     packages: &Packages,
-    nodes: &mut Nodes,
+    _: &mut Nodes,
 ) -> Option<SyntaxNode> {
     let provided_function = packages.resolve_function(name);
-    let literal = resolve_literal(name, nodes);
 
-    match (provided_function, literal) {
-        (Some(id), None) => Some(SyntaxNode::ProvidedFunction { id }),
-        (None, Some(literal)) => match literal {
-            Literal::Function => {
-                let [parameter, body] = [nodes.insert(SyntaxNode::Empty); 2];
-
-                Some(SyntaxNode::Function { parameter, body })
-            }
-            Literal::Integer { value } => Some(SyntaxNode::Number { value }),
-            Literal::Tuple => {
-                let values = Children::new([]);
-
-                Some(SyntaxNode::Tuple { values })
-            }
-        },
-        (_, _) => None,
-    }
+    provided_function.map(|id| SyntaxNode::ProvidedFunction { id })
 }
 
 fn resolve_literal(name: &str, _: &mut Nodes) -> Option<Literal> {
