@@ -45,7 +45,12 @@ prototype (a direct continuation, based on the same code).
 ## Further Reading
 
 I announced the archiving of this prototype in my daily note on
-[2025-04-23](https://www.crosscut.cc/daily/2025-04-23).
+[2025-04-23](https://www.crosscut.cc/daily/2025-04-23) and mentioned it again on
+[2025-04-30](/daily/2025-04-30).
 
-As of this writing (2025-04-23), I have not yet written about these decisions in
-depth, but am planning to do so. I intend to update this section once I have.
+I wrote about the switch to restricted structural structural editing from
+[2025-05-01](https://www.crosscut.cc/daily/2025-05-01) to
+[2025-05-05](https://www.crosscut.cc/daily/2025-05-05). I started writing about
+the switch from postfix to prefix syntax on
+[2025-05-06](https://www.crosscut.cc/daily/2025-05-06). As of this writing
+(2025-05-13), this series is still ongoing.
