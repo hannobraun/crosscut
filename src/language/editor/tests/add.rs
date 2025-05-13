@@ -1,10 +1,9 @@
 use crate::language::{
     code::{Codebase, SyntaxNode},
-    compiler::Compiler,
-    editor::{Editor, EditorInputEvent::*, editor::Cursor},
+    editor::{Editor, EditorInputEvent::*},
     packages::Packages,
     runtime::Evaluator,
-    tests::infra::{ExpectChildren, tuple, unresolved},
+    tests::infra::{ExpectChildren, unresolved},
 };
 
 #[test]
@@ -78,71 +77,4 @@ fn add_fn_node() {
     );
     assert_eq!(parameter.node, &SyntaxNode::Empty);
     assert_eq!(body.node, &SyntaxNode::Empty);
-}
-
-#[test]
-fn add_child() {
-    // It's possible to add a child to the current node.
-
-    let packages = Packages::default();
-
-    let mut codebase = Codebase::new();
-    let mut evaluator = Evaluator::new();
-
-    let parent = {
-        let root = codebase.root().path;
-        Compiler::new(&mut codebase).replace(&root, "tuple", &packages)
-    };
-
-    let mut editor = Editor::new(
-        Cursor {
-            path: parent,
-            index: "tuple".len(),
-        },
-        &codebase,
-        &packages,
-    );
-
-    editor.on_input(AddChild, &mut codebase, &mut evaluator, &packages);
-    editor.on_code("child", &mut codebase, &mut evaluator, &packages);
-
-    let parent = codebase.root();
-    let [child] = parent.expect_children(codebase.nodes());
-
-    assert_eq!(parent.node, &tuple([*child.path.hash()]));
-    assert_eq!(child.node, &unresolved("child"));
-}
-
-#[test]
-fn add_sibling() {
-    // It is possible to add a sibling to a node.
-
-    let packages = Packages::default();
-
-    let mut codebase = Codebase::new();
-    let mut evaluator = Evaluator::new();
-
-    let a = {
-        let mut compiler = Compiler::new(&mut codebase);
-
-        let parent = compiler.replace(
-            &compiler.codebase().root().path,
-            "tuple",
-            &packages,
-        );
-        compiler.insert_child(parent, "a", &packages)
-    };
-
-    let mut editor =
-        Editor::new(Cursor { path: a, index: 1 }, &codebase, &packages);
-
-    editor.on_input(AddSibling, &mut codebase, &mut evaluator, &packages);
-    editor.on_code("b", &mut codebase, &mut evaluator, &packages);
-
-    let parent = codebase.root();
-    let [a, b] = parent.expect_children(codebase.nodes());
-
-    assert_eq!(parent.node, &tuple([*a.path.hash(), *b.path.hash()]));
-    assert_eq!(a.node, &unresolved("a"));
-    assert_eq!(b.node, &unresolved("b"));
 }

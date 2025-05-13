@@ -14,12 +14,6 @@ pub fn expression(
     }
 }
 
-pub fn tuple(values: impl IntoIterator<Item = NodeHash>) -> SyntaxNode {
-    SyntaxNode::Tuple {
-        values: Children::new(values),
-    }
-}
-
 pub fn unresolved(identifier: &str) -> SyntaxNode {
     SyntaxNode::UnresolvedIdentifier {
         identifier: identifier.to_string(),
