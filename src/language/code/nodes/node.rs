@@ -30,6 +30,21 @@ use crate::language::{
 #[derive(Clone, Debug, Eq, Ord, PartialEq, PartialOrd, udigest::Digestable)]
 pub enum SyntaxNode {
     /// # A node used for adding a value to a list
+    ///
+    /// ## Implementation Note
+    ///
+    /// Having this child type of node is a bit weird, and probably not
+    /// desirable in the long term. It is only relevant to the editor, and
+    /// nothing else.
+    ///
+    /// As the syntax grows more complex, and what's shown in the editor keeps
+    /// diverging from the underlying syntax tree, it might not make sense to
+    /// still have this node.
+    ///
+    /// But so far, this point hasn't been reached. As of this writing, this
+    /// is the only such "editor-only" node. And while that is the case,
+    /// managing it here makes more sense. It allows the node to piggyback on
+    /// top of the existing infrastructure for other nodes.
     AddValue,
 
     /// # The application of an expression to an argument
