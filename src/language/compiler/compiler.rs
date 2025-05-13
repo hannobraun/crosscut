@@ -51,7 +51,9 @@ impl<'r> Compiler<'r> {
                         );
                     }
 
-                    SyntaxNode::Tuple { values: children }
+                    SyntaxNode::Tuple {
+                        values: children, ..
+                    }
                     | SyntaxNode::Test { children, .. } => children.add(child),
                 };
 
