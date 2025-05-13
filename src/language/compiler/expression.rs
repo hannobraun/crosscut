@@ -3,7 +3,7 @@ use crate::language::{
     packages::Packages,
 };
 
-use super::typed_nodes::Tuple;
+use super::Tuple;
 
 pub fn compile(
     token: &str,
