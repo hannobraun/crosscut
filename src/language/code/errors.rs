@@ -27,9 +27,7 @@ impl Errors {
 
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub enum CodeError {
-    UnresolvedIdentifier {
-        candidates: Vec<CandidateForResolution>,
-    },
+    UnresolvedIdentifier,
 }
 
 #[derive(Clone, Debug, Eq, PartialEq)]

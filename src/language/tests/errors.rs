@@ -15,7 +15,7 @@ fn unresolved_syntax_node() {
     let unresolved = language.codebase().root().path;
     assert_eq!(
         language.codebase().errors().get(unresolved.hash()),
-        Some(&CodeError::UnresolvedIdentifier { candidates: vec![] }),
+        Some(&CodeError::UnresolvedIdentifier),
     );
 
     // And it should also result in a runtime error when stepping.

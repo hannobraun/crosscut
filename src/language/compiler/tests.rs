@@ -82,7 +82,7 @@ fn insert_child_should_update_errors() {
 
     assert_eq!(
         compiler.codebase().errors().get(unresolved.hash()),
-        Some(&CodeError::UnresolvedIdentifier { candidates: vec![] }),
+        Some(&CodeError::UnresolvedIdentifier),
     );
 }
 
@@ -134,12 +134,9 @@ fn updating_child_updates_parent() {
         let child = change_set.nodes.insert(SyntaxNode::Number { value: 12 });
         let parent = change_set.nodes.insert(expression("unresolved", [child]));
 
-        change_set.errors.insert(
-            parent,
-            CodeError::UnresolvedIdentifier {
-                candidates: Vec::new(),
-            },
-        );
+        change_set
+            .errors
+            .insert(parent, CodeError::UnresolvedIdentifier);
 
         change_set.replace(
             &change_set.root_before_change(),
@@ -174,7 +171,7 @@ fn updating_child_updates_parent() {
         // the parent, any errors that had previously need to be preserved.
         assert_eq!(
             codebase.errors().get(parent.hash()),
-            Some(&CodeError::UnresolvedIdentifier { candidates: vec![] }),
+            Some(&CodeError::UnresolvedIdentifier),
         );
     }
 }

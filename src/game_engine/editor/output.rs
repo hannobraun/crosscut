@@ -3,9 +3,7 @@ use crossterm::style::{Attribute, Color};
 use crate::{
     io::editor::output::{Cursor, EditorOutputAdapter},
     language::{
-        code::{
-            CandidateForResolution, CodeError, Codebase, NodePath, SyntaxNode,
-        },
+        code::{CodeError, Codebase, NodePath, SyntaxNode},
         editor::{Editor, EditorLayout, EditorLine},
         language::Language,
         packages::Packages,
@@ -281,29 +279,8 @@ fn render_error<A: EditorOutputAdapter>(
     error: &CodeError,
 ) -> anyhow::Result<()> {
     match error {
-        CodeError::UnresolvedIdentifier { candidates } => {
+        CodeError::UnresolvedIdentifier => {
             write!(adapter, "unresolved identifier")?;
-
-            if !candidates.is_empty() {
-                write!(adapter, " (could resolve to ")?;
-
-                for (i, candidate) in candidates.iter().enumerate() {
-                    if i > 0 {
-                        write!(adapter, ", ")?;
-                    }
-
-                    match candidate {
-                        CandidateForResolution::Literal { .. } => {
-                            write!(adapter, "literal")?;
-                        }
-                        CandidateForResolution::ProvidedFunction { .. } => {
-                            write!(adapter, "provided function")?;
-                        }
-                    }
-                }
-
-                write!(adapter, ")")?;
-            }
         }
     }
 

@@ -19,11 +19,11 @@ pub fn compile(
     } else {
         match resolve_function(token, packages, nodes) {
             Ok((node, maybe_err)) => (node, maybe_err),
-            Err(candidates) => (
+            Err(_) => (
                 SyntaxNode::UnresolvedIdentifier {
                     identifier: token.to_string(),
                 },
-                Some(CodeError::UnresolvedIdentifier { candidates }),
+                Some(CodeError::UnresolvedIdentifier),
             ),
         }
     };
