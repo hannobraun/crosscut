@@ -54,7 +54,7 @@ fn resolve_function(
     name: &str,
     packages: &Packages,
     nodes: &mut Nodes,
-) -> Result<(SyntaxNode, Option<CodeError>), Vec<CandidateForResolution>> {
+) -> Result<(SyntaxNode, Option<CodeError>), ()> {
     let provided_function = packages.resolve_function(name);
     let literal = resolve_literal(name, nodes);
 
@@ -75,10 +75,7 @@ fn resolve_function(
                 Ok((SyntaxNode::Tuple { values }, None))
             }
         },
-        (None, None) => {
-            let candidates = Vec::new();
-            Err(candidates)
-        }
+        (None, None) => Err(()),
         (provided_function, literal) => {
             let mut candidates = Vec::new();
 
@@ -90,7 +87,7 @@ fn resolve_function(
                 candidates.push(CandidateForResolution::Literal { literal });
             }
 
-            Err(candidates)
+            Err(())
         }
     }
 }
