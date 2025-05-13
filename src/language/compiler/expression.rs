@@ -15,16 +15,15 @@ pub fn compile(
         (node, None)
     } else if let Some(node) = resolve_literal(token, nodes) {
         (node, None)
+    } else if let Some(node) = resolve_function(token, packages) {
+        (node, None)
     } else {
-        match resolve_function(token, packages) {
-            Some(node) => (node, None),
-            None => (
-                SyntaxNode::UnresolvedIdentifier {
-                    identifier: token.to_string(),
-                },
-                Some(CodeError::UnresolvedIdentifier),
-            ),
-        }
+        (
+            SyntaxNode::UnresolvedIdentifier {
+                identifier: token.to_string(),
+            },
+            Some(CodeError::UnresolvedIdentifier),
+        )
     };
 
     let hash = nodes.insert(node);
