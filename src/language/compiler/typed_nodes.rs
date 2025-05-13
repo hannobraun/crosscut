@@ -12,7 +12,7 @@ impl Function {
 pub struct Tuple;
 
 impl Tuple {
-    pub fn to_node(&self) -> SyntaxNode {
+    pub fn to_node(&self, _: &mut Nodes) -> SyntaxNode {
         let values = Children::new([]);
         SyntaxNode::Tuple { values }
     }

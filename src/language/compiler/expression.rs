@@ -56,7 +56,7 @@ fn resolve_literal(name: &str, nodes: &mut Nodes) -> Option<SyntaxNode> {
     } else {
         match name {
             "fn" => Some(Function.to_node(nodes)),
-            "tuple" => Some(Tuple.to_node()),
+            "tuple" => Some(Tuple.to_node(nodes)),
             _ => None,
         }
     }
