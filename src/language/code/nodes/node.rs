@@ -147,7 +147,7 @@ pub enum SyntaxNode {
         /// which evaluates to one of the values in the tuple value.
         values: Children,
 
-        /// # A special node that is used to add values to the tuple
+        /// # A node that can be edited to add values to the tuple
         ///
         /// This is used as a destination for the editor to navigate to, which
         /// it can edit to add a value.
