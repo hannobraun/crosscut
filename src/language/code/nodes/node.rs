@@ -253,14 +253,11 @@ impl SyntaxNode {
             Self::Apply {
                 expression: a,
                 argument: b,
-            }
-            | Self::Function {
-                parameter: a,
-                body: b,
             } => vec![*a, *b],
 
             Self::AddValue
             | Self::Empty
+            | Self::Function { .. }
             | Self::Number { value: _ }
             | Self::ProvidedFunction { .. }
             | Self::Recursion
