@@ -1,5 +1,5 @@
 use crate::language::{
-    code::{Children, CodeError, Errors, Literal, NodeHash, Nodes, SyntaxNode},
+    code::{Children, CodeError, Errors, NodeHash, Nodes, SyntaxNode},
     packages::Packages,
 };
 
@@ -14,19 +14,7 @@ pub fn compile(
     } else if let Some(node) = resolve_keyword(token, nodes) {
         (node, None)
     } else if let Some(literal) = resolve_literal(token, nodes) {
-        match literal {
-            Literal::Function => {
-                let [parameter, body] = [nodes.insert(SyntaxNode::Empty); 2];
-
-                (SyntaxNode::Function { parameter, body }, None)
-            }
-            Literal::Integer { value } => (SyntaxNode::Number { value }, None),
-            Literal::Tuple => {
-                let values = Children::new([]);
-
-                (SyntaxNode::Tuple { values }, None)
-            }
-        }
+        (literal, None)
     } else {
         match resolve_function(token, packages) {
             Some(node) => (node, None),
@@ -61,13 +49,19 @@ fn resolve_keyword(name: &str, nodes: &mut Nodes) -> Option<SyntaxNode> {
     }
 }
 
-fn resolve_literal(name: &str, _: &mut Nodes) -> Option<Literal> {
+fn resolve_literal(name: &str, nodes: &mut Nodes) -> Option<SyntaxNode> {
     if let Ok(value) = name.parse() {
-        Some(Literal::Integer { value })
+        Some(SyntaxNode::Number { value })
     } else {
         match name {
-            "fn" => Some(Literal::Function),
-            "tuple" => Some(Literal::Tuple),
+            "fn" => {
+                let [parameter, body] = [nodes.insert(SyntaxNode::Empty); 2];
+                Some(SyntaxNode::Function { parameter, body })
+            }
+            "tuple" => {
+                let values = Children::new([]);
+                Some(SyntaxNode::Tuple { values })
+            }
             _ => None,
         }
     }

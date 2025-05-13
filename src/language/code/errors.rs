@@ -27,10 +27,3 @@ impl Errors {
 pub enum CodeError {
     UnresolvedIdentifier,
 }
-
-#[derive(Clone, Debug, Eq, PartialEq, udigest::Digestable)]
-pub enum Literal {
-    Function,
-    Integer { value: i32 },
-    Tuple,
-}
