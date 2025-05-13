@@ -8,5 +8,4 @@ pub enum EditorInputEvent {
     RemoveLeft { whole_node: bool },
     RemoveRight { whole_node: bool },
     AddChild,
-    AddSibling,
 }

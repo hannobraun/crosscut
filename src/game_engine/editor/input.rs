@@ -127,7 +127,7 @@ impl TerminalInputEvent {
             Self::Up => Some(EditorInputEvent::MoveCursorUp),
             Self::Down => Some(EditorInputEvent::MoveCursorDown),
 
-            Self::Enter => Some(EditorInputEvent::AddSibling),
+            Self::Enter => Some(EditorInputEvent::MoveCursorDown),
 
             _ => None,
         }

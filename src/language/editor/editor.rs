@@ -80,13 +80,6 @@ impl Editor {
                         packages,
                     );
                 }
-                NodeAction::AddSibling => {
-                    self.cursor.path = compiler.insert_sibling(
-                        &self.cursor.path,
-                        self.input.buffer(),
-                        packages,
-                    );
-                }
             }
         }
 
@@ -166,7 +159,7 @@ impl Editor {
             let event = if ch == ' ' {
                 EditorInputEvent::AddChild
             } else if ch == '\n' {
-                EditorInputEvent::AddSibling
+                EditorInputEvent::MoveCursorDown
             } else {
                 EditorInputEvent::Insert { ch }
             };

@@ -71,10 +71,6 @@ impl EditorInputBuffer {
                 self.add_child_or_sibling(cursor);
                 return Some(NodeAction::AddChild);
             }
-            EditorInputEvent::AddSibling => {
-                self.add_child_or_sibling(cursor);
-                return Some(NodeAction::AddSibling);
-            }
         }
 
         None
@@ -153,7 +149,6 @@ pub enum NodeAction {
     NavigateToPrevious,
     NavigateToNext,
     AddChild,
-    AddSibling,
 }
 
 #[cfg(test)]
@@ -331,18 +326,6 @@ mod tests {
         assert_eq!(input.buffer(), "1");
 
         input.update(AddChild, &mut cursor);
-        assert_eq!(input.buffer(), "");
-    }
-
-    #[test]
-    fn add_sibling() {
-        let mut input = EditorInputBuffer::empty();
-        let mut cursor = 0;
-
-        input.update(Insert { ch: '1' }, &mut cursor);
-        assert_eq!(input.buffer(), "1");
-
-        input.update(AddSibling, &mut cursor);
         assert_eq!(input.buffer(), "");
     }
 }
