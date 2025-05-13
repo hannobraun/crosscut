@@ -155,19 +155,6 @@ pub enum SyntaxNode {
         /// From the perspective of the syntax tree, this child stays static.
         /// When the user tries to edit it, the editor actually creates a new
         /// child that is then edited, and this one stays as it is.
-        ///
-        /// ## Implementation Note
-        ///
-        /// Having this child here is a bit weird, and probably not desirable in
-        /// the long term. It is only relevant to the editor, and nothing else.
-        /// As the syntax grows more complex, and what's shown in the editor
-        /// keeps diverging from the underlying syntax tree, it probably doesn't
-        /// make sense to represent all of that here.
-        ///
-        /// But so far, this point hasn't been reached. As of this writing, this
-        /// is the only such "editor-only" syntax. And while that is the case,
-        /// managing it here makes more sense. It allows the node to piggyback
-        /// on top of the existing infrastructure for other nodes.
         add_value: NodeHash,
     },
 
