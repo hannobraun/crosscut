@@ -227,7 +227,7 @@ impl SyntaxNode {
             | Self::Recursion
             | Self::UnresolvedIdentifier { .. } => vec![],
 
-            Self::Tuple { values: inputs }
+            Self::Tuple { values: inputs, .. }
             | Self::Test {
                 children: inputs, ..
             } => inputs.inner.clone(),
