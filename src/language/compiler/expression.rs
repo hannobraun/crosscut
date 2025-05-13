@@ -72,7 +72,6 @@ fn resolve_function(
                 Ok((SyntaxNode::Tuple { values }, None))
             }
         },
-        (None, None) => Err(()),
         (_, _) => Err(()),
     }
 }
