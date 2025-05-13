@@ -1,4 +1,13 @@
-use crate::language::code::{Children, SyntaxNode};
+use crate::language::code::{Children, Nodes, SyntaxNode};
+
+pub struct Function;
+
+impl Function {
+    pub fn to_node(&self, nodes: &mut Nodes) -> SyntaxNode {
+        let [parameter, body] = [nodes.insert(SyntaxNode::Empty); 2];
+        SyntaxNode::Function { parameter, body }
+    }
+}
 
 pub struct Tuple;
 

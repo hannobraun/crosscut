@@ -3,7 +3,7 @@ use crate::language::{
     packages::Packages,
 };
 
-use super::Tuple;
+use super::{Tuple, typed_nodes::Function};
 
 pub fn compile(
     token: &str,
@@ -55,10 +55,7 @@ fn resolve_literal(name: &str, nodes: &mut Nodes) -> Option<SyntaxNode> {
         Some(SyntaxNode::Number { value })
     } else {
         match name {
-            "fn" => {
-                let [parameter, body] = [nodes.insert(SyntaxNode::Empty); 2];
-                Some(SyntaxNode::Function { parameter, body })
-            }
+            "fn" => Some(Function.to_node(nodes)),
             "tuple" => Some(Tuple.to_node()),
             _ => None,
         }
