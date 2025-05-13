@@ -1,7 +1,5 @@
 use std::collections::BTreeMap;
 
-use crate::language::packages::FunctionId;
-
 use super::NodeHash;
 
 #[derive(Clone, Debug, Eq, PartialEq)]
@@ -28,12 +26,6 @@ impl Errors {
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub enum CodeError {
     UnresolvedIdentifier,
-}
-
-#[derive(Clone, Debug, Eq, PartialEq)]
-pub enum CandidateForResolution {
-    Literal { literal: Literal },
-    ProvidedFunction { id: FunctionId },
 }
 
 #[derive(Clone, Debug, Eq, PartialEq, udigest::Digestable)]

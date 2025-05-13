@@ -1,8 +1,5 @@
 use crate::language::{
-    code::{
-        CandidateForResolution, Children, CodeError, Errors, Literal, NodeHash,
-        Nodes, SyntaxNode,
-    },
+    code::{Children, CodeError, Errors, Literal, NodeHash, Nodes, SyntaxNode},
     packages::Packages,
 };
 
@@ -76,19 +73,7 @@ fn resolve_function(
             }
         },
         (None, None) => Err(()),
-        (provided_function, literal) => {
-            let mut candidates = Vec::new();
-
-            if let Some(id) = provided_function {
-                candidates
-                    .push(CandidateForResolution::ProvidedFunction { id });
-            }
-            if let Some(literal) = literal {
-                candidates.push(CandidateForResolution::Literal { literal });
-            }
-
-            Err(())
-        }
+        (_, _) => Err(()),
     }
 }
 
