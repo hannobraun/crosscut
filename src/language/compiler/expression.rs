@@ -15,7 +15,7 @@ pub fn compile(
         (node, None)
     } else {
         match resolve_function(token, packages, nodes) {
-            Ok((node, maybe_err)) => (node, maybe_err),
+            Ok(node) => (node, None),
             Err(_) => (
                 SyntaxNode::UnresolvedIdentifier {
                     identifier: token.to_string(),
@@ -51,25 +51,23 @@ fn resolve_function(
     name: &str,
     packages: &Packages,
     nodes: &mut Nodes,
-) -> Result<(SyntaxNode, Option<CodeError>), ()> {
+) -> Result<SyntaxNode, ()> {
     let provided_function = packages.resolve_function(name);
     let literal = resolve_literal(name, nodes);
 
     match (provided_function, literal) {
-        (Some(id), None) => Ok((SyntaxNode::ProvidedFunction { id }, None)),
+        (Some(id), None) => Ok(SyntaxNode::ProvidedFunction { id }),
         (None, Some(literal)) => match literal {
             Literal::Function => {
                 let [parameter, body] = [nodes.insert(SyntaxNode::Empty); 2];
 
-                Ok((SyntaxNode::Function { parameter, body }, None))
+                Ok(SyntaxNode::Function { parameter, body })
             }
-            Literal::Integer { value } => {
-                Ok((SyntaxNode::Number { value }, None))
-            }
+            Literal::Integer { value } => Ok(SyntaxNode::Number { value }),
             Literal::Tuple => {
                 let values = Children::new([]);
 
-                Ok((SyntaxNode::Tuple { values }, None))
+                Ok(SyntaxNode::Tuple { values })
             }
         },
         (_, _) => Err(()),
