@@ -7,5 +7,4 @@ pub enum EditorInputEvent {
     MoveCursorDown,
     RemoveLeft { whole_node: bool },
     RemoveRight { whole_node: bool },
-    AddChild,
 }

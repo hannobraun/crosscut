@@ -73,13 +73,6 @@ impl Editor {
                         );
                     }
                 }
-                NodeAction::AddChild => {
-                    self.cursor.path = compiler.insert_child(
-                        self.cursor.path.clone(),
-                        self.input.buffer(),
-                        packages,
-                    );
-                }
             }
         }
 
@@ -156,9 +149,7 @@ impl Editor {
         packages: &Packages,
     ) {
         for ch in code.chars() {
-            let event = if ch == ' ' {
-                EditorInputEvent::AddChild
-            } else if ch == '\n' {
+            let event = if ch == ' ' || ch == '\n' {
                 EditorInputEvent::MoveCursorDown
             } else {
                 EditorInputEvent::Insert { ch }

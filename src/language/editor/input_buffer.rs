@@ -67,10 +67,6 @@ impl EditorInputBuffer {
                 let _ = whole_node;
                 self.remove_right(cursor);
             }
-            EditorInputEvent::AddChild => {
-                self.add_child_or_sibling(cursor);
-                return Some(NodeAction::AddChild);
-            }
         }
 
         None
@@ -138,17 +134,12 @@ impl EditorInputBuffer {
             self.buffer.remove(*cursor);
         }
     }
-
-    fn add_child_or_sibling(&mut self, cursor: &mut usize) {
-        *self = Self::new(String::new(), cursor);
-    }
 }
 
 #[derive(Debug)]
 pub enum NodeAction {
     NavigateToPrevious,
     NavigateToNext,
-    AddChild,
 }
 
 #[cfg(test)]
@@ -315,17 +306,5 @@ mod tests {
         input.update(MoveCursorLeft, &mut cursor);
         input.update(Insert { ch: '切' }, &mut cursor);
         assert_eq!(input.buffer(), "横切码");
-    }
-
-    #[test]
-    fn add_child() {
-        let mut input = EditorInputBuffer::empty();
-        let mut cursor = 0;
-
-        input.update(Insert { ch: '1' }, &mut cursor);
-        assert_eq!(input.buffer(), "1");
-
-        input.update(AddChild, &mut cursor);
-        assert_eq!(input.buffer(), "");
     }
 }
