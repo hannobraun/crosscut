@@ -1,4 +1,4 @@
-use super::{NodePath, Nodes, SiblingIndex, SyntaxNode};
+use super::{NodeHash, NodePath, Nodes, SiblingIndex, SyntaxNode};
 
 #[derive(Debug, Eq, PartialEq)]
 pub struct LocatedNode<'r> {
@@ -11,20 +11,7 @@ impl LocatedNode<'_> {
         &self,
         nodes: &'r Nodes,
     ) -> impl DoubleEndedIterator<Item = LocatedNode<'r>> {
-        self.node
-            .children()
-            .into_iter()
-            .enumerate()
-            .map(|(index, child)| {
-                let node = nodes.get(&child);
-                let path = NodePath::new(
-                    child,
-                    Some((self.path.clone(), SiblingIndex { index })),
-                    nodes,
-                );
-
-                LocatedNode { node, path }
-            })
+        hashes_to_located_nodes(self.node.children(), &self.path, nodes)
     }
 
     /// # The children of the node that are expressions and its inputs
@@ -37,4 +24,21 @@ impl LocatedNode<'_> {
     ) -> impl DoubleEndedIterator<Item = LocatedNode<'r>> {
         self.children(nodes)
     }
+}
+
+fn hashes_to_located_nodes<'r>(
+    hashes: Vec<NodeHash>,
+    parent: &NodePath,
+    nodes: &'r Nodes,
+) -> impl DoubleEndedIterator<Item = LocatedNode<'r>> {
+    hashes.into_iter().enumerate().map(|(index, child)| {
+        let node = nodes.get(&child);
+        let path = NodePath::new(
+            child,
+            Some((parent.clone(), SiblingIndex { index })),
+            nodes,
+        );
+
+        LocatedNode { node, path }
+    })
 }
