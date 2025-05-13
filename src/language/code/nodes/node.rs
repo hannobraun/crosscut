@@ -210,6 +210,30 @@ impl SyntaxNode {
         }
     }
 
+    pub fn inputs(&self) -> Vec<NodeHash> {
+        match self {
+            Self::Apply {
+                expression: a,
+                argument: b,
+            }
+            | Self::Function {
+                parameter: a,
+                body: b,
+            } => vec![*a, *b],
+
+            Self::Empty
+            | Self::Number { value: _ }
+            | Self::ProvidedFunction { .. }
+            | Self::Recursion
+            | Self::UnresolvedIdentifier { .. } => vec![],
+
+            Self::Tuple { values: inputs }
+            | Self::Test {
+                children: inputs, ..
+            } => inputs.inner.clone(),
+        }
+    }
+
     pub fn to_token(&self, packages: &Packages) -> String {
         self.display(packages).to_string()
     }
