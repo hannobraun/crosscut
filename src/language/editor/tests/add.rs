@@ -78,3 +78,25 @@ fn add_fn_node() {
     assert_eq!(parameter.node, &SyntaxNode::Empty);
     assert_eq!(body.node, &SyntaxNode::Empty);
 }
+
+#[test]
+fn add_value_to_tuple() {
+    // Tuples have a node that the user can edit to add children.
+
+    let packages = Packages::default();
+
+    let mut codebase = Codebase::new();
+    let mut evaluator = Evaluator::new();
+
+    let mut editor = Editor::new(codebase.root().path, &codebase, &packages);
+    editor.on_code("tuple", &mut codebase, &mut evaluator, &packages);
+
+    editor.on_input(MoveCursorDown, &mut codebase, &mut evaluator, &packages);
+    editor.on_code("1", &mut codebase, &mut evaluator, &packages);
+
+    let tuple = codebase.root();
+    let [value, _] = tuple.expect_children(codebase.nodes());
+
+    assert!(matches!(tuple.node, &SyntaxNode::Tuple { .. }));
+    assert_eq!(value.node, &SyntaxNode::Number { value: 1 });
+}

@@ -1,5 +1,5 @@
 use crate::language::{
-    code::{Codebase, NodePath},
+    code::{Codebase, NodePath, SyntaxNode},
     compiler::Compiler,
     packages::Packages,
     runtime::Evaluator,
@@ -90,8 +90,19 @@ impl Editor {
             }
         }
 
-        self.cursor.path =
-            compiler.replace(&self.cursor.path, self.input.buffer(), packages);
+        let current_node = compiler.codebase().node_at(&self.cursor.path);
+        self.cursor.path = if let SyntaxNode::AddValue = current_node.node {
+            let Some(parent) = current_node.path.parent().cloned() else {
+                unreachable!(
+                    "Current node is a node that is solely dedicated to adding \
+                    children to its parent. Thus, it must have a parent."
+                );
+            };
+
+            compiler.insert_child(parent, self.input.buffer(), packages)
+        } else {
+            compiler.replace(&self.cursor.path, self.input.buffer(), packages)
+        };
 
         let root = compiler.codebase().root().path;
         assert!(
