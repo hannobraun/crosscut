@@ -115,6 +115,11 @@ impl Evaluator {
         };
 
         match codebase.nodes().get(node.path.hash()) {
+            node @ SyntaxNode::AddValue => {
+                panic!(
+                    "Encountered a node that is not an expression: {node:#?}"
+                );
+            }
             SyntaxNode::Apply { .. } => {
                 if let Some(child) = node.children_to_evaluate.pop() {
                     self.eval_stack.push(node);

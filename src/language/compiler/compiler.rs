@@ -38,7 +38,8 @@ impl<'r> Compiler<'r> {
                 let mut node = change_set.nodes.get(parent.hash()).clone();
 
                 let sibling_index = match &mut node {
-                    SyntaxNode::Apply { .. }
+                    SyntaxNode::AddValue
+                    | SyntaxNode::Apply { .. }
                     | SyntaxNode::Empty
                     | SyntaxNode::Function { .. }
                     | SyntaxNode::Number { .. }

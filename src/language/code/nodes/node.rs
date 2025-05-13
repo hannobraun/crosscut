@@ -29,6 +29,9 @@ use crate::language::{
 /// reasons.
 #[derive(Clone, Debug, Eq, Ord, PartialEq, PartialOrd, udigest::Digestable)]
 pub enum SyntaxNode {
+    /// # A node used for adding a value to a list
+    AddValue,
+
     /// # The application of an expression to an argument
     Apply {
         /// # The expression that is being applied to the argument
@@ -196,7 +199,8 @@ impl SyntaxNode {
                     || child == child_b && sibling_index == &index_b
             }
 
-            Self::Empty
+            Self::AddValue
+            | Self::Empty
             | Self::Number { value: _ }
             | Self::ProvidedFunction { .. }
             | Self::Recursion
@@ -225,7 +229,8 @@ impl SyntaxNode {
                 body: b,
             } => vec![*a, *b],
 
-            Self::Empty
+            Self::AddValue
+            | Self::Empty
             | Self::Number { value: _ }
             | Self::ProvidedFunction { .. }
             | Self::Recursion
@@ -252,7 +257,8 @@ impl SyntaxNode {
                 body: b,
             } => vec![*a, *b],
 
-            Self::Empty
+            Self::AddValue
+            | Self::Empty
             | Self::Number { value: _ }
             | Self::ProvidedFunction { .. }
             | Self::Recursion
@@ -288,6 +294,9 @@ pub struct ExpressionDisplay<'r> {
 impl fmt::Display for ExpressionDisplay<'_> {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match &self.node {
+            SyntaxNode::AddValue => {
+                write!(f, "<add value>")
+            }
             SyntaxNode::Apply { .. } => {
                 write!(f, "apply")
             }

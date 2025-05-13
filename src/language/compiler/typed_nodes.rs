@@ -14,7 +14,7 @@ pub struct Tuple;
 impl Tuple {
     pub fn to_node(&self, nodes: &mut Nodes) -> SyntaxNode {
         let values = Children::new([]);
-        let add_value = nodes.insert(SyntaxNode::Empty);
+        let add_value = nodes.insert(SyntaxNode::AddValue);
         SyntaxNode::Tuple { values, add_value }
     }
 }
