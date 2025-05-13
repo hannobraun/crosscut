@@ -232,7 +232,7 @@ fn navigate_down_to_next_sibling() {
         compiler.insert_child(compiler.codebase().root().path, "b", &packages);
     }
 
-    let [a, b] = codebase
+    let [a, b, _] = codebase
         .root()
         .expect_children(codebase.nodes())
         .map(|located_node| located_node.path);
@@ -268,7 +268,7 @@ fn navigate_right_to_next_sibling() {
         compiler.insert_child(compiler.codebase().root().path, "b", &packages);
     }
 
-    let [a, b] = codebase
+    let [a, b, _] = codebase
         .root()
         .expect_children(codebase.nodes())
         .map(|located_node| located_node.path);
@@ -303,7 +303,7 @@ fn navigate_up_to_previous_sibling() {
         compiler.insert_child(compiler.codebase().root().path, "b", &packages);
     }
 
-    let [a, b] = codebase
+    let [a, b, _] = codebase
         .root()
         .expect_children(codebase.nodes())
         .map(|located_node| located_node.path);
@@ -339,7 +339,7 @@ fn navigate_left_to_previous_sibling() {
         compiler.insert_child(compiler.codebase().root().path, "b", &packages);
     }
 
-    let [a, b] = codebase
+    let [a, b, _] = codebase
         .root()
         .expect_children(codebase.nodes())
         .map(|located_node| located_node.path);

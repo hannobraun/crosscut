@@ -121,7 +121,10 @@ fn update_children(
             panic!("Node has no children. Can't replace one.");
         }
 
-        SyntaxNode::Tuple { values: children }
+        SyntaxNode::Tuple {
+            values: children,
+            add_value: NodeHash { .. },
+        }
         | SyntaxNode::Test {
             name: String { .. },
             children,

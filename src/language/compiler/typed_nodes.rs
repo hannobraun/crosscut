@@ -12,8 +12,9 @@ impl Function {
 pub struct Tuple;
 
 impl Tuple {
-    pub fn to_node(&self, _: &mut Nodes) -> SyntaxNode {
+    pub fn to_node(&self, nodes: &mut Nodes) -> SyntaxNode {
         let values = Children::new([]);
-        SyntaxNode::Tuple { values }
+        let add_value = nodes.insert(SyntaxNode::Empty);
+        SyntaxNode::Tuple { values, add_value }
     }
 }
