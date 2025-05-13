@@ -61,12 +61,6 @@ fn resolve_keyword(name: &str, nodes: &mut Nodes) -> Option<SyntaxNode> {
     }
 }
 
-fn resolve_function(name: &str, packages: &Packages) -> Option<SyntaxNode> {
-    let provided_function = packages.resolve_function(name);
-
-    provided_function.map(|id| SyntaxNode::ProvidedFunction { id })
-}
-
 fn resolve_literal(name: &str, _: &mut Nodes) -> Option<Literal> {
     if let Ok(value) = name.parse() {
         Some(Literal::Integer { value })
@@ -77,4 +71,10 @@ fn resolve_literal(name: &str, _: &mut Nodes) -> Option<Literal> {
             _ => None,
         }
     }
+}
+
+fn resolve_function(name: &str, packages: &Packages) -> Option<SyntaxNode> {
+    let provided_function = packages.resolve_function(name);
+
+    provided_function.map(|id| SyntaxNode::ProvidedFunction { id })
 }
