@@ -316,7 +316,7 @@ struct StackFrame {
 mod tests {
     use crate::language::{
         code::{Codebase, NodePath, SyntaxNode},
-        compiler::Tuple,
+        compiler::{Function, Tuple},
         runtime::{Evaluator, RuntimeState, Value},
         tests::infra::ExpectChildren,
     };
@@ -330,10 +330,7 @@ mod tests {
         let mut codebase = Codebase::new();
 
         codebase.make_change(|change_set| {
-            let parameter = change_set.nodes.insert(SyntaxNode::Empty);
-            let body = change_set.nodes.insert(SyntaxNode::Empty);
-
-            let node = SyntaxNode::Function { parameter, body };
+            let node = Function.to_node(change_set.nodes);
             let hash = change_set.nodes.insert(node);
 
             change_set.replace(
