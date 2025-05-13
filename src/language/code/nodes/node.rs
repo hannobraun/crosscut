@@ -297,7 +297,7 @@ impl fmt::Display for ExpressionDisplay<'_> {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match &self.node {
             SyntaxNode::AddValue => {
-                write!(f, "<add value>")
+                write!(f, "")
             }
             SyntaxNode::Apply { .. } => {
                 write!(f, "apply")
