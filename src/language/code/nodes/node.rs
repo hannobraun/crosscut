@@ -86,9 +86,9 @@ pub enum SyntaxNode {
         value: i32,
     },
 
-    /// # Binds a value to a name
+    /// # Assigns a name to a value
     Binding {
-        /// # The name that the value is bound to
+        /// # The name that this binding assigns to the value
         name: String,
     },
 
