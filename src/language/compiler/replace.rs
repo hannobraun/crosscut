@@ -112,6 +112,7 @@ fn update_children(
         SyntaxNode::AddValue
         | SyntaxNode::Empty
         | SyntaxNode::Number { value: _ }
+        | SyntaxNode::Pattern
         | SyntaxNode::ProvidedFunction {
             id: FunctionId { .. },
         }

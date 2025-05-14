@@ -86,6 +86,9 @@ pub enum SyntaxNode {
         value: i32,
     },
 
+    /// # A pattern that is used to match values in function parameters
+    Pattern,
+
     /// # The application of a provided function
     ///
     /// Evaluating this note applies a provided function to the active value.
@@ -204,6 +207,7 @@ impl SyntaxNode {
             Self::AddValue
             | Self::Empty
             | Self::Number { value: _ }
+            | Self::Pattern
             | Self::ProvidedFunction { .. }
             | Self::Recursion
             | Self::UnresolvedIdentifier { .. } => false,
@@ -234,6 +238,7 @@ impl SyntaxNode {
             Self::AddValue
             | Self::Empty
             | Self::Number { value: _ }
+            | Self::Pattern
             | Self::ProvidedFunction { .. }
             | Self::Recursion
             | Self::UnresolvedIdentifier { .. } => vec![],
@@ -259,6 +264,7 @@ impl SyntaxNode {
             | Self::Empty
             | Self::Function { .. }
             | Self::Number { value: _ }
+            | Self::Pattern
             | Self::ProvidedFunction { .. }
             | Self::Recursion
             | Self::UnresolvedIdentifier { .. } => vec![],
@@ -307,6 +313,9 @@ impl fmt::Display for ExpressionDisplay<'_> {
             }
             SyntaxNode::Number { value } => {
                 write!(f, "{value}")
+            }
+            SyntaxNode::Pattern => {
+                write!(f, "_")
             }
             SyntaxNode::ProvidedFunction { id, .. } => {
                 let name = self.packages.function_name_by_id(id);

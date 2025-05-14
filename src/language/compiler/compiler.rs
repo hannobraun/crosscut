@@ -43,6 +43,7 @@ impl<'r> Compiler<'r> {
                     | SyntaxNode::Empty
                     | SyntaxNode::Function { .. }
                     | SyntaxNode::Number { .. }
+                    | SyntaxNode::Pattern
                     | SyntaxNode::ProvidedFunction { .. }
                     | SyntaxNode::Recursion
                     | SyntaxNode::UnresolvedIdentifier { .. } => {

@@ -362,6 +362,9 @@ fn render_help<A: EditorOutputAdapter>(
                 `{value}`.",
             )?;
         }
+        SyntaxNode::Pattern => {
+            writeln!(adapter, "This is a pattern that can match an argument.")?;
+        }
         SyntaxNode::ProvidedFunction { .. } => {
             writeln!(
                 adapter,

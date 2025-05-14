@@ -75,7 +75,7 @@ fn add_fn_node() {
             body: *body.path.hash(),
         },
     );
-    assert_eq!(parameter.node, &SyntaxNode::Empty);
+    assert_eq!(parameter.node, &SyntaxNode::Pattern);
     assert_eq!(body.node, &SyntaxNode::Empty);
 }
 
