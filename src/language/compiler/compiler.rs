@@ -25,14 +25,12 @@ impl<'r> Compiler<'r> {
         packages: &Packages,
     ) -> NodePath {
         self.codebase.make_change(|change_set| {
-            let child = {
-                expression::compile(
-                    child_token,
-                    change_set.nodes,
-                    change_set.errors,
-                    packages,
-                )
-            };
+            let child = expression::compile(
+                child_token,
+                change_set.nodes,
+                change_set.errors,
+                packages,
+            );
 
             let (parent_path, sibling_index) = {
                 let mut node = change_set.nodes.get(parent.hash()).clone();
