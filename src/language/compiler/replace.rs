@@ -110,9 +110,9 @@ fn update_children(
         }
 
         SyntaxNode::AddValue
+        | SyntaxNode::Binding { name: _ }
         | SyntaxNode::Empty
         | SyntaxNode::Number { value: _ }
-        | SyntaxNode::Binding { name: _ }
         | SyntaxNode::ProvidedFunction {
             id: FunctionId { .. },
         }
