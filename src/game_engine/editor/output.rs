@@ -341,6 +341,9 @@ fn render_help<A: EditorOutputAdapter>(
                 "This is the application of a function to an argument.",
             )?;
         }
+        SyntaxNode::Binding { .. } => {
+            writeln!(adapter, "A binding that assigns a name to a value.")?;
+        }
         SyntaxNode::Empty => {
             writeln!(
                 adapter,
@@ -361,9 +364,6 @@ fn render_help<A: EditorOutputAdapter>(
                 "This is an integer literal that produces the integer value \
                 `{value}`.",
             )?;
-        }
-        SyntaxNode::Binding { .. } => {
-            writeln!(adapter, "A binding that assigns a name to a value.")?;
         }
         SyntaxNode::ProvidedFunction { .. } => {
             writeln!(
