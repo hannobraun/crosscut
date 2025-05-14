@@ -77,7 +77,7 @@ fn add_fn_node() {
     );
     assert_eq!(
         parameter.node,
-        &SyntaxNode::Pattern {
+        &SyntaxNode::Binding {
             identifier: "_".to_string()
         }
     );

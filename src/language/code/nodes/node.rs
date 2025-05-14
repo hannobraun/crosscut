@@ -92,7 +92,7 @@ pub enum SyntaxNode {
     ///
     /// The intention is to use this for pattern matching. For now, it just
     /// binds any value to a name.
-    Pattern {
+    Binding {
         /// # The identifier that this pattern binds its argument to
         identifier: String,
     },
@@ -215,7 +215,7 @@ impl SyntaxNode {
             Self::AddValue
             | Self::Empty
             | Self::Number { value: _ }
-            | Self::Pattern { .. }
+            | Self::Binding { .. }
             | Self::ProvidedFunction { .. }
             | Self::Recursion
             | Self::UnresolvedIdentifier { .. } => false,
@@ -246,7 +246,7 @@ impl SyntaxNode {
             Self::AddValue
             | Self::Empty
             | Self::Number { value: _ }
-            | Self::Pattern { .. }
+            | Self::Binding { .. }
             | Self::ProvidedFunction { .. }
             | Self::Recursion
             | Self::UnresolvedIdentifier { .. } => vec![],
@@ -272,7 +272,7 @@ impl SyntaxNode {
             | Self::Empty
             | Self::Function { .. }
             | Self::Number { value: _ }
-            | Self::Pattern { .. }
+            | Self::Binding { .. }
             | Self::ProvidedFunction { .. }
             | Self::Recursion
             | Self::UnresolvedIdentifier { .. } => vec![],
@@ -322,7 +322,7 @@ impl fmt::Display for ExpressionDisplay<'_> {
             SyntaxNode::Number { value } => {
                 write!(f, "{value}")
             }
-            SyntaxNode::Pattern { identifier } => {
+            SyntaxNode::Binding { identifier } => {
                 write!(f, "{identifier}")
             }
             SyntaxNode::ProvidedFunction { id, .. } => {
