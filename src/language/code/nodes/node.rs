@@ -86,14 +86,9 @@ pub enum SyntaxNode {
         value: i32,
     },
 
-    /// # A pattern that is used to match values in function parameters
-    ///
-    /// ## Implementation Note
-    ///
-    /// The intention is to use this for pattern matching. For now, it just
-    /// binds any value to a name.
+    /// # Binds a value to a name
     Binding {
-        /// # The identifier that this pattern binds its argument to
+        /// # The name that the value is bound to
         name: String,
     },
 
