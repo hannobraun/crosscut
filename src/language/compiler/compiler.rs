@@ -38,10 +38,10 @@ impl<'r> Compiler<'r> {
                 let sibling_index = match &mut node {
                     SyntaxNode::AddValue
                     | SyntaxNode::Apply { .. }
+                    | SyntaxNode::Binding { .. }
                     | SyntaxNode::Empty
                     | SyntaxNode::Function { .. }
                     | SyntaxNode::Number { .. }
-                    | SyntaxNode::Binding { .. }
                     | SyntaxNode::ProvidedFunction { .. }
                     | SyntaxNode::Recursion
                     | SyntaxNode::UnresolvedIdentifier { .. } => {
