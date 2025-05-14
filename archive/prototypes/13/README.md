@@ -46,7 +46,7 @@ prototype (a direct continuation, based on the same code).
 
 I announced the archiving of this prototype in my daily note on
 [2025-04-23](https://www.crosscut.cc/daily/2025-04-23) and mentioned it again on
-[2025-04-30](/daily/2025-04-30).
+[2025-04-30](https://www.crosscut.cc/daily/2025-04-30).
 
 I wrote about the switch to restricted structural structural editing from
 [2025-05-01](https://www.crosscut.cc/daily/2025-05-01) to
