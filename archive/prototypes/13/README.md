@@ -50,7 +50,9 @@ I announced the archiving of this prototype in my daily note on
 
 I wrote about the switch to restricted structural structural editing from
 [2025-05-01](https://www.crosscut.cc/daily/2025-05-01) to
-[2025-05-05](https://www.crosscut.cc/daily/2025-05-05). I started writing about
-the switch from postfix to prefix syntax on
+[2025-05-05](https://www.crosscut.cc/daily/2025-05-05), and posted an update on
+the progress on [2025-05-14](https://www.crosscut.cc/daily/2025-05-14).
+
+I started writing about the switch from postfix to prefix syntax on
 [2025-05-06](https://www.crosscut.cc/daily/2025-05-06). As of this writing
-(2025-05-13), this series is still ongoing.
+(2025-05-14), that series is still ongoing.
