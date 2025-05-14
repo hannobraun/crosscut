@@ -56,6 +56,12 @@ pub enum SyntaxNode {
         argument: NodeHash,
     },
 
+    /// # Assigns a name to a value
+    Binding {
+        /// # The name that this binding assigns to the value
+        name: String,
+    },
+
     /// # An empty node
     ///
     /// Empty nodes are placeholders, while the user is editing the code. They
@@ -84,12 +90,6 @@ pub enum SyntaxNode {
         /// support more number types, and more ways of specifying literals
         /// except as decimal numbers, this needs to become more sophisticated.
         value: i32,
-    },
-
-    /// # Assigns a name to a value
-    Binding {
-        /// # The name that this binding assigns to the value
-        name: String,
     },
 
     /// # The application of a provided function
