@@ -11,7 +11,7 @@ fn define_and_evaluate() {
         .down()
         .code("fn")
         .down()
-        .code("0")
+        .code("_")
         .down()
         .code("127");
 
@@ -31,7 +31,7 @@ fn self_recursion() {
         .down()
         .code("fn")
         .down()
-        .code("0")
+        .code("_")
         .down()
         .code("apply")
         .down()
