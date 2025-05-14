@@ -308,6 +308,9 @@ impl fmt::Display for ExpressionDisplay<'_> {
             SyntaxNode::Apply { .. } => {
                 write!(f, "apply")
             }
+            SyntaxNode::Binding { name } => {
+                write!(f, "{name}")
+            }
             SyntaxNode::Empty => {
                 write!(f, "")
             }
@@ -316,9 +319,6 @@ impl fmt::Display for ExpressionDisplay<'_> {
             }
             SyntaxNode::Number { value } => {
                 write!(f, "{value}")
-            }
-            SyntaxNode::Binding { name } => {
-                write!(f, "{name}")
             }
             SyntaxNode::ProvidedFunction { id, .. } => {
                 let name = self.packages.function_name_by_id(id);
