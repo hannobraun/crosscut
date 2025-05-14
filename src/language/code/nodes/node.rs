@@ -87,7 +87,10 @@ pub enum SyntaxNode {
     },
 
     /// # A pattern that is used to match values in function parameters
-    Pattern,
+    Pattern {
+        /// # The identifier that this pattern binds its argument to
+        identifier: String,
+    },
 
     /// # The application of a provided function
     ///
@@ -207,7 +210,7 @@ impl SyntaxNode {
             Self::AddValue
             | Self::Empty
             | Self::Number { value: _ }
-            | Self::Pattern
+            | Self::Pattern { .. }
             | Self::ProvidedFunction { .. }
             | Self::Recursion
             | Self::UnresolvedIdentifier { .. } => false,
@@ -238,7 +241,7 @@ impl SyntaxNode {
             Self::AddValue
             | Self::Empty
             | Self::Number { value: _ }
-            | Self::Pattern
+            | Self::Pattern { .. }
             | Self::ProvidedFunction { .. }
             | Self::Recursion
             | Self::UnresolvedIdentifier { .. } => vec![],
@@ -264,7 +267,7 @@ impl SyntaxNode {
             | Self::Empty
             | Self::Function { .. }
             | Self::Number { value: _ }
-            | Self::Pattern
+            | Self::Pattern { .. }
             | Self::ProvidedFunction { .. }
             | Self::Recursion
             | Self::UnresolvedIdentifier { .. } => vec![],
@@ -314,7 +317,7 @@ impl fmt::Display for ExpressionDisplay<'_> {
             SyntaxNode::Number { value } => {
                 write!(f, "{value}")
             }
-            SyntaxNode::Pattern => {
+            SyntaxNode::Pattern { identifier: _ } => {
                 write!(f, "_")
             }
             SyntaxNode::ProvidedFunction { id, .. } => {

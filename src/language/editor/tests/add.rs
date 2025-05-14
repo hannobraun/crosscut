@@ -75,7 +75,12 @@ fn add_fn_node() {
             body: *body.path.hash(),
         },
     );
-    assert_eq!(parameter.node, &SyntaxNode::Pattern);
+    assert_eq!(
+        parameter.node,
+        &SyntaxNode::Pattern {
+            identifier: "_".to_string()
+        }
+    );
     assert_eq!(body.node, &SyntaxNode::Empty);
 }
 

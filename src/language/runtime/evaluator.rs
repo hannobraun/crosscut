@@ -226,7 +226,7 @@ impl Evaluator {
                 self.finish_evaluating_node(Value::nothing());
             }
 
-            node @ SyntaxNode::AddValue | node @ SyntaxNode::Pattern => {
+            node @ SyntaxNode::AddValue | node @ SyntaxNode::Pattern { .. } => {
                 panic!(
                     "Encountered a node that is not an expression: {node:#?}"
                 );
