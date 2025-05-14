@@ -115,11 +115,6 @@ impl Evaluator {
         };
 
         match codebase.nodes().get(node.path.hash()) {
-            node @ SyntaxNode::AddValue => {
-                panic!(
-                    "Encountered a node that is not an expression: {node:#?}"
-                );
-            }
             SyntaxNode::Apply { .. } => {
                 if let Some(child) = node.children_to_evaluate.pop() {
                     self.eval_stack.push(node);
@@ -229,6 +224,12 @@ impl Evaluator {
                 // For now, tests don't expect a specific runtime behavior out
                 // of these expressions. So let's just use a placeholder here.
                 self.finish_evaluating_node(Value::nothing());
+            }
+
+            node @ SyntaxNode::AddValue => {
+                panic!(
+                    "Encountered a node that is not an expression: {node:#?}"
+                );
             }
         }
     }
