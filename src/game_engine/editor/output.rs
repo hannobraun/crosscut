@@ -363,7 +363,7 @@ fn render_help<A: EditorOutputAdapter>(
             )?;
         }
         SyntaxNode::Binding { .. } => {
-            writeln!(adapter, "This is a pattern that can match an argument.")?;
+            writeln!(adapter, "A binding that assigns a name to a value.")?;
         }
         SyntaxNode::ProvidedFunction { .. } => {
             writeln!(
