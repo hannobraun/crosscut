@@ -208,9 +208,9 @@ impl SyntaxNode {
             }
 
             Self::AddValue
+            | Self::Binding { .. }
             | Self::Empty
             | Self::Number { value: _ }
-            | Self::Binding { .. }
             | Self::ProvidedFunction { .. }
             | Self::Recursion
             | Self::UnresolvedIdentifier { .. } => false,
@@ -239,9 +239,9 @@ impl SyntaxNode {
             } => vec![*a, *b],
 
             Self::AddValue
+            | Self::Binding { .. }
             | Self::Empty
             | Self::Number { value: _ }
-            | Self::Binding { .. }
             | Self::ProvidedFunction { .. }
             | Self::Recursion
             | Self::UnresolvedIdentifier { .. } => vec![],
@@ -264,10 +264,10 @@ impl SyntaxNode {
             } => vec![*a, *b],
 
             Self::AddValue
+            | Self::Binding { .. }
             | Self::Empty
             | Self::Function { .. }
             | Self::Number { value: _ }
-            | Self::Binding { .. }
             | Self::ProvidedFunction { .. }
             | Self::Recursion
             | Self::UnresolvedIdentifier { .. } => vec![],
