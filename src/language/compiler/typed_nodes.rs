@@ -5,7 +5,7 @@ pub struct Function;
 impl Function {
     pub fn to_node(&self, nodes: &mut Nodes) -> SyntaxNode {
         let parameter = nodes.insert(SyntaxNode::Binding {
-            identifier: "_".to_string(),
+            name: "_".to_string(),
         });
         let body = nodes.insert(SyntaxNode::Empty);
 

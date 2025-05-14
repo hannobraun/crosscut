@@ -94,7 +94,7 @@ pub enum SyntaxNode {
     /// binds any value to a name.
     Binding {
         /// # The identifier that this pattern binds its argument to
-        identifier: String,
+        name: String,
     },
 
     /// # The application of a provided function
@@ -322,7 +322,7 @@ impl fmt::Display for ExpressionDisplay<'_> {
             SyntaxNode::Number { value } => {
                 write!(f, "{value}")
             }
-            SyntaxNode::Binding { identifier } => {
+            SyntaxNode::Binding { name: identifier } => {
                 write!(f, "{identifier}")
             }
             SyntaxNode::ProvidedFunction { id, .. } => {
