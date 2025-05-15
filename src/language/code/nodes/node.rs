@@ -79,7 +79,7 @@ pub enum SyntaxNode {
     /// # An unresolved identifier
     Identifier {
         /// # The identifier that could not be resolved
-        identifier: String,
+        name: String,
     },
 
     /// # A number literal
@@ -299,7 +299,9 @@ impl fmt::Display for SyntaxNode {
             SyntaxNode::Function { .. } => {
                 write!(f, "fn")
             }
-            SyntaxNode::Identifier { identifier, .. } => {
+            SyntaxNode::Identifier {
+                name: identifier, ..
+            } => {
                 write!(f, "{identifier}")
             }
             SyntaxNode::Number { value } => {

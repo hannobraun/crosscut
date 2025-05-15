@@ -176,7 +176,7 @@ mod tests {
 
         let [node_a, node_b] =
             ["a", "b"].map(|identifier| SyntaxNode::Identifier {
-                identifier: String::from(identifier),
+                name: String::from(identifier),
             });
         let path_a = {
             let hash = nodes.insert(node_a.clone());

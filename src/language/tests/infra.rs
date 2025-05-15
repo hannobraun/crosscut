@@ -16,7 +16,7 @@ pub fn expression(
 
 pub fn identifier(identifier: &str) -> SyntaxNode {
     SyntaxNode::Identifier {
-        identifier: identifier.to_string(),
+        name: identifier.to_string(),
     }
 }
 

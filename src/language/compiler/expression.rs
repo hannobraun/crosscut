@@ -22,7 +22,7 @@ pub fn compile(
     } else {
         (
             SyntaxNode::Identifier {
-                identifier: token.to_string(),
+                name: token.to_string(),
             },
             Some(CodeError::UnresolvedIdentifier),
         )

@@ -109,7 +109,7 @@ fn update_children(
         | SyntaxNode::Binding { name: _ }
         | SyntaxNode::Empty
         | SyntaxNode::Identifier {
-            identifier: String { .. },
+            name: String { .. },
         }
         | SyntaxNode::Number { value: _ }
         | SyntaxNode::ProvidedFunction { name: _ }
