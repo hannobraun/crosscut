@@ -53,12 +53,6 @@ impl Packages {
             functions_by_id.insert(id, function);
         }
     }
-
-    pub fn resolve_function(&self, name: &str) -> Option<FunctionId> {
-        self.inner
-            .values()
-            .find_map(|package| package.function_ids_by_name.get(name).copied())
-    }
 }
 
 #[derive(Debug, Default)]

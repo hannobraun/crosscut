@@ -5,18 +5,12 @@ use crate::language::{
 
 use super::{Function, Tuple};
 
-pub fn compile(
-    token: &str,
-    nodes: &mut Nodes,
-    packages: &Packages,
-) -> NodeHash {
+pub fn compile(token: &str, nodes: &mut Nodes, _: &Packages) -> NodeHash {
     let node = if token.is_empty() {
         SyntaxNode::Empty
     } else if let Some(node) = resolve_keyword(token, nodes) {
         node
     } else if let Some(node) = resolve_literal(token, nodes) {
-        node
-    } else if let Some(node) = resolve_function(token, packages) {
         node
     } else {
         SyntaxNode::Identifier {
@@ -51,12 +45,4 @@ fn resolve_literal(name: &str, nodes: &mut Nodes) -> Option<SyntaxNode> {
             _ => None,
         }
     }
-}
-
-fn resolve_function(name: &str, packages: &Packages) -> Option<SyntaxNode> {
-    packages
-        .resolve_function(name)
-        .map(|_| SyntaxNode::Identifier {
-            name: name.to_string(),
-        })
 }
