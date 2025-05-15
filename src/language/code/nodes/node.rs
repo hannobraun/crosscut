@@ -282,11 +282,11 @@ impl SyntaxNode {
         }
     }
 
-    pub fn to_token(&self, packages: &Packages) -> String {
-        self.display(packages).to_string()
+    pub fn to_token(&self, _: &Packages) -> String {
+        self.display().to_string()
     }
 
-    pub fn display<'r>(&'r self, _: &'r Packages) -> ExpressionDisplay<'r> {
+    pub fn display(&self) -> ExpressionDisplay {
         ExpressionDisplay { node: self }
     }
 }

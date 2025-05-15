@@ -6,12 +6,14 @@ use crate::{
         code::{CodeError, Codebase, NodePath, SyntaxNode},
         editor::{Editor, EditorLayout, EditorLine},
         language::Language,
-        packages::Packages,
         runtime::{Effect, Evaluator, RuntimeState},
     },
 };
 
 use super::input::{EditorMode, TerminalEditorInput};
+
+#[cfg(test)]
+use crate::language::packages::Packages;
 
 #[cfg(test)]
 pub fn codebase_to_stdout(codebase: &Codebase, packages: &Packages) {
@@ -34,7 +36,7 @@ pub fn codebase_to_string(codebase: &Codebase, packages: &Packages) -> String {
 #[cfg(test)]
 fn codebase_to_adapter(
     codebase: &Codebase,
-    packages: &Packages,
+    _: &Packages,
     adapter: &mut impl EditorOutputAdapter,
 ) {
     let layout = EditorLayout::new(codebase.root(), codebase);
@@ -43,7 +45,6 @@ fn codebase_to_adapter(
         codebase,
         editor: None,
         evaluator: None,
-        packages,
         cursor: None,
     };
 
@@ -73,7 +74,6 @@ where
             codebase: language.codebase(),
             editor: Some(language.editor()),
             evaluator: Some(language.evaluator()),
-            packages: language.packages(),
             cursor: None,
         };
 
@@ -253,7 +253,7 @@ fn render_node<A: EditorOutputAdapter>(
         _ => None,
     };
 
-    let node_display = node.display(context.packages);
+    let node_display = node.display();
     if let Some(color) = color {
         adapter.color(color, |adapter| {
             write!(adapter, "{node_display}")?;
@@ -378,7 +378,7 @@ fn render_help<A: EditorOutputAdapter>(
                 adapter,
                 "You are editing the `{}` keyword, which calls the current \
                 function recursively.",
-                node.display(context.packages),
+                node.display(),
             )?;
         }
         SyntaxNode::Tuple { .. } => {
@@ -407,7 +407,6 @@ struct RenderContext<'r> {
     codebase: &'r Codebase,
     editor: Option<&'r Editor>,
     evaluator: Option<&'r Evaluator>,
-    packages: &'r Packages,
     cursor: Option<Cursor>,
 }
 

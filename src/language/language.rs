@@ -49,10 +49,6 @@ impl Language {
         &self.evaluator
     }
 
-    pub fn packages(&self) -> &Packages {
-        &self.packages
-    }
-
     pub fn packages_mut(&mut self) -> &mut Packages {
         &mut self.packages
     }
