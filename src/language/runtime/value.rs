@@ -44,8 +44,8 @@ impl fmt::Display for Value {
             Self::Integer { value } => {
                 write!(f, "{value}")?;
             }
-            Self::ProvidedFunction { id, name: _ } => {
-                write!(f, "provided function `{id:?}`")?;
+            Self::ProvidedFunction { id: _, name } => {
+                write!(f, "provided function `{name}`")?;
             }
             Self::Tuple { values } => {
                 display_tuple(values, f)?;
