@@ -5,7 +5,6 @@ use crate::{
     language::{
         code::Type,
         language::Language,
-        packages::Function,
         runtime::{Effect, RuntimeState, Value},
     },
 };
@@ -48,11 +47,7 @@ where
     A: EditorOutputAdapter,
 {
     pub fn new(adapter: A) -> Self {
-        let mut language = Language::new();
-
-        language
-            .packages_mut()
-            .new_package([GameEngineFunction::Color, GameEngineFunction::Dim]);
+        let language = Language::new();
 
         let mut game_engine = Self {
             language,
@@ -276,19 +271,4 @@ pub enum GameInput {
 #[derive(Debug)]
 pub enum GameOutput {
     SubmitColor { color: [f64; 4] },
-}
-
-#[derive(Clone, Copy, Debug, Eq, Ord, PartialEq, PartialOrd)]
-pub enum GameEngineFunction {
-    Color,
-    Dim,
-}
-
-impl Function for GameEngineFunction {
-    fn name(&self) -> &str {
-        match self {
-            Self::Color => "color",
-            Self::Dim => "dim",
-        }
-    }
 }

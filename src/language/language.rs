@@ -12,7 +12,6 @@ pub struct Language {
     codebase: Codebase,
     editor: Editor,
     evaluator: Evaluator,
-    packages: Packages,
 }
 
 impl Language {
@@ -33,7 +32,6 @@ impl Language {
             codebase,
             editor,
             evaluator,
-            packages,
         }
     }
 
@@ -47,10 +45,6 @@ impl Language {
 
     pub fn evaluator(&self) -> &Evaluator {
         &self.evaluator
-    }
-
-    pub fn packages_mut(&mut self) -> &mut Packages {
-        &mut self.packages
     }
 
     pub fn on_input(&mut self, event: EditorInputEvent) {
