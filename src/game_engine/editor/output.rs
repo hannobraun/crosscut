@@ -241,11 +241,11 @@ fn render_node<A: EditorOutputAdapter>(
     }
 
     let color = match node {
+        SyntaxNode::Identifier { .. } => Some(ERROR_COLOR),
         SyntaxNode::Function { .. }
         | SyntaxNode::Number { .. }
         | SyntaxNode::Tuple { .. } => Some(Color::DarkBlue),
         SyntaxNode::ProvidedFunction { .. } => Some(Color::DarkMagenta),
-        SyntaxNode::Identifier { .. } => Some(ERROR_COLOR),
         _ => None,
     };
 
