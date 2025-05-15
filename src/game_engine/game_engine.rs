@@ -143,7 +143,7 @@ where
                 }
                 RuntimeState::Effect { effect, .. } => {
                     match effect {
-                        Effect::ProvidedFunction { id, name: _, input } => {
+                        Effect::ProvidedFunction { id, name, input } => {
                             match self.package.function_by_id(&id) {
                                 Some(GameEngineFunction::Color) => {
                                     match input {
@@ -181,7 +181,7 @@ where
                                     }
                                 },
                                 None => {
-                                    panic!("Unexpected function: {id:?}");
+                                    panic!("Unexpected function: {name}");
                                 }
                             };
                             continue;
