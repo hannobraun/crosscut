@@ -154,9 +154,7 @@ impl Evaluator {
                 }
             }
             SyntaxNode::Empty => {
-                self.finish_evaluating_node(
-                    node.evaluated_children.into_active_value(),
-                );
+                self.finish_evaluating_node(Value::nothing());
             }
             SyntaxNode::Function { parameter: _, body } => {
                 let body = NodePath::new(
@@ -273,21 +271,6 @@ impl RuntimeExpression {
 #[derive(Clone, Debug)]
 struct EvaluatedChildren {
     inner: Vec<Value>,
-}
-
-impl EvaluatedChildren {
-    pub fn into_active_value(mut self) -> Value {
-        let value = self.inner.pop().unwrap_or(Value::nothing());
-
-        assert!(
-            self.inner.is_empty(),
-            "Expected a node to have zero or one children, but it has \
-            multiple. This is a bug. Specifically, it is a mismatch of \
-            expectations between compiler and evaluator.",
-        );
-
-        value
-    }
 }
 
 #[derive(Debug)]
