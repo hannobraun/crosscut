@@ -121,6 +121,9 @@ fn render_runtime_state<A: EditorOutputAdapter>(
                                 {input})",
                             )?;
                         }
+                        Effect::ProvidedFunctionNotFound => {
+                            writeln!(adapter, "provided function not found")?;
+                        }
                         Effect::UnexpectedInput { expected, actual } => {
                             writeln!(
                                 adapter,

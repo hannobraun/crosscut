@@ -176,7 +176,9 @@ where
                                     }
                                 },
                                 _ => {
-                                    panic!("Unexpected function: {name}");
+                                    self.language.trigger_effect(
+                                        Effect::ProvidedFunctionNotFound,
+                                    );
                                 }
                             };
                             continue;
