@@ -1,6 +1,5 @@
 mod changes;
 mod codebase;
-mod intrinsics;
 mod nodes;
 mod types;
 
