@@ -299,6 +299,9 @@ impl fmt::Display for SyntaxNode {
             SyntaxNode::Function { .. } => {
                 write!(f, "fn")
             }
+            SyntaxNode::Identifier { identifier, .. } => {
+                write!(f, "{identifier}")
+            }
             SyntaxNode::Number { value } => {
                 write!(f, "{value}")
             }
@@ -310,9 +313,6 @@ impl fmt::Display for SyntaxNode {
             }
             SyntaxNode::Tuple { .. } => {
                 write!(f, "tuple")
-            }
-            SyntaxNode::Identifier { identifier, .. } => {
-                write!(f, "{identifier}")
             }
             SyntaxNode::Test { name, .. } => {
                 write!(f, "{name}")
