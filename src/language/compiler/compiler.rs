@@ -73,14 +73,6 @@ impl<'r> Compiler<'r> {
         replacement_token: &str,
         _: &Packages,
     ) -> NodePath {
-        self.replace_inner(to_replace, replacement_token)
-    }
-
-    fn replace_inner(
-        &mut self,
-        to_replace: &NodePath,
-        replacement_token: &str,
-    ) -> NodePath {
         self.codebase.make_change(|change_set| {
             let replacement =
                 expression::compile(replacement_token, change_set.nodes);
