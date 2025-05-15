@@ -1,7 +1,6 @@
 use super::{
-    code::{Codebase, IntrinsicFunction, NodePath},
+    code::{Codebase, NodePath},
     editor::{Editor, EditorCommand, EditorInputEvent},
-    packages::Packages,
     runtime::{
         Effect, Evaluator, RuntimeState, Value, apply_intrinsic_function,
     },
@@ -18,15 +17,8 @@ impl Language {
     pub fn new() -> Self {
         let codebase = Codebase::new();
         let evaluator = Evaluator::new();
-        let mut packages = Packages::default();
 
         let editor = Editor::new(codebase.root().path, &codebase);
-
-        packages.new_package([
-            IntrinsicFunction::Add,
-            IntrinsicFunction::Drop,
-            IntrinsicFunction::Identity,
-        ]);
 
         Self {
             codebase,
