@@ -249,7 +249,7 @@ fn render_node<A: EditorOutputAdapter>(
         _ => None,
     };
 
-    let node_display = node.display();
+    let node_display = node;
     if let Some(color) = color {
         adapter.color(color, |adapter| {
             write!(adapter, "{node_display}")?;
@@ -374,7 +374,7 @@ fn render_help<A: EditorOutputAdapter>(
                 adapter,
                 "You are editing the `{}` keyword, which calls the current \
                 function recursively.",
-                node.display(),
+                node,
             )?;
         }
         SyntaxNode::Tuple { .. } => {

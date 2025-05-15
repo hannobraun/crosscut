@@ -283,21 +283,13 @@ impl SyntaxNode {
     }
 
     pub fn to_token(&self) -> String {
-        self.display().to_string()
-    }
-
-    pub fn display(&self) -> ExpressionDisplay {
-        ExpressionDisplay { node: self }
+        self.to_string()
     }
 }
 
-pub struct ExpressionDisplay<'r> {
-    node: &'r SyntaxNode,
-}
-
-impl fmt::Display for ExpressionDisplay<'_> {
+impl fmt::Display for SyntaxNode {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        match &self.node {
+        match self {
             SyntaxNode::AddValue => {
                 write!(f, "")
             }
