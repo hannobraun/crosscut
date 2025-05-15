@@ -162,7 +162,7 @@ pub enum SyntaxNode {
     },
 
     /// # An unresolved identifier
-    UnresolvedIdentifier {
+    Identifier {
         /// # The identifier that could not be resolved
         identifier: String,
     },
@@ -210,7 +210,7 @@ impl SyntaxNode {
             | Self::Number { value: _ }
             | Self::ProvidedFunction { .. }
             | Self::Recursion
-            | Self::UnresolvedIdentifier { .. } => false,
+            | Self::Identifier { .. } => false,
 
             Self::Tuple { values, add_value } => {
                 values.contains_at(child, sibling_index)
@@ -241,7 +241,7 @@ impl SyntaxNode {
             | Self::Number { value: _ }
             | Self::ProvidedFunction { .. }
             | Self::Recursion
-            | Self::UnresolvedIdentifier { .. } => vec![],
+            | Self::Identifier { .. } => vec![],
 
             Self::Tuple { values, add_value } => {
                 let mut children = values.inner.clone();
@@ -267,7 +267,7 @@ impl SyntaxNode {
             | Self::Number { value: _ }
             | Self::ProvidedFunction { .. }
             | Self::Recursion
-            | Self::UnresolvedIdentifier { .. } => vec![],
+            | Self::Identifier { .. } => vec![],
 
             Self::Tuple { values: inputs, .. }
             | Self::Test {
@@ -311,7 +311,7 @@ impl fmt::Display for SyntaxNode {
             SyntaxNode::Tuple { .. } => {
                 write!(f, "tuple")
             }
-            SyntaxNode::UnresolvedIdentifier { identifier, .. } => {
+            SyntaxNode::Identifier { identifier, .. } => {
                 write!(f, "{identifier}")
             }
             SyntaxNode::Test { name, .. } => {

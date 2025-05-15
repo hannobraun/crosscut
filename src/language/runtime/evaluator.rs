@@ -210,7 +210,7 @@ impl Evaluator {
                     values: node.evaluated_children.inner.into_iter().collect(),
                 });
             }
-            SyntaxNode::UnresolvedIdentifier { .. } => {
+            SyntaxNode::Identifier { .. } => {
                 self.state = RuntimeState::Error {
                     path: node.path.clone(),
                 };

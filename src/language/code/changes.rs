@@ -175,7 +175,7 @@ mod tests {
         let mut errors = Errors::new();
 
         let [node_a, node_b] =
-            ["a", "b"].map(|identifier| SyntaxNode::UnresolvedIdentifier {
+            ["a", "b"].map(|identifier| SyntaxNode::Identifier {
                 identifier: String::from(identifier),
             });
         let path_a = {

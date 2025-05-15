@@ -245,7 +245,7 @@ fn render_node<A: EditorOutputAdapter>(
         | SyntaxNode::Number { .. }
         | SyntaxNode::Tuple { .. } => Some(Color::DarkBlue),
         SyntaxNode::ProvidedFunction { .. } => Some(Color::DarkMagenta),
-        SyntaxNode::UnresolvedIdentifier { .. } => Some(ERROR_COLOR),
+        SyntaxNode::Identifier { .. } => Some(ERROR_COLOR),
         _ => None,
     };
 
@@ -383,7 +383,7 @@ fn render_help<A: EditorOutputAdapter>(
                 contains the tuple's children.",
             )?;
         }
-        SyntaxNode::UnresolvedIdentifier { .. } => {
+        SyntaxNode::Identifier { .. } => {
             writeln!(adapter, "You are editing an erroneous syntax node.",)?;
         }
         SyntaxNode::Test { .. } => {

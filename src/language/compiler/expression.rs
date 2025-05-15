@@ -21,7 +21,7 @@ pub fn compile(
         (node, None)
     } else {
         (
-            SyntaxNode::UnresolvedIdentifier {
+            SyntaxNode::Identifier {
                 identifier: token.to_string(),
             },
             Some(CodeError::UnresolvedIdentifier),

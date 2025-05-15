@@ -15,7 +15,7 @@ pub fn expression(
 }
 
 pub fn unresolved(identifier: &str) -> SyntaxNode {
-    SyntaxNode::UnresolvedIdentifier {
+    SyntaxNode::Identifier {
         identifier: identifier.to_string(),
     }
 }
