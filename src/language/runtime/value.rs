@@ -1,15 +1,12 @@
 use std::fmt;
 
-use crate::language::{
-    code::{NodePath, display_tuple},
-    packages::FunctionId,
-};
+use crate::language::code::{NodePath, display_tuple};
 
 #[derive(Clone, Debug, Eq, PartialEq, udigest::Digestable)]
 pub enum Value {
     Function { body: NodePath },
     Integer { value: i32 },
-    ProvidedFunction { id: FunctionId, name: String },
+    ProvidedFunction { name: String },
     Tuple { values: Vec<Value> },
 }
 
@@ -44,7 +41,7 @@ impl fmt::Display for Value {
             Self::Integer { value } => {
                 write!(f, "{value}")?;
             }
-            Self::ProvidedFunction { id: _, name } => {
+            Self::ProvidedFunction { name } => {
                 write!(f, "provided function `{name}`")?;
             }
             Self::Tuple { values } => {
