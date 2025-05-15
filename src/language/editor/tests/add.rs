@@ -1,7 +1,6 @@
 use crate::language::{
     code::{Codebase, SyntaxNode},
     editor::{Editor, EditorInputEvent::*},
-    packages::Packages,
     runtime::Evaluator,
     tests::infra::{ExpectChildren, identifier},
 };
@@ -10,13 +9,11 @@ use crate::language::{
 fn add_apply_node() {
     // Adding an `apply` node also creates its children.
 
-    let packages = Packages::default();
-
     let mut codebase = Codebase::new();
     let mut evaluator = Evaluator::new();
 
     let mut editor = Editor::new(codebase.root().path, &codebase);
-    editor.on_code("apply", &mut codebase, &mut evaluator, &packages);
+    editor.on_code("apply", &mut codebase, &mut evaluator);
 
     let apply = codebase.root();
     let [function, argument] = apply.expect_children(codebase.nodes());
@@ -34,10 +31,10 @@ fn add_apply_node() {
     // The apply node's children can then be edited.
 
     editor.on_input(MoveCursorDown, &mut codebase, &mut evaluator);
-    editor.on_code("a", &mut codebase, &mut evaluator, &packages);
+    editor.on_code("a", &mut codebase, &mut evaluator);
 
     editor.on_input(MoveCursorDown, &mut codebase, &mut evaluator);
-    editor.on_code("b", &mut codebase, &mut evaluator, &packages);
+    editor.on_code("b", &mut codebase, &mut evaluator);
 
     let apply = codebase.root();
     let [function, argument] = apply.expect_children(codebase.nodes());
@@ -57,13 +54,11 @@ fn add_apply_node() {
 fn add_fn_node() {
     // Adding an `fn` node also creates its children.
 
-    let packages = Packages::default();
-
     let mut codebase = Codebase::new();
     let mut evaluator = Evaluator::new();
 
     let mut editor = Editor::new(codebase.root().path, &codebase);
-    editor.on_code("fn", &mut codebase, &mut evaluator, &packages);
+    editor.on_code("fn", &mut codebase, &mut evaluator);
 
     let function = codebase.root();
     let [parameter, body] = function.expect_children(codebase.nodes());
@@ -88,16 +83,14 @@ fn add_fn_node() {
 fn add_value_to_tuple() {
     // Tuples have a node that the user can edit to add children.
 
-    let packages = Packages::default();
-
     let mut codebase = Codebase::new();
     let mut evaluator = Evaluator::new();
 
     let mut editor = Editor::new(codebase.root().path, &codebase);
-    editor.on_code("tuple", &mut codebase, &mut evaluator, &packages);
+    editor.on_code("tuple", &mut codebase, &mut evaluator);
 
     editor.on_input(MoveCursorDown, &mut codebase, &mut evaluator);
-    editor.on_code("1", &mut codebase, &mut evaluator, &packages);
+    editor.on_code("1", &mut codebase, &mut evaluator);
 
     let tuple = codebase.root();
     let [value, _] = tuple.expect_children(codebase.nodes());

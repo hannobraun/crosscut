@@ -2,7 +2,6 @@ use crate::language::{
     code::Codebase,
     compiler::Compiler,
     editor::{Editor, EditorInputEvent, editor::Cursor},
-    packages::Packages,
     runtime::Evaluator,
     tests::infra::{ExpectChildren, identifier},
 };
@@ -12,8 +11,6 @@ fn edit_at_initial_cursor() {
     // The editor is initialized with the specific node it is currently editing.
     // That initialization should be correct, so editing that node actually
     // works.
-
-    let packages = Packages::default();
 
     let mut codebase = Codebase::new();
     let mut evaluator = Evaluator::new();
@@ -30,7 +27,7 @@ fn edit_at_initial_cursor() {
     let mut editor = Editor::new(cursor.clone(), &codebase);
     assert_eq!(editor.cursor(), &cursor);
 
-    editor.on_code("b", &mut codebase, &mut evaluator, &packages);
+    editor.on_code("b", &mut codebase, &mut evaluator);
     assert_eq!(
         codebase.node_at(&editor.cursor().path).node,
         &identifier("abc"),

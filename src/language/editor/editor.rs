@@ -118,16 +118,12 @@ impl Editor {
 }
 
 #[cfg(test)]
-use crate::language::packages::Packages;
-
-#[cfg(test)]
 impl Editor {
     pub fn on_code(
         &mut self,
         code: &str,
         codebase: &mut Codebase,
         evaluator: &mut Evaluator,
-        _: &Packages,
     ) {
         for ch in code.chars() {
             let event = if ch.is_whitespace() {

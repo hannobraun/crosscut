@@ -108,12 +108,8 @@ impl Language {
 #[cfg(test)]
 impl Language {
     pub fn code(&mut self, code: &str) -> &mut Self {
-        self.editor.on_code(
-            code,
-            &mut self.codebase,
-            &mut self.evaluator,
-            &self.packages,
-        );
+        self.editor
+            .on_code(code, &mut self.codebase, &mut self.evaluator);
         self
     }
 
