@@ -10,7 +10,7 @@ pub enum IntrinsicFunction {
 }
 
 impl Function for IntrinsicFunction {
-    fn name(&self) -> &'static str {
+    fn name(self) -> &'static str {
         match self {
             IntrinsicFunction::Add => "+",
             IntrinsicFunction::Drop => "drop",
