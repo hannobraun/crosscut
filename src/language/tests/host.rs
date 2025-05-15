@@ -1,7 +1,6 @@
 use crate::language::{
     code::Type,
     language::Language,
-    packages::Function,
     runtime::{Effect, Value},
 };
 
@@ -10,7 +9,6 @@ fn host_functions() {
     // The host can define functions that Crosscut code can call.
 
     let mut language = Language::new();
-    language.packages_mut().new_package([Halve]);
 
     language
         .code("apply")
@@ -44,7 +42,6 @@ fn host_functions_can_trigger_effects() {
     // example to indicate an error.
 
     let mut language = Language::new();
-    language.packages_mut().new_package([Halve]);
 
     language.code("apply").down().code("halve");
 
@@ -68,13 +65,4 @@ fn host_functions_can_trigger_effects() {
 
     assert_eq!(output.as_ref(), Err(&effect));
     assert!(language.step().is_effect());
-}
-
-#[derive(Clone, Copy, Eq, Ord, PartialEq, PartialOrd)]
-struct Halve;
-
-impl Function for Halve {
-    fn name(&self) -> &str {
-        "halve"
-    }
 }
