@@ -111,12 +111,8 @@ impl Evaluator {
                     return;
                 }
 
-                let Some([function, argument]) = node
-                    .clone()
-                    .evaluated_children
-                    .inner
-                    .into_iter()
-                    .collect_array()
+                let Some([function, argument]) =
+                    node.clone().evaluated_children.into_iter().collect_array()
                 else {
                     unreachable!(
                         "`Node::Application must have two children. If it \
@@ -192,7 +188,7 @@ impl Evaluator {
                 }
 
                 self.finish_evaluating_node(Value::Tuple {
-                    values: node.evaluated_children.inner.into_iter().collect(),
+                    values: node.evaluated_children.into_iter().collect(),
                 });
             }
             SyntaxNode::Test { .. } => {
@@ -226,7 +222,7 @@ impl Evaluator {
         // the stack.
 
         let new_state = if let Some(parent) = self.eval_stack.last_mut() {
-            parent.evaluated_children.inner.push(output);
+            parent.evaluated_children.push(output);
 
             RuntimeState::Running {
                 path: parent.path.clone(),
@@ -247,7 +243,7 @@ impl Evaluator {
 struct RuntimeExpression {
     path: NodePath,
     children_to_evaluate: Vec<NodePath>,
-    evaluated_children: EvaluatedChildren,
+    evaluated_children: Vec<Value>,
 }
 
 impl RuntimeExpression {
@@ -258,7 +254,7 @@ impl RuntimeExpression {
             .map(|located_node| located_node.path)
             .rev()
             .collect();
-        let evaluated_children = EvaluatedChildren { inner: Vec::new() };
+        let evaluated_children = Vec::new();
 
         Self {
             path,
@@ -266,11 +262,6 @@ impl RuntimeExpression {
             evaluated_children,
         }
     }
-}
-
-#[derive(Clone, Debug)]
-struct EvaluatedChildren {
-    inner: Vec<Value>,
 }
 
 #[derive(Debug)]
