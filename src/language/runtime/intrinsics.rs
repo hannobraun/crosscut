@@ -1,15 +1,15 @@
 use itertools::Itertools;
 
-use crate::language::code::{IntrinsicFunction, Type};
+use crate::language::code::Type;
 
 use super::{Effect, Value};
 
 pub fn apply_intrinsic_function(
-    intrinsic: &IntrinsicFunction,
+    name: &str,
     input: Value,
 ) -> Option<Result<Value, Effect>> {
-    match intrinsic {
-        IntrinsicFunction::Add => {
+    match name {
+        "+" => {
             if let Value::Tuple { values } = &input {
                 if let Some([a, b]) = values.iter().collect_array() {
                     if let [
@@ -29,7 +29,8 @@ pub fn apply_intrinsic_function(
                 actual: input,
             }))
         }
-        IntrinsicFunction::Drop => Some(Ok(Value::nothing())),
-        IntrinsicFunction::Identity => Some(Ok(input)),
+        "drop" => Some(Ok(Value::nothing())),
+        "identity" => Some(Ok(input)),
+        _ => None,
     }
 }

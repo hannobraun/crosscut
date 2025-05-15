@@ -85,12 +85,12 @@ impl Language {
         self.evaluator.step(&self.codebase);
 
         if let RuntimeState::Effect {
-            effect: Effect::ProvidedFunction { id, name: _, input },
+            effect: Effect::ProvidedFunction { id, name, input },
             ..
         } = self.evaluator.state()
         {
-            if let Some(intrinsic) = self.intrinsics.function_by_id(id) {
-                match apply_intrinsic_function(intrinsic, input.clone()) {
+            if self.intrinsics.function_by_id(id).is_some() {
+                match apply_intrinsic_function(name, input.clone()) {
                     Some(Ok(value)) => {
                         self.evaluator.exit_from_provided_function(value);
                     }
