@@ -353,6 +353,9 @@ fn render_help<A: EditorOutputAdapter>(
                 "This is a function literal that produces a function value.",
             )?;
         }
+        SyntaxNode::Identifier { .. } => {
+            writeln!(adapter, "You are editing an erroneous syntax node.",)?;
+        }
         SyntaxNode::Number { value } => {
             writeln!(
                 adapter,
@@ -382,9 +385,6 @@ fn render_help<A: EditorOutputAdapter>(
                 "This a tuple literal that produces a tuple value which \
                 contains the tuple's children.",
             )?;
-        }
-        SyntaxNode::Identifier { .. } => {
-            writeln!(adapter, "You are editing an erroneous syntax node.",)?;
         }
         SyntaxNode::Test { .. } => {
             writeln!(
