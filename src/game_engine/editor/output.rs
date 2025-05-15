@@ -16,19 +16,19 @@ use super::input::{EditorMode, TerminalEditorInput};
 use crate::language::packages::Packages;
 
 #[cfg(test)]
-pub fn codebase_to_stdout(codebase: &Codebase, packages: &Packages) {
+pub fn codebase_to_stdout(codebase: &Codebase, _: &Packages) {
     use crate::io::editor::output::DebugOutputAdapter;
-    codebase_to_adapter(codebase, packages, &mut DebugOutputAdapter);
+    codebase_to_adapter(codebase, &mut DebugOutputAdapter);
 }
 
 #[cfg(test)]
-pub fn codebase_to_string(codebase: &Codebase, packages: &Packages) -> String {
+pub fn codebase_to_string(codebase: &Codebase, _: &Packages) -> String {
     use crate::io::editor::output::StringOutputAdapter;
 
     let mut adapter = StringOutputAdapter {
         output: String::new(),
     };
-    codebase_to_adapter(codebase, packages, &mut adapter);
+    codebase_to_adapter(codebase, &mut adapter);
 
     adapter.output
 }
@@ -36,7 +36,6 @@ pub fn codebase_to_string(codebase: &Codebase, packages: &Packages) -> String {
 #[cfg(test)]
 fn codebase_to_adapter(
     codebase: &Codebase,
-    _: &Packages,
     adapter: &mut impl EditorOutputAdapter,
 ) {
     let layout = EditorLayout::new(codebase.root(), codebase);
