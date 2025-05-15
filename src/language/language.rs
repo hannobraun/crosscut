@@ -90,11 +90,18 @@ impl Language {
         } = self.evaluator.state()
         {
             if let Some(intrinsic) = self.intrinsics.function_by_id(id) {
-                apply_intrinsic_function(
+                match apply_intrinsic_function(
                     intrinsic,
                     input.clone(),
                     &mut self.evaluator,
-                );
+                ) {
+                    Ok(value) => {
+                        self.evaluator.exit_from_provided_function(value);
+                    }
+                    Err(effect) => {
+                        self.evaluator.trigger_effect(effect);
+                    }
+                }
             }
         }
 

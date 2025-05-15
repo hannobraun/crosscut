@@ -7,8 +7,8 @@ use super::{Effect, Evaluator, Value};
 pub fn apply_intrinsic_function(
     intrinsic: &IntrinsicFunction,
     input: Value,
-    evaluator: &mut Evaluator,
-) {
+    _: &mut Evaluator,
+) -> Result<Value, Effect> {
     match intrinsic {
         IntrinsicFunction::Add => {
             if let Value::Tuple { values } = &input {
@@ -18,26 +18,19 @@ pub fn apply_intrinsic_function(
                         Value::Integer { value: b },
                     ] = [a, b]
                     {
-                        evaluator.exit_from_provided_function(Value::Integer {
-                            value: *a + *b,
-                        });
-                        return;
+                        return Ok(Value::Integer { value: *a + *b });
                     }
                 }
             }
 
-            evaluator.trigger_effect(Effect::UnexpectedInput {
+            Err(Effect::UnexpectedInput {
                 expected: Type::Tuple {
                     values: vec![Type::Integer, Type::Integer],
                 },
                 actual: input,
-            });
+            })
         }
-        IntrinsicFunction::Drop => {
-            evaluator.exit_from_provided_function(Value::nothing());
-        }
-        IntrinsicFunction::Identity => {
-            evaluator.exit_from_provided_function(input);
-        }
+        IntrinsicFunction::Drop => Ok(Value::nothing()),
+        IntrinsicFunction::Identity => Ok(input),
     }
 }
