@@ -62,7 +62,7 @@ struct RegisteredPackage {
 }
 
 pub trait Function: Copy + Ord {
-    fn name(&self) -> &str;
+    fn name(&self) -> &'static str;
 }
 
 #[derive(
