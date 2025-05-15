@@ -49,7 +49,7 @@ impl Evaluator {
 
     pub fn exit_from_provided_function(&mut self, output: Value) {
         let RuntimeState::Effect {
-            effect: Effect::ProvidedFunction { .. },
+            effect: Effect::ApplyProvidedFunction { .. },
             ..
         } = &self.state
         else {
@@ -144,7 +144,7 @@ impl Evaluator {
                     }
                     Value::ProvidedFunction { name } => {
                         self.state = RuntimeState::Effect {
-                            effect: Effect::ProvidedFunction {
+                            effect: Effect::ApplyProvidedFunction {
                                 name,
                                 input: argument,
                             },

@@ -4,6 +4,6 @@ use super::Value;
 
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub enum Effect {
-    ProvidedFunction { name: String, input: Value },
+    ApplyProvidedFunction { name: String, input: Value },
     UnexpectedInput { expected: Type, actual: Value },
 }
