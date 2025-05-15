@@ -76,6 +76,12 @@ pub enum SyntaxNode {
         body: NodeHash,
     },
 
+    /// # An unresolved identifier
+    Identifier {
+        /// # The identifier that could not be resolved
+        identifier: String,
+    },
+
     /// # A number literal
     Number {
         /// # The value of the number this literal evaluates to
@@ -159,12 +165,6 @@ pub enum SyntaxNode {
         /// When the user tries to edit it, the editor actually creates a new
         /// child that is then edited, and this one stays as it is.
         add_value: NodeHash,
-    },
-
-    /// # An unresolved identifier
-    Identifier {
-        /// # The identifier that could not be resolved
-        identifier: String,
     },
 
     /// # An expression that can be used for testing
