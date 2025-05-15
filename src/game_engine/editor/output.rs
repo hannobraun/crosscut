@@ -316,7 +316,7 @@ fn render_help<A: EditorOutputAdapter>(
             )?;
         }
         SyntaxNode::Identifier { .. } => {
-            writeln!(adapter, "You are editing an erroneous syntax node.",)?;
+            writeln!(adapter, "You are editing an identifier.",)?;
         }
         SyntaxNode::Number { value } => {
             writeln!(
