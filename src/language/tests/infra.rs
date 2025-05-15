@@ -14,9 +14,9 @@ pub fn expression(
     }
 }
 
-pub fn identifier(identifier: &str) -> SyntaxNode {
+pub fn identifier(name: &str) -> SyntaxNode {
     SyntaxNode::Identifier {
-        name: identifier.to_string(),
+        name: name.to_string(),
     }
 }
 
