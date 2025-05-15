@@ -41,8 +41,6 @@ fn edit_at_initial_cursor() {
 fn navigate_down_to_child() {
     // Moving the cursor down navigates to the current node's child.
 
-    let packages = Packages::default();
-
     let mut codebase = Codebase::new();
     let mut evaluator = Evaluator::new();
 
@@ -65,7 +63,6 @@ fn navigate_down_to_child() {
         EditorInputEvent::MoveCursorDown,
         &mut codebase,
         &mut evaluator,
-        &packages,
     );
 
     assert_eq!(
@@ -81,8 +78,6 @@ fn navigate_down_to_child() {
 fn navigate_right_to_child() {
     // Moving the cursor right while at the end of the current node navigates to
     // the child.
-
-    let packages = Packages::default();
 
     let mut codebase = Codebase::new();
     let mut evaluator = Evaluator::new();
@@ -106,7 +101,6 @@ fn navigate_right_to_child() {
         EditorInputEvent::MoveCursorRight,
         &mut codebase,
         &mut evaluator,
-        &packages,
     );
 
     assert_eq!(
@@ -121,8 +115,6 @@ fn navigate_right_to_child() {
 #[test]
 fn navigate_up_to_parent() {
     // Moving the cursor up navigates to the current node's parent.
-
-    let packages = Packages::default();
 
     let mut codebase = Codebase::new();
     let mut evaluator = Evaluator::new();
@@ -146,7 +138,6 @@ fn navigate_up_to_parent() {
         EditorInputEvent::MoveCursorUp,
         &mut codebase,
         &mut evaluator,
-        &packages,
     );
 
     assert_eq!(
@@ -161,8 +152,6 @@ fn navigate_up_to_parent() {
 #[test]
 fn navigate_left_to_parent() {
     // Moving the cursor left navigates to the end of the current node's parent.
-
-    let packages = Packages::default();
 
     let mut codebase = Codebase::new();
     let mut evaluator = Evaluator::new();
@@ -186,7 +175,6 @@ fn navigate_left_to_parent() {
         EditorInputEvent::MoveCursorLeft,
         &mut codebase,
         &mut evaluator,
-        &packages,
     );
 
     assert_eq!(
@@ -201,8 +189,6 @@ fn navigate_left_to_parent() {
 #[test]
 fn navigate_down_to_next_sibling() {
     // Moving the cursor down navigates to the current node's next sibling.
-
-    let packages = Packages::default();
 
     let mut codebase = Codebase::new();
     let mut evaluator = Evaluator::new();
@@ -226,7 +212,6 @@ fn navigate_down_to_next_sibling() {
         EditorInputEvent::MoveCursorDown,
         &mut codebase,
         &mut evaluator,
-        &packages,
     );
 
     assert_eq!(editor.cursor(), &Cursor { path: b, index: 0 });
@@ -236,8 +221,6 @@ fn navigate_down_to_next_sibling() {
 fn navigate_right_to_next_sibling() {
     // Moving the cursor right while at the end of a node that has no child,
     // navigates to the next sibling.
-
-    let packages = Packages::default();
 
     let mut codebase = Codebase::new();
     let mut evaluator = Evaluator::new();
@@ -261,7 +244,6 @@ fn navigate_right_to_next_sibling() {
         EditorInputEvent::MoveCursorRight,
         &mut codebase,
         &mut evaluator,
-        &packages,
     );
 
     assert_eq!(editor.cursor(), &Cursor { path: b, index: 0 });
@@ -270,8 +252,6 @@ fn navigate_right_to_next_sibling() {
 #[test]
 fn navigate_up_to_previous_sibling() {
     // Moving the cursor up navigates to the current node's previous sibling.
-
-    let packages = Packages::default();
 
     let mut codebase = Codebase::new();
     let mut evaluator = Evaluator::new();
@@ -295,7 +275,6 @@ fn navigate_up_to_previous_sibling() {
         EditorInputEvent::MoveCursorUp,
         &mut codebase,
         &mut evaluator,
-        &packages,
     );
 
     assert_eq!(editor.cursor(), &Cursor { path: a, index: 1 });
@@ -305,8 +284,6 @@ fn navigate_up_to_previous_sibling() {
 fn navigate_left_to_previous_sibling() {
     // Moving the cursor left navigates to the end of the current node's
     // previous sibling.
-
-    let packages = Packages::default();
 
     let mut codebase = Codebase::new();
     let mut evaluator = Evaluator::new();
@@ -330,7 +307,6 @@ fn navigate_left_to_previous_sibling() {
         EditorInputEvent::MoveCursorLeft,
         &mut codebase,
         &mut evaluator,
-        &packages,
     );
 
     assert_eq!(editor.cursor(), &Cursor { path: a, index: 1 });

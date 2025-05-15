@@ -54,12 +54,8 @@ impl Language {
     }
 
     pub fn on_input(&mut self, event: EditorInputEvent) {
-        self.editor.on_input(
-            event,
-            &mut self.codebase,
-            &mut self.evaluator,
-            &self.packages,
-        );
+        self.editor
+            .on_input(event, &mut self.codebase, &mut self.evaluator);
     }
 
     pub fn on_command(&mut self, command: EditorCommand) {

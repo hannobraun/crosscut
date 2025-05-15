@@ -1,7 +1,6 @@
 use crate::language::{
     code::{Codebase, NodePath, SyntaxNode},
     compiler::Compiler,
-    packages::Packages,
     runtime::Evaluator,
 };
 
@@ -38,7 +37,6 @@ impl Editor {
         event: EditorInputEvent,
         codebase: &mut Codebase,
         evaluator: &mut Evaluator,
-        _: &Packages,
     ) {
         let layout = EditorLayout::new(codebase.root(), codebase);
         let mut compiler = Compiler::new(codebase);
@@ -120,13 +118,16 @@ impl Editor {
 }
 
 #[cfg(test)]
+use crate::language::packages::Packages;
+
+#[cfg(test)]
 impl Editor {
     pub fn on_code(
         &mut self,
         code: &str,
         codebase: &mut Codebase,
         evaluator: &mut Evaluator,
-        packages: &Packages,
+        _: &Packages,
     ) {
         for ch in code.chars() {
             let event = if ch.is_whitespace() {
@@ -135,7 +136,7 @@ impl Editor {
                 EditorInputEvent::Insert { ch }
             };
 
-            self.on_input(event, codebase, evaluator, packages);
+            self.on_input(event, codebase, evaluator);
         }
     }
 }

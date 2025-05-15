@@ -33,10 +33,10 @@ fn add_apply_node() {
 
     // The apply node's children can then be edited.
 
-    editor.on_input(MoveCursorDown, &mut codebase, &mut evaluator, &packages);
+    editor.on_input(MoveCursorDown, &mut codebase, &mut evaluator);
     editor.on_code("a", &mut codebase, &mut evaluator, &packages);
 
-    editor.on_input(MoveCursorDown, &mut codebase, &mut evaluator, &packages);
+    editor.on_input(MoveCursorDown, &mut codebase, &mut evaluator);
     editor.on_code("b", &mut codebase, &mut evaluator, &packages);
 
     let apply = codebase.root();
@@ -96,7 +96,7 @@ fn add_value_to_tuple() {
     let mut editor = Editor::new(codebase.root().path, &codebase);
     editor.on_code("tuple", &mut codebase, &mut evaluator, &packages);
 
-    editor.on_input(MoveCursorDown, &mut codebase, &mut evaluator, &packages);
+    editor.on_input(MoveCursorDown, &mut codebase, &mut evaluator);
     editor.on_code("1", &mut codebase, &mut evaluator, &packages);
 
     let tuple = codebase.root();
