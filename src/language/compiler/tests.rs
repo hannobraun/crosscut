@@ -72,8 +72,6 @@ fn replace_second_of_two_equal_children() {
     // If two children are equal, and one is replaced, the replacement logic
     // should correctly distinguish between them.
 
-    let packages = Packages::default();
-
     let mut codebase = Codebase::new();
 
     codebase.make_change(|change_set| {
@@ -95,7 +93,7 @@ fn replace_second_of_two_equal_children() {
         .map(|located_node| located_node.path);
 
     let mut compiler = Compiler::new(&mut codebase);
-    compiler.replace(&child, "updated", &packages);
+    compiler.replace(&child, "updated");
 
     let [child, updated] = codebase.root().expect_children(codebase.nodes());
 
@@ -108,7 +106,6 @@ fn updating_child_updates_parent() {
     // If the child of a parent node is being updated, the parent node should be
     // updated as well.
 
-    let packages = Packages::default();
     let mut codebase = Codebase::new();
 
     codebase.make_change(|change_set| {
@@ -127,7 +124,7 @@ fn updating_child_updates_parent() {
         .codebase()
         .root()
         .expect_children(compiler.codebase().nodes());
-    let child = compiler.replace(&child.path, "127", &packages);
+    let child = compiler.replace(&child.path, "127");
 
     // After editing the child, the new parent node should be the same as the
     // old one, but with an updated child.

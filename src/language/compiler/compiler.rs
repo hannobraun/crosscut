@@ -71,7 +71,6 @@ impl<'r> Compiler<'r> {
         &mut self,
         to_replace: &NodePath,
         replacement_token: &str,
-        _: &Packages,
     ) -> NodePath {
         self.codebase.make_change(|change_set| {
             let replacement =

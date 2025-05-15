@@ -75,7 +75,7 @@ impl Editor {
 
             compiler.insert_child(parent, self.input.buffer(), packages)
         } else {
-            compiler.replace(&self.cursor.path, self.input.buffer(), packages)
+            compiler.replace(&self.cursor.path, self.input.buffer())
         };
 
         let root = compiler.codebase().root().path;
