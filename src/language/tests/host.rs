@@ -9,7 +9,6 @@ fn host_functions() {
     // The host can define functions that Crosscut code can call.
 
     let mut language = Language::new();
-
     language
         .code("apply")
         .down()
@@ -42,7 +41,6 @@ fn host_functions_can_trigger_effects() {
     // example to indicate an error.
 
     let mut language = Language::new();
-
     language.code("apply").down().code("halve");
 
     let effect = Effect::UnexpectedInput {
