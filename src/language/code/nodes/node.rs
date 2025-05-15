@@ -2,7 +2,7 @@ use std::fmt;
 
 use crate::language::{
     code::{Children, NodeHash, SiblingIndex},
-    packages::{FunctionId, Packages},
+    packages::FunctionId,
 };
 
 /// # Structured but untyped representation of a syntax node
@@ -282,7 +282,7 @@ impl SyntaxNode {
         }
     }
 
-    pub fn to_token(&self, _: &Packages) -> String {
+    pub fn to_token(&self) -> String {
         self.display().to_string()
     }
 

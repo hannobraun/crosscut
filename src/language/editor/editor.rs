@@ -125,15 +125,13 @@ impl Editor {
         &mut self,
         cursor: impl Into<Cursor>,
         codebase: &Codebase,
-        packages: &Packages,
+        _: &Packages,
     ) {
         let cursor = cursor.into();
 
         let node = codebase.node_at(&cursor.path).node;
-        self.input = EditorInputBuffer::new(
-            node.to_token(packages),
-            &mut self.cursor.index,
-        );
+        self.input =
+            EditorInputBuffer::new(node.to_token(), &mut self.cursor.index);
 
         self.cursor = cursor;
     }
