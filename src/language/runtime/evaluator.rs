@@ -142,10 +142,9 @@ impl Evaluator {
                     Value::Function { body } => {
                         self.apply_function_raw(body, codebase);
                     }
-                    Value::ProvidedFunction { id, name } => {
+                    Value::ProvidedFunction { id: _, name } => {
                         self.state = RuntimeState::Effect {
                             effect: Effect::ProvidedFunction {
-                                id,
                                 name,
                                 input: argument,
                             },

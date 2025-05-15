@@ -83,7 +83,7 @@ impl Language {
         self.evaluator.step(&self.codebase);
 
         if let RuntimeState::Effect {
-            effect: Effect::ProvidedFunction { id: _, name, input },
+            effect: Effect::ProvidedFunction { name, input },
             ..
         } = self.evaluator.state()
         {
@@ -151,7 +151,7 @@ impl Language {
                     // We're not concerned with intermediate results here.
                 }
                 RuntimeState::Effect { effect, .. } => match effect {
-                    Effect::ProvidedFunction { id: _, name, input } => {
+                    Effect::ProvidedFunction { name, input } => {
                         match handler(name, input) {
                             Ok(output) => {
                                 self.provide_host_function_output(output);

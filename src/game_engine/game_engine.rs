@@ -99,12 +99,7 @@ where
         if self.end_of_frame {
             match self.language.evaluator().state() {
                 RuntimeState::Effect {
-                    effect:
-                        Effect::ProvidedFunction {
-                            id: _,
-                            name,
-                            input: _,
-                        },
+                    effect: Effect::ProvidedFunction { name, input: _ },
                     ..
                 } => {
                     assert_eq!(
@@ -145,7 +140,7 @@ where
                 }
                 RuntimeState::Effect { effect, .. } => {
                     match effect {
-                        Effect::ProvidedFunction { id: _, name, input } => {
+                        Effect::ProvidedFunction { name, input } => {
                             match name.as_str() {
                                 "color" => match input {
                                     Value::Integer { value } => {
