@@ -108,12 +108,12 @@ fn update_children(
         SyntaxNode::AddValue
         | SyntaxNode::Binding { name: _ }
         | SyntaxNode::Empty
-        | SyntaxNode::Number { value: _ }
-        | SyntaxNode::ProvidedFunction { name: _ }
-        | SyntaxNode::Recursion
         | SyntaxNode::Identifier {
             identifier: String { .. },
-        } => {
+        }
+        | SyntaxNode::Number { value: _ }
+        | SyntaxNode::ProvidedFunction { name: _ }
+        | SyntaxNode::Recursion => {
             panic!("Node has no children. Can't replace one.");
         }
 
