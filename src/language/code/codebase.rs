@@ -42,10 +42,6 @@ impl Codebase {
         }
     }
 
-    pub fn errors(&self) -> &Errors {
-        &self.errors
-    }
-
     pub fn make_change<R>(
         &mut self,
         f: impl FnOnce(&mut NewChangeSet) -> R,

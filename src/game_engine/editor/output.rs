@@ -3,7 +3,7 @@ use crossterm::style::{Attribute, Color};
 use crate::{
     io::editor::output::{Cursor, EditorOutputAdapter},
     language::{
-        code::{CodeError, Codebase, NodePath, SyntaxNode},
+        code::{Codebase, NodePath, SyntaxNode},
         editor::{Editor, EditorLayout, EditorLine},
         language::Language,
         runtime::{Effect, Evaluator, RuntimeState},
@@ -133,22 +133,11 @@ fn render_runtime_state<A: EditorOutputAdapter>(
                     Ok(())
                 })?;
             }
-            RuntimeState::Error { path } => {
-                // While we have a dynamic type system, it's possible that an
-                // error is only known at runtime. In that case, we'll get
-                // `None` here.
-                let maybe_error = context.codebase.errors().get(path.hash());
-
+            RuntimeState::Error { path: _ } => {
                 adapter.color(ERROR_COLOR, |adapter| {
                     write!(adapter, "Error")?;
 
-                    if let Some(error) = maybe_error {
-                        write!(adapter, ": ")?;
-                        render_error(adapter, error)?;
-                        writeln!(adapter)?;
-                    } else {
-                        writeln!(adapter)?;
-                    }
+                    writeln!(adapter)?;
 
                     Ok(())
                 })?;
@@ -256,27 +245,6 @@ fn render_node<A: EditorOutputAdapter>(
         })?;
     } else {
         write!(adapter, "{node}")?;
-    }
-
-    if let Some(error) = context.codebase.errors().get(path.hash()) {
-        adapter.color(ERROR_COLOR, |adapter| {
-            write!(adapter, "    error: ")?;
-            render_error(adapter, error)?;
-            Ok(())
-        })?;
-    }
-
-    Ok(())
-}
-
-fn render_error<A: EditorOutputAdapter>(
-    adapter: &mut A,
-    error: &CodeError,
-) -> anyhow::Result<()> {
-    match error {
-        CodeError::UnresolvedIdentifier => {
-            write!(adapter, "unresolved identifier")?;
-        }
     }
 
     Ok(())

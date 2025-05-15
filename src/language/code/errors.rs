@@ -13,10 +13,6 @@ impl Errors {
             inner: BTreeMap::new(),
         }
     }
-
-    pub fn get(&self, hash: &NodeHash) -> Option<&CodeError> {
-        self.inner.get(hash)
-    }
 }
 
 #[derive(Clone, Debug, Eq, PartialEq)]
