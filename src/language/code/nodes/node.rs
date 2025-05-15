@@ -207,10 +207,10 @@ impl SyntaxNode {
             Self::AddValue
             | Self::Binding { .. }
             | Self::Empty
+            | Self::Identifier { .. }
             | Self::Number { value: _ }
             | Self::ProvidedFunction { .. }
-            | Self::Recursion
-            | Self::Identifier { .. } => false,
+            | Self::Recursion => false,
 
             Self::Tuple { values, add_value } => {
                 values.contains_at(child, sibling_index)
@@ -238,10 +238,10 @@ impl SyntaxNode {
             Self::AddValue
             | Self::Binding { .. }
             | Self::Empty
+            | Self::Identifier { .. }
             | Self::Number { value: _ }
             | Self::ProvidedFunction { .. }
-            | Self::Recursion
-            | Self::Identifier { .. } => vec![],
+            | Self::Recursion => vec![],
 
             Self::Tuple { values, add_value } => {
                 let mut children = values.inner.clone();
@@ -263,11 +263,11 @@ impl SyntaxNode {
             Self::AddValue
             | Self::Binding { .. }
             | Self::Empty
+            | Self::Identifier { .. }
             | Self::Function { .. }
             | Self::Number { value: _ }
             | Self::ProvidedFunction { .. }
-            | Self::Recursion
-            | Self::Identifier { .. } => vec![],
+            | Self::Recursion => vec![],
 
             Self::Tuple { values: inputs, .. }
             | Self::Test {
