@@ -71,16 +71,15 @@ impl<'r> Compiler<'r> {
         &mut self,
         to_replace: &NodePath,
         replacement_token: &str,
-        packages: &Packages,
+        _: &Packages,
     ) -> NodePath {
-        self.replace_inner(to_replace, replacement_token, packages)
+        self.replace_inner(to_replace, replacement_token)
     }
 
     fn replace_inner(
         &mut self,
         to_replace: &NodePath,
         replacement_token: &str,
-        _: &Packages,
     ) -> NodePath {
         self.codebase.make_change(|change_set| {
             let replacement =
