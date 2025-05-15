@@ -3,7 +3,7 @@ use crate::language::{
     editor::{Editor, EditorInputEvent::*},
     packages::Packages,
     runtime::Evaluator,
-    tests::infra::{ExpectChildren, unresolved},
+    tests::infra::{ExpectChildren, identifier},
 };
 
 #[test]
@@ -49,8 +49,8 @@ fn add_apply_node() {
             argument: *argument.path.hash(),
         },
     );
-    assert_eq!(function.node, &unresolved("a"));
-    assert_eq!(argument.node, &unresolved("b"));
+    assert_eq!(function.node, &identifier("a"));
+    assert_eq!(argument.node, &identifier("b"));
 }
 
 #[test]

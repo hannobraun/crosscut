@@ -4,7 +4,7 @@ use crate::language::{
     editor::{Editor, EditorInputEvent, editor::Cursor},
     packages::Packages,
     runtime::Evaluator,
-    tests::infra::{ExpectChildren, unresolved},
+    tests::infra::{ExpectChildren, identifier},
 };
 
 #[test]
@@ -33,7 +33,7 @@ fn edit_at_initial_cursor() {
     editor.on_code("b", &mut codebase, &mut evaluator, &packages);
     assert_eq!(
         codebase.node_at(&editor.cursor().path).node,
-        &unresolved("abc"),
+        &identifier("abc"),
     );
 }
 
