@@ -59,17 +59,6 @@ impl Packages {
             .values()
             .find_map(|package| package.function_ids_by_name.get(name).copied())
     }
-
-    pub fn function_name_by_id(&self, id: &FunctionId) -> &str {
-        let Some(package) = self.inner.get(&id.package) else {
-            panic!("Expected package ID `{:?}` to be valid.", id.package);
-        };
-        let Some(name) = package.function_names_by_id.get(id) else {
-            panic!("Expected function ID `{id:?}` to be valid.");
-        };
-
-        name
-    }
 }
 
 #[derive(Debug, Default)]

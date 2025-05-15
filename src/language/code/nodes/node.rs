@@ -286,20 +286,13 @@ impl SyntaxNode {
         self.display(packages).to_string()
     }
 
-    pub fn display<'r>(
-        &'r self,
-        packages: &'r Packages,
-    ) -> ExpressionDisplay<'r> {
-        ExpressionDisplay {
-            node: self,
-            packages,
-        }
+    pub fn display<'r>(&'r self, _: &'r Packages) -> ExpressionDisplay<'r> {
+        ExpressionDisplay { node: self }
     }
 }
 
 pub struct ExpressionDisplay<'r> {
     node: &'r SyntaxNode,
-    packages: &'r Packages,
 }
 
 impl fmt::Display for ExpressionDisplay<'_> {
@@ -323,8 +316,7 @@ impl fmt::Display for ExpressionDisplay<'_> {
             SyntaxNode::Number { value } => {
                 write!(f, "{value}")
             }
-            SyntaxNode::ProvidedFunction { id, name: _ } => {
-                let name = self.packages.function_name_by_id(id);
+            SyntaxNode::ProvidedFunction { id: _, name } => {
                 write!(f, "{name}")
             }
             SyntaxNode::Recursion => {
