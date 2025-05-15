@@ -111,9 +111,6 @@ impl Language {
 }
 
 #[cfg(test)]
-use super::packages::FunctionId;
-
-#[cfg(test)]
 impl Language {
     pub fn code(&mut self, code: &str) -> &mut Self {
         self.editor.on_code(
@@ -138,7 +135,7 @@ impl Language {
 
     pub fn step_until_finished_and_handle_host_functions(
         &mut self,
-        mut handler: impl FnMut(&FunctionId, &Value) -> Result<Value, Effect>,
+        mut handler: impl FnMut(&str, &Value) -> Result<Value, Effect>,
     ) -> Result<Value, Effect> {
         use crate::game_engine::codebase_to_string;
 
@@ -150,8 +147,8 @@ impl Language {
                     // We're not concerned with intermediate results here.
                 }
                 RuntimeState::Effect { effect, .. } => match effect {
-                    Effect::ProvidedFunction { id, name: _, input } => {
-                        match handler(id, input) {
+                    Effect::ProvidedFunction { id: _, name, input } => {
+                        match handler(name, input) {
                             Ok(output) => {
                                 self.provide_host_function_output(output);
                             }
