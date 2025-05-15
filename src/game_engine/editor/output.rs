@@ -224,7 +224,7 @@ fn render_node<A: EditorOutputAdapter>(
     }
 
     let color = match node {
-        SyntaxNode::Identifier { .. } => Some(ERROR_COLOR),
+        SyntaxNode::Identifier { .. } => Some(Color::DarkMagenta),
         SyntaxNode::Function { .. }
         | SyntaxNode::Number { .. }
         | SyntaxNode::Tuple { .. } => Some(Color::DarkBlue),
@@ -366,5 +366,3 @@ struct RenderContext<'r> {
     evaluator: Option<&'r Evaluator>,
     cursor: Option<Cursor>,
 }
-
-const ERROR_COLOR: Color = Color::DarkRed;
