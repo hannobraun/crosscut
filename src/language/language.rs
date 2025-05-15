@@ -87,7 +87,7 @@ impl Language {
             ..
         } = self.evaluator.state()
         {
-            match apply_intrinsic_function(name, input.clone()) {
+            match apply_intrinsic_function(name, input) {
                 Some(Ok(value)) => {
                     self.evaluator.exit_from_provided_function(value);
                 }

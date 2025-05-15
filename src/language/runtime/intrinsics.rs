@@ -6,7 +6,7 @@ use super::{Effect, Value};
 
 pub fn apply_intrinsic_function(
     name: &str,
-    input: Value,
+    input: &Value,
 ) -> Option<Result<Value, Effect>> {
     match name {
         "+" => {
@@ -26,11 +26,11 @@ pub fn apply_intrinsic_function(
                 expected: Type::Tuple {
                     values: vec![Type::Integer, Type::Integer],
                 },
-                actual: input,
+                actual: input.clone(),
             }))
         }
         "drop" => Some(Ok(Value::nothing())),
-        "identity" => Some(Ok(input)),
+        "identity" => Some(Ok(input.clone())),
         _ => None,
     }
 }
