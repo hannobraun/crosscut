@@ -180,7 +180,7 @@ impl Evaluator {
 
                 self.finish_evaluating_node(Value::Function { body });
             }
-            SyntaxNode::Identifier { .. } => {
+            SyntaxNode::Identifier { name: _ } => {
                 self.state = RuntimeState::Error {
                     path: node.path.clone(),
                 };
