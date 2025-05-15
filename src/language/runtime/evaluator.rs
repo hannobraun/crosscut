@@ -183,7 +183,7 @@ impl Evaluator {
             SyntaxNode::Number { value } => {
                 self.finish_evaluating_node(Value::Integer { value: *value });
             }
-            SyntaxNode::ProvidedFunction { id, .. } => {
+            SyntaxNode::ProvidedFunction { id, name: _ } => {
                 self.finish_evaluating_node(Value::ProvidedFunction {
                     id: *id,
                 });
