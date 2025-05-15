@@ -1,5 +1,5 @@
 use crate::language::code::{
-    Errors, NewChangeSet, NodeHash, NodePath, Nodes, SiblingIndex, SyntaxNode,
+    NewChangeSet, NodeHash, NodePath, Nodes, SiblingIndex, SyntaxNode,
 };
 
 pub fn replace_node_and_update_parents(
@@ -34,7 +34,6 @@ pub fn replace_node_and_update_parents(
                     replacement,
                     &mut replacements,
                     change_set.nodes,
-                    change_set.errors,
                 );
 
                 if let Some(parent) = replacement.replaced.parent().cloned() {
@@ -83,7 +82,6 @@ fn update_children(
     replacement: Replacement,
     replacements: &mut Vec<Replacement>,
     nodes: &mut Nodes,
-    _: &mut Errors,
 ) -> Replacement {
     let mut expression = nodes.get(path.hash()).clone();
 

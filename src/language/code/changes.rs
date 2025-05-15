@@ -18,7 +18,7 @@ impl Changes {
         &'r mut self,
         root_before_change: NodeHash,
         nodes: &'r mut Nodes,
-        errors: &'r mut Errors,
+        _: &'r mut Errors,
     ) -> NewChangeSet<'r> {
         self.change_sets.push(ChangeSet {
             replacements_by_replaced: BTreeMap::new(),
@@ -32,7 +32,6 @@ impl Changes {
             change_set,
             root_before_change,
             nodes,
-            errors,
         }
     }
 
@@ -74,7 +73,6 @@ pub struct NewChangeSet<'r> {
     root_before_change: NodeHash,
 
     pub nodes: &'r mut Nodes,
-    pub errors: &'r mut Errors,
 }
 
 impl NewChangeSet<'_> {
