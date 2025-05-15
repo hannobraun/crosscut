@@ -1,6 +1,6 @@
 use std::collections::{BTreeMap, BTreeSet};
 
-use super::{Errors, NodeHash, NodePath, Nodes};
+use super::{NodeHash, NodePath, Nodes};
 
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub struct Changes {
@@ -18,7 +18,6 @@ impl Changes {
         &'r mut self,
         root_before_change: NodeHash,
         nodes: &'r mut Nodes,
-        _: &'r mut Errors,
     ) -> NewChangeSet<'r> {
         self.change_sets.push(ChangeSet {
             replacements_by_replaced: BTreeMap::new(),
@@ -162,7 +161,7 @@ struct CircularDependency;
 
 #[cfg(test)]
 mod tests {
-    use crate::language::code::{Errors, NodePath, Nodes, SyntaxNode};
+    use crate::language::code::{NodePath, Nodes, SyntaxNode};
 
     use super::Changes;
 
@@ -170,7 +169,6 @@ mod tests {
     fn circular_changes_should_work_correctly() {
         let mut changes = Changes::new();
         let mut nodes = Nodes::default();
-        let mut errors = Errors::new();
 
         let [node_a, node_b] =
             ["a", "b"].map(|identifier| SyntaxNode::Identifier {
@@ -183,7 +181,7 @@ mod tests {
 
         let path_b = {
             let mut change_set =
-                changes.new_change_set(*path_a.hash(), &mut nodes, &mut errors);
+                changes.new_change_set(*path_a.hash(), &mut nodes);
 
             let path_b = NodePath::for_root(change_set.nodes.insert(node_b));
             change_set.replace(&path_a, &path_b);
@@ -192,7 +190,7 @@ mod tests {
         };
         let path_a = {
             let mut change_set =
-                changes.new_change_set(*path_b.hash(), &mut nodes, &mut errors);
+                changes.new_change_set(*path_b.hash(), &mut nodes);
 
             let path_a = NodePath::for_root(change_set.nodes.insert(node_a));
             change_set.replace(&path_b, &path_a);

@@ -50,11 +50,8 @@ impl Codebase {
         &mut self,
         f: impl FnOnce(&mut NewChangeSet) -> R,
     ) -> R {
-        let mut new_change_set = self.changes.new_change_set(
-            self.root.hash,
-            &mut self.nodes,
-            &mut self.errors,
-        );
+        let mut new_change_set =
+            self.changes.new_change_set(self.root.hash, &mut self.nodes);
         let value = f(&mut new_change_set);
 
         let root_was_replaced =
