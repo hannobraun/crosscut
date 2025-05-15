@@ -5,7 +5,7 @@ use crate::{
     language::{
         code::Type,
         language::Language,
-        packages::{Function, Package},
+        packages::Function,
         runtime::{Effect, RuntimeState, Value},
     },
 };
@@ -18,7 +18,6 @@ use super::{
 #[derive(Debug)]
 pub struct GameEngine<A> {
     language: Language,
-    package: Package<GameEngineFunction>,
     game_output: Vec<GameOutput>,
     editor_input: TerminalEditorInput,
     editor_output: TerminalEditorOutput<A>,
@@ -51,13 +50,12 @@ where
     pub fn new(adapter: A) -> Self {
         let mut language = Language::new();
 
-        let package = language
+        language
             .packages_mut()
             .new_package([GameEngineFunction::Color, GameEngineFunction::Dim]);
 
         let mut game_engine = Self {
             language,
-            package,
             game_output: Vec::new(),
             editor_input: TerminalEditorInput::new(),
             editor_output: TerminalEditorOutput::new(adapter),
@@ -103,15 +101,14 @@ where
                 RuntimeState::Effect {
                     effect:
                         Effect::ProvidedFunction {
-                            id,
-                            name: _,
+                            id: _,
+                            name,
                             input: _,
                         },
                     ..
                 } => {
                     assert_eq!(
-                        self.package.function_by_id(id),
-                        Some(&GameEngineFunction::Color),
+                        name, "color",
                         "Expecting to provide output for `color` function, \
                         because that is the only one that sets the \
                         `end_of_frame` flag.",

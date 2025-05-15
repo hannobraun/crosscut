@@ -10,7 +10,7 @@ impl Packages {
     pub fn new_package<T>(
         &mut self,
         functions: impl IntoIterator<Item = T>,
-    ) -> Package<T>
+    ) -> Package
     where
         T: Function,
     {
@@ -56,7 +56,7 @@ impl Packages {
             functions_by_id.insert(id, function);
         }
 
-        Package { functions_by_id }
+        Package {}
     }
 
     pub fn resolve_function(&self, name: &str) -> Option<FunctionId> {
@@ -84,15 +84,7 @@ struct RegisteredPackage {
 }
 
 #[derive(Debug)]
-pub struct Package<T> {
-    functions_by_id: BTreeMap<FunctionId, T>,
-}
-
-impl<T> Package<T> {
-    pub fn function_by_id(&self, id: &FunctionId) -> Option<&T> {
-        self.functions_by_id.get(id)
-    }
-}
+pub struct Package {}
 
 pub trait Function: Copy + Ord {
     fn name(&self) -> &str;
