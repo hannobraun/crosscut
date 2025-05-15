@@ -130,6 +130,9 @@ pub enum SyntaxNode {
     ProvidedFunction {
         /// # The ID of the provided function
         id: FunctionId,
+
+        /// # The name of the provided function
+        name: String,
     },
 
     /// # The recursive application of the current function

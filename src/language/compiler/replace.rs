@@ -115,6 +115,7 @@ fn update_children(
         | SyntaxNode::Number { value: _ }
         | SyntaxNode::ProvidedFunction {
             id: FunctionId { .. },
+            name: _,
         }
         | SyntaxNode::Recursion
         | SyntaxNode::UnresolvedIdentifier {

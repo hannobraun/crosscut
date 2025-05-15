@@ -65,5 +65,8 @@ fn resolve_literal(name: &str, nodes: &mut Nodes) -> Option<SyntaxNode> {
 fn resolve_function(name: &str, packages: &Packages) -> Option<SyntaxNode> {
     packages
         .resolve_function(name)
-        .map(|id| SyntaxNode::ProvidedFunction { id })
+        .map(|id| SyntaxNode::ProvidedFunction {
+            id,
+            name: name.to_string(),
+        })
 }
