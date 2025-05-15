@@ -15,7 +15,7 @@ fn add_apply_node() {
     let mut codebase = Codebase::new();
     let mut evaluator = Evaluator::new();
 
-    let mut editor = Editor::new(codebase.root().path, &codebase, &packages);
+    let mut editor = Editor::new(codebase.root().path, &codebase);
     editor.on_code("apply", &mut codebase, &mut evaluator, &packages);
 
     let apply = codebase.root();
@@ -62,7 +62,7 @@ fn add_fn_node() {
     let mut codebase = Codebase::new();
     let mut evaluator = Evaluator::new();
 
-    let mut editor = Editor::new(codebase.root().path, &codebase, &packages);
+    let mut editor = Editor::new(codebase.root().path, &codebase);
     editor.on_code("fn", &mut codebase, &mut evaluator, &packages);
 
     let function = codebase.root();
@@ -93,7 +93,7 @@ fn add_value_to_tuple() {
     let mut codebase = Codebase::new();
     let mut evaluator = Evaluator::new();
 
-    let mut editor = Editor::new(codebase.root().path, &codebase, &packages);
+    let mut editor = Editor::new(codebase.root().path, &codebase);
     editor.on_code("tuple", &mut codebase, &mut evaluator, &packages);
 
     editor.on_input(MoveCursorDown, &mut codebase, &mut evaluator, &packages);

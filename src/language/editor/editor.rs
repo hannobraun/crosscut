@@ -16,11 +16,7 @@ pub struct Editor {
 }
 
 impl Editor {
-    pub fn new(
-        cursor: impl Into<Cursor>,
-        codebase: &Codebase,
-        _: &Packages,
-    ) -> Self {
+    pub fn new(cursor: impl Into<Cursor>, codebase: &Codebase) -> Self {
         let cursor = cursor.into();
 
         let mut editor = Self {
@@ -102,12 +98,12 @@ impl Editor {
         command: EditorCommand,
         codebase: &mut Codebase,
         evaluator: &mut Evaluator,
-        packages: &Packages,
+        _: &Packages,
     ) {
         match command {
             EditorCommand::Clear => {
                 *codebase = Codebase::new();
-                *self = Self::new(codebase.root().path, codebase, packages);
+                *self = Self::new(codebase.root().path, codebase);
                 evaluator.reset(codebase);
             }
         }

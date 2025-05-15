@@ -27,7 +27,7 @@ fn edit_at_initial_cursor() {
         path: codebase.root().path,
         index: 1,
     };
-    let mut editor = Editor::new(cursor.clone(), &codebase, &packages);
+    let mut editor = Editor::new(cursor.clone(), &codebase);
     assert_eq!(editor.cursor(), &cursor);
 
     editor.on_code("b", &mut codebase, &mut evaluator, &packages);
@@ -63,7 +63,6 @@ fn navigate_down_to_child() {
             index: 0,
         },
         &codebase,
-        &packages,
     );
     editor.on_input(
         EditorInputEvent::MoveCursorDown,
@@ -108,7 +107,6 @@ fn navigate_right_to_child() {
             index: "tuple".len(),
         },
         &codebase,
-        &packages,
     );
     editor.on_input(
         EditorInputEvent::MoveCursorRight,
@@ -152,7 +150,6 @@ fn navigate_up_to_parent() {
             index: 1,
         },
         &codebase,
-        &packages,
     );
     editor.on_input(
         EditorInputEvent::MoveCursorUp,
@@ -196,7 +193,6 @@ fn navigate_left_to_parent() {
             index: 0,
         },
         &codebase,
-        &packages,
     );
     editor.on_input(
         EditorInputEvent::MoveCursorLeft,
@@ -237,8 +233,7 @@ fn navigate_down_to_next_sibling() {
         .expect_children(codebase.nodes())
         .map(|located_node| located_node.path);
 
-    let mut editor =
-        Editor::new(Cursor { path: a, index: 0 }, &codebase, &packages);
+    let mut editor = Editor::new(Cursor { path: a, index: 0 }, &codebase);
     editor.on_input(
         EditorInputEvent::MoveCursorDown,
         &mut codebase,
@@ -273,8 +268,7 @@ fn navigate_right_to_next_sibling() {
         .expect_children(codebase.nodes())
         .map(|located_node| located_node.path);
 
-    let mut editor =
-        Editor::new(Cursor { path: a, index: 1 }, &codebase, &packages);
+    let mut editor = Editor::new(Cursor { path: a, index: 1 }, &codebase);
     editor.on_input(
         EditorInputEvent::MoveCursorRight,
         &mut codebase,
@@ -308,8 +302,7 @@ fn navigate_up_to_previous_sibling() {
         .expect_children(codebase.nodes())
         .map(|located_node| located_node.path);
 
-    let mut editor =
-        Editor::new(Cursor { path: b, index: 1 }, &codebase, &packages);
+    let mut editor = Editor::new(Cursor { path: b, index: 1 }, &codebase);
     editor.on_input(
         EditorInputEvent::MoveCursorUp,
         &mut codebase,
@@ -344,8 +337,7 @@ fn navigate_left_to_previous_sibling() {
         .expect_children(codebase.nodes())
         .map(|located_node| located_node.path);
 
-    let mut editor =
-        Editor::new(Cursor { path: b, index: 0 }, &codebase, &packages);
+    let mut editor = Editor::new(Cursor { path: b, index: 0 }, &codebase);
     editor.on_input(
         EditorInputEvent::MoveCursorLeft,
         &mut codebase,
