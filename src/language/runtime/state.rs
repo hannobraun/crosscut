@@ -25,11 +25,6 @@ impl RuntimeState {
         matches!(self, Self::Finished { .. })
     }
 
-    #[cfg(test)]
-    pub fn is_error(&self) -> bool {
-        matches!(self, Self::Error { .. })
-    }
-
     pub fn path(&self) -> Option<&NodePath> {
         match self {
             Self::Started => None,
