@@ -180,16 +180,10 @@ impl Evaluator {
 
                 self.finish_evaluating_node(Value::Function { body });
             }
-            SyntaxNode::Identifier { name: _ } => {
-                self.state = RuntimeState::Effect {
-                    effect: Effect::ProvidedFunctionNotFound,
-                    path: node.path.clone(),
-                };
-
-                // We don't want to advance the execution in any way when
-                // encountering an error. So let's restore the node we pulled
-                // from the evaluation stack earlier to where it was.
-                self.eval_stack.push(node);
+            SyntaxNode::Identifier { name } => {
+                self.finish_evaluating_node(Value::ProvidedFunction {
+                    name: name.clone(),
+                });
             }
             SyntaxNode::Number { value } => {
                 self.finish_evaluating_node(Value::Integer { value: *value });
