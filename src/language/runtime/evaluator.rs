@@ -180,6 +180,16 @@ impl Evaluator {
 
                 self.finish_evaluating_node(Value::Function { body });
             }
+            SyntaxNode::Identifier { .. } => {
+                self.state = RuntimeState::Error {
+                    path: node.path.clone(),
+                };
+
+                // We don't want to advance the execution in any way when
+                // encountering an error. So let's restore the node we pulled
+                // from the evaluation stack earlier to where it was.
+                self.eval_stack.push(node);
+            }
             SyntaxNode::Number { value } => {
                 self.finish_evaluating_node(Value::Integer { value: *value });
             }
@@ -209,16 +219,6 @@ impl Evaluator {
                 self.finish_evaluating_node(Value::Tuple {
                     values: node.evaluated_children.inner.into_iter().collect(),
                 });
-            }
-            SyntaxNode::Identifier { .. } => {
-                self.state = RuntimeState::Error {
-                    path: node.path.clone(),
-                };
-
-                // We don't want to advance the execution in any way when
-                // encountering an error. So let's restore the node we pulled
-                // from the evaluation stack earlier to where it was.
-                self.eval_stack.push(node);
             }
             SyntaxNode::Test { .. } => {
                 // For now, tests don't expect a specific runtime behavior out
