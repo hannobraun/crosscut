@@ -95,46 +95,6 @@ pub enum SyntaxNode {
         value: i32,
     },
 
-    /// # The application of a provided function
-    ///
-    /// Evaluating this note applies a provided function to the active value.
-    /// Provided functions are functions that are provided (as the name
-    /// suggests) by an entity outside of the language: either the runtime,
-    /// which provides intrinsic functions; or the host, which provides host
-    /// functions.
-    ///
-    /// ## Implementation Note
-    ///
-    /// Under the hood, this is handled in the following way:
-    ///
-    /// - It triggers an effect.
-    /// - This effect is processed by the runtime or host (the provider).
-    /// - The provider determined which function is being called, via the ID.
-    /// - The provider checks that the correct argument has been provided.
-    /// - The provider evaluates the function and returns the value.
-    ///
-    /// If we replaced the concept of intrinsic function with a special
-    /// `trigger` expression that triggers a provided value as an effect, that
-    /// would be better in at least the following ways:
-    ///
-    /// - The provider would just need to check which value was triggered.
-    ///   - This would remove the opportunity to provide an invalid argument.
-    ///   - It would also simplify the handling on the provider side.
-    /// - It would mesh well with the later introduction of algebraic effects,
-    ///   which would require such a feature anyway.
-    /// - Since a `trigger` expression would be required anyway, this would
-    ///   remove the redundant concept of provided functions.
-    ///
-    /// From an API perspective, this `trigger` expression could be wrapped into
-    /// a Crosscut function, preserving the same API.
-    ///
-    /// As of this writing, this is not possible. The language doesn't support
-    /// powerful enough values yet.
-    ProvidedFunction {
-        /// # The name of the provided function
-        name: String,
-    },
-
     /// # The recursive application of the current function
     ///
     /// Evaluating the node recursively applies the current function to the
@@ -209,7 +169,6 @@ impl SyntaxNode {
             | Self::Empty
             | Self::Identifier { .. }
             | Self::Number { value: _ }
-            | Self::ProvidedFunction { .. }
             | Self::Recursion => false,
 
             Self::Tuple { values, add_value } => {
@@ -240,7 +199,6 @@ impl SyntaxNode {
             | Self::Empty
             | Self::Identifier { .. }
             | Self::Number { value: _ }
-            | Self::ProvidedFunction { .. }
             | Self::Recursion => vec![],
 
             Self::Tuple { values, add_value } => {
@@ -266,7 +224,6 @@ impl SyntaxNode {
             | Self::Identifier { .. }
             | Self::Function { .. }
             | Self::Number { value: _ }
-            | Self::ProvidedFunction { .. }
             | Self::Recursion => vec![],
 
             Self::Tuple { values: inputs, .. }
@@ -304,9 +261,6 @@ impl fmt::Display for SyntaxNode {
             }
             SyntaxNode::Number { value } => {
                 write!(f, "{value}")
-            }
-            SyntaxNode::ProvidedFunction { name } => {
-                write!(f, "{name}")
             }
             SyntaxNode::Recursion => {
                 write!(f, "self")

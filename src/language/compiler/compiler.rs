@@ -39,7 +39,6 @@ impl<'r> Compiler<'r> {
                     | SyntaxNode::Function { .. }
                     | SyntaxNode::Identifier { .. }
                     | SyntaxNode::Number { .. }
-                    | SyntaxNode::ProvidedFunction { .. }
                     | SyntaxNode::Recursion => {
                         panic!(
                             "Can't add child to this node:\n\

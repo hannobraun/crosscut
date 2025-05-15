@@ -110,7 +110,6 @@ fn update_children(
             name: String { .. },
         }
         | SyntaxNode::Number { value: _ }
-        | SyntaxNode::ProvidedFunction { name: _ }
         | SyntaxNode::Recursion => {
             panic!("Node has no children. Can't replace one.");
         }

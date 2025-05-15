@@ -188,11 +188,6 @@ impl Evaluator {
             SyntaxNode::Number { value } => {
                 self.finish_evaluating_node(Value::Integer { value: *value });
             }
-            SyntaxNode::ProvidedFunction { name } => {
-                self.finish_evaluating_node(Value::ProvidedFunction {
-                    name: name.clone(),
-                });
-            }
             SyntaxNode::Recursion => {
                 let body = self
                     .call_stack

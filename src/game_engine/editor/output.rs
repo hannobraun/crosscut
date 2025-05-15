@@ -228,7 +228,6 @@ fn render_node<A: EditorOutputAdapter>(
         SyntaxNode::Function { .. }
         | SyntaxNode::Number { .. }
         | SyntaxNode::Tuple { .. } => Some(Color::DarkBlue),
-        SyntaxNode::ProvidedFunction { .. } => Some(Color::DarkMagenta),
         _ => None,
     };
 
@@ -323,14 +322,6 @@ fn render_help<A: EditorOutputAdapter>(
                 adapter,
                 "This is an integer literal that produces the integer value \
                 `{value}`.",
-            )?;
-        }
-        SyntaxNode::ProvidedFunction { .. } => {
-            writeln!(
-                adapter,
-                "This expression is the application of a provided function. \
-                Those are defined outside of Crosscut code, either as \
-                intrinsic functions, or by the host.",
             )?;
         }
         SyntaxNode::Recursion => {
