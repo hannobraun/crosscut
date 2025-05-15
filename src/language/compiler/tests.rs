@@ -1,7 +1,6 @@
 use crate::language::{
     code::{Codebase, NodeHash, NodePath, SyntaxNode},
     compiler::Compiler,
-    packages::Packages,
     tests::infra::{ExpectChildren, expression, identifier},
 };
 
@@ -9,7 +8,6 @@ use crate::language::{
 fn insert_child() {
     // The compiler can insert a child node.
 
-    let packages = Packages::default();
     let mut codebase = Codebase::new();
 
     codebase.make_change(|change_set| {
@@ -23,8 +21,7 @@ fn insert_child() {
 
     let mut compiler = Compiler::new(&mut codebase);
 
-    let a =
-        compiler.insert_child(compiler.codebase().root().path, "a", &packages);
+    let a = compiler.insert_child(compiler.codebase().root().path, "a");
 
     let [child_of_root] = compiler
         .codebase()
@@ -38,7 +35,6 @@ fn insert_child_with_grandparent() {
     // Inserting a child still works, if that child's parent has a parent
     // itself.
 
-    let packages = Packages::default();
     let mut codebase = Codebase::new();
 
     codebase.make_change(|change_set| {
@@ -56,7 +52,7 @@ fn insert_child_with_grandparent() {
 
     let grandparent = compiler.codebase().root();
     let [parent] = grandparent.expect_children(compiler.codebase().nodes());
-    let child = compiler.insert_child(parent.path, "child", &packages);
+    let child = compiler.insert_child(parent.path, "child");
 
     let [child_of_root] = compiler
         .codebase()

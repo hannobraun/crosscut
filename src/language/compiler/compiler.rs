@@ -1,7 +1,4 @@
-use crate::language::{
-    code::{Codebase, NodePath, SyntaxNode},
-    packages::Packages,
-};
+use crate::language::code::{Codebase, NodePath, SyntaxNode};
 
 use super::{expression, replace::replace_node_and_update_parents};
 
@@ -22,7 +19,6 @@ impl<'r> Compiler<'r> {
         &mut self,
         parent: NodePath,
         child_token: &str,
-        _: &Packages,
     ) -> NodePath {
         self.codebase.make_change(|change_set| {
             let child = expression::compile(child_token, change_set.nodes);

@@ -38,7 +38,7 @@ impl Editor {
         event: EditorInputEvent,
         codebase: &mut Codebase,
         evaluator: &mut Evaluator,
-        packages: &Packages,
+        _: &Packages,
     ) {
         let layout = EditorLayout::new(codebase.root(), codebase);
         let mut compiler = Compiler::new(codebase);
@@ -73,7 +73,7 @@ impl Editor {
                 );
             };
 
-            compiler.insert_child(parent, self.input.buffer(), packages)
+            compiler.insert_child(parent, self.input.buffer())
         } else {
             compiler.replace(&self.cursor.path, self.input.buffer())
         };
