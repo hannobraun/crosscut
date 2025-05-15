@@ -68,25 +68,6 @@ fn insert_child_with_grandparent() {
 }
 
 #[test]
-fn insert_child_should_update_errors() {
-    // Inserting an erroneous child should insert an error into the codebase.
-
-    let packages = Packages::default();
-
-    let mut codebase = Codebase::new();
-    let mut compiler = Compiler::new(&mut codebase);
-
-    let root =
-        compiler.replace(&compiler.codebase().root().path, "tuple", &packages);
-    let unresolved = compiler.insert_child(root, "unresolved", &packages);
-
-    assert_eq!(
-        compiler.codebase().errors().get(unresolved.hash()),
-        Some(&CodeError::UnresolvedIdentifier),
-    );
-}
-
-#[test]
 fn replace_second_of_two_equal_children() {
     // If two children are equal, and one is replaced, the replacement logic
     // should correctly distinguish between them.

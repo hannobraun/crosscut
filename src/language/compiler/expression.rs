@@ -8,10 +8,10 @@ use super::{Function, Tuple};
 pub fn compile(
     token: &str,
     nodes: &mut Nodes,
-    errors: &mut Errors,
+    _: &mut Errors,
     packages: &Packages,
 ) -> NodeHash {
-    let (node, maybe_error) = if token.is_empty() {
+    let (node, _) = if token.is_empty() {
         (SyntaxNode::Empty, None)
     } else if let Some(node) = resolve_keyword(token, nodes) {
         (node, None)
@@ -28,12 +28,7 @@ pub fn compile(
         )
     };
 
-    let hash = nodes.insert(node);
-    if let Some(error) = maybe_error {
-        errors.insert(hash, error);
-    }
-
-    hash
+    nodes.insert(node)
 }
 
 fn resolve_keyword(name: &str, nodes: &mut Nodes) -> Option<SyntaxNode> {
