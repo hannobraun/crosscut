@@ -101,7 +101,12 @@ where
         if self.end_of_frame {
             match self.language.evaluator().state() {
                 RuntimeState::Effect {
-                    effect: Effect::ProvidedFunction { id, .. },
+                    effect:
+                        Effect::ProvidedFunction {
+                            id,
+                            name: _,
+                            input: _,
+                        },
                     ..
                 } => {
                     assert_eq!(
