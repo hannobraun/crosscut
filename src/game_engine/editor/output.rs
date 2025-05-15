@@ -249,14 +249,13 @@ fn render_node<A: EditorOutputAdapter>(
         _ => None,
     };
 
-    let node_display = node;
     if let Some(color) = color {
         adapter.color(color, |adapter| {
-            write!(adapter, "{node_display}")?;
+            write!(adapter, "{node}")?;
             Ok(())
         })?;
     } else {
-        write!(adapter, "{node_display}")?;
+        write!(adapter, "{node}")?;
     }
 
     if let Some(error) = context.codebase.errors().get(path.hash()) {
