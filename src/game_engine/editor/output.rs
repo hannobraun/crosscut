@@ -118,7 +118,7 @@ fn render_runtime_state<A: EditorOutputAdapter>(
                     write!(adapter, "Effect: ")?;
 
                     match effect {
-                        Effect::ProvidedFunction { id, input } => {
+                        Effect::ProvidedFunction { id, name: _, input } => {
                             writeln!(
                                 adapter,
                                 "applying provided function `{id:?}` (input: \

@@ -142,10 +142,11 @@ impl Evaluator {
                     Value::Function { body } => {
                         self.apply_function_raw(body, codebase);
                     }
-                    Value::ProvidedFunction { id, name: _ } => {
+                    Value::ProvidedFunction { id, name } => {
                         self.state = RuntimeState::Effect {
                             effect: Effect::ProvidedFunction {
                                 id,
+                                name,
                                 input: argument,
                             },
                             path: node.path.clone(),
