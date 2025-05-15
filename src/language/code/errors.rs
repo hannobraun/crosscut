@@ -17,10 +17,6 @@ impl Errors {
     pub fn get(&self, hash: &NodeHash) -> Option<&CodeError> {
         self.inner.get(hash)
     }
-
-    pub fn insert(&mut self, hash: NodeHash, error: CodeError) {
-        self.inner.insert(hash, error);
-    }
 }
 
 #[derive(Clone, Debug, Eq, PartialEq)]

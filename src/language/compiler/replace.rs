@@ -83,7 +83,7 @@ fn update_children(
     replacement: Replacement,
     replacements: &mut Vec<Replacement>,
     nodes: &mut Nodes,
-    errors: &mut Errors,
+    _: &mut Errors,
 ) -> Replacement {
     let mut expression = nodes.get(path.hash()).clone();
 
@@ -131,18 +131,10 @@ fn update_children(
 
     replacements.push(replacement);
 
-    let replacement = Replacement {
+    Replacement {
         replaced: path,
         replacement: nodes.insert(expression),
-    };
-
-    // Updating a child doesn't change anything that could affect an error on
-    // the parent. So we need to preserve that.
-    if let Some(error) = errors.get(replacement.replaced.hash()) {
-        errors.insert(replacement.replacement, error.clone());
     }
-
-    replacement
 }
 
 fn update_path(
