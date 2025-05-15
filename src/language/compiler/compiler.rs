@@ -41,10 +41,10 @@ impl<'r> Compiler<'r> {
                     | SyntaxNode::Binding { .. }
                     | SyntaxNode::Empty
                     | SyntaxNode::Function { .. }
+                    | SyntaxNode::Identifier { .. }
                     | SyntaxNode::Number { .. }
                     | SyntaxNode::ProvidedFunction { .. }
-                    | SyntaxNode::Recursion
-                    | SyntaxNode::Identifier { .. } => {
+                    | SyntaxNode::Recursion => {
                         panic!(
                             "Can't add child to this node:\n\
                             {node:#?}"
