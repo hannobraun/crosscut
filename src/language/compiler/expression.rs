@@ -1,11 +1,8 @@
-use crate::language::{
-    code::{NodeHash, Nodes, SyntaxNode},
-    packages::Packages,
-};
+use crate::language::code::{NodeHash, Nodes, SyntaxNode};
 
 use super::{Function, Tuple};
 
-pub fn compile(token: &str, nodes: &mut Nodes, _: &Packages) -> NodeHash {
+pub fn compile(token: &str, nodes: &mut Nodes) -> NodeHash {
     let node = if token.is_empty() {
         SyntaxNode::Empty
     } else if let Some(node) = resolve_keyword(token, nodes) {

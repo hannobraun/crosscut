@@ -22,11 +22,10 @@ impl<'r> Compiler<'r> {
         &mut self,
         parent: NodePath,
         child_token: &str,
-        packages: &Packages,
+        _: &Packages,
     ) -> NodePath {
         self.codebase.make_change(|change_set| {
-            let child =
-                expression::compile(child_token, change_set.nodes, packages);
+            let child = expression::compile(child_token, change_set.nodes);
 
             let (parent_path, sibling_index) = {
                 let mut node = change_set.nodes.get(parent.hash()).clone();
@@ -81,14 +80,11 @@ impl<'r> Compiler<'r> {
         &mut self,
         to_replace: &NodePath,
         replacement_token: &str,
-        packages: &Packages,
+        _: &Packages,
     ) -> NodePath {
         self.codebase.make_change(|change_set| {
-            let replacement = expression::compile(
-                replacement_token,
-                change_set.nodes,
-                packages,
-            );
+            let replacement =
+                expression::compile(replacement_token, change_set.nodes);
 
             replace_node_and_update_parents(
                 to_replace.clone(),
