@@ -143,26 +143,24 @@ where
                 }
                 RuntimeState::Effect { effect, .. } => {
                     match effect {
-                        Effect::ProvidedFunction { id, name, input } => {
-                            match self.package.function_by_id(&id) {
-                                Some(GameEngineFunction::Color) => {
-                                    match input {
-                                        Value::Integer { value } => {
-                                            self.submit_color(value);
-                                            self.end_of_frame = true;
-                                            break;
-                                        }
-                                        value => {
-                                            self.language.trigger_effect(
-                                                Effect::UnexpectedInput {
-                                                    expected: Type::Integer,
-                                                    actual: value,
-                                                },
-                                            );
-                                        }
+                        Effect::ProvidedFunction { id: _, name, input } => {
+                            match name.as_str() {
+                                "color" => match input {
+                                    Value::Integer { value } => {
+                                        self.submit_color(value);
+                                        self.end_of_frame = true;
+                                        break;
                                     }
-                                }
-                                Some(GameEngineFunction::Dim) => match input {
+                                    value => {
+                                        self.language.trigger_effect(
+                                            Effect::UnexpectedInput {
+                                                expected: Type::Integer,
+                                                actual: value,
+                                            },
+                                        );
+                                    }
+                                },
+                                "dim" => match input {
                                     Value::Integer { value } => {
                                         self.language
                                             .provide_host_function_output(
@@ -180,7 +178,7 @@ where
                                         );
                                     }
                                 },
-                                None => {
+                                _ => {
                                     panic!("Unexpected function: {name}");
                                 }
                             };
