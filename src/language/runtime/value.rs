@@ -9,7 +9,7 @@ use crate::language::{
 pub enum Value {
     Function { body: NodePath },
     Integer { value: i32 },
-    ProvidedFunction { id: FunctionId },
+    ProvidedFunction { id: FunctionId, name: String },
     Tuple { values: Vec<Value> },
 }
 
@@ -44,7 +44,7 @@ impl fmt::Display for Value {
             Self::Integer { value } => {
                 write!(f, "{value}")?;
             }
-            Self::ProvidedFunction { id } => {
+            Self::ProvidedFunction { id, name: _ } => {
                 write!(f, "provided function `{id:?}`")?;
             }
             Self::Tuple { values } => {

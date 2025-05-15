@@ -142,7 +142,7 @@ impl Evaluator {
                     Value::Function { body } => {
                         self.apply_function_raw(body, codebase);
                     }
-                    Value::ProvidedFunction { id } => {
+                    Value::ProvidedFunction { id, name: _ } => {
                         self.state = RuntimeState::Effect {
                             effect: Effect::ProvidedFunction {
                                 id,
@@ -183,9 +183,10 @@ impl Evaluator {
             SyntaxNode::Number { value } => {
                 self.finish_evaluating_node(Value::Integer { value: *value });
             }
-            SyntaxNode::ProvidedFunction { id, name: _ } => {
+            SyntaxNode::ProvidedFunction { id, name } => {
                 self.finish_evaluating_node(Value::ProvidedFunction {
                     id: *id,
+                    name: name.clone(),
                 });
             }
             SyntaxNode::Recursion => {
