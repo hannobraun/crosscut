@@ -1,7 +1,7 @@
 use super::{
     code::{Codebase, IntrinsicFunction, NodePath},
     editor::{Editor, EditorCommand, EditorInputEvent},
-    packages::{Package, Packages},
+    packages::Packages,
     runtime::{
         Effect, Evaluator, RuntimeState, Value, apply_intrinsic_function,
     },
@@ -13,7 +13,6 @@ pub struct Language {
     editor: Editor,
     evaluator: Evaluator,
     packages: Packages,
-    intrinsics: Package<IntrinsicFunction>,
 }
 
 impl Language {
@@ -24,7 +23,7 @@ impl Language {
 
         let editor = Editor::new(codebase.root().path, &codebase, &packages);
 
-        let intrinsics = packages.new_package([
+        packages.new_package([
             IntrinsicFunction::Add,
             IntrinsicFunction::Drop,
             IntrinsicFunction::Identity,
@@ -35,7 +34,6 @@ impl Language {
             editor,
             evaluator,
             packages,
-            intrinsics,
         }
     }
 
@@ -85,23 +83,21 @@ impl Language {
         self.evaluator.step(&self.codebase);
 
         if let RuntimeState::Effect {
-            effect: Effect::ProvidedFunction { id, name, input },
+            effect: Effect::ProvidedFunction { id: _, name, input },
             ..
         } = self.evaluator.state()
         {
-            if self.intrinsics.function_by_id(id).is_some() {
-                match apply_intrinsic_function(name, input.clone()) {
-                    Some(Ok(value)) => {
-                        self.evaluator.exit_from_provided_function(value);
-                    }
-                    Some(Err(effect)) => {
-                        self.evaluator.trigger_effect(effect);
-                    }
-                    None => {
-                        // Function is not an intrinsic function and was not
-                        // handled. Nothing else to do here. The host can take
-                        // care of the effect.
-                    }
+            match apply_intrinsic_function(name, input.clone()) {
+                Some(Ok(value)) => {
+                    self.evaluator.exit_from_provided_function(value);
+                }
+                Some(Err(effect)) => {
+                    self.evaluator.trigger_effect(effect);
+                }
+                None => {
+                    // Function is not an intrinsic function and was not
+                    // handled. Nothing else to do here. The host can take
+                    // care of the effect.
                 }
             }
         }
