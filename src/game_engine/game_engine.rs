@@ -47,10 +47,8 @@ where
     A: EditorOutputAdapter,
 {
     pub fn new(adapter: A) -> Self {
-        let language = Language::new();
-
         let mut game_engine = Self {
-            language,
+            language: Language::new(),
             game_output: Vec::new(),
             editor_input: TerminalEditorInput::new(),
             editor_output: TerminalEditorOutput::new(adapter),
