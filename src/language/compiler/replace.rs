@@ -1,9 +1,5 @@
-use crate::language::{
-    code::{
-        Errors, NewChangeSet, NodeHash, NodePath, Nodes, SiblingIndex,
-        SyntaxNode,
-    },
-    packages::FunctionId,
+use crate::language::code::{
+    Errors, NewChangeSet, NodeHash, NodePath, Nodes, SiblingIndex, SyntaxNode,
 };
 
 pub fn replace_node_and_update_parents(
@@ -113,10 +109,7 @@ fn update_children(
         | SyntaxNode::Binding { name: _ }
         | SyntaxNode::Empty
         | SyntaxNode::Number { value: _ }
-        | SyntaxNode::ProvidedFunction {
-            id: FunctionId { .. },
-            name: _,
-        }
+        | SyntaxNode::ProvidedFunction { name: _ }
         | SyntaxNode::Recursion
         | SyntaxNode::UnresolvedIdentifier {
             identifier: String { .. },

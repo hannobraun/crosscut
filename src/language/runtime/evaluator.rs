@@ -183,7 +183,7 @@ impl Evaluator {
             SyntaxNode::Number { value } => {
                 self.finish_evaluating_node(Value::Integer { value: *value });
             }
-            SyntaxNode::ProvidedFunction { id: _, name } => {
+            SyntaxNode::ProvidedFunction { name } => {
                 self.finish_evaluating_node(Value::ProvidedFunction {
                     name: name.clone(),
                 });

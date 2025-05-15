@@ -1,9 +1,6 @@
 use std::fmt;
 
-use crate::language::{
-    code::{Children, NodeHash, SiblingIndex},
-    packages::FunctionId,
-};
+use crate::language::code::{Children, NodeHash, SiblingIndex};
 
 /// # Structured but untyped representation of a syntax node
 ///
@@ -128,9 +125,6 @@ pub enum SyntaxNode {
     /// As of this writing, this is not possible. The language doesn't support
     /// powerful enough values yet.
     ProvidedFunction {
-        /// # The ID of the provided function
-        id: FunctionId,
-
         /// # The name of the provided function
         name: String,
     },
@@ -308,7 +302,7 @@ impl fmt::Display for SyntaxNode {
             SyntaxNode::Number { value } => {
                 write!(f, "{value}")
             }
-            SyntaxNode::ProvidedFunction { id: _, name } => {
+            SyntaxNode::ProvidedFunction { name } => {
                 write!(f, "{name}")
             }
             SyntaxNode::Recursion => {
