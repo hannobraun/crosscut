@@ -76,9 +76,9 @@ pub enum SyntaxNode {
         body: NodeHash,
     },
 
-    /// # An unresolved identifier
+    /// # An identifier
     Identifier {
-        /// # The identifier that could not be resolved
+        /// # The name of the identifier
         name: String,
     },
 
