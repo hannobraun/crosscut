@@ -19,7 +19,7 @@ impl Editor {
     pub fn new(
         cursor: impl Into<Cursor>,
         codebase: &Codebase,
-        packages: &Packages,
+        _: &Packages,
     ) -> Self {
         let cursor = cursor.into();
 
@@ -28,7 +28,7 @@ impl Editor {
             cursor: cursor.clone(),
         };
 
-        editor.navigate_to(cursor, codebase, packages);
+        editor.navigate_to(cursor, codebase);
 
         editor
     }
@@ -56,21 +56,13 @@ impl Editor {
                     if let Some(previous) =
                         layout.node_before(&self.cursor.path)
                     {
-                        self.navigate_to(
-                            previous.clone(),
-                            compiler.codebase(),
-                            packages,
-                        );
+                        self.navigate_to(previous.clone(), compiler.codebase());
                         self.input.move_cursor_to_end(&mut self.cursor.index);
                     }
                 }
                 NodeAction::NavigateToNext => {
                     if let Some(next) = layout.node_after(&self.cursor.path) {
-                        self.navigate_to(
-                            next.clone(),
-                            compiler.codebase(),
-                            packages,
-                        );
+                        self.navigate_to(next.clone(), compiler.codebase());
                     }
                 }
             }
@@ -121,12 +113,7 @@ impl Editor {
         }
     }
 
-    fn navigate_to(
-        &mut self,
-        cursor: impl Into<Cursor>,
-        codebase: &Codebase,
-        _: &Packages,
-    ) {
+    fn navigate_to(&mut self, cursor: impl Into<Cursor>, codebase: &Codebase) {
         let cursor = cursor.into();
 
         let node = codebase.node_at(&cursor.path).node;
