@@ -1,6 +1,5 @@
 use super::{
-    Changes, Errors, LocatedNode, NewChangeSet, NodeHash, NodePath, Nodes,
-    SyntaxNode,
+    Changes, LocatedNode, NewChangeSet, NodeHash, NodePath, Nodes, SyntaxNode,
 };
 
 #[derive(Clone, Debug, Eq, PartialEq)]
@@ -8,7 +7,6 @@ pub struct Codebase {
     root: Root,
     nodes: Nodes,
     changes: Changes,
-    errors: Errors,
 }
 
 impl Codebase {
@@ -20,7 +18,6 @@ impl Codebase {
             root: Root { hash: root },
             nodes,
             changes: Changes::new(),
-            errors: Errors::new(),
         }
     }
 
