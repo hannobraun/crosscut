@@ -8,7 +8,7 @@ mod types;
 pub use self::{
     changes::{Changes, NewChangeSet},
     codebase::Codebase,
-    errors::{CodeError, Errors},
+    errors::Errors,
     intrinsics::IntrinsicFunction,
     nodes::{
         Children, LocatedNode, NodeHash, NodePath, Nodes, SiblingIndex,

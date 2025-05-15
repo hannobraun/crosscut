@@ -1,5 +1,5 @@
 use crate::language::{
-    code::{CodeError, NodeHash, Nodes, SyntaxNode},
+    code::{NodeHash, Nodes, SyntaxNode},
     packages::Packages,
 };
 
@@ -10,21 +10,18 @@ pub fn compile(
     nodes: &mut Nodes,
     packages: &Packages,
 ) -> NodeHash {
-    let (node, _) = if token.is_empty() {
-        (SyntaxNode::Empty, None)
+    let node = if token.is_empty() {
+        SyntaxNode::Empty
     } else if let Some(node) = resolve_keyword(token, nodes) {
-        (node, None)
+        node
     } else if let Some(node) = resolve_literal(token, nodes) {
-        (node, None)
+        node
     } else if let Some(node) = resolve_function(token, packages) {
-        (node, None)
+        node
     } else {
-        (
-            SyntaxNode::Identifier {
-                name: token.to_string(),
-            },
-            Some(CodeError::UnresolvedIdentifier),
-        )
+        SyntaxNode::Identifier {
+            name: token.to_string(),
+        }
     };
 
     nodes.insert(node)

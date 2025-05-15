@@ -16,6 +16,4 @@ impl Errors {
 }
 
 #[derive(Clone, Debug, Eq, PartialEq)]
-pub enum CodeError {
-    UnresolvedIdentifier,
-}
+pub enum CodeError {}
