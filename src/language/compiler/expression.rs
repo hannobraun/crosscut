@@ -1,5 +1,5 @@
 use crate::language::{
-    code::{CodeError, Errors, NodeHash, Nodes, SyntaxNode},
+    code::{CodeError, NodeHash, Nodes, SyntaxNode},
     packages::Packages,
 };
 
@@ -8,7 +8,6 @@ use super::{Function, Tuple};
 pub fn compile(
     token: &str,
     nodes: &mut Nodes,
-    _: &mut Errors,
     packages: &Packages,
 ) -> NodeHash {
     let (node, _) = if token.is_empty() {
