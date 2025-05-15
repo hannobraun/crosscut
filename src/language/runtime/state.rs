@@ -8,7 +8,6 @@ pub enum RuntimeState {
     Running { path: NodePath },
     Effect { effect: Effect, path: NodePath },
     Finished { output: Value },
-    Error { path: NodePath },
 }
 
 impl RuntimeState {
@@ -30,7 +29,6 @@ impl RuntimeState {
             Self::Started => None,
             Self::Running { path, .. } => Some(path),
             Self::Effect { path, .. } => Some(path),
-            Self::Error { path } => Some(path),
             Self::Finished { .. } => None,
         }
     }

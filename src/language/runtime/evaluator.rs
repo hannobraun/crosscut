@@ -181,7 +181,8 @@ impl Evaluator {
                 self.finish_evaluating_node(Value::Function { body });
             }
             SyntaxNode::Identifier { name: _ } => {
-                self.state = RuntimeState::Error {
+                self.state = RuntimeState::Effect {
+                    effect: Effect::ProvidedFunctionNotFound,
                     path: node.path.clone(),
                 };
 

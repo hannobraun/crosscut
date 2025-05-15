@@ -202,9 +202,6 @@ where
                         continue;
                     }
                 }
-                RuntimeState::Error { .. } => {
-                    // Currently not handling errors.
-                }
             }
 
             break;

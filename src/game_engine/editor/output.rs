@@ -136,12 +136,6 @@ fn render_runtime_state<A: EditorOutputAdapter>(
                     Ok(())
                 })?;
             }
-            RuntimeState::Error { path: _ } => {
-                adapter.color(ERROR_COLOR, |adapter| {
-                    writeln!(adapter, "Error")?;
-                    Ok(())
-                })?;
-            }
             RuntimeState::Finished { output } => {
                 adapter.color(Color::DarkYellow, |adapter| {
                     writeln!(adapter, "Finished: {output}")?;

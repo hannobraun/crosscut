@@ -136,8 +136,6 @@ impl Language {
         &mut self,
         mut handler: impl FnMut(&str, &Value) -> Result<Value, Effect>,
     ) -> Result<Value, Effect> {
-        use crate::game_engine::codebase_to_string;
-
         let mut i = 0;
 
         loop {
@@ -162,13 +160,6 @@ impl Language {
                 },
                 RuntimeState::Finished { output } => {
                     break Ok(output.clone());
-                }
-                RuntimeState::Error { .. } => {
-                    panic!(
-                        "Unexpected runtime error from this code:\n\
-                        {}",
-                        codebase_to_string(&self.codebase,),
-                    );
                 }
             }
 
