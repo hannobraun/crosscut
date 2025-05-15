@@ -24,10 +24,10 @@ impl Evaluator {
 
     pub fn reset(&mut self, codebase: &Codebase) {
         *self = Self::new();
-        self.apply_function_raw(codebase.root().path, codebase);
+        self.apply_function(codebase.root().path, codebase);
     }
 
-    pub fn apply_function_raw(&mut self, body: NodePath, codebase: &Codebase) {
+    pub fn apply_function(&mut self, body: NodePath, codebase: &Codebase) {
         self.eval_stack
             .push(RuntimeExpression::new(body.clone(), codebase));
 
@@ -127,7 +127,7 @@ impl Evaluator {
 
                 match function {
                     Value::Function { body } => {
-                        self.apply_function_raw(body, codebase);
+                        self.apply_function(body, codebase);
                     }
                     Value::ProvidedFunction { name } => {
                         self.state = RuntimeState::Effect {
