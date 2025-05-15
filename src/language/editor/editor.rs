@@ -98,7 +98,6 @@ impl Editor {
         command: EditorCommand,
         codebase: &mut Codebase,
         evaluator: &mut Evaluator,
-        _: &Packages,
     ) {
         match command {
             EditorCommand::Clear => {
