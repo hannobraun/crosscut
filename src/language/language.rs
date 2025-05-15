@@ -91,11 +91,16 @@ impl Language {
         {
             if let Some(intrinsic) = self.intrinsics.function_by_id(id) {
                 match apply_intrinsic_function(intrinsic, input.clone()) {
-                    Ok(value) => {
+                    Some(Ok(value)) => {
                         self.evaluator.exit_from_provided_function(value);
                     }
-                    Err(effect) => {
+                    Some(Err(effect)) => {
                         self.evaluator.trigger_effect(effect);
+                    }
+                    None => {
+                        // Function is not an intrinsic function and was not
+                        // handled. Nothing else to do here. The host can take
+                        // care of the effect.
                     }
                 }
             }

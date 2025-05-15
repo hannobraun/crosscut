@@ -7,7 +7,7 @@ use super::{Effect, Value};
 pub fn apply_intrinsic_function(
     intrinsic: &IntrinsicFunction,
     input: Value,
-) -> Result<Value, Effect> {
+) -> Option<Result<Value, Effect>> {
     match intrinsic {
         IntrinsicFunction::Add => {
             if let Value::Tuple { values } = &input {
@@ -17,19 +17,19 @@ pub fn apply_intrinsic_function(
                         Value::Integer { value: b },
                     ] = [a, b]
                     {
-                        return Ok(Value::Integer { value: *a + *b });
+                        return Some(Ok(Value::Integer { value: *a + *b }));
                     }
                 }
             }
 
-            Err(Effect::UnexpectedInput {
+            Some(Err(Effect::UnexpectedInput {
                 expected: Type::Tuple {
                     values: vec![Type::Integer, Type::Integer],
                 },
                 actual: input,
-            })
+            }))
         }
-        IntrinsicFunction::Drop => Ok(Value::nothing()),
-        IntrinsicFunction::Identity => Ok(input),
+        IntrinsicFunction::Drop => Some(Ok(Value::nothing())),
+        IntrinsicFunction::Identity => Some(Ok(input)),
     }
 }
