@@ -2,12 +2,11 @@ use itertools::Itertools;
 
 use crate::language::code::{IntrinsicFunction, Type};
 
-use super::{Effect, Evaluator, Value};
+use super::{Effect, Value};
 
 pub fn apply_intrinsic_function(
     intrinsic: &IntrinsicFunction,
     input: Value,
-    _: &mut Evaluator,
 ) -> Result<Value, Effect> {
     match intrinsic {
         IntrinsicFunction::Add => {
