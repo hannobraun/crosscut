@@ -227,9 +227,10 @@ impl Evaluator {
                         {node:#?}"
                     );
                 }
-                SyntaxNode::Apply { .. } => {
+                node @ SyntaxNode::Apply { .. } => {
                     unreachable!(
-                        "Dedicated `RuntimeNode` variant exists for this node."
+                        "Dedicated `RuntimeNode` variant exists for this node: \
+                        {node:#?}"
                     );
                 }
             },
