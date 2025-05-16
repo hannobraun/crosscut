@@ -238,14 +238,14 @@ impl Evaluator {
 }
 
 #[derive(Clone, Debug)]
-struct RuntimeNode {
-    path: NodePath,
-    children_to_evaluate: Vec<NodePath>,
-    evaluated_children: Vec<Value>,
+pub struct RuntimeNode {
+    pub path: NodePath,
+    pub children_to_evaluate: Vec<NodePath>,
+    pub evaluated_children: Vec<Value>,
 }
 
 impl RuntimeNode {
-    fn new(path: NodePath, codebase: &Codebase) -> Self {
+    pub fn new(path: NodePath, codebase: &Codebase) -> Self {
         let children_to_evaluate = codebase
             .node_at(&path)
             .inputs(codebase.nodes())
