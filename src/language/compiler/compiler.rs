@@ -88,30 +88,14 @@ impl<'r> Compiler<'r> {
         self.codebase.make_change(|change_set| {
             let node = change_set.nodes.get(to_replace.hash());
 
-            match TypedNode::from_syntax_node(node) {
+            let replacement = match TypedNode::from_syntax_node(node) {
                 TypedNode::Expression => {
-                    let replacement = expression::compile(
-                        replacement_token,
-                        change_set.nodes,
-                    );
-
-                    replace_node_and_update_parents(
-                        to_replace.clone(),
-                        replacement,
-                        change_set,
-                    )
+                    expression::compile(replacement_token, change_set.nodes)
                 }
                 TypedNode::Pattern => {
-                    let replacement =
-                        change_set.nodes.insert(SyntaxNode::Binding {
-                            name: replacement_token.to_string(),
-                        });
-
-                    replace_node_and_update_parents(
-                        to_replace.clone(),
-                        replacement,
-                        change_set,
-                    )
+                    change_set.nodes.insert(SyntaxNode::Binding {
+                        name: replacement_token.to_string(),
+                    })
                 }
                 TypedNode::Other => {
                     panic!(
@@ -119,7 +103,13 @@ impl<'r> Compiler<'r> {
                         {node:#?}"
                     );
                 }
-            }
+            };
+
+            replace_node_and_update_parents(
+                to_replace.clone(),
+                replacement,
+                change_set,
+            )
         })
     }
 }
