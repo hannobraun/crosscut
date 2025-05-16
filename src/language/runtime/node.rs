@@ -13,6 +13,9 @@ pub enum RuntimeNode {
     Function {
         body: NodePath,
     },
+    Identifier {
+        name: String,
+    },
     Generic {
         path: NodePath,
         children_to_evaluate: Vec<NodePath>,
@@ -53,6 +56,9 @@ impl RuntimeNode {
                     codebase.nodes(),
                 ),
             },
+            SyntaxNode::Identifier { name } => {
+                Self::Identifier { name: name.clone() }
+            }
             _ => {
                 let children_to_evaluate = syntax_node
                     .inputs(codebase.nodes())
@@ -90,7 +96,8 @@ impl RuntimeNode {
                 ..
             }
             | Self::Empty
-            | Self::Function { .. } => {
+            | Self::Function { .. }
+            | Self::Identifier { .. } => {
                 unreachable!("Node has no unevaluated children: {self:#?}")
             }
 
