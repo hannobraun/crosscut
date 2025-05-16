@@ -21,6 +21,18 @@ impl<'r> Compiler<'r> {
         child_token: &str,
     ) -> NodePath {
         self.codebase.make_change(|change_set| {
+            {
+                let parent = change_set.nodes.get(parent.hash());
+                assert!(
+                    matches!(
+                        parent,
+                        SyntaxNode::Tuple { .. } | SyntaxNode::Test { .. },
+                    ),
+                    "Trying to insert child for node that doesn't support it:\n\
+                    {parent:#?}",
+                );
+            }
+
             let child = expression::compile(child_token, change_set.nodes);
 
             let (parent_path, sibling_index) = {
