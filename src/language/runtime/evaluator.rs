@@ -109,7 +109,7 @@ impl Evaluator {
                 }
 
                 let Some([function, argument]) =
-                    node.clone().evaluated_children.into_iter().collect_array()
+                    node.evaluated_children.clone().into_iter().collect_array()
                 else {
                     unreachable!(
                         "`Node::Application must have two children. If it \
