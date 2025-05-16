@@ -132,10 +132,15 @@ impl Evaluator {
                     RuntimeChild::Evaluated {
                         value: Value::Function { parameter, body },
                     },
-                argument: RuntimeChild::Evaluated { value },
+                argument: RuntimeChild::Evaluated { value: argument },
                 ..
             } => {
-                self.apply_function(parameter, body, value, codebase.nodes());
+                self.apply_function(
+                    parameter,
+                    body,
+                    argument,
+                    codebase.nodes(),
+                );
             }
             RuntimeNode::Apply {
                 ref path,
