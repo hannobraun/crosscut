@@ -201,11 +201,12 @@ impl Evaluator {
                 self.finish_evaluating_node(Value::Integer { value });
             }
             RuntimeNode::Recursion => {
-                let body = self
-                    .call_stack
-                    .pop()
-                    .map(|stack_frame| stack_frame.root)
-                    .unwrap_or_else(|| codebase.root().path);
+                let stack_frame =
+                    self.call_stack.pop().unwrap_or_else(|| StackFrame {
+                        root: codebase.root().path,
+                    });
+
+                let body = stack_frame.root;
 
                 self.finish_evaluating_node(Value::Function { body });
             }
