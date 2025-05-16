@@ -17,9 +17,7 @@ use base64::{Engine, prelude::BASE64_URL_SAFE_NO_PAD};
 /// [`NodePath`].
 ///
 /// [`NodePath`]: super::NodePath
-#[derive(
-    Clone, Copy, Debug, Eq, Ord, PartialEq, PartialOrd, udigest::Digestable,
-)]
+#[derive(Clone, Copy, Eq, Ord, PartialEq, PartialOrd, udigest::Digestable)]
 pub struct NodeHash {
     inner: [u8; 32],
 }
@@ -37,6 +35,14 @@ impl NodeHash {
         Self {
             inner: udigest::hash::<blake3::Hasher>(node).into(),
         }
+    }
+}
+
+impl fmt::Debug for NodeHash {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        f.debug_struct("NodeHash")
+            .field("inner", &self.to_string())
+            .finish()
     }
 }
 
