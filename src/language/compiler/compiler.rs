@@ -1,6 +1,9 @@
 use crate::language::code::{Codebase, NodePath, SyntaxNode};
 
-use super::{expression, replace::replace_node_and_update_parents};
+use super::{
+    expression, replace::replace_node_and_update_parents,
+    typed_nodes::TypedNode,
+};
 
 pub struct Compiler<'r> {
     codebase: &'r mut Codebase,
@@ -83,14 +86,23 @@ impl<'r> Compiler<'r> {
         replacement_token: &str,
     ) -> NodePath {
         self.codebase.make_change(|change_set| {
-            let replacement =
-                expression::compile(replacement_token, change_set.nodes);
+            let node = change_set.nodes.get(to_replace.hash());
 
-            replace_node_and_update_parents(
-                to_replace.clone(),
-                replacement,
-                change_set,
-            )
+            match TypedNode::from_syntax_node(node) {
+                TypedNode::Expression => {
+                    let replacement = expression::compile(
+                        replacement_token,
+                        change_set.nodes,
+                    );
+
+                    replace_node_and_update_parents(
+                        to_replace.clone(),
+                        replacement,
+                        change_set,
+                    )
+                }
+                TypedNode::Other => to_replace.clone(),
+            }
         })
     }
 }
