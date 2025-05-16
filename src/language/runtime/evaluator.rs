@@ -28,7 +28,6 @@ impl Evaluator {
 
     pub fn apply_function(&mut self, body: NodePath, nodes: &Nodes) {
         self.eval_stack.push(RuntimeNode::new(body.clone(), nodes));
-
         self.call_stack.push(StackFrame { root: body });
     }
 
