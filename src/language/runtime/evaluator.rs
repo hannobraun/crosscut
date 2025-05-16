@@ -197,13 +197,11 @@ impl Evaluator {
                             evaluated_children,
                         });
                         self.eval_stack.push(RuntimeNode::new(child, codebase));
-
-                        return;
+                    } else {
+                        self.finish_evaluating_node(Value::Tuple {
+                            values: evaluated_children.into_iter().collect(),
+                        });
                     }
-
-                    self.finish_evaluating_node(Value::Tuple {
-                        values: evaluated_children.into_iter().collect(),
-                    });
                 }
                 SyntaxNode::Test { .. } => {
                     // For now, tests don't expect a specific runtime behavior
