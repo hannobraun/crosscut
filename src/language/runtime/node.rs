@@ -32,23 +32,28 @@ impl RuntimeNode {
             SyntaxNode::Apply {
                 expression,
                 argument,
-            } => Self::Apply {
-                path: path.clone(),
-                expression: RuntimeChild::Unevaluated {
+            } => {
+                let expression = RuntimeChild::Unevaluated {
                     path: NodePath::new(
                         *expression,
                         Some((path.clone(), SiblingIndex { index: 0 })),
                         codebase.nodes(),
                     ),
-                },
-                argument: RuntimeChild::Unevaluated {
+                };
+                let argument = RuntimeChild::Unevaluated {
                     path: NodePath::new(
                         *argument,
-                        Some((path, SiblingIndex { index: 1 })),
+                        Some((path.clone(), SiblingIndex { index: 1 })),
                         codebase.nodes(),
                     ),
-                },
-            },
+                };
+
+                Self::Apply {
+                    path,
+                    expression,
+                    argument,
+                }
+            }
             SyntaxNode::Empty => Self::Empty,
             SyntaxNode::Function { parameter: _, body } => Self::Function {
                 body: NodePath::new(
