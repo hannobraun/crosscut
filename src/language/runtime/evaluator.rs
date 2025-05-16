@@ -240,7 +240,6 @@ impl Evaluator {
 
         let new_state = if let Some(parent) = self.eval_stack.last_mut() {
             parent.child_was_evaluated(output);
-
             RuntimeState::Running
         } else {
             RuntimeState::Finished { output }
