@@ -65,7 +65,9 @@ impl RuntimeNode {
                 Self::Function { body }
             }
             SyntaxNode::Identifier { name } => {
-                Self::Identifier { name: name.clone() }
+                let name = name.clone();
+
+                Self::Identifier { name }
             }
             SyntaxNode::Number { value } => Self::Number { value: *value },
             SyntaxNode::Recursion => Self::Recursion,
