@@ -209,9 +209,8 @@ impl Evaluator {
                 });
             }
             RuntimeNode::Identifier { name } => {
-                self.finish_evaluating_node(Value::ProvidedFunction {
-                    name: name.clone(),
-                });
+                let value = Value::ProvidedFunction { name: name.clone() };
+                self.finish_evaluating_node(value);
             }
             RuntimeNode::Number { value } => {
                 self.finish_evaluating_node(Value::Integer { value });
