@@ -117,7 +117,7 @@ impl Evaluator {
                         return;
                     }
 
-                    let Some([function, argument]) =
+                    let Some([expression, argument]) =
                         evaluated_children.iter().cloned().collect_array()
                     else {
                         unreachable!(
@@ -127,7 +127,7 @@ impl Evaluator {
                         );
                     };
 
-                    match function {
+                    match expression {
                         Value::Function { body } => {
                             self.apply_function(body, codebase);
                         }
