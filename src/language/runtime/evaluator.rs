@@ -161,6 +161,7 @@ impl Evaluator {
                 );
                 self.eval_stack.push(node);
             }
+
             RuntimeNode::Generic {
                 path,
                 mut children_to_evaluate,
