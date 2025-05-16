@@ -1,4 +1,6 @@
-use crate::language::code::{Codebase, NodePath, SiblingIndex, SyntaxNode};
+use crate::language::code::{
+    Codebase, NodeHash, NodePath, SiblingIndex, SyntaxNode,
+};
 
 use super::Value;
 
@@ -10,6 +12,10 @@ pub enum RuntimeNode {
         argument: RuntimeChild,
     },
     Empty,
+    Function {
+        path: NodePath,
+        body: NodeHash,
+    },
     Generic {
         path: NodePath,
         children_to_evaluate: Vec<NodePath>,
@@ -43,6 +49,9 @@ impl RuntimeNode {
                 },
             },
             SyntaxNode::Empty => Self::Empty,
+            SyntaxNode::Function { parameter: _, body } => {
+                Self::Function { path, body: *body }
+            }
             _ => {
                 let children_to_evaluate = syntax_node
                     .inputs(codebase.nodes())
@@ -79,7 +88,8 @@ impl RuntimeNode {
                 argument: RuntimeChild::Evaluated { .. },
                 ..
             }
-            | Self::Empty => {
+            | Self::Empty
+            | Self::Function { .. } => {
                 unreachable!("Node has no unevaluated children: {self:#?}")
             }
 

@@ -165,21 +165,21 @@ impl Evaluator {
             RuntimeNode::Empty => {
                 self.finish_evaluating_node(Value::nothing());
             }
+            RuntimeNode::Function { path, body } => {
+                let body = NodePath::new(
+                    body,
+                    Some((path, SiblingIndex { index: 1 })),
+                    codebase.nodes(),
+                );
+
+                self.finish_evaluating_node(Value::Function { body });
+            }
 
             RuntimeNode::Generic {
                 path,
                 mut children_to_evaluate,
                 evaluated_children,
             } => match codebase.nodes().get(path.hash()) {
-                SyntaxNode::Function { parameter: _, body } => {
-                    let body = NodePath::new(
-                        *body,
-                        Some((path, SiblingIndex { index: 1 })),
-                        codebase.nodes(),
-                    );
-
-                    self.finish_evaluating_node(Value::Function { body });
-                }
                 SyntaxNode::Identifier { name } => {
                     self.finish_evaluating_node(Value::ProvidedFunction {
                         name: name.clone(),
@@ -229,7 +229,9 @@ impl Evaluator {
                         {node:#?}"
                     );
                 }
-                node @ SyntaxNode::Apply { .. } | node @ SyntaxNode::Empty => {
+                node @ SyntaxNode::Apply { .. }
+                | node @ SyntaxNode::Empty
+                | node @ SyntaxNode::Function { .. } => {
                     unreachable!(
                         "Dedicated `RuntimeNode` variant exists for this node: \
                         {node:#?}"
