@@ -222,7 +222,7 @@ impl Evaluator {
 
                 node @ SyntaxNode::AddValue
                 | node @ SyntaxNode::Binding { .. } => {
-                    panic!(
+                    unreachable!(
                         "Encountered a node that is not an expression: \
                         {node:#?}"
                     );
