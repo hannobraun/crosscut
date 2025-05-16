@@ -33,6 +33,8 @@ impl<'r> Compiler<'r> {
                 );
             }
 
+            // Compiling the child as an expression is correct for all the
+            // parents that we check for above.
             let child = expression::compile(child_token, change_set.nodes);
 
             let (parent_path, sibling_index) = {
