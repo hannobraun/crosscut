@@ -85,7 +85,7 @@ impl Evaluator {
             return;
         }
 
-        let Some(RuntimeNode {
+        let Some(RuntimeNode::Generic {
             path,
             mut children_to_evaluate,
             evaluated_children,
@@ -107,7 +107,7 @@ impl Evaluator {
         match codebase.nodes().get(path.hash()) {
             SyntaxNode::Apply { .. } => {
                 if let Some(child) = children_to_evaluate.pop() {
-                    self.eval_stack.push(RuntimeNode {
+                    self.eval_stack.push(RuntimeNode::Generic {
                         path,
                         children_to_evaluate,
                         evaluated_children,
@@ -143,7 +143,7 @@ impl Evaluator {
                         // A host function is not fully handled, until the
                         // handler has provided its output. It might also
                         // trigger an effect, and then we still need the node.
-                        self.eval_stack.push(RuntimeNode {
+                        self.eval_stack.push(RuntimeNode::Generic {
                             path,
                             children_to_evaluate,
                             evaluated_children,
@@ -155,7 +155,7 @@ impl Evaluator {
                             value.clone(),
                             path.clone(),
                         );
-                        self.eval_stack.push(RuntimeNode {
+                        self.eval_stack.push(RuntimeNode::Generic {
                             path,
                             children_to_evaluate,
                             evaluated_children,
@@ -194,7 +194,7 @@ impl Evaluator {
             }
             SyntaxNode::Tuple { .. } => {
                 if let Some(child) = children_to_evaluate.pop() {
-                    self.eval_stack.push(RuntimeNode {
+                    self.eval_stack.push(RuntimeNode::Generic {
                         path,
                         children_to_evaluate,
                         evaluated_children,

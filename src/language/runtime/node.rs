@@ -3,10 +3,12 @@ use crate::language::code::{Codebase, NodePath};
 use super::Value;
 
 #[derive(Clone, Debug)]
-pub struct RuntimeNode {
-    pub path: NodePath,
-    pub children_to_evaluate: Vec<NodePath>,
-    pub evaluated_children: Vec<Value>,
+pub enum RuntimeNode {
+    Generic {
+        path: NodePath,
+        children_to_evaluate: Vec<NodePath>,
+        evaluated_children: Vec<Value>,
+    },
 }
 
 impl RuntimeNode {
@@ -19,7 +21,7 @@ impl RuntimeNode {
             .collect();
         let evaluated_children = Vec::new();
 
-        Self {
+        Self::Generic {
             path,
             children_to_evaluate,
             evaluated_children,
@@ -27,7 +29,7 @@ impl RuntimeNode {
     }
 
     pub fn child_was_evaluated(&mut self, output: Value) {
-        let Self {
+        let Self::Generic {
             evaluated_children, ..
         } = self;
         evaluated_children.push(output);
