@@ -142,7 +142,8 @@ impl Evaluator {
 
                             // A host function is not fully handled, until the
                             // handler has provided its output. It might also
-                            // trigger an effect, and then we still need the node.
+                            // trigger an effect, and then we still need the
+                            // node.
                             self.eval_stack.push(RuntimeNode::Generic {
                                 path,
                                 children_to_evaluate,
