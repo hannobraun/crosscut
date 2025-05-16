@@ -150,7 +150,7 @@ impl Evaluator {
                                 evaluated_children,
                             });
                         }
-                        expression => {
+                        _ => {
                             self.unexpected_input(
                                 Type::Function,
                                 expression.clone(),
