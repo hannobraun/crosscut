@@ -149,10 +149,10 @@ impl Evaluator {
                                 evaluated_children,
                             });
                         }
-                        value => {
+                        expression => {
                             self.unexpected_input(
                                 Type::Function,
-                                value.clone(),
+                                expression.clone(),
                                 path.clone(),
                             );
                             self.eval_stack.push(RuntimeNode::Generic {
