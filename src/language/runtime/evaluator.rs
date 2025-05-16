@@ -206,9 +206,9 @@ impl Evaluator {
                         root: codebase.root().path,
                     });
 
-                let body = stack_frame.root;
-
-                self.finish_evaluating_node(Value::Function { body });
+                self.finish_evaluating_node(Value::Function {
+                    body: stack_frame.root,
+                });
             }
         }
     }
