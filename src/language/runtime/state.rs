@@ -5,7 +5,7 @@ use super::{Effect, Value};
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub enum RuntimeState {
     Started,
-    Running { path: NodePath },
+    Running,
     Effect { effect: Effect, path: NodePath },
     Finished { output: Value },
 }
@@ -27,7 +27,7 @@ impl RuntimeState {
     pub fn path(&self) -> Option<&NodePath> {
         match self {
             Self::Started => None,
-            Self::Running { path, .. } => Some(path),
+            Self::Running => None,
             Self::Effect { path, .. } => Some(path),
             Self::Finished { .. } => None,
         }

@@ -97,9 +97,7 @@ impl Evaluator {
             return;
         };
 
-        self.state = RuntimeState::Running {
-            path: node.path.clone(),
-        };
+        self.state = RuntimeState::Running;
 
         match codebase.nodes().get(node.path.hash()) {
             SyntaxNode::Apply { .. } => {
@@ -222,9 +220,7 @@ impl Evaluator {
         let new_state = if let Some(parent) = self.eval_stack.last_mut() {
             parent.evaluated_children.push(output);
 
-            RuntimeState::Running {
-                path: parent.path.clone(),
-            }
+            RuntimeState::Running
         } else {
             RuntimeState::Finished { output }
         };
@@ -322,7 +318,7 @@ mod tests {
         // over, but that's definitely more than enough.
         for _ in 0..1024 {
             evaluator.step(&codebase);
-            assert!(matches!(evaluator.state(), RuntimeState::Running { .. }));
+            assert!(matches!(evaluator.state(), RuntimeState::Running));
             assert!(evaluator.call_stack.len() <= 1);
         }
     }
