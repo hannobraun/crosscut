@@ -2,15 +2,14 @@ use crate::language::code::{Children, Nodes, SyntaxNode};
 
 pub enum TypedNode {
     Expression,
+    Pattern,
     Other,
 }
 
 impl TypedNode {
     pub fn from_syntax_node(syntax_node: &SyntaxNode) -> Self {
         match syntax_node {
-            SyntaxNode::AddValue
-            | SyntaxNode::Binding { .. }
-            | SyntaxNode::Test { .. } => Self::Other,
+            SyntaxNode::AddValue | SyntaxNode::Test { .. } => Self::Other,
 
             SyntaxNode::Apply { .. }
             | SyntaxNode::Empty
@@ -19,6 +18,8 @@ impl TypedNode {
             | SyntaxNode::Number { .. }
             | SyntaxNode::Recursion
             | SyntaxNode::Tuple { .. } => Self::Expression,
+
+            SyntaxNode::Binding { .. } => Self::Pattern,
         }
     }
 }
