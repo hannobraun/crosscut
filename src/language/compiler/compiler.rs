@@ -101,7 +101,18 @@ impl<'r> Compiler<'r> {
                         change_set,
                     )
                 }
-                TypedNode::Pattern => to_replace.clone(),
+                TypedNode::Pattern => {
+                    let replacement =
+                        change_set.nodes.insert(SyntaxNode::Binding {
+                            name: replacement_token.to_string(),
+                        });
+
+                    replace_node_and_update_parents(
+                        to_replace.clone(),
+                        replacement,
+                        change_set,
+                    )
+                }
                 TypedNode::Other => {
                     panic!(
                         "Trying to replace unexpected node:\n\
