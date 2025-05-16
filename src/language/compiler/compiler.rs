@@ -102,7 +102,12 @@ impl<'r> Compiler<'r> {
                     )
                 }
                 TypedNode::Pattern => to_replace.clone(),
-                TypedNode::Other => to_replace.clone(),
+                TypedNode::Other => {
+                    panic!(
+                        "Trying to replace unexpected node:\n\
+                        {node:#?}"
+                    );
+                }
             }
         })
     }
