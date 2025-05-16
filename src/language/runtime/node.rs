@@ -13,8 +13,9 @@ pub enum RuntimeNode {
 
 impl RuntimeNode {
     pub fn new(path: NodePath, codebase: &Codebase) -> Self {
-        let children_to_evaluate = codebase
-            .node_at(&path)
+        let syntax_node = codebase.node_at(&path);
+
+        let children_to_evaluate = syntax_node
             .inputs(codebase.nodes())
             .map(|located_node| located_node.path)
             .rev()
