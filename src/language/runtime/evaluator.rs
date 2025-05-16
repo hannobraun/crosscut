@@ -23,13 +23,22 @@ impl Evaluator {
 
     pub fn reset(&mut self, codebase: &Codebase) {
         *self = Self::new();
-        self.apply_function(codebase.root().path, codebase.nodes());
+        self.apply_function(
+            "_".to_string(),
+            codebase.root().path,
+            codebase.nodes(),
+        );
     }
 
-    pub fn apply_function(&mut self, body: NodePath, nodes: &Nodes) {
+    pub fn apply_function(
+        &mut self,
+        parameter: String,
+        body: NodePath,
+        nodes: &Nodes,
+    ) {
         self.eval_stack.push(RuntimeNode::new(body.clone(), nodes));
         self.call_stack.push(StackFrame {
-            parameter: "_".to_string(),
+            parameter,
             root: body,
         });
     }
@@ -118,12 +127,12 @@ impl Evaluator {
             RuntimeNode::Apply {
                 expression:
                     RuntimeChild::Evaluated {
-                        value: Value::Function { parameter: _, body },
+                        value: Value::Function { parameter, body },
                     },
                 argument: RuntimeChild::Evaluated { value: _ },
                 ..
             } => {
-                self.apply_function(body, codebase.nodes());
+                self.apply_function(parameter, body, codebase.nodes());
             }
             RuntimeNode::Apply {
                 ref path,

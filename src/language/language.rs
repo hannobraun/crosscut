@@ -52,7 +52,11 @@ impl Language {
     }
 
     pub fn apply_function(&mut self, root: NodePath) {
-        self.evaluator.apply_function(root, self.codebase.nodes());
+        self.evaluator.apply_function(
+            "_".to_string(),
+            root,
+            self.codebase.nodes(),
+        );
     }
 
     pub fn step(&mut self) -> &RuntimeState {
