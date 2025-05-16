@@ -45,6 +45,36 @@ fn binding() {
 }
 
 #[test]
+fn binding_inner_shadows_outer() {
+    let mut language = Language::new();
+    language
+        .code("apply")
+        .down()
+        .code("fn")
+        .down()
+        .remove_right() // remove the `_` placeholder
+        .code("arg") // outer binding
+        .down()
+        .code("apply") // outer function body
+        .down()
+        .code("fn")
+        .down()
+        .remove_right() // remove the `_` placeholder
+        .code("arg") // inner binding
+        .down()
+        .code("arg") // inner function body
+        .down()
+        .code("127") // argument for inner binding
+        .down()
+        .code("255"); // argument for outer binding
+
+    assert_eq!(
+        language.step_until_finished().unwrap(),
+        Value::Integer { value: 127 },
+    );
+}
+
+#[test]
 fn self_recursion() {
     // A function can recurse using the `self` keyword.
 
