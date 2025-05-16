@@ -85,12 +85,7 @@ impl Evaluator {
             return;
         }
 
-        let Some(RuntimeNode::Generic {
-            path,
-            mut children_to_evaluate,
-            evaluated_children,
-        }) = self.eval_stack.pop()
-        else {
+        let Some(node) = self.eval_stack.pop() else {
             // Evaluation stack is empty, which means there's nothing we can do.
 
             if !self.state.is_finished() {
@@ -104,6 +99,11 @@ impl Evaluator {
 
         self.state = RuntimeState::Running;
 
+        let RuntimeNode::Generic {
+            path,
+            mut children_to_evaluate,
+            evaluated_children,
+        } = node;
         match codebase.nodes().get(path.hash()) {
             SyntaxNode::Apply { .. } => {
                 if let Some(child) = children_to_evaluate.pop() {
