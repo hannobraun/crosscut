@@ -166,11 +166,6 @@ impl Evaluator {
                 mut children_to_evaluate,
                 evaluated_children,
             } => match codebase.nodes().get(path.hash()) {
-                SyntaxNode::Apply { .. } => {
-                    unreachable!(
-                        "Dedicated `RuntimeNode` variant exists for this node."
-                    );
-                }
                 SyntaxNode::Empty => {
                     self.finish_evaluating_node(Value::nothing());
                 }
@@ -230,6 +225,11 @@ impl Evaluator {
                     panic!(
                         "Encountered a node that is not an expression: \
                         {node:#?}"
+                    );
+                }
+                SyntaxNode::Apply { .. } => {
+                    unreachable!(
+                        "Dedicated `RuntimeNode` variant exists for this node."
                     );
                 }
             },
