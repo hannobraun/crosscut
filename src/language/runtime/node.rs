@@ -20,6 +20,9 @@ pub enum RuntimeNode {
     Number {
         value: i32,
     },
+    PopStackFrame {
+        output: Value,
+    },
     Recursion,
     Tuple {
         values_to_evaluate: Vec<NodePath>,
@@ -140,6 +143,10 @@ impl RuntimeNode {
                 evaluated_values, ..
             } => {
                 evaluated_values.push(value);
+            }
+
+            Self::PopStackFrame { output } => {
+                *output = value;
             }
 
             Self::Apply {

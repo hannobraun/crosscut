@@ -135,6 +135,9 @@ impl Evaluator {
                 argument: RuntimeChild::Evaluated { value: argument },
                 ..
             } => {
+                self.eval_stack.push(RuntimeNode::PopStackFrame {
+                    output: Value::nothing(),
+                });
                 self.apply_function(
                     parameter,
                     body,
@@ -228,6 +231,9 @@ impl Evaluator {
             }
             RuntimeNode::Number { value } => {
                 self.finish_evaluating_node(Value::Integer { value });
+            }
+            RuntimeNode::PopStackFrame { output } => {
+                self.finish_evaluating_node(output);
             }
             RuntimeNode::Recursion => {
                 let stack_frame =
