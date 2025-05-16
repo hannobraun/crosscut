@@ -9,6 +9,7 @@ pub enum RuntimeNode {
         expression: RuntimeChild,
         argument: RuntimeChild,
     },
+    Empty,
     Generic {
         path: NodePath,
         children_to_evaluate: Vec<NodePath>,
@@ -41,6 +42,7 @@ impl RuntimeNode {
                     ),
                 },
             },
+            SyntaxNode::Empty => Self::Empty,
             _ => {
                 let children_to_evaluate = syntax_node
                     .inputs(codebase.nodes())
@@ -76,7 +78,8 @@ impl RuntimeNode {
                 expression: RuntimeChild::Evaluated { .. },
                 argument: RuntimeChild::Evaluated { .. },
                 ..
-            } => {
+            }
+            | Self::Empty => {
                 unreachable!("Node has no unevaluated children: {self:#?}")
             }
 

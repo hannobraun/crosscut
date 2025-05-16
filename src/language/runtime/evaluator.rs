@@ -162,14 +162,15 @@ impl Evaluator {
                 self.eval_stack.push(node);
             }
 
+            RuntimeNode::Empty => {
+                self.finish_evaluating_node(Value::nothing());
+            }
+
             RuntimeNode::Generic {
                 path,
                 mut children_to_evaluate,
                 evaluated_children,
             } => match codebase.nodes().get(path.hash()) {
-                SyntaxNode::Empty => {
-                    self.finish_evaluating_node(Value::nothing());
-                }
                 SyntaxNode::Function { parameter: _, body } => {
                     let body = NodePath::new(
                         *body,
@@ -228,7 +229,7 @@ impl Evaluator {
                         {node:#?}"
                     );
                 }
-                node @ SyntaxNode::Apply { .. } => {
+                node @ SyntaxNode::Apply { .. } | node @ SyntaxNode::Empty => {
                     unreachable!(
                         "Dedicated `RuntimeNode` variant exists for this node: \
                         {node:#?}"
