@@ -122,8 +122,8 @@ impl Evaluator {
                     else {
                         unreachable!(
                             "`Node::Application must have two children. If it \
-                        doesn't, that is a bug. Specifically, it is a mismatch \
-                        between the compiler and the evaluator."
+                            doesn't, that is a bug. Specifically, it is a \
+                            mismatch between the compiler and the evaluator."
                         );
                     };
 
@@ -219,7 +219,8 @@ impl Evaluator {
                 node @ SyntaxNode::AddValue
                 | node @ SyntaxNode::Binding { .. } => {
                     panic!(
-                        "Encountered a node that is not an expression: {node:#?}"
+                        "Encountered a node that is not an expression: \
+                        {node:#?}"
                     );
                 }
             },
