@@ -85,7 +85,12 @@ impl Evaluator {
             return;
         }
 
-        let Some(mut node) = self.eval_stack.pop() else {
+        let Some(RuntimeNode {
+            path,
+            mut children_to_evaluate,
+            evaluated_children,
+        }) = self.eval_stack.pop()
+        else {
             // Evaluation stack is empty, which means there's nothing we can do.
 
             if !self.state.is_finished() {
@@ -99,17 +104,21 @@ impl Evaluator {
 
         self.state = RuntimeState::Running;
 
-        match codebase.nodes().get(node.path.hash()) {
+        match codebase.nodes().get(path.hash()) {
             SyntaxNode::Apply { .. } => {
-                if let Some(child) = node.children_to_evaluate.pop() {
-                    self.eval_stack.push(node);
+                if let Some(child) = children_to_evaluate.pop() {
+                    self.eval_stack.push(RuntimeNode {
+                        path,
+                        children_to_evaluate,
+                        evaluated_children,
+                    });
                     self.eval_stack.push(RuntimeNode::new(child, codebase));
 
                     return;
                 }
 
                 let Some([function, argument]) =
-                    node.evaluated_children.iter().cloned().collect_array()
+                    evaluated_children.iter().cloned().collect_array()
                 else {
                     unreachable!(
                         "`Node::Application must have two children. If it \
@@ -128,21 +137,29 @@ impl Evaluator {
                                 name,
                                 input: argument,
                             },
-                            path: node.path.clone(),
+                            path: path.clone(),
                         };
 
                         // A host function is not fully handled, until the
                         // handler has provided its output. It might also
                         // trigger an effect, and then we still need the node.
-                        self.eval_stack.push(node);
+                        self.eval_stack.push(RuntimeNode {
+                            path,
+                            children_to_evaluate,
+                            evaluated_children,
+                        });
                     }
                     value => {
                         self.unexpected_input(
                             Type::Function,
                             value.clone(),
-                            node.path.clone(),
+                            path.clone(),
                         );
-                        self.eval_stack.push(node);
+                        self.eval_stack.push(RuntimeNode {
+                            path,
+                            children_to_evaluate,
+                            evaluated_children,
+                        });
                     }
                 }
             }
@@ -152,7 +169,7 @@ impl Evaluator {
             SyntaxNode::Function { parameter: _, body } => {
                 let body = NodePath::new(
                     *body,
-                    Some((node.path, SiblingIndex { index: 1 })),
+                    Some((path, SiblingIndex { index: 1 })),
                     codebase.nodes(),
                 );
 
@@ -176,15 +193,19 @@ impl Evaluator {
                 self.finish_evaluating_node(Value::Function { body });
             }
             SyntaxNode::Tuple { .. } => {
-                if let Some(child) = node.children_to_evaluate.pop() {
-                    self.eval_stack.push(node);
+                if let Some(child) = children_to_evaluate.pop() {
+                    self.eval_stack.push(RuntimeNode {
+                        path,
+                        children_to_evaluate,
+                        evaluated_children,
+                    });
                     self.eval_stack.push(RuntimeNode::new(child, codebase));
 
                     return;
                 }
 
                 self.finish_evaluating_node(Value::Tuple {
-                    values: node.evaluated_children.into_iter().collect(),
+                    values: evaluated_children.into_iter().collect(),
                 });
             }
             SyntaxNode::Test { .. } => {
