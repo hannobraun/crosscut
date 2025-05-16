@@ -27,6 +27,9 @@ impl RuntimeNode {
     }
 
     pub fn child_was_evaluated(&mut self, output: Value) {
-        self.evaluated_children.push(output);
+        let Self {
+            evaluated_children, ..
+        } = self;
+        evaluated_children.push(output);
     }
 }
