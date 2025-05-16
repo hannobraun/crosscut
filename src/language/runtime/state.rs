@@ -26,7 +26,9 @@ impl RuntimeState {
 
     pub fn path(&self) -> Option<&NodePath> {
         match self {
-            Self::Started | Self::Running | Self::Finished { .. } => None,
+            Self::Started | Self::Running | Self::Finished { output: _ } => {
+                None
+            }
             Self::Effect { path, .. } => Some(path),
         }
     }
