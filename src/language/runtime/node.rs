@@ -1,6 +1,4 @@
-use crate::language::code::{
-    Codebase, NodeHash, NodePath, SiblingIndex, SyntaxNode,
-};
+use crate::language::code::{Codebase, NodePath, SiblingIndex, SyntaxNode};
 
 use super::Value;
 
@@ -13,8 +11,7 @@ pub enum RuntimeNode {
     },
     Empty,
     Function {
-        path: NodePath,
-        body: NodeHash,
+        body: NodePath,
     },
     Generic {
         path: NodePath,
@@ -49,9 +46,13 @@ impl RuntimeNode {
                 },
             },
             SyntaxNode::Empty => Self::Empty,
-            SyntaxNode::Function { parameter: _, body } => {
-                Self::Function { path, body: *body }
-            }
+            SyntaxNode::Function { parameter: _, body } => Self::Function {
+                body: NodePath::new(
+                    *body,
+                    Some((path, SiblingIndex { index: 1 })),
+                    codebase.nodes(),
+                ),
+            },
             _ => {
                 let children_to_evaluate = syntax_node
                     .inputs(codebase.nodes())

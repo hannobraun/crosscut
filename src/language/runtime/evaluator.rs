@@ -1,6 +1,4 @@
-use crate::language::code::{
-    Codebase, NodePath, SiblingIndex, SyntaxNode, Type,
-};
+use crate::language::code::{Codebase, NodePath, SyntaxNode, Type};
 
 use super::{
     Effect, RuntimeState, Value,
@@ -165,13 +163,7 @@ impl Evaluator {
             RuntimeNode::Empty => {
                 self.finish_evaluating_node(Value::nothing());
             }
-            RuntimeNode::Function { path, body } => {
-                let body = NodePath::new(
-                    body,
-                    Some((path, SiblingIndex { index: 1 })),
-                    codebase.nodes(),
-                );
-
+            RuntimeNode::Function { body } => {
                 self.finish_evaluating_node(Value::Function { body });
             }
 
