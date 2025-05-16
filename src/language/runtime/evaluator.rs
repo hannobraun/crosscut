@@ -28,7 +28,10 @@ impl Evaluator {
 
     pub fn apply_function(&mut self, body: NodePath, nodes: &Nodes) {
         self.eval_stack.push(RuntimeNode::new(body.clone(), nodes));
-        self.call_stack.push(StackFrame { root: body });
+        self.call_stack.push(StackFrame {
+            parameter: "_".to_string(),
+            root: body,
+        });
     }
 
     pub fn exit_from_provided_function(&mut self, output: Value) {
@@ -115,7 +118,7 @@ impl Evaluator {
             RuntimeNode::Apply {
                 expression:
                     RuntimeChild::Evaluated {
-                        value: Value::Function { body },
+                        value: Value::Function { parameter: _, body },
                     },
                 argument: RuntimeChild::Evaluated { value: _ },
                 ..
@@ -189,8 +192,10 @@ impl Evaluator {
                 self.finish_evaluating_node(Value::nothing());
             }
             RuntimeNode::Function { parameter, body } => {
-                let _ = parameter;
-                self.finish_evaluating_node(Value::Function { body });
+                self.finish_evaluating_node(Value::Function {
+                    parameter,
+                    body,
+                });
             }
             RuntimeNode::Identifier { name } => {
                 self.finish_evaluating_node(Value::ProvidedFunction {
@@ -203,10 +208,12 @@ impl Evaluator {
             RuntimeNode::Recursion => {
                 let stack_frame =
                     self.call_stack.pop().unwrap_or_else(|| StackFrame {
+                        parameter: "_".to_string(),
                         root: codebase.root().path,
                     });
 
                 self.finish_evaluating_node(Value::Function {
+                    parameter: stack_frame.parameter,
                     body: stack_frame.root,
                 });
             }
@@ -246,6 +253,7 @@ impl Evaluator {
 
 #[derive(Debug)]
 struct StackFrame {
+    parameter: String,
     root: NodePath,
 }
 
@@ -284,7 +292,7 @@ mod tests {
 
         evaluator.step(&codebase);
         let RuntimeState::Finished {
-            output: Value::Function { body },
+            output: Value::Function { parameter: _, body },
         } = evaluator.state()
         else {
             panic!();

@@ -4,7 +4,7 @@ use crate::language::code::{NodePath, display_tuple};
 
 #[derive(Clone, Debug, Eq, PartialEq, udigest::Digestable)]
 pub enum Value {
-    Function { body: NodePath },
+    Function { parameter: String, body: NodePath },
     Integer { value: i32 },
     ProvidedFunction { name: String },
     Tuple { values: Vec<Value> },
@@ -26,7 +26,7 @@ impl Value {
 
     pub fn into_function_body(self) -> Result<NodePath, Self> {
         match self {
-            Value::Function { body } => Ok(body),
+            Value::Function { parameter: _, body } => Ok(body),
             _ => Err(self),
         }
     }
@@ -35,7 +35,7 @@ impl Value {
 impl fmt::Display for Value {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match self {
-            Self::Function { body } => {
+            Self::Function { parameter: _, body } => {
                 write!(f, "fn {}", body.hash())?;
             }
             Self::Integer { value } => {
