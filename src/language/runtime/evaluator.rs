@@ -188,7 +188,8 @@ impl Evaluator {
             RuntimeNode::Empty => {
                 self.finish_evaluating_node(Value::nothing());
             }
-            RuntimeNode::Function { body } => {
+            RuntimeNode::Function { parameter, body } => {
+                let _ = parameter;
                 self.finish_evaluating_node(Value::Function { body });
             }
             RuntimeNode::Identifier { name } => {

@@ -11,6 +11,7 @@ pub enum RuntimeNode {
     },
     Empty,
     Function {
+        parameter: String,
         body: NodePath,
     },
     Identifier {
@@ -55,14 +56,25 @@ impl RuntimeNode {
                 }
             }
             SyntaxNode::Empty => Self::Empty,
-            SyntaxNode::Function { parameter: _, body } => {
+            SyntaxNode::Function { parameter, body } => {
+                let parameter = {
+                    let parameter = nodes.get(parameter);
+                    let SyntaxNode::Binding { name } = parameter else {
+                        panic!(
+                            "Expected parameter of function to be a binding:\n\
+                            {parameter:#?}"
+                        );
+                    };
+
+                    name.clone()
+                };
                 let body = NodePath::new(
                     *body,
                     Some((path, SiblingIndex { index: 1 })),
                     nodes,
                 );
 
-                Self::Function { body }
+                Self::Function { parameter, body }
             }
             SyntaxNode::Identifier { name } => {
                 let name = name.clone();
