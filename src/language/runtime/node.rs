@@ -71,6 +71,7 @@ impl RuntimeNode {
             } => {
                 *child = RuntimeChild::Evaluated { value };
             }
+
             Self::Apply {
                 expression: RuntimeChild::Evaluated { .. },
                 argument: RuntimeChild::Evaluated { .. },
@@ -78,6 +79,7 @@ impl RuntimeNode {
             } => {
                 unreachable!("Node has no unevaluated children: {self:#?}")
             }
+
             Self::Generic {
                 evaluated_children, ..
             } => {
