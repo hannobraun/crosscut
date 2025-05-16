@@ -234,6 +234,7 @@ impl Evaluator {
             }
             RuntimeNode::PopStackFrame { output } => {
                 self.finish_evaluating_node(output);
+                self.call_stack.pop();
             }
             RuntimeNode::Recursion => {
                 let stack_frame =

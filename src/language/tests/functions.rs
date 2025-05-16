@@ -75,6 +75,45 @@ fn binding_inner_shadows_outer() {
 }
 
 #[test]
+fn binding_inner_does_not_interfere_with_outer() {
+    let mut language = Language::new();
+    language
+        .code("apply")
+        .down()
+        .code("fn")
+        .down()
+        .remove_right() // remove the `_` placeholder
+        .code("arg") // outer binding
+        .down()
+        .code("apply") // outer function body
+        .down()
+        .code("+")
+        .down()
+        .code("tuple")
+        .down()
+        .code("apply")
+        .down()
+        .code("fn")
+        .down()
+        .remove_right() // remove the `_` placeholder
+        .code("arg") // inner binding
+        .down()
+        .code("arg") // inner function body; refers to inner binding
+        .down()
+        .code("1") // argument for inner binding
+        .down()
+        .code("arg") // refers to outer binding
+        .down()
+        .down() // navigate past the tuple
+        .code("2"); // argument for outer binding
+
+    assert_eq!(
+        language.step_until_finished().unwrap(),
+        Value::Integer { value: 3 },
+    );
+}
+
+#[test]
 fn self_recursion() {
     // A function can recurse using the `self` keyword.
 
