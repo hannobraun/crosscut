@@ -28,9 +28,7 @@ pub enum RuntimeNode {
 
 impl RuntimeNode {
     pub fn new(path: NodePath, codebase: &Codebase) -> Self {
-        let syntax_node = codebase.nodes().get(path.hash());
-
-        match syntax_node {
+        match codebase.nodes().get(path.hash()) {
             SyntaxNode::Apply {
                 expression,
                 argument,
