@@ -1,10 +1,11 @@
-use itertools::Itertools;
-
 use crate::language::code::{
     Codebase, NodePath, SiblingIndex, SyntaxNode, Type,
 };
 
-use super::{Effect, RuntimeState, Value, node::RuntimeNode};
+use super::{
+    Effect, RuntimeState, Value,
+    node::{RuntimeChild, RuntimeNode},
+};
 
 #[derive(Debug)]
 pub struct Evaluator {
@@ -100,69 +101,76 @@ impl Evaluator {
         self.state = RuntimeState::Running;
 
         match node {
+            RuntimeNode::Apply {
+                expression: RuntimeChild::Unevaluated { ref path },
+                ..
+            }
+            | RuntimeNode::Apply {
+                expression: RuntimeChild::Evaluated { .. },
+                argument: RuntimeChild::Unevaluated { ref path },
+                ..
+            } => {
+                let path = path.clone();
+
+                self.eval_stack.push(node);
+                self.eval_stack.push(RuntimeNode::new(path, codebase));
+            }
+            RuntimeNode::Apply {
+                expression:
+                    RuntimeChild::Evaluated {
+                        value: Value::Function { body },
+                    },
+                argument: RuntimeChild::Evaluated { value: _ },
+                ..
+            } => {
+                self.apply_function(body, codebase);
+            }
+            RuntimeNode::Apply {
+                ref path,
+                expression:
+                    RuntimeChild::Evaluated {
+                        value: Value::ProvidedFunction { ref name },
+                    },
+                argument:
+                    RuntimeChild::Evaluated {
+                        value: ref argument,
+                    },
+            } => {
+                self.state = RuntimeState::Effect {
+                    effect: Effect::ApplyProvidedFunction {
+                        name: name.clone(),
+                        input: argument.clone(),
+                    },
+                    path: path.clone(),
+                };
+
+                // A host function is not fully handled, until the
+                // handler has provided its output. It might also
+                // trigger an effect, and then we still need the
+                // node.
+                self.eval_stack.push(node);
+            }
+            RuntimeNode::Apply {
+                ref path,
+                expression: RuntimeChild::Evaluated { ref value },
+                ..
+            } => {
+                self.unexpected_input(
+                    Type::Function,
+                    value.clone(),
+                    path.clone(),
+                );
+                self.eval_stack.push(node);
+            }
             RuntimeNode::Generic {
                 path,
                 mut children_to_evaluate,
                 evaluated_children,
             } => match codebase.nodes().get(path.hash()) {
                 SyntaxNode::Apply { .. } => {
-                    if let Some(child) = children_to_evaluate.pop() {
-                        self.eval_stack.push(RuntimeNode::Generic {
-                            path,
-                            children_to_evaluate,
-                            evaluated_children,
-                        });
-                        self.eval_stack.push(RuntimeNode::new(child, codebase));
-
-                        return;
-                    }
-
-                    let Some([expression, argument]) =
-                        evaluated_children.iter().cloned().collect_array()
-                    else {
-                        unreachable!(
-                            "`Node::Application must have two children. If it \
-                            doesn't, that is a bug. Specifically, it is a \
-                            mismatch between the compiler and the evaluator."
-                        );
-                    };
-
-                    match expression {
-                        Value::Function { body } => {
-                            self.apply_function(body, codebase);
-                        }
-                        Value::ProvidedFunction { name } => {
-                            self.state = RuntimeState::Effect {
-                                effect: Effect::ApplyProvidedFunction {
-                                    name,
-                                    input: argument,
-                                },
-                                path: path.clone(),
-                            };
-
-                            // A host function is not fully handled, until the
-                            // handler has provided its output. It might also
-                            // trigger an effect, and then we still need the
-                            // node.
-                            self.eval_stack.push(RuntimeNode::Generic {
-                                path,
-                                children_to_evaluate,
-                                evaluated_children,
-                            });
-                        }
-                        _ => {
-                            self.unexpected_input(
-                                Type::Function,
-                                expression.clone(),
-                                path.clone(),
-                            );
-                            self.eval_stack.push(RuntimeNode::Generic {
-                                path,
-                                children_to_evaluate,
-                                evaluated_children,
-                            });
-                        }
-                    }
+                    unreachable!(
+                        "Dedicated `RuntimeNode` variant exists for this node."
+                    );
                 }
                 SyntaxNode::Empty => {
                     self.finish_evaluating_node(Value::nothing());
