@@ -1,4 +1,4 @@
-use crate::language::code::{Codebase, NodePath, Type};
+use crate::language::code::{Codebase, NodePath, Nodes, Type};
 
 use super::{
     Effect, RuntimeState, Value,
@@ -23,12 +23,11 @@ impl Evaluator {
 
     pub fn reset(&mut self, codebase: &Codebase) {
         *self = Self::new();
-        self.apply_function(codebase.root().path, codebase);
+        self.apply_function(codebase.root().path, codebase.nodes());
     }
 
-    pub fn apply_function(&mut self, body: NodePath, codebase: &Codebase) {
-        self.eval_stack
-            .push(RuntimeNode::new(body.clone(), codebase.nodes()));
+    pub fn apply_function(&mut self, body: NodePath, nodes: &Nodes) {
+        self.eval_stack.push(RuntimeNode::new(body.clone(), nodes));
 
         self.call_stack.push(StackFrame { root: body });
     }
@@ -122,7 +121,7 @@ impl Evaluator {
                 argument: RuntimeChild::Evaluated { value: _ },
                 ..
             } => {
-                self.apply_function(body, codebase);
+                self.apply_function(body, codebase.nodes());
             }
             RuntimeNode::Apply {
                 ref path,
