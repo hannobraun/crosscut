@@ -1,6 +1,7 @@
 mod effect;
 mod evaluator;
 mod intrinsics;
+mod node;
 mod state;
 mod value;
 
