@@ -211,15 +211,9 @@ impl Evaluator {
 
             RuntimeNode::Generic { path, .. } => {
                 match codebase.nodes().get(path.hash()) {
-                    SyntaxNode::Test { .. } => {
-                        // For now, tests don't expect a specific runtime
-                        // behavior out of these expressions. So let's just use
-                        // a placeholder here.
-                        self.finish_evaluating_node(Value::nothing());
-                    }
-
                     node @ SyntaxNode::AddValue
-                    | node @ SyntaxNode::Binding { .. } => {
+                    | node @ SyntaxNode::Binding { .. }
+                    | node @ SyntaxNode::Test { .. } => {
                         unreachable!(
                             "Encountered a node that is not an expression: \
                         {node:#?}"
