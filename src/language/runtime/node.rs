@@ -1,4 +1,4 @@
-use crate::language::code::{Codebase, NodePath, SiblingIndex, SyntaxNode};
+use crate::language::code::{NodePath, Nodes, SiblingIndex, SyntaxNode};
 
 use super::Value;
 
@@ -27,8 +27,8 @@ pub enum RuntimeNode {
 }
 
 impl RuntimeNode {
-    pub fn new(path: NodePath, codebase: &Codebase) -> Self {
-        match codebase.nodes().get(path.hash()) {
+    pub fn new(path: NodePath, nodes: &Nodes) -> Self {
+        match nodes.get(path.hash()) {
             SyntaxNode::Apply {
                 expression,
                 argument,
@@ -37,14 +37,14 @@ impl RuntimeNode {
                     path: NodePath::new(
                         *expression,
                         Some((path.clone(), SiblingIndex { index: 0 })),
-                        codebase.nodes(),
+                        nodes,
                     ),
                 };
                 let argument = RuntimeChild::Unevaluated {
                     path: NodePath::new(
                         *argument,
                         Some((path.clone(), SiblingIndex { index: 1 })),
-                        codebase.nodes(),
+                        nodes,
                     ),
                 };
 
@@ -59,7 +59,7 @@ impl RuntimeNode {
                 let body = NodePath::new(
                     *body,
                     Some((path, SiblingIndex { index: 1 })),
-                    codebase.nodes(),
+                    nodes,
                 );
 
                 Self::Function { body }
@@ -86,7 +86,7 @@ impl RuntimeNode {
                         NodePath::new(
                             hash,
                             Some((path.clone(), SiblingIndex { index })),
-                            codebase.nodes(),
+                            nodes,
                         )
                     })
                     .collect();

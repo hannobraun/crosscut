@@ -28,7 +28,7 @@ impl Evaluator {
 
     pub fn apply_function(&mut self, body: NodePath, codebase: &Codebase) {
         self.eval_stack
-            .push(RuntimeNode::new(body.clone(), codebase));
+            .push(RuntimeNode::new(body.clone(), codebase.nodes()));
 
         self.call_stack.push(StackFrame { root: body });
     }
@@ -111,7 +111,8 @@ impl Evaluator {
                 let path = path.clone();
 
                 self.eval_stack.push(node);
-                self.eval_stack.push(RuntimeNode::new(path, codebase));
+                self.eval_stack
+                    .push(RuntimeNode::new(path, codebase.nodes()));
             }
             RuntimeNode::Apply {
                 expression:
@@ -175,7 +176,8 @@ impl Evaluator {
                 };
 
                 self.eval_stack.push(node);
-                self.eval_stack.push(RuntimeNode::new(child, codebase));
+                self.eval_stack
+                    .push(RuntimeNode::new(child, codebase.nodes()));
             }
             RuntimeNode::Tuple {
                 evaluated_values, ..
