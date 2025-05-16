@@ -1,7 +1,7 @@
 use crate::language::{
     code::Codebase,
     compiler::Compiler,
-    editor::{Editor, EditorInputEvent, editor::Cursor},
+    editor::{Editor, EditorInputEvent::*, editor::Cursor},
     runtime::Evaluator,
     tests::infra::{ExpectChildren, identifier},
 };
@@ -56,11 +56,7 @@ fn navigate_down_to_child() {
         },
         &codebase,
     );
-    editor.on_input(
-        EditorInputEvent::MoveCursorDown,
-        &mut codebase,
-        &mut evaluator,
-    );
+    editor.on_input(MoveCursorDown, &mut codebase, &mut evaluator);
 
     assert_eq!(
         editor.cursor(),
@@ -94,11 +90,7 @@ fn navigate_right_to_child() {
         },
         &codebase,
     );
-    editor.on_input(
-        EditorInputEvent::MoveCursorRight,
-        &mut codebase,
-        &mut evaluator,
-    );
+    editor.on_input(MoveCursorRight, &mut codebase, &mut evaluator);
 
     assert_eq!(
         editor.cursor(),
@@ -131,11 +123,7 @@ fn navigate_up_to_parent() {
         },
         &codebase,
     );
-    editor.on_input(
-        EditorInputEvent::MoveCursorUp,
-        &mut codebase,
-        &mut evaluator,
-    );
+    editor.on_input(MoveCursorUp, &mut codebase, &mut evaluator);
 
     assert_eq!(
         editor.cursor(),
@@ -168,11 +156,7 @@ fn navigate_left_to_parent() {
         },
         &codebase,
     );
-    editor.on_input(
-        EditorInputEvent::MoveCursorLeft,
-        &mut codebase,
-        &mut evaluator,
-    );
+    editor.on_input(MoveCursorLeft, &mut codebase, &mut evaluator);
 
     assert_eq!(
         editor.cursor(),
@@ -205,11 +189,7 @@ fn navigate_down_to_next_sibling() {
         .map(|located_node| located_node.path);
 
     let mut editor = Editor::new(Cursor { path: a, index: 0 }, &codebase);
-    editor.on_input(
-        EditorInputEvent::MoveCursorDown,
-        &mut codebase,
-        &mut evaluator,
-    );
+    editor.on_input(MoveCursorDown, &mut codebase, &mut evaluator);
 
     assert_eq!(editor.cursor(), &Cursor { path: b, index: 0 });
 }
@@ -237,11 +217,7 @@ fn navigate_right_to_next_sibling() {
         .map(|located_node| located_node.path);
 
     let mut editor = Editor::new(Cursor { path: a, index: 1 }, &codebase);
-    editor.on_input(
-        EditorInputEvent::MoveCursorRight,
-        &mut codebase,
-        &mut evaluator,
-    );
+    editor.on_input(MoveCursorRight, &mut codebase, &mut evaluator);
 
     assert_eq!(editor.cursor(), &Cursor { path: b, index: 0 });
 }
@@ -268,11 +244,7 @@ fn navigate_up_to_previous_sibling() {
         .map(|located_node| located_node.path);
 
     let mut editor = Editor::new(Cursor { path: b, index: 1 }, &codebase);
-    editor.on_input(
-        EditorInputEvent::MoveCursorUp,
-        &mut codebase,
-        &mut evaluator,
-    );
+    editor.on_input(MoveCursorUp, &mut codebase, &mut evaluator);
 
     assert_eq!(editor.cursor(), &Cursor { path: a, index: 1 });
 }
@@ -300,11 +272,7 @@ fn navigate_left_to_previous_sibling() {
         .map(|located_node| located_node.path);
 
     let mut editor = Editor::new(Cursor { path: b, index: 0 }, &codebase);
-    editor.on_input(
-        EditorInputEvent::MoveCursorLeft,
-        &mut codebase,
-        &mut evaluator,
-    );
+    editor.on_input(MoveCursorLeft, &mut codebase, &mut evaluator);
 
     assert_eq!(editor.cursor(), &Cursor { path: a, index: 1 });
 }
