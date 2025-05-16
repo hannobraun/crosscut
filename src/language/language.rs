@@ -108,6 +108,11 @@ impl Language {
         self
     }
 
+    pub fn remove_right(&mut self) -> &mut Self {
+        self.on_input(EditorInputEvent::RemoveRight { whole_node: false });
+        self
+    }
+
     pub fn step_until_finished(&mut self) -> Result<Value, Effect> {
         self.step_until_finished_and_handle_host_functions(|name, _| {
             unreachable!("Unexpected host function: `{name}`")

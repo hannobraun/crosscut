@@ -22,6 +22,29 @@ fn define_and_evaluate() {
 }
 
 #[test]
+fn binding() {
+    // A caller can pass arguments to a function, which can bind them to a name.
+
+    let mut language = Language::new();
+    language
+        .code("apply")
+        .down()
+        .code("fn")
+        .down()
+        .remove_right() // remove the `_` placeholder
+        .code("arg") // binding
+        .down()
+        .code("arg") // function body
+        .down()
+        .code("127");
+
+    assert_eq!(
+        language.step_until_finished().unwrap(),
+        Value::Integer { value: 127 },
+    );
+}
+
+#[test]
 fn self_recursion() {
     // A function can recurse using the `self` keyword.
 

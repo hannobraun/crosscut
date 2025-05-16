@@ -35,12 +35,13 @@ impl Evaluator {
         &mut self,
         parameter: String,
         body: NodePath,
-        _: Value,
+        argument: Value,
         nodes: &Nodes,
     ) {
         self.eval_stack.push(RuntimeNode::new(body.clone(), nodes));
         self.call_stack.push(StackFrame {
             parameter,
+            argument,
             root: body,
         });
     }
@@ -209,7 +210,16 @@ impl Evaluator {
                 });
             }
             RuntimeNode::Identifier { name } => {
-                let value = Value::ProvidedFunction { name: name.clone() };
+                let mut value = Value::ProvidedFunction { name: name.clone() };
+
+                for stack_frame in self.call_stack.iter().rev() {
+                    dbg!(stack_frame);
+                    if stack_frame.parameter == name {
+                        value = stack_frame.argument.clone();
+                        break;
+                    }
+                }
+
                 self.finish_evaluating_node(value);
             }
             RuntimeNode::Number { value } => {
@@ -219,6 +229,7 @@ impl Evaluator {
                 let stack_frame =
                     self.call_stack.pop().unwrap_or_else(|| StackFrame {
                         parameter: "_".to_string(),
+                        argument: Value::nothing(),
                         root: codebase.root().path,
                     });
 
@@ -264,6 +275,7 @@ impl Evaluator {
 #[derive(Debug)]
 struct StackFrame {
     parameter: String,
+    argument: Value,
     root: NodePath,
 }
 
