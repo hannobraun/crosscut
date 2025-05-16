@@ -29,12 +29,12 @@ impl RuntimeNode {
         }
     }
 
-    pub fn child_was_evaluated(&mut self, output: Value) {
+    pub fn child_was_evaluated(&mut self, value: Value) {
         match self {
             Self::Generic {
                 evaluated_children, ..
             } => {
-                evaluated_children.push(output);
+                evaluated_children.push(value);
             }
         }
     }
