@@ -69,7 +69,11 @@ impl RuntimeNode {
 
                 Self::Identifier { name }
             }
-            SyntaxNode::Number { value } => Self::Number { value: *value },
+            SyntaxNode::Number { value } => {
+                let value = *value;
+
+                Self::Number { value }
+            }
             SyntaxNode::Recursion => Self::Recursion,
             SyntaxNode::Tuple { values, .. } => Self::Tuple {
                 values_to_evaluate: values
