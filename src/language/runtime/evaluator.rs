@@ -174,21 +174,21 @@ impl Evaluator {
             RuntimeNode::Number { value } => {
                 self.finish_evaluating_node(Value::Integer { value });
             }
+            RuntimeNode::Recursion => {
+                let body = self
+                    .call_stack
+                    .pop()
+                    .map(|stack_frame| stack_frame.root)
+                    .unwrap_or_else(|| codebase.root().path);
+
+                self.finish_evaluating_node(Value::Function { body });
+            }
 
             RuntimeNode::Generic {
                 path,
                 mut children_to_evaluate,
                 evaluated_children,
             } => match codebase.nodes().get(path.hash()) {
-                SyntaxNode::Recursion => {
-                    let body = self
-                        .call_stack
-                        .pop()
-                        .map(|stack_frame| stack_frame.root)
-                        .unwrap_or_else(|| codebase.root().path);
-
-                    self.finish_evaluating_node(Value::Function { body });
-                }
                 SyntaxNode::Tuple { .. } => {
                     if let Some(child) = children_to_evaluate.pop() {
                         self.eval_stack.push(RuntimeNode::Generic {
@@ -223,7 +223,8 @@ impl Evaluator {
                 | node @ SyntaxNode::Empty
                 | node @ SyntaxNode::Function { .. }
                 | node @ SyntaxNode::Identifier { .. }
-                | node @ SyntaxNode::Number { .. } => {
+                | node @ SyntaxNode::Number { .. }
+                | node @ SyntaxNode::Recursion => {
                     unreachable!(
                         "Dedicated `RuntimeNode` variant exists for this node: \
                         {node:#?}"

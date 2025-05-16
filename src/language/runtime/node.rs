@@ -19,6 +19,7 @@ pub enum RuntimeNode {
     Number {
         value: i32,
     },
+    Recursion,
     Generic {
         path: NodePath,
         children_to_evaluate: Vec<NodePath>,
@@ -63,6 +64,7 @@ impl RuntimeNode {
                 Self::Identifier { name: name.clone() }
             }
             SyntaxNode::Number { value } => Self::Number { value: *value },
+            SyntaxNode::Recursion => Self::Recursion,
             _ => {
                 let children_to_evaluate = syntax_node
                     .inputs(codebase.nodes())
@@ -102,7 +104,8 @@ impl RuntimeNode {
             | Self::Empty
             | Self::Function { .. }
             | Self::Identifier { .. }
-            | Self::Number { .. } => {
+            | Self::Number { .. }
+            | Self::Recursion => {
                 unreachable!("Node has no unevaluated children: {self:#?}")
             }
 
