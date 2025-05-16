@@ -26,6 +26,7 @@ impl Evaluator {
         self.apply_function(
             "_".to_string(),
             codebase.root().path,
+            Value::nothing(),
             codebase.nodes(),
         );
     }
@@ -34,6 +35,7 @@ impl Evaluator {
         &mut self,
         parameter: String,
         body: NodePath,
+        _: Value,
         nodes: &Nodes,
     ) {
         self.eval_stack.push(RuntimeNode::new(body.clone(), nodes));
@@ -129,10 +131,10 @@ impl Evaluator {
                     RuntimeChild::Evaluated {
                         value: Value::Function { parameter, body },
                     },
-                argument: RuntimeChild::Evaluated { value: _ },
+                argument: RuntimeChild::Evaluated { value },
                 ..
             } => {
-                self.apply_function(parameter, body, codebase.nodes());
+                self.apply_function(parameter, body, value, codebase.nodes());
             }
             RuntimeNode::Apply {
                 ref path,

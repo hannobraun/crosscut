@@ -55,6 +55,7 @@ impl Language {
         self.evaluator.apply_function(
             "_".to_string(),
             root,
+            Value::nothing(),
             self.codebase.nodes(),
         );
     }
