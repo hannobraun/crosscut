@@ -99,126 +99,130 @@ impl Evaluator {
 
         self.state = RuntimeState::Running;
 
-        let RuntimeNode::Generic {
-            path,
-            mut children_to_evaluate,
-            evaluated_children,
-        } = node;
-        match codebase.nodes().get(path.hash()) {
-            SyntaxNode::Apply { .. } => {
-                if let Some(child) = children_to_evaluate.pop() {
-                    self.eval_stack.push(RuntimeNode::Generic {
-                        path,
-                        children_to_evaluate,
-                        evaluated_children,
-                    });
-                    self.eval_stack.push(RuntimeNode::new(child, codebase));
+        match node {
+            RuntimeNode::Generic {
+                path,
+                mut children_to_evaluate,
+                evaluated_children,
+            } => match codebase.nodes().get(path.hash()) {
+                SyntaxNode::Apply { .. } => {
+                    if let Some(child) = children_to_evaluate.pop() {
+                        self.eval_stack.push(RuntimeNode::Generic {
+                            path,
+                            children_to_evaluate,
+                            evaluated_children,
+                        });
+                        self.eval_stack.push(RuntimeNode::new(child, codebase));
 
-                    return;
-                }
+                        return;
+                    }
 
-                let Some([function, argument]) =
-                    evaluated_children.iter().cloned().collect_array()
-                else {
-                    unreachable!(
-                        "`Node::Application must have two children. If it \
+                    let Some([function, argument]) =
+                        evaluated_children.iter().cloned().collect_array()
+                    else {
+                        unreachable!(
+                            "`Node::Application must have two children. If it \
                         doesn't, that is a bug. Specifically, it is a mismatch \
                         between the compiler and the evaluator."
-                    );
-                };
-
-                match function {
-                    Value::Function { body } => {
-                        self.apply_function(body, codebase);
-                    }
-                    Value::ProvidedFunction { name } => {
-                        self.state = RuntimeState::Effect {
-                            effect: Effect::ApplyProvidedFunction {
-                                name,
-                                input: argument,
-                            },
-                            path: path.clone(),
-                        };
-
-                        // A host function is not fully handled, until the
-                        // handler has provided its output. It might also
-                        // trigger an effect, and then we still need the node.
-                        self.eval_stack.push(RuntimeNode::Generic {
-                            path,
-                            children_to_evaluate,
-                            evaluated_children,
-                        });
-                    }
-                    value => {
-                        self.unexpected_input(
-                            Type::Function,
-                            value.clone(),
-                            path.clone(),
                         );
+                    };
+
+                    match function {
+                        Value::Function { body } => {
+                            self.apply_function(body, codebase);
+                        }
+                        Value::ProvidedFunction { name } => {
+                            self.state = RuntimeState::Effect {
+                                effect: Effect::ApplyProvidedFunction {
+                                    name,
+                                    input: argument,
+                                },
+                                path: path.clone(),
+                            };
+
+                            // A host function is not fully handled, until the
+                            // handler has provided its output. It might also
+                            // trigger an effect, and then we still need the node.
+                            self.eval_stack.push(RuntimeNode::Generic {
+                                path,
+                                children_to_evaluate,
+                                evaluated_children,
+                            });
+                        }
+                        value => {
+                            self.unexpected_input(
+                                Type::Function,
+                                value.clone(),
+                                path.clone(),
+                            );
+                            self.eval_stack.push(RuntimeNode::Generic {
+                                path,
+                                children_to_evaluate,
+                                evaluated_children,
+                            });
+                        }
+                    }
+                }
+                SyntaxNode::Empty => {
+                    self.finish_evaluating_node(Value::nothing());
+                }
+                SyntaxNode::Function { parameter: _, body } => {
+                    let body = NodePath::new(
+                        *body,
+                        Some((path, SiblingIndex { index: 1 })),
+                        codebase.nodes(),
+                    );
+
+                    self.finish_evaluating_node(Value::Function { body });
+                }
+                SyntaxNode::Identifier { name } => {
+                    self.finish_evaluating_node(Value::ProvidedFunction {
+                        name: name.clone(),
+                    });
+                }
+                SyntaxNode::Number { value } => {
+                    self.finish_evaluating_node(Value::Integer {
+                        value: *value,
+                    });
+                }
+                SyntaxNode::Recursion => {
+                    let body = self
+                        .call_stack
+                        .pop()
+                        .map(|stack_frame| stack_frame.root)
+                        .unwrap_or_else(|| codebase.root().path);
+
+                    self.finish_evaluating_node(Value::Function { body });
+                }
+                SyntaxNode::Tuple { .. } => {
+                    if let Some(child) = children_to_evaluate.pop() {
                         self.eval_stack.push(RuntimeNode::Generic {
                             path,
                             children_to_evaluate,
                             evaluated_children,
                         });
+                        self.eval_stack.push(RuntimeNode::new(child, codebase));
+
+                        return;
                     }
-                }
-            }
-            SyntaxNode::Empty => {
-                self.finish_evaluating_node(Value::nothing());
-            }
-            SyntaxNode::Function { parameter: _, body } => {
-                let body = NodePath::new(
-                    *body,
-                    Some((path, SiblingIndex { index: 1 })),
-                    codebase.nodes(),
-                );
 
-                self.finish_evaluating_node(Value::Function { body });
-            }
-            SyntaxNode::Identifier { name } => {
-                self.finish_evaluating_node(Value::ProvidedFunction {
-                    name: name.clone(),
-                });
-            }
-            SyntaxNode::Number { value } => {
-                self.finish_evaluating_node(Value::Integer { value: *value });
-            }
-            SyntaxNode::Recursion => {
-                let body = self
-                    .call_stack
-                    .pop()
-                    .map(|stack_frame| stack_frame.root)
-                    .unwrap_or_else(|| codebase.root().path);
-
-                self.finish_evaluating_node(Value::Function { body });
-            }
-            SyntaxNode::Tuple { .. } => {
-                if let Some(child) = children_to_evaluate.pop() {
-                    self.eval_stack.push(RuntimeNode::Generic {
-                        path,
-                        children_to_evaluate,
-                        evaluated_children,
+                    self.finish_evaluating_node(Value::Tuple {
+                        values: evaluated_children.into_iter().collect(),
                     });
-                    self.eval_stack.push(RuntimeNode::new(child, codebase));
-
-                    return;
+                }
+                SyntaxNode::Test { .. } => {
+                    // For now, tests don't expect a specific runtime behavior out
+                    // of these expressions. So let's just use a placeholder here.
+                    self.finish_evaluating_node(Value::nothing());
                 }
 
-                self.finish_evaluating_node(Value::Tuple {
-                    values: evaluated_children.into_iter().collect(),
-                });
-            }
-            SyntaxNode::Test { .. } => {
-                // For now, tests don't expect a specific runtime behavior out
-                // of these expressions. So let's just use a placeholder here.
-                self.finish_evaluating_node(Value::nothing());
-            }
-
-            node @ SyntaxNode::AddValue | node @ SyntaxNode::Binding { .. } => {
-                panic!(
-                    "Encountered a node that is not an expression: {node:#?}"
-                );
-            }
+                node @ SyntaxNode::AddValue
+                | node @ SyntaxNode::Binding { .. } => {
+                    panic!(
+                        "Encountered a node that is not an expression: {node:#?}"
+                    );
+                }
+            },
         }
     }
 
