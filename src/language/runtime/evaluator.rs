@@ -211,8 +211,9 @@ impl Evaluator {
                     });
                 }
                 SyntaxNode::Test { .. } => {
-                    // For now, tests don't expect a specific runtime behavior out
-                    // of these expressions. So let's just use a placeholder here.
+                    // For now, tests don't expect a specific runtime behavior
+                    // out of these expressions. So let's just use a placeholder
+                    // here.
                     self.finish_evaluating_node(Value::nothing());
                 }
 
