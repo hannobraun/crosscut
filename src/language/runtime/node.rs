@@ -20,9 +20,12 @@ pub enum RuntimeNode {
         value: i32,
     },
     Recursion,
+    Tuple {
+        values_to_evaluate: Vec<NodePath>,
+        evaluated_values: Vec<Value>,
+    },
     Generic {
         path: NodePath,
-        children_to_evaluate: Vec<NodePath>,
         evaluated_children: Vec<Value>,
     },
 }
@@ -65,17 +68,28 @@ impl RuntimeNode {
             }
             SyntaxNode::Number { value } => Self::Number { value: *value },
             SyntaxNode::Recursion => Self::Recursion,
-            _ => {
-                let children_to_evaluate = syntax_node
-                    .inputs(codebase.nodes())
-                    .map(|located_node| located_node.path)
+            SyntaxNode::Tuple { values, .. } => Self::Tuple {
+                values_to_evaluate: values
+                    .inner
+                    .iter()
+                    .copied()
+                    .enumerate()
                     .rev()
-                    .collect();
+                    .map(|(index, hash)| {
+                        NodePath::new(
+                            hash,
+                            Some((path.clone(), SiblingIndex { index })),
+                            codebase.nodes(),
+                        )
+                    })
+                    .collect(),
+                evaluated_values: Vec::new(),
+            },
+            _ => {
                 let evaluated_children = Vec::new();
 
                 Self::Generic {
                     path,
-                    children_to_evaluate,
                     evaluated_children,
                 }
             }
@@ -94,6 +108,12 @@ impl RuntimeNode {
                 ..
             } => {
                 *child = RuntimeChild::Evaluated { value };
+            }
+
+            Self::Tuple {
+                evaluated_values, ..
+            } => {
+                evaluated_values.push(value);
             }
 
             Self::Apply {

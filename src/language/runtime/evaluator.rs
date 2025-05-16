@@ -84,7 +84,7 @@ impl Evaluator {
             return;
         }
 
-        let Some(node) = self.eval_stack.pop() else {
+        let Some(mut node) = self.eval_stack.pop() else {
             // Evaluation stack is empty, which means there's nothing we can do.
 
             if !self.state.is_finished() {
@@ -160,6 +160,31 @@ impl Evaluator {
                 self.eval_stack.push(node);
             }
 
+            RuntimeNode::Tuple {
+                ref mut values_to_evaluate,
+                ..
+            } if !values_to_evaluate.is_empty() => {
+                let Some(child) = values_to_evaluate.pop() else {
+                    // This could be prevented with an `if let` guard, but those
+                    // are not stable yet, as of 2025-05-16:
+                    // https://rust-lang.github.io/rfcs/2294-if-let-guard.html
+                    unreachable!(
+                        "The match guard above checks that there are values to \
+                        evaluate."
+                    );
+                };
+
+                self.eval_stack.push(node);
+                self.eval_stack.push(RuntimeNode::new(child, codebase));
+            }
+            RuntimeNode::Tuple {
+                evaluated_values, ..
+            } => {
+                self.finish_evaluating_node(Value::Tuple {
+                    values: evaluated_values,
+                });
+            }
+
             RuntimeNode::Empty => {
                 self.finish_evaluating_node(Value::nothing());
             }
@@ -184,51 +209,36 @@ impl Evaluator {
                 self.finish_evaluating_node(Value::Function { body });
             }
 
-            RuntimeNode::Generic {
-                path,
-                mut children_to_evaluate,
-                evaluated_children,
-            } => match codebase.nodes().get(path.hash()) {
-                SyntaxNode::Tuple { .. } => {
-                    if let Some(child) = children_to_evaluate.pop() {
-                        self.eval_stack.push(RuntimeNode::Generic {
-                            path,
-                            children_to_evaluate,
-                            evaluated_children,
-                        });
-                        self.eval_stack.push(RuntimeNode::new(child, codebase));
-                    } else {
-                        self.finish_evaluating_node(Value::Tuple {
-                            values: evaluated_children.into_iter().collect(),
-                        });
+            RuntimeNode::Generic { path, .. } => {
+                match codebase.nodes().get(path.hash()) {
+                    SyntaxNode::Test { .. } => {
+                        // For now, tests don't expect a specific runtime behavior
+                        // out of these expressions. So let's just use a placeholder
+                        // here.
+                        self.finish_evaluating_node(Value::nothing());
+                    }
+
+                    node @ SyntaxNode::AddValue
+                    | node @ SyntaxNode::Binding { .. } => {
+                        unreachable!(
+                            "Encountered a node that is not an expression: \
+                        {node:#?}"
+                        );
+                    }
+                    node @ SyntaxNode::Apply { .. }
+                    | node @ SyntaxNode::Empty
+                    | node @ SyntaxNode::Function { .. }
+                    | node @ SyntaxNode::Identifier { .. }
+                    | node @ SyntaxNode::Number { .. }
+                    | node @ SyntaxNode::Recursion
+                    | node @ SyntaxNode::Tuple { .. } => {
+                        unreachable!(
+                            "Dedicated `RuntimeNode` variant exists for this node: \
+                        {node:#?}"
+                        );
                     }
                 }
-                SyntaxNode::Test { .. } => {
-                    // For now, tests don't expect a specific runtime behavior
-                    // out of these expressions. So let's just use a placeholder
-                    // here.
-                    self.finish_evaluating_node(Value::nothing());
-                }
-
-                node @ SyntaxNode::AddValue
-                | node @ SyntaxNode::Binding { .. } => {
-                    unreachable!(
-                        "Encountered a node that is not an expression: \
-                        {node:#?}"
-                    );
-                }
-                node @ SyntaxNode::Apply { .. }
-                | node @ SyntaxNode::Empty
-                | node @ SyntaxNode::Function { .. }
-                | node @ SyntaxNode::Identifier { .. }
-                | node @ SyntaxNode::Number { .. }
-                | node @ SyntaxNode::Recursion => {
-                    unreachable!(
-                        "Dedicated `RuntimeNode` variant exists for this node: \
-                        {node:#?}"
-                    );
-                }
-            },
+            }
         }
     }
 
