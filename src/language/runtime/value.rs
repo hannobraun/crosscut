@@ -35,8 +35,8 @@ impl Value {
 impl fmt::Display for Value {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match self {
-            Self::Function { parameter: _, body } => {
-                write!(f, "fn {}", body.hash())?;
+            Self::Function { parameter, body } => {
+                write!(f, "fn {parameter}: {}", body.hash())?;
             }
             Self::Integer { value } => {
                 write!(f, "{value}")?;
