@@ -75,8 +75,8 @@ impl RuntimeNode {
                 Self::Number { value }
             }
             SyntaxNode::Recursion => Self::Recursion,
-            SyntaxNode::Tuple { values, .. } => Self::Tuple {
-                values_to_evaluate: values
+            SyntaxNode::Tuple { values, .. } => {
+                let values_to_evaluate = values
                     .inner
                     .iter()
                     .copied()
@@ -89,9 +89,14 @@ impl RuntimeNode {
                             codebase.nodes(),
                         )
                     })
-                    .collect(),
-                evaluated_values: Vec::new(),
-            },
+                    .collect();
+                let evaluated_values = Vec::new();
+
+                Self::Tuple {
+                    values_to_evaluate,
+                    evaluated_values,
+                }
+            }
             syntax_node => {
                 // For the most part, this would only happen if there's a bug in
                 // the compiler or evaluator. This still shouldn't be an
