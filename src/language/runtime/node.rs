@@ -25,4 +25,8 @@ impl RuntimeNode {
             evaluated_children,
         }
     }
+
+    pub fn child_was_evaluated(&mut self, output: Value) {
+        self.evaluated_children.push(output);
+    }
 }

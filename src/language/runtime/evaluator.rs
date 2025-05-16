@@ -239,7 +239,7 @@ impl Evaluator {
         // the stack.
 
         let new_state = if let Some(parent) = self.eval_stack.last_mut() {
-            parent.evaluated_children.push(output);
+            parent.child_was_evaluated(output);
 
             RuntimeState::Running
         } else {
