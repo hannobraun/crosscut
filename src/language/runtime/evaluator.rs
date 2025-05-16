@@ -218,7 +218,6 @@ impl Evaluator {
                 let mut value = Value::ProvidedFunction { name: name.clone() };
 
                 for stack_frame in self.call_stack.iter().rev() {
-                    dbg!(stack_frame);
                     if stack_frame.parameter == name {
                         value = stack_frame.argument.clone();
                         break;
