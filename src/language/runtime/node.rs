@@ -55,13 +55,15 @@ impl RuntimeNode {
                 }
             }
             SyntaxNode::Empty => Self::Empty,
-            SyntaxNode::Function { parameter: _, body } => Self::Function {
-                body: NodePath::new(
+            SyntaxNode::Function { parameter: _, body } => {
+                let body = NodePath::new(
                     *body,
                     Some((path, SiblingIndex { index: 1 })),
                     codebase.nodes(),
-                ),
-            },
+                );
+
+                Self::Function { body }
+            }
             SyntaxNode::Identifier { name } => {
                 Self::Identifier { name: name.clone() }
             }
