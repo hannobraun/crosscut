@@ -1,4 +1,4 @@
-use crate::language::code::{Codebase, NodePath, SyntaxNode, Type};
+use crate::language::code::{Codebase, NodePath, Type};
 
 use super::{
     Effect, RuntimeState, Value,
@@ -207,31 +207,6 @@ impl Evaluator {
                     .unwrap_or_else(|| codebase.root().path);
 
                 self.finish_evaluating_node(Value::Function { body });
-            }
-
-            RuntimeNode::Generic { path, .. } => {
-                match codebase.nodes().get(path.hash()) {
-                    node @ SyntaxNode::AddValue
-                    | node @ SyntaxNode::Binding { .. }
-                    | node @ SyntaxNode::Test { .. } => {
-                        unreachable!(
-                            "Encountered a node that is not an expression: \
-                        {node:#?}"
-                        );
-                    }
-                    node @ SyntaxNode::Apply { .. }
-                    | node @ SyntaxNode::Empty
-                    | node @ SyntaxNode::Function { .. }
-                    | node @ SyntaxNode::Identifier { .. }
-                    | node @ SyntaxNode::Number { .. }
-                    | node @ SyntaxNode::Recursion
-                    | node @ SyntaxNode::Tuple { .. } => {
-                        unreachable!(
-                            "Dedicated `RuntimeNode` variant exists for this node: \
-                        {node:#?}"
-                        );
-                    }
-                }
             }
         }
     }

@@ -24,10 +24,6 @@ pub enum RuntimeNode {
         values_to_evaluate: Vec<NodePath>,
         evaluated_values: Vec<Value>,
     },
-    Generic {
-        path: NodePath,
-        evaluated_children: Vec<Value>,
-    },
 }
 
 impl RuntimeNode {
@@ -85,13 +81,15 @@ impl RuntimeNode {
                     .collect(),
                 evaluated_values: Vec::new(),
             },
-            _ => {
-                let evaluated_children = Vec::new();
-
-                Self::Generic {
-                    path,
-                    evaluated_children,
-                }
+            syntax_node => {
+                // For the most part, this would only happen if there's a bug in
+                // the compiler or evaluator. This still shouldn't be an
+                // `unreachable!` though, as it's also a possible consequence of
+                // somebody messing with the store code database.
+                panic!(
+                    "Could not construct runtime node from syntax node: \n\
+                    {syntax_node:#?}"
+                );
             }
         }
     }
@@ -127,12 +125,6 @@ impl RuntimeNode {
             | Self::Number { .. }
             | Self::Recursion => {
                 unreachable!("Node has no unevaluated children: {self:#?}")
-            }
-
-            Self::Generic {
-                evaluated_children, ..
-            } => {
-                evaluated_children.push(value);
             }
         }
     }
