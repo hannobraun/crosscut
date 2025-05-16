@@ -276,3 +276,40 @@ fn navigate_left_to_previous_sibling() {
 
     assert_eq!(editor.cursor(), &Cursor { path: a, index: 1 });
 }
+
+#[test]
+fn navigate_past_add_value_node_of_a_tuple() {
+    // Navigating past the "add value" node of a tuple should not add any
+    // values.
+
+    let mut codebase = Codebase::new();
+    let mut evaluator = Evaluator::new();
+
+    let mut editor = Editor::new(
+        Cursor {
+            path: codebase.root().path,
+            index: 0,
+        },
+        &codebase,
+    );
+
+    editor.on_code("apply", &mut codebase, &mut evaluator);
+    editor.on_input(MoveCursorDown, &mut codebase, &mut evaluator);
+    editor.on_code("tuple", &mut codebase, &mut evaluator);
+    editor.on_input(MoveCursorDown, &mut codebase, &mut evaluator);
+    editor.on_input(MoveCursorDown, &mut codebase, &mut evaluator);
+    editor.on_code("arg", &mut codebase, &mut evaluator);
+
+    let [_tuple, arg] = codebase
+        .root()
+        .expect_children(codebase.nodes())
+        .map(|located_node| located_node.path);
+
+    assert_eq!(
+        editor.cursor(),
+        &Cursor {
+            path: arg,
+            index: "arg".len()
+        }
+    );
+}

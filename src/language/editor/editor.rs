@@ -64,14 +64,18 @@ impl Editor {
 
         let current_node = compiler.codebase().node_at(&self.cursor.path);
         self.cursor.path = if let SyntaxNode::AddValue = current_node.node {
-            let Some(parent) = current_node.path.parent().cloned() else {
-                unreachable!(
-                    "Current node is a node that is solely dedicated to adding \
+            if !self.input.buffer().is_empty() {
+                let Some(parent) = current_node.path.parent().cloned() else {
+                    unreachable!(
+                        "Current node is a node that is solely dedicated to adding \
                     children to its parent. Thus, it must have a parent."
-                );
-            };
+                    );
+                };
 
-            compiler.insert_child(parent, self.input.buffer())
+                compiler.insert_child(parent, self.input.buffer())
+            } else {
+                self.cursor.path.clone()
+            }
         } else {
             compiler.replace(&self.cursor.path, self.input.buffer())
         };
