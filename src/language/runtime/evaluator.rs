@@ -8,7 +8,7 @@ use super::{Effect, RuntimeState, Value};
 
 #[derive(Debug)]
 pub struct Evaluator {
-    eval_stack: Vec<RuntimeExpression>,
+    eval_stack: Vec<RuntimeNode>,
     call_stack: Vec<StackFrame>,
     state: RuntimeState,
 }
@@ -29,7 +29,7 @@ impl Evaluator {
 
     pub fn apply_function(&mut self, body: NodePath, codebase: &Codebase) {
         self.eval_stack
-            .push(RuntimeExpression::new(body.clone(), codebase));
+            .push(RuntimeNode::new(body.clone(), codebase));
 
         self.call_stack.push(StackFrame { root: body });
     }
@@ -105,8 +105,7 @@ impl Evaluator {
             SyntaxNode::Apply { .. } => {
                 if let Some(child) = node.children_to_evaluate.pop() {
                     self.eval_stack.push(node);
-                    self.eval_stack
-                        .push(RuntimeExpression::new(child, codebase));
+                    self.eval_stack.push(RuntimeNode::new(child, codebase));
 
                     return;
                 }
@@ -181,8 +180,7 @@ impl Evaluator {
             SyntaxNode::Tuple { .. } => {
                 if let Some(child) = node.children_to_evaluate.pop() {
                     self.eval_stack.push(node);
-                    self.eval_stack
-                        .push(RuntimeExpression::new(child, codebase));
+                    self.eval_stack.push(RuntimeNode::new(child, codebase));
 
                     return;
                 }
@@ -240,13 +238,13 @@ impl Evaluator {
 }
 
 #[derive(Clone, Debug)]
-struct RuntimeExpression {
+struct RuntimeNode {
     path: NodePath,
     children_to_evaluate: Vec<NodePath>,
     evaluated_children: Vec<Value>,
 }
 
-impl RuntimeExpression {
+impl RuntimeNode {
     fn new(path: NodePath, codebase: &Codebase) -> Self {
         let children_to_evaluate = codebase
             .node_at(&path)
