@@ -27,7 +27,6 @@ pub fn replace_node_and_update_parents(
     }
 
     let mut path = update_path(&current_replacement, None, change_set);
-    let mut parent;
 
     while let Some(replacement) = replacements.pop() {
         let Some(sibling_index) = replacement.replaced.sibling_index() else {
@@ -38,7 +37,7 @@ pub fn replace_node_and_update_parents(
         };
 
         current_replacement = replacement;
-        parent = Some(path).map(|path| (path, sibling_index));
+        let parent = Some(path).map(|path| (path, sibling_index));
         path = update_path(&current_replacement, parent, change_set);
     }
 
