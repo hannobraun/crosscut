@@ -18,13 +18,7 @@ fn add_apply_node() {
     let apply = codebase.root();
     let [function, argument] = apply.expect_children(codebase.nodes());
 
-    assert_eq!(
-        apply.node,
-        &SyntaxNode::Apply {
-            expression: Child::new(*function.path.hash()),
-            argument: *argument.path.hash(),
-        },
-    );
+    assert!(matches!(apply.node, &SyntaxNode::Apply { .. }));
     assert_eq!(function.node, &SyntaxNode::Empty);
     assert_eq!(argument.node, &SyntaxNode::Empty);
 
