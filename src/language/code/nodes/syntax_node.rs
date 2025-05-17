@@ -156,11 +156,10 @@ impl SyntaxNode {
                 expression,
                 argument,
             } => {
-                let [index_a, index_b] =
-                    [0, 1].map(|index| SiblingIndex { index });
+                let [index_a, index_b] = [0, 1];
 
-                child == expression && sibling_index == &index_a
-                    || child == argument && sibling_index == &index_b
+                child == expression && sibling_index.index == index_a
+                    || child == argument && sibling_index.index == index_b
             }
 
             Self::AddNode
