@@ -345,12 +345,13 @@ mod tests {
         let mut codebase = Codebase::new();
 
         codebase.make_change(|change_set| {
-            let recursion = change_set.nodes.insert(SyntaxNode::Recursion);
+            let recursion = SyntaxNode::Recursion;
             let tuple = {
                 let node = Tuple.to_syntax_node(change_set.nodes);
                 change_set.nodes.insert(node)
             };
 
+            let recursion = change_set.nodes.insert(recursion);
             let apply = change_set.nodes.insert(SyntaxNode::Apply {
                 expression: Child::new(recursion),
                 argument: tuple,
