@@ -346,7 +346,7 @@ mod tests {
 
         codebase.make_change(|change_set| {
             let recursion = SyntaxNode::Recursion;
-            let tuple = { Tuple.to_syntax_node(change_set.nodes) };
+            let tuple = Tuple.to_syntax_node(change_set.nodes);
 
             let recursion = change_set.nodes.insert(recursion);
             let tuple = change_set.nodes.insert(tuple);
