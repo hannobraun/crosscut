@@ -103,7 +103,7 @@ fn update_children(
             }
         }
 
-        SyntaxNode::AddValue
+        SyntaxNode::AddNode
         | SyntaxNode::Binding { name: _ }
         | SyntaxNode::Empty
         | SyntaxNode::Identifier {

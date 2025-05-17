@@ -42,7 +42,7 @@ pub enum SyntaxNode {
     /// is the only such "editor-only" node. And while that is the case,
     /// managing it here makes more sense. It allows the node to piggyback on
     /// top of the existing infrastructure for other nodes.
-    AddValue,
+    AddNode,
 
     /// # The application of an expression to an argument
     Apply {
@@ -164,7 +164,7 @@ impl SyntaxNode {
                     || child == child_b && sibling_index == &index_b
             }
 
-            Self::AddValue
+            Self::AddNode
             | Self::Binding { .. }
             | Self::Empty
             | Self::Identifier { .. }
@@ -194,7 +194,7 @@ impl SyntaxNode {
                 body: b,
             } => vec![*a, *b],
 
-            Self::AddValue
+            Self::AddNode
             | Self::Binding { .. }
             | Self::Empty
             | Self::Identifier { .. }
@@ -219,7 +219,7 @@ impl SyntaxNode {
 impl fmt::Display for SyntaxNode {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match self {
-            SyntaxNode::AddValue => {
+            SyntaxNode::AddNode => {
                 write!(f, "")
             }
             SyntaxNode::Apply { .. } => {

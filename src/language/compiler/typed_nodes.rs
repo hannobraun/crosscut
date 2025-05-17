@@ -9,7 +9,7 @@ pub enum TypedNode {
 impl TypedNode {
     pub fn from_syntax_node(syntax_node: &SyntaxNode) -> Self {
         match syntax_node {
-            SyntaxNode::AddValue | SyntaxNode::Test { .. } => Self::Other,
+            SyntaxNode::AddNode | SyntaxNode::Test { .. } => Self::Other,
 
             SyntaxNode::Apply { .. }
             | SyntaxNode::Empty
@@ -42,7 +42,7 @@ pub struct Tuple;
 impl Tuple {
     pub fn to_node(&self, nodes: &mut Nodes) -> SyntaxNode {
         let values = Children::new([]);
-        let add_value = nodes.insert(SyntaxNode::AddValue);
+        let add_value = nodes.insert(SyntaxNode::AddNode);
 
         SyntaxNode::Tuple { values, add_value }
     }
