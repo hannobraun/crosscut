@@ -7,11 +7,15 @@ use super::{NodeHash, NodePath, SiblingIndex};
 )]
 pub struct Child {
     pub hash: NodeHash,
+    pub index: SiblingIndex,
 }
 
 impl Child {
-    pub fn new(hash: NodeHash) -> Self {
-        Self { hash }
+    pub fn new(hash: NodeHash, index: usize) -> Self {
+        Self {
+            hash,
+            index: SiblingIndex { index },
+        }
     }
 }
 

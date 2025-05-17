@@ -47,7 +47,7 @@ impl Apply {
             [self.expression, self.argument].map(|node| nodes.insert(node));
 
         SyntaxNode::Apply {
-            expression: Child::new(expression),
+            expression: Child::new(expression, 0),
             argument,
         }
     }
