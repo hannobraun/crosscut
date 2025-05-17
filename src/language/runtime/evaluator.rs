@@ -346,14 +346,14 @@ mod tests {
 
         codebase.make_change(|change_set| {
             let recursion = change_set.nodes.insert(SyntaxNode::Recursion);
-            let argument = {
+            let tuple = {
                 let node = Tuple.to_syntax_node(change_set.nodes);
                 change_set.nodes.insert(node)
             };
 
             let apply = change_set.nodes.insert(SyntaxNode::Apply {
                 expression: Child::new(recursion),
-                argument,
+                argument: tuple,
             });
 
             change_set.replace(
