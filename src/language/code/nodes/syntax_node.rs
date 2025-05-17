@@ -179,13 +179,13 @@ impl SyntaxNode {
             }
 
             Self::Tuple { values, add_value } => {
-                values.contains_at(child, sibling_index)
+                values.contains_at(child, sibling_index, 0)
                     || add_value == child
                         && sibling_index.index == values.inner.len()
             }
 
             Self::Test { children, .. } => {
-                children.contains_at(child, sibling_index)
+                children.contains_at(child, sibling_index, 0)
             }
         }
     }

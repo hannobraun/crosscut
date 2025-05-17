@@ -17,11 +17,11 @@ impl Children {
         &self,
         child: &NodeHash,
         sibling_index: &SiblingIndex,
+        offset: usize,
     ) -> bool {
-        self.inner
-            .iter()
-            .enumerate()
-            .any(|(index, c)| c == child && index == sibling_index.index)
+        self.inner.iter().enumerate().any(|(index, c)| {
+            c == child && index + offset == sibling_index.index
+        })
     }
 
     pub fn next_index(&self) -> SiblingIndex {
