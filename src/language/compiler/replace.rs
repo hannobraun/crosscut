@@ -179,9 +179,7 @@ fn update_path(
     change_set: &mut NewChangeSet,
 ) -> NodePath {
     let path = NodePath::new(replacement.replacement, parent, change_set.nodes);
-
     change_set.replace(&replacement.replaced, &path);
-
     path
 }
 
