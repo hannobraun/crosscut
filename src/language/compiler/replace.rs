@@ -58,12 +58,7 @@ pub fn replace_node_and_update_parents(
                 parent,
             } => {
                 // comment added to force more readable formatting
-                let path = update_path(
-                    replacement,
-                    parent,
-                    &mut replacements,
-                    change_set,
-                );
+                let path = update_path(replacement, parent, change_set);
 
                 if let Some(replacement) = replacements.pop() {
                     let Some(sibling_index) =
@@ -182,7 +177,6 @@ fn update_children(
 fn update_path(
     replacement: Replacement,
     parent: Option<(NodePath, SiblingIndex)>,
-    _: &mut Vec<Replacement>,
     change_set: &mut NewChangeSet,
 ) -> NodePath {
     let path = NodePath::new(replacement.replacement, parent, change_set.nodes);
