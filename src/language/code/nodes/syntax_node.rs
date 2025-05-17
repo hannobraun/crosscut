@@ -171,13 +171,13 @@ impl SyntaxNode {
             | Self::Recursion => false,
 
             Self::Function {
-                parameter: child_a,
+                parameter,
                 body: child_b,
             } => {
                 let [index_a, index_b] =
                     [0, 1].map(|index| SiblingIndex { index });
 
-                child == child_a && sibling_index == &index_a
+                child == parameter && sibling_index == &index_a
                     || child == child_b && sibling_index == &index_b
             }
 
