@@ -26,7 +26,10 @@ use crate::language::code::{Children, NodeHash, SiblingIndex};
 /// reasons.
 #[derive(Clone, Debug, Eq, Ord, PartialEq, PartialOrd, udigest::Digestable)]
 pub enum SyntaxNode {
-    /// # A node used for adding a value to a list
+    /// # A node used for adding a child to its parent
+    ///
+    /// This is used for editing, so the user has a node to navigate to when
+    /// they want to add a child.
     ///
     /// ## Implementation Note
     ///
@@ -41,7 +44,7 @@ pub enum SyntaxNode {
     /// But so far, this point hasn't been reached. As of this writing, this
     /// is the only such "editor-only" node. And while that is the case,
     /// managing it here makes more sense. It allows the node to piggyback on
-    /// top of the existing infrastructure for other nodes.
+    /// top of the existing infrastructure for addressing nodes.
     AddNode,
 
     /// # The application of an expression to an argument
