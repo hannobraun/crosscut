@@ -104,18 +104,18 @@ impl NodePath {
         &self.hash
     }
 
-    pub fn sibling_index(&self) -> Option<SiblingIndex> {
-        self.parent
-            .as_ref()
-            .map(|&(_, sibling_index)| sibling_index)
-    }
-
     /// # The path of the node's parent
     ///
     /// This is required to distinguish between identical nodes whose hash is
     /// the same, but that have different parents.
     pub fn parent(&self) -> Option<&NodePath> {
         self.parent.as_ref().map(|(path, _)| path.deref())
+    }
+
+    pub fn sibling_index(&self) -> Option<SiblingIndex> {
+        self.parent
+            .as_ref()
+            .map(|&(_, sibling_index)| sibling_index)
     }
 
     pub fn is_ancestor_of(&self, possible_descendant: &NodePath) -> bool {
