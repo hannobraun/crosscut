@@ -87,11 +87,11 @@ fn update_children(
 
     match &mut expression {
         SyntaxNode::Apply {
-            expression: a,
+            expression,
             argument: b,
         } => {
-            if a == replacement.replaced.hash() {
-                *a = replacement.replacement;
+            if expression == replacement.replaced.hash() {
+                *expression = replacement.replacement;
             } else if b == replacement.replaced.hash() {
                 *b = replacement.replacement;
             } else {
