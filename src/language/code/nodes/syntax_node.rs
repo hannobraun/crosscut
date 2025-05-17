@@ -155,10 +155,6 @@ impl SyntaxNode {
             Self::Apply {
                 expression: child_a,
                 argument: child_b,
-            }
-            | Self::Function {
-                parameter: child_a,
-                body: child_b,
             } => {
                 let [index_a, index_b] =
                     [0, 1].map(|index| SiblingIndex { index });
@@ -173,6 +169,17 @@ impl SyntaxNode {
             | Self::Identifier { .. }
             | Self::Number { value: _ }
             | Self::Recursion => false,
+
+            Self::Function {
+                parameter: child_a,
+                body: child_b,
+            } => {
+                let [index_a, index_b] =
+                    [0, 1].map(|index| SiblingIndex { index });
+
+                child == child_a && sibling_index == &index_a
+                    || child == child_b && sibling_index == &index_b
+            }
 
             Self::Tuple { values, add_value } => {
                 values.contains_at(child, sibling_index)
