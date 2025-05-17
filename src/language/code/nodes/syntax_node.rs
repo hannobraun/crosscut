@@ -2,6 +2,8 @@ use std::fmt;
 
 use crate::language::code::{Children, NodeHash, SiblingIndex};
 
+use super::Child;
+
 /// # Structured but untyped representation of a syntax node
 ///
 /// This representation is structured, in the sense that for each type of node
@@ -50,7 +52,7 @@ pub enum SyntaxNode {
     /// # The application of an expression to an argument
     Apply {
         /// # The expression that is being applied to the argument
-        expression: NodeHash,
+        expression: Child,
 
         /// # The argument that the expression is being applied to
         argument: NodeHash,
@@ -156,7 +158,7 @@ impl SyntaxNode {
                 expression,
                 argument,
             } => {
-                child == expression && sibling_index.index == 0
+                child == &expression.hash && sibling_index.index == 0
                     || child == argument && sibling_index.index == 1
             }
 
@@ -189,7 +191,7 @@ impl SyntaxNode {
             Self::Apply {
                 expression,
                 argument,
-            } => vec![*expression, *argument],
+            } => vec![expression.hash, *argument],
 
             Self::AddNode
             | Self::Binding { .. }

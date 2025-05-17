@@ -293,7 +293,7 @@ struct StackFrame {
 #[cfg(test)]
 mod tests {
     use crate::language::{
-        code::{Codebase, NodePath, SyntaxNode},
+        code::{Child, Codebase, NodePath, SyntaxNode},
         compiler::{Function, Tuple},
         runtime::{Evaluator, RuntimeState, Value},
         tests::infra::ExpectChildren,
@@ -352,7 +352,7 @@ mod tests {
             };
 
             let apply = change_set.nodes.insert(SyntaxNode::Apply {
-                expression: recursion,
+                expression: Child { hash: recursion },
                 argument,
             });
 

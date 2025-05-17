@@ -90,8 +90,8 @@ fn update_children(
             expression,
             argument,
         } => {
-            if expression == replacement.replaced.hash() {
-                *expression = replacement.replacement;
+            if &expression.hash == replacement.replaced.hash() {
+                expression.hash = replacement.replacement;
             } else if argument == replacement.replaced.hash() {
                 *argument = replacement.replacement;
             } else {

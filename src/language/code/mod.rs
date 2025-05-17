@@ -7,7 +7,7 @@ pub use self::{
     changes::{Changes, NewChangeSet},
     codebase::Codebase,
     nodes::{
-        Children, LocatedNode, NodeHash, NodePath, Nodes, SiblingIndex,
+        Child, Children, LocatedNode, NodeHash, NodePath, Nodes, SiblingIndex,
         SyntaxNode,
     },
     types::{Type, display_tuple},

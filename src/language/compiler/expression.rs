@@ -1,4 +1,4 @@
-use crate::language::code::{NodeHash, Nodes, SyntaxNode};
+use crate::language::code::{Child, NodeHash, Nodes, SyntaxNode};
 
 use super::{Function, Tuple};
 
@@ -23,7 +23,7 @@ fn resolve_keyword(name: &str, nodes: &mut Nodes) -> Option<SyntaxNode> {
         "apply" => {
             let [expression, argument] = [nodes.insert(SyntaxNode::Empty); 2];
             Some(SyntaxNode::Apply {
-                expression,
+                expression: Child { hash: expression },
                 argument,
             })
         }
