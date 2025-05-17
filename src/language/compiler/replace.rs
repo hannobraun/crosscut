@@ -35,11 +35,14 @@ pub fn replace_node_and_update_parents(
         replacement = next_replacement;
     }
 
-    let current_replacement = Replacement {
-        replaced: to_replace,
-        replacement,
-    };
-    let mut path = update_path(&current_replacement, None, change_set);
+    let mut path = update_path(
+        &Replacement {
+            replaced: to_replace,
+            replacement,
+        },
+        None,
+        change_set,
+    );
 
     while let Some(replacement) = replacements.pop() {
         let Some(sibling_index) = replacement.replaced.sibling_index() else {
