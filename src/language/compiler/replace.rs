@@ -35,14 +35,7 @@ pub fn replace_node_and_update_parents(
         replacement = next_replacement;
     }
 
-    let mut path = update_path(
-        &Replacement {
-            replaced: to_replace,
-            replacement,
-        },
-        None,
-        change_set,
-    );
+    let mut path = update_path(&to_replace, replacement, None, change_set);
 
     while let Some(replacement) = replacements.pop() {
         let Some(sibling_index) = replacement.replaced.sibling_index() else {
@@ -53,7 +46,12 @@ pub fn replace_node_and_update_parents(
         };
 
         let parent = Some(path).map(|path| (path, sibling_index));
-        path = update_path(&replacement, parent, change_set);
+        path = update_path(
+            &replacement.replaced,
+            replacement.replacement,
+            parent,
+            change_set,
+        );
     }
 
     path
@@ -121,13 +119,14 @@ fn update_children(
 }
 
 fn update_path(
-    replacement: &Replacement,
+    replaced: &NodePath,
+    replacement: NodeHash,
     parent: Option<(NodePath, SiblingIndex)>,
     change_set: &mut NewChangeSet,
 ) -> NodePath {
-    let path = NodePath::new(replacement.replacement, parent, change_set.nodes);
+    let path = NodePath::new(replacement, parent, change_set.nodes);
 
-    change_set.replace(&replacement.replaced, &path);
+    change_set.replace(replaced, &path);
 
     path
 }
