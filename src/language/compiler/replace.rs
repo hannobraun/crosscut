@@ -110,12 +110,9 @@ fn update_children(
             panic!("Node has no children. Can't replace one.");
         }
 
-        SyntaxNode::Function {
-            parameter: a,
-            body: b,
-        } => {
-            if a == replacement.replaced.hash() {
-                *a = replacement.replacement;
+        SyntaxNode::Function { parameter, body: b } => {
+            if parameter == replacement.replaced.hash() {
+                *parameter = replacement.replacement;
             } else if b == replacement.replaced.hash() {
                 *b = replacement.replacement;
             } else {
