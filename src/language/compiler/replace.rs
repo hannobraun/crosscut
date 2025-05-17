@@ -30,7 +30,7 @@ pub fn replace_node_and_update_parents(
         });
 
         to_replace = parent;
-        replacement = next_replacement.replacement;
+        replacement = next_replacement;
     }
 
     let mut current_replacement = Replacement {
@@ -60,7 +60,7 @@ fn update_children(
     to_replace: &NodePath,
     replacement: NodeHash,
     nodes: &mut Nodes,
-) -> Replacement {
+) -> NodeHash {
     let mut expression = nodes.get(path.hash()).clone();
 
     match &mut expression {
@@ -113,10 +113,7 @@ fn update_children(
         }
     }
 
-    Replacement {
-        replaced: path.clone(),
-        replacement: nodes.insert(expression),
-    }
+    nodes.insert(expression)
 }
 
 fn update_path(
