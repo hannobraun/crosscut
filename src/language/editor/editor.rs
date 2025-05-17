@@ -67,8 +67,9 @@ impl Editor {
             if !self.input.buffer().is_empty() {
                 let Some(parent) = current_node.path.parent().cloned() else {
                     unreachable!(
-                        "Current node is a node that is solely dedicated to adding \
-                    children to its parent. Thus, it must have a parent."
+                        "Current node is a node that is solely dedicated to \
+                        adding children to its parent. Thus, it must have a \
+                        parent."
                     );
                 };
 
