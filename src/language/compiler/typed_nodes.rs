@@ -48,7 +48,7 @@ impl Apply {
 
         SyntaxNode::Apply {
             expression: Child::new(expression, 0),
-            argument,
+            argument: Child::new(argument, 1),
         }
     }
 }

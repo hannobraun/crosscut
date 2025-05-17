@@ -46,7 +46,7 @@ impl RuntimeNode {
                 };
                 let argument = RuntimeChild::Unevaluated {
                     path: NodePath::new(
-                        *argument,
+                        *argument.hash(),
                         Some((path.clone(), SiblingIndex { index: 1 })),
                         nodes,
                     ),

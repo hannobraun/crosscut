@@ -55,7 +55,7 @@ pub enum SyntaxNode {
         expression: Child,
 
         /// # The argument that the expression is being applied to
-        argument: NodeHash,
+        argument: Child,
     },
 
     /// # Assigns a name to a value
@@ -159,7 +159,7 @@ impl SyntaxNode {
                 argument,
             } => {
                 expression.is(child, sibling_index)
-                    || child == argument && sibling_index.index == 1
+                    || argument.is(child, sibling_index)
             }
 
             Self::AddNode
@@ -191,7 +191,7 @@ impl SyntaxNode {
             Self::Apply {
                 expression,
                 argument,
-            } => vec![*expression.hash(), *argument],
+            } => vec![*expression.hash(), *argument.hash()],
 
             Self::AddNode
             | Self::Binding { .. }

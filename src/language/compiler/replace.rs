@@ -72,9 +72,11 @@ fn update_children(
                 to_replace.hash(),
                 &sibling_index,
                 replacement,
+            ) || argument.replace(
+                to_replace.hash(),
+                &sibling_index,
+                replacement,
             ) {
-            } else if argument == to_replace.hash() {
-                *argument = replacement;
             } else {
                 panic!("Expected to replace child, but could not find it.");
             }
