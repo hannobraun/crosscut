@@ -40,7 +40,7 @@ impl Function {
 pub struct Tuple;
 
 impl Tuple {
-    pub fn to_node(&self, nodes: &mut Nodes) -> SyntaxNode {
+    pub fn to_syntax_node(&self, nodes: &mut Nodes) -> SyntaxNode {
         let values = Children::new([]);
         let add_value = nodes.insert(SyntaxNode::AddNode);
 
