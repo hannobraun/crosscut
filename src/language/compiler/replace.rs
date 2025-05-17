@@ -88,12 +88,12 @@ fn update_children(
     match &mut expression {
         SyntaxNode::Apply {
             expression,
-            argument: b,
+            argument,
         } => {
             if expression == replacement.replaced.hash() {
                 *expression = replacement.replacement;
-            } else if b == replacement.replaced.hash() {
-                *b = replacement.replacement;
+            } else if argument == replacement.replaced.hash() {
+                *argument = replacement.replacement;
             } else {
                 panic!("Expected to replace child, but could not find it.");
             }
