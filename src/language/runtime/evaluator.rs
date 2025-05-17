@@ -293,8 +293,8 @@ struct StackFrame {
 #[cfg(test)]
 mod tests {
     use crate::language::{
-        code::{Child, Codebase, NodePath, SyntaxNode},
-        compiler::{Function, Tuple},
+        code::{Codebase, NodePath, SyntaxNode},
+        compiler::{Apply, Function, Tuple},
         runtime::{Evaluator, RuntimeState, Value},
         tests::infra::ExpectChildren,
     };
@@ -348,12 +348,14 @@ mod tests {
             let recursion = SyntaxNode::Recursion;
             let tuple = Tuple.to_syntax_node(change_set.nodes);
 
-            let recursion = change_set.nodes.insert(recursion);
-            let tuple = change_set.nodes.insert(tuple);
-            let apply = change_set.nodes.insert(SyntaxNode::Apply {
-                expression: Child::new(recursion),
-                argument: tuple,
-            });
+            let apply = {
+                let apply = Apply::new()
+                    .with_expression(recursion)
+                    .with_argument(tuple)
+                    .into_syntax_node(change_set.nodes);
+
+                change_set.nodes.insert(apply)
+            };
 
             change_set.replace(
                 &change_set.root_before_change(),
