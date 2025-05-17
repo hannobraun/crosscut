@@ -25,6 +25,7 @@ pub fn replace_node_and_update_parents(
             &parent,
             &to_replace,
             replacement,
+            sibling_index,
             change_set.nodes,
         );
 
@@ -57,6 +58,7 @@ fn update_children(
     path: &NodePath,
     to_replace: &NodePath,
     replacement: NodeHash,
+    _: SiblingIndex,
     nodes: &mut Nodes,
 ) -> NodeHash {
     let mut expression = nodes.get(path.hash()).clone();
