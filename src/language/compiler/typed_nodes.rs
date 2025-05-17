@@ -31,7 +31,7 @@ impl Function {
         let parameter = nodes.insert(SyntaxNode::Binding {
             name: "_".to_string(),
         });
-        let body = nodes.insert(SyntaxNode::Empty);
+        let body = Children::new([nodes.insert(SyntaxNode::Empty)]);
 
         SyntaxNode::Function { parameter, body }
     }

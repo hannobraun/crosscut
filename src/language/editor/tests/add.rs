@@ -1,5 +1,5 @@
 use crate::language::{
-    code::{Codebase, SyntaxNode},
+    code::{Children, Codebase, SyntaxNode},
     editor::{Editor, EditorInputEvent::*},
     runtime::Evaluator,
     tests::infra::{ExpectChildren, identifier},
@@ -67,7 +67,7 @@ fn add_fn_node() {
         function.node,
         &SyntaxNode::Function {
             parameter: *parameter.path.hash(),
-            body: *body.path.hash(),
+            body: Children::new([*body.path.hash()]),
         },
     );
     assert_eq!(

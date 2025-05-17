@@ -113,9 +113,11 @@ fn update_children(
         SyntaxNode::Function { parameter, body } => {
             if parameter == replacement.replaced.hash() {
                 *parameter = replacement.replacement;
-            } else if body == replacement.replaced.hash() {
-                *body = replacement.replacement;
-            } else {
+            } else if !body.replace(
+                &replacement.replaced,
+                replacement.replacement,
+                1,
+            ) {
                 panic!("Expected to replace child, but could not find it.");
             }
         }

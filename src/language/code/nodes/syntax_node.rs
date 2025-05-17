@@ -76,7 +76,7 @@ pub enum SyntaxNode {
         parameter: NodeHash,
 
         /// # The root node of the function's body
-        body: NodeHash,
+        body: Children,
     },
 
     /// # An identifier
@@ -169,7 +169,7 @@ impl SyntaxNode {
 
             Self::Function { parameter, body } => {
                 child == parameter && sibling_index.index == 0
-                    || child == body && sibling_index.index == 1
+                    || body.contains_at(child, sibling_index, 1)
             }
 
             Self::Tuple { values, add_value } => {
@@ -199,7 +199,9 @@ impl SyntaxNode {
             | Self::Recursion => vec![],
 
             Self::Function { parameter, body } => {
-                vec![*parameter, *body]
+                let mut children = vec![*parameter];
+                children.extend(body.inner.iter().copied());
+                children
             }
 
             Self::Tuple { values, add_value } => {
