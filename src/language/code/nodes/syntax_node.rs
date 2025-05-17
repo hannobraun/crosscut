@@ -170,15 +170,12 @@ impl SyntaxNode {
             | Self::Number { value: _ }
             | Self::Recursion => false,
 
-            Self::Function {
-                parameter,
-                body: child_b,
-            } => {
+            Self::Function { parameter, body } => {
                 let [index_a, index_b] =
                     [0, 1].map(|index| SiblingIndex { index });
 
                 child == parameter && sibling_index == &index_a
-                    || child == child_b && sibling_index == &index_b
+                    || child == body && sibling_index == &index_b
             }
 
             Self::Tuple { values, add_value } => {
