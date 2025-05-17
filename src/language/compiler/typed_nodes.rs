@@ -31,10 +31,7 @@ pub struct Apply {
 
 impl Apply {
     pub fn new() -> Self {
-        Self {
-            expression: SyntaxNode::Empty,
-            argument: SyntaxNode::Empty,
-        }
+        Self::default()
     }
 
     #[cfg(test)]
@@ -56,6 +53,15 @@ impl Apply {
         SyntaxNode::Apply {
             expression: Child::new(expression),
             argument,
+        }
+    }
+}
+
+impl Default for Apply {
+    fn default() -> Self {
+        Self {
+            expression: SyntaxNode::Empty,
+            argument: SyntaxNode::Empty,
         }
     }
 }
