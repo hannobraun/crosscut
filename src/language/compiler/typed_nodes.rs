@@ -30,10 +30,6 @@ pub struct Apply {
 }
 
 impl Apply {
-    pub fn new() -> Self {
-        Self::default()
-    }
-
     #[cfg(test)]
     pub fn with_expression(mut self, expression: SyntaxNode) -> Self {
         self.expression = expression;

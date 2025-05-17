@@ -346,7 +346,7 @@ mod tests {
 
         codebase.make_change(|change_set| {
             let apply = {
-                let apply = Apply::new()
+                let apply = Apply::default()
                     .with_expression(SyntaxNode::Recursion)
                     .with_argument(Tuple.to_syntax_node(change_set.nodes))
                     .into_syntax_node(change_set.nodes);
