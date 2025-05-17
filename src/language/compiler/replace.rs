@@ -35,8 +35,8 @@ pub fn replace_node_and_update_parents(
         if let Some(rep) = replacements.pop() {
             let Some(sibling_index) = rep.replaced.sibling_index() else {
                 unreachable!(
-                    "The replaced node has a parent, so it must have a \
-                             sibling index."
+                    "The replaced node has a parent, so it must have a sibling \
+                    index."
                 );
             };
 
