@@ -40,9 +40,8 @@ pub fn replace_node_and_update_parents(
             } => {
                 let path = update_path(replacement, parent, change_set);
 
-                if let Some(replacement) = replacements.pop() {
-                    let Some(sibling_index) =
-                        replacement.replaced.sibling_index()
+                if let Some(rep) = replacements.pop() {
+                    let Some(sibling_index) = rep.replaced.sibling_index()
                     else {
                         unreachable!(
                             "The replaced node has a parent, so it must have a \
@@ -51,7 +50,7 @@ pub fn replace_node_and_update_parents(
                     };
 
                     ReplaceAction::UpdatePath {
-                        replacement,
+                        replacement: rep,
                         parent: Some(path).map(|path| (path, sibling_index)),
                     }
                 } else {
