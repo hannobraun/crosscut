@@ -189,10 +189,6 @@ impl SyntaxNode {
             Self::Apply {
                 expression: a,
                 argument: b,
-            }
-            | Self::Function {
-                parameter: a,
-                body: b,
             } => vec![*a, *b],
 
             Self::AddNode
@@ -201,6 +197,13 @@ impl SyntaxNode {
             | Self::Identifier { .. }
             | Self::Number { value: _ }
             | Self::Recursion => vec![],
+
+            Self::Function {
+                parameter: a,
+                body: b,
+            } => {
+                vec![*a, *b]
+            }
 
             Self::Tuple { values, add_value } => {
                 let mut children = values.inner.clone();
