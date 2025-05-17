@@ -6,8 +6,8 @@ use super::{NodeHash, NodePath, SiblingIndex};
     Clone, Copy, Debug, Eq, Ord, PartialEq, PartialOrd, udigest::Digestable,
 )]
 pub struct Child {
-    pub hash: NodeHash,
-    pub index: SiblingIndex,
+    hash: NodeHash,
+    index: SiblingIndex,
 }
 
 impl Child {
