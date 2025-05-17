@@ -128,8 +128,11 @@ fn update_children(
             name: String { .. },
             children,
         } => {
-            let was_replaced = children
-                .replace(&replacement.replaced, replacement.replacement);
+            let was_replaced = children.replace(
+                &replacement.replaced,
+                replacement.replacement,
+                0,
+            );
 
             assert!(
                 was_replaced,

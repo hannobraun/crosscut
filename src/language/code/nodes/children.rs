@@ -41,10 +41,11 @@ impl Children {
         &mut self,
         to_replace: &NodePath,
         replacement: NodeHash,
+        offset: usize,
     ) -> bool {
         if let Some(child) = self
             .inner
-            .get_mut(to_replace.sibling_index().unwrap().index)
+            .get_mut(to_replace.sibling_index().unwrap().index - offset)
         {
             if child == to_replace.hash() {
                 *child = replacement;
