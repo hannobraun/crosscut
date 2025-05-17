@@ -191,7 +191,7 @@ impl SyntaxNode {
             Self::Apply {
                 expression,
                 argument,
-            } => vec![expression.hash, *argument],
+            } => vec![*expression.hash(), *argument],
 
             Self::AddNode
             | Self::Binding { .. }

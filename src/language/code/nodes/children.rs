@@ -18,6 +18,10 @@ impl Child {
         }
     }
 
+    pub fn hash(&self) -> &NodeHash {
+        &self.hash
+    }
+
     pub fn is(&self, hash: &NodeHash, index: &SiblingIndex) -> bool {
         &self.hash == hash && &self.index == index
     }

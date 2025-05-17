@@ -39,7 +39,7 @@ impl RuntimeNode {
             } => {
                 let expression = RuntimeChild::Unevaluated {
                     path: NodePath::new(
-                        expression.hash,
+                        *expression.hash(),
                         Some((path.clone(), SiblingIndex { index: 0 })),
                         nodes,
                     ),
