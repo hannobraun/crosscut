@@ -352,7 +352,7 @@ mod tests {
             };
 
             let apply = change_set.nodes.insert(SyntaxNode::Apply {
-                expression: Child { hash: recursion },
+                expression: Child::new(recursion),
                 argument,
             });
 

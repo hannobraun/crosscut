@@ -23,7 +23,7 @@ fn resolve_keyword(name: &str, nodes: &mut Nodes) -> Option<SyntaxNode> {
         "apply" => {
             let [expression, argument] = [nodes.insert(SyntaxNode::Empty); 2];
             Some(SyntaxNode::Apply {
-                expression: Child { hash: expression },
+                expression: Child::new(expression),
                 argument,
             })
         }

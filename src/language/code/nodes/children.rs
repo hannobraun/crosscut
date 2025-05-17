@@ -9,6 +9,12 @@ pub struct Child {
     pub hash: NodeHash,
 }
 
+impl Child {
+    pub fn new(hash: NodeHash) -> Self {
+        Self { hash }
+    }
+}
+
 #[derive(Clone, Debug, Eq, Ord, PartialEq, PartialOrd, udigest::Digestable)]
 pub struct Children {
     pub inner: Vec<NodeHash>,

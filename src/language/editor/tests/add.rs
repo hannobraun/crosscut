@@ -21,9 +21,7 @@ fn add_apply_node() {
     assert_eq!(
         apply.node,
         &SyntaxNode::Apply {
-            expression: Child {
-                hash: *function.path.hash()
-            },
+            expression: Child::new(*function.path.hash()),
             argument: *argument.path.hash(),
         },
     );
@@ -44,9 +42,7 @@ fn add_apply_node() {
     assert_eq!(
         apply.node,
         &SyntaxNode::Apply {
-            expression: Child {
-                hash: *function.path.hash()
-            },
+            expression: Child::new(*function.path.hash()),
             argument: *argument.path.hash(),
         },
     );
