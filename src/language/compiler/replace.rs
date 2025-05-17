@@ -16,7 +16,9 @@ pub fn replace_node_and_update_parents(
     // replaced nodes.
     let mut replacements = Vec::new();
 
-    while let Some((parent, _)) = to_replace.parent_and_sibling_index() {
+    while let Some((parent, sibling_index)) =
+        to_replace.parent_and_sibling_index()
+    {
         let parent = parent.clone();
 
         let next_replacement = update_children(
@@ -29,6 +31,7 @@ pub fn replace_node_and_update_parents(
         replacements.push(Replacement {
             replaced: to_replace,
             replacement,
+            sibling_index,
         });
 
         to_replace = parent;
@@ -38,14 +41,7 @@ pub fn replace_node_and_update_parents(
     let mut path = update_path(&to_replace, replacement, None, change_set);
 
     while let Some(replacement) = replacements.pop() {
-        let Some(sibling_index) = replacement.replaced.sibling_index() else {
-            unreachable!(
-                "The replaced node has a parent, so it must have a sibling \
-                index."
-            );
-        };
-
-        let parent = Some(path).map(|path| (path, sibling_index));
+        let parent = Some(path).map(|path| (path, replacement.sibling_index));
         path = update_path(
             &replacement.replaced,
             replacement.replacement,
@@ -135,4 +131,5 @@ fn update_path(
 struct Replacement {
     replaced: NodePath,
     replacement: NodeHash,
+    sibling_index: SiblingIndex,
 }
