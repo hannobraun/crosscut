@@ -36,23 +36,25 @@ impl Children {
         index
     }
 
-    pub fn replace(&mut self, to_replace: &NodePath, replacement: NodeHash) {
-        let Some(child) = self
+    #[must_use]
+    pub fn replace(
+        &mut self,
+        to_replace: &NodePath,
+        replacement: NodeHash,
+    ) -> bool {
+        if let Some(child) = self
             .inner
             .get_mut(to_replace.sibling_index().unwrap().index)
-        else {
-            panic!(
-                "Trying to replace a child at an index that is not present."
-            );
-        };
-
-        assert_eq!(
-            child,
-            to_replace.hash(),
-            "Trying to replace a child that is not present."
-        );
-
-        *child = replacement;
+        {
+            if child == to_replace.hash() {
+                *child = replacement;
+                true
+            } else {
+                false
+            }
+        } else {
+            false
+        }
     }
 }
 

@@ -128,7 +128,13 @@ fn update_children(
             name: String { .. },
             children,
         } => {
-            children.replace(&replacement.replaced, replacement.replacement);
+            let was_replaced = children
+                .replace(&replacement.replaced, replacement.replacement);
+
+            assert!(
+                was_replaced,
+                "Tried to replace child that is not present.",
+            );
         }
     }
 
