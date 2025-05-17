@@ -68,8 +68,11 @@ fn update_children(
             expression,
             argument,
         } => {
-            if expression.is(to_replace.hash(), &sibling_index) {
-                expression.hash = replacement;
+            if expression.replace(
+                to_replace.hash(),
+                &sibling_index,
+                replacement,
+            ) {
             } else if argument == to_replace.hash() {
                 *argument = replacement;
             } else {

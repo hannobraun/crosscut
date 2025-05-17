@@ -25,6 +25,20 @@ impl Child {
     pub fn is(&self, hash: &NodeHash, index: &SiblingIndex) -> bool {
         &self.hash == hash && &self.index == index
     }
+
+    pub fn replace(
+        &mut self,
+        replace_hash: &NodeHash,
+        replace_index: &SiblingIndex,
+        replacement: NodeHash,
+    ) -> bool {
+        if self.is(replace_hash, replace_index) {
+            self.hash = replacement;
+            true
+        } else {
+            false
+        }
+    }
 }
 
 #[derive(Clone, Debug, Eq, Ord, PartialEq, PartialOrd, udigest::Digestable)]
