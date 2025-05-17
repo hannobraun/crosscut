@@ -1,5 +1,5 @@
 use crate::language::code::{
-    NewChangeSet, NodeHash, NodePath, Nodes, SiblingIndex, SyntaxNode,
+    NewChangeSet, NodeHash, NodePath, Nodes, SyntaxNode,
 };
 
 pub fn replace_node_and_update_parents(
@@ -30,7 +30,9 @@ pub fn replace_node_and_update_parents(
     let mut parent = None;
 
     loop {
-        let path = update_path(replacement, parent, change_set);
+        let path =
+            NodePath::new(replacement.replacement, parent, change_set.nodes);
+        change_set.replace(&replacement.replaced, &path);
 
         if let Some(rep) = replacements.pop() {
             let Some(sibling_index) = rep.replaced.sibling_index() else {
@@ -120,16 +122,6 @@ fn update_children(
         replaced: path,
         replacement: nodes.insert(expression),
     }
-}
-
-fn update_path(
-    replacement: Replacement,
-    parent: Option<(NodePath, SiblingIndex)>,
-    change_set: &mut NewChangeSet,
-) -> NodePath {
-    let path = NodePath::new(replacement.replacement, parent, change_set.nodes);
-    change_set.replace(&replacement.replaced, &path);
-    path
 }
 
 #[derive(Clone, Debug)]
