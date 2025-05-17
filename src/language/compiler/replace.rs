@@ -7,7 +7,7 @@ pub fn replace_node_and_update_parents(
     replacement: NodeHash,
     change_set: &mut NewChangeSet,
 ) -> NodePath {
-    let mut replacement = Replacement {
+    let mut current_replacement = Replacement {
         replaced: to_replace,
         replacement,
     };
@@ -18,10 +18,10 @@ pub fn replace_node_and_update_parents(
     // replaced nodes.
     let mut replacements = Vec::new();
 
-    while let Some(parent) = replacement.replaced.parent().cloned() {
-        replacement = update_children(
+    while let Some(parent) = current_replacement.replaced.parent().cloned() {
+        current_replacement = update_children(
             parent,
-            replacement,
+            current_replacement,
             &mut replacements,
             change_set.nodes,
         );
@@ -30,9 +30,12 @@ pub fn replace_node_and_update_parents(
     let mut parent = None;
 
     loop {
-        let path =
-            NodePath::new(replacement.replacement, parent, change_set.nodes);
-        change_set.replace(&replacement.replaced, &path);
+        let path = NodePath::new(
+            current_replacement.replacement,
+            parent,
+            change_set.nodes,
+        );
+        change_set.replace(&current_replacement.replaced, &path);
 
         if let Some(rep) = replacements.pop() {
             let Some(sibling_index) = rep.replaced.sibling_index() else {
@@ -42,7 +45,7 @@ pub fn replace_node_and_update_parents(
                 );
             };
 
-            replacement = rep;
+            current_replacement = rep;
             parent = Some(path).map(|path| (path, sibling_index));
         } else {
             break path;
