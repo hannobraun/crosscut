@@ -20,7 +20,7 @@ pub fn compile(token: &str, nodes: &mut Nodes) -> NodeHash {
 
 fn resolve_keyword(name: &str, nodes: &mut Nodes) -> Option<SyntaxNode> {
     match name {
-        "apply" => Some(Apply.to_syntax_node(nodes)),
+        "apply" => Some(Apply::new().to_syntax_node(nodes)),
         "self" => Some(SyntaxNode::Recursion),
         _ => None,
     }

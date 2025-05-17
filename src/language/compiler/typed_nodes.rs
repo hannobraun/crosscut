@@ -27,6 +27,10 @@ impl TypedNode {
 pub struct Apply;
 
 impl Apply {
+    pub fn new() -> Self {
+        Apply
+    }
+
     pub fn to_syntax_node(&self, nodes: &mut Nodes) -> SyntaxNode {
         let [expression, argument] = [nodes.insert(SyntaxNode::Empty); 2];
 
