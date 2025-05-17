@@ -1,4 +1,4 @@
-use crate::language::code::{Children, Nodes, SyntaxNode};
+use crate::language::code::{Child, Children, Nodes, SyntaxNode};
 
 pub enum TypedNode {
     Expression,
@@ -20,6 +20,19 @@ impl TypedNode {
             | SyntaxNode::Tuple { .. } => Self::Expression,
 
             SyntaxNode::Binding { .. } => Self::Pattern,
+        }
+    }
+}
+
+pub struct Apply;
+
+impl Apply {
+    pub fn to_syntax_node(&self, nodes: &mut Nodes) -> SyntaxNode {
+        let [expression, argument] = [nodes.insert(SyntaxNode::Empty); 2];
+
+        SyntaxNode::Apply {
+            expression: Child::new(expression),
+            argument,
         }
     }
 }

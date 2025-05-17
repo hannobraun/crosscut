@@ -1,6 +1,6 @@
-use crate::language::code::{Child, NodeHash, Nodes, SyntaxNode};
+use crate::language::code::{NodeHash, Nodes, SyntaxNode};
 
-use super::{Function, Tuple};
+use super::{Function, Tuple, typed_nodes::Apply};
 
 pub fn compile(token: &str, nodes: &mut Nodes) -> NodeHash {
     let node = if token.is_empty() {
@@ -20,13 +20,7 @@ pub fn compile(token: &str, nodes: &mut Nodes) -> NodeHash {
 
 fn resolve_keyword(name: &str, nodes: &mut Nodes) -> Option<SyntaxNode> {
     match name {
-        "apply" => {
-            let [expression, argument] = [nodes.insert(SyntaxNode::Empty); 2];
-            Some(SyntaxNode::Apply {
-                expression: Child::new(expression),
-                argument,
-            })
-        }
+        "apply" => Some(Apply.to_syntax_node(nodes)),
         "self" => Some(SyntaxNode::Recursion),
         _ => None,
     }
