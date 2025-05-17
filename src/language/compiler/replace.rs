@@ -13,6 +13,7 @@ pub fn replace_node_and_update_parents(
     };
 
     let mut replacements = Vec::new();
+
     let mut next_action =
         if let Some(parent) = replacement.replaced.parent().cloned() {
             ReplaceAction::UpdateChildren {
