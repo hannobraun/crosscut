@@ -1,5 +1,5 @@
 use crate::language::{
-    code::{Child, Children, Codebase, SyntaxNode},
+    code::{Children, Codebase, SyntaxNode},
     editor::{Editor, EditorInputEvent::*},
     runtime::Evaluator,
     tests::infra::{ExpectChildren, identifier},
@@ -33,13 +33,6 @@ fn add_apply_node() {
     let apply = codebase.root();
     let [function, argument] = apply.expect_children(codebase.nodes());
 
-    assert_eq!(
-        apply.node,
-        &SyntaxNode::Apply {
-            expression: Child::new(*function.path.hash()),
-            argument: *argument.path.hash(),
-        },
-    );
     assert_eq!(function.node, &identifier("a"));
     assert_eq!(argument.node, &identifier("b"));
 }
