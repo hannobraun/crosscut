@@ -89,10 +89,6 @@ fn update_children(
         SyntaxNode::Apply {
             expression: a,
             argument: b,
-        }
-        | SyntaxNode::Function {
-            parameter: a,
-            body: b,
         } => {
             if a == replacement.replaced.hash() {
                 *a = replacement.replacement;
@@ -112,6 +108,19 @@ fn update_children(
         | SyntaxNode::Number { value: _ }
         | SyntaxNode::Recursion => {
             panic!("Node has no children. Can't replace one.");
+        }
+
+        SyntaxNode::Function {
+            parameter: a,
+            body: b,
+        } => {
+            if a == replacement.replaced.hash() {
+                *a = replacement.replacement;
+            } else if b == replacement.replaced.hash() {
+                *b = replacement.replacement;
+            } else {
+                panic!("Expected to replace child, but could not find it.");
+            }
         }
 
         SyntaxNode::Tuple {
