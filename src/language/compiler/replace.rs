@@ -18,7 +18,7 @@ pub fn replace_node_and_update_parents(
 
     while let Some(parent) = to_replace.parent().cloned() {
         let next_replacement = update_children(
-            parent.clone(),
+            &parent,
             &to_replace,
             replacement,
             change_set.nodes,
@@ -56,7 +56,7 @@ pub fn replace_node_and_update_parents(
 }
 
 fn update_children(
-    path: NodePath,
+    path: &NodePath,
     to_replace: &NodePath,
     replacement: NodeHash,
     nodes: &mut Nodes,
@@ -114,7 +114,7 @@ fn update_children(
     }
 
     Replacement {
-        replaced: path,
+        replaced: path.clone(),
         replacement: nodes.insert(expression),
     }
 }
