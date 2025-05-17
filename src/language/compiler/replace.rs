@@ -7,7 +7,7 @@ pub fn replace_node_and_update_parents(
     replacement: NodeHash,
     change_set: &mut NewChangeSet,
 ) -> NodePath {
-    let replacement = Replacement {
+    let mut replacement = Replacement {
         replaced: to_replace,
         replacement,
     };
@@ -18,41 +18,22 @@ pub fn replace_node_and_update_parents(
     // replaced nodes.
     let mut replacements = Vec::new();
 
-    let mut next_action =
-        if let Some(parent) = replacement.replaced.parent().cloned() {
-            ReplaceAction::UpdateChildren {
-                path: parent,
-                replacement,
-            }
-        } else {
-            ReplaceAction::UpdatePath {
-                replacement,
-                parent: None,
-            }
-        };
+    while let Some(parent) = replacement.replaced.parent().cloned() {
+        replacement = update_children(
+            parent,
+            replacement,
+            &mut replacements,
+            change_set.nodes,
+        );
+    }
+
+    let mut next_action = ReplaceAction::UpdatePath {
+        replacement,
+        parent: None,
+    };
 
     loop {
         next_action = match next_action {
-            ReplaceAction::UpdateChildren { path, replacement } => {
-                let replacement = update_children(
-                    path,
-                    replacement,
-                    &mut replacements,
-                    change_set.nodes,
-                );
-
-                if let Some(parent) = replacement.replaced.parent().cloned() {
-                    ReplaceAction::UpdateChildren {
-                        path: parent,
-                        replacement,
-                    }
-                } else {
-                    ReplaceAction::UpdatePath {
-                        replacement,
-                        parent: None,
-                    }
-                }
-            }
             ReplaceAction::UpdatePath {
                 replacement,
                 parent,
@@ -86,10 +67,6 @@ pub fn replace_node_and_update_parents(
 
 #[derive(Debug)]
 enum ReplaceAction {
-    UpdateChildren {
-        path: NodePath,
-        replacement: Replacement,
-    },
     UpdatePath {
         replacement: Replacement,
         parent: Option<(NodePath, SiblingIndex)>,
