@@ -19,8 +19,12 @@ pub fn replace_node_and_update_parents(
     let mut replacements = Vec::new();
 
     while let Some(parent) = current_replacement.replaced.parent().cloned() {
-        let next_replacement =
-            update_children(parent, &current_replacement, change_set.nodes);
+        let next_replacement = update_children(
+            parent,
+            &current_replacement.replaced,
+            current_replacement.replacement,
+            change_set.nodes,
+        );
 
         replacements.push(current_replacement);
         current_replacement = next_replacement;
@@ -46,7 +50,8 @@ pub fn replace_node_and_update_parents(
 
 fn update_children(
     path: NodePath,
-    replacement: &Replacement,
+    to_replace: &NodePath,
+    replacement: NodeHash,
     nodes: &mut Nodes,
 ) -> Replacement {
     let mut expression = nodes.get(path.hash()).clone();
@@ -56,10 +61,10 @@ fn update_children(
             expression,
             argument,
         } => {
-            if &expression.hash == replacement.replaced.hash() {
-                expression.hash = replacement.replacement;
-            } else if argument == replacement.replaced.hash() {
-                *argument = replacement.replacement;
+            if &expression.hash == to_replace.hash() {
+                expression.hash = replacement;
+            } else if argument == to_replace.hash() {
+                *argument = replacement;
             } else {
                 panic!("Expected to replace child, but could not find it.");
             }
@@ -77,13 +82,9 @@ fn update_children(
         }
 
         SyntaxNode::Function { parameter, body } => {
-            if parameter == replacement.replaced.hash() {
-                *parameter = replacement.replacement;
-            } else if !body.replace(
-                &replacement.replaced,
-                replacement.replacement,
-                1,
-            ) {
+            if parameter == to_replace.hash() {
+                *parameter = replacement;
+            } else if !body.replace(to_replace, replacement, 1) {
                 panic!("Expected to replace child, but could not find it.");
             }
         }
@@ -96,11 +97,7 @@ fn update_children(
             name: String { .. },
             children,
         } => {
-            let was_replaced = children.replace(
-                &replacement.replaced,
-                replacement.replacement,
-                0,
-            );
+            let was_replaced = children.replace(to_replace, replacement, 0);
 
             assert!(
                 was_replaced,
