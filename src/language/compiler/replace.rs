@@ -57,7 +57,6 @@ pub fn replace_node_and_update_parents(
                 replacement,
                 parent,
             } => {
-                // comment added to force more readable formatting
                 let path = update_path(replacement, parent, change_set);
 
                 if let Some(replacement) = replacements.pop() {
