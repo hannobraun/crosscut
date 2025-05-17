@@ -187,9 +187,9 @@ impl SyntaxNode {
     pub fn children(&self) -> Vec<NodeHash> {
         match self {
             Self::Apply {
-                expression: a,
+                expression,
                 argument: b,
-            } => vec![*a, *b],
+            } => vec![*expression, *b],
 
             Self::AddNode
             | Self::Binding { .. }
