@@ -37,15 +37,16 @@ pub fn replace_node_and_update_parents(
         );
         change_set.replace(&current_replacement.replaced, &path);
 
-        if let Some(rep) = replacements.pop() {
-            let Some(sibling_index) = rep.replaced.sibling_index() else {
+        if let Some(replacement) = replacements.pop() {
+            let Some(sibling_index) = replacement.replaced.sibling_index()
+            else {
                 unreachable!(
                     "The replaced node has a parent, so it must have a sibling \
                     index."
                 );
             };
 
-            current_replacement = rep;
+            current_replacement = replacement;
             parent = Some(path).map(|path| (path, sibling_index));
         } else {
             break path;
