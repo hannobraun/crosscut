@@ -58,7 +58,30 @@ pub fn replace_node_and_update_parents(
                 parent,
             } => {
                 // comment added to force more readable formatting
-                update_path(replacement, parent, &mut replacements, change_set)
+                let path = update_path(
+                    replacement,
+                    parent,
+                    &mut replacements,
+                    change_set,
+                );
+
+                if let Some(replacement) = replacements.pop() {
+                    let Some(sibling_index) =
+                        replacement.replaced.sibling_index()
+                    else {
+                        unreachable!(
+                            "The replaced node has a parent, so it must have a \
+                             sibling index."
+                        );
+                    };
+
+                    ReplaceAction::UpdatePath {
+                        replacement,
+                        parent: Some(path).map(|path| (path, sibling_index)),
+                    }
+                } else {
+                    ReplaceAction::Finish { path }
+                }
             }
             ReplaceAction::Finish { path } => {
                 break path;
@@ -159,28 +182,14 @@ fn update_children(
 fn update_path(
     replacement: Replacement,
     parent: Option<(NodePath, SiblingIndex)>,
-    replacements: &mut Vec<Replacement>,
+    _: &mut Vec<Replacement>,
     change_set: &mut NewChangeSet,
-) -> ReplaceAction {
+) -> NodePath {
     let path = NodePath::new(replacement.replacement, parent, change_set.nodes);
 
     change_set.replace(&replacement.replaced, &path);
 
-    if let Some(replacement) = replacements.pop() {
-        let Some(sibling_index) = replacement.replaced.sibling_index() else {
-            unreachable!(
-                "The replaced node has a parent, so it must have a sibling \
-                index."
-            );
-        };
-
-        ReplaceAction::UpdatePath {
-            replacement,
-            parent: Some(path).map(|path| (path, sibling_index)),
-        }
-    } else {
-        ReplaceAction::Finish { path }
-    }
+    path
 }
 
 #[derive(Clone, Debug)]
