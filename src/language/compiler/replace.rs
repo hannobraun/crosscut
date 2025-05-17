@@ -21,11 +21,12 @@ pub fn replace_node_and_update_parents(
     while let Some(parent) = current_replacement.replaced.parent().cloned() {
         let next_replacement = update_children(
             parent,
-            current_replacement,
+            &current_replacement,
             &mut replacements,
             change_set.nodes,
         );
 
+        replacements.push(current_replacement);
         current_replacement = next_replacement;
     }
 
@@ -58,8 +59,8 @@ pub fn replace_node_and_update_parents(
 
 fn update_children(
     path: NodePath,
-    replacement: Replacement,
-    replacements: &mut Vec<Replacement>,
+    replacement: &Replacement,
+    _: &mut Vec<Replacement>,
     nodes: &mut Nodes,
 ) -> Replacement {
     let mut expression = nodes.get(path.hash()).clone();
@@ -121,8 +122,6 @@ fn update_children(
             );
         }
     }
-
-    replacements.push(replacement);
 
     Replacement {
         replaced: path,
