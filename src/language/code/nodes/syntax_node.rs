@@ -198,8 +198,8 @@ impl SyntaxNode {
             | Self::Number { value: _ }
             | Self::Recursion => vec![],
 
-            Self::Function { parameter, body: b } => {
-                vec![*parameter, *b]
+            Self::Function { parameter, body } => {
+                vec![*parameter, *body]
             }
 
             Self::Tuple { values, add_value } => {
