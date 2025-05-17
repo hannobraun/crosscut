@@ -35,7 +35,7 @@ pub fn replace_node_and_update_parents(
         replacement = next_replacement;
     }
 
-    let mut current_replacement = Replacement {
+    let current_replacement = Replacement {
         replaced: to_replace,
         replacement,
     };
@@ -49,9 +49,8 @@ pub fn replace_node_and_update_parents(
             );
         };
 
-        current_replacement = replacement;
         let parent = Some(path).map(|path| (path, sibling_index));
-        path = update_path(&current_replacement, parent, change_set);
+        path = update_path(&replacement, parent, change_set);
     }
 
     path
