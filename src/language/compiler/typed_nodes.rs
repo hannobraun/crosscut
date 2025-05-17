@@ -31,7 +31,7 @@ pub struct Apply {
 
 impl Apply {
     pub fn new() -> Self {
-        Apply {
+        Self {
             expression: SyntaxNode::Empty,
             argument: SyntaxNode::Empty,
         }
