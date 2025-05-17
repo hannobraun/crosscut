@@ -171,11 +171,10 @@ impl SyntaxNode {
             | Self::Recursion => false,
 
             Self::Function { parameter, body } => {
-                let [index_a, index_b] =
-                    [0, 1].map(|index| SiblingIndex { index });
+                let [index_a, index_b] = [0, 1];
 
-                child == parameter && sibling_index == &index_a
-                    || child == body && sibling_index == &index_b
+                child == parameter && sibling_index.index == index_a
+                    || child == body && sibling_index.index == index_b
             }
 
             Self::Tuple { values, add_value } => {
