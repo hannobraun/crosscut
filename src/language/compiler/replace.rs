@@ -27,52 +27,25 @@ pub fn replace_node_and_update_parents(
         );
     }
 
-    let mut next_action = ReplaceAction::UpdatePath {
-        replacement,
-        parent: None,
-    };
+    let mut parent = None;
 
     loop {
-        next_action = match next_action {
-            ReplaceAction::UpdatePath {
-                replacement,
-                parent,
-            } => {
-                let path = update_path(replacement, parent, change_set);
+        let path = update_path(replacement, parent, change_set);
 
-                if let Some(rep) = replacements.pop() {
-                    let Some(sibling_index) = rep.replaced.sibling_index()
-                    else {
-                        unreachable!(
-                            "The replaced node has a parent, so it must have a \
+        if let Some(rep) = replacements.pop() {
+            let Some(sibling_index) = rep.replaced.sibling_index() else {
+                unreachable!(
+                    "The replaced node has a parent, so it must have a \
                              sibling index."
-                        );
-                    };
+                );
+            };
 
-                    ReplaceAction::UpdatePath {
-                        replacement: rep,
-                        parent: Some(path).map(|path| (path, sibling_index)),
-                    }
-                } else {
-                    ReplaceAction::Finish { path }
-                }
-            }
-            ReplaceAction::Finish { path } => {
-                break path;
-            }
-        };
+            replacement = rep;
+            parent = Some(path).map(|path| (path, sibling_index));
+        } else {
+            break path;
+        }
     }
-}
-
-#[derive(Debug)]
-enum ReplaceAction {
-    UpdatePath {
-        replacement: Replacement,
-        parent: Option<(NodePath, SiblingIndex)>,
-    },
-    Finish {
-        path: NodePath,
-    },
 }
 
 fn update_children(
