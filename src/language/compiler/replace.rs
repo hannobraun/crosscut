@@ -17,15 +17,19 @@ pub fn replace_node_and_update_parents(
     let mut replacements = Vec::new();
 
     while let Some(parent) = to_replace.parent().cloned() {
-        let next_replacement =
-            update_children(parent, &to_replace, replacement, change_set.nodes);
+        let next_replacement = update_children(
+            parent.clone(),
+            &to_replace,
+            replacement,
+            change_set.nodes,
+        );
 
         replacements.push(Replacement {
             replaced: to_replace,
             replacement,
         });
 
-        to_replace = next_replacement.replaced;
+        to_replace = parent;
         replacement = next_replacement.replacement;
     }
 
