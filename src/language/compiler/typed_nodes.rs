@@ -38,8 +38,8 @@ impl Apply {
     }
 
     pub fn into_syntax_node(self, nodes: &mut Nodes) -> SyntaxNode {
-        let expression = nodes.insert(self.expression);
-        let argument = nodes.insert(self.argument);
+        let [expression, argument] =
+            [self.expression, self.argument].map(|node| nodes.insert(node));
 
         SyntaxNode::Apply {
             expression: Child::new(expression),
