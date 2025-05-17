@@ -1,6 +1,6 @@
 use crate::language::code::{NodeHash, Nodes, SyntaxNode};
 
-use super::{Function, Tuple, typed_nodes::Apply};
+use super::{Apply, Function, Tuple};
 
 pub fn compile(token: &str, nodes: &mut Nodes) -> NodeHash {
     let node = if token.is_empty() {

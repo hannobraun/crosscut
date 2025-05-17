@@ -5,7 +5,7 @@ mod typed_nodes;
 
 pub use self::{
     compiler::Compiler,
-    typed_nodes::{Function, Tuple},
+    typed_nodes::{Apply, Function, Tuple},
 };
 
 #[cfg(test)]
