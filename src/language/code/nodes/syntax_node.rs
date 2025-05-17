@@ -188,8 +188,8 @@ impl SyntaxNode {
         match self {
             Self::Apply {
                 expression,
-                argument: b,
-            } => vec![*expression, *b],
+                argument,
+            } => vec![*expression, *argument],
 
             Self::AddNode
             | Self::Binding { .. }
