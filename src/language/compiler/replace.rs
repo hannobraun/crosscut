@@ -12,6 +12,10 @@ pub fn replace_node_and_update_parents(
         replacement,
     };
 
+    // The replacements that are being made, as we propagate the initial
+    // replacement to the root node. We need to remember those, as later, we
+    // need to step from the root down again, to update the `NodePath`s of all
+    // replaced nodes.
     let mut replacements = Vec::new();
 
     let mut next_action =
