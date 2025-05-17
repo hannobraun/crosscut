@@ -26,26 +26,23 @@ pub fn replace_node_and_update_parents(
         current_replacement = next_replacement;
     }
 
-    let mut parent = None;
+    let mut path = update_path(&current_replacement, None, change_set);
+    let mut parent;
 
-    loop {
-        let path = update_path(&current_replacement, parent, change_set);
+    while let Some(replacement) = replacements.pop() {
+        let Some(sibling_index) = replacement.replaced.sibling_index() else {
+            unreachable!(
+                "The replaced node has a parent, so it must have a sibling \
+                index."
+            );
+        };
 
-        if let Some(replacement) = replacements.pop() {
-            let Some(sibling_index) = replacement.replaced.sibling_index()
-            else {
-                unreachable!(
-                    "The replaced node has a parent, so it must have a sibling \
-                    index."
-                );
-            };
-
-            current_replacement = replacement;
-            parent = Some(path).map(|path| (path, sibling_index));
-        } else {
-            break path;
-        }
+        current_replacement = replacement;
+        parent = Some(path).map(|path| (path, sibling_index));
+        path = update_path(&current_replacement, parent, change_set);
     }
+
+    path
 }
 
 fn update_children(
