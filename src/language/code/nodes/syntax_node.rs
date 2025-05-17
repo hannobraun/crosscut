@@ -158,7 +158,7 @@ impl SyntaxNode {
                 expression,
                 argument,
             } => {
-                child == &expression.hash && sibling_index.index == 0
+                expression.is(child, sibling_index)
                     || child == argument && sibling_index.index == 1
             }
 

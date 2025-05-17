@@ -17,6 +17,10 @@ impl Child {
             index: SiblingIndex { index },
         }
     }
+
+    pub fn is(&self, hash: &NodeHash, index: &SiblingIndex) -> bool {
+        &self.hash == hash && &self.index == index
+    }
 }
 
 #[derive(Clone, Debug, Eq, Ord, PartialEq, PartialOrd, udigest::Digestable)]

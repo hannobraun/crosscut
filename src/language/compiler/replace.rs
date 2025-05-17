@@ -58,7 +58,7 @@ fn update_children(
     path: &NodePath,
     to_replace: &NodePath,
     replacement: NodeHash,
-    _: SiblingIndex,
+    sibling_index: SiblingIndex,
     nodes: &mut Nodes,
 ) -> NodeHash {
     let mut expression = nodes.get(path.hash()).clone();
@@ -68,7 +68,7 @@ fn update_children(
             expression,
             argument,
         } => {
-            if &expression.hash == to_replace.hash() {
+            if expression.is(to_replace.hash(), &sibling_index) {
                 expression.hash = replacement;
             } else if argument == to_replace.hash() {
                 *argument = replacement;
