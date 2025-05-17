@@ -24,15 +24,19 @@ impl TypedNode {
     }
 }
 
-pub struct Apply;
+pub struct Apply {
+    expression: SyntaxNode,
+}
 
 impl Apply {
     pub fn new() -> Self {
-        Apply
+        Apply {
+            expression: SyntaxNode::Empty,
+        }
     }
 
     pub fn into_syntax_node(self, nodes: &mut Nodes) -> SyntaxNode {
-        let expression = nodes.insert(SyntaxNode::Empty);
+        let expression = nodes.insert(self.expression);
         let argument = nodes.insert(SyntaxNode::Empty);
 
         SyntaxNode::Apply {
