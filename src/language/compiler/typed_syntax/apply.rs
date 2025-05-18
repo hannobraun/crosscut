@@ -1,6 +1,6 @@
 use crate::language::code::{ChildOwned, Nodes, SyntaxNode};
 
-use super::{Form, NodeRef, Owned};
+use super::{Child, Form, NodeRef, Owned};
 
 pub struct Apply<T: Form> {
     pub expression: T::Form<SyntaxNode>,
@@ -32,8 +32,8 @@ impl Apply<Owned> {
 }
 
 impl Apply<NodeRef<'_>> {
-    pub fn expression(&self) -> ChildOwned {
-        ChildOwned::new(*self.expression, 0)
+    pub fn expression(&self) -> Child<NodeRef> {
+        Child::new(self.expression, 0)
     }
 
     pub fn argument(&self) -> ChildOwned {
