@@ -1,10 +1,10 @@
-use crate::language::code::{Children, Nodes, SyntaxNode};
+use crate::language::code::{ChildrenOwned, Nodes, SyntaxNode};
 
 pub struct Tuple;
 
 impl Tuple {
     pub fn to_syntax_node(&self, nodes: &mut Nodes) -> SyntaxNode {
-        let values = Children::new([]);
+        let values = ChildrenOwned::new([]);
         let add_value = nodes.insert(SyntaxNode::AddNode);
 
         SyntaxNode::Tuple { values, add_value }

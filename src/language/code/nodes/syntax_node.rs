@@ -1,7 +1,7 @@
 use std::fmt;
 
 use crate::language::{
-    code::{Children, NodeHash, SiblingIndex},
+    code::{ChildrenOwned, NodeHash, SiblingIndex},
     compiler::{Apply, Function},
 };
 
@@ -79,7 +79,7 @@ pub enum SyntaxNode {
         parameter: NodeHash,
 
         /// # The root node of the function's body
-        body: Children,
+        body: ChildrenOwned,
     },
 
     /// # An identifier
@@ -120,7 +120,7 @@ pub enum SyntaxNode {
         ///
         /// A tuple literal can have an arbitrary number of children, each of
         /// which evaluates to one of the values in the tuple value.
-        values: Children,
+        values: ChildrenOwned,
 
         /// # A node that can be edited to add values to the tuple
         ///
@@ -144,7 +144,7 @@ pub enum SyntaxNode {
         name: String,
 
         /// # The children of the test expression
-        children: Children,
+        children: ChildrenOwned,
     },
 }
 

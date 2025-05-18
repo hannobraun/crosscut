@@ -1,4 +1,4 @@
-use crate::language::code::{Children, Nodes, SyntaxNode};
+use crate::language::code::{ChildrenOwned, Nodes, SyntaxNode};
 
 use super::{Child, Form, NodeByHash, Owned, Ref};
 
@@ -17,7 +17,7 @@ impl Function<Owned> {
 
         SyntaxNode::Function {
             parameter,
-            body: Children::new(body),
+            body: ChildrenOwned::new(body),
         }
     }
 }

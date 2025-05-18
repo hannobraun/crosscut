@@ -3,11 +3,11 @@ use std::vec;
 use super::{NodeHash, NodePath, SiblingIndex};
 
 #[derive(Clone, Debug, Eq, Ord, PartialEq, PartialOrd, udigest::Digestable)]
-pub struct Children {
+pub struct ChildrenOwned {
     pub inner: Vec<NodeHash>,
 }
 
-impl Children {
+impl ChildrenOwned {
     pub fn new(children: impl IntoIterator<Item = NodeHash>) -> Self {
         let inner = children.into_iter().collect();
         Self { inner }
@@ -59,7 +59,7 @@ impl Children {
     }
 }
 
-impl<const N: usize> From<[NodeHash; N]> for Children {
+impl<const N: usize> From<[NodeHash; N]> for ChildrenOwned {
     fn from(children: [NodeHash; N]) -> Self {
         Self {
             inner: children.into(),
@@ -67,7 +67,7 @@ impl<const N: usize> From<[NodeHash; N]> for Children {
     }
 }
 
-impl IntoIterator for Children {
+impl IntoIterator for ChildrenOwned {
     type Item = NodeHash;
     type IntoIter = vec::IntoIter<NodeHash>;
 

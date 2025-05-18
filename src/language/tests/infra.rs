@@ -1,7 +1,7 @@
 use itertools::Itertools;
 
 use crate::language::code::{
-    Children, LocatedNode, NodeHash, Nodes, SyntaxNode,
+    ChildrenOwned, LocatedNode, NodeHash, Nodes, SyntaxNode,
 };
 
 pub fn expression(
@@ -10,7 +10,7 @@ pub fn expression(
 ) -> SyntaxNode {
     SyntaxNode::Test {
         name: name.to_string(),
-        children: Children::new(children),
+        children: ChildrenOwned::new(children),
     }
 }
 
