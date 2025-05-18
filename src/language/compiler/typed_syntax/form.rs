@@ -6,9 +6,9 @@ pub trait Form {
     type Form<T: 'static>;
 }
 
-pub struct NodeRef;
+pub struct NodeByHash;
 
-impl Form for NodeRef {
+impl Form for NodeByHash {
     type Form<T: 'static> = NodeHash;
 }
 
