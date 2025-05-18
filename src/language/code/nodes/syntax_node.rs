@@ -5,7 +5,7 @@ use crate::language::{
     compiler::Apply,
 };
 
-use super::Child;
+use super::ChildOwned;
 
 /// # Structured but untyped representation of a syntax node
 ///
@@ -55,10 +55,10 @@ pub enum SyntaxNode {
     /// # The application of an expression to an argument
     Apply {
         /// # The expression that is being applied to the argument
-        expression: Child,
+        expression: ChildOwned,
 
         /// # The argument that the expression is being applied to
-        argument: Child,
+        argument: ChildOwned,
     },
 
     /// # Assigns a name to a value

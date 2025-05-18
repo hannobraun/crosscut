@@ -1,4 +1,4 @@
-use crate::language::code::{Child, Nodes, SyntaxNode};
+use crate::language::code::{ChildOwned, Nodes, SyntaxNode};
 
 use super::{Form, NodeRef, Owned};
 
@@ -25,19 +25,19 @@ impl Apply<Owned> {
             [self.expression, self.argument].map(|node| nodes.insert(node));
 
         SyntaxNode::Apply {
-            expression: Child::new(expression, 0),
-            argument: Child::new(argument, 1),
+            expression: ChildOwned::new(expression, 0),
+            argument: ChildOwned::new(argument, 1),
         }
     }
 }
 
 impl Apply<NodeRef<'_>> {
-    pub fn expression(&self) -> Child {
-        Child::new(*self.expression, 0)
+    pub fn expression(&self) -> ChildOwned {
+        ChildOwned::new(*self.expression, 0)
     }
 
-    pub fn argument(&self) -> Child {
-        Child::new(*self.argument, 1)
+    pub fn argument(&self) -> ChildOwned {
+        ChildOwned::new(*self.argument, 1)
     }
 }
 

@@ -5,12 +5,12 @@ use super::{NodeHash, NodePath, SiblingIndex};
 #[derive(
     Clone, Copy, Debug, Eq, Ord, PartialEq, PartialOrd, udigest::Digestable,
 )]
-pub struct Child {
+pub struct ChildOwned {
     hash: NodeHash,
     index: SiblingIndex,
 }
 
-impl Child {
+impl ChildOwned {
     pub fn new(hash: NodeHash, index: usize) -> Self {
         Self {
             hash,
