@@ -2,14 +2,6 @@ use std::vec;
 
 use super::{NodeHash, NodePath, SiblingIndex};
 
-#[derive(
-    Clone, Copy, Debug, Eq, Ord, PartialEq, PartialOrd, udigest::Digestable,
-)]
-pub struct ChildOwned {
-    hash: NodeHash,
-    index: SiblingIndex,
-}
-
 #[derive(Clone, Debug, Eq, Ord, PartialEq, PartialOrd, udigest::Digestable)]
 pub struct Children {
     pub inner: Vec<NodeHash>,
