@@ -44,12 +44,16 @@ impl Child<RefMut<'_>> {
 }
 
 pub struct Children<'r> {
-    hashes: &'r [NodeHash],
+    hashes: Vec<&'r NodeHash>,
     offset: SiblingIndex,
 }
 
 impl<'r> Children<'r> {
-    pub fn new(hashes: &'r [NodeHash], offset: usize) -> Self {
+    pub fn new(
+        hashes: impl IntoIterator<Item = &'r NodeHash>,
+        offset: usize,
+    ) -> Self {
+        let hashes = hashes.into_iter().collect();
         let offset = SiblingIndex { index: offset };
         Self { hashes, offset }
     }
@@ -57,6 +61,7 @@ impl<'r> Children<'r> {
     pub fn contains(&self, hash: &NodeHash, index: &SiblingIndex) -> bool {
         self.hashes
             .iter()
+            .copied()
             .enumerate()
             .any(|(i, c)| c == hash && i + self.offset.index == index.index)
     }
