@@ -1,6 +1,9 @@
 use std::fmt;
 
-use crate::language::code::{Children, NodeHash, SiblingIndex};
+use crate::language::{
+    code::{Children, NodeHash, SiblingIndex},
+    compiler::Apply,
+};
 
 use super::Child;
 
@@ -158,8 +161,12 @@ impl SyntaxNode {
                 expression,
                 argument,
             } => {
-                expression.is(child, sibling_index)
-                    || argument.is(child, sibling_index)
+                let apply = Apply {
+                    expression: expression.hash(),
+                    argument: argument.hash(),
+                };
+                apply.expression().is(child, sibling_index)
+                    || apply.argument().is(child, sibling_index)
             }
 
             Self::AddNode

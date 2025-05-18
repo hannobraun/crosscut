@@ -6,7 +6,7 @@ mod tuple;
 
 pub use self::{
     apply::Apply,
-    form::{Form, Owned},
+    form::{Form, Owned, Ref},
     function::Function,
     node::TypedNode,
     tuple::Tuple,
