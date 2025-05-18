@@ -1,11 +1,13 @@
 use crate::language::code::{Child, Nodes, SyntaxNode};
 
-pub struct Apply {
-    pub expression: SyntaxNode,
-    pub argument: SyntaxNode,
+use super::{Form, Owned};
+
+pub struct Apply<T: Form> {
+    pub expression: T::Form<SyntaxNode>,
+    pub argument: T::Form<SyntaxNode>,
 }
 
-impl Apply {
+impl Apply<Owned> {
     #[cfg(test)]
     pub fn with_expression(mut self, expression: SyntaxNode) -> Self {
         self.expression = expression;
@@ -29,7 +31,7 @@ impl Apply {
     }
 }
 
-impl Default for Apply {
+impl Default for Apply<Owned> {
     fn default() -> Self {
         Self {
             expression: SyntaxNode::Empty,
