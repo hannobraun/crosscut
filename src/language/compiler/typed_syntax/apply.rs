@@ -1,8 +1,8 @@
 use crate::language::code::{Child, Nodes, SyntaxNode};
 
 pub struct Apply {
-    expression: SyntaxNode,
-    argument: SyntaxNode,
+    pub expression: SyntaxNode,
+    pub argument: SyntaxNode,
 }
 
 impl Apply {
