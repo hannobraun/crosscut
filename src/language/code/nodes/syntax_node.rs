@@ -5,8 +5,6 @@ use crate::language::{
     compiler::Apply,
 };
 
-use super::ChildOwned;
-
 /// # Structured but untyped representation of a syntax node
 ///
 /// This representation is structured, in the sense that for each type of node
@@ -58,7 +56,7 @@ pub enum SyntaxNode {
         expression: NodeHash,
 
         /// # The argument that the expression is being applied to
-        argument: ChildOwned,
+        argument: NodeHash,
     },
 
     /// # Assigns a name to a value
@@ -163,7 +161,7 @@ impl SyntaxNode {
             } => {
                 let apply = Apply {
                     expression: *expression,
-                    argument: *argument.hash(),
+                    argument: *argument,
                 };
                 apply.expression().is(child, sibling_index)
                     || apply.argument().is(child, sibling_index)
@@ -198,7 +196,7 @@ impl SyntaxNode {
             Self::Apply {
                 expression,
                 argument,
-            } => vec![*expression, *argument.hash()],
+            } => vec![*expression, *argument],
 
             Self::AddNode
             | Self::Binding { .. }

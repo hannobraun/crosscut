@@ -6,7 +6,7 @@ mod path;
 mod syntax_node;
 
 pub use self::{
-    children::{ChildOwned, Children},
+    children::Children,
     hash::NodeHash,
     located::LocatedNode,
     nodes::Nodes,

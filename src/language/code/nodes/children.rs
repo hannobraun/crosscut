@@ -10,19 +10,6 @@ pub struct ChildOwned {
     index: SiblingIndex,
 }
 
-impl ChildOwned {
-    pub fn new(hash: NodeHash, index: usize) -> Self {
-        Self {
-            hash,
-            index: SiblingIndex { index },
-        }
-    }
-
-    pub fn hash(&self) -> &NodeHash {
-        &self.hash
-    }
-}
-
 #[derive(Clone, Debug, Eq, Ord, PartialEq, PartialOrd, udigest::Digestable)]
 pub struct Children {
     pub inner: Vec<NodeHash>,

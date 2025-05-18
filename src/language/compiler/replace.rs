@@ -72,7 +72,7 @@ fn update_children(
         } => {
             let mut apply = Apply {
                 expression: *expression,
-                argument: *argument.hash(),
+                argument: *argument,
             };
 
             if apply.expression_mut().replace(

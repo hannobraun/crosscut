@@ -1,4 +1,4 @@
-use crate::language::code::{ChildOwned, Nodes, SyntaxNode};
+use crate::language::code::{Nodes, SyntaxNode};
 
 use super::{Child, Form, NodeByHash, Owned, Ref, RefMut};
 
@@ -26,7 +26,7 @@ impl Apply<Owned> {
 
         SyntaxNode::Apply {
             expression,
-            argument: ChildOwned::new(argument, 1),
+            argument,
         }
     }
 }
@@ -51,7 +51,7 @@ impl Apply<NodeByHash> {
     pub fn into_syntax_node(self) -> SyntaxNode {
         SyntaxNode::Apply {
             expression: self.expression,
-            argument: ChildOwned::new(self.argument, 1),
+            argument: self.argument,
         }
     }
 }
