@@ -2,7 +2,7 @@ use std::fmt;
 
 use crate::language::{
     code::{Children, NodeHash, SiblingIndex},
-    compiler::Apply,
+    compiler::{Apply, Function},
 };
 
 /// # Structured but untyped representation of a syntax node
@@ -175,7 +175,12 @@ impl SyntaxNode {
             | Self::Recursion => false,
 
             Self::Function { parameter, body } => {
-                child == parameter && sibling_index.index == 0
+                let function = Function {
+                    parameter: *parameter,
+                    body: body.inner.clone(),
+                };
+
+                function.parameter().is(child, sibling_index)
                     || body.contains_at(child, sibling_index, 1)
             }
 
