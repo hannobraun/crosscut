@@ -42,3 +42,22 @@ impl Child<RefMut<'_>> {
         }
     }
 }
+
+pub struct Children<'r> {
+    hashes: &'r [NodeHash],
+    offset: SiblingIndex,
+}
+
+impl<'r> Children<'r> {
+    pub fn new(hashes: &'r [NodeHash], offset: usize) -> Self {
+        let offset = SiblingIndex { index: offset };
+        Self { hashes, offset }
+    }
+
+    pub fn contains(&self, hash: &NodeHash, index: &SiblingIndex) -> bool {
+        self.hashes
+            .iter()
+            .enumerate()
+            .any(|(i, c)| c == hash && i + self.offset.index == index.index)
+    }
+}

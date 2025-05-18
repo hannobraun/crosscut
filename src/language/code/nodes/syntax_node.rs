@@ -181,7 +181,7 @@ impl SyntaxNode {
                 };
 
                 function.parameter().is(child, sibling_index)
-                    || body.contains_at(child, sibling_index, 1)
+                    || function.body().contains(child, sibling_index)
             }
 
             Self::Tuple { values, add_value } => {
