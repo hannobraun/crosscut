@@ -1,28 +1,8 @@
+mod node;
+
+pub use self::node::TypedNode;
+
 use crate::language::code::{Child, Children, Nodes, SyntaxNode};
-
-pub enum TypedNode {
-    Expression,
-    Pattern,
-    Other,
-}
-
-impl TypedNode {
-    pub fn from_syntax_node(syntax_node: &SyntaxNode) -> Self {
-        match syntax_node {
-            SyntaxNode::AddNode | SyntaxNode::Test { .. } => Self::Other,
-
-            SyntaxNode::Apply { .. }
-            | SyntaxNode::Empty
-            | SyntaxNode::Function { .. }
-            | SyntaxNode::Identifier { .. }
-            | SyntaxNode::Number { .. }
-            | SyntaxNode::Recursion
-            | SyntaxNode::Tuple { .. } => Self::Expression,
-
-            SyntaxNode::Binding { .. } => Self::Pattern,
-        }
-    }
-}
 
 pub struct Apply {
     expression: SyntaxNode,
