@@ -1,11 +1,11 @@
 mod compiler;
 mod expression;
 mod replace;
-mod typed_nodes;
+mod typed_syntax;
 
 pub use self::{
     compiler::Compiler,
-    typed_nodes::{Apply, Function, Tuple, TypedNode},
+    typed_syntax::{Apply, Function, Tuple, TypedNode},
 };
 
 #[cfg(test)]
