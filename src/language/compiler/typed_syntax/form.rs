@@ -12,8 +12,8 @@ impl Form for Owned {
     type Form<T> = T;
 }
 
-pub struct Ref<'r>(PhantomData<&'r ()>);
+pub struct NodeRef<'r>(PhantomData<&'r ()>);
 
-impl<'r> Form for Ref<'r> {
+impl<'r> Form for NodeRef<'r> {
     type Form<T> = &'r NodeHash;
 }
