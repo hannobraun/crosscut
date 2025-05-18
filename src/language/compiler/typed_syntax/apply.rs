@@ -31,13 +31,13 @@ impl Apply<Owned> {
     }
 }
 
-impl Apply<NodeRef<'_>> {
+impl Apply<NodeRef> {
     pub fn expression(&self) -> Child<Ref> {
-        Child::new(self.expression, 0)
+        Child::new(&self.expression, 0)
     }
 
     pub fn argument(&self) -> Child<Ref> {
-        Child::new(self.argument, 1)
+        Child::new(&self.argument, 1)
     }
 }
 

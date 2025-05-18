@@ -162,8 +162,8 @@ impl SyntaxNode {
                 argument,
             } => {
                 let apply = Apply {
-                    expression: expression.hash(),
-                    argument: argument.hash(),
+                    expression: *expression.hash(),
+                    argument: *argument.hash(),
                 };
                 apply.expression().is(child, sibling_index)
                     || apply.argument().is(child, sibling_index)

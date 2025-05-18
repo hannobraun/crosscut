@@ -6,10 +6,10 @@ pub trait Form {
     type Form<T: 'static>;
 }
 
-pub struct NodeRef<'r>(PhantomData<&'r ()>);
+pub struct NodeRef;
 
-impl<'r> Form for NodeRef<'r> {
-    type Form<T: 'static> = &'r NodeHash;
+impl Form for NodeRef {
+    type Form<T: 'static> = NodeHash;
 }
 
 pub struct Owned;
