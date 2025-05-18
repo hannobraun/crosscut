@@ -4,7 +4,7 @@ use crate::language::code::{Children, Nodes, SyntaxNode};
 pub struct Function {}
 
 impl Function {
-    pub fn to_syntax_node(&self, nodes: &mut Nodes) -> SyntaxNode {
+    pub fn into_syntax_node(self, nodes: &mut Nodes) -> SyntaxNode {
         let parameter = nodes.insert(SyntaxNode::Binding {
             name: "_".to_string(),
         });
