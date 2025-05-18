@@ -1,7 +1,7 @@
 use crate::language::code::{Children, Nodes, SyntaxNode};
 
 #[derive(Default)]
-pub struct Function;
+pub struct Function {}
 
 impl Function {
     pub fn to_syntax_node(&self, nodes: &mut Nodes) -> SyntaxNode {

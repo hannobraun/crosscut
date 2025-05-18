@@ -308,7 +308,7 @@ mod tests {
         let mut codebase = Codebase::new();
 
         codebase.make_change(|change_set| {
-            let node = Function.to_syntax_node(change_set.nodes);
+            let node = Function::default().to_syntax_node(change_set.nodes);
             let hash = change_set.nodes.insert(node);
 
             change_set.replace(
