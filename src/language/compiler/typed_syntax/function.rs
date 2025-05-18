@@ -27,7 +27,7 @@ impl Function<NodeByHash> {
         Child::new(&self.parameter, 0)
     }
 
-    pub fn body(&self) -> Children {
+    pub fn body(&self) -> Children<Ref> {
         Children::new(&self.body, 1)
     }
 }

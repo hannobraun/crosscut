@@ -43,12 +43,12 @@ impl Child<RefMut<'_>> {
     }
 }
 
-pub struct Children<'r> {
-    hashes: Vec<&'r NodeHash>,
+pub struct Children<T: Form> {
+    hashes: Vec<T::Form<NodeHash>>,
     offset: SiblingIndex,
 }
 
-impl<'r> Children<'r> {
+impl<'r> Children<Ref<'r>> {
     pub fn new(
         hashes: impl IntoIterator<Item = &'r NodeHash>,
         offset: usize,
