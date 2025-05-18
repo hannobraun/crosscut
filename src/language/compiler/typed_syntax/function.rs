@@ -7,7 +7,8 @@ pub struct Function {
 impl Function {
     pub fn into_syntax_node(self, nodes: &mut Nodes) -> SyntaxNode {
         let parameter = nodes.insert(self.parameter);
-        let body = [nodes.insert(SyntaxNode::Empty)];
+        let body =
+            [SyntaxNode::Empty].map(|expression| nodes.insert(expression));
 
         SyntaxNode::Function {
             parameter,
