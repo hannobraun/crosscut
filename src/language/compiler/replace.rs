@@ -71,7 +71,7 @@ fn update_children(
             argument,
         } => {
             let mut apply = Apply {
-                expression: *expression.hash(),
+                expression: *expression,
                 argument: *argument.hash(),
             };
 

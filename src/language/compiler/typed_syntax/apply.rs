@@ -25,7 +25,7 @@ impl Apply<Owned> {
             [self.expression, self.argument].map(|node| nodes.insert(node));
 
         SyntaxNode::Apply {
-            expression: ChildOwned::new(expression, 0),
+            expression,
             argument: ChildOwned::new(argument, 1),
         }
     }
@@ -50,7 +50,7 @@ impl Apply<NodeByHash> {
 
     pub fn into_syntax_node(self) -> SyntaxNode {
         SyntaxNode::Apply {
-            expression: ChildOwned::new(self.expression, 0),
+            expression: self.expression,
             argument: ChildOwned::new(self.argument, 1),
         }
     }

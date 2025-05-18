@@ -55,7 +55,7 @@ pub enum SyntaxNode {
     /// # The application of an expression to an argument
     Apply {
         /// # The expression that is being applied to the argument
-        expression: ChildOwned,
+        expression: NodeHash,
 
         /// # The argument that the expression is being applied to
         argument: ChildOwned,
@@ -162,7 +162,7 @@ impl SyntaxNode {
                 argument,
             } => {
                 let apply = Apply {
-                    expression: *expression.hash(),
+                    expression: *expression,
                     argument: *argument.hash(),
                 };
                 apply.expression().is(child, sibling_index)
@@ -198,7 +198,7 @@ impl SyntaxNode {
             Self::Apply {
                 expression,
                 argument,
-            } => vec![*expression.hash(), *argument.hash()],
+            } => vec![*expression, *argument.hash()],
 
             Self::AddNode
             | Self::Binding { .. }
