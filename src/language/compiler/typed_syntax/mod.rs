@@ -1,22 +1,10 @@
 mod apply;
+mod function;
 mod node;
 
-pub use self::{apply::Apply, node::TypedNode};
+pub use self::{apply::Apply, function::Function, node::TypedNode};
 
 use crate::language::code::{Children, Nodes, SyntaxNode};
-
-pub struct Function;
-
-impl Function {
-    pub fn to_syntax_node(&self, nodes: &mut Nodes) -> SyntaxNode {
-        let parameter = nodes.insert(SyntaxNode::Binding {
-            name: "_".to_string(),
-        });
-        let body = Children::new([nodes.insert(SyntaxNode::Empty)]);
-
-        SyntaxNode::Function { parameter, body }
-    }
-}
 
 pub struct Tuple;
 
