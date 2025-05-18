@@ -1,11 +1,13 @@
 use crate::language::code::{Children, Nodes, SyntaxNode};
 
-pub struct Function {
-    pub parameter: SyntaxNode,
-    pub body: Vec<SyntaxNode>,
+use super::{Form, Owned};
+
+pub struct Function<T: Form> {
+    pub parameter: T::Form<SyntaxNode>,
+    pub body: Vec<T::Form<SyntaxNode>>,
 }
 
-impl Function {
+impl Function<Owned> {
     pub fn into_syntax_node(self, nodes: &mut Nodes) -> SyntaxNode {
         let parameter = nodes.insert(self.parameter);
         let body = self
@@ -20,7 +22,7 @@ impl Function {
     }
 }
 
-impl Default for Function {
+impl Default for Function<Owned> {
     fn default() -> Self {
         Self {
             parameter: SyntaxNode::Binding {
