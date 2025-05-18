@@ -55,6 +55,7 @@ impl<'r> Children<'r> {
     ) -> Self {
         let hashes = hashes.into_iter().collect();
         let offset = SiblingIndex { index: offset };
+
         Self { hashes, offset }
     }
 
