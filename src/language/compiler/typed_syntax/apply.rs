@@ -36,8 +36,8 @@ impl Apply<NodeRef<'_>> {
         Child::new(self.expression, 0)
     }
 
-    pub fn argument(&self) -> ChildOwned {
-        ChildOwned::new(*self.argument, 1)
+    pub fn argument(&self) -> Child<Ref> {
+        Child::new(self.argument, 1)
     }
 }
 
