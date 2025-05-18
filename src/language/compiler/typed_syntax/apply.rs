@@ -1,6 +1,6 @@
 use crate::language::code::{ChildOwned, Nodes, SyntaxNode};
 
-use super::{Child, Form, NodeByHash, Owned, Ref};
+use super::{Child, Form, NodeByHash, Owned, Ref, RefMut};
 
 pub struct Apply<T: Form> {
     pub expression: T::Form<SyntaxNode>,
@@ -36,8 +36,23 @@ impl Apply<NodeByHash> {
         Child::new(&self.expression, 0)
     }
 
+    pub fn expression_mut(&mut self) -> Child<RefMut> {
+        Child::new(&mut self.expression, 0)
+    }
+
     pub fn argument(&self) -> Child<Ref> {
         Child::new(&self.argument, 1)
+    }
+
+    pub fn argument_mut(&mut self) -> Child<RefMut> {
+        Child::new(&mut self.argument, 1)
+    }
+
+    pub fn into_syntax_node(self) -> SyntaxNode {
+        SyntaxNode::Apply {
+            expression: ChildOwned::new(self.expression, 0),
+            argument: ChildOwned::new(self.argument, 1),
+        }
     }
 }
 

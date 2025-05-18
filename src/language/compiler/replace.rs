@@ -2,6 +2,8 @@ use crate::language::code::{
     NewChangeSet, NodeHash, NodePath, Nodes, SiblingIndex, SyntaxNode,
 };
 
+use super::Apply;
+
 pub fn replace_node_and_update_parents(
     to_replace: NodePath,
     replacement: NodeHash,
@@ -68,11 +70,16 @@ fn update_children(
             expression,
             argument,
         } => {
-            if expression.replace(
+            let mut apply = Apply {
+                expression: *expression.hash(),
+                argument: *argument.hash(),
+            };
+
+            if apply.expression_mut().replace(
                 to_replace.hash(),
                 &sibling_index,
                 replacement,
-            ) || argument.replace(
+            ) || apply.argument_mut().replace(
                 to_replace.hash(),
                 &sibling_index,
                 replacement,
@@ -80,6 +87,13 @@ fn update_children(
             } else {
                 panic!("Expected to replace child, but could not find it.");
             }
+
+            // TASK: Simplify.
+            let node = apply.into_syntax_node();
+            return nodes.insert(node);
+
+            // TASK: This doesn't work, because the updated children in `apply`
+            //       are not carried over to the actual node.
         }
 
         SyntaxNode::AddNode

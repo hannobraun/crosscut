@@ -8,7 +8,7 @@ mod tuple;
 pub use self::{
     apply::Apply,
     child::Child,
-    form::{Form, NodeByHash, Owned, Ref},
+    form::{Form, NodeByHash, Owned, Ref, RefMut},
     function::Function,
     node::TypedNode,
     tuple::Tuple,

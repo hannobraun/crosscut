@@ -1,6 +1,6 @@
 use crate::language::code::{NodeHash, SiblingIndex};
 
-use super::{Form, Ref};
+use super::{Form, Ref, RefMut};
 
 pub struct Child<T: Form> {
     hash: T::Form<NodeHash>,
@@ -17,5 +17,28 @@ impl<T: Form> Child<T> {
 impl Child<Ref<'_>> {
     pub fn is(&self, hash: &NodeHash, index: &SiblingIndex) -> bool {
         self.hash == hash && &self.index == index
+    }
+}
+
+impl Child<RefMut<'_>> {
+    pub fn as_ref(&self) -> Child<Ref> {
+        Child {
+            hash: self.hash,
+            index: self.index,
+        }
+    }
+
+    pub fn replace(
+        &mut self,
+        replace_hash: &NodeHash,
+        replace_index: &SiblingIndex,
+        replacement: NodeHash,
+    ) -> bool {
+        if self.as_ref().is(replace_hash, replace_index) {
+            *self.hash = replacement;
+            true
+        } else {
+            false
+        }
     }
 }
