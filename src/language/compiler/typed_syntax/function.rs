@@ -1,5 +1,6 @@
 use crate::language::code::{Children, Nodes, SyntaxNode};
 
+#[derive(Default)]
 pub struct Function;
 
 impl Function {
