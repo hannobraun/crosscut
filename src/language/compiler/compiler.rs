@@ -2,7 +2,7 @@ use crate::language::code::{Codebase, NodePath, SyntaxNode};
 
 use super::{
     expression, replace::replace_node_and_update_parents,
-    typed_nodes::TypedNode,
+    TypedNode,
 };
 
 pub struct Compiler<'r> {
