@@ -36,12 +36,12 @@ impl Apply<NodeByHash> {
         Child::new(&self.expression, 0)
     }
 
-    pub fn expression_mut(&mut self) -> Child<RefMut> {
-        Child::new(&mut self.expression, 0)
-    }
-
     pub fn argument(&self) -> Child<Ref> {
         Child::new(&self.argument, 1)
+    }
+
+    pub fn expression_mut(&mut self) -> Child<RefMut> {
+        Child::new(&mut self.expression, 0)
     }
 
     pub fn argument_mut(&mut self) -> Child<RefMut> {
