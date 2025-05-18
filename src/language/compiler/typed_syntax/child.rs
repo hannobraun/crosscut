@@ -1,6 +1,6 @@
 use crate::language::code::{NodeHash, SiblingIndex};
 
-use super::{Form, NodeRef};
+use super::{Form, Ref};
 
 pub struct Child<T: Form> {
     hash: T::Form<NodeHash>,
@@ -14,7 +14,7 @@ impl<T: Form> Child<T> {
     }
 }
 
-impl Child<NodeRef<'_>> {
+impl Child<Ref<'_>> {
     pub fn is(&self, hash: &NodeHash, index: &SiblingIndex) -> bool {
         self.hash == hash && &self.index == index
     }

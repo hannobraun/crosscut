@@ -17,3 +17,9 @@ pub struct Owned;
 impl Form for Owned {
     type Form<T: 'static> = T;
 }
+
+pub struct Ref<'r>(PhantomData<&'r ()>);
+
+impl<'r> Form for Ref<'r> {
+    type Form<T: 'static> = &'r T;
+}
