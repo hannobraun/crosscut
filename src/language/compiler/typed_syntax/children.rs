@@ -48,9 +48,9 @@ pub struct Children<T: Form> {
     offset: SiblingIndex,
 }
 
-impl<'r> Children<Ref<'r>> {
+impl<T: Form> Children<T> {
     pub fn new(
-        hashes: impl IntoIterator<Item = &'r NodeHash>,
+        hashes: impl IntoIterator<Item = T::Form<NodeHash>>,
         offset: usize,
     ) -> Self {
         let hashes = hashes.into_iter().collect();
@@ -58,7 +58,9 @@ impl<'r> Children<Ref<'r>> {
 
         Self { hashes, offset }
     }
+}
 
+impl Children<Ref<'_>> {
     pub fn contains(&self, hash: &NodeHash, index: &SiblingIndex) -> bool {
         self.hashes
             .iter()
