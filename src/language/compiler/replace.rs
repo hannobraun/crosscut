@@ -76,15 +76,19 @@ fn update_children(
                 argument: *argument,
             };
 
-            if apply.expression_mut().replace(
+            let replaced_expression = apply.expression_mut().replace(
                 to_replace.hash(),
                 &sibling_index,
                 replacement,
-            ) || apply.argument_mut().replace(
-                to_replace.hash(),
-                &sibling_index,
-                replacement,
-            ) {
+            );
+
+            if replaced_expression
+                || apply.argument_mut().replace(
+                    to_replace.hash(),
+                    &sibling_index,
+                    replacement,
+                )
+            {
             } else {
                 panic!("Expected to replace child, but could not find it.");
             }
