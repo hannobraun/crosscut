@@ -1,7 +1,7 @@
 use crate::language::{
     code::NodePath,
     compiler::Tuple,
-    tests::infra::{ExpectChildren, expression, identifier},
+    tests::infra::{ExpectChildren, identifier},
 };
 
 use super::Codebase;
@@ -52,8 +52,13 @@ fn uniquely_identify_identical_siblings() {
     let mut codebase = Codebase::new();
 
     codebase.make_change(|change_set| {
-        let child = change_set.nodes.insert(identifier("child"));
-        let parent = change_set.nodes.insert(expression("b", [child, child]));
+        let parent = {
+            let node = Tuple::default()
+                .with_values([identifier("child"), identifier("child")])
+                .into_syntax_node(change_set.nodes);
+
+            change_set.nodes.insert(node)
+        };
 
         change_set.replace(
             &change_set.root_before_change(),
@@ -61,7 +66,7 @@ fn uniquely_identify_identical_siblings() {
         );
     });
 
-    let [a1, a2] = codebase.root().expect_children(codebase.nodes());
+    let [a1, a2, _] = codebase.root().expect_children(codebase.nodes());
 
     assert_ne!(a1, a2);
 }
