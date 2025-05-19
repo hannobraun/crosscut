@@ -24,7 +24,7 @@ fn insert_child() {
 
     let mut compiler = Compiler::new(&mut codebase);
 
-    let child = compiler.insert_child(compiler.codebase().root().path, "a");
+    let child = compiler.insert_child(compiler.codebase().root().path, "child");
 
     let [child_of_root, _] = compiler
         .codebase()
