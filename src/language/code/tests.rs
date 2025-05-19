@@ -21,12 +21,13 @@ fn uniquely_identify_identical_children_of_different_parents() {
             .with_values([identifier("child")])
             .into_syntax_node(change_set.nodes);
 
-        let [parent_a, parent_b] =
-            [parent_a, parent_b].map(|node| change_set.nodes.insert(node));
+        let root = {
+            let node = Tuple::default()
+                .with_values([parent_a, parent_b])
+                .into_syntax_node(change_set.nodes);
 
-        let root = change_set
-            .nodes
-            .insert(expression("root", [parent_a, parent_b]));
+            change_set.nodes.insert(node)
+        };
 
         change_set.replace(
             &change_set.root_before_change(),
@@ -34,7 +35,7 @@ fn uniquely_identify_identical_children_of_different_parents() {
         );
     });
 
-    let [parent_a, parent_b] =
+    let [parent_a, parent_b, _] =
         codebase.root().expect_children(codebase.nodes());
     let [child_a, child_b] = [parent_a, parent_b].map(|parent| {
         let [child, _] = parent.expect_children(codebase.nodes());
