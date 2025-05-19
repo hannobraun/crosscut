@@ -40,13 +40,8 @@ impl Apply<NodeByHash> {
         Child::new(&self.argument, 1)
     }
 
-    pub fn has_child(
-        &self,
-        hash: &NodeHash,
-        sibling_index: &SiblingIndex,
-    ) -> bool {
-        self.expression().is(hash, sibling_index)
-            || self.argument().is(hash, sibling_index)
+    pub fn has_child(&self, hash: &NodeHash, index: &SiblingIndex) -> bool {
+        self.expression().is(hash, index) || self.argument().is(hash, index)
     }
 
     pub fn expression_mut(&mut self) -> Child<RefMut> {
