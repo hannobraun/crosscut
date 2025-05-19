@@ -191,7 +191,7 @@ impl SyntaxNode {
                 };
 
                 tuple.values().contains(child, sibling_index)
-                    || add_value == child && sibling_index.index == values.len()
+                    || tuple.add_value().is(child, sibling_index)
             }
 
             Self::Test { children, .. } => {
