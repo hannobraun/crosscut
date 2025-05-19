@@ -66,7 +66,7 @@ fn uniquely_identify_identical_siblings() {
         );
     });
 
-    let [a1, a2, _] = codebase.root().expect_children(codebase.nodes());
+    let [child_a, a2, _] = codebase.root().expect_children(codebase.nodes());
 
-    assert_ne!(a1, a2);
+    assert_ne!(child_a, a2);
 }
