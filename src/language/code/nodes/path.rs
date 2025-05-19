@@ -1,4 +1,4 @@
-use std::ops::Deref;
+use std::{fmt, ops::Deref};
 
 use super::{NodeHash, Nodes};
 
@@ -145,4 +145,10 @@ impl NodePath {
 )]
 pub struct ChildIndex {
     pub index: usize,
+}
+
+impl fmt::Display for ChildIndex {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.index)
+    }
 }
