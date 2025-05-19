@@ -1,6 +1,8 @@
-use crate::language::code::{Codebase, NodePath, SiblingIndex, SyntaxNode};
+use crate::language::code::{Codebase, NodePath, SyntaxNode};
 
-use super::{TypedNode, expression, replace::replace_node_and_update_parents};
+use super::{
+    Tuple, TypedNode, expression, replace::replace_node_and_update_parents,
+};
 
 pub struct Compiler<'r> {
     codebase: &'r mut Codebase,
@@ -43,13 +45,15 @@ impl<'r> Compiler<'r> {
                         );
                     }
 
-                    SyntaxNode::Tuple { values, .. } => {
-                        let index = {
-                            SiblingIndex {
-                                index: values.len(),
-                            }
+                    SyntaxNode::Tuple { values, add_value } => {
+                        let mut tuple = Tuple {
+                            values: values.clone(),
+                            add_value: *add_value,
                         };
-                        values.push(child);
+
+                        let index = tuple.values_mut().add(child);
+                        let node = tuple.into_syntax_node();
+
                         (node, index)
                     }
                 };
