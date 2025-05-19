@@ -8,6 +8,6 @@ pub use self::{
     hash::NodeHash,
     located::LocatedNode,
     nodes::Nodes,
-    path::{NodePath, SiblingIndex},
+    path::{ChildIndex, NodePath},
     syntax_node::SyntaxNode,
 };

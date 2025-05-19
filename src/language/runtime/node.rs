@@ -1,4 +1,4 @@
-use crate::language::code::{NodePath, Nodes, SiblingIndex, SyntaxNode};
+use crate::language::code::{ChildIndex, NodePath, Nodes, SyntaxNode};
 
 use super::Value;
 
@@ -40,14 +40,14 @@ impl RuntimeNode {
                 let expression = RuntimeChild::Unevaluated {
                     path: NodePath::new(
                         *expression,
-                        Some((path.clone(), SiblingIndex { index: 0 })),
+                        Some((path.clone(), ChildIndex { index: 0 })),
                         nodes,
                     ),
                 };
                 let argument = RuntimeChild::Unevaluated {
                     path: NodePath::new(
                         *argument,
-                        Some((path.clone(), SiblingIndex { index: 1 })),
+                        Some((path.clone(), ChildIndex { index: 1 })),
                         nodes,
                     ),
                 };
@@ -74,7 +74,7 @@ impl RuntimeNode {
                 let body = body.first().unwrap();
                 let body = NodePath::new(
                     *body,
-                    Some((path, SiblingIndex { index: 1 })),
+                    Some((path, ChildIndex { index: 1 })),
                     nodes,
                 );
 
@@ -100,7 +100,7 @@ impl RuntimeNode {
                     .map(|(index, hash)| {
                         NodePath::new(
                             hash,
-                            Some((path.clone(), SiblingIndex { index })),
+                            Some((path.clone(), ChildIndex { index })),
                             nodes,
                         )
                     })

@@ -1,4 +1,4 @@
-use super::{NodeHash, NodePath, Nodes, SiblingIndex, SyntaxNode};
+use super::{ChildIndex, NodeHash, NodePath, Nodes, SyntaxNode};
 
 #[derive(Debug, Eq, PartialEq)]
 pub struct LocatedNode<'r> {
@@ -24,7 +24,7 @@ fn hashes_to_located_nodes<'r>(
         let node = nodes.get(&child);
         let path = NodePath::new(
             child,
-            Some((parent.clone(), SiblingIndex { index })),
+            Some((parent.clone(), ChildIndex { index })),
             nodes,
         );
 

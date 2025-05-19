@@ -1,4 +1,4 @@
-use crate::language::code::{NodeHash, Nodes, SiblingIndex, SyntaxNode};
+use crate::language::code::{ChildIndex, NodeHash, Nodes, SyntaxNode};
 
 use super::{Child, Children, Form, NodeByHash, Owned, Ref, RefMut};
 
@@ -45,7 +45,7 @@ impl Tuple<NodeByHash> {
     pub fn replace_child(
         &mut self,
         replace_hash: &NodeHash,
-        replace_index: &SiblingIndex,
+        replace_index: &ChildIndex,
         replacement: NodeHash,
     ) -> bool {
         self.values_mut()

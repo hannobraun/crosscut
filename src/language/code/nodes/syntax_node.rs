@@ -1,7 +1,7 @@
 use std::fmt;
 
 use crate::language::{
-    code::{NodeHash, SiblingIndex},
+    code::{ChildIndex, NodeHash},
     compiler::{Apply, Function, Tuple},
 };
 
@@ -138,7 +138,7 @@ impl SyntaxNode {
     pub fn has_child_at(
         &self,
         child: &NodeHash,
-        sibling_index: &SiblingIndex,
+        sibling_index: &ChildIndex,
     ) -> bool {
         match self {
             Self::Apply {

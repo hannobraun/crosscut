@@ -1,4 +1,4 @@
-use crate::language::code::{NodeHash, SiblingIndex, SyntaxNode};
+use crate::language::code::{ChildIndex, NodeHash, SyntaxNode};
 
 use super::{Apply, Function, NodeByHash, Tuple};
 
@@ -58,7 +58,7 @@ impl TypedNode {
     pub fn replace_child(
         &mut self,
         replace_hash: &NodeHash,
-        replace_index: &SiblingIndex,
+        replace_index: &ChildIndex,
         replacement: NodeHash,
     ) -> bool {
         match self {

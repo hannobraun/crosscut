@@ -46,14 +46,14 @@ pub struct NodePath {
     /// more bookkeeping in `Codebase` or `Nodes` to compensate.
     ///
     /// When I tried this approach, it didn't seem worth the trouble.
-    parent: Option<(Box<NodePath>, SiblingIndex)>,
+    parent: Option<(Box<NodePath>, ChildIndex)>,
 }
 
 impl NodePath {
     #[track_caller]
     pub fn new(
         hash: NodeHash,
-        parent: Option<(NodePath, SiblingIndex)>,
+        parent: Option<(NodePath, ChildIndex)>,
         nodes: &Nodes,
     ) -> Self {
         if let Some((parent_path, sibling_index)) = &parent {
@@ -108,7 +108,7 @@ impl NodePath {
     ///
     /// This is required to distinguish between identical nodes whose hash is
     /// the same, but that have different parents.
-    pub fn parent(&self) -> Option<(&NodePath, SiblingIndex)> {
+    pub fn parent(&self) -> Option<(&NodePath, ChildIndex)> {
         self.parent
             .as_ref()
             .map(|(path, sibling_index)| (path.deref(), *sibling_index))
@@ -143,6 +143,6 @@ impl NodePath {
 #[derive(
     Clone, Copy, Debug, Eq, Ord, PartialEq, PartialOrd, udigest::Digestable,
 )]
-pub struct SiblingIndex {
+pub struct ChildIndex {
     pub index: usize,
 }

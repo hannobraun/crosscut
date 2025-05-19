@@ -1,5 +1,5 @@
 use crate::language::code::{
-    NewChangeSet, NodeHash, NodePath, Nodes, SiblingIndex,
+    ChildIndex, NewChangeSet, NodeHash, NodePath, Nodes,
 };
 
 use super::TypedNode;
@@ -58,7 +58,7 @@ fn update_children(
     path: &NodePath,
     to_replace: &NodePath,
     replacement: NodeHash,
-    sibling_index: SiblingIndex,
+    sibling_index: ChildIndex,
     nodes: &mut Nodes,
 ) -> NodeHash {
     let mut node = TypedNode::from_syntax_node(nodes.get(path.hash()));
@@ -73,7 +73,7 @@ fn update_children(
 fn update_path(
     replaced: &NodePath,
     replacement: NodeHash,
-    parent: Option<(NodePath, SiblingIndex)>,
+    parent: Option<(NodePath, ChildIndex)>,
     change_set: &mut NewChangeSet,
 ) -> NodePath {
     let path = NodePath::new(replacement, parent, change_set.nodes);
@@ -87,5 +87,5 @@ fn update_path(
 struct Replacement {
     replaced: NodePath,
     replacement: NodeHash,
-    sibling_index: SiblingIndex,
+    sibling_index: ChildIndex,
 }

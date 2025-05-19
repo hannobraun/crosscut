@@ -6,7 +6,7 @@ mod types;
 pub use self::{
     changes::{Changes, NewChangeSet},
     codebase::Codebase,
-    nodes::{LocatedNode, NodeHash, NodePath, Nodes, SiblingIndex, SyntaxNode},
+    nodes::{ChildIndex, LocatedNode, NodeHash, NodePath, Nodes, SyntaxNode},
     types::{Type, display_tuple},
 };
 
