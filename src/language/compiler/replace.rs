@@ -58,12 +58,12 @@ fn update_children(
     path: &NodePath,
     to_replace: &NodePath,
     replacement: NodeHash,
-    sibling_index: ChildIndex,
+    index: ChildIndex,
     nodes: &mut Nodes,
 ) -> NodeHash {
     let mut node = TypedNode::from_syntax_node(nodes.get(path.hash()));
 
-    if !node.replace_child(to_replace.hash(), &sibling_index, replacement) {
+    if !node.replace_child(to_replace.hash(), &index, replacement) {
         panic!("Expected to replace child, but could not find it.");
     }
 
