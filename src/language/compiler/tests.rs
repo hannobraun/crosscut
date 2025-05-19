@@ -1,6 +1,6 @@
 use crate::language::{
     code::{Codebase, NodeHash, NodePath, SyntaxNode},
-    compiler::Compiler,
+    compiler::{Compiler, Tuple},
     tests::infra::{ExpectChildren, expression, identifier},
 };
 
@@ -11,7 +11,10 @@ fn insert_child() {
     let mut codebase = Codebase::new();
 
     codebase.make_change(|change_set| {
-        let parent = change_set.nodes.insert(expression("parent", []));
+        let parent = {
+            let node = Tuple::default().into_syntax_node(change_set.nodes);
+            change_set.nodes.insert(node)
+        };
 
         change_set.replace(
             &change_set.root_before_change(),
@@ -23,7 +26,7 @@ fn insert_child() {
 
     let a = compiler.insert_child(compiler.codebase().root().path, "a");
 
-    let [child_of_root] = compiler
+    let [child_of_root, _] = compiler
         .codebase()
         .root()
         .expect_children(compiler.codebase().nodes());
