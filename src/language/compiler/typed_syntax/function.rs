@@ -1,6 +1,6 @@
 use crate::language::code::{ChildrenOwned, Nodes, SyntaxNode};
 
-use super::{Child, Children, Form, NodeByHash, Owned, Ref};
+use super::{Child, Children, Form, NodeByHash, Owned, Ref, RefMut};
 
 pub struct Function<T: Form> {
     pub parameter: T::Form<SyntaxNode>,
@@ -29,6 +29,17 @@ impl Function<NodeByHash> {
 
     pub fn body(&self) -> Children<Ref> {
         Children::new(&self.body, 1)
+    }
+
+    pub fn parameter_mut(&mut self) -> Child<RefMut> {
+        Child::new(&mut self.parameter, 0)
+    }
+
+    pub fn into_syntax_node(self) -> SyntaxNode {
+        SyntaxNode::Function {
+            parameter: self.parameter,
+            body: ChildrenOwned::new(self.body),
+        }
     }
 }
 
