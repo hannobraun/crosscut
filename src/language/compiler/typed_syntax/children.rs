@@ -66,10 +66,8 @@ impl Children<Ref<'_>> {
 
 impl Children<RefMut<'_>> {
     pub fn add(&mut self, child: NodeHash) -> ChildIndex {
-        let index = {
-            ChildIndex {
-                index: self.hashes.len(),
-            }
+        let index = ChildIndex {
+            index: self.hashes.len(),
         };
         self.hashes.push(child);
         index
