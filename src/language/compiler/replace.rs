@@ -120,8 +120,7 @@ fn update_children(
                 replacement,
             );
 
-            if replaced_parameter {
-            } else if !replaced_in_body {
+            if !replaced_parameter && !replaced_in_body {
                 panic!("Expected to replace child, but could not find it.");
             }
 
