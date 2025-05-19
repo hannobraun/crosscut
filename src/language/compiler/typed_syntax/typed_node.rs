@@ -1,4 +1,4 @@
-use crate::language::code::SyntaxNode;
+use crate::language::code::{NodeHash, SiblingIndex, SyntaxNode};
 
 use super::{Apply, Function, NodeByHash, Tuple};
 
@@ -52,6 +52,35 @@ impl TypedNode {
                     },
                 },
             },
+        }
+    }
+
+    pub fn replace_child(
+        &mut self,
+        replace_hash: &NodeHash,
+        replace_index: &SiblingIndex,
+        replacement: NodeHash,
+    ) -> bool {
+        match self {
+            TypedNode::Expression { expression } => match expression {
+                Expression::Apply { apply } => apply.replace_child(
+                    replace_hash,
+                    replace_index,
+                    replacement,
+                ),
+                Expression::Function { function } => function.replace_child(
+                    replace_hash,
+                    replace_index,
+                    replacement,
+                ),
+                Expression::Tuple { tuple } => tuple.replace_child(
+                    replace_hash,
+                    replace_index,
+                    replacement,
+                ),
+                Expression::Other => false,
+            },
+            TypedNode::Pattern | TypedNode::Other => false,
         }
     }
 }

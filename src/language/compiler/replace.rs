@@ -61,43 +61,16 @@ fn update_children(
     sibling_index: SiblingIndex,
     nodes: &mut Nodes,
 ) -> NodeHash {
-    let node = TypedNode::from_syntax_node(nodes.get(path.hash()));
+    let mut node = TypedNode::from_syntax_node(nodes.get(path.hash()));
+    if !node.replace_child(to_replace.hash(), &sibling_index, replacement) {
+        panic!("Expected to replace child, but could not find it.");
+    }
 
     let node = match node {
         TypedNode::Expression { expression } => match expression {
-            Expression::Apply { mut apply } => {
-                if !apply.replace_child(
-                    to_replace.hash(),
-                    &sibling_index,
-                    replacement,
-                ) {
-                    panic!("Expected to replace child, but could not find it.");
-                }
-
-                apply.into_syntax_node()
-            }
-            Expression::Function { mut function } => {
-                if !function.replace_child(
-                    to_replace.hash(),
-                    &sibling_index,
-                    replacement,
-                ) {
-                    panic!("Expected to replace child, but could not find it.");
-                }
-
-                function.into_syntax_node()
-            }
-            Expression::Tuple { mut tuple } => {
-                if !tuple.replace_child(
-                    to_replace.hash(),
-                    &sibling_index,
-                    replacement,
-                ) {
-                    panic!("Tried to replace child that is not present.");
-                }
-
-                tuple.into_syntax_node()
-            }
+            Expression::Apply { apply } => apply.into_syntax_node(),
+            Expression::Function { function } => function.into_syntax_node(),
+            Expression::Tuple { tuple } => tuple.into_syntax_node(),
             Expression::Other => {
                 panic!("Node has no children. Can't replace one.");
             }
