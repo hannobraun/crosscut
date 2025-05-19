@@ -11,13 +11,25 @@ impl TypedNode {
         match syntax_node {
             SyntaxNode::AddNode => Self::Other,
 
-            SyntaxNode::Apply { .. }
-            | SyntaxNode::Empty
-            | SyntaxNode::Function { .. }
-            | SyntaxNode::Identifier { .. }
-            | SyntaxNode::Number { .. }
-            | SyntaxNode::Recursion
-            | SyntaxNode::Tuple { .. } => Self::Expression {
+            SyntaxNode::Apply { .. } => Self::Expression {
+                expression: Expression,
+            },
+            SyntaxNode::Empty => Self::Expression {
+                expression: Expression,
+            },
+            SyntaxNode::Function { .. } => Self::Expression {
+                expression: Expression,
+            },
+            SyntaxNode::Identifier { .. } => Self::Expression {
+                expression: Expression,
+            },
+            SyntaxNode::Number { .. } => Self::Expression {
+                expression: Expression,
+            },
+            SyntaxNode::Recursion => Self::Expression {
+                expression: Expression,
+            },
+            SyntaxNode::Tuple { .. } => Self::Expression {
                 expression: Expression,
             },
 
