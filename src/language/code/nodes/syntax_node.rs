@@ -149,8 +149,7 @@ impl SyntaxNode {
                     expression: *expression,
                     argument: *argument,
                 };
-                apply.expression().is(child, sibling_index)
-                    || apply.argument().is(child, sibling_index)
+                apply.has_child(child, sibling_index)
             }
 
             Self::AddNode
