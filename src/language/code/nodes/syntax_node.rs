@@ -2,7 +2,7 @@ use std::fmt;
 
 use crate::language::{
     code::{ChildrenOwned, NodeHash, SiblingIndex},
-    compiler::{Apply, Function},
+    compiler::{Apply, Function, Tuple},
 };
 
 /// # Structured but untyped representation of a syntax node
@@ -185,7 +185,12 @@ impl SyntaxNode {
             }
 
             Self::Tuple { values, add_value } => {
-                values.contains_at(child, sibling_index, 0)
+                let tuple = Tuple {
+                    values: values.inner.clone(),
+                    add_value: *add_value,
+                };
+
+                tuple.values().contains(child, sibling_index)
                     || add_value == child
                         && sibling_index.index == values.inner.len()
             }

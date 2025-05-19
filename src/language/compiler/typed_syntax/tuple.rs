@@ -1,6 +1,6 @@
 use crate::language::code::{ChildrenOwned, Nodes, SyntaxNode};
 
-use super::{Form, Owned};
+use super::{Children, Form, NodeByHash, Owned, Ref};
 
 pub struct Tuple<T: Form> {
     pub values: Vec<T::Form<SyntaxNode>>,
@@ -20,6 +20,12 @@ impl Tuple<Owned> {
             values: ChildrenOwned::new(values),
             add_value,
         }
+    }
+}
+
+impl Tuple<NodeByHash> {
+    pub fn values(&self) -> Children<Ref> {
+        Children::new(&self.values, 0)
     }
 }
 
