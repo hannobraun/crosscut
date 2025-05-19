@@ -1,4 +1,4 @@
-use crate::language::code::{Nodes, SyntaxNode};
+use crate::language::code::{NodeHash, Nodes, SiblingIndex, SyntaxNode};
 
 use super::{Child, Children, Form, NodeByHash, Owned, Ref, RefMut};
 
@@ -35,6 +35,24 @@ impl Function<NodeByHash> {
 
     pub fn body_mut(&mut self) -> Children<RefMut> {
         Children::new(&mut self.body, 1)
+    }
+
+    pub fn replace_child(
+        &mut self,
+        replace_hash: &NodeHash,
+        replace_index: &SiblingIndex,
+        replacement: NodeHash,
+    ) -> bool {
+        let replaced_parameter = self.parameter_mut().replace(
+            replace_hash,
+            replace_index,
+            replacement,
+        );
+        let replaced_in_body =
+            self.body_mut()
+                .replace(replace_hash, replace_index, replacement);
+
+        replaced_parameter || replaced_in_body
     }
 
     pub fn into_syntax_node(self) -> SyntaxNode {
