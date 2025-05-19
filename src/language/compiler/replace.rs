@@ -81,14 +81,13 @@ fn update_children(
                 &sibling_index,
                 replacement,
             );
+            let replaced_argument = apply.argument_mut().replace(
+                to_replace.hash(),
+                &sibling_index,
+                replacement,
+            );
 
-            if replaced_expression
-                || apply.argument_mut().replace(
-                    to_replace.hash(),
-                    &sibling_index,
-                    replacement,
-                )
-            {
+            if replaced_expression || replaced_argument {
             } else {
                 panic!("Expected to replace child, but could not find it.");
             }
