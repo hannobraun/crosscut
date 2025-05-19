@@ -111,11 +111,13 @@ fn update_children(
                 body: body.clone(),
             };
 
-            if function.parameter_mut().replace(
+            let replaced_parameter = function.parameter_mut().replace(
                 to_replace.hash(),
                 &sibling_index,
                 replacement,
-            ) {
+            );
+
+            if replaced_parameter {
             } else if !function.body_mut().replace(to_replace, replacement) {
                 panic!("Expected to replace child, but could not find it.");
             }
