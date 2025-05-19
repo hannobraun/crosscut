@@ -1,4 +1,4 @@
-use crate::language::code::{Codebase, NodePath, SyntaxNode};
+use crate::language::code::{Codebase, NodePath, SiblingIndex, SyntaxNode};
 
 use super::{TypedNode, expression, replace::replace_node_and_update_parents};
 
@@ -58,7 +58,11 @@ impl<'r> Compiler<'r> {
                     SyntaxNode::Tuple {
                         values: children, ..
                     } => {
-                        let index = children.next_index();
+                        let index = {
+                            SiblingIndex {
+                                index: children.inner.len(),
+                            }
+                        };
                         children.inner.push(child);
                         index
                     }
