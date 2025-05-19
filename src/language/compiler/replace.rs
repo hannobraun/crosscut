@@ -1,9 +1,8 @@
-use crate::language::{
-    code::{NewChangeSet, NodeHash, NodePath, Nodes, SiblingIndex, SyntaxNode},
-    compiler::Tuple,
+use crate::language::code::{
+    NewChangeSet, NodeHash, NodePath, Nodes, SiblingIndex,
 };
 
-use super::{Apply, Expression, Function, TypedNode};
+use super::{Expression, TypedNode};
 
 pub fn replace_node_and_update_parents(
     to_replace: NodePath,
@@ -62,90 +61,47 @@ fn update_children(
     sibling_index: SiblingIndex,
     nodes: &mut Nodes,
 ) -> NodeHash {
-    match TypedNode::from_syntax_node(nodes.get(path.hash())) {
+    let node = match TypedNode::from_syntax_node(nodes.get(path.hash())) {
         TypedNode::Expression { expression } => match expression {
-            Expression::Apply { apply } => {
-                let _ = apply;
+            Expression::Apply { mut apply } => {
+                if !apply.replace_child(
+                    to_replace.hash(),
+                    &sibling_index,
+                    replacement,
+                ) {
+                    panic!("Expected to replace child, but could not find it.");
+                }
+
+                apply.into_syntax_node()
             }
-            Expression::Function { function } => {
-                let _ = function;
+            Expression::Function { mut function } => {
+                if !function.replace_child(
+                    to_replace.hash(),
+                    &sibling_index,
+                    replacement,
+                ) {
+                    panic!("Expected to replace child, but could not find it.");
+                }
+
+                function.into_syntax_node()
             }
-            Expression::Tuple { tuple } => {
-                let _ = tuple;
+            Expression::Tuple { mut tuple } => {
+                if !tuple.replace_child(
+                    to_replace.hash(),
+                    &sibling_index,
+                    replacement,
+                ) {
+                    panic!("Tried to replace child that is not present.");
+                }
+
+                tuple.into_syntax_node()
             }
-            Expression::Other => {}
+            Expression::Other => {
+                panic!("Node has no children. Can't replace one.");
+            }
         },
-        TypedNode::Pattern => {}
-        TypedNode::Other => {}
-    }
-
-    let node = match nodes.get(path.hash()) {
-        SyntaxNode::Apply {
-            expression,
-            argument,
-        } => {
-            let mut apply = Apply {
-                expression: *expression,
-                argument: *argument,
-            };
-
-            if !apply.replace_child(
-                to_replace.hash(),
-                &sibling_index,
-                replacement,
-            ) {
-                panic!("Expected to replace child, but could not find it.");
-            }
-
-            apply.into_syntax_node()
-        }
-
-        SyntaxNode::AddNode
-        | SyntaxNode::Binding { name: _ }
-        | SyntaxNode::Empty
-        | SyntaxNode::Identifier {
-            name: String { .. },
-        }
-        | SyntaxNode::Number { value: _ }
-        | SyntaxNode::Recursion => {
+        TypedNode::Pattern | TypedNode::Other => {
             panic!("Node has no children. Can't replace one.");
-        }
-
-        SyntaxNode::Function { parameter, body } => {
-            let mut function = Function {
-                parameter: *parameter,
-                body: body.clone(),
-            };
-
-            if !function.replace_child(
-                to_replace.hash(),
-                &sibling_index,
-                replacement,
-            ) {
-                panic!("Expected to replace child, but could not find it.");
-            }
-
-            function.into_syntax_node()
-        }
-
-        SyntaxNode::Tuple {
-            values: children,
-            add_value,
-        } => {
-            let mut tuple = Tuple {
-                values: children.clone(),
-                add_value: *add_value,
-            };
-
-            if !tuple.replace_child(
-                to_replace.hash(),
-                &sibling_index,
-                replacement,
-            ) {
-                panic!("Tried to replace child that is not present.");
-            }
-
-            tuple.into_syntax_node()
         }
     };
 
