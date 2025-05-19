@@ -56,11 +56,11 @@ impl NodePath {
         parent: Option<(NodePath, ChildIndex)>,
         nodes: &Nodes,
     ) -> Self {
-        if let Some((parent_path, sibling_index)) = &parent {
+        if let Some((parent_path, index)) = &parent {
             let parent_node = nodes.get(parent_path.hash());
 
-            if !parent_node.has_child_at(&hash, sibling_index) {
-                let index = sibling_index.index;
+            if !parent_node.has_child_at(&hash, index) {
+                let index = index.index;
 
                 panic!(
                     "Attempting to construct invalid `NodePath`: Node is not \
