@@ -42,11 +42,11 @@ impl Apply<NodeByHash> {
 
     pub fn has_child(
         &self,
-        child: &NodeHash,
+        hash: &NodeHash,
         sibling_index: &SiblingIndex,
     ) -> bool {
-        self.expression().is(child, sibling_index)
-            || self.argument().is(child, sibling_index)
+        self.expression().is(hash, sibling_index)
+            || self.argument().is(hash, sibling_index)
     }
 
     pub fn expression_mut(&mut self) -> Child<RefMut> {
