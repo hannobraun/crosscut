@@ -1,11 +1,13 @@
 use crate::language::code::{ChildrenOwned, Nodes, SyntaxNode};
 
-pub struct Tuple {
-    pub values: Vec<SyntaxNode>,
-    pub add_value: SyntaxNode,
+use super::{Form, Owned};
+
+pub struct Tuple<T: Form> {
+    pub values: Vec<T::Form<SyntaxNode>>,
+    pub add_value: T::Form<SyntaxNode>,
 }
 
-impl Tuple {
+impl Tuple<Owned> {
     pub fn into_syntax_node(self, nodes: &mut Nodes) -> SyntaxNode {
         let values = self
             .values
@@ -21,7 +23,7 @@ impl Tuple {
     }
 }
 
-impl Default for Tuple {
+impl Default for Tuple<Owned> {
     fn default() -> Self {
         Self {
             values: Vec::new(),
