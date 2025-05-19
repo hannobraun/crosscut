@@ -59,7 +59,7 @@ impl NodePath {
         if let Some((parent_path, index)) = &parent {
             let parent_node = nodes.get(parent_path.hash());
 
-            if !parent_node.has_child_at(&hash, index) {
+            if !parent_node.has_child(&hash, index) {
                 panic!(
                     "Attempting to construct invalid `NodePath`: Node is not \
                     listed among children of its supposed parent, at the given \

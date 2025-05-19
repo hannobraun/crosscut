@@ -135,7 +135,7 @@ pub enum SyntaxNode {
 }
 
 impl SyntaxNode {
-    pub fn has_child_at(&self, child: &NodeHash, index: &ChildIndex) -> bool {
+    pub fn has_child(&self, child: &NodeHash, index: &ChildIndex) -> bool {
         match self {
             Self::Apply {
                 expression,
