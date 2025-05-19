@@ -66,9 +66,7 @@ fn update_children(
         panic!("Expected to replace child, but could not find it.");
     }
 
-    let node = node.into_syntax_node();
-
-    nodes.insert(node)
+    nodes.insert(node.into_syntax_node())
 }
 
 fn update_path(
