@@ -88,12 +88,8 @@ fn update_children(
                 panic!("Expected to replace child, but could not find it.");
             }
 
-            // TASK: Simplify.
             let node = apply.into_syntax_node();
             return nodes.insert(node);
-
-            // TASK: This doesn't work, because the updated children in `apply`
-            //       are not carried over to the actual node.
         }
 
         SyntaxNode::AddNode
