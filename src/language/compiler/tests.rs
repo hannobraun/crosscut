@@ -129,13 +129,10 @@ fn updating_child_updates_parent() {
         .codebase()
         .root()
         .expect_children(compiler.codebase().nodes());
-    let child = compiler.replace(&child.path, "new");
+    compiler.replace(&child.path, "new");
 
     // After editing the child, the new parent node should be the same as the
     // old one, but with an updated child.
-    let parent = compiler.codebase().root().path;
-    assert_eq!(
-        codebase.nodes().get(parent.hash()).children(),
-        vec![*child.hash()],
-    );
+    let [child] = codebase.root().expect_children(codebase.nodes());
+    assert_eq!(child.node, &identifier("new"));
 }
