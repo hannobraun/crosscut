@@ -27,7 +27,7 @@ impl<'r> Compiler<'r> {
             // parents that we check for above.
             let child = expression::compile(child_token, change_set.nodes);
 
-            let (parent_path, sibling_index) = {
+            let (parent_path, index) = {
                 let node = change_set.nodes.get(parent.hash()).clone();
 
                 let (node, sibling_index) = match &node {
@@ -66,11 +66,7 @@ impl<'r> Compiler<'r> {
                 (path, sibling_index)
             };
 
-            NodePath::new(
-                child,
-                Some((parent_path, sibling_index)),
-                change_set.nodes,
-            )
+            NodePath::new(child, Some((parent_path, index)), change_set.nodes)
         })
     }
 
