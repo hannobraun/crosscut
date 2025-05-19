@@ -1,4 +1,4 @@
-use crate::language::code::{Nodes, SyntaxNode};
+use crate::language::code::{NodeHash, Nodes, SiblingIndex, SyntaxNode};
 
 use super::{Child, Form, NodeByHash, Owned, Ref, RefMut};
 
@@ -46,6 +46,26 @@ impl Apply<NodeByHash> {
 
     pub fn argument_mut(&mut self) -> Child<RefMut> {
         Child::new(&mut self.argument, 1)
+    }
+
+    pub fn replace_child(
+        &mut self,
+        replace_hash: &NodeHash,
+        replace_index: &SiblingIndex,
+        replacement: NodeHash,
+    ) -> bool {
+        let replaced_expression = self.expression_mut().replace(
+            replace_hash,
+            replace_index,
+            replacement,
+        );
+        let replaced_argument = self.argument_mut().replace(
+            replace_hash,
+            replace_index,
+            replacement,
+        );
+
+        replaced_expression || replaced_argument
     }
 
     pub fn into_syntax_node(self) -> SyntaxNode {
