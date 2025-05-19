@@ -120,7 +120,7 @@ fn update_children(
             if replaced_parameter {
             } else if !function.body_mut().replace(
                 to_replace.hash(),
-                &to_replace.sibling_index().unwrap(),
+                &sibling_index,
                 replacement,
             ) {
                 panic!("Expected to replace child, but could not find it.");
@@ -140,7 +140,7 @@ fn update_children(
 
             let was_replaced = tuple.values_mut().replace(
                 to_replace.hash(),
-                &to_replace.sibling_index().unwrap(),
+                &sibling_index,
                 replacement,
             );
             assert!(

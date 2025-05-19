@@ -112,12 +112,6 @@ impl NodePath {
         self.parent_and_sibling_index().map(|(path, _)| path)
     }
 
-    pub fn sibling_index(&self) -> Option<SiblingIndex> {
-        self.parent
-            .as_ref()
-            .map(|&(_, sibling_index)| sibling_index)
-    }
-
     pub fn parent_and_sibling_index(
         &self,
     ) -> Option<(&NodePath, SiblingIndex)> {
