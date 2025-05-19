@@ -81,8 +81,7 @@ impl NodePath {
 
         Self {
             hash,
-            parent: parent
-                .map(|(path, sibling_index)| (Box::new(path), sibling_index)),
+            parent: parent.map(|(path, index)| (Box::new(path), index)),
         }
     }
 
