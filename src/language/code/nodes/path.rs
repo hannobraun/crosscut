@@ -60,8 +60,6 @@ impl NodePath {
             let parent_node = nodes.get(parent_path.hash());
 
             if !parent_node.has_child_at(&hash, index) {
-                let index = index.index;
-
                 panic!(
                     "Attempting to construct invalid `NodePath`: Node is not \
                     listed among children of its supposed parent, at the given \
