@@ -135,7 +135,7 @@ pub enum SyntaxNode {
 }
 
 impl SyntaxNode {
-    pub fn has_child(&self, child: &NodeHash, index: &ChildIndex) -> bool {
+    pub fn has_child(&self, hash: &NodeHash, index: &ChildIndex) -> bool {
         match self {
             Self::Apply {
                 expression,
@@ -145,7 +145,7 @@ impl SyntaxNode {
                     expression: *expression,
                     argument: *argument,
                 };
-                apply.has_child(child, index)
+                apply.has_child(hash, index)
             }
 
             Self::AddNode
@@ -161,7 +161,7 @@ impl SyntaxNode {
                     body: body.clone(),
                 };
 
-                function.has_child(child, index)
+                function.has_child(hash, index)
             }
 
             Self::Tuple { values, add_value } => {
@@ -170,8 +170,8 @@ impl SyntaxNode {
                     add_value: *add_value,
                 };
 
-                tuple.values().contains(child, index)
-                    || tuple.add_value().is(child, index)
+                tuple.values().contains(hash, index)
+                    || tuple.add_value().is(hash, index)
             }
         }
     }
