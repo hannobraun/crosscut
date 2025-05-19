@@ -114,13 +114,14 @@ fn update_children(
                 &sibling_index,
                 replacement,
             );
-
-            if replaced_parameter {
-            } else if !function.body_mut().replace(
+            let replaced_in_body = function.body_mut().replace(
                 to_replace.hash(),
                 &sibling_index,
                 replacement,
-            ) {
+            );
+
+            if replaced_parameter {
+            } else if !replaced_in_body {
                 panic!("Expected to replace child, but could not find it.");
             }
 
