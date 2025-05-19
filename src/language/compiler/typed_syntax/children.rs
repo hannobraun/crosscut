@@ -51,7 +51,6 @@ pub struct Children<T: Form> {
 impl<T: Form> Children<T> {
     pub fn new(hashes: T::Form<Vec<NodeHash>>, offset: usize) -> Self {
         let offset = SiblingIndex { index: offset };
-
         Self { hashes, offset }
     }
 }
