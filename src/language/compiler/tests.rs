@@ -1,7 +1,7 @@
 use crate::language::{
     code::{Codebase, NodePath},
     compiler::{Compiler, Tuple},
-    tests::infra::{ExpectChildren, expression, identifier},
+    tests::infra::{ExpectChildren, identifier},
 };
 
 #[test]
@@ -114,8 +114,13 @@ fn updating_child_updates_parent() {
     let mut codebase = Codebase::new();
 
     codebase.make_change(|change_set| {
-        let child = change_set.nodes.insert(identifier("old"));
-        let parent = change_set.nodes.insert(expression("unresolved", [child]));
+        let parent = {
+            let node = Tuple::default()
+                .with_values([identifier("old")])
+                .into_syntax_node(change_set.nodes);
+
+            change_set.nodes.insert(node)
+        };
 
         change_set.replace(
             &change_set.root_before_change(),
@@ -125,12 +130,12 @@ fn updating_child_updates_parent() {
 
     let mut compiler = Compiler::new(&mut codebase);
 
-    let [child] = compiler
+    let [child, _] = compiler
         .codebase()
         .root()
         .expect_children(compiler.codebase().nodes());
     compiler.replace(&child.path, "new");
 
-    let [child] = codebase.root().expect_children(codebase.nodes());
+    let [child, _] = codebase.root().expect_children(codebase.nodes());
     assert_eq!(child.node, &identifier("new"));
 }
