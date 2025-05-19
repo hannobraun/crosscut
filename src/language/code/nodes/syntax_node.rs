@@ -161,8 +161,7 @@ impl SyntaxNode {
                     body: body.clone(),
                 };
 
-                function.parameter().is(child, index)
-                    || function.body().contains(child, index)
+                function.has_child(child, index)
             }
 
             Self::Tuple { values, add_value } => {

@@ -29,6 +29,10 @@ impl Function<NodeByHash> {
         Children::new(&self.body, 1)
     }
 
+    pub fn has_child(&self, hash: &NodeHash, index: &ChildIndex) -> bool {
+        self.parameter().is(hash, index) || self.body().contains(hash, index)
+    }
+
     pub fn parameter_mut(&mut self) -> Child<RefMut> {
         Child::new(&mut self.parameter, 0)
     }
