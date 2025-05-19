@@ -30,7 +30,7 @@ impl<'r> Compiler<'r> {
             let (parent_path, index) = {
                 let node = change_set.nodes.get(parent.hash()).clone();
 
-                let (node, sibling_index) = match &node {
+                let (node, index) = match &node {
                     SyntaxNode::AddNode
                     | SyntaxNode::Apply { .. }
                     | SyntaxNode::Binding { .. }
@@ -63,7 +63,7 @@ impl<'r> Compiler<'r> {
                 let path =
                     replace_node_and_update_parents(parent, hash, change_set);
 
-                (path, sibling_index)
+                (path, index)
             };
 
             NodePath::new(child, Some((parent_path, index)), change_set.nodes)
