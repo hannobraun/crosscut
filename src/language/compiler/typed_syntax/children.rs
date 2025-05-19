@@ -78,10 +78,10 @@ impl Children<RefMut<'_>> {
     pub fn replace(
         &mut self,
         replace_hash: &NodeHash,
-        to_replace_index: &SiblingIndex,
+        replace_index: &SiblingIndex,
         replacement: NodeHash,
     ) -> bool {
-        let Some(index) = to_replace_index.index.checked_sub(self.offset.index)
+        let Some(index) = replace_index.index.checked_sub(self.offset.index)
         else {
             return false;
         };
