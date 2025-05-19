@@ -5,9 +5,12 @@ pub struct Tuple {}
 
 impl Tuple {
     pub fn into_syntax_node(self, nodes: &mut Nodes) -> SyntaxNode {
-        let values = ChildrenOwned::new([]);
+        let values = [];
         let add_value = nodes.insert(SyntaxNode::AddNode);
 
-        SyntaxNode::Tuple { values, add_value }
+        SyntaxNode::Tuple {
+            values: ChildrenOwned::new(values),
+            add_value,
+        }
     }
 }
