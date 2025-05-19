@@ -57,7 +57,11 @@ impl<'r> Compiler<'r> {
 
                     SyntaxNode::Tuple {
                         values: children, ..
-                    } => children.add(child),
+                    } => {
+                        let index = children.next_index();
+                        children.inner.push(child);
+                        index
+                    }
                     SyntaxNode::Test { children, .. } => children.add(child),
                 };
 
