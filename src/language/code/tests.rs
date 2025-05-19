@@ -52,7 +52,7 @@ fn uniquely_identify_identical_siblings() {
     let mut codebase = Codebase::new();
 
     codebase.make_change(|change_set| {
-        let child = change_set.nodes.insert(identifier("a"));
+        let child = change_set.nodes.insert(identifier("child"));
         let parent = change_set.nodes.insert(expression("b", [child, child]));
 
         change_set.replace(
