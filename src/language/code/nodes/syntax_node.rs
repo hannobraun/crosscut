@@ -2,7 +2,7 @@ use std::fmt;
 
 use crate::language::{
     code::{ChildIndex, NodeHash},
-    compiler::{Apply, Function, Tuple},
+    compiler::TypedNode,
 };
 
 /// # Structured but untyped representation of a syntax node
@@ -136,43 +136,7 @@ pub enum SyntaxNode {
 
 impl SyntaxNode {
     pub fn has_child(&self, hash: &NodeHash, index: &ChildIndex) -> bool {
-        match self {
-            Self::Apply {
-                expression,
-                argument,
-            } => {
-                let apply = Apply {
-                    expression: *expression,
-                    argument: *argument,
-                };
-                apply.has_child(hash, index)
-            }
-
-            Self::AddNode
-            | Self::Binding { .. }
-            | Self::Empty
-            | Self::Identifier { .. }
-            | Self::Number { value: _ }
-            | Self::Recursion => false,
-
-            Self::Function { parameter, body } => {
-                let function = Function {
-                    parameter: *parameter,
-                    body: body.clone(),
-                };
-
-                function.has_child(hash, index)
-            }
-
-            Self::Tuple { values, add_value } => {
-                let tuple = Tuple {
-                    values: values.clone(),
-                    add_value: *add_value,
-                };
-
-                tuple.has_child(hash, index)
-            }
-        }
+        TypedNode::from_syntax_node(self).has_child(hash, index)
     }
 
     pub fn children(&self) -> Vec<NodeHash> {

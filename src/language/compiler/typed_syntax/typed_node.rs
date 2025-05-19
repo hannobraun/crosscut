@@ -55,6 +55,20 @@ impl TypedNode {
         }
     }
 
+    pub fn has_child(&self, hash: &NodeHash, index: &ChildIndex) -> bool {
+        match self {
+            TypedNode::Expression { expression } => match expression {
+                Expression::Apply { apply } => apply.has_child(hash, index),
+                Expression::Function { function } => {
+                    function.has_child(hash, index)
+                }
+                Expression::Tuple { tuple } => tuple.has_child(hash, index),
+                Expression::Other => false,
+            },
+            TypedNode::Pattern | TypedNode::Other => false,
+        }
+    }
+
     pub fn replace_child(
         &mut self,
         replace_hash: &NodeHash,
