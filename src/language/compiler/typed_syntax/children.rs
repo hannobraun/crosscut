@@ -86,13 +86,13 @@ impl Children<RefMut<'_>> {
             return false;
         };
 
-        if let Some(child) = self.hashes.get_mut(index) {
-            if child == to_replace_hash {
-                *child = replacement;
-                true
-            } else {
-                false
-            }
+        let Some(child) = self.hashes.get_mut(index) else {
+            return false;
+        };
+
+        if child == to_replace_hash {
+            *child = replacement;
+            true
         } else {
             false
         }
