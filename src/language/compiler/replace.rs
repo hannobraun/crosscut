@@ -32,7 +32,7 @@ pub fn replace_node_and_update_parents(
         replacements.push(Replacement {
             replaced: to_replace,
             replacement,
-            sibling_index: index,
+            index,
         });
 
         to_replace = parent;
@@ -42,7 +42,7 @@ pub fn replace_node_and_update_parents(
     let mut path = update_path(&to_replace, replacement, None, change_set);
 
     while let Some(replacement) = replacements.pop() {
-        let parent = Some(path).map(|path| (path, replacement.sibling_index));
+        let parent = Some(path).map(|path| (path, replacement.index));
         path = update_path(
             &replacement.replaced,
             replacement.replacement,
@@ -87,5 +87,5 @@ fn update_path(
 struct Replacement {
     replaced: NodePath,
     replacement: NodeHash,
-    sibling_index: ChildIndex,
+    index: ChildIndex,
 }
