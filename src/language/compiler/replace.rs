@@ -1,5 +1,6 @@
-use crate::language::code::{
-    NewChangeSet, NodeHash, NodePath, Nodes, SiblingIndex, SyntaxNode,
+use crate::language::{
+    code::{NewChangeSet, NodeHash, NodePath, Nodes, SiblingIndex, SyntaxNode},
+    compiler::Tuple,
 };
 
 use super::{Apply, Function};
@@ -124,13 +125,22 @@ fn update_children(
 
         SyntaxNode::Tuple {
             values: children,
-            add_value: NodeHash { .. },
+            add_value,
         } => {
-            let was_replaced = children.replace(to_replace, replacement, 0);
+            let mut tuple = Tuple {
+                values: children.inner.clone(),
+                add_value: *add_value,
+            };
+
+            let was_replaced =
+                tuple.values_mut().replace(to_replace, replacement);
             assert!(
                 was_replaced,
                 "Tried to replace child that is not present.",
             );
+
+            let node = tuple.into_syntax_node();
+            return nodes.insert(node);
         }
         SyntaxNode::Test {
             name: String { .. },
