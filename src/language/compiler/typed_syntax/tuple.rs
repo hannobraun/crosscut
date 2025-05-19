@@ -22,7 +22,7 @@ impl Tuple<Owned> {
             .values
             .into_iter()
             .map(|node| nodes.insert(node))
-            .collect::<Vec<_>>();
+            .collect();
         let add_value = nodes.insert(self.add_value);
 
         SyntaxNode::Tuple { values, add_value }
