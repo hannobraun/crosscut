@@ -10,7 +10,6 @@ impl TypedNode {
     pub fn from_syntax_node(syntax_node: &SyntaxNode) -> Self {
         match syntax_node {
             SyntaxNode::AddNode => Self::Other,
-
             SyntaxNode::Apply { .. } => Self::Expression {
                 expression: Expression,
             },
