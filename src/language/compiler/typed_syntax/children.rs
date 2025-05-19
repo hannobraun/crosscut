@@ -81,10 +81,9 @@ impl Children<RefMut<'_>> {
         to_replace_index: &SiblingIndex,
         replacement: NodeHash,
     ) -> bool {
-        if let Some(child) = self
-            .hashes
-            .get_mut(to_replace_index.index - self.offset.index)
-        {
+        let index = to_replace_index.index - self.offset.index;
+
+        if let Some(child) = self.hashes.get_mut(index) {
             if child == to_replace_hash {
                 *child = replacement;
                 true
