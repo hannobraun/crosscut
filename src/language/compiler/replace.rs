@@ -18,21 +18,21 @@ pub fn replace_node_and_update_parents(
     // replaced nodes.
     let mut replacements = Vec::new();
 
-    while let Some((parent, sibling_index)) = to_replace.parent() {
+    while let Some((parent, index)) = to_replace.parent() {
         let parent = parent.clone();
 
         let next_replacement = update_children(
             &parent,
             &to_replace,
             replacement,
-            sibling_index,
+            index,
             change_set.nodes,
         );
 
         replacements.push(Replacement {
             replaced: to_replace,
             replacement,
-            sibling_index,
+            sibling_index: index,
         });
 
         to_replace = parent;
