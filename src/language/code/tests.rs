@@ -55,10 +55,12 @@ fn uniquely_identify_identical_siblings() {
         let child = change_set.nodes.insert(expression("a", []));
         let parent = change_set.nodes.insert(expression("b", [child, child]));
 
-        let b = NodePath::for_root(parent);
-        change_set.replace(&change_set.root_before_change(), &b);
+        change_set.replace(
+            &change_set.root_before_change(),
+            &NodePath::for_root(parent),
+        );
 
-        b
+        NodePath::for_root(parent)
     });
 
     let [a1, a2] = codebase.node_at(&root).expect_children(codebase.nodes());
