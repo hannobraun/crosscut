@@ -125,8 +125,15 @@ fn update_children(
         SyntaxNode::Tuple {
             values: children,
             add_value: NodeHash { .. },
+        } => {
+            let was_replaced = children.replace(to_replace, replacement, 0);
+
+            assert!(
+                was_replaced,
+                "Tried to replace child that is not present.",
+            );
         }
-        | SyntaxNode::Test {
+        SyntaxNode::Test {
             name: String { .. },
             children,
         } => {
