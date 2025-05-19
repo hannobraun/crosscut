@@ -142,8 +142,8 @@ fn updating_child_updates_parent() {
         codebase: &Codebase,
     ) {
         assert_eq!(
-            codebase.node_at(&parent).node,
-            &expression("unresolved", children)
+            codebase.nodes().get(parent.hash()).children(),
+            children.into_iter().collect::<Vec<_>>(),
         );
     }
 }
