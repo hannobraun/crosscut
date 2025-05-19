@@ -41,7 +41,10 @@ fn insert_child_with_grandparent() {
     let mut codebase = Codebase::new();
 
     codebase.make_change(|change_set| {
-        let parent = change_set.nodes.insert(expression("parent", []));
+        let parent = {
+            let node = Tuple::default().into_syntax_node(change_set.nodes);
+            change_set.nodes.insert(node)
+        };
         let grandparent =
             change_set.nodes.insert(expression("grandparent", [parent]));
 
@@ -61,7 +64,7 @@ fn insert_child_with_grandparent() {
         .codebase()
         .root()
         .expect_children(compiler.codebase().nodes());
-    let [grandchild_of_root] =
+    let [grandchild_of_root, _] =
         child_of_root.expect_children(compiler.codebase().nodes());
     assert_eq!(grandchild_of_root.path, child);
 }
