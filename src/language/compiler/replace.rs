@@ -2,7 +2,7 @@ use crate::language::code::{
     NewChangeSet, NodeHash, NodePath, Nodes, SiblingIndex,
 };
 
-use super::{Expression, TypedNode};
+use super::TypedNode;
 
 pub fn replace_node_and_update_parents(
     to_replace: NodePath,
@@ -66,19 +66,7 @@ fn update_children(
         panic!("Expected to replace child, but could not find it.");
     }
 
-    let node = match node {
-        TypedNode::Expression { expression } => match expression {
-            Expression::Apply { apply } => apply.into_syntax_node(),
-            Expression::Function { function } => function.into_syntax_node(),
-            Expression::Tuple { tuple } => tuple.into_syntax_node(),
-            Expression::Other => {
-                panic!("Node has no children. Can't replace one.");
-            }
-        },
-        TypedNode::Pattern | TypedNode::Other => {
-            panic!("Node has no children. Can't replace one.");
-        }
-    };
+    let node = node.into_syntax_node();
 
     nodes.insert(node)
 }

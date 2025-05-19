@@ -83,6 +83,24 @@ impl TypedNode {
             TypedNode::Pattern | TypedNode::Other => false,
         }
     }
+
+    pub fn into_syntax_node(self) -> SyntaxNode {
+        match self {
+            TypedNode::Expression { expression } => match expression {
+                Expression::Apply { apply } => apply.into_syntax_node(),
+                Expression::Function { function } => {
+                    function.into_syntax_node()
+                }
+                Expression::Tuple { tuple } => tuple.into_syntax_node(),
+                Expression::Other => {
+                    panic!("Can't convert node into syntax node.");
+                }
+            },
+            TypedNode::Pattern | TypedNode::Other => {
+                panic!("Can't convert node into syntax node.");
+            }
+        }
+    }
 }
 
 pub enum Expression {
