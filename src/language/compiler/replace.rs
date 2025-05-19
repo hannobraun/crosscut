@@ -122,13 +122,11 @@ fn update_children(
                 add_value: *add_value,
             };
 
-            let replaced_in_values = tuple.values_mut().replace(
+            if !tuple.values_mut().replace(
                 to_replace.hash(),
                 &sibling_index,
                 replacement,
-            );
-
-            if !replaced_in_values {
+            ) {
                 panic!("Tried to replace child that is not present.");
             }
 
