@@ -114,11 +114,10 @@ fn update_children(
                 &sibling_index,
                 replacement,
             ) {
-            } else if !body.replace(to_replace, replacement, 1) {
+            } else if !function.body_mut().replace(to_replace, replacement) {
                 panic!("Expected to replace child, but could not find it.");
             }
 
-            function.body = body.inner.clone();
             let node = function.into_syntax_node();
             return nodes.insert(node);
         }

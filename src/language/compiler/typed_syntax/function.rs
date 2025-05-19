@@ -35,6 +35,10 @@ impl Function<NodeByHash> {
         Child::new(&mut self.parameter, 0)
     }
 
+    pub fn body_mut(&mut self) -> Children<RefMut> {
+        Children::new(&mut self.body, 1)
+    }
+
     pub fn into_syntax_node(self) -> SyntaxNode {
         SyntaxNode::Function {
             parameter: self.parameter,

@@ -1,4 +1,4 @@
-use crate::language::code::{NodeHash, SiblingIndex};
+use crate::language::code::{NodeHash, NodePath, SiblingIndex};
 
 use super::{Form, Ref, RefMut};
 
@@ -61,5 +61,26 @@ impl Children<Ref<'_>> {
             .iter()
             .enumerate()
             .any(|(i, c)| c == hash && i + self.offset.index == index.index)
+    }
+}
+
+impl Children<RefMut<'_>> {
+    pub fn replace(
+        &mut self,
+        to_replace: &NodePath,
+        replacement: NodeHash,
+    ) -> bool {
+        if let Some(child) = self.hashes.get_mut(
+            to_replace.sibling_index().unwrap().index - self.offset.index,
+        ) {
+            if child == to_replace.hash() {
+                *child = replacement;
+                true
+            } else {
+                false
+            }
+        } else {
+            false
+        }
     }
 }
