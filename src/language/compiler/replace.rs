@@ -127,10 +127,10 @@ fn update_children(
                 &sibling_index,
                 replacement,
             );
-            assert!(
-                replaced_in_values,
-                "Tried to replace child that is not present.",
-            );
+
+            if !replaced_in_values {
+                panic!("Tried to replace child that is not present.");
+            }
 
             tuple.into_syntax_node()
         }
