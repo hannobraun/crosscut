@@ -44,16 +44,12 @@ impl Child<RefMut<'_>> {
 }
 
 pub struct Children<T: Form> {
-    hashes: Vec<T::Form<NodeHash>>,
+    hashes: T::Form<Vec<NodeHash>>,
     offset: SiblingIndex,
 }
 
 impl<T: Form> Children<T> {
-    pub fn new(
-        hashes: impl IntoIterator<Item = T::Form<NodeHash>>,
-        offset: usize,
-    ) -> Self {
-        let hashes = hashes.into_iter().collect();
+    pub fn new(hashes: T::Form<Vec<NodeHash>>, offset: usize) -> Self {
         let offset = SiblingIndex { index: offset };
 
         Self { hashes, offset }
@@ -64,7 +60,6 @@ impl Children<Ref<'_>> {
     pub fn contains(&self, hash: &NodeHash, index: &SiblingIndex) -> bool {
         self.hashes
             .iter()
-            .copied()
             .enumerate()
             .any(|(i, c)| c == hash && i + self.offset.index == index.index)
     }
