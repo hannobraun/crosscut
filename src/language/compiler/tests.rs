@@ -131,8 +131,6 @@ fn updating_child_updates_parent() {
         .expect_children(compiler.codebase().nodes());
     compiler.replace(&child.path, "new");
 
-    // After editing the child, the new parent node should be the same as the
-    // old one, but with an updated child.
     let [child] = codebase.root().expect_children(codebase.nodes());
     assert_eq!(child.node, &identifier("new"));
 }
