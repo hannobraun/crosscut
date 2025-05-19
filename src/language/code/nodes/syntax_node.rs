@@ -133,31 +133,33 @@ pub enum SyntaxNode {
 
 impl SyntaxNode {
     pub fn children(&self) -> Vec<NodeHash> {
+        let mut children = Vec::new();
+
         match self {
             Self::Apply {
                 expression,
                 argument,
-            } => vec![*expression, *argument],
+            } => children.extend([*expression, *argument]),
 
             Self::AddNode
             | Self::Binding { .. }
             | Self::Empty
             | Self::Identifier { .. }
             | Self::Number { value: _ }
-            | Self::Recursion => vec![],
+            | Self::Recursion => {}
 
             Self::Function { parameter, body } => {
-                let mut children = vec![*parameter];
+                children.push(*parameter);
                 children.extend(body.iter().copied());
-                children
             }
 
             Self::Tuple { values, add_value } => {
-                let mut children = values.clone();
+                children.extend(values.iter().cloned());
                 children.push(*add_value);
-                children
             }
         }
+
+        children
     }
 
     pub fn to_token(&self) -> String {
