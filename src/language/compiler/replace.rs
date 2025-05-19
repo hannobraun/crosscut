@@ -87,8 +87,7 @@ fn update_children(
                 replacement,
             );
 
-            if replaced_expression || replaced_argument {
-            } else {
+            if !replaced_expression && !replaced_argument {
                 panic!("Expected to replace child, but could not find it.");
             }
 
