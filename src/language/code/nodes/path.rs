@@ -108,7 +108,7 @@ impl NodePath {
     pub fn parent(&self) -> Option<(&NodePath, ChildIndex)> {
         self.parent
             .as_ref()
-            .map(|(path, sibling_index)| (path.deref(), *sibling_index))
+            .map(|(path, index)| (path.deref(), *index))
     }
 
     pub fn is_ancestor_of(&self, possible_descendant: &NodePath) -> bool {
