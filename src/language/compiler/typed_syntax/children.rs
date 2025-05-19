@@ -77,7 +77,7 @@ impl Children<RefMut<'_>> {
 
     pub fn replace(
         &mut self,
-        to_replace_hash: &NodeHash,
+        replace_hash: &NodeHash,
         to_replace_index: &SiblingIndex,
         replacement: NodeHash,
     ) -> bool {
@@ -90,7 +90,7 @@ impl Children<RefMut<'_>> {
             return false;
         };
 
-        if child == to_replace_hash {
+        if child == replace_hash {
             *child = replacement;
             true
         } else {
