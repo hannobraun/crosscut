@@ -339,13 +339,6 @@ fn render_help<A: EditorOutputAdapter>(
                 contains the tuple's children.",
             )?;
         }
-        SyntaxNode::Test { .. } => {
-            writeln!(
-                adapter,
-                "You are editing an expression that should only be used for \
-                testing. This is a bug."
-            )?;
-        }
     }
 
     Ok(())

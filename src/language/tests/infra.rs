@@ -1,19 +1,6 @@
 use itertools::Itertools;
 
-use crate::language::code::{
-    ChildrenOwned, LocatedNode, NodeHash, Nodes, SyntaxNode,
-};
-
-#[allow(unused)] // just removed the last user; about to remove this too
-pub fn expression(
-    name: &str,
-    children: impl IntoIterator<Item = NodeHash>,
-) -> SyntaxNode {
-    SyntaxNode::Test {
-        name: name.to_string(),
-        children: ChildrenOwned::new(children),
-    }
-}
+use crate::language::code::{LocatedNode, Nodes, SyntaxNode};
 
 pub fn identifier(name: &str) -> SyntaxNode {
     SyntaxNode::Identifier {

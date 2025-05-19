@@ -90,7 +90,7 @@ fn update_children(
             }
 
             let node = apply.into_syntax_node();
-            return nodes.insert(node);
+            nodes.insert(node)
         }
 
         SyntaxNode::AddNode
@@ -120,7 +120,7 @@ fn update_children(
             }
 
             let node = function.into_syntax_node();
-            return nodes.insert(node);
+            nodes.insert(node)
         }
 
         SyntaxNode::Tuple {
@@ -140,22 +140,9 @@ fn update_children(
             );
 
             let node = tuple.into_syntax_node();
-            return nodes.insert(node);
-        }
-        SyntaxNode::Test {
-            name: String { .. },
-            children,
-        } => {
-            let was_replaced = children.replace(to_replace, replacement, 0);
-
-            assert!(
-                was_replaced,
-                "Tried to replace child that is not present.",
-            );
+            nodes.insert(node)
         }
     }
-
-    nodes.insert(expression)
 }
 
 fn update_path(

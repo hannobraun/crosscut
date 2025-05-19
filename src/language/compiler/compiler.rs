@@ -54,7 +54,6 @@ impl<'r> Compiler<'r> {
                         children.push(child);
                         index
                     }
-                    SyntaxNode::Test { children, .. } => children.add(child),
                 };
 
                 let hash = change_set.nodes.insert(node);

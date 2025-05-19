@@ -1,7 +1,7 @@
 use std::fmt;
 
 use crate::language::{
-    code::{ChildrenOwned, NodeHash, SiblingIndex},
+    code::{NodeHash, SiblingIndex},
     compiler::{Apply, Function, Tuple},
 };
 
@@ -132,20 +132,6 @@ pub enum SyntaxNode {
         /// child that is then edited, and this one stays as it is.
         add_value: NodeHash,
     },
-
-    /// # An expression that can be used for testing
-    ///
-    /// It has a name, making it possible to clearly identify it within a test
-    /// scenario; and has an arbitrary number of children, making it suitable
-    /// for editing tests.
-    #[cfg_attr(not(test), allow(dead_code))]
-    Test {
-        /// # The name of the test expression
-        name: String,
-
-        /// # The children of the test expression
-        children: ChildrenOwned,
-    },
 }
 
 impl SyntaxNode {
@@ -193,10 +179,6 @@ impl SyntaxNode {
                 tuple.values().contains(child, sibling_index)
                     || tuple.add_value().is(child, sibling_index)
             }
-
-            Self::Test { children, .. } => {
-                children.contains_at(child, sibling_index, 0)
-            }
         }
     }
 
@@ -225,8 +207,6 @@ impl SyntaxNode {
                 children.push(*add_value);
                 children
             }
-
-            Self::Test { children, .. } => children.inner.clone(),
         }
     }
 
@@ -264,9 +244,6 @@ impl fmt::Display for SyntaxNode {
             }
             SyntaxNode::Tuple { .. } => {
                 write!(f, "tuple")
-            }
-            SyntaxNode::Test { name, .. } => {
-                write!(f, "{name}")
             }
         }
     }
