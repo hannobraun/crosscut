@@ -1,7 +1,7 @@
 use crate::language::code::SyntaxNode;
 
 pub enum TypedNode {
-    Expression,
+    Expression { expression: Expression },
     Pattern,
     Other,
 }
@@ -17,9 +17,13 @@ impl TypedNode {
             | SyntaxNode::Identifier { .. }
             | SyntaxNode::Number { .. }
             | SyntaxNode::Recursion
-            | SyntaxNode::Tuple { .. } => Self::Expression,
+            | SyntaxNode::Tuple { .. } => Self::Expression {
+                expression: Expression,
+            },
 
             SyntaxNode::Binding { .. } => Self::Pattern,
         }
     }
 }
+
+pub struct Expression;

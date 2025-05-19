@@ -63,7 +63,9 @@ fn update_children(
     nodes: &mut Nodes,
 ) -> NodeHash {
     match TypedNode::from_syntax_node(nodes.get(path.hash())) {
-        TypedNode::Expression => {}
+        TypedNode::Expression { expression } => {
+            let _ = expression;
+        }
         TypedNode::Pattern => {}
         TypedNode::Other => {}
     }
