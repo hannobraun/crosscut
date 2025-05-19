@@ -28,9 +28,9 @@ impl<'r> Compiler<'r> {
             let child = expression::compile(child_token, change_set.nodes);
 
             let (parent_path, sibling_index) = {
-                let mut node = change_set.nodes.get(parent.hash()).clone();
+                let node = change_set.nodes.get(parent.hash()).clone();
 
-                let (node, sibling_index) = match &mut node {
+                let (node, sibling_index) = match &node {
                     SyntaxNode::AddNode
                     | SyntaxNode::Apply { .. }
                     | SyntaxNode::Binding { .. }
