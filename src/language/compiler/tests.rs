@@ -1,5 +1,5 @@
 use crate::language::{
-    code::{Codebase, NodePath, SyntaxNode},
+    code::{Codebase, NodePath},
     compiler::{Compiler, Tuple},
     tests::infra::{ExpectChildren, expression, identifier},
 };
@@ -114,7 +114,7 @@ fn updating_child_updates_parent() {
     let mut codebase = Codebase::new();
 
     codebase.make_change(|change_set| {
-        let child = change_set.nodes.insert(SyntaxNode::Number { value: 12 });
+        let child = change_set.nodes.insert(identifier("old"));
         let parent = change_set.nodes.insert(expression("unresolved", [child]));
 
         change_set.replace(
@@ -129,7 +129,7 @@ fn updating_child_updates_parent() {
         .codebase()
         .root()
         .expect_children(compiler.codebase().nodes());
-    let child = compiler.replace(&child.path, "127");
+    let child = compiler.replace(&child.path, "new");
 
     // After editing the child, the new parent node should be the same as the
     // old one, but with an updated child.
