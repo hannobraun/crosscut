@@ -108,13 +108,7 @@ impl NodePath {
     ///
     /// This is required to distinguish between identical nodes whose hash is
     /// the same, but that have different parents.
-    pub fn parent(&self) -> Option<&NodePath> {
-        self.parent_and_sibling_index().map(|(path, _)| path)
-    }
-
-    pub fn parent_and_sibling_index(
-        &self,
-    ) -> Option<(&NodePath, SiblingIndex)> {
+    pub fn parent(&self) -> Option<(&NodePath, SiblingIndex)> {
         self.parent
             .as_ref()
             .map(|(path, sibling_index)| (path.deref(), *sibling_index))
