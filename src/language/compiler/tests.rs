@@ -24,13 +24,13 @@ fn insert_child() {
 
     let mut compiler = Compiler::new(&mut codebase);
 
-    let a = compiler.insert_child(compiler.codebase().root().path, "a");
+    let child = compiler.insert_child(compiler.codebase().root().path, "a");
 
     let [child_of_root, _] = compiler
         .codebase()
         .root()
         .expect_children(compiler.codebase().nodes());
-    assert_eq!(child_of_root.path, a);
+    assert_eq!(child_of_root.path, child);
 }
 
 #[test]
