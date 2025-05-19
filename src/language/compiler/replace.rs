@@ -136,13 +136,13 @@ fn update_children(
                 add_value: *add_value,
             };
 
-            let was_replaced = tuple.values_mut().replace(
+            let replaced_in_values = tuple.values_mut().replace(
                 to_replace.hash(),
                 &sibling_index,
                 replacement,
             );
             assert!(
-                was_replaced,
+                replaced_in_values,
                 "Tried to replace child that is not present.",
             );
 
