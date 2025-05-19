@@ -348,7 +348,9 @@ mod tests {
             let apply = {
                 let apply = Apply::default()
                     .with_expression(SyntaxNode::Recursion)
-                    .with_argument(Tuple.to_syntax_node(change_set.nodes))
+                    .with_argument(
+                        Tuple::default().to_syntax_node(change_set.nodes),
+                    )
                     .into_syntax_node(change_set.nodes);
 
                 change_set.nodes.insert(apply)
