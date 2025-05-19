@@ -118,7 +118,11 @@ fn update_children(
             );
 
             if replaced_parameter {
-            } else if !function.body_mut().replace(to_replace, replacement) {
+            } else if !function.body_mut().replace(
+                to_replace.hash(),
+                &to_replace.sibling_index().unwrap(),
+                replacement,
+            ) {
                 panic!("Expected to replace child, but could not find it.");
             }
 
@@ -134,8 +138,11 @@ fn update_children(
                 add_value: *add_value,
             };
 
-            let was_replaced =
-                tuple.values_mut().replace(to_replace, replacement);
+            let was_replaced = tuple.values_mut().replace(
+                to_replace.hash(),
+                &to_replace.sibling_index().unwrap(),
+                replacement,
+            );
             assert!(
                 was_replaced,
                 "Tried to replace child that is not present.",
