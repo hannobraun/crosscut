@@ -61,7 +61,9 @@ fn update_children(
     sibling_index: SiblingIndex,
     nodes: &mut Nodes,
 ) -> NodeHash {
-    let node = match TypedNode::from_syntax_node(nodes.get(path.hash())) {
+    let node = TypedNode::from_syntax_node(nodes.get(path.hash()));
+
+    let node = match node {
         TypedNode::Expression { expression } => match expression {
             Expression::Apply { mut apply } => {
                 if !apply.replace_child(
