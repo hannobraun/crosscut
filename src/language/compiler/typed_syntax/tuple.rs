@@ -1,5 +1,6 @@
 use crate::language::code::{ChildrenOwned, Nodes, SyntaxNode};
 
+#[derive(Default)]
 pub struct Tuple;
 
 impl Tuple {
