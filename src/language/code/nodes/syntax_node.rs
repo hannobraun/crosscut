@@ -1,9 +1,6 @@
 use std::fmt;
 
-use crate::language::{
-    code::{ChildIndex, NodeHash},
-    compiler::TypedNode,
-};
+use crate::language::code::NodeHash;
 
 /// # Structured but untyped representation of a syntax node
 ///
@@ -135,10 +132,6 @@ pub enum SyntaxNode {
 }
 
 impl SyntaxNode {
-    pub fn has_child(&self, hash: &NodeHash, index: &ChildIndex) -> bool {
-        TypedNode::from_syntax_node(self).has_child(hash, index)
-    }
-
     pub fn children(&self) -> Vec<NodeHash> {
         match self {
             Self::Apply {
