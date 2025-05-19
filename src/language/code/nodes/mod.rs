@@ -1,4 +1,3 @@
-mod children;
 mod hash;
 mod located;
 mod nodes;
