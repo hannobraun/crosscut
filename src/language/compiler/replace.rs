@@ -127,7 +127,6 @@ fn update_children(
             add_value: NodeHash { .. },
         } => {
             let was_replaced = children.replace(to_replace, replacement, 0);
-
             assert!(
                 was_replaced,
                 "Tried to replace child that is not present.",
