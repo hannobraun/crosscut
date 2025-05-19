@@ -3,7 +3,7 @@ use crate::language::{
     compiler::Tuple,
 };
 
-use super::{Apply, Function, TypedNode};
+use super::{Apply, Expression, Function, TypedNode};
 
 pub fn replace_node_and_update_parents(
     to_replace: NodePath,
@@ -63,9 +63,18 @@ fn update_children(
     nodes: &mut Nodes,
 ) -> NodeHash {
     match TypedNode::from_syntax_node(nodes.get(path.hash())) {
-        TypedNode::Expression { expression } => {
-            let _ = expression;
-        }
+        TypedNode::Expression { expression } => match expression {
+            Expression::Apply { apply } => {
+                let _ = apply;
+            }
+            Expression::Function { function } => {
+                let _ = function;
+            }
+            Expression::Tuple { tuple } => {
+                let _ = tuple;
+            }
+            Expression::Other => {}
+        },
         TypedNode::Pattern => {}
         TypedNode::Other => {}
     }

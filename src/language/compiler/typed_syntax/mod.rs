@@ -11,5 +11,5 @@ pub use self::{
     form::{Form, NodeByHash, Owned, Ref, RefMut},
     function::Function,
     tuple::Tuple,
-    typed_node::TypedNode,
+    typed_node::{Expression, TypedNode},
 };
