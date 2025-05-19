@@ -62,7 +62,7 @@ fn update_children(
     sibling_index: SiblingIndex,
     nodes: &mut Nodes,
 ) -> NodeHash {
-    let node = match &nodes.get(path.hash()).clone() {
+    let node = match nodes.get(path.hash()) {
         SyntaxNode::Apply {
             expression,
             argument,
