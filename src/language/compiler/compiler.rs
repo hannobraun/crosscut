@@ -28,7 +28,7 @@ impl<'r> Compiler<'r> {
             let (parent_path, sibling_index) = {
                 let mut node = change_set.nodes.get(parent.hash()).clone();
 
-                let sibling_index = match &mut node {
+                let (node, sibling_index) = match &mut node {
                     SyntaxNode::AddNode
                     | SyntaxNode::Apply { .. }
                     | SyntaxNode::Binding { .. }
@@ -50,7 +50,7 @@ impl<'r> Compiler<'r> {
                             }
                         };
                         values.push(child);
-                        index
+                        (node, index)
                     }
                 };
 
