@@ -57,8 +57,8 @@ impl<'r> Compiler<'r> {
 
                     SyntaxNode::Tuple {
                         values: children, ..
-                    }
-                    | SyntaxNode::Test { children, .. } => children.add(child),
+                    } => children.add(child),
+                    SyntaxNode::Test { children, .. } => children.add(child),
                 };
 
                 let hash = change_set.nodes.insert(node);
