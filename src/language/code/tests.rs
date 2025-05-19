@@ -59,8 +59,6 @@ fn uniquely_identify_identical_siblings() {
             &change_set.root_before_change(),
             &NodePath::for_root(parent),
         );
-
-        NodePath::for_root(parent)
     });
 
     let [a1, a2] = codebase.root().expect_children(codebase.nodes());
