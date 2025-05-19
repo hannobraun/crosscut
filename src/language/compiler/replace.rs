@@ -66,7 +66,7 @@ fn update_children(
 ) -> NodeHash {
     let mut expression = nodes.get(path.hash()).clone();
 
-    match &mut expression {
+    let node = match &mut expression {
         SyntaxNode::Apply {
             expression,
             argument,
@@ -89,8 +89,7 @@ fn update_children(
                 panic!("Expected to replace child, but could not find it.");
             }
 
-            let node = apply.into_syntax_node();
-            nodes.insert(node)
+            apply.into_syntax_node()
         }
 
         SyntaxNode::AddNode
@@ -119,8 +118,7 @@ fn update_children(
                 panic!("Expected to replace child, but could not find it.");
             }
 
-            let node = function.into_syntax_node();
-            nodes.insert(node)
+            function.into_syntax_node()
         }
 
         SyntaxNode::Tuple {
@@ -139,10 +137,11 @@ fn update_children(
                 "Tried to replace child that is not present.",
             );
 
-            let node = tuple.into_syntax_node();
-            nodes.insert(node)
+            tuple.into_syntax_node()
         }
-    }
+    };
+
+    nodes.insert(node)
 }
 
 fn update_path(
