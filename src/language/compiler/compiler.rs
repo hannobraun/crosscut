@@ -43,15 +43,13 @@ impl<'r> Compiler<'r> {
                         );
                     }
 
-                    SyntaxNode::Tuple {
-                        values: children, ..
-                    } => {
+                    SyntaxNode::Tuple { values, .. } => {
                         let index = {
                             SiblingIndex {
-                                index: children.len(),
+                                index: values.len(),
                             }
                         };
-                        children.push(child);
+                        values.push(child);
                         index
                     }
                 };
