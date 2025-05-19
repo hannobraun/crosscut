@@ -122,7 +122,7 @@ fn update_children(
                 add_value: *add_value,
             };
 
-            if !tuple.values_mut().replace(
+            if !tuple.replace_child(
                 to_replace.hash(),
                 &sibling_index,
                 replacement,
