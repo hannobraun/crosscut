@@ -78,11 +78,13 @@ fn replace_second_of_two_equal_children() {
     let mut codebase = Codebase::new();
 
     codebase.make_change(|change_set| {
-        let child = change_set.nodes.insert(identifier("child"));
+        let parent = {
+            let node = Tuple::default()
+                .with_values([identifier("child"), identifier("child")])
+                .into_syntax_node(change_set.nodes);
 
-        let parent = change_set
-            .nodes
-            .insert(expression("parent", [child, child]));
+            change_set.nodes.insert(node)
+        };
 
         change_set.replace(
             &change_set.root_before_change(),
@@ -90,7 +92,7 @@ fn replace_second_of_two_equal_children() {
         );
     });
 
-    let [_, child] = codebase
+    let [_, child, _] = codebase
         .root()
         .expect_children(codebase.nodes())
         .map(|located_node| located_node.path);
@@ -98,7 +100,7 @@ fn replace_second_of_two_equal_children() {
     let mut compiler = Compiler::new(&mut codebase);
     compiler.replace(&child, "updated");
 
-    let [child, updated] = codebase.root().expect_children(codebase.nodes());
+    let [child, updated, _] = codebase.root().expect_children(codebase.nodes());
 
     assert_eq!(child.node, &identifier("child"));
     assert_eq!(updated.node, &identifier("updated"));
