@@ -51,7 +51,7 @@ fn uniquely_identify_identical_siblings() {
 
     let mut codebase = Codebase::new();
 
-    let root = codebase.make_change(|change_set| {
+    codebase.make_change(|change_set| {
         let child = change_set.nodes.insert(expression("a", []));
         let parent = change_set.nodes.insert(expression("b", [child, child]));
 
@@ -63,7 +63,7 @@ fn uniquely_identify_identical_siblings() {
         NodePath::for_root(parent)
     });
 
-    let [a1, a2] = codebase.node_at(&root).expect_children(codebase.nodes());
+    let [a1, a2] = codebase.root().expect_children(codebase.nodes());
 
     assert_ne!(a1, a2);
 }
