@@ -1,5 +1,5 @@
 use crate::language::{
-    code::{Codebase, NodeHash, NodePath, SyntaxNode},
+    code::{Codebase, NodePath, SyntaxNode},
     compiler::{Compiler, Tuple},
     tests::infra::{ExpectChildren, expression, identifier},
 };
@@ -134,16 +134,8 @@ fn updating_child_updates_parent() {
     // After editing the child, the new parent node should be the same as the
     // old one, but with an updated child.
     let parent = compiler.codebase().root().path;
-    check_parent(parent, [*child.hash()], &codebase);
-
-    fn check_parent(
-        parent: NodePath,
-        children: impl IntoIterator<Item = NodeHash>,
-        codebase: &Codebase,
-    ) {
-        assert_eq!(
-            codebase.nodes().get(parent.hash()).children(),
-            children.into_iter().collect::<Vec<_>>(),
-        );
-    }
+    assert_eq!(
+        codebase.nodes().get(parent.hash()).children(),
+        vec![*child.hash()],
+    );
 }
