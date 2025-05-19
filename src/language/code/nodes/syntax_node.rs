@@ -170,8 +170,7 @@ impl SyntaxNode {
                     add_value: *add_value,
                 };
 
-                tuple.values().contains(hash, index)
-                    || tuple.add_value().is(hash, index)
+                tuple.has_child(hash, index)
             }
         }
     }

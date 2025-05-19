@@ -38,6 +38,10 @@ impl Tuple<NodeByHash> {
         Child::new(&self.add_value, self.values.len())
     }
 
+    pub fn has_child(&self, hash: &NodeHash, index: &ChildIndex) -> bool {
+        self.values().contains(hash, index) || self.add_value().is(hash, index)
+    }
+
     pub fn values_mut(&mut self) -> Children<RefMut> {
         Children::new(&mut self.values, 0)
     }
