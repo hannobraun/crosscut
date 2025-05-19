@@ -71,7 +71,7 @@ impl RuntimeNode {
 
                     name.clone()
                 };
-                let body = body.inner.first().unwrap();
+                let body = body.first().unwrap();
                 let body = NodePath::new(
                     *body,
                     Some((path, SiblingIndex { index: 1 })),

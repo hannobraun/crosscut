@@ -79,7 +79,7 @@ pub enum SyntaxNode {
         parameter: NodeHash,
 
         /// # The root node of the function's body
-        body: ChildrenOwned,
+        body: Vec<NodeHash>,
     },
 
     /// # An identifier
@@ -177,7 +177,7 @@ impl SyntaxNode {
             Self::Function { parameter, body } => {
                 let function = Function {
                     parameter: *parameter,
-                    body: body.inner.clone(),
+                    body: body.clone(),
                 };
 
                 function.parameter().is(child, sibling_index)
@@ -212,7 +212,7 @@ impl SyntaxNode {
 
             Self::Function { parameter, body } => {
                 let mut children = vec![*parameter];
-                children.extend(body.inner.iter().copied());
+                children.extend(body.iter().copied());
                 children
             }
 

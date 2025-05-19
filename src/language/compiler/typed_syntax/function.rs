@@ -1,4 +1,4 @@
-use crate::language::code::{ChildrenOwned, Nodes, SyntaxNode};
+use crate::language::code::{Nodes, SyntaxNode};
 
 use super::{Child, Children, Form, NodeByHash, Owned, Ref, RefMut};
 
@@ -13,12 +13,10 @@ impl Function<Owned> {
         let body = self
             .body
             .into_iter()
-            .map(|expression| nodes.insert(expression));
+            .map(|expression| nodes.insert(expression))
+            .collect();
 
-        SyntaxNode::Function {
-            parameter,
-            body: ChildrenOwned::new(body),
-        }
+        SyntaxNode::Function { parameter, body }
     }
 }
 
@@ -42,7 +40,7 @@ impl Function<NodeByHash> {
     pub fn into_syntax_node(self) -> SyntaxNode {
         SyntaxNode::Function {
             parameter: self.parameter,
-            body: ChildrenOwned::new(self.body),
+            body: self.body,
         }
     }
 }

@@ -106,7 +106,7 @@ fn update_children(
         SyntaxNode::Function { parameter, body } => {
             let mut function = Function {
                 parameter: *parameter,
-                body: body.inner.clone(),
+                body: body.clone(),
             };
 
             if function.parameter_mut().replace(
