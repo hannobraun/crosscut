@@ -1,4 +1,4 @@
-use crate::language::code::{ChildrenOwned, Nodes, SyntaxNode};
+use crate::language::code::{Nodes, SyntaxNode};
 
 use super::{Children, Form, NodeByHash, Owned, Ref, RefMut};
 
@@ -16,10 +16,7 @@ impl Tuple<Owned> {
             .collect::<Vec<_>>();
         let add_value = nodes.insert(self.add_value);
 
-        SyntaxNode::Tuple {
-            values: ChildrenOwned::new(values),
-            add_value,
-        }
+        SyntaxNode::Tuple { values, add_value }
     }
 }
 
@@ -34,7 +31,7 @@ impl Tuple<NodeByHash> {
 
     pub fn into_syntax_node(self) -> SyntaxNode {
         SyntaxNode::Tuple {
-            values: ChildrenOwned::new(self.values),
+            values: self.values,
             add_value: self.add_value,
         }
     }

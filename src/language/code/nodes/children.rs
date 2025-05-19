@@ -8,6 +8,7 @@ pub struct ChildrenOwned {
 }
 
 impl ChildrenOwned {
+    #[cfg(test)]
     pub fn new(children: impl IntoIterator<Item = NodeHash>) -> Self {
         let inner = children.into_iter().collect();
         Self { inner }

@@ -128,7 +128,7 @@ fn update_children(
             add_value,
         } => {
             let mut tuple = Tuple {
-                values: children.inner.clone(),
+                values: children.clone(),
                 add_value: *add_value,
             };
 

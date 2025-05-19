@@ -60,10 +60,10 @@ impl<'r> Compiler<'r> {
                     } => {
                         let index = {
                             SiblingIndex {
-                                index: children.inner.len(),
+                                index: children.len(),
                             }
                         };
-                        children.inner.push(child);
+                        children.push(child);
                         index
                     }
                     SyntaxNode::Test { children, .. } => children.add(child),

@@ -120,7 +120,7 @@ pub enum SyntaxNode {
         ///
         /// A tuple literal can have an arbitrary number of children, each of
         /// which evaluates to one of the values in the tuple value.
-        values: ChildrenOwned,
+        values: Vec<NodeHash>,
 
         /// # A node that can be edited to add values to the tuple
         ///
@@ -186,13 +186,12 @@ impl SyntaxNode {
 
             Self::Tuple { values, add_value } => {
                 let tuple = Tuple {
-                    values: values.inner.clone(),
+                    values: values.clone(),
                     add_value: *add_value,
                 };
 
                 tuple.values().contains(child, sibling_index)
-                    || add_value == child
-                        && sibling_index.index == values.inner.len()
+                    || add_value == child && sibling_index.index == values.len()
             }
 
             Self::Test { children, .. } => {
@@ -222,7 +221,7 @@ impl SyntaxNode {
             }
 
             Self::Tuple { values, add_value } => {
-                let mut children = values.inner.clone();
+                let mut children = values.clone();
                 children.push(*add_value);
                 children
             }
