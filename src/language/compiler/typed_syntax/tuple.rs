@@ -5,7 +5,10 @@ pub struct Tuple {}
 
 impl Tuple {
     pub fn into_syntax_node(self, nodes: &mut Nodes) -> SyntaxNode {
-        let values = [].map(|node| nodes.insert(node));
+        let values = []
+            .into_iter()
+            .map(|node| nodes.insert(node))
+            .collect::<Vec<_>>();
         let add_value = nodes.insert(SyntaxNode::AddNode);
 
         SyntaxNode::Tuple {
