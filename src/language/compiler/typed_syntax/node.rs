@@ -14,6 +14,7 @@ impl TypedNode {
             SyntaxNode::Apply { .. } => Self::Expression {
                 expression: Expression,
             },
+            SyntaxNode::Binding { .. } => Self::Pattern,
             SyntaxNode::Empty => Self::Expression {
                 expression: Expression,
             },
@@ -32,8 +33,6 @@ impl TypedNode {
             SyntaxNode::Tuple { .. } => Self::Expression {
                 expression: Expression,
             },
-
-            SyntaxNode::Binding { .. } => Self::Pattern,
         }
     }
 }
