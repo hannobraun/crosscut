@@ -65,7 +65,7 @@ impl Editor {
         let current_node = compiler.codebase().node_at(&self.cursor.path);
         self.cursor.path = if let SyntaxNode::AddNode = current_node.node {
             if !self.input.buffer().is_empty() {
-                let Some(parent) = current_node.path.parent().cloned() else {
+                let Some(parent) = current_node.path.parent() else {
                     unreachable!(
                         "Current node is a node that is solely dedicated to \
                         adding children to its parent. Thus, it must have a \
@@ -73,7 +73,7 @@ impl Editor {
                     );
                 };
 
-                compiler.insert_child(parent, self.input.buffer())
+                compiler.insert_child(parent.clone(), self.input.buffer())
             } else {
                 self.cursor.path.clone()
             }
