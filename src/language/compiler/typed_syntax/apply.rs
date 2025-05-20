@@ -1,9 +1,7 @@
 use crate::{
-    language::code::{ChildIndex, NodeByHash, NodeHash, Nodes, SyntaxNode},
-    util::form::{Form, Owned, RefMut},
+    language::code::{Nodes, SyntaxNode},
+    util::form::{Form, Owned},
 };
-
-use super::Child;
 
 pub struct Apply<T: Form> {
     pub expression: T::Form<SyntaxNode>,
@@ -30,43 +28,6 @@ impl Apply<Owned> {
         SyntaxNode::Apply {
             expression,
             argument,
-        }
-    }
-}
-
-impl Apply<NodeByHash> {
-    pub fn expression_mut(&mut self) -> Child<RefMut> {
-        Child::new(&mut self.expression, 0)
-    }
-
-    pub fn argument_mut(&mut self) -> Child<RefMut> {
-        Child::new(&mut self.argument, 1)
-    }
-
-    pub fn replace_child(
-        &mut self,
-        replace_hash: &NodeHash,
-        replace_index: &ChildIndex,
-        replacement: NodeHash,
-    ) -> bool {
-        let replaced_expression = self.expression_mut().replace(
-            replace_hash,
-            replace_index,
-            replacement,
-        );
-        let replaced_argument = self.argument_mut().replace(
-            replace_hash,
-            replace_index,
-            replacement,
-        );
-
-        replaced_expression || replaced_argument
-    }
-
-    pub fn into_syntax_node(self) -> SyntaxNode {
-        SyntaxNode::Apply {
-            expression: self.expression,
-            argument: self.argument,
         }
     }
 }

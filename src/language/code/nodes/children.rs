@@ -1,6 +1,6 @@
 use std::fmt;
 
-use crate::util::form::{Form, Ref};
+use crate::util::form::{Form, Ref, RefMut};
 
 use super::NodeHash;
 
@@ -15,6 +15,26 @@ impl Children<Ref<'_>> {
             .copied()
             .enumerate()
             .any(|(i, c)| c == hash && i == index.index)
+    }
+}
+
+impl Children<RefMut<'_>> {
+    pub fn replace(
+        &mut self,
+        replace_hash: &NodeHash,
+        replace_index: &ChildIndex,
+        replacement: NodeHash,
+    ) -> bool {
+        let Some(child) = self.hashes.get_mut(replace_index.index) else {
+            return false;
+        };
+
+        if *child == replace_hash {
+            **child = replacement;
+            true
+        } else {
+            false
+        }
     }
 }
 

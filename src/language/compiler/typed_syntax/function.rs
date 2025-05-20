@@ -1,9 +1,7 @@
 use crate::{
-    language::code::{ChildIndex, NodeByHash, NodeHash, Nodes, SyntaxNode},
-    util::form::{Form, Owned, RefMut},
+    language::code::{Nodes, SyntaxNode},
+    util::form::{Form, Owned},
 };
-
-use super::{Child, Children};
 
 pub struct Function<T: Form> {
     pub parameter: T::Form<SyntaxNode>,
@@ -20,41 +18,6 @@ impl Function<Owned> {
             .collect();
 
         SyntaxNode::Function { parameter, body }
-    }
-}
-
-impl Function<NodeByHash> {
-    pub fn parameter_mut(&mut self) -> Child<RefMut> {
-        Child::new(&mut self.parameter, 0)
-    }
-
-    pub fn body_mut(&mut self) -> Children<RefMut> {
-        Children::new(&mut self.body, 1)
-    }
-
-    pub fn replace_child(
-        &mut self,
-        replace_hash: &NodeHash,
-        replace_index: &ChildIndex,
-        replacement: NodeHash,
-    ) -> bool {
-        let replaced_parameter = self.parameter_mut().replace(
-            replace_hash,
-            replace_index,
-            replacement,
-        );
-        let replaced_in_body =
-            self.body_mut()
-                .replace(replace_hash, replace_index, replacement);
-
-        replaced_parameter || replaced_in_body
-    }
-
-    pub fn into_syntax_node(self) -> SyntaxNode {
-        SyntaxNode::Function {
-            parameter: self.parameter,
-            body: self.body,
-        }
     }
 }
 

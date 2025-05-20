@@ -1,6 +1,9 @@
 use std::fmt;
 
-use crate::{language::code::NodeHash, util::form::Ref};
+use crate::{
+    language::code::NodeHash,
+    util::form::{Ref, RefMut},
+};
 
 use super::Children;
 
@@ -157,6 +160,36 @@ impl SyntaxNode {
 
             Self::Tuple { values, add_value } => {
                 hashes.extend(values.iter());
+                hashes.push(add_value);
+            }
+        }
+
+        Children { hashes }
+    }
+
+    pub fn children_mut(&mut self) -> Children<RefMut> {
+        let mut hashes = Vec::new();
+
+        match self {
+            Self::Apply {
+                expression,
+                argument,
+            } => hashes.extend([expression, argument]),
+
+            Self::AddNode
+            | Self::Binding { .. }
+            | Self::Empty
+            | Self::Identifier { .. }
+            | Self::Number { value: _ }
+            | Self::Recursion => {}
+
+            Self::Function { parameter, body } => {
+                hashes.push(parameter);
+                hashes.extend(body.iter_mut());
+            }
+
+            Self::Tuple { values, add_value } => {
+                hashes.extend(values.iter_mut());
                 hashes.push(add_value);
             }
         }

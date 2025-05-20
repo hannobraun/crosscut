@@ -2,8 +2,6 @@ use crate::language::code::{
     ChildIndex, NewChangeSet, NodeHash, NodePath, Nodes,
 };
 
-use super::TypedNode;
-
 pub fn replace_node_and_update_parents(
     to_replace: NodePath,
     replacement: NodeHash,
@@ -61,13 +59,16 @@ fn update_children(
     index: ChildIndex,
     nodes: &mut Nodes,
 ) -> NodeHash {
-    let mut node = TypedNode::from_syntax_node(nodes.get(path.hash()));
+    let mut node = nodes.get(path.hash()).clone();
 
-    if !node.replace_child(to_replace.hash(), &index, replacement) {
+    if !node
+        .children_mut()
+        .replace(to_replace.hash(), &index, replacement)
+    {
         panic!("Expected to replace child, but could not find it.");
     }
 
-    nodes.insert(node.into_syntax_node())
+    nodes.insert(node)
 }
 
 fn update_path(

@@ -71,7 +71,7 @@ impl<'r> Compiler<'r> {
             let node = change_set.nodes.get(to_replace.hash());
 
             let replacement = match TypedNode::from_syntax_node(node) {
-                TypedNode::Expression { .. } => {
+                TypedNode::Expression => {
                     expression::compile(replacement_token, change_set.nodes)
                 }
                 TypedNode::Pattern => {
