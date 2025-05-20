@@ -7,6 +7,7 @@ mod game_engine;
 mod io;
 mod language;
 mod threads;
+mod util;
 
 fn main() -> anyhow::Result<()> {
     let threads = threads::start()?;

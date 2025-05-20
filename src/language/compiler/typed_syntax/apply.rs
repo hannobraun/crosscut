@@ -1,6 +1,9 @@
-use crate::language::code::{ChildIndex, NodeHash, Nodes, SyntaxNode};
+use crate::{
+    language::code::{ChildIndex, NodeHash, Nodes, SyntaxNode},
+    util::form::{Form, Owned, Ref, RefMut},
+};
 
-use super::{Child, Form, NodeByHash, Owned, Ref, RefMut};
+use super::{Child, NodeByHash};
 
 pub struct Apply<T: Form> {
     pub expression: T::Form<SyntaxNode>,

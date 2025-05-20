@@ -1,6 +1,7 @@
-use crate::language::code::{ChildIndex, NodeHash};
-
-use super::{Form, Ref, RefMut};
+use crate::{
+    language::code::{ChildIndex, NodeHash},
+    util::form::{Form, Ref, RefMut},
+};
 
 pub struct Child<T: Form> {
     hash: T::Form<NodeHash>,
