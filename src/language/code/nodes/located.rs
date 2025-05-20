@@ -16,18 +16,22 @@ impl LocatedNode<'_> {
 }
 
 fn hashes_to_located_nodes<'r>(
-    hashes: Vec<NodeHash>,
+    hashes: Vec<&NodeHash>,
     parent: &NodePath,
     nodes: &'r Nodes,
 ) -> impl DoubleEndedIterator<Item = LocatedNode<'r>> {
-    hashes.into_iter().enumerate().map(|(index, child)| {
-        let node = nodes.get(&child);
-        let path = NodePath::new(
-            child,
-            Some((parent.clone(), ChildIndex { index })),
-            nodes,
-        );
+    hashes
+        .into_iter()
+        .copied()
+        .enumerate()
+        .map(|(index, child)| {
+            let node = nodes.get(&child);
+            let path = NodePath::new(
+                child,
+                Some((parent.clone(), ChildIndex { index })),
+                nodes,
+            );
 
-        LocatedNode { node, path }
-    })
+            LocatedNode { node, path }
+        })
 }

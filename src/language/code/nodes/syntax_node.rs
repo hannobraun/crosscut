@@ -132,14 +132,14 @@ pub enum SyntaxNode {
 }
 
 impl SyntaxNode {
-    pub fn children(&self) -> Vec<NodeHash> {
+    pub fn children(&self) -> Vec<&NodeHash> {
         let mut children = Vec::new();
 
         match self {
             Self::Apply {
                 expression,
                 argument,
-            } => children.extend([*expression, *argument]),
+            } => children.extend([expression, argument]),
 
             Self::AddNode
             | Self::Binding { .. }
@@ -149,13 +149,13 @@ impl SyntaxNode {
             | Self::Recursion => {}
 
             Self::Function { parameter, body } => {
-                children.push(*parameter);
-                children.extend(body.iter().copied());
+                children.push(parameter);
+                children.extend(body.iter());
             }
 
             Self::Tuple { values, add_value } => {
-                children.extend(values.iter().cloned());
-                children.push(*add_value);
+                children.extend(values.iter());
+                children.push(add_value);
             }
         }
 
