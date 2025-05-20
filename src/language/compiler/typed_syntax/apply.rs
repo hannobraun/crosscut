@@ -1,6 +1,6 @@
 use crate::{
     language::code::{ChildIndex, NodeByHash, NodeHash, Nodes, SyntaxNode},
-    util::form::{Form, Owned, Ref, RefMut},
+    util::form::{Form, Owned, RefMut},
 };
 
 use super::Child;
@@ -35,18 +35,6 @@ impl Apply<Owned> {
 }
 
 impl Apply<NodeByHash> {
-    pub fn expression(&self) -> Child<Ref> {
-        Child::new(&self.expression, 0)
-    }
-
-    pub fn argument(&self) -> Child<Ref> {
-        Child::new(&self.argument, 1)
-    }
-
-    pub fn has_child(&self, hash: &NodeHash, index: &ChildIndex) -> bool {
-        self.expression().is(hash, index) || self.argument().is(hash, index)
-    }
-
     pub fn expression_mut(&mut self) -> Child<RefMut> {
         Child::new(&mut self.expression, 0)
     }

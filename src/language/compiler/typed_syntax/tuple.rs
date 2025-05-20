@@ -1,9 +1,9 @@
 use crate::{
     language::code::{ChildIndex, NodeByHash, NodeHash, Nodes, SyntaxNode},
-    util::form::{Form, Owned, Ref, RefMut},
+    util::form::{Form, Owned, RefMut},
 };
 
-use super::{Child, Children};
+use super::Children;
 
 pub struct Tuple<T: Form> {
     pub values: Vec<T::Form<SyntaxNode>>,
@@ -33,18 +33,6 @@ impl Tuple<Owned> {
 }
 
 impl Tuple<NodeByHash> {
-    pub fn values(&self) -> Children<Ref> {
-        Children::new(&self.values, 0)
-    }
-
-    pub fn add_value(&self) -> Child<Ref> {
-        Child::new(&self.add_value, self.values.len())
-    }
-
-    pub fn has_child(&self, hash: &NodeHash, index: &ChildIndex) -> bool {
-        self.values().contains(hash, index) || self.add_value().is(hash, index)
-    }
-
     pub fn values_mut(&mut self) -> Children<RefMut> {
         Children::new(&mut self.values, 0)
     }

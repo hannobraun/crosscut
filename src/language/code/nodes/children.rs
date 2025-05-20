@@ -6,6 +6,16 @@ pub struct Children<'r> {
     pub hashes: Vec<&'r NodeHash>,
 }
 
+impl Children<'_> {
+    pub fn contains(&self, hash: &NodeHash, index: &ChildIndex) -> bool {
+        self.hashes
+            .iter()
+            .copied()
+            .enumerate()
+            .any(|(i, c)| c == hash && i == index.index)
+    }
+}
+
 /// # The index of a node among its siblings
 ///
 /// ## Implementation Note

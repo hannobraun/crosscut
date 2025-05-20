@@ -56,15 +56,6 @@ impl<T: Form> Children<T> {
     }
 }
 
-impl Children<Ref<'_>> {
-    pub fn contains(&self, hash: &NodeHash, index: &ChildIndex) -> bool {
-        self.hashes
-            .iter()
-            .enumerate()
-            .any(|(i, c)| c == hash && i + self.offset.index == index.index)
-    }
-}
-
 impl Children<RefMut<'_>> {
     pub fn add(&mut self, child: NodeHash) -> ChildIndex {
         let index = ChildIndex {

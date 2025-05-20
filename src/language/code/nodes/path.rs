@@ -1,7 +1,5 @@
 use std::ops::Deref;
 
-use crate::language::compiler::TypedNode;
-
 use super::{ChildIndex, NodeHash, Nodes};
 
 /// # A unique and versioned path to a [`Node`]
@@ -61,8 +59,7 @@ impl NodePath {
         if let Some((parent_path, index)) = &parent {
             let parent_node = nodes.get(parent_path.hash());
 
-            if !TypedNode::from_syntax_node(parent_node).has_child(&hash, index)
-            {
+            if !parent_node.children().contains(&hash, index) {
                 panic!(
                     "Attempting to construct invalid `NodePath`: Node is not \
                     listed among children of its supposed parent, at the given \
