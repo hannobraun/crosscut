@@ -42,14 +42,7 @@ impl<'r> Compiler<'r> {
 
                         (node, index)
                     }
-                    SyntaxNode::AddNode
-                    | SyntaxNode::Apply { .. }
-                    | SyntaxNode::Binding { .. }
-                    | SyntaxNode::Empty
-                    | SyntaxNode::Function { .. }
-                    | SyntaxNode::Identifier { .. }
-                    | SyntaxNode::Number { .. }
-                    | SyntaxNode::Recursion => {
+                    node => {
                         panic!(
                             "Can't add child to this node:\n\
                             {node:#?}"
