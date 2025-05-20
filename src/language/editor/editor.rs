@@ -60,6 +60,21 @@ impl Editor {
                     }
                 }
                 NodeAction::Submit => {
+                    // This is preparation for letting the user submit new nodes
+                    // (as a parent or sibling of the currently selected node)
+                    // when this is appropriate in the current context. But this
+                    // has turned out to be quite complicated.
+                    //
+                    // I don't think this is an insurmountable problem, but it's
+                    // definitely something that requires some rounds of
+                    // iteration and a dedicated test suite. I don't think this
+                    // is worth the price right now. The current solution of
+                    // having a dedicated "add new node" node in the syntax tree
+                    // is weird, but it works.
+                    //
+                    // The code path that leads here is left in preparation for
+                    // making this happen later on.
+
                     if let Some(next) = layout.node_after(&self.cursor.path) {
                         self.navigate_to(next.clone(), compiler.codebase());
                     }
