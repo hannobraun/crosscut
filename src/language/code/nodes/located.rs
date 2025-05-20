@@ -11,7 +11,7 @@ impl LocatedNode<'_> {
         &self,
         nodes: &'r Nodes,
     ) -> impl DoubleEndedIterator<Item = LocatedNode<'r>> {
-        hashes_to_located_nodes(self.node.children(), &self.path, nodes)
+        hashes_to_located_nodes(self.node.children().hashes, &self.path, nodes)
     }
 }
 

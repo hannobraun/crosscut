@@ -2,6 +2,8 @@ use std::fmt;
 
 use crate::language::code::NodeHash;
 
+use super::Children;
+
 /// # Structured but untyped representation of a syntax node
 ///
 /// This representation is structured, in the sense that for each type of node
@@ -132,7 +134,7 @@ pub enum SyntaxNode {
 }
 
 impl SyntaxNode {
-    pub fn children(&self) -> Vec<&NodeHash> {
+    pub fn children(&self) -> Children {
         let mut children = Vec::new();
 
         match self {
@@ -159,7 +161,7 @@ impl SyntaxNode {
             }
         }
 
-        children
+        Children { hashes: children }
     }
 
     pub fn to_token(&self) -> String {
