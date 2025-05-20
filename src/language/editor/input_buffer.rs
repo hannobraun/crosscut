@@ -13,12 +13,6 @@ impl EditorInputBuffer {
         Self { buffer }
     }
 
-    pub fn move_cursor_to_end(&mut self, cursor: &mut usize) {
-        // The cursor counts bytes, not characters. So the use of `len` here is
-        // correct.
-        *cursor = self.buffer.len();
-    }
-
     pub fn empty() -> Self {
         Self {
             buffer: String::new(),
@@ -136,6 +130,12 @@ impl EditorInputBuffer {
         if *cursor < self.buffer.len() {
             self.buffer.remove(*cursor);
         }
+    }
+
+    pub fn move_cursor_to_end(&mut self, cursor: &mut usize) {
+        // The cursor counts bytes, not characters. So the use of `len` here is
+        // correct.
+        *cursor = self.buffer.len();
     }
 }
 
