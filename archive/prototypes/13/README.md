@@ -44,7 +44,7 @@ prototype (a direct continuation, based on the same code).
 
 ## Further Reading
 
-I announced the archiving of this prototype in my daily note on
+I announced that I'm archiving this prototype in my daily note on
 [2025-04-23](https://www.crosscut.cc/daily/2025-04-23) and mentioned it again on
 [2025-04-30](https://www.crosscut.cc/daily/2025-04-30).
 
