@@ -6,10 +6,10 @@ mod path;
 mod syntax_node;
 
 pub use self::{
-    children::Children,
+    children::{ChildIndex, Children},
     hash::{NodeByHash, NodeHash},
     located::LocatedNode,
     nodes::Nodes,
-    path::{ChildIndex, NodePath},
+    path::NodePath,
     syntax_node::SyntaxNode,
 };
