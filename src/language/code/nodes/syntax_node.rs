@@ -87,6 +87,28 @@ pub enum SyntaxNode {
     ///
     /// Empty nodes are placeholders, while the user is editing the code. They
     /// have no effect and evaluate to the empty tuple.
+    ///
+    /// ## Implementation Note
+    ///
+    /// Having a dedicated type of syntax node just to serve as a placeholder is
+    /// undesirable. Just using an empty tuple (or later on, an empty record)
+    /// instead would be better. Or in some cases, like apply nodes, maybe the
+    /// identity function as the placeholder for the function.
+    ///
+    /// But right now, there are multiple problems with this:
+    ///
+    /// - The syntax for tuples is quite cumbersome. Once records are a thing,
+    ///   and their syntax is fully implemented, I expect the empty record to be
+    ///   quite compact (`{}`), but right now, this is not the case.
+    /// - To make this work well, the editor would need to distinguish between
+    ///   nodes the user has explicitly written, and those that were generated
+    ///   as placeholders. Otherwise, the user would have to manually delete
+    ///   these placeholders to type something new.
+    ///
+    /// These problems are definitely not insurmountable, but solving them would
+    /// require resources that are, for the time being, better spent elsewhere.
+    /// So for now, having a dedicated node as the placeholder, seems like a
+    /// practical solution.
     Empty,
 
     /// # A function literal
