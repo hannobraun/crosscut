@@ -1,6 +1,6 @@
 use std::fmt;
 
-use crate::language::code::NodeHash;
+use crate::{language::code::NodeHash, util::form::Ref};
 
 use super::Children;
 
@@ -134,7 +134,7 @@ pub enum SyntaxNode {
 }
 
 impl SyntaxNode {
-    pub fn children(&self) -> Children {
+    pub fn children(&self) -> Children<Ref> {
         let mut hashes = Vec::new();
 
         match self {

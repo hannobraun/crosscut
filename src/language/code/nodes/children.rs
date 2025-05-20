@@ -1,12 +1,14 @@
 use std::fmt;
 
+use crate::util::form::{Form, Ref};
+
 use super::NodeHash;
 
-pub struct Children<'r> {
-    pub hashes: Vec<&'r NodeHash>,
+pub struct Children<T: Form> {
+    pub hashes: Vec<T::Form<NodeHash>>,
 }
 
-impl Children<'_> {
+impl Children<Ref<'_>> {
     pub fn contains(&self, hash: &NodeHash, index: &ChildIndex) -> bool {
         self.hashes
             .iter()
