@@ -135,13 +135,13 @@ pub enum SyntaxNode {
 
 impl SyntaxNode {
     pub fn children(&self) -> Children {
-        let mut children = Vec::new();
+        let mut hashes = Vec::new();
 
         match self {
             Self::Apply {
                 expression,
                 argument,
-            } => children.extend([expression, argument]),
+            } => hashes.extend([expression, argument]),
 
             Self::AddNode
             | Self::Binding { .. }
@@ -151,17 +151,17 @@ impl SyntaxNode {
             | Self::Recursion => {}
 
             Self::Function { parameter, body } => {
-                children.push(parameter);
-                children.extend(body.iter());
+                hashes.push(parameter);
+                hashes.extend(body.iter());
             }
 
             Self::Tuple { values, add_value } => {
-                children.extend(values.iter());
-                children.push(add_value);
+                hashes.extend(values.iter());
+                hashes.push(add_value);
             }
         }
 
-        Children { hashes: children }
+        Children { hashes }
     }
 
     pub fn to_token(&self) -> String {
