@@ -59,6 +59,11 @@ impl Editor {
                         self.navigate_to(next.clone(), compiler.codebase());
                     }
                 }
+                NodeAction::Submit => {
+                    if let Some(next) = layout.node_after(&self.cursor.path) {
+                        self.navigate_to(next.clone(), compiler.codebase());
+                    }
+                }
             }
         }
 

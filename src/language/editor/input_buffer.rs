@@ -68,7 +68,7 @@ impl EditorInputBuffer {
                 self.remove_right(cursor);
             }
             EditorInputEvent::Submit => {
-                return Some(NodeAction::NavigateToNext);
+                return Some(NodeAction::Submit);
             }
         }
 
@@ -143,6 +143,7 @@ impl EditorInputBuffer {
 pub enum NodeAction {
     NavigateToPrevious,
     NavigateToNext,
+    Submit,
 }
 
 #[cfg(test)]
