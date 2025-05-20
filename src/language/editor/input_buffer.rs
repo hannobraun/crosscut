@@ -67,6 +67,9 @@ impl EditorInputBuffer {
                 let _ = whole_node;
                 self.remove_right(cursor);
             }
+            EditorInputEvent::Submit => {
+                return Some(NodeAction::NavigateToNext);
+            }
         }
 
         None
