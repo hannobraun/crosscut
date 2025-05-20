@@ -2,6 +2,8 @@ use std::fmt;
 
 use base64::{Engine, prelude::BASE64_URL_SAFE_NO_PAD};
 
+use crate::util::form::Form;
+
 /// # The hash of a syntax node
 ///
 /// The purpose of this type is to serve as a building block for identifying
@@ -51,4 +53,10 @@ impl fmt::Display for NodeHash {
         write!(f, "{}", BASE64_URL_SAFE_NO_PAD.encode(self.inner))?;
         Ok(())
     }
+}
+
+pub struct NodeByHash;
+
+impl Form for NodeByHash {
+    type Form<T: 'static> = NodeHash;
 }

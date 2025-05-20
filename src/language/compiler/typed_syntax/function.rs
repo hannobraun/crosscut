@@ -1,9 +1,9 @@
 use crate::{
-    language::code::{ChildIndex, NodeHash, Nodes, SyntaxNode},
+    language::code::{ChildIndex, NodeByHash, NodeHash, Nodes, SyntaxNode},
     util::form::{Form, Owned, Ref, RefMut},
 };
 
-use super::{Child, Children, NodeByHash};
+use super::{Child, Children};
 
 pub struct Function<T: Form> {
     pub parameter: T::Form<SyntaxNode>,

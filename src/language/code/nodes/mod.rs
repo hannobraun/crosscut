@@ -5,7 +5,7 @@ mod path;
 mod syntax_node;
 
 pub use self::{
-    hash::NodeHash,
+    hash::{NodeByHash, NodeHash},
     located::LocatedNode,
     nodes::Nodes,
     path::{ChildIndex, NodePath},

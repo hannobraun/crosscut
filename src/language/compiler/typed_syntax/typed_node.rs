@@ -1,6 +1,6 @@
-use crate::language::code::{ChildIndex, NodeHash, SyntaxNode};
+use crate::language::code::{ChildIndex, NodeByHash, NodeHash, SyntaxNode};
 
-use super::{Apply, Function, NodeByHash, Tuple};
+use super::{Apply, Function, Tuple};
 
 pub enum TypedNode {
     Expression { expression: Expression },
