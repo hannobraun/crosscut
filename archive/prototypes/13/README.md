@@ -53,6 +53,6 @@ I wrote about the switch to restricted structural structural editing from
 [2025-05-05](https://www.crosscut.cc/daily/2025-05-05), and posted an update on
 the progress on [2025-05-14](https://www.crosscut.cc/daily/2025-05-14).
 
-I started writing about the switch from postfix to prefix syntax on
-[2025-05-06](https://www.crosscut.cc/daily/2025-05-06). As of this writing
-(2025-05-14), that series is still ongoing.
+I wrote about the switch from postfix to prefix syntax from
+[2025-05-06](https://www.crosscut.cc/daily/2025-05-06) to
+[2025-05-20](https://www.crosscut.cc/daily/2025-05-20).
