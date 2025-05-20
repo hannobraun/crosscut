@@ -8,7 +8,7 @@ pub struct Children<T: Form> {
 }
 
 impl<T: Form> Children<T> {
-    pub fn new(hashes: T::Form<Vec<NodeHash>>, _: usize) -> Self {
+    pub fn new(hashes: T::Form<Vec<NodeHash>>) -> Self {
         Self { hashes }
     }
 }
