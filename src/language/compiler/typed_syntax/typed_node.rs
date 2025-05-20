@@ -10,14 +10,16 @@ impl TypedNode {
     pub fn from_syntax_node(syntax_node: &SyntaxNode) -> Self {
         match syntax_node {
             SyntaxNode::AddNode => Self::Other,
-            SyntaxNode::Apply { .. } => Self::Expression,
+
+            SyntaxNode::Apply { .. }
+            | SyntaxNode::Empty
+            | SyntaxNode::Function { .. }
+            | SyntaxNode::Identifier { .. }
+            | SyntaxNode::Number { .. }
+            | SyntaxNode::Recursion
+            | SyntaxNode::Tuple { .. } => Self::Expression,
+
             SyntaxNode::Binding { .. } => Self::Pattern,
-            SyntaxNode::Empty => Self::Expression,
-            SyntaxNode::Function { .. } => Self::Expression,
-            SyntaxNode::Identifier { .. } => Self::Expression,
-            SyntaxNode::Number { .. } => Self::Expression,
-            SyntaxNode::Recursion => Self::Expression,
-            SyntaxNode::Tuple { .. } => Self::Expression,
         }
     }
 }
