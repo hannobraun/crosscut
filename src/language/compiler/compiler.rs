@@ -31,6 +31,17 @@ impl<'r> Compiler<'r> {
                 let node = change_set.nodes.get(parent.hash()).clone();
 
                 let (node, index) = match &node {
+                    SyntaxNode::Tuple { values, add_value } => {
+                        let mut tuple = Tuple {
+                            values: values.clone(),
+                            add_value: *add_value,
+                        };
+
+                        let index = tuple.values_mut().add(child);
+                        let node = tuple.into_syntax_node();
+
+                        (node, index)
+                    }
                     SyntaxNode::AddNode
                     | SyntaxNode::Apply { .. }
                     | SyntaxNode::Binding { .. }
@@ -43,18 +54,6 @@ impl<'r> Compiler<'r> {
                             "Can't add child to this node:\n\
                             {node:#?}"
                         );
-                    }
-
-                    SyntaxNode::Tuple { values, add_value } => {
-                        let mut tuple = Tuple {
-                            values: values.clone(),
-                            add_value: *add_value,
-                        };
-
-                        let index = tuple.values_mut().add(child);
-                        let node = tuple.into_syntax_node();
-
-                        (node, index)
                     }
                 };
 
