@@ -38,18 +38,34 @@ pub enum SyntaxNode {
     ///
     /// ## Implementation Note
     ///
-    /// Having this child type of node is a bit weird, and probably not
-    /// desirable in the long term. It is only relevant to the editor, and
-    /// nothing else.
+    /// This approach to adding children is not desirable, for at least two
+    /// reasons:
     ///
-    /// As the syntax grows more complex, and what's shown in the editor keeps
-    /// diverging from the underlying syntax tree, it might not make sense to
-    /// still have this node.
+    /// 1. Having a node here that has no meaning to that part of the code, and
+    ///    is _only_ used by the editor, is a bit weird. At the very least, it
+    ///    might be better to have some kind of "virtual" node that only the
+    ///    editor deals with.
+    /// 2. From a UX perspective, this "add child" node is weird. It might be
+    ///    more intuitive, if navigating away from a node using "space" or
+    ///    "enter" would create a new child or sibling where possible, and just
+    ///    navigate to the next node where not.
     ///
-    /// But so far, this point hasn't been reached. As of this writing, this
-    /// is the only such "editor-only" node. And while that is the case,
-    /// managing it here makes more sense. It allows the node to piggyback on
-    /// top of the existing infrastructure for addressing nodes.
+    /// But both of those approaches are more complicated than the current one,
+    /// which has turned out to be a quick win. Specifically, I found there to
+    /// be the following hurdles:
+    ///
+    /// 1. A virtual editor-only node would not benefit from the infrastructure
+    ///    that we already have for identifying nodes, like `NodePath`. Maybe we
+    ///    need a solution for this anyway, as the syntax grows more complex and
+    ///    what's shown in the editor diverges from the structure of the syntax
+    ///    tree. But so far, this hasn't been necessary.
+    /// 2. Adding new children or siblings or just navigating to the next node,
+    ///    depending on the context, might be the better solution, but it's not
+    ///    trivial to implement. There are many edge cases to consider to get it
+    ///    to a good enough state.
+    ///
+    /// Neither solution seems worth paying the price for right now, so this
+    /// weird node is what we got for the time being.
     AddNode,
 
     /// # The application of an expression to an argument
