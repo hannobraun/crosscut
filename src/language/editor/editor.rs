@@ -137,7 +137,7 @@ impl Editor {
     ) {
         for ch in code.chars() {
             let event = if ch.is_whitespace() {
-                EditorInputEvent::MoveCursorDown
+                EditorInputEvent::Submit
             } else {
                 EditorInputEvent::Insert { ch }
             };
