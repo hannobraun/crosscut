@@ -38,7 +38,7 @@ fn add_apply_node() {
 }
 
 #[test]
-fn add_fn_node() {
+fn add_function() {
     // Adding an `fn` node also creates its children.
 
     let mut codebase = Codebase::new();
