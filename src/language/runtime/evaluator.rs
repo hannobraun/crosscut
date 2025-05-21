@@ -183,7 +183,7 @@ impl Evaluator {
             }
 
             RuntimeNode::Tuple {
-                ref mut values_to_evaluate,
+                to_evaluate: ref mut values_to_evaluate,
                 ..
             } if !values_to_evaluate.is_empty() => {
                 let Some(child) = values_to_evaluate.pop() else {

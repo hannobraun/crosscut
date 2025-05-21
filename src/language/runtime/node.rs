@@ -25,7 +25,7 @@ pub enum RuntimeNode {
     },
     Recursion,
     Tuple {
-        values_to_evaluate: Vec<NodePath>,
+        to_evaluate: Vec<NodePath>,
         evaluated_values: Vec<Value>,
     },
 }
@@ -108,7 +108,7 @@ impl RuntimeNode {
                 let evaluated_values = Vec::new();
 
                 Self::Tuple {
-                    values_to_evaluate,
+                    to_evaluate: values_to_evaluate,
                     evaluated_values,
                 }
             }
