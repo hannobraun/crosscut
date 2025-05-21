@@ -183,10 +183,10 @@ impl Evaluator {
             }
 
             RuntimeNode::Tuple {
-                to_evaluate: ref mut values_to_evaluate,
+                ref mut to_evaluate,
                 ..
-            } if !values_to_evaluate.is_empty() => {
-                let Some(child) = values_to_evaluate.pop() else {
+            } if !to_evaluate.is_empty() => {
+                let Some(child) = to_evaluate.pop() else {
                     // This could be prevented with an `if let` guard, but those
                     // are not stable yet, as of 2025-05-16:
                     // https://rust-lang.github.io/rfcs/2294-if-let-guard.html
