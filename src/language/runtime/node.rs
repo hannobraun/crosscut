@@ -92,7 +92,7 @@ impl RuntimeNode {
             }
             SyntaxNode::Recursion => Self::Recursion,
             SyntaxNode::Tuple { values, .. } => {
-                let values_to_evaluate = values
+                let to_evaluate = values
                     .iter()
                     .copied()
                     .enumerate()
@@ -108,7 +108,7 @@ impl RuntimeNode {
                 let evaluated_values = Vec::new();
 
                 Self::Tuple {
-                    to_evaluate: values_to_evaluate,
+                    to_evaluate,
                     evaluated_values,
                 }
             }
