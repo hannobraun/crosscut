@@ -15,11 +15,12 @@ impl Codebase {
 
         let root = {
             let node = SyntaxNode::Empty;
-            nodes.insert(node)
+            let hash = nodes.insert(node);
+            Root { hash }
         };
 
         Self {
-            root: Root { hash: root },
+            root,
             nodes,
             changes: Changes::new(),
         }
