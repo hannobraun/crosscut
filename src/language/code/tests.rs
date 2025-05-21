@@ -1,6 +1,6 @@
 use crate::language::{
     code::NodePath,
-    compiler::Tuple,
+    compiler::{Expressions, Tuple},
     tests::infra::{ExpectChildren, identifier},
 };
 
@@ -14,16 +14,16 @@ fn uniquely_identify_identical_children_of_different_parents() {
     let mut codebase = Codebase::new();
 
     codebase.make_change(|change_set| {
-        let parent_a = Tuple::default()
-            .with_values([identifier("child")])
+        let parent_a = Expressions::default()
+            .with_expressions([identifier("child")])
             .into_syntax_node(change_set.nodes);
-        let parent_b = Tuple::default()
-            .with_values([identifier("child")])
+        let parent_b = Expressions::default()
+            .with_expressions([identifier("child")])
             .into_syntax_node(change_set.nodes);
 
         let root = {
-            let node = Tuple::default()
-                .with_values([parent_a, parent_b])
+            let node = Expressions::default()
+                .with_expressions([parent_a, parent_b])
                 .into_syntax_node(change_set.nodes);
 
             change_set.nodes.insert(node)

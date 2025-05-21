@@ -9,4 +9,7 @@ pub use self::{
 };
 
 #[cfg(test)]
+pub use self::typed_syntax::Expressions;
+
+#[cfg(test)]
 mod tests;

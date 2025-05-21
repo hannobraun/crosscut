@@ -111,6 +111,25 @@ pub enum SyntaxNode {
     /// practical solution.
     Empty,
 
+    /// # A series of expressions
+    #[cfg_attr(not(test), allow(unused))] // currently introducing this
+    Expressions {
+        /// # The expressions
+        expressions: Vec<NodeHash>,
+
+        /// # A node that can be edited to add an expression
+        ///
+        /// This is used as a destination for the editor to navigate to, which
+        /// it can edit to add a value.
+        ///
+        /// From the perspective of the syntax tree, this child stays static.
+        /// When the user tries to edit it, the editor actually creates a new
+        /// child that is then edited, and this one stays as it is.
+        ///
+        /// This is expected to be a [`SyntaxNode::Add`].
+        add: NodeHash,
+    },
+
     /// # A function literal
     ///
     /// Evaluates to a function value.
@@ -191,6 +210,11 @@ impl SyntaxNode {
             | Self::Number { value: _ }
             | Self::Recursion => {}
 
+            Self::Expressions { expressions, add } => {
+                hashes.extend(expressions);
+                hashes.push(add);
+            }
+
             Self::Function { parameter, body } => {
                 hashes.push(parameter);
                 hashes.extend(body);
@@ -220,6 +244,11 @@ impl SyntaxNode {
             | Self::Identifier { .. }
             | Self::Number { value: _ }
             | Self::Recursion => {}
+
+            Self::Expressions { expressions, add } => {
+                hashes.extend(expressions);
+                hashes.push(add);
+            }
 
             Self::Function { parameter, body } => {
                 hashes.push(parameter);
@@ -254,6 +283,11 @@ impl fmt::Display for SyntaxNode {
             }
             SyntaxNode::Empty => {
                 write!(f, "")
+            }
+            SyntaxNode::Expressions { .. } => {
+                unreachable!(
+                    "Expressions node is not directly displayed in the editor."
+                );
             }
             SyntaxNode::Function { .. } => {
                 write!(f, "fn")

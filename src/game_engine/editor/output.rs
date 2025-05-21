@@ -308,6 +308,11 @@ fn render_help<A: EditorOutputAdapter>(
                 making up your mind about what you want to type."
             )?;
         }
+        SyntaxNode::Expressions { .. } => {
+            unreachable!(
+                "Expressions node is not directly displayed in the editor."
+            );
+        }
         SyntaxNode::Function { .. } => {
             writeln!(
                 adapter,
