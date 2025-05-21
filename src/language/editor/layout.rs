@@ -1,4 +1,4 @@
-use crate::language::code::{Codebase, LocatedNode, NodePath};
+use crate::language::code::{Codebase, LocatedNode, NodePath, SyntaxNode};
 
 #[derive(Debug)]
 pub struct EditorLayout {
@@ -77,10 +77,15 @@ fn collect_nodes_from_root(
     nodes_from_root: &mut Vec<NodeInLayout>,
     codebase: &Codebase,
 ) {
-    nodes_from_root.push(NodeInLayout {
-        path: located_node.path.clone(),
-        distance_from_root,
-    });
+    if let SyntaxNode::Expressions { .. } = located_node.node {
+        // The expressions node is not directly displayed in the editor. Only
+        // its children are.
+    } else {
+        nodes_from_root.push(NodeInLayout {
+            path: located_node.path.clone(),
+            distance_from_root,
+        });
+    }
 
     let mut children = Vec::new();
     children.extend(located_node.children(codebase.nodes()));
