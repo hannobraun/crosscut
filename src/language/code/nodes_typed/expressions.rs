@@ -1,12 +1,12 @@
-#![cfg(test)]
-
 use crate::{
-    language::code::SyntaxNode,
-    util::form::{Form, Owned},
+    language::code::{NodeByHash, SyntaxNode},
+    util::form::{Form, Owned, RefMut},
 };
 
 #[cfg(test)]
 use crate::language::code::Nodes;
+
+use super::Children;
 
 pub struct Expressions<T: Form> {
     pub expressions: Vec<T::Form<SyntaxNode>>,
@@ -33,6 +33,19 @@ impl Expressions<Owned> {
         let add = nodes.insert(self.add);
 
         SyntaxNode::Expressions { expressions, add }
+    }
+}
+
+impl Expressions<NodeByHash> {
+    pub fn expressions_mut(&mut self) -> Children<RefMut> {
+        Children::new(&mut self.expressions)
+    }
+
+    pub fn into_syntax_node(self) -> SyntaxNode {
+        SyntaxNode::Expressions {
+            expressions: self.expressions,
+            add: self.add,
+        }
     }
 }
 
