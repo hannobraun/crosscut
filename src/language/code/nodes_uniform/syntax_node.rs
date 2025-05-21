@@ -112,7 +112,6 @@ pub enum SyntaxNode {
     Empty,
 
     /// # A series of expressions
-    #[cfg_attr(not(test), allow(unused))] // currently introducing this
     Expressions {
         /// # The expressions
         expressions: Vec<NodeHash>,
