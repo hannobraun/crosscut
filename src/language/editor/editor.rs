@@ -16,7 +16,19 @@ pub struct Editor {
 
 impl Editor {
     pub fn new(cursor: impl Into<Cursor>, codebase: &Codebase) -> Self {
-        let cursor = cursor.into();
+        let mut cursor = cursor.into();
+
+        // The editor doesn't directly show the `Expressions` node, only its
+        // children.
+        let located_node = codebase.node_at(&cursor.path);
+        if let SyntaxNode::Expressions { .. } = located_node.node {
+            let Some(child) = located_node.children(codebase.nodes()).next()
+            else {
+                unreachable!("An `Expressions` node has at least one child.");
+            };
+
+            cursor.path = child.path;
+        }
 
         let mut editor = Self {
             input: EditorInputBuffer::empty(),
