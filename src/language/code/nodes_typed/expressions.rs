@@ -1,10 +1,7 @@
 use crate::{
-    language::code::{NodeByHash, SyntaxNode},
+    language::code::{NodeByHash, Nodes, SyntaxNode},
     util::form::{Form, Owned, RefMut},
 };
-
-#[cfg(test)]
-use crate::language::code::Nodes;
 
 use super::Children;
 
@@ -23,7 +20,6 @@ impl Expressions<Owned> {
         self
     }
 
-    #[cfg(test)]
     pub fn into_syntax_node(self, nodes: &mut Nodes) -> SyntaxNode {
         let expressions = self
             .expressions

@@ -300,7 +300,7 @@ fn navigate_past_add_value_node_of_a_tuple() {
     editor.on_input(MoveCursorDown, &mut codebase, &mut evaluator);
     editor.on_code("arg", &mut codebase, &mut evaluator);
 
-    let apply = codebase.root();
+    let [apply, _] = codebase.root().expect_children(codebase.nodes());
     let [_tuple, arg] = apply
         .expect_children(codebase.nodes())
         .map(|located_node| located_node.path);

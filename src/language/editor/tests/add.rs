@@ -15,7 +15,7 @@ fn add_apply_node() {
     let mut editor = Editor::new(codebase.root().path, &codebase);
     editor.on_code("apply", &mut codebase, &mut evaluator);
 
-    let apply = codebase.root();
+    let [apply, _] = codebase.root().expect_children(codebase.nodes());
     let [function, argument] = apply.expect_children(codebase.nodes());
 
     assert!(matches!(apply.node, &SyntaxNode::Apply { .. }));
@@ -30,7 +30,7 @@ fn add_apply_node() {
     editor.on_input(MoveCursorDown, &mut codebase, &mut evaluator);
     editor.on_code("b", &mut codebase, &mut evaluator);
 
-    let apply = codebase.root();
+    let [apply, _] = codebase.root().expect_children(codebase.nodes());
     let [function, argument] = apply.expect_children(codebase.nodes());
 
     assert_eq!(function.node, &identifier("a"));
@@ -47,7 +47,7 @@ fn add_function() {
     let mut editor = Editor::new(codebase.root().path, &codebase);
     editor.on_code("fn", &mut codebase, &mut evaluator);
 
-    let function = codebase.root();
+    let [function, _] = codebase.root().expect_children(codebase.nodes());
     let [parameter, body] = function.expect_children(codebase.nodes());
 
     assert_eq!(
@@ -79,7 +79,7 @@ fn add_value_to_tuple() {
     editor.on_input(MoveCursorDown, &mut codebase, &mut evaluator);
     editor.on_code("1", &mut codebase, &mut evaluator);
 
-    let tuple = codebase.root();
+    let [tuple, _] = codebase.root().expect_children(codebase.nodes());
     let [value, _] = tuple.expect_children(codebase.nodes());
 
     assert!(matches!(tuple.node, &SyntaxNode::Tuple { .. }));
