@@ -66,7 +66,7 @@ pub enum SyntaxNode {
     ///
     /// Neither solution seems worth paying the price for right now, so this
     /// weird node is what we got for the time being.
-    AddNode,
+    Add,
 
     /// # The application of an expression to an argument
     Apply {
@@ -184,7 +184,7 @@ impl SyntaxNode {
                 argument,
             } => hashes.extend([expression, argument]),
 
-            Self::AddNode
+            Self::Add
             | Self::Binding { .. }
             | Self::Empty
             | Self::Identifier { .. }
@@ -214,7 +214,7 @@ impl SyntaxNode {
                 argument,
             } => hashes.extend([expression, argument]),
 
-            Self::AddNode
+            Self::Add
             | Self::Binding { .. }
             | Self::Empty
             | Self::Identifier { .. }
@@ -243,7 +243,7 @@ impl SyntaxNode {
 impl fmt::Display for SyntaxNode {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match self {
-            SyntaxNode::AddNode => {
+            SyntaxNode::Add => {
                 write!(f, "")
             }
             SyntaxNode::Apply { .. } => {

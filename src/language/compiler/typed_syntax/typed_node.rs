@@ -9,7 +9,7 @@ pub enum TypedNode {
 impl TypedNode {
     pub fn from_syntax_node(syntax_node: &SyntaxNode) -> Self {
         match syntax_node {
-            SyntaxNode::AddNode => Self::Other,
+            SyntaxNode::Add => Self::Other,
 
             SyntaxNode::Apply { .. }
             | SyntaxNode::Empty

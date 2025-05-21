@@ -83,7 +83,7 @@ impl Editor {
         }
 
         let current_node = compiler.codebase().node_at(&self.cursor.path);
-        self.cursor.path = if let SyntaxNode::AddNode = current_node.node {
+        self.cursor.path = if let SyntaxNode::Add = current_node.node {
             if !self.input.buffer().is_empty() {
                 let Some((parent, _)) = current_node.path.parent() else {
                     unreachable!(

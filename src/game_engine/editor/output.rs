@@ -285,7 +285,7 @@ fn render_help<A: EditorOutputAdapter>(
     writeln!(adapter)?;
 
     match node {
-        SyntaxNode::AddNode => {
+        SyntaxNode::Add => {
             writeln!(
                 adapter,
                 "Edit this node to add a new child to the parent.",

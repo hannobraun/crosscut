@@ -49,7 +49,7 @@ impl Default for Tuple<Owned> {
     fn default() -> Self {
         Self {
             values: Vec::new(),
-            add_value: SyntaxNode::AddNode,
+            add_value: SyntaxNode::Add,
         }
     }
 }
