@@ -105,11 +105,11 @@ impl RuntimeNode {
                         )
                     })
                     .collect();
-                let evaluated_values = Vec::new();
+                let evaluated = Vec::new();
 
                 Self::Tuple {
                     to_evaluate,
-                    evaluated: evaluated_values,
+                    evaluated,
                 }
             }
             syntax_node => {
