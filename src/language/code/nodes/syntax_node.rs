@@ -193,11 +193,11 @@ impl SyntaxNode {
 
             Self::Function { parameter, body } => {
                 hashes.push(parameter);
-                hashes.extend(body.iter());
+                hashes.extend(body);
             }
 
             Self::Tuple { values, add_value } => {
-                hashes.extend(values.iter());
+                hashes.extend(values);
                 hashes.push(add_value);
             }
         }
