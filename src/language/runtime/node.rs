@@ -139,11 +139,8 @@ impl RuntimeNode {
                 *child = RuntimeChild::Evaluated { value };
             }
 
-            Self::Tuple {
-                evaluated: evaluated_values,
-                ..
-            } => {
-                evaluated_values.push(value);
+            Self::Tuple { evaluated, .. } => {
+                evaluated.push(value);
             }
 
             Self::PopStackFrame { output } => {
