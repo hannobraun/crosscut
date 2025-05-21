@@ -6,6 +6,24 @@ use crate::language::{
 };
 
 #[test]
+fn add_nodes_to_root_context() {
+    // It is possible to add multiple nodes to the root context.
+
+    let mut codebase = Codebase::new();
+    let mut evaluator = Evaluator::new();
+
+    let mut editor = Editor::new(codebase.root().path, &codebase);
+    editor.on_code("a", &mut codebase, &mut evaluator);
+    editor.on_input(MoveCursorDown, &mut codebase, &mut evaluator);
+    editor.on_code("b", &mut codebase, &mut evaluator);
+
+    let [a, b, _] = codebase.root().expect_children(codebase.nodes());
+
+    assert_eq!(a.node, &identifier("a"));
+    assert_eq!(b.node, &identifier("b"));
+}
+
+#[test]
 fn add_apply_node() {
     // Adding an `apply` node also creates its children.
 
