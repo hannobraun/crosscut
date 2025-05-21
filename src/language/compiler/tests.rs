@@ -1,5 +1,5 @@
 use crate::language::{
-    code::{Codebase, NodePath, Tuple},
+    code::{Codebase, Expressions, NodePath, Tuple},
     compiler::Compiler,
     tests::infra::{ExpectChildren, identifier},
 };
@@ -28,10 +28,10 @@ fn insert_child_with_grandparent() {
     let mut codebase = Codebase::new();
 
     codebase.make_change(|change_set| {
-        let parent = Tuple::default().into_syntax_node(change_set.nodes);
+        let parent = Expressions::default().into_syntax_node(change_set.nodes);
         let grandparent = {
-            let node = Tuple::default()
-                .with_values([parent])
+            let node = Expressions::default()
+                .with_expressions([parent])
                 .into_syntax_node(change_set.nodes);
             change_set.nodes.insert(node)
         };
