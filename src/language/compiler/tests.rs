@@ -9,19 +9,6 @@ fn insert_child() {
     // The compiler can insert a child node.
 
     let mut codebase = Codebase::new();
-
-    codebase.make_change(|change_set| {
-        let parent = {
-            let node = Tuple::default().into_syntax_node(change_set.nodes);
-            change_set.nodes.insert(node)
-        };
-
-        change_set.replace(
-            &change_set.root_before_change(),
-            &NodePath::for_root(parent),
-        );
-    });
-
     let mut compiler = Compiler::new(&mut codebase);
 
     let child = compiler.insert_child(compiler.codebase().root().path, "child");
