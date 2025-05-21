@@ -66,8 +66,8 @@ fn replace_second_of_two_equal_children() {
 
     codebase.make_change(|change_set| {
         let parent = {
-            let node = Tuple::default()
-                .with_values([identifier("child"), identifier("child")])
+            let node = Expressions::default()
+                .with_expressions([identifier("child"), identifier("child")])
                 .into_syntax_node(change_set.nodes);
 
             change_set.nodes.insert(node)
