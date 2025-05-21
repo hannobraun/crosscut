@@ -12,7 +12,11 @@ pub struct Codebase {
 impl Codebase {
     pub fn new() -> Self {
         let mut nodes = Nodes::default();
-        let root = nodes.insert(SyntaxNode::Empty);
+
+        let root = {
+            let node = SyntaxNode::Empty;
+            nodes.insert(node)
+        };
 
         Self {
             root: Root { hash: root },
