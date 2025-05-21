@@ -201,7 +201,8 @@ impl Evaluator {
                     .push(RuntimeNode::new(child, codebase.nodes()));
             }
             RuntimeNode::Tuple {
-                evaluated_values, ..
+                evaluated: evaluated_values,
+                ..
             } => {
                 self.finish_evaluating_node(Value::Tuple {
                     values: evaluated_values,
