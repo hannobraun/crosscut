@@ -1,5 +1,5 @@
 use crate::language::{
-    code::{Codebase, Expressions, NodePath, Tuple},
+    code::{Codebase, Expressions, NodePath},
     compiler::Compiler,
     tests::infra::{ExpectChildren, identifier},
 };
@@ -102,8 +102,8 @@ fn updating_child_updates_parent() {
 
     codebase.make_change(|change_set| {
         let parent = {
-            let node = Tuple::default()
-                .with_values([identifier("old")])
+            let node = Expressions::default()
+                .with_expressions([identifier("old")])
                 .into_syntax_node(change_set.nodes);
 
             change_set.nodes.insert(node)
