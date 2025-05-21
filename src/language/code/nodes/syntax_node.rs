@@ -223,11 +223,11 @@ impl SyntaxNode {
 
             Self::Function { parameter, body } => {
                 hashes.push(parameter);
-                hashes.extend(body.iter_mut());
+                hashes.extend(body);
             }
 
             Self::Tuple { values, add_value } => {
-                hashes.extend(values.iter_mut());
+                hashes.extend(values);
                 hashes.push(add_value);
             }
         }
