@@ -10,6 +10,10 @@ pub enum RuntimeNode {
         argument: RuntimeChild,
     },
     Empty,
+    Expressions {
+        to_evaluate: Vec<NodePath>,
+        evaluated: Vec<Value>,
+    },
     Function {
         parameter: String,
         body: NodePath,
@@ -59,6 +63,30 @@ impl RuntimeNode {
                 }
             }
             SyntaxNode::Empty => Self::Empty,
+            SyntaxNode::Expressions {
+                expressions,
+                add: _,
+            } => {
+                let to_evaluate = expressions
+                    .iter()
+                    .copied()
+                    .enumerate()
+                    .rev()
+                    .map(|(index, hash)| {
+                        NodePath::new(
+                            hash,
+                            Some((path.clone(), ChildIndex { index })),
+                            nodes,
+                        )
+                    })
+                    .collect();
+                let evaluated = Vec::new();
+
+                Self::Expressions {
+                    to_evaluate,
+                    evaluated,
+                }
+            }
             SyntaxNode::Function { parameter, body } => {
                 let parameter = {
                     let parameter = nodes.get(parameter);
@@ -139,7 +167,8 @@ impl RuntimeNode {
                 *child = RuntimeChild::Evaluated { value };
             }
 
-            Self::Tuple { evaluated, .. } => {
+            Self::Expressions { evaluated, .. }
+            | Self::Tuple { evaluated, .. } => {
                 evaluated.push(value);
             }
 

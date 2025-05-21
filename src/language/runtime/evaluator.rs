@@ -182,6 +182,29 @@ impl Evaluator {
                 self.eval_stack.push(node);
             }
 
+            RuntimeNode::Expressions {
+                ref mut to_evaluate,
+                ..
+            } if !to_evaluate.is_empty() => {
+                let Some(child) = to_evaluate.pop() else {
+                    // This could be prevented with an `if let` guard, but those
+                    // are not stable yet, as of 2025-05-21:
+                    // https://rust-lang.github.io/rfcs/2294-if-let-guard.html
+                    unreachable!(
+                        "The match guard above checks that there are values to \
+                        evaluate."
+                    );
+                };
+
+                self.eval_stack.push(node);
+                self.eval_stack
+                    .push(RuntimeNode::new(child, codebase.nodes()));
+            }
+            RuntimeNode::Expressions { mut evaluated, .. } => {
+                let value = evaluated.pop().unwrap_or_else(Value::nothing);
+                self.finish_evaluating_node(value);
+            }
+
             RuntimeNode::Tuple {
                 ref mut to_evaluate,
                 ..
