@@ -11,6 +11,7 @@ pub struct Expressions<T: Form> {
 }
 
 impl Expressions<Owned> {
+    #[cfg(test)]
     pub fn with_expressions(
         mut self,
         values: impl IntoIterator<Item = SyntaxNode>,
