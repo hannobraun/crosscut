@@ -1,8 +1,6 @@
-use crate::language::code::{Codebase, NodePath, SyntaxNode};
+use crate::language::code::{Codebase, NodePath, SyntaxNode, Tuple, TypedNode};
 
-use super::{
-    Tuple, TypedNode, expression, replace::replace_node_and_update_parents,
-};
+use super::{expression, replace::replace_node_and_update_parents};
 
 pub struct Compiler<'r> {
     codebase: &'r mut Codebase,

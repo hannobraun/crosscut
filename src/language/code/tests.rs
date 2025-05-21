@@ -1,6 +1,5 @@
 use crate::language::{
-    code::NodePath,
-    compiler::{Expressions, Tuple},
+    code::{Expressions, NodePath, Tuple},
     tests::infra::{ExpectChildren, identifier},
 };
 

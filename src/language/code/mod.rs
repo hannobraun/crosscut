@@ -1,6 +1,7 @@
 mod changes;
 mod codebase;
 mod nodes_uniform;
+mod typed_syntax;
 mod types;
 
 pub use self::{
@@ -10,8 +11,12 @@ pub use self::{
         ChildIndex, LocatedNode, NodeByHash, NodeHash, NodePath, Nodes,
         SyntaxNode,
     },
+    typed_syntax::{Apply, Function, Tuple, TypedNode},
     types::{Type, display_tuple},
 };
+
+#[cfg(test)]
+pub use self::typed_syntax::Expressions;
 
 #[cfg(test)]
 mod tests;

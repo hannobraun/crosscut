@@ -1,6 +1,6 @@
 use crate::language::{
-    code::{Codebase, NodePath},
-    compiler::{Compiler, Tuple},
+    code::{Codebase, NodePath, Tuple},
+    compiler::Compiler,
     tests::infra::{ExpectChildren, identifier},
 };
 

@@ -293,8 +293,7 @@ struct StackFrame {
 #[cfg(test)]
 mod tests {
     use crate::language::{
-        code::{Codebase, NodePath, SyntaxNode},
-        compiler::{Apply, Function, Tuple},
+        code::{Apply, Codebase, Function, NodePath, SyntaxNode, Tuple},
         runtime::{Evaluator, RuntimeState, Value},
         tests::infra::ExpectChildren,
     };
