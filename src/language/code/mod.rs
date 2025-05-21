@@ -1,12 +1,12 @@
 mod changes;
 mod codebase;
-mod nodes;
+mod nodes_uniform;
 mod types;
 
 pub use self::{
     changes::{Changes, NewChangeSet},
     codebase::Codebase,
-    nodes::{
+    nodes_uniform::{
         ChildIndex, LocatedNode, NodeByHash, NodeHash, NodePath, Nodes,
         SyntaxNode,
     },
