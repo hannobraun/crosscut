@@ -72,18 +72,18 @@ pub struct NodeInLayout {
 }
 
 fn collect_nodes_from_root(
-    node: LocatedNode,
+    located_node: LocatedNode,
     distance_from_root: u32,
     nodes_from_root: &mut Vec<NodeInLayout>,
     codebase: &Codebase,
 ) {
     nodes_from_root.push(NodeInLayout {
-        path: node.path.clone(),
+        path: located_node.path.clone(),
         distance_from_root,
     });
 
     let mut children = Vec::new();
-    children.extend(node.children(codebase.nodes()));
+    children.extend(located_node.children(codebase.nodes()));
 
     for child in children {
         collect_nodes_from_root(
