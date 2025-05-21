@@ -1,9 +1,12 @@
 #![cfg(test)]
 
 use crate::{
-    language::code::{Nodes, SyntaxNode},
+    language::code::SyntaxNode,
     util::form::{Form, Owned},
 };
+
+#[cfg(test)]
+use crate::language::code::Nodes;
 
 pub struct Expressions<T: Form> {
     pub expressions: Vec<T::Form<SyntaxNode>>,
@@ -20,6 +23,7 @@ impl Expressions<Owned> {
         self
     }
 
+    #[cfg(test)]
     pub fn into_syntax_node(self, nodes: &mut Nodes) -> SyntaxNode {
         let expressions = self
             .expressions
