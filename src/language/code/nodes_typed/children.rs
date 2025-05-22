@@ -32,8 +32,12 @@ impl<T: Form> Children<T> {
 impl Children<Ref<'_>> {
     pub fn iter(
         &self,
-    ) -> impl DoubleEndedIterator<Item = &NodeHash> + ExactSizeIterator {
-        self.hashes.iter()
+    ) -> impl DoubleEndedIterator<Item = Child> + ExactSizeIterator {
+        self.hashes
+            .iter()
+            .copied()
+            .enumerate()
+            .map(|(index, hash)| Child::new(hash, index))
     }
 }
 

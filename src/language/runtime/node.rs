@@ -71,15 +71,7 @@ impl RuntimeNode {
                 let to_evaluate = expressions
                     .expressions()
                     .iter()
-                    .copied()
-                    .enumerate()
-                    .map(|(index, hash)| {
-                        NodePath::new(
-                            hash,
-                            Some((path.clone(), ChildIndex { index })),
-                            nodes,
-                        )
-                    })
+                    .map(|child| child.into_path(path.clone(), nodes))
                     .rev()
                     .collect();
                 let evaluated = Vec::new();
