@@ -46,12 +46,12 @@ impl RuntimeNode {
                     argument: *argument,
                 };
 
-                let expression = RuntimeChild::Unevaluated {
-                    path: apply.expression().into_path(path.clone(), nodes),
-                };
-                let argument = RuntimeChild::Unevaluated {
-                    path: apply.argument().into_path(path.clone(), nodes),
-                };
+                let [expression, argument] =
+                    [apply.expression(), apply.argument()].map(|child| {
+                        RuntimeChild::Unevaluated {
+                            path: child.into_path(path.clone(), nodes),
+                        }
+                    });
 
                 Self::Apply {
                     path,
