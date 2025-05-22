@@ -138,7 +138,7 @@ impl RuntimeNode {
                 // For the most part, this would only happen if there's a bug in
                 // the compiler or evaluator. This still shouldn't be an
                 // `unreachable!` though, as it's also a possible consequence of
-                // somebody messing with the store code database.
+                // somebody messing with the stored code database.
                 panic!(
                     "Could not construct runtime node from syntax node: \n\
                     {syntax_node:#?}"
