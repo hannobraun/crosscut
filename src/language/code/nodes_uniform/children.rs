@@ -61,3 +61,9 @@ impl fmt::Display for ChildIndex {
         write!(f, "{}", self.index)
     }
 }
+
+impl From<usize> for ChildIndex {
+    fn from(index: usize) -> Self {
+        Self { index }
+    }
+}
