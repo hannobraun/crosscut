@@ -1,4 +1,6 @@
-use crate::language::code::{ChildIndex, NodePath, Nodes, SyntaxNode};
+use crate::language::code::{
+    Apply, ChildIndex, NodeByHash, NodePath, Nodes, SyntaxNode,
+};
 
 use super::Value;
 
@@ -41,16 +43,21 @@ impl RuntimeNode {
                 expression,
                 argument,
             } => {
+                let apply: Apply<NodeByHash> = Apply {
+                    expression: *expression,
+                    argument: *argument,
+                };
+
                 let expression = RuntimeChild::Unevaluated {
                     path: NodePath::new(
-                        *expression,
+                        apply.expression,
                         Some((path.clone(), ChildIndex { index: 0 })),
                         nodes,
                     ),
                 };
                 let argument = RuntimeChild::Unevaluated {
                     path: NodePath::new(
-                        *argument,
+                        apply.argument,
                         Some((path.clone(), ChildIndex { index: 1 })),
                         nodes,
                     ),
