@@ -11,15 +11,6 @@ pub struct Tuple<T: Form> {
 }
 
 impl Tuple<Owned> {
-    #[cfg(test)]
-    pub fn with_values(
-        mut self,
-        values: impl IntoIterator<Item = SyntaxNode>,
-    ) -> Self {
-        self.values = values.into_iter().collect();
-        self
-    }
-
     pub fn into_syntax_node(self, nodes: &mut Nodes) -> SyntaxNode {
         let values = self
             .values

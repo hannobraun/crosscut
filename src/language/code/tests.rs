@@ -1,5 +1,5 @@
 use crate::language::{
-    code::{Expressions, NodePath, Tuple},
+    code::{Expressions, NodePath},
     tests::infra::{ExpectChildren, identifier},
 };
 
@@ -52,8 +52,8 @@ fn uniquely_identify_identical_siblings() {
 
     codebase.make_change(|change_set| {
         let parent = {
-            let node = Tuple::default()
-                .with_values([identifier("child"), identifier("child")])
+            let node = Expressions::default()
+                .with_expressions([identifier("child"), identifier("child")])
                 .into_syntax_node(change_set.nodes);
 
             change_set.nodes.insert(node)
