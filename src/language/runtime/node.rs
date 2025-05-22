@@ -49,18 +49,10 @@ impl RuntimeNode {
                 };
 
                 let expression = RuntimeChild::Unevaluated {
-                    path: NodePath::new(
-                        apply.expression,
-                        Some((path.clone(), ChildIndex { index: 0 })),
-                        nodes,
-                    ),
+                    path: apply.expression().into_path(path.clone(), nodes),
                 };
                 let argument = RuntimeChild::Unevaluated {
-                    path: NodePath::new(
-                        apply.argument,
-                        Some((path.clone(), ChildIndex { index: 1 })),
-                        nodes,
-                    ),
+                    path: apply.argument().into_path(path.clone(), nodes),
                 };
 
                 Self::Apply {

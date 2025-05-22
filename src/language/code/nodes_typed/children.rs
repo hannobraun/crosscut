@@ -1,7 +1,23 @@
 use crate::{
-    language::code::{ChildIndex, NodeHash},
+    language::code::{ChildIndex, NodeHash, NodePath, Nodes},
     util::form::{Form, RefMut},
 };
+
+pub struct Child {
+    hash: NodeHash,
+    index: ChildIndex,
+}
+
+impl Child {
+    pub fn new(hash: NodeHash, index: impl Into<ChildIndex>) -> Self {
+        let index = index.into();
+        Self { hash, index }
+    }
+
+    pub fn into_path(self, parent: NodePath, nodes: &Nodes) -> NodePath {
+        NodePath::new(self.hash, Some((parent, self.index)), nodes)
+    }
+}
 
 pub struct Children<T: Form> {
     hashes: T::Form<Vec<NodeHash>>,

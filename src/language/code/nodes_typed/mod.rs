@@ -6,6 +6,10 @@ mod tuple;
 mod typed_node;
 
 pub use self::{
-    apply::Apply, children::Children, expressions::Expressions,
-    function::Function, tuple::Tuple, typed_node::TypedNode,
+    apply::Apply,
+    children::{Child, Children},
+    expressions::Expressions,
+    function::Function,
+    tuple::Tuple,
+    typed_node::TypedNode,
 };
