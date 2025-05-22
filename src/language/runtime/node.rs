@@ -1,4 +1,6 @@
-use crate::language::code::{Apply, ChildIndex, NodePath, Nodes, SyntaxNode};
+use crate::language::code::{
+    Apply, ChildIndex, Expressions, NodeByHash, NodePath, Nodes, SyntaxNode,
+};
 
 use super::Value;
 
@@ -60,11 +62,14 @@ impl RuntimeNode {
                 }
             }
             SyntaxNode::Empty => Self::Empty,
-            SyntaxNode::Expressions {
-                expressions,
-                add: _,
-            } => {
+            SyntaxNode::Expressions { expressions, add } => {
+                let expressions: Expressions<NodeByHash> = Expressions {
+                    expressions: expressions.clone(),
+                    add: *add,
+                };
+
                 let to_evaluate = expressions
+                    .expressions
                     .iter()
                     .copied()
                     .enumerate()
