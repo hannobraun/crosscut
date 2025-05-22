@@ -73,7 +73,6 @@ impl RuntimeNode {
                     .iter()
                     .copied()
                     .enumerate()
-                    .rev()
                     .map(|(index, hash)| {
                         NodePath::new(
                             hash,
@@ -81,6 +80,7 @@ impl RuntimeNode {
                             nodes,
                         )
                     })
+                    .rev()
                     .collect();
                 let evaluated = Vec::new();
 
