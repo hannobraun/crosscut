@@ -1,6 +1,4 @@
-use crate::language::code::{
-    Apply, ChildIndex, NodeByHash, NodePath, Nodes, SyntaxNode,
-};
+use crate::language::code::{Apply, ChildIndex, NodePath, Nodes, SyntaxNode};
 
 use super::Value;
 
@@ -43,7 +41,7 @@ impl RuntimeNode {
                 expression,
                 argument,
             } => {
-                let apply: Apply<NodeByHash> = Apply {
+                let apply = Apply {
                     expression: *expression,
                     argument: *argument,
                 };
