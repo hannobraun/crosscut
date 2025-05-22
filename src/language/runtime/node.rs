@@ -69,7 +69,7 @@ impl RuntimeNode {
                 };
 
                 let to_evaluate = expressions
-                    .expressions
+                    .expressions()
                     .iter()
                     .copied()
                     .enumerate()

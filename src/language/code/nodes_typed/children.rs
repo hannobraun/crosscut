@@ -1,6 +1,6 @@
 use crate::{
     language::code::{ChildIndex, NodeHash, NodePath, Nodes},
-    util::form::{Form, RefMut},
+    util::form::{Form, Ref, RefMut},
 };
 
 pub struct Child {
@@ -26,6 +26,14 @@ pub struct Children<T: Form> {
 impl<T: Form> Children<T> {
     pub fn new(hashes: T::Form<Vec<NodeHash>>) -> Self {
         Self { hashes }
+    }
+}
+
+impl Children<Ref<'_>> {
+    pub fn iter(
+        &self,
+    ) -> impl DoubleEndedIterator<Item = &NodeHash> + ExactSizeIterator {
+        self.hashes.iter()
     }
 }
 

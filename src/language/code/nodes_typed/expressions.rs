@@ -1,6 +1,6 @@
 use crate::{
     language::code::{NodeByHash, Nodes, SyntaxNode},
-    util::form::{Form, Owned, RefMut},
+    util::form::{Form, Owned, Ref, RefMut},
 };
 
 use super::Children;
@@ -33,6 +33,10 @@ impl Expressions<Owned> {
 }
 
 impl Expressions<NodeByHash> {
+    pub fn expressions(&self) -> Children<Ref> {
+        Children::new(&self.expressions)
+    }
+
     pub fn expressions_mut(&mut self) -> Children<RefMut> {
         Children::new(&mut self.expressions)
     }
