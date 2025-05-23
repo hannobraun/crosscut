@@ -88,7 +88,7 @@ impl RuntimeNode {
                     body: body.clone(),
                 };
 
-                let parameter = Binding::new(&function.parameter, nodes).name;
+                let parameter = Binding::new(&function.parameter, nodes);
                 let body = function.body.first().unwrap();
                 let body = NodePath::new(
                     *body,
@@ -96,7 +96,10 @@ impl RuntimeNode {
                     nodes,
                 );
 
-                Self::Function { parameter, body }
+                Self::Function {
+                    parameter: parameter.name,
+                    body,
+                }
             }
             SyntaxNode::Identifier { name } => {
                 let name = name.clone();
