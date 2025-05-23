@@ -7,7 +7,7 @@ mod types;
 pub use self::{
     changes::{Changes, NewChangeSet},
     codebase::Codebase,
-    nodes_typed::{Apply, Expressions, Function, Tuple, TypedNode},
+    nodes_typed::{Apply, Binding, Expressions, Function, Tuple, TypedNode},
     nodes_uniform::{
         ChildIndex, LocatedNode, NodeAsUniform, NodeByHash, NodeHash, NodePath,
         Nodes, SyntaxNode,

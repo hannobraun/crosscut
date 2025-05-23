@@ -1,6 +1,6 @@
 use crate::language::code::{
-    Apply, ChildIndex, Expressions, Function, NodeByHash, NodePath, Nodes,
-    SyntaxNode,
+    Apply, Binding, ChildIndex, Expressions, Function, NodeByHash, NodePath,
+    Nodes, SyntaxNode,
 };
 
 use super::Value;
@@ -88,17 +88,7 @@ impl RuntimeNode {
                     body: body.clone(),
                 };
 
-                let parameter = {
-                    let parameter = nodes.get(&function.parameter);
-                    let SyntaxNode::Binding { name } = parameter else {
-                        panic!(
-                            "Expected parameter of function to be a binding:\n\
-                            {parameter:#?}"
-                        );
-                    };
-
-                    name.clone()
-                };
+                let parameter = Binding::new(&function.parameter, nodes).name;
                 let body = function.body.first().unwrap();
                 let body = NodePath::new(
                     *body,
