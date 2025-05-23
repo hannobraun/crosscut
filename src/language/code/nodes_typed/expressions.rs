@@ -28,7 +28,10 @@ impl Expressions<Owned> {
             .collect();
         let add = nodes.insert(self.add);
 
-        SyntaxNode::Expressions { expressions, add }
+        SyntaxNode::Expressions {
+            children: expressions,
+            add,
+        }
     }
 }
 
@@ -43,7 +46,7 @@ impl Expressions<NodeByHash> {
 
     pub fn into_syntax_node(self) -> SyntaxNode {
         SyntaxNode::Expressions {
-            expressions: self.expressions,
+            children: self.expressions,
             add: self.add,
         }
     }

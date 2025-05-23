@@ -114,7 +114,7 @@ pub enum SyntaxNode {
     /// # A series of expressions
     Expressions {
         /// # The expressions
-        expressions: Vec<NodeHash>,
+        children: Vec<NodeHash>,
 
         /// # A node that can be edited to add an expression
         ///
@@ -209,7 +209,10 @@ impl SyntaxNode {
             | Self::Number { value: _ }
             | Self::Recursion => {}
 
-            Self::Expressions { expressions, add } => {
+            Self::Expressions {
+                children: expressions,
+                add,
+            } => {
                 hashes.extend(expressions);
                 hashes.push(add);
             }
@@ -244,7 +247,10 @@ impl SyntaxNode {
             | Self::Number { value: _ }
             | Self::Recursion => {}
 
-            Self::Expressions { expressions, add } => {
+            Self::Expressions {
+                children: expressions,
+                add,
+            } => {
                 hashes.extend(expressions);
                 hashes.push(add);
             }

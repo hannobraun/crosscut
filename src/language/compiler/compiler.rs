@@ -31,7 +31,10 @@ impl<'r> Compiler<'r> {
                 let node = change_set.nodes.get(parent.hash()).clone();
 
                 let (node, index) = match &node {
-                    SyntaxNode::Expressions { expressions, add } => {
+                    SyntaxNode::Expressions {
+                        children: expressions,
+                        add,
+                    } => {
                         let mut expressions = Expressions {
                             expressions: expressions.clone(),
                             add: *add,
