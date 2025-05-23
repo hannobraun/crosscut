@@ -21,17 +21,14 @@ impl Expressions<Owned> {
     }
 
     pub fn into_syntax_node(self, nodes: &mut Nodes) -> SyntaxNode {
-        let expressions = self
+        let children = self
             .expressions
             .into_iter()
             .map(|node| nodes.insert(node))
             .collect();
         let add = nodes.insert(self.add);
 
-        SyntaxNode::Expressions {
-            children: expressions,
-            add,
-        }
+        SyntaxNode::Expressions { children, add }
     }
 }
 
