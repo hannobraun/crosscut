@@ -3,8 +3,10 @@ use crate::{
     util::form::Form,
 };
 
+use super::Binding;
+
 pub struct Function<T: Form> {
-    pub parameter: T::Form<SyntaxNode>,
+    pub parameter: T::Form<Binding>,
     pub body: Vec<T::Form<SyntaxNode>>,
 }
 
