@@ -1,5 +1,5 @@
 use crate::{
-    language::code::{NodeAsUniform, Nodes, SyntaxNode},
+    language::code::{NodeAsUniform, NodeHash, Nodes, SyntaxNode},
     util::form::Form,
 };
 
@@ -7,7 +7,7 @@ use super::Binding;
 
 pub struct Function<T: Form> {
     pub parameter: T::Form<Binding>,
-    pub body: Vec<T::Form<SyntaxNode>>,
+    pub body: Vec<T::Form<NodeHash>>,
 }
 
 impl Function<NodeAsUniform> {
