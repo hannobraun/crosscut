@@ -1,6 +1,6 @@
 use crate::{
     language::code::{NodeAsUniform, NodeHash, Nodes, SyntaxNode},
-    util::form::Form,
+    util::form::{Form, Owned},
 };
 
 use super::Binding;
@@ -23,6 +23,17 @@ pub struct Function<T: Form> {
     ///
     /// - Hanno Braun
     pub body: Vec<T::Form<NodeHash>>,
+}
+
+impl Function<Owned> {
+    pub fn new(
+        parameter: &NodeHash,
+        body: Vec<NodeHash>,
+        nodes: &Nodes,
+    ) -> Self {
+        let parameter = Binding::new(parameter, nodes);
+        Self { parameter, body }
+    }
 }
 
 impl Function<NodeAsUniform> {
