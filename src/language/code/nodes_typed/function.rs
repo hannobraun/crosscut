@@ -1,6 +1,6 @@
 use crate::{
-    language::code::{Nodes, SyntaxNode},
-    util::form::{Form, Owned},
+    language::code::{NodeAsUniform, Nodes, SyntaxNode},
+    util::form::Form,
 };
 
 pub struct Function<T: Form> {
@@ -8,7 +8,7 @@ pub struct Function<T: Form> {
     pub body: Vec<T::Form<SyntaxNode>>,
 }
 
-impl Function<Owned> {
+impl Function<NodeAsUniform> {
     pub fn into_syntax_node(self, nodes: &mut Nodes) -> SyntaxNode {
         let parameter = nodes.insert(self.parameter);
         let body = self
@@ -21,7 +21,7 @@ impl Function<Owned> {
     }
 }
 
-impl Default for Function<Owned> {
+impl Default for Function<NodeAsUniform> {
     fn default() -> Self {
         Self {
             parameter: SyntaxNode::Binding {

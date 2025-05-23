@@ -2,7 +2,7 @@ use std::fmt;
 
 use crate::{
     language::code::NodeHash,
-    util::form::{Ref, RefMut},
+    util::form::{Form, Ref, RefMut},
 };
 
 use super::Children;
@@ -305,4 +305,10 @@ impl fmt::Display for SyntaxNode {
             }
         }
     }
+}
+
+pub struct NodeAsUniform;
+
+impl Form for NodeAsUniform {
+    type Form<T: 'static> = SyntaxNode;
 }

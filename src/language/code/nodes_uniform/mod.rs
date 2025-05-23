@@ -11,5 +11,5 @@ pub use self::{
     located::LocatedNode,
     nodes::Nodes,
     path::NodePath,
-    syntax_node::SyntaxNode,
+    syntax_node::{NodeAsUniform, SyntaxNode},
 };

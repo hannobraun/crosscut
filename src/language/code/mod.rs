@@ -9,8 +9,8 @@ pub use self::{
     codebase::Codebase,
     nodes_typed::{Apply, Expressions, Function, Tuple, TypedNode},
     nodes_uniform::{
-        ChildIndex, LocatedNode, NodeByHash, NodeHash, NodePath, Nodes,
-        SyntaxNode,
+        ChildIndex, LocatedNode, NodeAsUniform, NodeByHash, NodeHash, NodePath,
+        Nodes, SyntaxNode,
     },
     types::{Type, display_tuple},
 };
