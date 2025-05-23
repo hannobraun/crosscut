@@ -70,8 +70,7 @@ impl RuntimeNode {
 
                 let to_evaluate = expressions
                     .children()
-                    .iter()
-                    .map(|child| child.into_path(path.clone(), nodes))
+                    .to_paths(&path, nodes)
                     .rev()
                     .collect();
                 let evaluated = Vec::new();
@@ -84,12 +83,8 @@ impl RuntimeNode {
             SyntaxNode::Function { parameter, body } => {
                 let function = Function::new(parameter, body.clone(), nodes);
 
-                let body = function
-                    .body()
-                    .iter()
-                    .next()
-                    .unwrap()
-                    .into_path(path, nodes);
+                let body =
+                    function.body().to_paths(&path, nodes).next().unwrap();
 
                 Self::Function {
                     parameter: function.parameter.name,

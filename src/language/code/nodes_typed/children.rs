@@ -47,6 +47,15 @@ impl TypedChildren<Ref<'_>> {
                 TypedChild::new(hash, index)
             })
     }
+
+    pub fn to_paths(
+        &self,
+        parent: &NodePath,
+        nodes: &Nodes,
+    ) -> impl DoubleEndedIterator<Item = NodePath> + ExactSizeIterator {
+        self.iter()
+            .map(|child| child.into_path(parent.clone(), nodes))
+    }
 }
 
 impl TypedChildren<RefMut<'_>> {
