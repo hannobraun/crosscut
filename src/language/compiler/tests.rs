@@ -31,7 +31,7 @@ fn insert_child_with_grandparent() {
         let parent = Expressions::default().into_syntax_node(change_set.nodes);
         let grandparent = {
             let node = Expressions::default()
-                .with_expressions([parent])
+                .with_children([parent])
                 .into_syntax_node(change_set.nodes);
             change_set.nodes.insert(node)
         };
@@ -67,7 +67,7 @@ fn replace_second_of_two_equal_children() {
     codebase.make_change(|change_set| {
         let parent = {
             let node = Expressions::default()
-                .with_expressions([identifier("child"), identifier("child")])
+                .with_children([identifier("child"), identifier("child")])
                 .into_syntax_node(change_set.nodes);
 
             change_set.nodes.insert(node)
@@ -103,7 +103,7 @@ fn updating_child_updates_parent() {
     codebase.make_change(|change_set| {
         let parent = {
             let node = Expressions::default()
-                .with_expressions([identifier("old")])
+                .with_children([identifier("old")])
                 .into_syntax_node(change_set.nodes);
 
             change_set.nodes.insert(node)

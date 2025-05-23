@@ -14,15 +14,15 @@ fn uniquely_identify_identical_children_of_different_parents() {
 
     codebase.make_change(|change_set| {
         let parent_a = Expressions::default()
-            .with_expressions([identifier("child")])
+            .with_children([identifier("child")])
             .into_syntax_node(change_set.nodes);
         let parent_b = Expressions::default()
-            .with_expressions([identifier("child")])
+            .with_children([identifier("child")])
             .into_syntax_node(change_set.nodes);
 
         let root = {
             let node = Expressions::default()
-                .with_expressions([parent_a, parent_b])
+                .with_children([parent_a, parent_b])
                 .into_syntax_node(change_set.nodes);
 
             change_set.nodes.insert(node)
@@ -53,7 +53,7 @@ fn uniquely_identify_identical_siblings() {
     codebase.make_change(|change_set| {
         let parent = {
             let node = Expressions::default()
-                .with_expressions([identifier("child"), identifier("child")])
+                .with_children([identifier("child"), identifier("child")])
                 .into_syntax_node(change_set.nodes);
 
             change_set.nodes.insert(node)
