@@ -14,9 +14,9 @@ impl Expressions<Owned> {
     #[cfg(test)]
     pub fn with_children(
         mut self,
-        values: impl IntoIterator<Item = SyntaxNode>,
+        children: impl IntoIterator<Item = SyntaxNode>,
     ) -> Self {
-        self.children = values.into_iter().collect();
+        self.children = children.into_iter().collect();
         self
     }
 
