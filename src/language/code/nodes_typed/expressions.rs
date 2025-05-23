@@ -33,7 +33,7 @@ impl Expressions<Owned> {
 }
 
 impl Expressions<NodeByHash> {
-    pub fn expressions(&self) -> Children<Ref> {
+    pub fn children(&self) -> Children<Ref> {
         Children::new(&self.children)
     }
 

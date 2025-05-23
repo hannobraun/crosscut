@@ -72,7 +72,7 @@ impl RuntimeNode {
                 };
 
                 let to_evaluate = expressions
-                    .expressions()
+                    .children()
                     .iter()
                     .map(|child| child.into_path(path.clone(), nodes))
                     .rev()
