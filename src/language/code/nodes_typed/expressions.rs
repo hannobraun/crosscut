@@ -6,7 +6,7 @@ use crate::{
 use super::Children;
 
 pub struct Expressions<T: Form> {
-    pub expressions: Vec<T::Form<SyntaxNode>>,
+    pub children: Vec<T::Form<SyntaxNode>>,
     pub add: T::Form<SyntaxNode>,
 }
 
@@ -16,13 +16,13 @@ impl Expressions<Owned> {
         mut self,
         values: impl IntoIterator<Item = SyntaxNode>,
     ) -> Self {
-        self.expressions = values.into_iter().collect();
+        self.children = values.into_iter().collect();
         self
     }
 
     pub fn into_syntax_node(self, nodes: &mut Nodes) -> SyntaxNode {
         let children = self
-            .expressions
+            .children
             .into_iter()
             .map(|node| nodes.insert(node))
             .collect();
@@ -34,16 +34,16 @@ impl Expressions<Owned> {
 
 impl Expressions<NodeByHash> {
     pub fn expressions(&self) -> Children<Ref> {
-        Children::new(&self.expressions)
+        Children::new(&self.children)
     }
 
     pub fn expressions_mut(&mut self) -> Children<RefMut> {
-        Children::new(&mut self.expressions)
+        Children::new(&mut self.children)
     }
 
     pub fn into_syntax_node(self) -> SyntaxNode {
         SyntaxNode::Expressions {
-            children: self.expressions,
+            children: self.children,
             add: self.add,
         }
     }
@@ -52,7 +52,7 @@ impl Expressions<NodeByHash> {
 impl Default for Expressions<Owned> {
     fn default() -> Self {
         Self {
-            expressions: Vec::new(),
+            children: Vec::new(),
             add: SyntaxNode::Add,
         }
     }

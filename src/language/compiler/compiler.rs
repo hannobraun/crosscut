@@ -36,7 +36,7 @@ impl<'r> Compiler<'r> {
                         add,
                     } => {
                         let mut expressions = Expressions {
-                            expressions: expressions.clone(),
+                            children: expressions.clone(),
                             add: *add,
                         };
 

@@ -67,7 +67,7 @@ impl RuntimeNode {
                 add,
             } => {
                 let expressions = Expressions {
-                    expressions: expressions.clone(),
+                    children: expressions.clone(),
                     add: *add,
                 };
 
