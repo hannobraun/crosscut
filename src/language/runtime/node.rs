@@ -84,12 +84,12 @@ impl RuntimeNode {
             SyntaxNode::Function { parameter, body } => {
                 let function = Function::new(parameter, body.clone(), nodes);
 
-                let body = function.body.first().unwrap();
-                let body = NodePath::new(
-                    *body,
-                    Some((path, ChildIndex { index: 1 })),
-                    nodes,
-                );
+                let body = function
+                    .body()
+                    .iter()
+                    .next()
+                    .unwrap()
+                    .into_path(path, nodes);
 
                 Self::Function {
                     parameter: function.parameter.name,

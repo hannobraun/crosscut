@@ -1,9 +1,9 @@
 use crate::{
     language::code::{NodeAsUniform, NodeHash, Nodes, SyntaxNode},
-    util::form::{Form, Owned},
+    util::form::{Form, Owned, Ref},
 };
 
-use super::Binding;
+use super::{Binding, TypedChildren};
 
 pub struct Function<T: Form> {
     pub parameter: T::Form<Binding>,
@@ -33,6 +33,10 @@ impl Function<Owned> {
     ) -> Self {
         let parameter = Binding::new(parameter, nodes);
         Self { parameter, body }
+    }
+
+    pub fn body(&self) -> TypedChildren<Ref> {
+        TypedChildren::new(&self.body, 1)
     }
 }
 
