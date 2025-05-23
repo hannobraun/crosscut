@@ -40,7 +40,7 @@ impl<'r> Compiler<'r> {
                             add: *add,
                         };
 
-                        let index = expressions.expressions_mut().add(child);
+                        let index = expressions.children_mut().add(child);
                         let node = expressions.into_syntax_node();
 
                         (node, index)

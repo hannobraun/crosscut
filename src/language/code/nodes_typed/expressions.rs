@@ -37,7 +37,7 @@ impl Expressions<NodeByHash> {
         Children::new(&self.children)
     }
 
-    pub fn expressions_mut(&mut self) -> Children<RefMut> {
+    pub fn children_mut(&mut self) -> Children<RefMut> {
         Children::new(&mut self.children)
     }
 
