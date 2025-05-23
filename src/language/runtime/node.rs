@@ -84,7 +84,6 @@ impl RuntimeNode {
             SyntaxNode::Function { parameter, body } => {
                 let function = Function::new(parameter, body.clone(), nodes);
 
-                let parameter = function.parameter;
                 let body = function.body.first().unwrap();
                 let body = NodePath::new(
                     *body,
@@ -93,7 +92,7 @@ impl RuntimeNode {
                 );
 
                 Self::Function {
-                    parameter: parameter.name,
+                    parameter: function.parameter.name,
                     body,
                 }
             }
