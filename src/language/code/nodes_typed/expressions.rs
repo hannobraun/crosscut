@@ -34,11 +34,11 @@ impl Expressions<Owned> {
 
 impl Expressions<NodeByHash> {
     pub fn children(&self) -> TypedChildren<Ref> {
-        TypedChildren::new(&self.children)
+        TypedChildren::new(&self.children, 0)
     }
 
     pub fn children_mut(&mut self) -> TypedChildren<RefMut> {
-        TypedChildren::new(&mut self.children)
+        TypedChildren::new(&mut self.children, 0)
     }
 
     pub fn into_syntax_node(self) -> SyntaxNode {

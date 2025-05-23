@@ -25,7 +25,7 @@ impl Tuple<Owned> {
 
 impl Tuple<NodeByHash> {
     pub fn values_mut(&mut self) -> TypedChildren<RefMut> {
-        TypedChildren::new(&mut self.values)
+        TypedChildren::new(&mut self.values, 0)
     }
 
     pub fn into_syntax_node(self) -> SyntaxNode {

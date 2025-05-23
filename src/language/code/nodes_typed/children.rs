@@ -21,11 +21,16 @@ impl TypedChild {
 
 pub struct TypedChildren<T: Form> {
     hashes: T::Form<Vec<NodeHash>>,
+    offset: ChildIndex,
 }
 
 impl<T: Form> TypedChildren<T> {
-    pub fn new(hashes: T::Form<Vec<NodeHash>>) -> Self {
-        Self { hashes }
+    pub fn new(
+        hashes: T::Form<Vec<NodeHash>>,
+        offset: impl Into<ChildIndex>,
+    ) -> Self {
+        let offset = offset.into();
+        Self { hashes, offset }
     }
 }
 
@@ -37,7 +42,10 @@ impl TypedChildren<Ref<'_>> {
             .iter()
             .copied()
             .enumerate()
-            .map(|(index, hash)| TypedChild::new(hash, index))
+            .map(|(index, hash)| {
+                let index = self.offset.index + index;
+                TypedChild::new(hash, index)
+            })
     }
 }
 
