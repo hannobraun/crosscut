@@ -9,7 +9,7 @@ mod typed_node;
 pub use self::{
     apply::Apply,
     binding::Binding,
-    children::{Child, TypedChildren},
+    children::{TypedChild, TypedChildren},
     expressions::Expressions,
     function::Function,
     tuple::Tuple,

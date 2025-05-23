@@ -3,12 +3,12 @@ use crate::{
     util::form::{Form, Ref, RefMut},
 };
 
-pub struct Child {
+pub struct TypedChild {
     hash: NodeHash,
     index: ChildIndex,
 }
 
-impl Child {
+impl TypedChild {
     pub fn new(hash: NodeHash, index: impl Into<ChildIndex>) -> Self {
         let index = index.into();
         Self { hash, index }
@@ -32,12 +32,12 @@ impl<T: Form> TypedChildren<T> {
 impl TypedChildren<Ref<'_>> {
     pub fn iter(
         &self,
-    ) -> impl DoubleEndedIterator<Item = Child> + ExactSizeIterator {
+    ) -> impl DoubleEndedIterator<Item = TypedChild> + ExactSizeIterator {
         self.hashes
             .iter()
             .copied()
             .enumerate()
-            .map(|(index, hash)| Child::new(hash, index))
+            .map(|(index, hash)| TypedChild::new(hash, index))
     }
 }
 

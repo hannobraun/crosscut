@@ -3,7 +3,7 @@ use crate::{
     util::form::{Form, Owned},
 };
 
-use super::Child;
+use super::TypedChild;
 
 pub struct Apply<T: Form> {
     pub expression: T::Form<SyntaxNode>,
@@ -35,12 +35,12 @@ impl Apply<Owned> {
 }
 
 impl Apply<NodeByHash> {
-    pub fn expression(&self) -> Child {
-        Child::new(self.expression, 0)
+    pub fn expression(&self) -> TypedChild {
+        TypedChild::new(self.expression, 0)
     }
 
-    pub fn argument(&self) -> Child {
-        Child::new(self.argument, 1)
+    pub fn argument(&self) -> TypedChild {
+        TypedChild::new(self.argument, 1)
     }
 }
 
