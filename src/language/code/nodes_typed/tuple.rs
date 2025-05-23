@@ -3,7 +3,7 @@ use crate::{
     util::form::{Form, Owned, RefMut},
 };
 
-use super::Children;
+use super::TypedChildren;
 
 pub struct Tuple<T: Form> {
     pub values: Vec<T::Form<SyntaxNode>>,
@@ -24,8 +24,8 @@ impl Tuple<Owned> {
 }
 
 impl Tuple<NodeByHash> {
-    pub fn values_mut(&mut self) -> Children<RefMut> {
-        Children::new(&mut self.values)
+    pub fn values_mut(&mut self) -> TypedChildren<RefMut> {
+        TypedChildren::new(&mut self.values)
     }
 
     pub fn into_syntax_node(self) -> SyntaxNode {

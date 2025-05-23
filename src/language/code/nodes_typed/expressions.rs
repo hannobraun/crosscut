@@ -3,7 +3,7 @@ use crate::{
     util::form::{Form, Owned, Ref, RefMut},
 };
 
-use super::Children;
+use super::TypedChildren;
 
 pub struct Expressions<T: Form> {
     pub children: Vec<T::Form<SyntaxNode>>,
@@ -33,12 +33,12 @@ impl Expressions<Owned> {
 }
 
 impl Expressions<NodeByHash> {
-    pub fn children(&self) -> Children<Ref> {
-        Children::new(&self.children)
+    pub fn children(&self) -> TypedChildren<Ref> {
+        TypedChildren::new(&self.children)
     }
 
-    pub fn children_mut(&mut self) -> Children<RefMut> {
-        Children::new(&mut self.children)
+    pub fn children_mut(&mut self) -> TypedChildren<RefMut> {
+        TypedChildren::new(&mut self.children)
     }
 
     pub fn into_syntax_node(self) -> SyntaxNode {

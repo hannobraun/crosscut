@@ -19,17 +19,17 @@ impl Child {
     }
 }
 
-pub struct Children<T: Form> {
+pub struct TypedChildren<T: Form> {
     hashes: T::Form<Vec<NodeHash>>,
 }
 
-impl<T: Form> Children<T> {
+impl<T: Form> TypedChildren<T> {
     pub fn new(hashes: T::Form<Vec<NodeHash>>) -> Self {
         Self { hashes }
     }
 }
 
-impl Children<Ref<'_>> {
+impl TypedChildren<Ref<'_>> {
     pub fn iter(
         &self,
     ) -> impl DoubleEndedIterator<Item = Child> + ExactSizeIterator {
@@ -41,7 +41,7 @@ impl Children<Ref<'_>> {
     }
 }
 
-impl Children<RefMut<'_>> {
+impl TypedChildren<RefMut<'_>> {
     pub fn add(&mut self, child: NodeHash) -> ChildIndex {
         let index = ChildIndex {
             index: self.hashes.len(),
