@@ -209,11 +209,8 @@ impl SyntaxNode {
             | Self::Number { value: _ }
             | Self::Recursion => {}
 
-            Self::Expressions {
-                children: expressions,
-                add,
-            } => {
-                hashes.extend(expressions);
+            Self::Expressions { children, add } => {
+                hashes.extend(children);
                 hashes.push(add);
             }
 
