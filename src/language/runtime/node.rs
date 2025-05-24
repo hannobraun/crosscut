@@ -11,11 +11,11 @@ pub enum RuntimeNode {
         expression: RuntimeChild,
         argument: RuntimeChild,
     },
-    Empty,
     Body {
         to_evaluate: Vec<NodePath>,
         evaluated: Vec<Value>,
     },
+    Empty,
     Function {
         parameter: String,
         body: NodePath,
