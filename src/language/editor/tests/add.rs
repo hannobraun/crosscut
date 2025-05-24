@@ -81,7 +81,7 @@ fn add_function() {
             name: "_".to_string()
         }
     );
-    assert_eq!(body.node, &SyntaxNode::Empty);
+    assert!(matches!(body.node, &SyntaxNode::Empty));
 }
 
 #[test]
