@@ -1,5 +1,5 @@
 use super::{
-    Changes, Expressions, LocatedNode, NewChangeSet, NodeHash, NodePath, Nodes,
+    Body, Changes, LocatedNode, NewChangeSet, NodeHash, NodePath, Nodes,
 };
 
 #[derive(Clone, Debug, Eq, PartialEq)]
@@ -14,7 +14,7 @@ impl Codebase {
         let mut nodes = Nodes::default();
 
         let root = {
-            let node = Expressions::default().into_syntax_node(&mut nodes);
+            let node = Body::default().into_syntax_node(&mut nodes);
             let hash = nodes.insert(node);
             Root { hash }
         };

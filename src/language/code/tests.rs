@@ -1,5 +1,5 @@
 use crate::language::{
-    code::{Expressions, NodePath},
+    code::{Body, NodePath},
     tests::infra::{ExpectChildren, identifier},
 };
 
@@ -13,15 +13,15 @@ fn uniquely_identify_identical_children_of_different_parents() {
     let mut codebase = Codebase::new();
 
     codebase.make_change(|change_set| {
-        let parent_a = Expressions::default()
+        let parent_a = Body::default()
             .with_children([identifier("child")], change_set.nodes)
             .into_syntax_node(change_set.nodes);
-        let parent_b = Expressions::default()
+        let parent_b = Body::default()
             .with_children([identifier("child")], change_set.nodes)
             .into_syntax_node(change_set.nodes);
 
         let root = {
-            let node = Expressions::default()
+            let node = Body::default()
                 .with_children([parent_a, parent_b], change_set.nodes)
                 .into_syntax_node(change_set.nodes);
 
@@ -52,7 +52,7 @@ fn uniquely_identify_identical_siblings() {
 
     codebase.make_change(|change_set| {
         let parent = {
-            let node = Expressions::default()
+            let node = Body::default()
                 .with_children(
                     [identifier("child"), identifier("child")],
                     change_set.nodes,

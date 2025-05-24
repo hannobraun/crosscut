@@ -10,7 +10,7 @@ pub use self::{
     apply::Apply,
     binding::Binding,
     children::{TypedChild, TypedChildren},
-    expressions::Expressions,
+    expressions::Body,
     function::Function,
     tuple::Tuple,
     typed_node::TypedNode,

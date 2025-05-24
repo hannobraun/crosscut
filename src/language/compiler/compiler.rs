@@ -1,5 +1,5 @@
 use crate::language::code::{
-    Codebase, Expressions, NodePath, SyntaxNode, Tuple, TypedNode,
+    Body, Codebase, NodePath, SyntaxNode, Tuple, TypedNode,
 };
 
 use super::{expression, replace::replace_node_and_update_parents};
@@ -32,7 +32,7 @@ impl<'r> Compiler<'r> {
 
                 let (node, index) = match &node {
                     SyntaxNode::Body { children, add } => {
-                        let mut expressions = Expressions {
+                        let mut expressions = Body {
                             children: children.clone(),
                             add: *add,
                         };

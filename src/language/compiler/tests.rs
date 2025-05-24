@@ -1,5 +1,5 @@
 use crate::language::{
-    code::{Codebase, Expressions, NodePath},
+    code::{Body, Codebase, NodePath},
     compiler::Compiler,
     tests::infra::{ExpectChildren, identifier},
 };
@@ -28,9 +28,9 @@ fn insert_child_with_grandparent() {
     let mut codebase = Codebase::new();
 
     codebase.make_change(|change_set| {
-        let parent = Expressions::default().into_syntax_node(change_set.nodes);
+        let parent = Body::default().into_syntax_node(change_set.nodes);
         let grandparent = {
-            let node = Expressions::default()
+            let node = Body::default()
                 .with_children([parent], change_set.nodes)
                 .into_syntax_node(change_set.nodes);
             change_set.nodes.insert(node)
@@ -66,7 +66,7 @@ fn replace_second_of_two_equal_children() {
 
     codebase.make_change(|change_set| {
         let parent = {
-            let node = Expressions::default()
+            let node = Body::default()
                 .with_children(
                     [identifier("child"), identifier("child")],
                     change_set.nodes,
@@ -105,7 +105,7 @@ fn updating_child_updates_parent() {
 
     codebase.make_change(|change_set| {
         let parent = {
-            let node = Expressions::default()
+            let node = Body::default()
                 .with_children([identifier("old")], change_set.nodes)
                 .into_syntax_node(change_set.nodes);
 

@@ -5,12 +5,12 @@ use crate::{
 
 use super::TypedChildren;
 
-pub struct Expressions<T: Form> {
+pub struct Body<T: Form> {
     pub children: Vec<T::Form<NodeHash>>,
     pub add: T::Form<SyntaxNode>,
 }
 
-impl Expressions<Owned> {
+impl Body<Owned> {
     #[cfg(test)]
     pub fn with_children(
         mut self,
@@ -33,7 +33,7 @@ impl Expressions<Owned> {
     }
 }
 
-impl Expressions<NodeByHash> {
+impl Body<NodeByHash> {
     pub fn children(&self) -> TypedChildren<Ref> {
         TypedChildren::new(&self.children, 0)
     }
@@ -50,7 +50,7 @@ impl Expressions<NodeByHash> {
     }
 }
 
-impl Default for Expressions<Owned> {
+impl Default for Body<Owned> {
     fn default() -> Self {
         Self {
             children: Vec::new(),

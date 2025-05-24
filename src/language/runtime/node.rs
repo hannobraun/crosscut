@@ -1,5 +1,5 @@
 use crate::language::code::{
-    Apply, ChildIndex, Expressions, Function, NodePath, Nodes, SyntaxNode,
+    Apply, Body, ChildIndex, Function, NodePath, Nodes, SyntaxNode,
 };
 
 use super::Value;
@@ -62,7 +62,7 @@ impl RuntimeNode {
                 }
             }
             SyntaxNode::Body { children, add } => {
-                let expressions = Expressions {
+                let expressions = Body {
                     children: children.clone(),
                     add: *add,
                 };

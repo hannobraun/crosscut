@@ -312,7 +312,7 @@ struct StackFrame {
 #[cfg(test)]
 mod tests {
     use crate::language::{
-        code::{Apply, Codebase, Expressions, Function, NodePath, SyntaxNode},
+        code::{Apply, Body, Codebase, Function, NodePath, SyntaxNode},
         runtime::{Evaluator, RuntimeState, Value},
         tests::infra::ExpectChildren,
     };
@@ -367,8 +367,7 @@ mod tests {
                 let apply = Apply::default()
                     .with_expression(SyntaxNode::Recursion)
                     .with_argument(
-                        Expressions::default()
-                            .into_syntax_node(change_set.nodes),
+                        Body::default().into_syntax_node(change_set.nodes),
                     )
                     .into_syntax_node(change_set.nodes);
 
