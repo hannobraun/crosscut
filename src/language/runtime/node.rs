@@ -37,7 +37,7 @@ pub enum RuntimeNode {
 impl RuntimeNode {
     pub fn new(path: NodePath, nodes: &Nodes) -> Self {
         let TypedNode::Expression { expression } =
-            TypedNode::from_syntax_node(nodes.get(path.hash()), nodes)
+            TypedNode::from_hash(path.hash(), nodes)
         else {
             // For the most part, this would only happen if there's a bug in the
             // compiler or evaluator. This still shouldn't be an `unreachable!`
