@@ -62,16 +62,13 @@ impl RuntimeNode {
                 }
             }
             SyntaxNode::Body { children, add } => {
-                let expressions = Body {
+                let body = Body {
                     children: children.clone(),
                     add: *add,
                 };
 
-                let to_evaluate = expressions
-                    .children()
-                    .to_paths(&path, nodes)
-                    .rev()
-                    .collect();
+                let to_evaluate =
+                    body.children().to_paths(&path, nodes).rev().collect();
                 let evaluated = Vec::new();
 
                 Self::Expressions {
