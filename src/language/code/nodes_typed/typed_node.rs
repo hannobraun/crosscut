@@ -10,7 +10,6 @@ impl TypedNode {
     pub fn from_syntax_node(syntax_node: &SyntaxNode) -> Self {
         match syntax_node {
             SyntaxNode::Add => Self::Other,
-
             SyntaxNode::Apply { .. } => Self::Expression,
             SyntaxNode::Body { .. } => Self::Expression,
             SyntaxNode::Empty => Self::Expression,
@@ -19,7 +18,6 @@ impl TypedNode {
             SyntaxNode::Number { .. } => Self::Expression,
             SyntaxNode::Recursion => Self::Expression,
             SyntaxNode::Tuple { .. } => Self::Expression,
-
             SyntaxNode::Binding { .. } => Self::Pattern,
         }
     }
