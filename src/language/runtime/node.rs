@@ -72,11 +72,9 @@ impl RuntimeNode {
                 expression: Expression::Function { function },
             } => {
                 let body = function.body().into_path(path, nodes);
+                let parameter = function.parameter.name;
 
-                Self::Function {
-                    parameter: function.parameter.name,
-                    body,
-                }
+                Self::Function { parameter, body }
             }
             TypedNode::Expression {
                 expression: Expression::Identifier { name },
