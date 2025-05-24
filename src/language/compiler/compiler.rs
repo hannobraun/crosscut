@@ -81,23 +81,25 @@ impl<'r> Compiler<'r> {
         self.codebase.make_change(|change_set| {
             let node = change_set.nodes.get(to_replace.hash());
 
-            let replacement =
-                match TypedNode::from_syntax_node(node, change_set.nodes) {
-                    TypedNode::Expression { .. } => {
-                        expression::compile(replacement_token, change_set.nodes)
-                    }
-                    TypedNode::Pattern => {
-                        change_set.nodes.insert(SyntaxNode::Binding {
-                            name: replacement_token.to_string(),
-                        })
-                    }
-                    TypedNode::Other => {
-                        panic!(
-                            "Trying to replace unexpected node:\n\
+            let replacement = match TypedNode::from_syntax_node(
+                node.clone(),
+                change_set.nodes,
+            ) {
+                TypedNode::Expression { .. } => {
+                    expression::compile(replacement_token, change_set.nodes)
+                }
+                TypedNode::Pattern => {
+                    change_set.nodes.insert(SyntaxNode::Binding {
+                        name: replacement_token.to_string(),
+                    })
+                }
+                TypedNode::Other => {
+                    panic!(
+                        "Trying to replace unexpected node:\n\
                         {node:#?}"
-                        );
-                    }
-                };
+                    );
+                }
+            };
 
             replace_node_and_update_parents(
                 to_replace.clone(),

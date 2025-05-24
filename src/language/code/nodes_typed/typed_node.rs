@@ -15,10 +15,10 @@ pub enum TypedNode {
 impl TypedNode {
     pub fn from_hash(hash: &NodeHash, nodes: &Nodes) -> Self {
         let syntax_node = nodes.get(hash);
-        Self::from_syntax_node(syntax_node, nodes)
+        Self::from_syntax_node(syntax_node.clone(), nodes)
     }
 
-    pub fn from_syntax_node(syntax_node: &SyntaxNode, nodes: &Nodes) -> Self {
+    pub fn from_syntax_node(syntax_node: SyntaxNode, nodes: &Nodes) -> Self {
         match syntax_node.clone() {
             SyntaxNode::Add => Self::Other,
             SyntaxNode::Apply {
