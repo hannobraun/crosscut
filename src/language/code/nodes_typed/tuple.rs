@@ -1,6 +1,6 @@
 use crate::{
     language::code::{NodeByHash, Nodes, SyntaxNode},
-    util::form::{Form, Owned, RefMut},
+    util::form::{Form, Owned, Ref, RefMut},
 };
 
 use super::TypedChildren;
@@ -24,6 +24,10 @@ impl Tuple<Owned> {
 }
 
 impl Tuple<NodeByHash> {
+    pub fn values(&self) -> TypedChildren<Ref> {
+        TypedChildren::new(&self.values, 0)
+    }
+
     pub fn values_mut(&mut self) -> TypedChildren<RefMut> {
         TypedChildren::new(&mut self.values, 0)
     }

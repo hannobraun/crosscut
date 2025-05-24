@@ -1,6 +1,5 @@
 use crate::language::code::{
-    Apply, Body, ChildIndex, Function, NodeByHash, NodePath, Nodes, SyntaxNode,
-    Tuple,
+    Apply, Body, Function, NodeByHash, NodePath, Nodes, SyntaxNode, Tuple,
 };
 
 use super::Value;
@@ -104,19 +103,8 @@ impl RuntimeNode {
                     add_value: *add_value,
                 };
 
-                let to_evaluate = tuple
-                    .values
-                    .into_iter()
-                    .enumerate()
-                    .rev()
-                    .map(|(index, hash)| {
-                        NodePath::new(
-                            hash,
-                            Some((path.clone(), ChildIndex { index })),
-                            nodes,
-                        )
-                    })
-                    .collect();
+                let to_evaluate =
+                    tuple.values().to_paths(&path, nodes).rev().collect();
                 let evaluated = Vec::new();
 
                 Self::Tuple {
