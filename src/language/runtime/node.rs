@@ -36,10 +36,18 @@ pub enum RuntimeNode {
 
 impl RuntimeNode {
     pub fn new(path: NodePath, nodes: &Nodes) -> Self {
-        match TypedNode::from_syntax_node(nodes.get(path.hash()), nodes) {
-            TypedNode::Expression {
-                expression: Expression::Apply { apply },
-            } => {
+        let TypedNode::Expression { expression } =
+            TypedNode::from_syntax_node(nodes.get(path.hash()), nodes)
+        else {
+            // For the most part, this would only happen if there's a bug in the
+            // compiler or evaluator. This still shouldn't be an `unreachable!`
+            // though, as it's also a possible consequence of somebody messing
+            // with the stored code database.
+            panic!("Expected expression.");
+        };
+
+        match expression {
+            Expression::Apply { apply } => {
                 let [expression, argument] =
                     [apply.expression(), apply.argument()].map(|child| {
                         RuntimeChild::Unevaluated {
@@ -53,9 +61,7 @@ impl RuntimeNode {
                     argument,
                 }
             }
-            TypedNode::Expression {
-                expression: Expression::Body { body },
-            } => {
+            Expression::Body { body } => {
                 let to_evaluate =
                     body.children().to_paths(&path, nodes).rev().collect();
                 let evaluated = Vec::new();
@@ -65,29 +71,19 @@ impl RuntimeNode {
                     evaluated,
                 }
             }
-            TypedNode::Expression {
-                expression: Expression::Empty,
-            } => Self::Empty,
-            TypedNode::Expression {
-                expression: Expression::Function { function },
-            } => {
+            Expression::Empty => Self::Empty,
+            Expression::Function { function } => {
                 let body = function.body().into_path(path, nodes);
                 let parameter = function.parameter.name;
 
                 Self::Function { parameter, body }
             }
-            TypedNode::Expression {
-                expression: Expression::Identifier { name },
-            } => Self::Identifier { name: name.clone() },
-            TypedNode::Expression {
-                expression: Expression::Number { value },
-            } => Self::Number { value },
-            TypedNode::Expression {
-                expression: Expression::Recursion,
-            } => Self::Recursion,
-            TypedNode::Expression {
-                expression: Expression::Tuple { tuple },
-            } => {
+            Expression::Identifier { name } => {
+                Self::Identifier { name: name.clone() }
+            }
+            Expression::Number { value } => Self::Number { value },
+            Expression::Recursion => Self::Recursion,
+            Expression::Tuple { tuple } => {
                 let to_evaluate =
                     tuple.values().to_paths(&path, nodes).rev().collect();
                 let evaluated = Vec::new();
@@ -96,16 +92,6 @@ impl RuntimeNode {
                     to_evaluate,
                     evaluated,
                 }
-            }
-            syntax_node => {
-                // For the most part, this would only happen if there's a bug in
-                // the compiler or evaluator. This still shouldn't be an
-                // `unreachable!` though, as it's also a possible consequence of
-                // somebody messing with the stored code database.
-                panic!(
-                    "Could not construct runtime node from syntax node: \n\
-                    {syntax_node:#?}"
-                );
             }
         }
     }
