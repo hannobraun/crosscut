@@ -37,21 +37,19 @@ impl Function<Owned> {
 }
 
 impl Function<NodeAsUniform> {
-    pub fn into_syntax_node(self, nodes: &mut Nodes) -> SyntaxNode {
-        let parameter = nodes.insert(self.parameter);
-        let body = nodes.insert(self.body);
-
-        SyntaxNode::Function { parameter, body }
-    }
-}
-
-impl Default for Function<NodeAsUniform> {
-    fn default() -> Self {
+    pub fn empty() -> Self {
         Self {
             parameter: SyntaxNode::Binding {
                 name: "_".to_string(),
             },
             body: SyntaxNode::Empty,
         }
+    }
+
+    pub fn into_syntax_node(self, nodes: &mut Nodes) -> SyntaxNode {
+        let parameter = nodes.insert(self.parameter);
+        let body = nodes.insert(self.body);
+
+        SyntaxNode::Function { parameter, body }
     }
 }

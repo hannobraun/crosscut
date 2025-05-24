@@ -31,7 +31,7 @@ fn resolve_literal(name: &str, nodes: &mut Nodes) -> Option<SyntaxNode> {
         Some(SyntaxNode::Number { value })
     } else {
         match name {
-            "fn" => Some(Function::default().into_syntax_node(nodes)),
+            "fn" => Some(Function::empty().into_syntax_node(nodes)),
             "tuple" => Some(Tuple::default().into_syntax_node(nodes)),
             _ => None,
         }
