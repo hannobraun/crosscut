@@ -112,7 +112,7 @@ pub enum SyntaxNode {
     Empty,
 
     /// # A series of expressions
-    Expressions {
+    Body {
         /// # The expressions
         children: Vec<NodeHash>,
 
@@ -209,7 +209,7 @@ impl SyntaxNode {
             | Self::Number { value: _ }
             | Self::Recursion => {}
 
-            Self::Expressions { children, add } => {
+            Self::Body { children, add } => {
                 hashes.extend(children);
                 hashes.push(add);
             }
@@ -244,7 +244,7 @@ impl SyntaxNode {
             | Self::Number { value: _ }
             | Self::Recursion => {}
 
-            Self::Expressions { children, add } => {
+            Self::Body { children, add } => {
                 hashes.extend(children);
                 hashes.push(add);
             }
@@ -283,7 +283,7 @@ impl fmt::Display for SyntaxNode {
             SyntaxNode::Empty => {
                 write!(f, "")
             }
-            SyntaxNode::Expressions { .. } => {
+            SyntaxNode::Body { .. } => {
                 unreachable!(
                     "Expressions node is not directly displayed in the editor."
                 );

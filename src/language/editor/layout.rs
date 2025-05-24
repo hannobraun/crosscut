@@ -77,7 +77,7 @@ fn collect_nodes_from_root(
     nodes_from_root: &mut Vec<NodeInLayout>,
     codebase: &Codebase,
 ) {
-    if let SyntaxNode::Expressions { .. } = located_node.node {
+    if let SyntaxNode::Body { .. } = located_node.node {
         // The expressions node is not directly displayed in the editor. Only
         // its children are.
     } else {

@@ -13,7 +13,7 @@ impl TypedNode {
 
             SyntaxNode::Apply { .. }
             | SyntaxNode::Empty
-            | SyntaxNode::Expressions { .. }
+            | SyntaxNode::Body { .. }
             | SyntaxNode::Function { .. }
             | SyntaxNode::Identifier { .. }
             | SyntaxNode::Number { .. }

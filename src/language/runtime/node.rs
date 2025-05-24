@@ -62,7 +62,7 @@ impl RuntimeNode {
                 }
             }
             SyntaxNode::Empty => Self::Empty,
-            SyntaxNode::Expressions { children, add } => {
+            SyntaxNode::Body { children, add } => {
                 let expressions = Expressions {
                     children: children.clone(),
                     add: *add,

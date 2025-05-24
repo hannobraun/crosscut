@@ -308,7 +308,7 @@ fn render_help<A: EditorOutputAdapter>(
                 making up your mind about what you want to type."
             )?;
         }
-        SyntaxNode::Expressions { .. } => {
+        SyntaxNode::Body { .. } => {
             unreachable!(
                 "Expressions node is not directly displayed in the editor."
             );
