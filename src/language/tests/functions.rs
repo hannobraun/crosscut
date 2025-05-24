@@ -66,6 +66,7 @@ fn binding_inner_shadows_outer() {
         .down()
         .code("127") // argument for inner binding
         .down()
+        .down() // navigate past the function body
         .code("255"); // argument for outer binding
 
     assert_eq!(
@@ -100,11 +101,13 @@ fn binding_inner_does_not_interfere_with_outer() {
         .down()
         .code("arg") // inner function body; refers to inner binding
         .down()
+        .down() // navigate past the inner function body
         .code("1") // argument for inner binding
         .down()
         .code("arg") // refers to outer binding
         .down()
         .down() // navigate past the tuple
+        .down() // navigate past the outer function body
         .code("2"); // argument for outer binding
 
     assert_eq!(

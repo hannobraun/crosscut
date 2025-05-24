@@ -37,12 +37,15 @@ impl Function<Owned> {
 }
 
 impl Function<NodeAsUniform> {
-    pub fn empty(_: &mut Nodes) -> Self {
+    pub fn empty(nodes: &mut Nodes) -> Self {
         Self {
             parameter: SyntaxNode::Binding {
                 name: "_".to_string(),
             },
-            body: SyntaxNode::Empty,
+            body: SyntaxNode::Body {
+                children: Vec::new(),
+                add: nodes.insert(SyntaxNode::Add),
+            },
         }
     }
 
