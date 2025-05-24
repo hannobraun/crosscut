@@ -83,6 +83,24 @@ pub enum SyntaxNode {
         name: String,
     },
 
+    /// # A series of expressions
+    Body {
+        /// # The expressions
+        children: Vec<NodeHash>,
+
+        /// # A node that can be edited to add an expression
+        ///
+        /// This is used as a destination for the editor to navigate to, which
+        /// it can edit to add a value.
+        ///
+        /// From the perspective of the syntax tree, this child stays static.
+        /// When the user tries to edit it, the editor actually creates a new
+        /// child that is then edited, and this one stays as it is.
+        ///
+        /// This is expected to be a [`SyntaxNode::Add`].
+        add: NodeHash,
+    },
+
     /// # An empty node
     ///
     /// Empty nodes are placeholders, while the user is editing the code. They
@@ -110,24 +128,6 @@ pub enum SyntaxNode {
     /// So for now, having a dedicated node as the placeholder, seems like a
     /// practical solution.
     Empty,
-
-    /// # A series of expressions
-    Body {
-        /// # The expressions
-        children: Vec<NodeHash>,
-
-        /// # A node that can be edited to add an expression
-        ///
-        /// This is used as a destination for the editor to navigate to, which
-        /// it can edit to add a value.
-        ///
-        /// From the perspective of the syntax tree, this child stays static.
-        /// When the user tries to edit it, the editor actually creates a new
-        /// child that is then edited, and this one stays as it is.
-        ///
-        /// This is expected to be a [`SyntaxNode::Add`].
-        add: NodeHash,
-    },
 
     /// # A function literal
     ///
