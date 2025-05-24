@@ -1,12 +1,12 @@
 use crate::{
-    language::code::{NodeByHash, Nodes, SyntaxNode},
+    language::code::{NodeByHash, NodeHash, Nodes, SyntaxNode},
     util::form::{Form, Owned, Ref, RefMut},
 };
 
 use super::TypedChildren;
 
 pub struct Expressions<T: Form> {
-    pub children: Vec<T::Form<SyntaxNode>>,
+    pub children: Vec<T::Form<NodeHash>>,
     pub add: T::Form<SyntaxNode>,
 }
 
@@ -15,18 +15,18 @@ impl Expressions<Owned> {
     pub fn with_children(
         mut self,
         children: impl IntoIterator<Item = SyntaxNode>,
-        _: &mut Nodes,
+        nodes: &mut Nodes,
     ) -> Self {
-        self.children = children.into_iter().collect();
+        self.children = children
+            .into_iter()
+            .map(|node| nodes.insert(node))
+            .collect();
+
         self
     }
 
     pub fn into_syntax_node(self, nodes: &mut Nodes) -> SyntaxNode {
-        let children = self
-            .children
-            .into_iter()
-            .map(|node| nodes.insert(node))
-            .collect();
+        let children = self.children;
         let add = nodes.insert(self.add);
 
         SyntaxNode::Expressions { children, add }
