@@ -182,7 +182,7 @@ impl Evaluator {
                 self.eval_stack.push(node);
             }
 
-            RuntimeNode::Expressions {
+            RuntimeNode::Body {
                 ref mut to_evaluate,
                 ..
             } if !to_evaluate.is_empty() => {
@@ -200,7 +200,7 @@ impl Evaluator {
                 self.eval_stack
                     .push(RuntimeNode::new(child, codebase.nodes()));
             }
-            RuntimeNode::Expressions { mut evaluated, .. } => {
+            RuntimeNode::Body { mut evaluated, .. } => {
                 let value = evaluated.pop().unwrap_or_else(Value::nothing);
                 self.finish_evaluating_node(value);
             }

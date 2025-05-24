@@ -12,7 +12,7 @@ pub enum RuntimeNode {
         argument: RuntimeChild,
     },
     Empty,
-    Expressions {
+    Body {
         to_evaluate: Vec<NodePath>,
         evaluated: Vec<Value>,
     },
@@ -71,7 +71,7 @@ impl RuntimeNode {
                     body.children().to_paths(&path, nodes).rev().collect();
                 let evaluated = Vec::new();
 
-                Self::Expressions {
+                Self::Body {
                     to_evaluate,
                     evaluated,
                 }
@@ -145,8 +145,7 @@ impl RuntimeNode {
                 *child = RuntimeChild::Evaluated { value };
             }
 
-            Self::Expressions { evaluated, .. }
-            | Self::Tuple { evaluated, .. } => {
+            Self::Body { evaluated, .. } | Self::Tuple { evaluated, .. } => {
                 evaluated.push(value);
             }
 
