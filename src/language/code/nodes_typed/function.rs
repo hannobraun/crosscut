@@ -37,7 +37,7 @@ impl Function<Owned> {
 }
 
 impl Function<NodeAsUniform> {
-    pub fn empty() -> Self {
+    pub fn empty(_: &mut Nodes) -> Self {
         Self {
             parameter: SyntaxNode::Binding {
                 name: "_".to_string(),
