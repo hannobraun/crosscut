@@ -61,7 +61,6 @@ impl RuntimeNode {
                     argument,
                 }
             }
-            SyntaxNode::Empty => Self::Empty,
             SyntaxNode::Body { children, add } => {
                 let expressions = Expressions {
                     children: children.clone(),
@@ -80,6 +79,7 @@ impl RuntimeNode {
                     evaluated,
                 }
             }
+            SyntaxNode::Empty => Self::Empty,
             SyntaxNode::Function { parameter, body } => {
                 let function = Function::new(parameter, *body, nodes);
                 let body = function.body().into_path(path, nodes);
