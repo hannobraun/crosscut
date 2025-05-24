@@ -82,7 +82,6 @@ impl RuntimeNode {
             }
             SyntaxNode::Function { parameter, body } => {
                 let function = Function::new(parameter, *body, nodes);
-
                 let body = function.body().into_path(path, nodes);
 
                 Self::Function {
