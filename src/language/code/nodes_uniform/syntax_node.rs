@@ -85,10 +85,10 @@ pub enum SyntaxNode {
 
     /// # A series of expressions
     Body {
-        /// # The expressions
+        /// # The children of the body
         children: Vec<NodeHash>,
 
-        /// # A node that can be edited to add an expression
+        /// # A node that can be edited to add an expression to the body
         ///
         /// This is used as a destination for the editor to navigate to, which
         /// it can edit to add a value.
