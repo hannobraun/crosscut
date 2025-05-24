@@ -27,7 +27,7 @@ pub struct Function<T: Form> {
 
 impl Function<Owned> {
     pub fn new(parameter: &NodeHash, body: NodeHash, nodes: &Nodes) -> Self {
-        let parameter = Binding::new(parameter, nodes);
+        let parameter = Binding::from_hash(parameter, nodes);
         Self { parameter, body }
     }
 

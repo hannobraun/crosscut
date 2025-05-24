@@ -5,7 +5,7 @@ pub struct Binding {
 }
 
 impl Binding {
-    pub fn new(hash: &NodeHash, nodes: &Nodes) -> Self {
+    pub fn from_hash(hash: &NodeHash, nodes: &Nodes) -> Self {
         let SyntaxNode::Binding { name } = nodes.get(hash) else {
             panic!("Expected node to be a binding.");
         };
