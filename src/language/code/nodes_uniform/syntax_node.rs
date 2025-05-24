@@ -282,7 +282,7 @@ impl fmt::Display for SyntaxNode {
             }
             SyntaxNode::Body { .. } => {
                 unreachable!(
-                    "Expressions node is not directly displayed in the editor."
+                    "Body node is not directly displayed in the editor."
                 );
             }
             SyntaxNode::Empty => {
