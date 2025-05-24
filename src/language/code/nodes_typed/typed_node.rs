@@ -11,6 +11,7 @@ impl TypedNode {
         match syntax_node {
             SyntaxNode::Add => Self::Other,
             SyntaxNode::Apply { .. } => Self::Expression,
+            SyntaxNode::Binding { .. } => Self::Pattern,
             SyntaxNode::Body { .. } => Self::Expression,
             SyntaxNode::Empty => Self::Expression,
             SyntaxNode::Function { .. } => Self::Expression,
@@ -18,7 +19,6 @@ impl TypedNode {
             SyntaxNode::Number { .. } => Self::Expression,
             SyntaxNode::Recursion => Self::Expression,
             SyntaxNode::Tuple { .. } => Self::Expression,
-            SyntaxNode::Binding { .. } => Self::Pattern,
         }
     }
 }
