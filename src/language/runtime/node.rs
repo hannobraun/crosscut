@@ -78,11 +78,7 @@ impl RuntimeNode {
             }
             TypedNode::Expression {
                 expression: Expression::Identifier { name },
-            } => {
-                let name = name.clone();
-
-                Self::Identifier { name }
-            }
+            } => Self::Identifier { name: name.clone() },
             TypedNode::Expression {
                 expression: Expression::Number { value },
             } => Self::Number { value },
