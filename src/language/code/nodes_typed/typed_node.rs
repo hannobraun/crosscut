@@ -19,7 +19,7 @@ impl TypedNode {
     }
 
     pub fn from_syntax_node(syntax_node: SyntaxNode, nodes: &Nodes) -> Self {
-        match syntax_node.clone() {
+        match syntax_node {
             SyntaxNode::Add => Self::Other,
             SyntaxNode::Apply {
                 expression,
