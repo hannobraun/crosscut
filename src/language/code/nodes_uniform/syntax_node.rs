@@ -280,13 +280,13 @@ impl fmt::Display for SyntaxNode {
             SyntaxNode::Binding { name } => {
                 write!(f, "{name}")
             }
-            SyntaxNode::Empty => {
-                write!(f, "")
-            }
             SyntaxNode::Body { .. } => {
                 unreachable!(
                     "Expressions node is not directly displayed in the editor."
                 );
+            }
+            SyntaxNode::Empty => {
+                write!(f, "")
             }
             SyntaxNode::Function { .. } => {
                 write!(f, "fn")
