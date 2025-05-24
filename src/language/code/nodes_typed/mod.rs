@@ -13,5 +13,5 @@ pub use self::{
     children::{TypedChild, TypedChildren},
     function::Function,
     tuple::Tuple,
-    typed_node::TypedNode,
+    typed_node::{Expression, TypedNode},
 };

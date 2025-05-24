@@ -1,6 +1,4 @@
-use crate::language::code::{
-    Apply, Body, Function, NodePath, Nodes, SyntaxNode, Tuple,
-};
+use crate::language::code::{Expression, NodePath, Nodes, TypedNode};
 
 use super::Value;
 
@@ -38,16 +36,10 @@ pub enum RuntimeNode {
 
 impl RuntimeNode {
     pub fn new(path: NodePath, nodes: &Nodes) -> Self {
-        match nodes.get(path.hash()) {
-            SyntaxNode::Apply {
-                expression,
-                argument,
+        match TypedNode::from_syntax_node(nodes.get(path.hash()), nodes) {
+            TypedNode::Expression {
+                expression: Expression::Apply { apply },
             } => {
-                let apply = Apply {
-                    expression: *expression,
-                    argument: *argument,
-                };
-
                 let [expression, argument] =
                     [apply.expression(), apply.argument()].map(|child| {
                         RuntimeChild::Unevaluated {
@@ -61,12 +53,9 @@ impl RuntimeNode {
                     argument,
                 }
             }
-            SyntaxNode::Body { children, add } => {
-                let body = Body {
-                    children: children.clone(),
-                    add: *add,
-                };
-
+            TypedNode::Expression {
+                expression: Expression::Body { body },
+            } => {
                 let to_evaluate =
                     body.children().to_paths(&path, nodes).rev().collect();
                 let evaluated = Vec::new();
@@ -76,9 +65,12 @@ impl RuntimeNode {
                     evaluated,
                 }
             }
-            SyntaxNode::Empty => Self::Empty,
-            SyntaxNode::Function { parameter, body } => {
-                let function = Function::new(parameter, *body, nodes);
+            TypedNode::Expression {
+                expression: Expression::Empty,
+            } => Self::Empty,
+            TypedNode::Expression {
+                expression: Expression::Function { function },
+            } => {
                 let body = function.body().into_path(path, nodes);
 
                 Self::Function {
@@ -86,23 +78,22 @@ impl RuntimeNode {
                     body,
                 }
             }
-            SyntaxNode::Identifier { name } => {
+            TypedNode::Expression {
+                expression: Expression::Identifier { name },
+            } => {
                 let name = name.clone();
 
                 Self::Identifier { name }
             }
-            SyntaxNode::Number { value } => {
-                let value = *value;
-
-                Self::Number { value }
-            }
-            SyntaxNode::Recursion => Self::Recursion,
-            SyntaxNode::Tuple { values, add_value } => {
-                let tuple = Tuple {
-                    values: values.clone(),
-                    add_value: *add_value,
-                };
-
+            TypedNode::Expression {
+                expression: Expression::Number { value },
+            } => Self::Number { value },
+            TypedNode::Expression {
+                expression: Expression::Recursion,
+            } => Self::Recursion,
+            TypedNode::Expression {
+                expression: Expression::Tuple { tuple },
+            } => {
                 let to_evaluate =
                     tuple.values().to_paths(&path, nodes).rev().collect();
                 let evaluated = Vec::new();
