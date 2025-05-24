@@ -1,4 +1,4 @@
-use crate::language::code::SyntaxNode;
+use crate::language::code::{Nodes, SyntaxNode};
 
 pub enum TypedNode {
     Expression,
@@ -7,7 +7,7 @@ pub enum TypedNode {
 }
 
 impl TypedNode {
-    pub fn from_syntax_node(syntax_node: &SyntaxNode) -> Self {
+    pub fn from_syntax_node(syntax_node: &SyntaxNode, _: &Nodes) -> Self {
         match syntax_node {
             SyntaxNode::Add => Self::Other,
             SyntaxNode::Apply { .. } => Self::Expression,
