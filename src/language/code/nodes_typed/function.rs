@@ -5,6 +5,7 @@ use crate::{
 
 use super::{Binding, TypedChild};
 
+#[derive(Debug)]
 pub struct Function<T: Form> {
     pub parameter: T::Form<Binding>,
 

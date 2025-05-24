@@ -55,6 +55,7 @@ impl fmt::Display for NodeHash {
     }
 }
 
+#[derive(Debug)]
 pub struct NodeByHash;
 
 impl Form for NodeByHash {

@@ -1,5 +1,6 @@
 use crate::language::code::{NodeHash, Nodes, SyntaxNode};
 
+#[derive(Debug)]
 pub struct Binding {
     pub name: String,
 }

@@ -4,6 +4,7 @@ pub trait Form {
     type Form<T: 'static>;
 }
 
+#[derive(Debug)]
 pub struct Owned;
 
 impl Form for Owned {

@@ -5,6 +5,7 @@ use crate::{
 
 use super::TypedChild;
 
+#[derive(Debug)]
 pub struct Apply<T: Form> {
     pub expression: T::Form<SyntaxNode>,
     pub argument: T::Form<SyntaxNode>,

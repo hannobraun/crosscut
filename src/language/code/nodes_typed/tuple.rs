@@ -5,6 +5,7 @@ use crate::{
 
 use super::TypedChildren;
 
+#[derive(Debug)]
 pub struct Tuple<T: Form> {
     pub values: Vec<T::Form<SyntaxNode>>,
     pub add_value: T::Form<SyntaxNode>,

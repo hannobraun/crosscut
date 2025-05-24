@@ -5,6 +5,7 @@ use crate::{
 
 use super::TypedChildren;
 
+#[derive(Debug)]
 pub struct Body<T: Form> {
     /// # The children of the body
     ///

@@ -1,5 +1,6 @@
 use crate::language::code::{Nodes, SyntaxNode};
 
+#[derive(Debug)]
 pub enum TypedNode {
     Expression,
     Pattern,
