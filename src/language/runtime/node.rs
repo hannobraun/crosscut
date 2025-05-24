@@ -106,8 +106,7 @@ impl RuntimeNode {
 
                 let to_evaluate = tuple
                     .values
-                    .iter()
-                    .copied()
+                    .into_iter()
                     .enumerate()
                     .rev()
                     .map(|(index, hash)| {
