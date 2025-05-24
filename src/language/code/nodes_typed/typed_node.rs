@@ -12,8 +12,8 @@ impl TypedNode {
             SyntaxNode::Add => Self::Other,
 
             SyntaxNode::Apply { .. }
-            | SyntaxNode::Empty
             | SyntaxNode::Body { .. }
+            | SyntaxNode::Empty
             | SyntaxNode::Function { .. }
             | SyntaxNode::Identifier { .. }
             | SyntaxNode::Number { .. }
