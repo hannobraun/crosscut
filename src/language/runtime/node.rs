@@ -1,5 +1,6 @@
 use crate::language::code::{
-    Apply, Body, ChildIndex, Function, NodePath, Nodes, SyntaxNode,
+    Apply, Body, ChildIndex, Function, NodeByHash, NodePath, Nodes, SyntaxNode,
+    Tuple,
 };
 
 use super::Value;
@@ -97,8 +98,14 @@ impl RuntimeNode {
                 Self::Number { value }
             }
             SyntaxNode::Recursion => Self::Recursion,
-            SyntaxNode::Tuple { values, .. } => {
-                let to_evaluate = values
+            SyntaxNode::Tuple { values, add_value } => {
+                let tuple: Tuple<NodeByHash> = Tuple {
+                    values: values.clone(),
+                    add_value: *add_value,
+                };
+
+                let to_evaluate = tuple
+                    .values
                     .iter()
                     .copied()
                     .enumerate()
