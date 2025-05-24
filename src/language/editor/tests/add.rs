@@ -72,7 +72,7 @@ fn add_function() {
         function.node,
         &SyntaxNode::Function {
             parameter: *parameter.path.hash(),
-            body: vec![*body.path.hash()],
+            body: *body.path.hash(),
         },
     );
     assert_eq!(

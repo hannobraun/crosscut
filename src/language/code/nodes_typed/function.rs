@@ -1,9 +1,9 @@
 use crate::{
     language::code::{NodeAsUniform, NodeHash, Nodes, SyntaxNode},
-    util::form::{Form, Owned, Ref},
+    util::form::{Form, Owned},
 };
 
-use super::{Binding, TypedChildren};
+use super::{Binding, TypedChild};
 
 pub struct Function<T: Form> {
     pub parameter: T::Form<Binding>,
@@ -22,32 +22,24 @@ pub struct Function<T: Form> {
     /// function into this type parameter.
     ///
     /// - Hanno Braun
-    pub body: Vec<T::Form<NodeHash>>,
+    pub body: T::Form<NodeHash>,
 }
 
 impl Function<Owned> {
-    pub fn new(
-        parameter: &NodeHash,
-        body: Vec<NodeHash>,
-        nodes: &Nodes,
-    ) -> Self {
+    pub fn new(parameter: &NodeHash, body: NodeHash, nodes: &Nodes) -> Self {
         let parameter = Binding::new(parameter, nodes);
         Self { parameter, body }
     }
 
-    pub fn body(&self) -> TypedChildren<Ref> {
-        TypedChildren::new(&self.body, 1)
+    pub fn body(&self) -> TypedChild {
+        TypedChild::new(self.body, 1)
     }
 }
 
 impl Function<NodeAsUniform> {
     pub fn into_syntax_node(self, nodes: &mut Nodes) -> SyntaxNode {
         let parameter = nodes.insert(self.parameter);
-        let body = self
-            .body
-            .into_iter()
-            .map(|expression| nodes.insert(expression))
-            .collect();
+        let body = nodes.insert(self.body);
 
         SyntaxNode::Function { parameter, body }
     }
@@ -59,7 +51,7 @@ impl Default for Function<NodeAsUniform> {
             parameter: SyntaxNode::Binding {
                 name: "_".to_string(),
             },
-            body: vec![SyntaxNode::Empty],
+            body: SyntaxNode::Empty,
         }
     }
 }

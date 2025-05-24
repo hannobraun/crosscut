@@ -137,7 +137,7 @@ pub enum SyntaxNode {
         parameter: NodeHash,
 
         /// # The root node of the function's body
-        body: Vec<NodeHash>,
+        body: NodeHash,
     },
 
     /// # An identifier
@@ -216,7 +216,7 @@ impl SyntaxNode {
 
             Self::Function { parameter, body } => {
                 hashes.push(parameter);
-                hashes.extend(body);
+                hashes.push(body);
             }
 
             Self::Tuple { values, add_value } => {
@@ -251,7 +251,7 @@ impl SyntaxNode {
 
             Self::Function { parameter, body } => {
                 hashes.push(parameter);
-                hashes.extend(body);
+                hashes.push(body);
             }
 
             Self::Tuple { values, add_value } => {

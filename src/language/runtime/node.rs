@@ -81,10 +81,9 @@ impl RuntimeNode {
                 }
             }
             SyntaxNode::Function { parameter, body } => {
-                let function = Function::new(parameter, body.clone(), nodes);
+                let function = Function::new(parameter, *body, nodes);
 
-                let body =
-                    function.body().to_paths(&path, nodes).next().unwrap();
+                let body = function.body().into_path(path, nodes);
 
                 Self::Function {
                     parameter: function.parameter.name,
