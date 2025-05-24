@@ -1,7 +1,7 @@
 mod apply;
 mod binding;
+mod body;
 mod children;
-mod expressions;
 mod function;
 mod tuple;
 mod typed_node;
@@ -9,8 +9,8 @@ mod typed_node;
 pub use self::{
     apply::Apply,
     binding::Binding,
+    body::Body,
     children::{TypedChild, TypedChildren},
-    expressions::Body,
     function::Function,
     tuple::Tuple,
     typed_node::TypedNode,
