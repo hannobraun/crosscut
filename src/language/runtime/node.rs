@@ -1,6 +1,4 @@
-use crate::language::code::{
-    Body, Expression, NodePath, Nodes, SyntaxNode, TypedNode,
-};
+use crate::language::code::{Body, Expression, NodePath, Nodes, TypedNode};
 
 use super::Value;
 
@@ -86,18 +84,7 @@ impl RuntimeNode {
             Expression::Number { value } => Self::Number { value },
             Expression::Recursion => Self::Recursion,
             Expression::Tuple { tuple } => {
-                let values = {
-                    let SyntaxNode::Body { children, add } =
-                        nodes.get(&tuple.values)
-                    else {
-                        panic!("Expected body.");
-                    };
-
-                    let children = children.clone();
-                    let add = *add;
-
-                    Body { children, add }
-                };
+                let values = Body::from_hash(&tuple.values, nodes);
 
                 let parent = tuple.values().into_path(path, nodes);
 

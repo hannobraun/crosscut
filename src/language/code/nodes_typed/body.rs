@@ -1,5 +1,5 @@
 use crate::{
-    language::code::{NodeByHash, Nodes, SyntaxNode},
+    language::code::{NodeByHash, NodeHash, Nodes, SyntaxNode},
     util::form::{Form, Owned, Ref, RefMut},
 };
 
@@ -35,6 +35,17 @@ impl Body<Owned> {
 }
 
 impl Body<NodeByHash> {
+    pub fn from_hash(hash: &NodeHash, nodes: &Nodes) -> Self {
+        let SyntaxNode::Body { children, add } = nodes.get(hash) else {
+            panic!("Expected body.");
+        };
+
+        let children = children.clone();
+        let add = *add;
+
+        Self { children, add }
+    }
+
     pub fn children(&self) -> TypedChildren<Ref> {
         TypedChildren::new(&self.children, 0)
     }
