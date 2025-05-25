@@ -12,6 +12,13 @@ pub struct Tuple<T: Form> {
 }
 
 impl Tuple<Owned> {
+    pub fn empty() -> Self {
+        Self {
+            values: Vec::new(),
+            add_value: SyntaxNode::Add,
+        }
+    }
+
     pub fn into_syntax_node(self, nodes: &mut Nodes) -> SyntaxNode {
         let values = self
             .values
@@ -37,15 +44,6 @@ impl Tuple<NodeByHash> {
         SyntaxNode::Tuple {
             values: self.values,
             add_value: self.add_value,
-        }
-    }
-}
-
-impl Default for Tuple<Owned> {
-    fn default() -> Self {
-        Self {
-            values: Vec::new(),
-            add_value: SyntaxNode::Add,
         }
     }
 }
