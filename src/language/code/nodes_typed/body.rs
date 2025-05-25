@@ -12,6 +12,13 @@ pub struct Body<T: Form> {
 }
 
 impl Body<Owned> {
+    pub fn empty() -> Self {
+        Self {
+            children: Vec::new(),
+            add: SyntaxNode::Add,
+        }
+    }
+
     #[cfg(test)]
     pub fn with_children(
         mut self,

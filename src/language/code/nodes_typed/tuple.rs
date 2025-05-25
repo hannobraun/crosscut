@@ -13,10 +13,7 @@ pub struct Tuple<T: Form> {
 impl Tuple<Owned> {
     pub fn empty() -> Self {
         Self {
-            values: Body {
-                children: Vec::new(),
-                add: SyntaxNode::Add,
-            },
+            values: Body::empty(),
         }
     }
 
