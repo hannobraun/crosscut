@@ -7,13 +7,7 @@ use super::TypedChildren;
 
 #[derive(Debug)]
 pub struct Body<T: Form> {
-    /// # The children of the body
-    ///
-    /// This refers to all expressions in the body by hash, regardless of what
-    /// [`Form`] is passed as a type parameter. This is required, so function
-    /// values can be constructed from this type, at runtime.
     pub children: Vec<T::Form<SyntaxNode>>,
-
     pub add: T::Form<SyntaxNode>,
 }
 
