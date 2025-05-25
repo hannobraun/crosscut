@@ -130,13 +130,15 @@ pub enum SyntaxNode {
     Empty,
 
     /// # A function literal
-    ///
-    /// Evaluates to a function value.
     Function {
         /// # The parameter of the function
+        ///
+        /// This is expected to be a [`SyntaxNode::Binding`].
         parameter: NodeHash,
 
-        /// # The root node of the function's body
+        /// # The body of the function
+        ///
+        /// This is expected to be a [`SyntaxNode::Body`].
         body: NodeHash,
     },
 
