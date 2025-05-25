@@ -24,7 +24,10 @@ impl Editor {
         if let SyntaxNode::Body { .. } = located_node.node {
             let Some(child) = located_node.children(codebase.nodes()).next()
             else {
-                unreachable!("An `Expressions` node has at least one child.");
+                unreachable!(
+                    "A body node has at least one child, the node for adding \
+                    more children."
+                );
             };
 
             cursor.path = child.path;
