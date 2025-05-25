@@ -11,18 +11,9 @@ pub struct Function<T: Form> {
 
     /// # The body of the function
     ///
-    /// ## Implementation Note
-    ///
-    /// This refers to all expressions in the function bodies by hash,
-    /// regardless of what form the other fields have. This is not as type-safe
-    /// as I would want these typed node types to be, but it's necessary. The
-    /// hash is required to construct function values from this, at runtime.
-    ///
-    /// Maybe the type safety can be taken care of by an accessor method, which
-    /// returns `Children`, which could get a type parameter and a conversion
-    /// function into this type parameter.
-    ///
-    /// - Hanno Braun
+    /// Refers to the body node by hash, regardless of what form the other
+    /// fields have. This is necessary, so function values can be constructed
+    /// from this at runtime.
     pub body: T::Form<NodeHash>,
 }
 
