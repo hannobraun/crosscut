@@ -84,8 +84,10 @@ impl RuntimeNode {
             Expression::Number { value } => Self::Number { value },
             Expression::Recursion => Self::Recursion,
             Expression::Tuple { tuple } => {
+                let parent = path;
+
                 let to_evaluate =
-                    tuple.values().to_paths(&path, nodes).rev().collect();
+                    tuple.values().to_paths(&parent, nodes).rev().collect();
                 let evaluated = Vec::new();
 
                 Self::Tuple {
