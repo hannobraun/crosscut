@@ -22,7 +22,6 @@ impl Body<Owned> {
     pub fn with_children(
         mut self,
         children: impl IntoIterator<Item = SyntaxNode>,
-        _: &mut Nodes,
     ) -> Self {
         self.children = children.into_iter().collect();
 
