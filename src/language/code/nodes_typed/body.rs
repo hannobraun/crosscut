@@ -1,5 +1,5 @@
 use crate::{
-    language::code::{NodeByHash, NodeHash, Nodes, SyntaxNode},
+    language::code::{NodeByHash, Nodes, SyntaxNode},
     util::form::{Form, Owned, Ref, RefMut},
 };
 
@@ -12,7 +12,7 @@ pub struct Body<T: Form> {
     /// This refers to all expressions in the body by hash, regardless of what
     /// [`Form`] is passed as a type parameter. This is required, so function
     /// values can be constructed from this type, at runtime.
-    pub children: Vec<T::Form<NodeHash>>,
+    pub children: Vec<T::Form<SyntaxNode>>,
 
     pub add: T::Form<SyntaxNode>,
 }
@@ -22,18 +22,19 @@ impl Body<Owned> {
     pub fn with_children(
         mut self,
         children: impl IntoIterator<Item = SyntaxNode>,
-        nodes: &mut Nodes,
+        _: &mut Nodes,
     ) -> Self {
-        self.children = children
-            .into_iter()
-            .map(|node| nodes.insert(node))
-            .collect();
+        self.children = children.into_iter().collect();
 
         self
     }
 
     pub fn into_syntax_node(self, nodes: &mut Nodes) -> SyntaxNode {
-        let children = self.children;
+        let children = self
+            .children
+            .into_iter()
+            .map(|node| nodes.insert(node))
+            .collect();
         let add = nodes.insert(self.add);
 
         SyntaxNode::Body { children, add }
