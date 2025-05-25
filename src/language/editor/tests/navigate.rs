@@ -73,27 +73,25 @@ fn navigate_right_to_child() {
     let mut codebase = Codebase::new();
     let mut evaluator = Evaluator::new();
 
-    let child = {
+    {
         let mut compiler = Compiler::new(&mut codebase);
-
-        let parent =
-            compiler.replace(&compiler.codebase().root().path, "tuple");
-        compiler.insert_child(parent, "child")
-    };
+        compiler.replace(&compiler.codebase().root().path, "fn");
+    }
 
     let mut editor = Editor::new(
         Cursor {
             path: codebase.root().path,
-            index: "tuple".len(),
+            index: "fn".len(),
         },
         &codebase,
     );
     editor.on_input(MoveCursorRight, &mut codebase, &mut evaluator);
 
+    let [child, _] = codebase.root().expect_children(codebase.nodes());
     assert_eq!(
         editor.cursor(),
         &Cursor {
-            path: child,
+            path: child.path,
             index: 0,
         },
     );
