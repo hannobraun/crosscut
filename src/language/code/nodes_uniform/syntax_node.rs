@@ -176,7 +176,7 @@ pub enum SyntaxNode {
     Tuple {
         /// # The values of the tuple
         ///
-        /// This is expected to be a [`SyntaxNode::Expressions`].
+        /// This is expected to be a [`SyntaxNode::Body`].
         values: NodeHash,
     },
 }
