@@ -169,8 +169,6 @@ fn navigate_down_to_next_sibling() {
     {
         let mut compiler = Compiler::new(&mut codebase);
 
-        compiler.replace(&compiler.codebase().root().path, "tuple");
-
         compiler.insert_child(compiler.codebase().root().path, "a");
         compiler.insert_child(compiler.codebase().root().path, "b");
     }
@@ -197,8 +195,6 @@ fn navigate_right_to_next_sibling() {
     {
         let mut compiler = Compiler::new(&mut codebase);
 
-        compiler.replace(&compiler.codebase().root().path, "tuple");
-
         compiler.insert_child(compiler.codebase().root().path, "a");
         compiler.insert_child(compiler.codebase().root().path, "b");
     }
@@ -223,8 +219,6 @@ fn navigate_up_to_previous_sibling() {
 
     {
         let mut compiler = Compiler::new(&mut codebase);
-
-        compiler.replace(&compiler.codebase().root().path, "tuple");
 
         compiler.insert_child(compiler.codebase().root().path, "a");
         compiler.insert_child(compiler.codebase().root().path, "b");
@@ -251,8 +245,6 @@ fn navigate_left_to_previous_sibling() {
 
     {
         let mut compiler = Compiler::new(&mut codebase);
-
-        compiler.replace(&compiler.codebase().root().path, "tuple");
 
         compiler.insert_child(compiler.codebase().root().path, "a");
         compiler.insert_child(compiler.codebase().root().path, "b");
