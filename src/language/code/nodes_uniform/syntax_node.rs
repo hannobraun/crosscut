@@ -174,21 +174,10 @@ pub enum SyntaxNode {
     /// Tuples only exist in the language as a placeholder. I (@hannobraun)
     /// expect to replace them with record types at some point.
     Tuple {
-        /// # The nodes that determine the values of the tuple literal
+        /// # The values of the tuple
         ///
-        /// A tuple literal can have an arbitrary number of children, each of
-        /// which evaluates to one of the values in the tuple value.
-        values: Vec<NodeHash>,
-
-        /// # A node that can be edited to add values to the tuple
-        ///
-        /// This is used as a destination for the editor to navigate to, which
-        /// it can edit to add a value.
-        ///
-        /// From the perspective of the syntax tree, this child stays static.
-        /// When the user tries to edit it, the editor actually creates a new
-        /// child that is then edited, and this one stays as it is.
-        add_value: NodeHash,
+        /// This is expected to be a [`SyntaxNode::Expressions`].
+        values: NodeHash,
     },
 }
 
@@ -219,9 +208,8 @@ impl SyntaxNode {
                 hashes.push(body);
             }
 
-            Self::Tuple { values, add_value } => {
-                hashes.extend(values);
-                hashes.push(add_value);
+            Self::Tuple { values } => {
+                hashes.push(values);
             }
         }
 
@@ -254,9 +242,8 @@ impl SyntaxNode {
                 hashes.push(body);
             }
 
-            Self::Tuple { values, add_value } => {
-                hashes.extend(values);
-                hashes.push(add_value);
+            Self::Tuple { values } => {
+                hashes.push(values);
             }
         }
 

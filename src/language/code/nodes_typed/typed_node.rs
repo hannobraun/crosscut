@@ -55,9 +55,9 @@ impl TypedNode {
             SyntaxNode::Recursion => Self::Expression {
                 expression: Expression::Recursion,
             },
-            SyntaxNode::Tuple { values, add_value } => Self::Expression {
+            SyntaxNode::Tuple { values } => Self::Expression {
                 expression: Expression::Tuple {
-                    tuple: Tuple { values, add_value },
+                    tuple: Tuple { values },
                 },
             },
         }

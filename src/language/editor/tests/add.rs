@@ -98,7 +98,8 @@ fn add_value_to_tuple() {
     editor.on_code("1", &mut codebase, &mut evaluator);
 
     let [tuple, _] = codebase.root().expect_children(codebase.nodes());
-    let [value, _] = tuple.expect_children(codebase.nodes());
+    let [body] = tuple.expect_children(codebase.nodes());
+    let [value, _] = body.expect_children(codebase.nodes());
 
     assert!(matches!(tuple.node, &SyntaxNode::Tuple { .. }));
     assert_eq!(value.node, &SyntaxNode::Number { value: 1 });

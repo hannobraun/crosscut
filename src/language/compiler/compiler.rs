@@ -1,6 +1,4 @@
-use crate::language::code::{
-    Body, Codebase, NodePath, SyntaxNode, Tuple, TypedNode,
-};
+use crate::language::code::{Body, Codebase, NodePath, SyntaxNode, TypedNode};
 
 use super::{expression, replace::replace_node_and_update_parents};
 
@@ -39,17 +37,6 @@ impl<'r> Compiler<'r> {
 
                         let index = expressions.children_mut().add(child);
                         let node = expressions.into_syntax_node();
-
-                        (node, index)
-                    }
-                    SyntaxNode::Tuple { values, add_value } => {
-                        let mut tuple = Tuple {
-                            values: values.clone(),
-                            add_value: *add_value,
-                        };
-
-                        let index = tuple.values_mut().add(child);
-                        let node = tuple.into_syntax_node();
 
                         (node, index)
                     }

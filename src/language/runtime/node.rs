@@ -1,4 +1,6 @@
-use crate::language::code::{Expression, NodePath, Nodes, TypedNode};
+use crate::language::code::{
+    Body, Expression, NodePath, Nodes, SyntaxNode, TypedNode,
+};
 
 use super::Value;
 
@@ -84,10 +86,23 @@ impl RuntimeNode {
             Expression::Number { value } => Self::Number { value },
             Expression::Recursion => Self::Recursion,
             Expression::Tuple { tuple } => {
-                let parent = path;
+                let values = {
+                    let SyntaxNode::Body { children, add } =
+                        nodes.get(&tuple.values)
+                    else {
+                        panic!("Expected body.");
+                    };
+
+                    let children = children.clone();
+                    let add = *add;
+
+                    Body { children, add }
+                };
+
+                let parent = tuple.values().into_path(path, nodes);
 
                 let to_evaluate =
-                    tuple.values().to_paths(&parent, nodes).rev().collect();
+                    values.children().to_paths(&parent, nodes).rev().collect();
                 let evaluated = Vec::new();
 
                 Self::Tuple {
