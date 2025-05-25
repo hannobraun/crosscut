@@ -104,17 +104,15 @@ fn navigate_up_to_parent() {
     let mut codebase = Codebase::new();
     let mut evaluator = Evaluator::new();
 
-    let child = {
+    {
         let mut compiler = Compiler::new(&mut codebase);
+        compiler.replace(&compiler.codebase().root().path, "fn");
+    }
 
-        let parent =
-            compiler.replace(&compiler.codebase().root().path, "tuple");
-        compiler.insert_child(parent, "child")
-    };
-
+    let [child, _] = codebase.root().expect_children(codebase.nodes());
     let mut editor = Editor::new(
         Cursor {
-            path: child,
+            path: child.path,
             index: 1,
         },
         &codebase,
@@ -125,7 +123,7 @@ fn navigate_up_to_parent() {
         editor.cursor(),
         &Cursor {
             path: codebase.root().path,
-            index: "tuple".len(),
+            index: "fn".len(),
         },
     );
 }
