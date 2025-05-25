@@ -85,7 +85,6 @@ impl RuntimeNode {
             Expression::Recursion => Self::Recursion,
             Expression::Tuple { tuple } => {
                 let values = Body::from_hash(&tuple.values, nodes);
-
                 let parent = tuple.values().into_path(path, nodes);
 
                 let to_evaluate =
