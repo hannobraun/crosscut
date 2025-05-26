@@ -62,7 +62,7 @@ impl EditorLine {
             * Self::NUMBER_OF_SPACES_PER_LEVEL_OF_INDENTATION
     }
 
-    const NUMBER_OF_SPACES_PER_LEVEL_OF_INDENTATION: u32 = 4;
+    pub const NUMBER_OF_SPACES_PER_LEVEL_OF_INDENTATION: u32 = 4;
 }
 
 #[derive(Debug)]
