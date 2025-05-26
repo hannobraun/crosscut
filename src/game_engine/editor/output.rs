@@ -197,11 +197,28 @@ fn render_line<A: EditorOutputAdapter>(
     adapter: &mut A,
     context: &mut RenderContext,
 ) -> anyhow::Result<()> {
-    for _ in 0..line.width_of_indentation() {
+    for _ in 0..line.level_of_indentation {
+        let arrow = " ⭲";
+
+        let Ok(count) = arrow.chars().count().try_into() else {
+            unreachable!(
+                "The `str` created above has a length that can be converted to \
+                `u32`."
+            );
+        };
+        let count: u32 = count;
+
+        let max_count = EditorLine::NUMBER_OF_SPACES_PER_LEVEL_OF_INDENTATION;
+        assert!(count <= max_count);
+
         adapter.color(Color::Grey, |adapter| {
-            write!(adapter, "·")?;
+            write!(adapter, "{}", arrow)?;
             Ok(())
         })?;
+
+        for _ in 0..(max_count - count) {
+            write!(adapter, " ")?;
+        }
     }
 
     render_node(&line.node.path, adapter, context)?;
