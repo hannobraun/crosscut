@@ -238,9 +238,9 @@ fn channel<T>() -> (Sender<T>, Receiver<T>) {
     (Sender { inner: sender }, Receiver { inner: receiver })
 }
 
-fn spawn<F>(name: &str, mut f: F) -> anyhow::Result<ThreadHandle>
+fn spawn<F>(name: &str, f: F) -> anyhow::Result<ThreadHandle>
 where
-    F: FnMut() -> Result<(), Error> + Send + 'static,
+    F: FnOnce() -> Result<(), Error> + Send + 'static,
 {
     let handle =
         thread::Builder::new()
