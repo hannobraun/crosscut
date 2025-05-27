@@ -5,7 +5,7 @@ use super::{
     node::{RuntimeChild, RuntimeNode},
 };
 
-#[derive(Debug)]
+#[derive(Debug, Default)]
 pub struct Evaluator {
     eval_stack: Vec<RuntimeNode>,
     call_stack: Vec<StackFrame>,
@@ -14,11 +14,7 @@ pub struct Evaluator {
 
 impl Evaluator {
     pub fn new() -> Self {
-        Self {
-            eval_stack: Vec::new(),
-            call_stack: Vec::new(),
-            state: RuntimeState::Started,
-        }
+        Self::default()
     }
 
     pub fn reset(&mut self, codebase: &Codebase) {
