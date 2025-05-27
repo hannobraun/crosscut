@@ -136,11 +136,14 @@ impl Evaluator {
                 is_tail_call,
                 ..
             } => {
-                let _ = is_tail_call;
+                if is_tail_call {
+                    self.call_stack.pop();
+                } else {
+                    self.eval_stack.push(RuntimeNode::PopStackFrame {
+                        output: Value::nothing(),
+                    });
+                }
 
-                self.eval_stack.push(RuntimeNode::PopStackFrame {
-                    output: Value::nothing(),
-                });
                 self.apply_function(
                     parameter,
                     body,
@@ -261,10 +264,12 @@ impl Evaluator {
             }
             RuntimeNode::Recursion => {
                 let stack_frame =
-                    self.call_stack.pop().unwrap_or_else(|| StackFrame {
-                        parameter: "".to_string(),
-                        argument: Value::nothing(),
-                        root: codebase.root().path,
+                    self.call_stack.last().cloned().unwrap_or_else(|| {
+                        StackFrame {
+                            parameter: "".to_string(),
+                            argument: Value::nothing(),
+                            root: codebase.root().path,
+                        }
                     });
 
                 self.finish_evaluating_node(Value::Function {

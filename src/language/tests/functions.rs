@@ -1,4 +1,7 @@
-use crate::language::{language::Language, runtime::Value};
+use crate::language::{
+    language::Language,
+    runtime::{Effect, RuntimeState, Value},
+};
 
 #[test]
 fn define_and_evaluate() {
@@ -135,4 +138,59 @@ fn self_recursion() {
     for _ in 0..1024 {
         assert!(language.step().is_running());
     }
+}
+
+#[test]
+fn tail_call_arguments_have_access_to_function_argument() {
+    // The arguments of a tail call can access the arguments of the function.
+
+    let mut language = Language::new();
+    language
+        .code("apply")
+        .down()
+        .code("fn")
+        .down()
+        .code("arg")
+        .down()
+        .code("apply")
+        .down()
+        .code("test")
+        .down()
+        .code("arg")
+        .down()
+        .code("apply")
+        .down()
+        .code("self")
+        .down()
+        .code("arg")
+        .down()
+        .down() // navigate past function body
+        .code("127");
+
+    let mut saw_argument = 0;
+
+    for _ in 0..1024 {
+        if saw_argument >= 2 {
+            // Saw it twice, which means the `self` call successfully passed it
+            // into the next iteration.
+            //
+            // Return from the test, to circumvent the panic below.
+            return;
+        }
+
+        if let RuntimeState::Effect {
+            effect: Effect::ApplyProvidedFunction { name, input },
+            ..
+        } = language.step()
+        {
+            assert_eq!(name, "test");
+            assert_eq!(input, &Value::Integer { value: 127 });
+
+            saw_argument += 1;
+
+            language.provide_host_function_output(Value::nothing());
+        }
+    }
+
+    panic!();
 }
