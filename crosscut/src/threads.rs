@@ -63,57 +63,59 @@ pub fn start() -> anyhow::Result<Threads> {
     let (game_input_tx, game_input_rx) = channel::<GameInput>();
     let (game_output_tx, game_output_rx) = channel();
 
-    let editor_input =
-        spawn("editor input", move || match read_editor_event() {
-            Ok(ControlFlow::Continue(event)) => {
-                editor_input_tx.send(event)?;
-                Ok(ControlFlow::Continue(()))
+    let editor_input = spawn("editor input", move || {
+        loop {
+            match read_editor_event() {
+                Ok(ControlFlow::Continue(event)) => {
+                    editor_input_tx.send(event)?;
+                }
+                Ok(ControlFlow::Break(())) => break Ok(()),
+                Err(err) => break Err(Error::Other { err }),
             }
-            Ok(ControlFlow::Break(())) => Ok(ControlFlow::Break(())),
-            Err(err) => Err(Error::Other { err }),
-        })?;
+        }
+    })?;
 
     let game_engine = spawn("game engine", move || {
-        let game = Box::new(PureCrosscutGame);
-        let mut game_engine = GameEngine::with_editor_ui(game)?;
+        loop {
+            let game = Box::new(PureCrosscutGame);
+            let mut game_engine = GameEngine::with_editor_ui(game)?;
 
-        let event = select! {
-            recv(editor_input_rx.inner) -> result => {
-                result.map(|maybe_event|
-                    if let Some(event) = maybe_event {
-                        GameEngineEvent::EditorInput { event }}
-                    else {
-                        GameEngineEvent::Heartbeat
-                    }
-                )
-            }
-            recv(game_input_rx.inner) -> result => {
-                result.map(|input| GameEngineEvent::GameInput { input })
-            }
-        };
-        let Ok(event) = event else {
-            return Err(ChannelDisconnected.into());
-        };
+            let event = select! {
+                recv(editor_input_rx.inner) -> result => {
+                    result.map(|maybe_event|
+                        if let Some(event) = maybe_event {
+                            GameEngineEvent::EditorInput { event }}
+                        else {
+                            GameEngineEvent::Heartbeat
+                        }
+                    )
+                }
+                recv(game_input_rx.inner) -> result => {
+                    result.map(|input| GameEngineEvent::GameInput { input })
+                }
+            };
+            let Ok(event) = event else {
+                return Err(ChannelDisconnected.into());
+            };
 
-        match event {
-            GameEngineEvent::EditorInput { event } => {
-                game_engine.on_editor_input(event)?;
+            match event {
+                GameEngineEvent::EditorInput { event } => {
+                    game_engine.on_editor_input(event)?;
+                }
+                GameEngineEvent::GameInput {
+                    input: GameInput::RenderingFrame,
+                } => {
+                    // If a new frame is being rendered on the other thread, then
+                    // the game engine can get ready to provide the next one.
+                    game_engine.on_frame()?;
+                }
+                GameEngineEvent::Heartbeat => {}
             }
-            GameEngineEvent::GameInput {
-                input: GameInput::RenderingFrame,
-            } => {
-                // If a new frame is being rendered on the other thread, then
-                // the game engine can get ready to provide the next one.
-                game_engine.on_frame()?;
+
+            for event in game_engine.game_output() {
+                game_output_tx.send(event)?;
             }
-            GameEngineEvent::Heartbeat => {}
         }
-
-        for event in game_engine.game_output() {
-            game_output_tx.send(event)?;
-        }
-
-        Ok(ControlFlow::Continue(()))
     })?;
 
     Ok(Threads {
@@ -237,24 +239,16 @@ fn channel<T>() -> (Sender<T>, Receiver<T>) {
 
 fn spawn<F>(name: &str, mut f: F) -> anyhow::Result<ThreadHandle>
 where
-    F: FnMut() -> Result<ControlFlow<()>, Error> + Send + 'static,
+    F: FnMut() -> Result<(), Error> + Send + 'static,
 {
     let handle =
         thread::Builder::new()
             .name(name.to_string())
             .spawn(move || {
-                loop {
-                    match f() {
-                        Ok(ControlFlow::Continue(())) => {}
-                        Ok(ControlFlow::Break(())) => {
-                            break;
-                        }
-                        Err(Error::ChannelDisconnected { .. }) => {
-                            break;
-                        }
-                        Err(Error::Other { err }) => {
-                            return Err(err);
-                        }
+                match f() {
+                    Ok(()) | Err(Error::ChannelDisconnected { .. }) => {}
+                    Err(Error::Other { err }) => {
+                        return Err(err);
                     }
                 }
 
