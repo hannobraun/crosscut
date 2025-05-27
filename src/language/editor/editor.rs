@@ -136,7 +136,7 @@ impl Editor {
         command: EditorCommand,
         codebase: &mut Codebase,
         evaluator: &mut Evaluator,
-    ) {
+    ) -> anyhow::Result<()> {
         match command {
             EditorCommand::Clear => {
                 *codebase = Codebase::new();
@@ -144,6 +144,8 @@ impl Editor {
                 evaluator.reset(codebase);
             }
         }
+
+        Ok(())
     }
 
     fn navigate_to(&mut self, cursor: impl Into<Cursor>, codebase: &Codebase) {

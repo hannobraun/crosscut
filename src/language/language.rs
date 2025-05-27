@@ -48,7 +48,7 @@ impl Language {
             command,
             &mut self.codebase,
             &mut self.evaluator,
-        );
+        )?;
 
         Ok(())
     }
