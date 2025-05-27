@@ -8,10 +8,6 @@ pub struct Changes {
 }
 
 impl Changes {
-    pub fn new() -> Self {
-        Self::default()
-    }
-
     pub fn new_change_set<'r>(
         &'r mut self,
         root_before_change: NodeHash,
@@ -165,7 +161,7 @@ mod tests {
 
     #[test]
     fn circular_changes_should_work_correctly() {
-        let mut changes = Changes::new();
+        let mut changes = Changes::default();
         let mut nodes = Nodes::default();
 
         let [node_a, node_b] =

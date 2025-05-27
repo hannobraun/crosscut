@@ -22,7 +22,7 @@ impl Codebase {
         Self {
             root,
             nodes,
-            changes: Changes::new(),
+            changes: Changes::default(),
         }
     }
 
