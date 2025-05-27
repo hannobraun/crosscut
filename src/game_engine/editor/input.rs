@@ -50,6 +50,9 @@ impl TerminalEditorInput {
                         "dump" => {
                             language.on_command(EditorCommand::Dump)?;
                         }
+                        "reset" => {
+                            language.on_command(EditorCommand::Reset)?;
+                        }
                         _ => {
                             // This should result in an error message being
                             // displayed where the user can see it. For now, we

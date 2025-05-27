@@ -158,6 +158,9 @@ impl Editor {
                     write!(file, "{data:#?}")?;
                 }
             }
+            EditorCommand::Reset => {
+                evaluator.reset(codebase);
+            }
         }
 
         Ok(())
@@ -209,4 +212,5 @@ impl From<NodePath> for Cursor {
 pub enum EditorCommand {
     Clear,
     Dump,
+    Reset,
 }
