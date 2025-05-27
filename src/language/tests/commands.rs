@@ -3,7 +3,7 @@ use crate::language::{
 };
 
 #[test]
-fn clear() {
+fn clear() -> anyhow::Result<()> {
     // The clear command should reset everything to its initial state.
     //
     // This is too dangerous of a capability to keep around long-term, but for
@@ -25,4 +25,6 @@ fn clear() {
         language.step_until_finished().unwrap(),
         Value::Integer { value: 7 },
     );
+
+    Ok(())
 }
