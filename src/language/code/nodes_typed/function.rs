@@ -32,7 +32,7 @@ impl Function<NodeAsUniform> {
     pub fn empty(nodes: &mut Nodes) -> Self {
         Self {
             parameter: SyntaxNode::Binding {
-                name: "_".to_string(),
+                name: "".to_string(),
             },
             body: SyntaxNode::Body {
                 children: Vec::new(),

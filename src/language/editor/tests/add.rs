@@ -78,7 +78,7 @@ fn add_function() {
     assert_eq!(
         parameter.node,
         &SyntaxNode::Binding {
-            name: "_".to_string()
+            name: "".to_string()
         }
     );
     assert!(matches!(body.node, &SyntaxNode::Body { .. }));
