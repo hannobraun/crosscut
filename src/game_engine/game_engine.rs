@@ -90,8 +90,8 @@ where
                         assert_eq!(
                             name, "color",
                             "Expecting to provide output for `color` function, \
-                            because that is the only one that sets the \
-                            `end_of_frame` flag.",
+                            because that is the only one that enters this \
+                            state.",
                         );
 
                         self.language
