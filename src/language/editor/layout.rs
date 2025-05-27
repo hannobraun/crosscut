@@ -74,8 +74,8 @@ fn collect_nodes_from_root(
 ) {
     let distance_from_root = if let SyntaxNode::Body { .. } = located_node.node
     {
-        // The expressions node is not directly displayed in the editor. Only
-        // its children are.
+        // Bodies are not directly displayed in the editor. Only their children
+        // are.
 
         distance_from_root
     } else {
