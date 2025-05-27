@@ -9,10 +9,9 @@ mod language;
 mod threads;
 mod util;
 
-pub use game_engine::PureCrosscutGame;
+pub use game_engine::{Game, PureCrosscutGame};
 
-pub fn start_and_wait() -> anyhow::Result<()> {
-    let game = Box::new(PureCrosscutGame);
+pub fn start_and_wait(game: Box<dyn Game + Send>) -> anyhow::Result<()> {
     let threads = threads::start(game)?;
 
     // This call is going to block until the user requests a shutdown via the

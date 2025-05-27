@@ -1,3 +1,4 @@
 fn main() -> anyhow::Result<()> {
-    crosscut::start_and_wait()
+    let game = Box::new(crosscut::PureCrosscutGame);
+    crosscut::start_and_wait(game)
 }
