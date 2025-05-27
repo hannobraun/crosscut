@@ -10,11 +10,12 @@ use crate::{
 };
 
 use super::{
-    TerminalInputEvent,
+    Game, PureCrosscutGame, TerminalInputEvent,
     editor::{input::TerminalEditorInput, output::TerminalEditorOutput},
 };
 
 pub struct GameEngine<A> {
+    game: Box<dyn Game>,
     language: Language,
     game_output: Vec<GameOutput>,
     editor_input: TerminalEditorInput,
@@ -39,6 +40,7 @@ where
 {
     pub fn new(adapter: A) -> Self {
         let mut game_engine = Self {
+            game: Box::new(PureCrosscutGame),
             language: Language::new(),
             game_output: Vec::new(),
             editor_input: TerminalEditorInput::new(),
@@ -80,6 +82,8 @@ where
     }
 
     fn run_game_for_a_few_steps(&mut self) {
+        let _ = self.game;
+
         match self.state {
             State::Running => {}
             State::EndOfFrame => {
