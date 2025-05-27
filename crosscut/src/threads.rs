@@ -76,10 +76,10 @@ pub fn start() -> anyhow::Result<Threads> {
     })?;
 
     let game_engine = spawn("game engine", move || {
-        loop {
-            let game = Box::new(PureCrosscutGame);
-            let mut game_engine = GameEngine::with_editor_ui(game)?;
+        let game = Box::new(PureCrosscutGame);
+        let mut game_engine = GameEngine::with_editor_ui(game)?;
 
+        loop {
             let event = select! {
                 recv(editor_input_rx.inner) -> result => {
                     result.map(|maybe_event|
