@@ -1,3 +1,5 @@
+use std::time::{Duration, Instant};
+
 use crate::{
     io::editor::output::{EditorOutputAdapter, RawTerminalAdapter},
     language::{
@@ -109,6 +111,38 @@ where
 
                 self.state = State::Running;
             }
+            State::WaitUntil { instant } => {
+                if Instant::now() < instant {
+                    return;
+                }
+
+                match self.language.evaluator().state() {
+                    RuntimeState::Effect {
+                        effect: Effect::ApplyProvidedFunction { name, input: _ },
+                        ..
+                    } => {
+                        assert_eq!(
+                            name, "sleep_ms",
+                            "Expecting to provide output for `sleep_ms` \
+                            function, because that is the only one that enters \
+                            this state.",
+                        );
+
+                        self.language
+                            .provide_host_function_output(Value::nothing());
+                    }
+                    state => {
+                        assert!(
+                            matches!(state, RuntimeState::Started),
+                            "`WaitUntil` state was entered, but expected \
+                            effect is not active. This should only happen, if \
+                            the runtime has been reset.",
+                        );
+                    }
+                }
+
+                self.state = State::Running;
+            }
         }
 
         let mut num_steps = 0;
@@ -151,6 +185,25 @@ where
                                                     value: value / 2,
                                                 },
                                             );
+                                    }
+                                    value => {
+                                        self.language.trigger_effect(
+                                            Effect::UnexpectedInput {
+                                                expected: Type::Integer,
+                                                actual: value,
+                                            },
+                                        );
+                                    }
+                                },
+                                "sleep_ms" => match input {
+                                    Value::Integer { value } if value >= 0 => {
+                                        let value = value as u64;
+
+                                        self.state = State::WaitUntil {
+                                            instant: Instant::now()
+                                                + Duration::from_millis(value),
+                                        };
+                                        break;
                                     }
                                     value => {
                                         self.language.trigger_effect(
@@ -276,4 +329,5 @@ pub enum GameOutput {
 pub enum State {
     Running,
     EndOfFrame,
+    WaitUntil { instant: Instant },
 }
