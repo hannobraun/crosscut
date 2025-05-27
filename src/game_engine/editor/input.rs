@@ -43,7 +43,17 @@ impl TerminalEditorInput {
             }
             EditorMode::Command { input, cursor } => match event {
                 TerminalInputEvent::Enter => {
-                    language.on_command(EditorCommand::Clear)?;
+                    match input.buffer().as_str() {
+                        "clear" => {
+                            language.on_command(EditorCommand::Clear)?;
+                        }
+                        _ => {
+                            // This should result in an error message being
+                            // displayed where the user can see it. For now, we
+                            // just ignore it thought.
+                        }
+                    }
+
                     self.mode = EditorMode::Edit;
                 }
                 TerminalInputEvent::Escape => {
