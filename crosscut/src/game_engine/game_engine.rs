@@ -177,24 +177,6 @@ where
                                         );
                                     }
                                 },
-                                "dim" => match input {
-                                    Value::Integer { value } => {
-                                        self.language
-                                            .provide_host_function_output(
-                                                Value::Integer {
-                                                    value: value / 2,
-                                                },
-                                            );
-                                    }
-                                    value => {
-                                        self.language.trigger_effect(
-                                            Effect::UnexpectedInput {
-                                                expected: Type::Integer,
-                                                actual: value,
-                                            },
-                                        );
-                                    }
-                                },
                                 "sleep_ms" => match input {
                                     Value::Integer { value } if value >= 0 => {
                                         let value = value as u64;
