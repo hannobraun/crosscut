@@ -30,7 +30,7 @@ impl TerminalEditorInput {
         &mut self,
         event: TerminalInputEvent,
         language: &mut Language,
-    ) {
+    ) -> anyhow::Result<()> {
         match &mut self.mode {
             EditorMode::Edit => {
                 let event = match event {
@@ -63,6 +63,8 @@ impl TerminalEditorInput {
                 }
             },
         }
+
+        Ok(())
     }
 }
 

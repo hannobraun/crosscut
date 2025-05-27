@@ -70,7 +70,7 @@ where
         &mut self,
         event: TerminalInputEvent,
     ) -> anyhow::Result<()> {
-        self.editor_input.on_input(event, &mut self.language);
+        self.editor_input.on_input(event, &mut self.language)?;
         self.run_game_for_a_few_steps();
         self.render_editor()?;
 
