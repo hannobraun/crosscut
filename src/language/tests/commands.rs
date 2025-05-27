@@ -17,7 +17,7 @@ fn clear() -> anyhow::Result<()> {
         Value::Integer { value: 12 },
     );
 
-    language.on_command(EditorCommand::Clear);
+    language.on_command(EditorCommand::Clear)?;
     assert_eq!(language.step_until_finished().unwrap(), Value::nothing());
 
     language.code("7");

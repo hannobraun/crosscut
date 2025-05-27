@@ -50,7 +50,7 @@ impl TerminalEditorInput {
             }
             EditorMode::Command { input, cursor } => match event {
                 TerminalInputEvent::Enter => {
-                    language.on_command(EditorCommand::Clear);
+                    language.on_command(EditorCommand::Clear)?;
                     self.mode = EditorMode::Edit;
                 }
                 TerminalInputEvent::Escape => {

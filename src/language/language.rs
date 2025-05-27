@@ -43,12 +43,14 @@ impl Language {
             .on_input(event, &mut self.codebase, &mut self.evaluator);
     }
 
-    pub fn on_command(&mut self, command: EditorCommand) {
+    pub fn on_command(&mut self, command: EditorCommand) -> anyhow::Result<()> {
         self.editor.on_command(
             command,
             &mut self.codebase,
             &mut self.evaluator,
         );
+
+        Ok(())
     }
 
     pub fn apply_function(&mut self, root: NodePath) {
