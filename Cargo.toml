@@ -1,4 +1,4 @@
 [workspace]
 resolver = "2"
-members = ["crosscut", "tools/daily", "tools/website"]
+members = ["crosscut", "games/snake", "tools/daily", "tools/website"]
 default-members = ["crosscut"]

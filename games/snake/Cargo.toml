@@ -1,0 +1,3 @@
+[package]
+name = "snake"
+edition = "2024"
