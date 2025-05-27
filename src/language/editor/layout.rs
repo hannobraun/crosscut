@@ -72,15 +72,20 @@ fn collect_nodes_from_root(
     nodes_from_root: &mut Vec<NodeInLayout>,
     codebase: &Codebase,
 ) {
-    if let SyntaxNode::Body { .. } = located_node.node {
+    let distance_from_root = if let SyntaxNode::Body { .. } = located_node.node
+    {
         // The expressions node is not directly displayed in the editor. Only
         // its children are.
+
+        distance_from_root
     } else {
         nodes_from_root.push(NodeInLayout {
             path: located_node.path.clone(),
             distance_from_root,
         });
-    }
+
+        distance_from_root + 1
+    };
 
     let mut children = Vec::new();
     children.extend(located_node.children(codebase.nodes()));
@@ -88,7 +93,7 @@ fn collect_nodes_from_root(
     for child in children {
         collect_nodes_from_root(
             child,
-            distance_from_root + 1,
+            distance_from_root,
             nodes_from_root,
             codebase,
         );
