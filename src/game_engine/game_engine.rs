@@ -100,9 +100,9 @@ where
                     state => {
                         assert!(
                             matches!(state, RuntimeState::Started),
-                            "`end_of_frame` flag has been set, but expected effect \
-                            is not active. This should only happen, if the runtime \
-                            has been reset.",
+                            "`end_of_frame` flag has been set, but expected \
+                            effect is not active. This should only happen, if \
+                            the runtime has been reset.",
                         );
                     }
                 }
