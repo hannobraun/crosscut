@@ -13,7 +13,7 @@ use crossbeam_channel::{SendError, TryRecvError, select};
 
 use crate::{
     game_engine::{
-        GameEngine, GameInput, GameOutput, PureCrosscutGame, TerminalInputEvent,
+        Game, GameEngine, GameInput, GameOutput, TerminalInputEvent,
     },
     io::editor::input::read_editor_event,
 };
@@ -21,7 +21,7 @@ use crate::{
 static PANICS: LazyLock<Mutex<HashMap<ThreadId, String>>> =
     LazyLock::new(|| Mutex::new(HashMap::new()));
 
-pub fn start() -> anyhow::Result<Threads> {
+pub fn start(game: Box<dyn Game + Send>) -> anyhow::Result<Threads> {
     // Since one of the threads puts the terminal into raw mode while it's
     // running, the default panic handler won't work well. Let's register a hook
     // that extracts all information we need, so we can later print it here,
@@ -76,7 +76,6 @@ pub fn start() -> anyhow::Result<Threads> {
     })?;
 
     let game_engine = spawn("game engine", move || {
-        let game = Box::new(PureCrosscutGame);
         let mut game_engine = GameEngine::with_editor_ui(game)?;
 
         loop {
