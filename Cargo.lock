@@ -1684,6 +1684,7 @@ dependencies = [
 name = "snake"
 version = "0.0.0"
 dependencies = [
+ "anyhow",
  "crosscut",
 ]
 
