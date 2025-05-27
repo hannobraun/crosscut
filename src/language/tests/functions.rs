@@ -11,8 +11,7 @@ fn define_and_evaluate() {
         .down()
         .code("fn")
         .down()
-        .code("_")
-        .down()
+        .down() // navigate past the parameter
         .code("127");
 
     assert_eq!(
@@ -126,8 +125,7 @@ fn self_recursion() {
         .down()
         .code("fn")
         .down()
-        .code("_")
-        .down()
+        .down() // navigate past the parameter
         .code("apply")
         .down()
         .code("self");
