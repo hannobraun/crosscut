@@ -3,11 +3,11 @@
 // and is pretty annoying.
 #![allow(clippy::module_inception)]
 
-pub mod game_engine;
-pub mod io;
-pub mod language;
-pub mod threads;
-pub mod util;
+mod game_engine;
+mod io;
+mod language;
+mod threads;
+mod util;
 
 pub fn start_and_wait() -> anyhow::Result<()> {
     let threads = threads::start()?;
