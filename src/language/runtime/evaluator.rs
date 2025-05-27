@@ -24,7 +24,7 @@ impl Evaluator {
     pub fn reset(&mut self, codebase: &Codebase) {
         *self = Self::new();
         self.apply_function(
-            "_".to_string(),
+            "".to_string(),
             codebase.root().path,
             Value::nothing(),
             codebase.nodes(),
