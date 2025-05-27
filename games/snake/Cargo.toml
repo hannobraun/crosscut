@@ -1,3 +1,6 @@
 [package]
 name = "snake"
 edition = "2024"
+
+[dependencies.crosscut]
+path = "../../crosscut"
