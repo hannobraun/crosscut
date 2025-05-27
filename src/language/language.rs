@@ -162,3 +162,9 @@ impl Language {
         }
     }
 }
+
+impl Default for Language {
+    fn default() -> Self {
+        Self::new()
+    }
+}
