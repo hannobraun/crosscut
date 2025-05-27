@@ -1,20 +1,12 @@
-// It makes sense to prevent this in public APIs, but it also warns me about the
-// names of private modules that I only re-export from. That provides no value
-// and is pretty annoying.
-#![allow(clippy::module_inception)]
-
-mod game_engine;
-mod io;
-mod language;
-mod threads;
-mod util;
-
 fn main() -> anyhow::Result<()> {
-    let threads = threads::start()?;
+    let threads = crosscut::threads::start()?;
 
     // This call is going to block until the user requests a shutdown via the
     // game I/O, or any of the other threads shut down.
-    io::game_engine::start_and_wait(threads.game_input, threads.game_output)?;
+    crosscut::io::game_engine::start_and_wait(
+        threads.game_input,
+        threads.game_output,
+    )?;
 
     // At this point, the shutdown should be in progress. None of these calls
     // should block for long, if at all. The purpose of still joining all
