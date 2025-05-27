@@ -13,12 +13,8 @@ pub struct Evaluator {
 }
 
 impl Evaluator {
-    pub fn new() -> Self {
-        Self::default()
-    }
-
     pub fn reset(&mut self, codebase: &Codebase) {
-        *self = Self::new();
+        *self = Self::default();
         self.apply_function(
             "".to_string(),
             codebase.root().path,
@@ -344,7 +340,7 @@ mod tests {
         let [expected_parameter, expected_body] =
             codebase.root().expect_children(codebase.nodes());
 
-        let mut evaluator = Evaluator::new();
+        let mut evaluator = Evaluator::default();
         evaluator.reset(&codebase);
 
         evaluator.step(&codebase);
@@ -388,7 +384,7 @@ mod tests {
             )
         });
 
-        let mut evaluator = Evaluator::new();
+        let mut evaluator = Evaluator::default();
         evaluator.reset(&codebase);
         assert_eq!(evaluator.call_stack.len(), 1);
 

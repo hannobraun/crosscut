@@ -10,7 +10,7 @@ fn add_nodes_to_root_context() {
     // It is possible to add multiple nodes to the root context.
 
     let mut codebase = Codebase::new();
-    let mut evaluator = Evaluator::new();
+    let mut evaluator = Evaluator::default();
 
     let mut editor = Editor::new(codebase.root().path, &codebase);
     editor.on_code("a", &mut codebase, &mut evaluator);
@@ -28,7 +28,7 @@ fn add_apply_node() {
     // Adding an `apply` node also creates its children.
 
     let mut codebase = Codebase::new();
-    let mut evaluator = Evaluator::new();
+    let mut evaluator = Evaluator::default();
 
     let mut editor = Editor::new(codebase.root().path, &codebase);
     editor.on_code("apply", &mut codebase, &mut evaluator);
@@ -60,7 +60,7 @@ fn add_function() {
     // Adding an `fn` node also creates its children.
 
     let mut codebase = Codebase::new();
-    let mut evaluator = Evaluator::new();
+    let mut evaluator = Evaluator::default();
 
     let mut editor = Editor::new(codebase.root().path, &codebase);
     editor.on_code("fn", &mut codebase, &mut evaluator);
@@ -89,7 +89,7 @@ fn add_value_to_tuple() {
     // Tuples have a node that the user can edit to add children.
 
     let mut codebase = Codebase::new();
-    let mut evaluator = Evaluator::new();
+    let mut evaluator = Evaluator::default();
 
     let mut editor = Editor::new(codebase.root().path, &codebase);
     editor.on_code("tuple", &mut codebase, &mut evaluator);

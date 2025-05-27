@@ -13,7 +13,7 @@ fn edit_at_initial_cursor() {
     // works.
 
     let mut codebase = Codebase::new();
-    let mut evaluator = Evaluator::new();
+    let mut evaluator = Evaluator::default();
 
     {
         let root = codebase.root().path;
@@ -39,7 +39,7 @@ fn navigate_down_to_child() {
     // Moving the cursor down navigates to the current node's child.
 
     let mut codebase = Codebase::new();
-    let mut evaluator = Evaluator::new();
+    let mut evaluator = Evaluator::default();
 
     {
         let mut compiler = Compiler::new(&mut codebase);
@@ -71,7 +71,7 @@ fn navigate_right_to_child() {
     // the child.
 
     let mut codebase = Codebase::new();
-    let mut evaluator = Evaluator::new();
+    let mut evaluator = Evaluator::default();
 
     {
         let mut compiler = Compiler::new(&mut codebase);
@@ -102,7 +102,7 @@ fn navigate_up_to_parent() {
     // Moving the cursor up navigates to the current node's parent.
 
     let mut codebase = Codebase::new();
-    let mut evaluator = Evaluator::new();
+    let mut evaluator = Evaluator::default();
 
     {
         let mut compiler = Compiler::new(&mut codebase);
@@ -133,7 +133,7 @@ fn navigate_left_to_parent() {
     // Moving the cursor left navigates to the end of the current node's parent.
 
     let mut codebase = Codebase::new();
-    let mut evaluator = Evaluator::new();
+    let mut evaluator = Evaluator::default();
 
     {
         let mut compiler = Compiler::new(&mut codebase);
@@ -164,7 +164,7 @@ fn navigate_down_to_next_sibling() {
     // Moving the cursor down navigates to the current node's next sibling.
 
     let mut codebase = Codebase::new();
-    let mut evaluator = Evaluator::new();
+    let mut evaluator = Evaluator::default();
 
     {
         let mut compiler = Compiler::new(&mut codebase);
@@ -190,7 +190,7 @@ fn navigate_right_to_next_sibling() {
     // navigates to the next sibling.
 
     let mut codebase = Codebase::new();
-    let mut evaluator = Evaluator::new();
+    let mut evaluator = Evaluator::default();
 
     {
         let mut compiler = Compiler::new(&mut codebase);
@@ -215,7 +215,7 @@ fn navigate_up_to_previous_sibling() {
     // Moving the cursor up navigates to the current node's previous sibling.
 
     let mut codebase = Codebase::new();
-    let mut evaluator = Evaluator::new();
+    let mut evaluator = Evaluator::default();
 
     {
         let mut compiler = Compiler::new(&mut codebase);
@@ -241,7 +241,7 @@ fn navigate_left_to_previous_sibling() {
     // previous sibling.
 
     let mut codebase = Codebase::new();
-    let mut evaluator = Evaluator::new();
+    let mut evaluator = Evaluator::default();
 
     {
         let mut compiler = Compiler::new(&mut codebase);
@@ -267,7 +267,7 @@ fn navigate_past_add_value_node_of_a_tuple() {
     // values.
 
     let mut codebase = Codebase::new();
-    let mut evaluator = Evaluator::new();
+    let mut evaluator = Evaluator::default();
 
     let mut editor = Editor::new(
         Cursor {
