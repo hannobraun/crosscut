@@ -61,8 +61,6 @@ pub fn start() -> anyhow::Result<Threads> {
     let (game_input_tx, game_input_rx) = channel::<GameInput>();
     let (game_output_tx, game_output_rx) = channel();
 
-    let mut game_engine = GameEngine::with_editor_ui()?;
-
     let editor_input =
         spawn("editor input", move || match read_editor_event() {
             Ok(ControlFlow::Continue(event)) => {
@@ -74,6 +72,8 @@ pub fn start() -> anyhow::Result<Threads> {
         })?;
 
     let game_engine = spawn("game engine", move || {
+        let mut game_engine = GameEngine::with_editor_ui()?;
+
         let event = select! {
             recv(editor_input_rx.inner) -> result => {
                 result.map(|maybe_event|
