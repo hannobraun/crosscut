@@ -1,3 +1,5 @@
+use std::{fmt, fs::File};
+
 use crate::language::{
     code::{Codebase, NodePath, SyntaxNode},
     compiler::Compiler,
@@ -143,6 +145,19 @@ impl Editor {
                 *self = Self::new(codebase.root().path, codebase);
                 evaluator.reset(codebase);
             }
+            EditorCommand::Dump => {
+                for (name, data) in [
+                    ("codebase", codebase as &dyn fmt::Debug),
+                    ("evaluator", evaluator),
+                ] {
+                    use std::io::Write;
+
+                    let name = format!("{name}.dump");
+                    let mut file = File::create(name)?;
+
+                    write!(file, "{data:#?}")?;
+                }
+            }
         }
 
         Ok(())
@@ -193,4 +208,5 @@ impl From<NodePath> for Cursor {
 
 pub enum EditorCommand {
     Clear,
+    Dump,
 }
