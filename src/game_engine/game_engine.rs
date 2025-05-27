@@ -79,33 +79,36 @@ where
     }
 
     fn run_game_for_a_few_steps(&mut self) {
-        if let State::EndOfFrame = self.state {
-            match self.language.evaluator().state() {
-                RuntimeState::Effect {
-                    effect: Effect::ApplyProvidedFunction { name, input: _ },
-                    ..
-                } => {
-                    assert_eq!(
-                        name, "color",
-                        "Expecting to provide output for `color` function, \
-                        because that is the only one that sets the \
-                        `end_of_frame` flag.",
-                    );
+        match self.state {
+            State::Running => {}
+            State::EndOfFrame => {
+                match self.language.evaluator().state() {
+                    RuntimeState::Effect {
+                        effect: Effect::ApplyProvidedFunction { name, input: _ },
+                        ..
+                    } => {
+                        assert_eq!(
+                            name, "color",
+                            "Expecting to provide output for `color` function, \
+                            because that is the only one that sets the \
+                            `end_of_frame` flag.",
+                        );
 
-                    self.language
-                        .provide_host_function_output(Value::nothing());
+                        self.language
+                            .provide_host_function_output(Value::nothing());
+                    }
+                    state => {
+                        assert!(
+                            matches!(state, RuntimeState::Started),
+                            "`end_of_frame` flag has been set, but expected effect \
+                            is not active. This should only happen, if the runtime \
+                            has been reset.",
+                        );
+                    }
                 }
-                state => {
-                    assert!(
-                        matches!(state, RuntimeState::Started),
-                        "`end_of_frame` flag has been set, but expected effect \
-                        is not active. This should only happen, if the runtime \
-                        has been reset.",
-                    );
-                }
+
+                self.state = State::Running;
             }
-
-            self.state = State::Running;
         }
 
         let mut num_steps = 0;
