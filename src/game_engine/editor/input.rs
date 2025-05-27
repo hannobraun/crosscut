@@ -1,5 +1,3 @@
-use std::collections::BTreeSet;
-
 use crate::language::{
     editor::{EditorCommand, EditorInputBuffer, EditorInputEvent},
     language::Language,
@@ -12,11 +10,6 @@ pub struct TerminalEditorInput {
 
 impl TerminalEditorInput {
     pub fn new() -> Self {
-        let mut commands = BTreeSet::new();
-        commands.insert("clear");
-        commands.insert("nop");
-        commands.insert("reset");
-
         Self {
             mode: EditorMode::Edit,
         }
