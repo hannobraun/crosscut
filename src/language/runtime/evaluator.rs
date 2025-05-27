@@ -302,7 +302,7 @@ impl Evaluator {
     }
 }
 
-#[derive(Debug)]
+#[derive(Clone, Debug)]
 struct StackFrame {
     parameter: String,
     argument: Value,
