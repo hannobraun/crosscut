@@ -2,12 +2,21 @@ use crate::language::code::NodePath;
 
 use super::{Effect, Value};
 
-#[derive(Clone, Debug, Eq, PartialEq)]
+#[derive(Clone, Debug, Default, Eq, PartialEq)]
 pub enum RuntimeState {
+    #[default]
     Started,
+
     Running,
-    Effect { effect: Effect, path: NodePath },
-    Finished { output: Value },
+
+    Effect {
+        effect: Effect,
+        path: NodePath,
+    },
+
+    Finished {
+        output: Value,
+    },
 }
 
 impl RuntimeState {
