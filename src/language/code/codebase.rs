@@ -63,6 +63,12 @@ impl Codebase {
     }
 }
 
+impl Default for Codebase {
+    fn default() -> Self {
+        Self::new()
+    }
+}
+
 #[derive(Clone, Debug, Eq, PartialEq)]
 struct Root {
     hash: NodeHash,
