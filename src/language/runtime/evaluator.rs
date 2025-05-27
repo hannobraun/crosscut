@@ -164,8 +164,8 @@ impl Evaluator {
                     path: path.clone(),
                 };
 
-                // A host function is not fully handled, until the handler has
-                // provided its output. It might also trigger an effect, and
+                // A provided function is not fully handled, until the handler
+                // has provided its output. It might also trigger an effect, and
                 // then we still need the node.
                 self.eval_stack.push(node);
             }
