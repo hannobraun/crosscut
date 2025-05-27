@@ -1,4 +1,6 @@
-use crate::language::code::{Body, Expression, NodePath, Nodes, TypedNode};
+use crate::language::code::{
+    Body, Expression, NodePath, Nodes, SyntaxNode, TypedNode,
+};
 
 use super::Value;
 
@@ -8,6 +10,7 @@ pub enum RuntimeNode {
         path: NodePath,
         expression: RuntimeChild,
         argument: RuntimeChild,
+        is_tail_call: bool,
     },
     Body {
         to_evaluate: Vec<NodePath>,
@@ -55,10 +58,24 @@ impl RuntimeNode {
                         }
                     });
 
+                let is_tail_call =
+                    if let Some((parent_path, child_index)) = path.parent() {
+                        if let SyntaxNode::Body { children, .. } =
+                            nodes.get(parent_path.hash())
+                        {
+                            child_index.index + 1 == children.len()
+                        } else {
+                            false
+                        }
+                    } else {
+                        false
+                    };
+
                 Self::Apply {
                     path,
                     expression,
                     argument,
+                    is_tail_call,
                 }
             }
             Expression::Body { body } => {

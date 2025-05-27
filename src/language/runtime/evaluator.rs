@@ -133,8 +133,11 @@ impl Evaluator {
                         value: Value::Function { parameter, body },
                     },
                 argument: RuntimeChild::Evaluated { value: argument },
+                is_tail_call,
                 ..
             } => {
+                let _ = is_tail_call;
+
                 self.eval_stack.push(RuntimeNode::PopStackFrame {
                     output: Value::nothing(),
                 });
@@ -155,6 +158,7 @@ impl Evaluator {
                     RuntimeChild::Evaluated {
                         value: ref argument,
                     },
+                ..
             } => {
                 self.state = RuntimeState::Effect {
                     effect: Effect::ApplyProvidedFunction {
