@@ -25,9 +25,10 @@ pub struct GameEngine<A> {
 
 impl GameEngine<RawTerminalAdapter> {
     pub fn with_editor_ui() -> anyhow::Result<Self> {
+        let game = Box::new(PureCrosscutGame);
         let adapter = RawTerminalAdapter::new()?;
 
-        let mut game_engine = Self::new(adapter);
+        let mut game_engine = Self::new(game, adapter);
         game_engine.render_editor()?;
 
         Ok(game_engine)
@@ -38,9 +39,9 @@ impl<A> GameEngine<A>
 where
     A: EditorOutputAdapter,
 {
-    pub fn new(adapter: A) -> Self {
+    pub fn new(game: Box<dyn Game>, adapter: A) -> Self {
         let mut game_engine = Self {
-            game: Box::new(PureCrosscutGame),
+            game,
             language: Language::new(),
             game_output: Vec::new(),
             editor_input: TerminalEditorInput::new(),
@@ -248,8 +249,9 @@ use crate::io::editor::output::DebugOutputAdapter;
 #[cfg(test)]
 impl GameEngine<DebugOutputAdapter> {
     pub fn without_editor_ui() -> Self {
+        let game = Box::new(PureCrosscutGame);
         let adapter = DebugOutputAdapter;
-        Self::new(adapter)
+        Self::new(game, adapter)
     }
 
     pub fn enter_code(&mut self, code: &str) -> &mut Self {
