@@ -1,0 +1,23 @@
+[package]
+name = "crosscut"
+edition = "2024"
+
+[dependencies]
+anyhow = "*"
+base64 = "*"
+crossbeam-channel = "*"
+crossterm = "*"
+itertools = "*"
+panic-message = "*"
+pollster = "*"
+thiserror = "*"
+wgpu = "*"
+winit = "*"
+
+[dependencies.blake3]
+version = "*"
+features = ["traits-preview"]
+
+[dependencies.udigest]
+version = "*"
+features = ["derive"]
