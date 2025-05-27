@@ -21,6 +21,17 @@ pub struct GameEngine<A> {
     end_of_frame: bool,
 }
 
+impl GameEngine<RawTerminalAdapter> {
+    pub fn with_editor_ui() -> anyhow::Result<Self> {
+        let adapter = RawTerminalAdapter::new()?;
+
+        let mut game_engine = Self::new(adapter);
+        game_engine.render_editor()?;
+
+        Ok(game_engine)
+    }
+}
+
 impl<A> GameEngine<A>
 where
     A: EditorOutputAdapter,
@@ -187,17 +198,6 @@ where
         self.game_output.push(GameOutput::SubmitColor {
             color: [value, value, value, 1.],
         });
-    }
-}
-
-impl GameEngine<RawTerminalAdapter> {
-    pub fn with_editor_ui() -> anyhow::Result<Self> {
-        let adapter = RawTerminalAdapter::new()?;
-
-        let mut game_engine = Self::new(adapter);
-        game_engine.render_editor()?;
-
-        Ok(game_engine)
     }
 }
 
