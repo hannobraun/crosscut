@@ -258,7 +258,7 @@ impl Evaluator {
             RuntimeNode::Recursion => {
                 let stack_frame =
                     self.call_stack.pop().unwrap_or_else(|| StackFrame {
-                        parameter: "_".to_string(),
+                        parameter: "".to_string(),
                         argument: Value::nothing(),
                         root: codebase.root().path,
                     });
