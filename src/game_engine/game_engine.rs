@@ -18,7 +18,7 @@ pub struct GameEngine<A> {
     game_output: Vec<GameOutput>,
     editor_input: TerminalEditorInput,
     editor_output: TerminalEditorOutput<A>,
-    end_of_frame: bool,
+    state: State,
 }
 
 impl GameEngine<RawTerminalAdapter> {
@@ -42,7 +42,7 @@ where
             game_output: Vec::new(),
             editor_input: TerminalEditorInput::new(),
             editor_output: TerminalEditorOutput::new(adapter),
-            end_of_frame: false,
+            state: State::Running,
         };
         game_engine.run_game_for_a_few_steps();
 
@@ -79,7 +79,7 @@ where
     }
 
     fn run_game_for_a_few_steps(&mut self) {
-        if self.end_of_frame {
+        if let State::EndOfFrame = self.state {
             match self.language.evaluator().state() {
                 RuntimeState::Effect {
                     effect: Effect::ApplyProvidedFunction { name, input: _ },
@@ -105,7 +105,7 @@ where
                 }
             }
 
-            self.end_of_frame = false;
+            self.state = State::Running;
         }
 
         let mut num_steps = 0;
@@ -128,7 +128,7 @@ where
                                 "color" => match input {
                                     Value::Integer { value } => {
                                         self.submit_color(value);
-                                        self.end_of_frame = true;
+                                        self.state = State::EndOfFrame;
                                         break;
                                     }
                                     value => {
@@ -267,4 +267,10 @@ pub enum GameInput {
 #[derive(Debug)]
 pub enum GameOutput {
     SubmitColor { color: [f64; 4] },
+}
+
+#[derive(Debug)]
+pub enum State {
+    Running,
+    EndOfFrame,
 }
