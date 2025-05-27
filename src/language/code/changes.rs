@@ -2,16 +2,14 @@ use std::collections::{BTreeMap, BTreeSet};
 
 use super::{NodeHash, NodePath, Nodes};
 
-#[derive(Clone, Debug, Eq, PartialEq)]
+#[derive(Clone, Debug, Default, Eq, PartialEq)]
 pub struct Changes {
     change_sets: Vec<ChangeSet>,
 }
 
 impl Changes {
     pub fn new() -> Self {
-        Self {
-            change_sets: Vec::new(),
-        }
+        Self::default()
     }
 
     pub fn new_change_set<'r>(
