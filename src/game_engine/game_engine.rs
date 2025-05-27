@@ -1,7 +1,5 @@
 use crate::{
-    io::editor::output::{
-        DebugOutputAdapter, EditorOutputAdapter, RawTerminalAdapter,
-    },
+    io::editor::output::{EditorOutputAdapter, RawTerminalAdapter},
     language::{
         code::Type,
         language::Language,
@@ -192,14 +190,6 @@ where
     }
 }
 
-impl GameEngine<DebugOutputAdapter> {
-    #[cfg(test)]
-    pub fn without_editor_ui() -> Self {
-        let adapter = DebugOutputAdapter;
-        Self::new(adapter)
-    }
-}
-
 impl GameEngine<RawTerminalAdapter> {
     pub fn with_editor_ui() -> anyhow::Result<Self> {
         let adapter = RawTerminalAdapter::new()?;
@@ -212,7 +202,15 @@ impl GameEngine<RawTerminalAdapter> {
 }
 
 #[cfg(test)]
+use crate::io::editor::output::DebugOutputAdapter;
+
+#[cfg(test)]
 impl GameEngine<DebugOutputAdapter> {
+    pub fn without_editor_ui() -> Self {
+        let adapter = DebugOutputAdapter;
+        Self::new(adapter)
+    }
+
     pub fn enter_code(&mut self, code: &str) -> &mut Self {
         assert!(self.editor_input.mode().is_edit_mode());
 
