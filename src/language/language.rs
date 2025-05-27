@@ -55,7 +55,7 @@ impl Language {
 
     pub fn apply_function(&mut self, root: NodePath) {
         self.evaluator.apply_function(
-            "_".to_string(),
+            "".to_string(),
             root,
             Value::nothing(),
             self.codebase.nodes(),
