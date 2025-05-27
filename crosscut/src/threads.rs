@@ -12,7 +12,9 @@ use anyhow::anyhow;
 use crossbeam_channel::{SendError, TryRecvError, select};
 
 use crate::{
-    game_engine::{GameEngine, GameInput, GameOutput, TerminalInputEvent},
+    game_engine::{
+        GameEngine, GameInput, GameOutput, PureCrosscutGame, TerminalInputEvent,
+    },
     io::editor::input::read_editor_event,
 };
 
@@ -72,7 +74,8 @@ pub fn start() -> anyhow::Result<Threads> {
         })?;
 
     let game_engine = spawn("game engine", move || {
-        let mut game_engine = GameEngine::with_editor_ui()?;
+        let game = Box::new(PureCrosscutGame);
+        let mut game_engine = GameEngine::with_editor_ui(game)?;
 
         let event = select! {
             recv(editor_input_rx.inner) -> result => {

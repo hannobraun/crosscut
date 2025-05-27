@@ -10,7 +10,7 @@ use crate::{
 };
 
 use super::{
-    Game, PureCrosscutGame, TerminalInputEvent,
+    Game, TerminalInputEvent,
     editor::{input::TerminalEditorInput, output::TerminalEditorOutput},
 };
 
@@ -24,8 +24,7 @@ pub struct GameEngine<A> {
 }
 
 impl GameEngine<RawTerminalAdapter> {
-    pub fn with_editor_ui() -> anyhow::Result<Self> {
-        let game = Box::new(PureCrosscutGame);
+    pub fn with_editor_ui(game: Box<dyn Game>) -> anyhow::Result<Self> {
         let adapter = RawTerminalAdapter::new()?;
 
         let mut game_engine = Self::new(game, adapter);
@@ -249,7 +248,7 @@ use crate::io::editor::output::DebugOutputAdapter;
 #[cfg(test)]
 impl GameEngine<DebugOutputAdapter> {
     pub fn without_editor_ui() -> Self {
-        let game = Box::new(PureCrosscutGame);
+        let game = Box::new(super::PureCrosscutGame);
         let adapter = DebugOutputAdapter;
         Self::new(game, adapter)
     }
