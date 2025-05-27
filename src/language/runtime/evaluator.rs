@@ -365,14 +365,14 @@ mod tests {
 
         codebase.make_change(|change_set| {
             let root = {
-                let apply = Apply::default()
+                let node = Apply::default()
                     .with_expression(SyntaxNode::Recursion)
                     .with_argument(
                         Body::default().into_syntax_node(change_set.nodes),
                     )
                     .into_syntax_node(change_set.nodes);
 
-                change_set.nodes.insert(apply)
+                change_set.nodes.insert(node)
             };
 
             change_set.replace(
