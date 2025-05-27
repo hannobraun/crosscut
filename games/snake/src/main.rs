@@ -1,4 +1,3 @@
 fn main() -> anyhow::Result<()> {
-    println!("Hello, world!");
-    Ok(())
+    crosscut::start_and_wait()
 }
