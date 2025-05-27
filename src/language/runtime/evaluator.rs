@@ -364,7 +364,7 @@ mod tests {
         let mut codebase = Codebase::new();
 
         codebase.make_change(|change_set| {
-            let apply = {
+            let root = {
                 let apply = Apply::default()
                     .with_expression(SyntaxNode::Recursion)
                     .with_argument(
@@ -377,7 +377,7 @@ mod tests {
 
             change_set.replace(
                 &change_set.root_before_change(),
-                &NodePath::for_root(apply),
+                &NodePath::for_root(root),
             )
         });
 
