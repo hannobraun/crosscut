@@ -14,6 +14,10 @@ pub struct Evaluator {
 
 impl Evaluator {
     pub fn update(&mut self, codebase: &Codebase) {
+        for node in &mut self.eval_stack {
+            let _ = node.path;
+        }
+
         self.reset(codebase);
     }
 
@@ -136,6 +140,7 @@ impl Evaluator {
                     self.call_stack.pop();
                 } else {
                     self.eval_stack.push(RuntimeNode {
+                        path: None,
                         kind: RuntimeNodeKind::PopStackFrame {
                             output: Value::nothing(),
                         },

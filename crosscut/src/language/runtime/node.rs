@@ -6,13 +6,18 @@ use super::Value;
 
 #[derive(Clone, Debug)]
 pub struct RuntimeNode {
+    pub path: Option<NodePath>,
     pub kind: RuntimeNodeKind,
 }
 
 impl RuntimeNode {
     pub fn new(path: NodePath, nodes: &Nodes) -> Self {
-        let kind = RuntimeNodeKind::new(path, nodes);
-        Self { kind }
+        let kind = RuntimeNodeKind::new(path.clone(), nodes);
+
+        Self {
+            path: Some(path),
+            kind,
+        }
     }
 }
 
