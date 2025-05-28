@@ -1,5 +1,5 @@
 use crate::language::{
-    code::Codebase,
+    code::{Codebase, SyntaxNode},
     compiler::Compiler,
     editor::{Editor, EditorInputEvent::*, editor::Cursor},
     runtime::Evaluator,
@@ -296,4 +296,36 @@ fn navigate_past_add_value_node_of_a_tuple() {
             index: "arg".len()
         }
     );
+}
+
+#[test]
+fn navigating_to_node_should_not_reset_children() {
+    // When navigating to a node that already has children, and not editing it,
+    // the children should stay as they are.
+
+    let mut codebase = Codebase::new();
+    let mut evaluator = Evaluator::default();
+
+    let mut editor = Editor::new(
+        Cursor {
+            path: codebase.root().path,
+            index: 0,
+        },
+        &codebase,
+    );
+
+    editor.on_code("apply", &mut codebase, &mut evaluator);
+    editor.on_input(MoveCursorDown, &mut codebase, &mut evaluator);
+    editor.on_code("function", &mut codebase, &mut evaluator);
+    editor.on_input(MoveCursorDown, &mut codebase, &mut evaluator);
+    editor.on_code("argument", &mut codebase, &mut evaluator);
+    editor.on_input(MoveCursorUp, &mut codebase, &mut evaluator);
+    editor.on_input(MoveCursorUp, &mut codebase, &mut evaluator);
+
+    let [apply, _] = codebase.root().expect_children(codebase.nodes());
+    let [function, argument] = apply.expect_children(codebase.nodes());
+
+    assert!(matches!(apply.node, SyntaxNode::Apply { .. }));
+    assert!(matches!(function.node, SyntaxNode::Identifier { .. }));
+    assert!(matches!(argument.node, SyntaxNode::Identifier { .. }));
 }

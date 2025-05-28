@@ -113,7 +113,13 @@ impl Editor {
                 self.cursor.path =
                     compiler.insert_child(parent.clone(), self.input.buffer());
             }
-        } else {
+        } else if &compiler
+            .codebase()
+            .nodes()
+            .get(self.cursor.path.hash())
+            .to_token()
+            != self.input.buffer()
+        {
             self.cursor.path =
                 compiler.replace(&self.cursor.path, self.input.buffer());
         }
