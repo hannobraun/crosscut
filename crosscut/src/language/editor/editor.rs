@@ -100,7 +100,7 @@ impl Editor {
         }
 
         let current_node = compiler.codebase().node_at(&self.cursor.path);
-        self.cursor.path = if let SyntaxNode::Add = current_node.node {
+        if let SyntaxNode::Add = current_node.node {
             if !self.input.buffer().is_empty() {
                 let Some((parent, _)) = current_node.path.parent() else {
                     unreachable!(
@@ -110,13 +110,13 @@ impl Editor {
                     );
                 };
 
-                compiler.insert_child(parent.clone(), self.input.buffer())
-            } else {
-                self.cursor.path.clone()
+                self.cursor.path =
+                    compiler.insert_child(parent.clone(), self.input.buffer());
             }
         } else {
-            compiler.replace(&self.cursor.path, self.input.buffer())
-        };
+            self.cursor.path =
+                compiler.replace(&self.cursor.path, self.input.buffer());
+        }
 
         let root = compiler.codebase().root().path;
         assert!(
