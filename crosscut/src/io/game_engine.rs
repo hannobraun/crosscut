@@ -118,11 +118,6 @@ impl ApplicationHandler for Handler {
 
                 if let Err(err) = resources.renderer.render(self.color) {
                     self.handle_error(err, event_loop);
-
-                    // I want to have this explicit return here, to make sure
-                    // this stays working as the code shifts.
-                    #[allow(clippy::needless_return)]
-                    return;
                 }
             }
             _ => {}
