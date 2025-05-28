@@ -59,7 +59,7 @@ impl ApplicationHandler for Handler {
             Err(err) => {
                 self.handle_error(err, event_loop);
             }
-        };
+        }
     }
 
     fn window_event(
