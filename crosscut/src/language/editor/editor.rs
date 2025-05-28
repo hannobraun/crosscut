@@ -130,13 +130,7 @@ impl Editor {
             "Editor is no longer editing a current node after update.",
         );
 
-        // Unconditionally resetting the interpreter like this, is not going to
-        // work long-term. What we actually want to do here, is hot-reload the
-        // changed code.
-        //
-        // For now, it seems like the difference is actually not observable
-        // though, due to the limited nature of the language.
-        evaluator.reset(compiler.codebase());
+        evaluator.update(compiler.codebase());
     }
 
     pub fn on_command(

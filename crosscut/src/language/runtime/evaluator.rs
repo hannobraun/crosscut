@@ -13,6 +13,10 @@ pub struct Evaluator {
 }
 
 impl Evaluator {
+    pub fn update(&mut self, codebase: &Codebase) {
+        self.reset(codebase);
+    }
+
     pub fn reset(&mut self, codebase: &Codebase) {
         *self = Self::default();
         self.apply_function(
