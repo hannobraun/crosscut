@@ -104,7 +104,8 @@ impl ApplicationHandler for Handler {
                         }
                         Ok(None) => {
                             // No update, so nothing to do here. If we had an
-                            // update before, we'll use that one below.
+                            // update in an earlier iteration of the loop, we'll
+                            // use that one below.
                             break;
                         }
                         Err(threads::ChannelDisconnected) => {
