@@ -71,7 +71,6 @@ impl ApplicationHandler for Handler {
         let Some(resources) = self.resources.as_ref() else {
             return;
         };
-        let _ = resources.window;
 
         match event {
             WindowEvent::CloseRequested => {
