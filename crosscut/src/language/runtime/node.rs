@@ -24,7 +24,28 @@ impl RuntimeNode {
 #[derive(Clone, Debug)]
 pub enum RuntimeNodeKind {
     Apply {
+        /// # The path of the apply node
+        ///
+        /// ## Implementation Node
+        ///
+        /// It's weird to have this field here, when there's already a `path`
+        /// field in `RuntimeNode`. But this field is available always (and
+        /// needed always), while the other one is optional.
+        ///
+        /// There are ways to avoid this. Like adding a path field to every
+        /// variant that is constructed from a `SyntaxNode`, instead of having
+        /// the one in `RuntimeNode`. But that seems error-prone, as that would
+        /// have to be done correctly for every new variant.
+        ///
+        /// Or `RuntimeNode` could become an enum that distinguishes between
+        /// runtime nodes created from `SyntaxNode`, or runtime nodes created
+        /// synthetically. But that seems overly complicated.
+        ///
+        /// In the end, this seems like a decent compromise, while the runtime
+        /// still has its current shape. Long-term, it will probably become
+        /// lower-level, more like a bytecode interpreter.
         path: NodePath,
+
         expression: RuntimeChild,
         argument: RuntimeChild,
         is_tail_call: bool,
