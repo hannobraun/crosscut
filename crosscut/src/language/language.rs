@@ -110,8 +110,18 @@ impl Language {
         self
     }
 
+    pub fn up(&mut self) -> &mut Self {
+        self.on_input(EditorInputEvent::MoveCursorUp);
+        self
+    }
+
     pub fn remove_right(&mut self) -> &mut Self {
         self.on_input(EditorInputEvent::RemoveRight { whole_node: false });
+        self
+    }
+
+    pub fn remove_left(&mut self) -> &mut Self {
+        self.on_input(EditorInputEvent::RemoveLeft { whole_node: false });
         self
     }
 

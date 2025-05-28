@@ -1,5 +1,7 @@
 use crate::language::{
-    editor::EditorInputEvent, language::Language, runtime::Value,
+    editor::EditorInputEvent,
+    language::Language,
+    runtime::{Effect, RuntimeState, Value},
 };
 
 #[test]
@@ -64,4 +66,82 @@ fn update_after_removing_all_characters() {
 
     language.on_input(EditorInputEvent::RemoveLeft { whole_node: false });
     assert_eq!(language.step_until_finished().unwrap(), Value::nothing());
+}
+
+#[test]
+#[should_panic] // currently being implemented
+fn keep_state_on_update() {
+    // An update of the code keeps all the runtime state.
+
+    let mut language = Language::new();
+    language
+        .code("apply")
+        .down()
+        .code("fn")
+        .down()
+        .code("i")
+        .down()
+        .code("apply")
+        .down()
+        .code("notify_test")
+        .down()
+        .code("i")
+        .down()
+        .code("apply")
+        .down()
+        .code("self")
+        .down()
+        .code("apply")
+        .down()
+        .code("+")
+        .down()
+        .code("tuple")
+        .down()
+        .code("i")
+        .down()
+        .code("1")
+        .down()
+        .down() // navigate past tuple
+        .down() // navigate past function body
+        .code("0");
+
+    wait_for(&mut language, 0);
+    wait_for(&mut language, 1);
+    wait_for(&mut language, 2);
+
+    language
+        .up()
+        .up()
+        .up()
+        .up()
+        .up()
+        .up()
+        .remove_left()
+        .code("-");
+
+    wait_for(&mut language, 1);
+
+    fn wait_for(language: &mut Language, expected_value: i32) {
+        for _ in 0..1024 {
+            if let RuntimeState::Effect {
+                effect: Effect::ApplyProvidedFunction { name, input },
+                ..
+            } = language.step()
+            {
+                assert_eq!(name, "notify_test");
+
+                let Value::Integer { value } = input else {
+                    panic!("Expected integer, got `{input:?}`.");
+                };
+
+                assert_eq!(value, &expected_value);
+
+                language.provide_host_function_output(Value::nothing());
+
+                return;
+            }
+        }
+
+        panic!();
+    }
 }
