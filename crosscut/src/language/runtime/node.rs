@@ -5,7 +5,19 @@ use crate::language::code::{
 use super::Value;
 
 #[derive(Clone, Debug)]
-pub enum RuntimeNode {
+pub struct RuntimeNode {
+    pub kind: RuntimeNodeKind,
+}
+
+impl RuntimeNode {
+    pub fn new(path: NodePath, nodes: &Nodes) -> Self {
+        let kind = RuntimeNodeKind::new(path, nodes);
+        Self { kind }
+    }
+}
+
+#[derive(Clone, Debug)]
+pub enum RuntimeNodeKind {
     Apply {
         path: NodePath,
         expression: RuntimeChild,
@@ -37,7 +49,7 @@ pub enum RuntimeNode {
     },
 }
 
-impl RuntimeNode {
+impl RuntimeNodeKind {
     pub fn new(path: NodePath, nodes: &Nodes) -> Self {
         let TypedNode::Expression { expression } =
             TypedNode::from_hash(path.hash(), nodes)
