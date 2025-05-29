@@ -65,7 +65,7 @@ pub fn start(game: Box<dyn Game + Send>) -> anyhow::Result<Threads> {
             match read_editor_event() {
                 Ok(ControlFlow::Continue(maybe_event)) => {
                     let event = if let Some(event) = maybe_event {
-                        EditorEvent::Input { event }
+                        EditorEvent::Input { input: event }
                     } else {
                         EditorEvent::Heartbeat
                     };
@@ -93,7 +93,7 @@ pub fn start(game: Box<dyn Game + Send>) -> anyhow::Result<Threads> {
             game_engine.on_frame()?;
 
             match editor_event {
-                Some(EditorEvent::Input { event }) => {
+                Some(EditorEvent::Input { input: event }) => {
                     game_engine.on_editor_input(event)?;
                 }
                 Some(EditorEvent::Heartbeat) => {}
@@ -249,7 +249,7 @@ where
 #[derive(Debug)]
 enum EditorEvent {
     Input {
-        event: TerminalInputEvent,
+        input: TerminalInputEvent,
     },
 
     /// # An event that has no effect when processed
