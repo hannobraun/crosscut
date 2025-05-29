@@ -66,6 +66,8 @@ pub fn start(game: Box<dyn Game + Send>) -> anyhow::Result<Threads> {
         loop {
             match read_editor_event() {
                 Ok(ControlFlow::Continue(event)) => {
+                    // `event` can be `None`, but we still need to send that.
+                    // See documentation of `GameEngineEvent::Heartbeat`.
                     editor_input_tx.send(event)?;
                 }
                 Ok(ControlFlow::Break(())) => break Ok(()),
