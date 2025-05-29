@@ -93,8 +93,8 @@ pub fn start(game: Box<dyn Game + Send>) -> anyhow::Result<Threads> {
             game_engine.on_frame()?;
 
             match editor_event {
-                Some(EditorEvent::Input { input: event }) => {
-                    game_engine.on_editor_input(event)?;
+                Some(EditorEvent::Input { input }) => {
+                    game_engine.on_editor_input(input)?;
                 }
                 Some(EditorEvent::Heartbeat) => {}
                 None => {}
