@@ -84,9 +84,9 @@ pub fn start(game: Box<dyn Game + Send>) -> anyhow::Result<Threads> {
 
             let editor_event = editor_input_rx.try_recv()?.map(|maybe_event| {
                 if let Some(event) = maybe_event {
-                    GameEngineInput::EditorEvent { event }
+                    EditorEvent::EditorEvent { event }
                 } else {
-                    GameEngineInput::Heartbeat
+                    EditorEvent::Heartbeat
                 }
             });
 
@@ -95,10 +95,10 @@ pub fn start(game: Box<dyn Game + Send>) -> anyhow::Result<Threads> {
             game_engine.on_frame()?;
 
             match editor_event {
-                Some(GameEngineInput::EditorEvent { event }) => {
+                Some(EditorEvent::EditorEvent { event }) => {
                     game_engine.on_editor_input(event)?;
                 }
-                Some(GameEngineInput::Heartbeat) => {}
+                Some(EditorEvent::Heartbeat) => {}
                 None => {}
             }
 
@@ -249,7 +249,7 @@ where
 }
 
 #[derive(Debug)]
-enum GameEngineInput {
+enum EditorEvent {
     EditorEvent {
         event: TerminalInputEvent,
     },
