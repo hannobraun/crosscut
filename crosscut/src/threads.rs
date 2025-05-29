@@ -64,9 +64,13 @@ pub fn start(game: Box<dyn Game + Send>) -> anyhow::Result<Threads> {
         loop {
             match read_editor_event() {
                 Ok(ControlFlow::Continue(maybe_event)) => {
-                    // `event` can be `None`, but we still need to send that.
-                    // See documentation of `GameEngineEvent::Heartbeat`.
-                    editor_input_tx.send(maybe_event)?;
+                    let event = if let Some(event) = maybe_event {
+                        EditorEvent::Input { event }
+                    } else {
+                        EditorEvent::Heartbeat
+                    };
+
+                    editor_input_tx.send(event)?;
                 }
                 Ok(ControlFlow::Break(())) => break Ok(()),
                 Err(err) => break Err(Error::Other { err }),
@@ -82,13 +86,7 @@ pub fn start(game: Box<dyn Game + Send>) -> anyhow::Result<Threads> {
                 return Err(ChannelDisconnected.into());
             };
 
-            let editor_event = editor_input_rx.try_recv()?.map(|maybe_event| {
-                if let Some(event) = maybe_event {
-                    EditorEvent::Input { event }
-                } else {
-                    EditorEvent::Heartbeat
-                }
-            });
+            let editor_event = editor_input_rx.try_recv()?;
 
             // If a new frame is being rendered on the other thread, then the
             // game engine can get ready to provide the next one.
