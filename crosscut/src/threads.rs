@@ -89,7 +89,7 @@ pub fn start(game: Box<dyn Game + Send>) -> anyhow::Result<Threads> {
                     )
                 }
                 recv(game_input_rx.inner) -> result => {
-                    result.map(|input| GameEngineEvent::GameInput { input })
+                    result.map(|OnRender| GameEngineEvent::GameInput)
                 }
             };
             let Ok(event) = event else {
@@ -100,7 +100,7 @@ pub fn start(game: Box<dyn Game + Send>) -> anyhow::Result<Threads> {
                 GameEngineEvent::EditorInput { event } => {
                     game_engine.on_editor_input(event)?;
                 }
-                GameEngineEvent::GameInput { input: OnRender } => {
+                GameEngineEvent::GameInput => {
                     // If a new frame is being rendered on the other thread,
                     // then the game engine can get ready to provide the next
                     // one.
@@ -261,9 +261,7 @@ enum GameEngineEvent {
         event: TerminalInputEvent,
     },
 
-    GameInput {
-        input: OnRender,
-    },
+    GameInput,
 
     /// # An event that has no effect when processed
     ///
