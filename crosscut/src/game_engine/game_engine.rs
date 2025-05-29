@@ -302,7 +302,7 @@ impl GameEngine<DebugOutputAdapter> {
 }
 
 #[derive(Debug)]
-pub struct GameInput;
+pub struct OnRender;
 
 #[derive(Debug)]
 pub enum GameOutput {

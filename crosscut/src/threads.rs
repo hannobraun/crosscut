@@ -12,9 +12,7 @@ use anyhow::anyhow;
 use crossbeam_channel::{SendError, TryRecvError, select};
 
 use crate::{
-    game_engine::{
-        Game, GameEngine, GameInput, GameOutput, TerminalInputEvent,
-    },
+    game_engine::{Game, GameEngine, GameOutput, OnRender, TerminalInputEvent},
     io::editor::input::read_editor_event,
 };
 
@@ -59,7 +57,7 @@ pub fn start(game: Box<dyn Game + Send>) -> anyhow::Result<Threads> {
     // bug in rust-analyzer:
     // https://github.com/rust-lang/rust-analyzer/issues/15984
     let (editor_input_tx, editor_input_rx) = channel();
-    let (game_input_tx, game_input_rx) = channel::<GameInput>();
+    let (game_input_tx, game_input_rx) = channel::<OnRender>();
     let (game_output_tx, game_output_rx) = channel();
 
     let editor_input = spawn("editor input", move || {
@@ -102,7 +100,7 @@ pub fn start(game: Box<dyn Game + Send>) -> anyhow::Result<Threads> {
                 GameEngineEvent::EditorInput { event } => {
                     game_engine.on_editor_input(event)?;
                 }
-                GameEngineEvent::GameInput { input: GameInput } => {
+                GameEngineEvent::GameInput { input: OnRender } => {
                     // If a new frame is being rendered on the other thread,
                     // then the game engine can get ready to provide the next
                     // one.
@@ -126,7 +124,7 @@ pub fn start(game: Box<dyn Game + Send>) -> anyhow::Result<Threads> {
 
 pub struct Threads {
     pub handles: [ThreadHandle; 2],
-    pub game_input: Sender<GameInput>,
+    pub game_input: Sender<OnRender>,
     pub game_output: Receiver<GameOutput>,
 }
 
@@ -264,7 +262,7 @@ enum GameEngineEvent {
     },
 
     GameInput {
-        input: GameInput,
+        input: OnRender,
     },
 
     /// # An event that has no effect when processed

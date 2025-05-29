@@ -5,7 +5,7 @@ mod game_engine;
 pub use self::{
     editor::input::TerminalInputEvent,
     game::{Game, PureCrosscutGame},
-    game_engine::{GameEngine, GameInput, GameOutput},
+    game_engine::{GameEngine, GameOutput, OnRender},
 };
 
 #[cfg(test)]
