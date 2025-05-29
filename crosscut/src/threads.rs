@@ -64,8 +64,8 @@ pub fn start(game: Box<dyn Game + Send>) -> anyhow::Result<Threads> {
         loop {
             match read_editor_event() {
                 Ok(ControlFlow::Continue(maybe_event)) => {
-                    let event = if let Some(event) = maybe_event {
-                        EditorEvent::Input { input: event }
+                    let event = if let Some(input) = maybe_event {
+                        EditorEvent::Input { input }
                     } else {
                         EditorEvent::Heartbeat
                     };
