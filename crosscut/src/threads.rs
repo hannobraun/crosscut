@@ -82,8 +82,8 @@ pub fn start(game: Box<dyn Game + Send>) -> anyhow::Result<Threads> {
                 recv(editor_input_rx.inner) -> result => {
                     result.map(|maybe_event|
                         if let Some(event) = maybe_event {
-                            GameEngineEvent::EditorInput { event }}
-                        else {
+                            GameEngineEvent::EditorInput { event }
+                        } else {
                             GameEngineEvent::Heartbeat
                         }
                     )
