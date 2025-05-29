@@ -9,7 +9,7 @@ use std::{
 };
 
 use anyhow::anyhow;
-use crossbeam_channel::{SendError, TryRecvError};
+use crossbeam_channel::{RecvError, SendError, TryRecvError};
 
 use crate::{
     game_engine::{Game, GameEngine, GameOutput, OnRender, TerminalInputEvent},
@@ -82,9 +82,7 @@ pub fn start(game: Box<dyn Game + Send>) -> anyhow::Result<Threads> {
         let mut game_engine = GameEngine::with_editor_ui(game)?;
 
         loop {
-            let Ok(OnRender) = game_input_rx.inner.recv() else {
-                return Err(ChannelDisconnected.into());
-            };
+            let OnRender = game_input_rx.recv()?;
 
             let editor_event = editor_event_rx.try_recv()?;
 
@@ -180,6 +178,13 @@ pub struct Receiver<T> {
 }
 
 impl<T> Receiver<T> {
+    pub fn recv(&self) -> Result<T, ChannelDisconnected> {
+        match self.inner.recv() {
+            Ok(message) => Ok(message),
+            Err(RecvError) => Err(ChannelDisconnected),
+        }
+    }
+
     pub fn try_recv(&self) -> Result<Option<T>, ChannelDisconnected> {
         match self.inner.try_recv() {
             Ok(message) => Ok(Some(message)),
