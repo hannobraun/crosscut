@@ -102,9 +102,7 @@ pub fn start(game: Box<dyn Game + Send>) -> anyhow::Result<Threads> {
                 GameEngineEvent::EditorInput { event } => {
                     game_engine.on_editor_input(event)?;
                 }
-                GameEngineEvent::GameInput {
-                    input: GameInput::RenderingFrame,
-                } => {
+                GameEngineEvent::GameInput { input: GameInput } => {
                     // If a new frame is being rendered on the other thread,
                     // then the game engine can get ready to provide the next
                     // one.

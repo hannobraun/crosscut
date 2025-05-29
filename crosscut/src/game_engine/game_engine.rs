@@ -302,9 +302,7 @@ impl GameEngine<DebugOutputAdapter> {
 }
 
 #[derive(Debug)]
-pub enum GameInput {
-    RenderingFrame,
-}
+pub struct GameInput;
 
 #[derive(Debug)]
 pub enum GameOutput {
