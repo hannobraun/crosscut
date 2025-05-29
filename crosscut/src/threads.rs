@@ -82,14 +82,14 @@ pub fn start(game: Box<dyn Game + Send>) -> anyhow::Result<Threads> {
                 recv(editor_input_rx.inner) -> result => {
                     result.map(|maybe_event|
                         if let Some(event) = maybe_event {
-                            GameEngineEvent::EditorInput { event }
+                            GameEngineInput::EditorInput { event }
                         } else {
-                            GameEngineEvent::Heartbeat
+                            GameEngineInput::Heartbeat
                         }
                     )
                 }
                 recv(game_input_rx.inner) -> result => {
-                    result.map(|OnRender| GameEngineEvent::OnRender)
+                    result.map(|OnRender| GameEngineInput::OnRender)
                 }
             };
             let Ok(event) = event else {
@@ -97,16 +97,16 @@ pub fn start(game: Box<dyn Game + Send>) -> anyhow::Result<Threads> {
             };
 
             match event {
-                GameEngineEvent::EditorInput { event } => {
+                GameEngineInput::EditorInput { event } => {
                     game_engine.on_editor_input(event)?;
                 }
-                GameEngineEvent::OnRender => {
+                GameEngineInput::OnRender => {
                     // If a new frame is being rendered on the other thread,
                     // then the game engine can get ready to provide the next
                     // one.
                     game_engine.on_frame()?;
                 }
-                GameEngineEvent::Heartbeat => {}
+                GameEngineInput::Heartbeat => {}
             }
 
             for event in game_engine.game_output() {
@@ -256,7 +256,7 @@ where
 }
 
 #[derive(Debug)]
-enum GameEngineEvent {
+enum GameEngineInput {
     EditorInput {
         event: TerminalInputEvent,
     },
