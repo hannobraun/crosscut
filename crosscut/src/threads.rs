@@ -56,7 +56,7 @@ pub fn start(game: Box<dyn Game + Send>) -> anyhow::Result<Threads> {
     // Need to specify some of the channel types explicitly, to work around this
     // bug in rust-analyzer:
     // https://github.com/rust-lang/rust-analyzer/issues/15984
-    let (editor_event_tx, editor_input_rx) = channel();
+    let (editor_event_tx, editor_event_rx) = channel();
     let (game_input_tx, game_input_rx) = channel::<OnRender>();
     let (game_output_tx, game_output_rx) = channel();
 
@@ -86,7 +86,7 @@ pub fn start(game: Box<dyn Game + Send>) -> anyhow::Result<Threads> {
                 return Err(ChannelDisconnected.into());
             };
 
-            let editor_event = editor_input_rx.try_recv()?;
+            let editor_event = editor_event_rx.try_recv()?;
 
             // If a new frame is being rendered on the other thread, then the
             // game engine can get ready to provide the next one.
