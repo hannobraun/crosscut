@@ -55,7 +55,7 @@ pub fn start(game: Box<dyn Game + Send>) -> anyhow::Result<Threads> {
         panics.insert(thread_id, full_message);
     }));
 
-    // Need to specify the types of the channels explicitly, to work around this
+    // Need to specify some of the channel types explicitly, to work around this
     // bug in rust-analyzer:
     // https://github.com/rust-lang/rust-analyzer/issues/15984
     let (editor_input_tx, editor_input_rx) = channel();
