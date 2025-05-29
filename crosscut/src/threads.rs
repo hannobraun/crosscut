@@ -9,7 +9,7 @@ use std::{
 };
 
 use anyhow::anyhow;
-use crossbeam_channel::{SendError, TryRecvError, select};
+use crossbeam_channel::{SendError, TryRecvError};
 
 use crate::{
     game_engine::{Game, GameEngine, GameOutput, OnRender, TerminalInputEvent},
@@ -78,35 +78,28 @@ pub fn start(game: Box<dyn Game + Send>) -> anyhow::Result<Threads> {
         let mut game_engine = GameEngine::with_editor_ui(game)?;
 
         loop {
-            let event = select! {
-                recv(editor_input_rx.inner) -> result => {
-                    result.map(|maybe_event|
-                        if let Some(event) = maybe_event {
-                            GameEngineInput::EditorEvent { event }
-                        } else {
-                            GameEngineInput::Heartbeat
-                        }
-                    )
-                }
-                recv(game_input_rx.inner) -> result => {
-                    result.map(|OnRender| GameEngineInput::OnRender)
-                }
-            };
-            let Ok(event) = event else {
+            let Ok(OnRender) = game_input_rx.inner.recv() else {
                 return Err(ChannelDisconnected.into());
             };
 
+            let event = editor_input_rx.try_recv()?.map(|maybe_event| {
+                if let Some(event) = maybe_event {
+                    GameEngineInput::EditorEvent { event }
+                } else {
+                    GameEngineInput::Heartbeat
+                }
+            });
+
+            // If a new frame is being rendered on the other thread, then the
+            // game engine can get ready to provide the next one.
+            game_engine.on_frame()?;
+
             match event {
-                GameEngineInput::EditorEvent { event } => {
+                Some(GameEngineInput::EditorEvent { event }) => {
                     game_engine.on_editor_input(event)?;
                 }
-                GameEngineInput::OnRender => {
-                    // If a new frame is being rendered on the other thread,
-                    // then the game engine can get ready to provide the next
-                    // one.
-                    game_engine.on_frame()?;
-                }
-                GameEngineInput::Heartbeat => {}
+                Some(GameEngineInput::Heartbeat) => {}
+                None => {}
             }
 
             for event in game_engine.game_output() {
@@ -260,8 +253,6 @@ enum GameEngineInput {
     EditorEvent {
         event: TerminalInputEvent,
     },
-
-    OnRender,
 
     /// # An event that has no effect when processed
     ///
