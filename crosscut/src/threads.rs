@@ -82,7 +82,7 @@ pub fn start(game: Box<dyn Game + Send>) -> anyhow::Result<Threads> {
                 return Err(ChannelDisconnected.into());
             };
 
-            let event = editor_input_rx.try_recv()?.map(|maybe_event| {
+            let editor_event = editor_input_rx.try_recv()?.map(|maybe_event| {
                 if let Some(event) = maybe_event {
                     GameEngineInput::EditorEvent { event }
                 } else {
@@ -94,7 +94,7 @@ pub fn start(game: Box<dyn Game + Send>) -> anyhow::Result<Threads> {
             // game engine can get ready to provide the next one.
             game_engine.on_frame()?;
 
-            match event {
+            match editor_event {
                 Some(GameEngineInput::EditorEvent { event }) => {
                     game_engine.on_editor_input(event)?;
                 }
