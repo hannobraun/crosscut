@@ -302,9 +302,6 @@ impl GameEngine<DebugOutputAdapter> {
 }
 
 #[derive(Debug)]
-pub struct OnRender;
-
-#[derive(Debug)]
 pub enum GameOutput {
     SubmitColor { color: [f64; 4] },
 }

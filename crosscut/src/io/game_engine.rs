@@ -12,8 +12,8 @@ use winit::{
 
 use crate::{
     Game,
-    game_engine::{GameEngine, GameOutput, OnRender, TerminalInput},
-    threads::{self, Receiver, Sender},
+    game_engine::{GameEngine, GameOutput, TerminalInput},
+    threads::{self, Receiver},
 };
 
 use super::terminal::output::RawTerminalAdapter;
@@ -21,8 +21,6 @@ use super::terminal::output::RawTerminalAdapter;
 pub fn start_and_wait(
     game: Box<dyn Game + Send>,
     terminal_input: Receiver<TerminalInput>,
-    _: Sender<OnRender>,
-    _: Receiver<GameOutput>,
 ) -> anyhow::Result<()> {
     let game_engine = GameEngine::with_editor_ui(game)?;
 

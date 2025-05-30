@@ -12,8 +12,7 @@ use anyhow::anyhow;
 use crossbeam_channel::{SendError, TryRecvError};
 
 use crate::{
-    game_engine::{GameOutput, OnRender, TerminalInput},
-    io::terminal::input::read_terminal_input,
+    game_engine::TerminalInput, io::terminal::input::read_terminal_input,
 };
 
 static PANICS: LazyLock<Mutex<HashMap<ThreadId, String>>> =
@@ -57,8 +56,6 @@ pub fn start() -> anyhow::Result<Threads> {
     // bug in rust-analyzer:
     // https://github.com/rust-lang/rust-analyzer/issues/15984
     let (terminal_input_tx, terminal_input_rx) = channel();
-    let (game_input_tx, _) = channel::<OnRender>();
-    let (_, game_output_rx) = channel();
 
     let editor_input = spawn("terminal input", move || {
         loop {
@@ -75,16 +72,12 @@ pub fn start() -> anyhow::Result<Threads> {
     Ok(Threads {
         handles: [editor_input],
         terminal_input: terminal_input_rx,
-        game_input: game_input_tx,
-        game_output: game_output_rx,
     })
 }
 
 pub struct Threads {
     pub handles: [ThreadHandle; 1],
     pub terminal_input: Receiver<TerminalInput>,
-    pub game_input: Sender<OnRender>,
-    pub game_output: Receiver<GameOutput>,
 }
 
 #[derive(Debug)]
