@@ -56,7 +56,7 @@ pub fn start(game: Box<dyn Game + Send>) -> anyhow::Result<Threads> {
     // Need to specify some of the channel types explicitly, to work around this
     // bug in rust-analyzer:
     // https://github.com/rust-lang/rust-analyzer/issues/15984
-    let (editor_input_tx, editor_input_rx) = channel();
+    let (terminal_input_tx, editor_input_rx) = channel();
     let (game_input_tx, game_input_rx) = channel::<OnRender>();
     let (game_output_tx, game_output_rx) = channel();
 
@@ -64,7 +64,7 @@ pub fn start(game: Box<dyn Game + Send>) -> anyhow::Result<Threads> {
         loop {
             match read_editor_event() {
                 Ok(ControlFlow::Continue(input)) => {
-                    editor_input_tx.send(input)?;
+                    terminal_input_tx.send(input)?;
                 }
                 Ok(ControlFlow::Break(())) => break Ok(()),
                 Err(err) => break Err(Error::Other { err }),
