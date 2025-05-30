@@ -13,7 +13,7 @@ use crossbeam_channel::{RecvError, SendError, TryRecvError};
 
 use crate::{
     game_engine::{Game, GameEngine, GameOutput, OnRender},
-    io::editor::input::read_terminal_input,
+    io::terminal::input::read_terminal_input,
 };
 
 static PANICS: LazyLock<Mutex<HashMap<ThreadId, String>>> =

@@ -1,7 +1,7 @@
 use crossterm::style::{Attribute, Color};
 
 use crate::{
-    io::editor::output::{Cursor, EditorOutputAdapter},
+    io::terminal::output::{Cursor, EditorOutputAdapter},
     language::{
         code::{Codebase, NodePath, SyntaxNode},
         editor::{Editor, EditorLayout, EditorLine},
@@ -14,13 +14,13 @@ use super::input::{EditorMode, TerminalEditorInput};
 
 #[cfg(test)]
 pub fn codebase_to_stdout(codebase: &Codebase) {
-    use crate::io::editor::output::DebugOutputAdapter;
+    use crate::io::terminal::output::DebugOutputAdapter;
     codebase_to_adapter(codebase, &mut DebugOutputAdapter);
 }
 
 #[cfg(test)]
 pub fn codebase_to_string(codebase: &Codebase) -> String {
-    use crate::io::editor::output::StringOutputAdapter;
+    use crate::io::terminal::output::StringOutputAdapter;
 
     let mut adapter = StringOutputAdapter {
         output: String::new(),

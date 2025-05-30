@@ -1,7 +1,7 @@
 use std::time::{Duration, Instant};
 
 use crate::{
-    io::editor::output::{EditorOutputAdapter, RawTerminalAdapter},
+    io::terminal::output::{EditorOutputAdapter, RawTerminalAdapter},
     language::{
         code::Type,
         language::Language,
@@ -243,7 +243,7 @@ where
 }
 
 #[cfg(test)]
-use crate::io::editor::output::DebugOutputAdapter;
+use crate::io::terminal::output::DebugOutputAdapter;
 
 #[cfg(test)]
 impl GameEngine<DebugOutputAdapter> {
