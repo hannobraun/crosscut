@@ -82,7 +82,7 @@ pub fn start(game: Box<dyn Game + Send>) -> anyhow::Result<Threads> {
             // game engine can get ready to provide the next one.
             game_engine.on_frame()?;
 
-            if let Some(input) = editor_input_rx.try_recv()? {
+            while let Some(input) = editor_input_rx.try_recv()? {
                 game_engine.on_editor_input(input)?;
             }
 
