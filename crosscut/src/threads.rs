@@ -13,7 +13,7 @@ use crossbeam_channel::{RecvError, SendError, TryRecvError};
 
 use crate::{
     game_engine::{Game, GameEngine, GameOutput, OnRender},
-    io::editor::input::read_editor_event,
+    io::editor::input::read_terminal_input,
 };
 
 static PANICS: LazyLock<Mutex<HashMap<ThreadId, String>>> =
@@ -62,7 +62,7 @@ pub fn start(game: Box<dyn Game + Send>) -> anyhow::Result<Threads> {
 
     let editor_input = spawn("terminal input", move || {
         loop {
-            match read_editor_event() {
+            match read_terminal_input() {
                 Ok(ControlFlow::Continue(input)) => {
                     terminal_input_tx.send(input)?;
                 }

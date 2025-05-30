@@ -4,8 +4,8 @@ use crossterm::event::{self, Event, KeyCode, KeyModifiers};
 
 use crate::game_engine::TerminalInputEvent;
 
-pub fn read_editor_event() -> anyhow::Result<ControlFlow<(), TerminalInputEvent>>
-{
+pub fn read_terminal_input()
+-> anyhow::Result<ControlFlow<(), TerminalInputEvent>> {
     let timeout = Duration::from_millis(50);
     let event_ready = event::poll(timeout)?;
 
