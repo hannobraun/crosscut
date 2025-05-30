@@ -39,21 +39,19 @@ pub fn read_editor_event()
             // tracked here:
             // https://github.com/hannobraun/crosscut/issues/70
 
-            Some(TerminalInputEvent::Character { ch })
+            TerminalInputEvent::Character { ch }
         }
 
-        KeyCode::Backspace => {
-            Some(TerminalInputEvent::Backspace { ctrl_pressed })
-        }
-        KeyCode::Enter => Some(TerminalInputEvent::Enter),
-        KeyCode::Left => Some(TerminalInputEvent::Left),
-        KeyCode::Right => Some(TerminalInputEvent::Right),
-        KeyCode::Up => Some(TerminalInputEvent::Up),
-        KeyCode::Down => Some(TerminalInputEvent::Down),
-        KeyCode::Delete => Some(TerminalInputEvent::Delete { ctrl_pressed }),
-        KeyCode::Esc => Some(TerminalInputEvent::Escape),
-        _ => Some(TerminalInputEvent::Heartbeat),
+        KeyCode::Backspace => TerminalInputEvent::Backspace { ctrl_pressed },
+        KeyCode::Enter => TerminalInputEvent::Enter,
+        KeyCode::Left => TerminalInputEvent::Left,
+        KeyCode::Right => TerminalInputEvent::Right,
+        KeyCode::Up => TerminalInputEvent::Up,
+        KeyCode::Down => TerminalInputEvent::Down,
+        KeyCode::Delete => TerminalInputEvent::Delete { ctrl_pressed },
+        KeyCode::Esc => TerminalInputEvent::Escape,
+        _ => TerminalInputEvent::Heartbeat,
     };
 
-    Ok(ControlFlow::Continue(event))
+    Ok(ControlFlow::Continue(Some(event)))
 }
