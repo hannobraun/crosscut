@@ -85,11 +85,8 @@ pub fn start(game: Box<dyn Game + Send>) -> anyhow::Result<Threads> {
             // game engine can get ready to provide the next one.
             game_engine.on_frame()?;
 
-            match editor_event {
-                Some(EditorEvent::Input { input }) => {
-                    game_engine.on_editor_input(input)?;
-                }
-                None => {}
+            if let Some(EditorEvent::Input { input }) = editor_event {
+                game_engine.on_editor_input(input)?;
             }
 
             for event in game_engine.game_output() {
