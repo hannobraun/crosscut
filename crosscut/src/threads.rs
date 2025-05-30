@@ -9,17 +9,17 @@ use std::{
 };
 
 use anyhow::anyhow;
-use crossbeam_channel::{RecvError, SendError, TryRecvError};
+use crossbeam_channel::{SendError, TryRecvError};
 
 use crate::{
-    game_engine::{Game, GameEngine, GameOutput, OnRender},
+    game_engine::{GameOutput, OnRender, TerminalInput},
     io::terminal::input::read_terminal_input,
 };
 
 static PANICS: LazyLock<Mutex<HashMap<ThreadId, String>>> =
     LazyLock::new(|| Mutex::new(HashMap::new()));
 
-pub fn start(game: Box<dyn Game + Send>) -> anyhow::Result<Threads> {
+pub fn start() -> anyhow::Result<Threads> {
     // Since one of the threads puts the terminal into raw mode while it's
     // running, the default panic handler won't work well. Let's register a hook
     // that extracts all information we need, so we can later print it here,
@@ -57,8 +57,8 @@ pub fn start(game: Box<dyn Game + Send>) -> anyhow::Result<Threads> {
     // bug in rust-analyzer:
     // https://github.com/rust-lang/rust-analyzer/issues/15984
     let (terminal_input_tx, terminal_input_rx) = channel();
-    let (game_input_tx, game_input_rx) = channel::<OnRender>();
-    let (game_output_tx, game_output_rx) = channel();
+    let (game_input_tx, _) = channel::<OnRender>();
+    let (_, game_output_rx) = channel();
 
     let editor_input = spawn("terminal input", move || {
         loop {
@@ -72,35 +72,17 @@ pub fn start(game: Box<dyn Game + Send>) -> anyhow::Result<Threads> {
         }
     })?;
 
-    let game_engine = spawn("game engine", move || {
-        let mut game_engine = GameEngine::with_editor_ui(game)?;
-
-        loop {
-            let OnRender = game_input_rx.recv()?;
-
-            // If a new frame is being rendered on the other thread, then the
-            // game engine can get ready to provide the next one.
-            game_engine.on_frame()?;
-
-            while let Some(input) = terminal_input_rx.try_recv()? {
-                game_engine.on_editor_input(input)?;
-            }
-
-            for event in game_engine.game_output() {
-                game_output_tx.send(event)?;
-            }
-        }
-    })?;
-
     Ok(Threads {
-        handles: [editor_input, game_engine],
+        handles: [editor_input],
+        terminal_input: terminal_input_rx,
         game_input: game_input_tx,
         game_output: game_output_rx,
     })
 }
 
 pub struct Threads {
-    pub handles: [ThreadHandle; 2],
+    pub handles: [ThreadHandle; 1],
+    pub terminal_input: Receiver<TerminalInput>,
     pub game_input: Sender<OnRender>,
     pub game_output: Receiver<GameOutput>,
 }
@@ -166,13 +148,6 @@ pub struct Receiver<T> {
 }
 
 impl<T> Receiver<T> {
-    pub fn recv(&self) -> Result<T, ChannelDisconnected> {
-        match self.inner.recv() {
-            Ok(message) => Ok(message),
-            Err(RecvError) => Err(ChannelDisconnected),
-        }
-    }
-
     pub fn try_recv(&self) -> Result<Option<T>, ChannelDisconnected> {
         match self.inner.try_recv() {
             Ok(message) => Ok(Some(message)),

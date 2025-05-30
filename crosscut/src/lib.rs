@@ -12,11 +12,16 @@ mod util;
 pub use game_engine::{Game, PureCrosscutGame};
 
 pub fn start_and_wait(game: Box<dyn Game + Send>) -> anyhow::Result<()> {
-    let threads = threads::start(game)?;
+    let threads = threads::start()?;
 
     // This call is going to block until the user requests a shutdown via the
     // game I/O, or any of the other threads shut down.
-    io::game_engine::start_and_wait(threads.game_input, threads.game_output)?;
+    io::game_engine::start_and_wait(
+        game,
+        threads.terminal_input,
+        threads.game_input,
+        threads.game_output,
+    )?;
 
     // At this point, the shutdown should be in progress. None of these calls
     // should block for long, if at all. The purpose of still joining all

@@ -11,19 +11,28 @@ use winit::{
 };
 
 use crate::{
-    game_engine::{GameOutput, OnRender},
+    Game,
+    game_engine::{GameEngine, GameOutput, OnRender, TerminalInput},
     threads::{self, Receiver, Sender},
 };
 
+use super::terminal::output::RawTerminalAdapter;
+
 pub fn start_and_wait(
-    input: Sender<OnRender>,
-    output: Receiver<GameOutput>,
+    game: Box<dyn Game + Send>,
+    terminal_input: Receiver<TerminalInput>,
+    _: Sender<OnRender>,
+    _: Receiver<GameOutput>,
 ) -> anyhow::Result<()> {
+    let game_engine = GameEngine::with_editor_ui(game)?;
+
     let mut handler = Handler {
+        game_engine,
+        terminal_input,
         resources: None,
         result: Ok(()),
         color: wgpu::Color::BLACK,
-        game_io: GameIo { input, output },
+        game_io: GameIo {},
     };
 
     let event_loop = EventLoop::new()?;
@@ -33,6 +42,8 @@ pub fn start_and_wait(
 }
 
 struct Handler {
+    game_engine: GameEngine<RawTerminalAdapter>,
+    terminal_input: Receiver<TerminalInput>,
     resources: Option<Resources>,
     result: anyhow::Result<()>,
     color: wgpu::Color,
@@ -83,7 +94,12 @@ impl ApplicationHandler for Handler {
                 event_loop.exit();
             }
             WindowEvent::RedrawRequested => {
-                if let Err(err) = on_frame(&self.game_io, &mut self.color) {
+                if let Err(err) = on_frame(
+                    &mut self.game_engine,
+                    &self.terminal_input,
+                    &self.game_io,
+                    &mut self.color,
+                ) {
                     match err {
                         OnFrameError::ChannelDisconnected(
                             threads::ChannelDisconnected,
@@ -91,6 +107,9 @@ impl ApplicationHandler for Handler {
                             // The other end has hung up. We should shut down
                             // too.
                             event_loop.exit();
+                        }
+                        OnFrameError::GameEngine(err) => {
+                            self.on_error(err, event_loop);
                         }
                     }
 
@@ -115,14 +134,22 @@ impl ApplicationHandler for Handler {
 }
 
 fn on_frame(
-    game_io: &GameIo,
+    game_engine: &mut GameEngine<RawTerminalAdapter>,
+    terminal_input_rx: &Receiver<TerminalInput>,
+    _: &GameIo,
     color: &mut wgpu::Color,
 ) -> Result<(), OnFrameError> {
-    game_io.input.send(OnRender)?;
+    // If a new frame is being rendered on the other thread, then the game
+    // engine can get ready to provide the next one.
+    game_engine.on_frame()?;
 
-    while let Some(GameOutput::SubmitColor {
+    while let Some(input) = terminal_input_rx.try_recv()? {
+        game_engine.on_editor_input(input)?;
+    }
+
+    for GameOutput::SubmitColor {
         color: [r, g, b, a],
-    }) = game_io.output.try_recv()?
+    } in game_engine.game_output()
     {
         *color = wgpu::Color { r, g, b, a };
     }
@@ -134,6 +161,9 @@ fn on_frame(
 enum OnFrameError {
     #[error(transparent)]
     ChannelDisconnected(#[from] threads::ChannelDisconnected),
+
+    #[error(transparent)]
+    GameEngine(#[from] anyhow::Error),
 }
 
 struct Resources {
@@ -232,7 +262,4 @@ impl Renderer {
     }
 }
 
-struct GameIo {
-    input: Sender<OnRender>,
-    output: Receiver<GameOutput>,
-}
+struct GameIo {}
