@@ -4,8 +4,8 @@ use crossterm::event::{self, Event, KeyCode, KeyModifiers};
 
 use crate::game_engine::TerminalInputEvent;
 
-pub fn read_editor_event()
--> anyhow::Result<ControlFlow<(), Option<TerminalInputEvent>>> {
+pub fn read_editor_event() -> anyhow::Result<ControlFlow<(), TerminalInputEvent>>
+{
     let timeout = Duration::from_millis(50);
     let event_ready = event::poll(timeout)?;
 
@@ -14,13 +14,13 @@ pub fn read_editor_event()
         // learn if the other thread has shut down. Otherwise, this thread
         // will hang forever, blocking on input, preventing the application
         // from shutting down.
-        return Ok(ControlFlow::Continue(Some(TerminalInputEvent::Heartbeat)));
+        return Ok(ControlFlow::Continue(TerminalInputEvent::Heartbeat));
     }
 
     let event = event::read()?;
 
     let Event::Key(key_event) = event else {
-        return Ok(ControlFlow::Continue(Some(TerminalInputEvent::Heartbeat)));
+        return Ok(ControlFlow::Continue(TerminalInputEvent::Heartbeat));
     };
 
     let ctrl_pressed = key_event.modifiers.contains(KeyModifiers::CONTROL);
@@ -53,5 +53,5 @@ pub fn read_editor_event()
         _ => TerminalInputEvent::Heartbeat,
     };
 
-    Ok(ControlFlow::Continue(Some(event)))
+    Ok(ControlFlow::Continue(event))
 }

@@ -63,12 +63,8 @@ pub fn start(game: Box<dyn Game + Send>) -> anyhow::Result<Threads> {
     let editor_input = spawn("editor input", move || {
         loop {
             match read_editor_event() {
-                Ok(ControlFlow::Continue(maybe_input)) => {
-                    let event = if let Some(input) = maybe_input {
-                        EditorEvent::Input { input }
-                    } else {
-                        unreachable!("Terminal no longer emits `None` events.");
-                    };
+                Ok(ControlFlow::Continue(input)) => {
+                    let event = EditorEvent::Input { input };
 
                     editor_event_tx.send(event)?;
                 }
