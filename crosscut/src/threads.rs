@@ -12,7 +12,7 @@ use anyhow::anyhow;
 use crossbeam_channel::{RecvError, SendError, TryRecvError};
 
 use crate::{
-    game_engine::{Game, GameEngine, GameOutput, OnRender, TerminalInputEvent},
+    game_engine::{Game, GameEngine, GameOutput, OnRender},
     io::editor::input::read_editor_event,
 };
 
@@ -64,7 +64,7 @@ pub fn start(game: Box<dyn Game + Send>) -> anyhow::Result<Threads> {
         loop {
             match read_editor_event() {
                 Ok(ControlFlow::Continue(input)) => {
-                    let event = EditorEvent::Input { input };
+                    let event = input;
 
                     editor_event_tx.send(event)?;
                 }
@@ -85,7 +85,7 @@ pub fn start(game: Box<dyn Game + Send>) -> anyhow::Result<Threads> {
             // game engine can get ready to provide the next one.
             game_engine.on_frame()?;
 
-            if let Some(EditorEvent::Input { input }) = editor_event {
+            if let Some(input) = editor_event {
                 game_engine.on_editor_input(input)?;
             }
 
@@ -240,9 +240,4 @@ where
             })?;
 
     Ok(ThreadHandle::new(handle))
-}
-
-#[derive(Debug)]
-enum EditorEvent {
-    Input { input: TerminalInputEvent },
 }
