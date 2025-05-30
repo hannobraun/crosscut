@@ -132,14 +132,14 @@ impl ApplicationHandler for Handler {
 
 fn on_frame(
     game_engine: &mut GameEngine<RawTerminalAdapter>,
-    terminal_input_rx: &Receiver<TerminalInput>,
+    terminal_input: &Receiver<TerminalInput>,
     color: &mut wgpu::Color,
 ) -> Result<(), OnFrameError> {
     // If a new frame is being rendered on the other thread, then the game
     // engine can get ready to provide the next one.
     game_engine.on_frame()?;
 
-    while let Some(input) = terminal_input_rx.try_recv()? {
+    while let Some(input) = terminal_input.try_recv()? {
         game_engine.on_editor_input(input)?;
     }
 
