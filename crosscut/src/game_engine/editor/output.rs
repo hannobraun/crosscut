@@ -1,7 +1,7 @@
 use crossterm::style::{Attribute, Color};
 
 use crate::{
-    io::terminal::output::{Cursor, EditorOutputAdapter},
+    io::terminal::output::{Cursor, TerminalOutputAdapter},
     language::{
         code::{Codebase, NodePath, SyntaxNode},
         editor::{Editor, EditorLayout, EditorLine},
@@ -33,7 +33,7 @@ pub fn codebase_to_string(codebase: &Codebase) -> String {
 #[cfg(test)]
 fn codebase_to_adapter(
     codebase: &Codebase,
-    adapter: &mut impl EditorOutputAdapter,
+    adapter: &mut impl TerminalOutputAdapter,
 ) {
     let layout = EditorLayout::new(codebase.root(), codebase);
 
@@ -55,7 +55,7 @@ pub struct TerminalEditorOutput<A> {
 
 impl<A> TerminalEditorOutput<A>
 where
-    A: EditorOutputAdapter,
+    A: TerminalOutputAdapter,
 {
     pub fn new(adapter: A) -> Self {
         Self { adapter }
@@ -93,7 +93,7 @@ where
     }
 }
 
-fn render_runtime_state<A: EditorOutputAdapter>(
+fn render_runtime_state<A: TerminalOutputAdapter>(
     adapter: &mut A,
     context: &RenderContext,
 ) -> anyhow::Result<()> {
@@ -150,7 +150,7 @@ fn render_runtime_state<A: EditorOutputAdapter>(
     Ok(())
 }
 
-fn render_layout<A: EditorOutputAdapter>(
+fn render_layout<A: TerminalOutputAdapter>(
     layout: &EditorLayout,
     adapter: &mut A,
     context: &mut RenderContext,
@@ -166,7 +166,7 @@ fn render_layout<A: EditorOutputAdapter>(
     Ok(())
 }
 
-fn render_possibly_active_line<A: EditorOutputAdapter>(
+fn render_possibly_active_line<A: TerminalOutputAdapter>(
     line: &EditorLine,
     adapter: &mut A,
     context: &mut RenderContext,
@@ -192,7 +192,7 @@ fn render_possibly_active_line<A: EditorOutputAdapter>(
     Ok(())
 }
 
-fn render_line<A: EditorOutputAdapter>(
+fn render_line<A: TerminalOutputAdapter>(
     line: &EditorLine,
     adapter: &mut A,
     context: &mut RenderContext,
@@ -226,7 +226,7 @@ fn render_line<A: EditorOutputAdapter>(
     Ok(())
 }
 
-fn render_node<A: EditorOutputAdapter>(
+fn render_node<A: TerminalOutputAdapter>(
     path: &NodePath,
     adapter: &mut A,
     context: &mut RenderContext,
@@ -260,7 +260,7 @@ fn render_node<A: EditorOutputAdapter>(
     Ok(())
 }
 
-fn render_prompt<A: EditorOutputAdapter>(
+fn render_prompt<A: TerminalOutputAdapter>(
     adapter: &mut A,
     editor_input: &TerminalEditorInput,
     context: &mut RenderContext,
@@ -289,7 +289,7 @@ fn render_prompt<A: EditorOutputAdapter>(
 //
 // This is tracked in this issue:
 // https://github.com/hannobraun/crosscut/issues/67
-fn render_help<A: EditorOutputAdapter>(
+fn render_help<A: TerminalOutputAdapter>(
     adapter: &mut A,
     context: &RenderContext,
 ) -> anyhow::Result<()> {

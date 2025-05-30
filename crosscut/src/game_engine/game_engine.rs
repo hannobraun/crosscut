@@ -1,7 +1,7 @@
 use std::time::{Duration, Instant};
 
 use crate::{
-    io::terminal::output::{EditorOutputAdapter, RawTerminalAdapter},
+    io::terminal::output::{RawTerminalAdapter, TerminalOutputAdapter},
     language::{
         code::Type,
         language::Language,
@@ -36,7 +36,7 @@ impl GameEngine<RawTerminalAdapter> {
 
 impl<A> GameEngine<A>
 where
-    A: EditorOutputAdapter,
+    A: TerminalOutputAdapter,
 {
     pub fn new(game: Box<dyn Game>, adapter: A) -> Self {
         let mut game_engine = Self {

@@ -10,7 +10,7 @@ use crossterm::{
     terminal::{self, ClearType},
 };
 
-pub trait EditorOutputAdapter: fmt::Write {
+pub trait TerminalOutputAdapter: fmt::Write {
     fn clear(&mut self) -> io::Result<()> {
         Ok(())
     }
@@ -52,7 +52,7 @@ pub trait EditorOutputAdapter: fmt::Write {
 #[derive(Debug)]
 pub struct DebugOutputAdapter;
 
-impl EditorOutputAdapter for DebugOutputAdapter {}
+impl TerminalOutputAdapter for DebugOutputAdapter {}
 
 impl fmt::Write for DebugOutputAdapter {
     fn write_str(&mut self, s: &str) -> fmt::Result {
@@ -65,7 +65,7 @@ pub struct StringOutputAdapter {
     pub output: String,
 }
 
-impl EditorOutputAdapter for StringOutputAdapter {}
+impl TerminalOutputAdapter for StringOutputAdapter {}
 
 impl fmt::Write for StringOutputAdapter {
     fn write_str(&mut self, s: &str) -> fmt::Result {
@@ -139,7 +139,7 @@ impl RawTerminalAdapter {
     }
 }
 
-impl EditorOutputAdapter for RawTerminalAdapter {
+impl TerminalOutputAdapter for RawTerminalAdapter {
     fn clear(&mut self) -> io::Result<()> {
         self.w.queue(terminal::Clear(ClearType::All))?;
         self.move_cursor_to([0, 0])?;
