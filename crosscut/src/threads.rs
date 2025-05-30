@@ -60,7 +60,7 @@ pub fn start(game: Box<dyn Game + Send>) -> anyhow::Result<Threads> {
     let (game_input_tx, game_input_rx) = channel::<OnRender>();
     let (game_output_tx, game_output_rx) = channel();
 
-    let editor_input = spawn("editor input", move || {
+    let editor_input = spawn("terminal input", move || {
         loop {
             match read_editor_event() {
                 Ok(ControlFlow::Continue(input)) => {
