@@ -61,9 +61,9 @@ where
 
     pub fn on_editor_input(
         &mut self,
-        event: TerminalInput,
+        input: TerminalInput,
     ) -> anyhow::Result<()> {
-        self.editor_input.on_input(event, &mut self.language)?;
+        self.editor_input.on_input(input, &mut self.language)?;
         self.run_game_for_a_few_steps();
         self.render_editor()?;
 
