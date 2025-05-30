@@ -83,12 +83,17 @@ impl ApplicationHandler for Handler {
                 event_loop.exit();
             }
             WindowEvent::RedrawRequested => {
-                if let Err(OnFrameError::ChannelDisconnected(
-                    threads::ChannelDisconnected,
-                )) = on_frame(&self.game_io, &mut self.color)
-                {
-                    // The other end has hung up. We should shut down too.
-                    event_loop.exit();
+                if let Err(err) = on_frame(&self.game_io, &mut self.color) {
+                    match err {
+                        OnFrameError::ChannelDisconnected(
+                            threads::ChannelDisconnected,
+                        ) => {
+                            // The other end has hung up. We should shut down
+                            // too.
+                            event_loop.exit();
+                        }
+                    }
+
                     return;
                 }
 
