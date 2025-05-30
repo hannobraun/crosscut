@@ -79,13 +79,12 @@ pub fn start(game: Box<dyn Game + Send>) -> anyhow::Result<Threads> {
 
         loop {
             let OnRender = game_input_rx.recv()?;
-            let editor_event = editor_event_rx.try_recv()?;
 
             // If a new frame is being rendered on the other thread, then the
             // game engine can get ready to provide the next one.
             game_engine.on_frame()?;
 
-            if let Some(input) = editor_event {
+            if let Some(input) = editor_event_rx.try_recv()? {
                 game_engine.on_editor_input(input)?;
             }
 
