@@ -25,7 +25,7 @@ pub fn read_terminal_input()
 
     let ctrl_pressed = key_event.modifiers.contains(KeyModifiers::CONTROL);
 
-    let event = match key_event.code {
+    let input = match key_event.code {
         KeyCode::Char('c') if ctrl_pressed => {
             // The terminal is in raw mode, so we have to handle CTRL+C
             // manually.
@@ -53,5 +53,5 @@ pub fn read_terminal_input()
         _ => TerminalInputEvent::Heartbeat,
     };
 
-    Ok(ControlFlow::Continue(event))
+    Ok(ControlFlow::Continue(input))
 }
