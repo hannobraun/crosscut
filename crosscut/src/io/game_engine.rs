@@ -83,8 +83,9 @@ impl ApplicationHandler for Handler {
                 event_loop.exit();
             }
             WindowEvent::RedrawRequested => {
-                if let Err(threads::ChannelDisconnected) =
-                    on_frame(&self.game_io, &mut self.color)
+                if let Err(OnFrameError::ChannelDisconnected(
+                    threads::ChannelDisconnected,
+                )) = on_frame(&self.game_io, &mut self.color)
                 {
                     // The other end has hung up. We should shut down too.
                     event_loop.exit();
@@ -111,7 +112,7 @@ impl ApplicationHandler for Handler {
 fn on_frame(
     game_io: &GameIo,
     color: &mut wgpu::Color,
-) -> Result<(), threads::ChannelDisconnected> {
+) -> Result<(), OnFrameError> {
     game_io.input.send(OnRender)?;
 
     while let Some(GameOutput::SubmitColor {
@@ -122,6 +123,12 @@ fn on_frame(
     }
 
     Ok(())
+}
+
+#[derive(Debug, thiserror::Error)]
+enum OnFrameError {
+    #[error(transparent)]
+    ChannelDisconnected(#[from] threads::ChannelDisconnected),
 }
 
 struct Resources {
