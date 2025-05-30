@@ -26,20 +26,19 @@ impl TerminalEditorInput {
     ) -> anyhow::Result<()> {
         match &mut self.mode {
             EditorMode::Edit => {
-                let event = match event {
+                match event {
                     TerminalInputEvent::Escape => {
                         self.mode = EditorMode::Command {
                             input: EditorInputBuffer::empty(),
                             cursor: 0,
                         };
-                        None
                     }
-                    event => event.into_editor_input_event(),
+                    event => {
+                        if let Some(event) = event.into_editor_input_event() {
+                            language.on_input(event);
+                        }
+                    }
                 };
-
-                if let Some(event) = event {
-                    language.on_input(event);
-                }
             }
             EditorMode::Command { input, cursor } => match event {
                 TerminalInputEvent::Enter => {
