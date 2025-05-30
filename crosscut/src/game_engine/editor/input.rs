@@ -21,12 +21,12 @@ impl TerminalEditorInput {
 
     pub fn on_input(
         &mut self,
-        event: TerminalInputEvent,
+        event: TerminalInput,
         language: &mut Language,
     ) -> anyhow::Result<()> {
         match &mut self.mode {
             EditorMode::Edit => match event {
-                TerminalInputEvent::Escape => {
+                TerminalInput::Escape => {
                     self.mode = EditorMode::Command {
                         input: EditorInputBuffer::empty(),
                         cursor: 0,
@@ -39,7 +39,7 @@ impl TerminalEditorInput {
                 }
             },
             EditorMode::Command { input, cursor } => match event {
-                TerminalInputEvent::Enter => {
+                TerminalInput::Enter => {
                     match input.buffer().as_str() {
                         "clear" => {
                             language.on_command(EditorCommand::Clear)?;
@@ -59,7 +59,7 @@ impl TerminalEditorInput {
 
                     self.mode = EditorMode::Edit;
                 }
-                TerminalInputEvent::Escape => {
+                TerminalInput::Escape => {
                     self.mode = EditorMode::Edit;
                 }
                 event => {
@@ -96,7 +96,7 @@ impl EditorMode {
 }
 
 #[derive(Debug)]
-pub enum TerminalInputEvent {
+pub enum TerminalInput {
     Character {
         ch: char,
     },
@@ -132,7 +132,7 @@ pub enum TerminalInputEvent {
     Heartbeat,
 }
 
-impl TerminalInputEvent {
+impl TerminalInput {
     fn into_editor_input_event(self) -> Option<EditorInputEvent> {
         match self {
             Self::Character { ch } if ch.is_whitespace() => {

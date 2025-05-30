@@ -2,10 +2,9 @@ use std::{ops::ControlFlow, time::Duration};
 
 use crossterm::event::{self, Event, KeyCode, KeyModifiers};
 
-use crate::game_engine::TerminalInputEvent;
+use crate::game_engine::TerminalInput;
 
-pub fn read_terminal_input()
--> anyhow::Result<ControlFlow<(), TerminalInputEvent>> {
+pub fn read_terminal_input() -> anyhow::Result<ControlFlow<(), TerminalInput>> {
     let timeout = Duration::from_millis(50);
     let event_ready = event::poll(timeout)?;
 
@@ -14,13 +13,13 @@ pub fn read_terminal_input()
         // learn if the other thread has shut down. Otherwise, this thread
         // will hang forever, blocking on input, preventing the application
         // from shutting down.
-        return Ok(ControlFlow::Continue(TerminalInputEvent::Heartbeat));
+        return Ok(ControlFlow::Continue(TerminalInput::Heartbeat));
     }
 
     let event = event::read()?;
 
     let Event::Key(key_event) = event else {
-        return Ok(ControlFlow::Continue(TerminalInputEvent::Heartbeat));
+        return Ok(ControlFlow::Continue(TerminalInput::Heartbeat));
     };
 
     let ctrl_pressed = key_event.modifiers.contains(KeyModifiers::CONTROL);
@@ -39,18 +38,18 @@ pub fn read_terminal_input()
             // tracked here:
             // https://github.com/hannobraun/crosscut/issues/70
 
-            TerminalInputEvent::Character { ch }
+            TerminalInput::Character { ch }
         }
 
-        KeyCode::Backspace => TerminalInputEvent::Backspace { ctrl_pressed },
-        KeyCode::Enter => TerminalInputEvent::Enter,
-        KeyCode::Left => TerminalInputEvent::Left,
-        KeyCode::Right => TerminalInputEvent::Right,
-        KeyCode::Up => TerminalInputEvent::Up,
-        KeyCode::Down => TerminalInputEvent::Down,
-        KeyCode::Delete => TerminalInputEvent::Delete { ctrl_pressed },
-        KeyCode::Esc => TerminalInputEvent::Escape,
-        _ => TerminalInputEvent::Heartbeat,
+        KeyCode::Backspace => TerminalInput::Backspace { ctrl_pressed },
+        KeyCode::Enter => TerminalInput::Enter,
+        KeyCode::Left => TerminalInput::Left,
+        KeyCode::Right => TerminalInput::Right,
+        KeyCode::Up => TerminalInput::Up,
+        KeyCode::Down => TerminalInput::Down,
+        KeyCode::Delete => TerminalInput::Delete { ctrl_pressed },
+        KeyCode::Esc => TerminalInput::Escape,
+        _ => TerminalInput::Heartbeat,
     };
 
     Ok(ControlFlow::Continue(input))

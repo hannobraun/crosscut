@@ -10,7 +10,7 @@ use crate::{
 };
 
 use super::{
-    Game, TerminalInputEvent,
+    Game, TerminalInput,
     editor::{input::TerminalEditorInput, output::TerminalEditorOutput},
 };
 
@@ -61,7 +61,7 @@ where
 
     pub fn on_editor_input(
         &mut self,
-        event: TerminalInputEvent,
+        event: TerminalInput,
     ) -> anyhow::Result<()> {
         self.editor_input.on_input(event, &mut self.language)?;
         self.run_game_for_a_few_steps();
@@ -265,12 +265,12 @@ impl GameEngine<DebugOutputAdapter> {
 
     pub fn cursor_down(&mut self) -> &mut Self {
         assert!(self.editor_input.mode().is_edit_mode());
-        self.on_editor_input(TerminalInputEvent::Down).unwrap();
+        self.on_editor_input(TerminalInput::Down).unwrap();
         self
     }
 
     pub fn enter_command_mode(&mut self) -> &mut Self {
-        self.on_editor_input(TerminalInputEvent::Escape).unwrap();
+        self.on_editor_input(TerminalInput::Escape).unwrap();
         self
     }
 
@@ -285,17 +285,17 @@ impl GameEngine<DebugOutputAdapter> {
     }
 
     pub fn execute_command(&mut self) -> &mut Self {
-        self.on_editor_input(TerminalInputEvent::Enter).unwrap();
+        self.on_editor_input(TerminalInput::Enter).unwrap();
         self
     }
 
     pub fn abort_command(&mut self) -> &mut Self {
-        self.on_editor_input(TerminalInputEvent::Escape).unwrap();
+        self.on_editor_input(TerminalInput::Escape).unwrap();
         self
     }
 
     pub fn on_char(&mut self, ch: char) -> &mut Self {
-        self.on_editor_input(TerminalInputEvent::Character { ch })
+        self.on_editor_input(TerminalInput::Character { ch })
             .unwrap();
         self
     }

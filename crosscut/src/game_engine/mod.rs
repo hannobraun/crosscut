@@ -3,7 +3,7 @@ mod game;
 mod game_engine;
 
 pub use self::{
-    editor::input::TerminalInputEvent,
+    editor::input::TerminalInput,
     game::{Game, PureCrosscutGame},
     game_engine::{GameEngine, GameOutput, OnRender},
 };
