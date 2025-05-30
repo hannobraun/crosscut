@@ -32,7 +32,6 @@ pub fn start_and_wait(
         resources: None,
         result: Ok(()),
         color: wgpu::Color::BLACK,
-        game_io: GameIo {},
     };
 
     let event_loop = EventLoop::new()?;
@@ -47,7 +46,6 @@ struct Handler {
     resources: Option<Resources>,
     result: anyhow::Result<()>,
     color: wgpu::Color,
-    game_io: GameIo,
 }
 
 impl Handler {
@@ -97,7 +95,6 @@ impl ApplicationHandler for Handler {
                 if let Err(err) = on_frame(
                     &mut self.game_engine,
                     &self.terminal_input,
-                    &self.game_io,
                     &mut self.color,
                 ) {
                     match err {
@@ -136,7 +133,6 @@ impl ApplicationHandler for Handler {
 fn on_frame(
     game_engine: &mut GameEngine<RawTerminalAdapter>,
     terminal_input_rx: &Receiver<TerminalInput>,
-    _: &GameIo,
     color: &mut wgpu::Color,
 ) -> Result<(), OnFrameError> {
     // If a new frame is being rendered on the other thread, then the game
@@ -261,5 +257,3 @@ impl Renderer {
         Ok(())
     }
 }
-
-struct GameIo {}
