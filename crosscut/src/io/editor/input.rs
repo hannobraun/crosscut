@@ -14,13 +14,13 @@ pub fn read_editor_event()
         // learn if the other thread has shut down. Otherwise, this thread
         // will hang forever, blocking on input, preventing the application
         // from shutting down.
-        return Ok(ControlFlow::Continue(None));
+        return Ok(ControlFlow::Continue(Some(TerminalInputEvent::Heartbeat)));
     }
 
     let event = event::read()?;
 
     let Event::Key(key_event) = event else {
-        return Ok(ControlFlow::Continue(None));
+        return Ok(ControlFlow::Continue(Some(TerminalInputEvent::Heartbeat)));
     };
 
     let ctrl_pressed = key_event.modifiers.contains(KeyModifiers::CONTROL);
@@ -52,7 +52,7 @@ pub fn read_editor_event()
         KeyCode::Down => Some(TerminalInputEvent::Down),
         KeyCode::Delete => Some(TerminalInputEvent::Delete { ctrl_pressed }),
         KeyCode::Esc => Some(TerminalInputEvent::Escape),
-        _ => None,
+        _ => Some(TerminalInputEvent::Heartbeat),
     };
 
     Ok(ControlFlow::Continue(event))

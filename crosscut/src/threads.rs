@@ -67,7 +67,7 @@ pub fn start(game: Box<dyn Game + Send>) -> anyhow::Result<Threads> {
                     let event = if let Some(input) = maybe_input {
                         EditorEvent::Input { input }
                     } else {
-                        EditorEvent::Heartbeat
+                        unreachable!("Terminal no longer emits `None` events.");
                     };
 
                     editor_event_tx.send(event)?;
@@ -93,7 +93,6 @@ pub fn start(game: Box<dyn Game + Send>) -> anyhow::Result<Threads> {
                 Some(EditorEvent::Input { input }) => {
                     game_engine.on_editor_input(input)?;
                 }
-                Some(EditorEvent::Heartbeat) => {}
                 None => {}
             }
 
@@ -252,22 +251,5 @@ where
 
 #[derive(Debug)]
 enum EditorEvent {
-    Input {
-        input: TerminalInputEvent,
-    },
-
-    /// # An event that has no effect when processed
-    ///
-    /// If a thread shuts down, either because of an error, or because the
-    /// application is supposed to shut down as a whole, that needs to propagate
-    /// to the other threads.
-    ///
-    /// For some threads, this is easily achieved, because they block on reading
-    /// from a channel from another thread, which will fail the moment that
-    /// other thread shuts down. Other threads block on something else, and
-    /// don't benefit from this mechanism.
-    ///
-    /// Those other threads need to instead _send_ to another thread from time
-    /// to time, to learn about the shutdown. This is what this event is for.
-    Heartbeat,
+    Input { input: TerminalInputEvent },
 }

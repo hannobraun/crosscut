@@ -97,10 +97,16 @@ impl EditorMode {
 
 #[derive(Debug)]
 pub enum TerminalInputEvent {
-    Character { ch: char },
+    Character {
+        ch: char,
+    },
 
-    Backspace { ctrl_pressed: bool },
-    Delete { ctrl_pressed: bool },
+    Backspace {
+        ctrl_pressed: bool,
+    },
+    Delete {
+        ctrl_pressed: bool,
+    },
 
     Left,
     Right,
@@ -109,6 +115,21 @@ pub enum TerminalInputEvent {
 
     Enter,
     Escape,
+
+    /// # An event that has no effect when processed
+    ///
+    /// If a thread shuts down, either because of an error, or because the
+    /// application is supposed to shut down as a whole, that needs to propagate
+    /// to the other threads.
+    ///
+    /// For some threads, this is easily achieved, because they block on reading
+    /// from a channel from another thread, which will fail the moment that
+    /// other thread shuts down. Other threads block on something else, and
+    /// don't benefit from this mechanism.
+    ///
+    /// Those other threads need to instead _send_ to another thread from time
+    /// to time, to learn about the shutdown. This is what this event is for.
+    Heartbeat,
 }
 
 impl TerminalInputEvent {
