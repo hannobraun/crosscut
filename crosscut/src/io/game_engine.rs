@@ -84,33 +84,11 @@ impl ApplicationHandler for Handler {
             }
             WindowEvent::RedrawRequested => {
                 if let Err(threads::ChannelDisconnected) =
-                    self.game_io.input.send(OnRender)
+                    on_frame(&self.game_io, &mut self.color)
                 {
                     // The other end has hung up. We should shut down too.
                     event_loop.exit();
                     return;
-                }
-
-                loop {
-                    match self.game_io.output.try_recv() {
-                        Ok(Some(GameOutput::SubmitColor {
-                            color: [r, g, b, a],
-                        })) => {
-                            self.color = wgpu::Color { r, g, b, a };
-                        }
-                        Ok(None) => {
-                            // No update, so nothing to do here. If we had an
-                            // update in an earlier iteration of the loop, we'll
-                            // use that one below.
-                            break;
-                        }
-                        Err(threads::ChannelDisconnected) => {
-                            // The other end has hung up. Time for us to shut
-                            // down too.
-                            event_loop.exit();
-                            return;
-                        }
-                    };
                 }
 
                 if let Err(err) = resources.renderer.render(self.color) {
@@ -128,6 +106,22 @@ impl ApplicationHandler for Handler {
 
         resources.window.request_redraw();
     }
+}
+
+fn on_frame(
+    game_io: &GameIo,
+    color: &mut wgpu::Color,
+) -> Result<(), threads::ChannelDisconnected> {
+    game_io.input.send(OnRender)?;
+
+    while let Some(GameOutput::SubmitColor {
+        color: [r, g, b, a],
+    }) = game_io.output.try_recv()?
+    {
+        *color = wgpu::Color { r, g, b, a };
+    }
+
+    Ok(())
 }
 
 struct Resources {
