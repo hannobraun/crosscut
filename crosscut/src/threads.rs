@@ -64,9 +64,7 @@ pub fn start(game: Box<dyn Game + Send>) -> anyhow::Result<Threads> {
         loop {
             match read_editor_event() {
                 Ok(ControlFlow::Continue(input)) => {
-                    let event = input;
-
-                    editor_event_tx.send(event)?;
+                    editor_event_tx.send(input)?;
                 }
                 Ok(ControlFlow::Break(())) => break Ok(()),
                 Err(err) => break Err(Error::Other { err }),
