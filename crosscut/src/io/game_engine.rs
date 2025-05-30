@@ -33,7 +33,7 @@ pub fn start_and_wait(
 }
 
 struct Handler {
-    resources: Option<ApplicationResources>,
+    resources: Option<Resources>,
     result: anyhow::Result<()>,
     color: wgpu::Color,
     game_io: GameIo,
@@ -48,7 +48,7 @@ impl Handler {
 
 impl ApplicationHandler for Handler {
     fn resumed(&mut self, event_loop: &ActiveEventLoop) {
-        match ApplicationResources::new(event_loop) {
+        match Resources::new(event_loop) {
             Ok(resources) => {
                 self.resources = Some(resources);
             }
@@ -130,12 +130,12 @@ impl ApplicationHandler for Handler {
     }
 }
 
-struct ApplicationResources {
+struct Resources {
     window: Arc<Window>,
     renderer: Renderer,
 }
 
-impl ApplicationResources {
+impl Resources {
     fn new(event_loop: &ActiveEventLoop) -> anyhow::Result<Self> {
         let window = {
             let window = event_loop.create_window(
