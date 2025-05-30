@@ -40,11 +40,7 @@ struct Handler {
 }
 
 impl Handler {
-    fn handle_error(
-        &mut self,
-        err: anyhow::Error,
-        event_loop: &ActiveEventLoop,
-    ) {
+    fn on_error(&mut self, err: anyhow::Error, event_loop: &ActiveEventLoop) {
         self.result = Err(err);
         event_loop.exit();
     }
@@ -57,7 +53,7 @@ impl ApplicationHandler for Handler {
                 self.resources = Some(resources);
             }
             Err(err) => {
-                self.handle_error(err, event_loop);
+                self.on_error(err, event_loop);
             }
         }
     }
@@ -118,7 +114,7 @@ impl ApplicationHandler for Handler {
                 }
 
                 if let Err(err) = resources.renderer.render(self.color) {
-                    self.handle_error(err, event_loop);
+                    self.on_error(err, event_loop);
                 }
             }
             _ => {}
