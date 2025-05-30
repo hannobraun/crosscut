@@ -53,7 +53,7 @@ impl TerminalEditorInput {
                         _ => {
                             // This should result in an error message being
                             // displayed where the user can see it. For now, we
-                            // just ignore it thought.
+                            // just ignore it though.
                         }
                     }
 
