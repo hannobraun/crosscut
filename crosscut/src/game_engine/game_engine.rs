@@ -52,7 +52,7 @@ where
         game_engine
     }
 
-    pub fn render_editor(&mut self) -> anyhow::Result<()> {
+    fn render_editor(&mut self) -> anyhow::Result<()> {
         self.editor_output
             .render(&self.language, &self.editor_input)?;
 
