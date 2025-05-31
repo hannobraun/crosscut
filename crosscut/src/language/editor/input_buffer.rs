@@ -19,7 +19,7 @@ impl EditorInputBuffer {
         }
     }
 
-    pub fn buffer(&self) -> &String {
+    pub fn contents(&self) -> &String {
         &self.buffer
     }
 
@@ -156,10 +156,10 @@ mod tests {
         let mut cursor = 0;
 
         input.update(Insert { ch: '1' }, &mut cursor);
-        assert_eq!(input.buffer(), "1");
+        assert_eq!(input.contents(), "1");
 
         input.update(Insert { ch: '2' }, &mut cursor);
-        assert_eq!(input.buffer(), "12");
+        assert_eq!(input.contents(), "12");
     }
 
     #[test]
@@ -168,15 +168,15 @@ mod tests {
         let mut cursor = 0;
 
         input.update(Insert { ch: '2' }, &mut cursor);
-        assert_eq!(input.buffer(), "2");
+        assert_eq!(input.contents(), "2");
 
         input.update(MoveCursorLeft, &mut cursor);
         input.update(Insert { ch: '1' }, &mut cursor);
-        assert_eq!(input.buffer(), "12");
+        assert_eq!(input.contents(), "12");
 
         input.update(MoveCursorRight, &mut cursor);
         input.update(Insert { ch: '7' }, &mut cursor);
-        assert_eq!(input.buffer(), "127");
+        assert_eq!(input.contents(), "127");
     }
 
     #[test]
@@ -186,13 +186,13 @@ mod tests {
 
         input.update(Insert { ch: '1' }, &mut cursor);
         input.update(Insert { ch: '2' }, &mut cursor);
-        assert_eq!(input.buffer(), "12");
+        assert_eq!(input.contents(), "12");
 
         input.update(RemoveLeft { whole_node: false }, &mut cursor);
-        assert_eq!(input.buffer(), "1");
+        assert_eq!(input.contents(), "1");
 
         input.update(RemoveLeft { whole_node: false }, &mut cursor);
-        assert_eq!(input.buffer(), "");
+        assert_eq!(input.contents(), "");
     }
 
     #[test]
@@ -202,11 +202,11 @@ mod tests {
 
         input.update(Insert { ch: '1' }, &mut cursor);
         input.update(Insert { ch: '2' }, &mut cursor);
-        assert_eq!(input.buffer(), "12");
+        assert_eq!(input.contents(), "12");
 
         input.update(MoveCursorLeft, &mut cursor);
         input.update(RemoveLeft { whole_node: false }, &mut cursor);
-        assert_eq!(input.buffer(), "2");
+        assert_eq!(input.contents(), "2");
     }
 
     #[test]
@@ -215,11 +215,11 @@ mod tests {
         let mut cursor = 0;
 
         input.update(Insert { ch: '1' }, &mut cursor);
-        assert_eq!(input.buffer(), "1");
+        assert_eq!(input.contents(), "1");
 
         input.update(MoveCursorLeft, &mut cursor);
         input.update(RemoveLeft { whole_node: false }, &mut cursor);
-        assert_eq!(input.buffer(), "1");
+        assert_eq!(input.contents(), "1");
     }
 
     #[test]
@@ -231,10 +231,10 @@ mod tests {
         input.update(Insert { ch: '2' }, &mut cursor);
         input.update(Insert { ch: '7' }, &mut cursor);
         input.update(MoveCursorLeft, &mut cursor);
-        assert_eq!(input.buffer(), "127");
+        assert_eq!(input.contents(), "127");
 
         input.update(RemoveLeft { whole_node: true }, &mut cursor);
-        assert_eq!(input.buffer(), "7");
+        assert_eq!(input.contents(), "7");
     }
 
     #[test]
@@ -244,15 +244,15 @@ mod tests {
 
         input.update(Insert { ch: '1' }, &mut cursor);
         input.update(Insert { ch: '2' }, &mut cursor);
-        assert_eq!(input.buffer(), "12");
+        assert_eq!(input.contents(), "12");
 
         input.update(MoveCursorLeft, &mut cursor);
         input.update(MoveCursorLeft, &mut cursor);
         input.update(RemoveRight { whole_node: false }, &mut cursor);
-        assert_eq!(input.buffer(), "2");
+        assert_eq!(input.contents(), "2");
 
         input.update(RemoveRight { whole_node: false }, &mut cursor);
-        assert_eq!(input.buffer(), "");
+        assert_eq!(input.contents(), "");
     }
 
     #[test]
@@ -261,10 +261,10 @@ mod tests {
         let mut cursor = 0;
 
         input.update(Insert { ch: '1' }, &mut cursor);
-        assert_eq!(input.buffer(), "1");
+        assert_eq!(input.contents(), "1");
 
         input.update(RemoveRight { whole_node: false }, &mut cursor);
-        assert_eq!(input.buffer(), "1");
+        assert_eq!(input.contents(), "1");
     }
 
     #[test]
@@ -274,7 +274,7 @@ mod tests {
 
         input.update(MoveCursorLeft, &mut cursor);
         input.update(Insert { ch: '1' }, &mut cursor);
-        assert_eq!(input.buffer(), "1");
+        assert_eq!(input.contents(), "1");
     }
 
     #[test]
@@ -284,7 +284,7 @@ mod tests {
 
         input.update(MoveCursorRight, &mut cursor);
         input.update(Insert { ch: '1' }, &mut cursor);
-        assert_eq!(input.buffer(), "1");
+        assert_eq!(input.contents(), "1");
     }
 
     #[test]
@@ -293,7 +293,7 @@ mod tests {
         let mut cursor = 0;
 
         input.update(Insert { ch: '横' }, &mut cursor);
-        assert_eq!(input.buffer(), "横");
+        assert_eq!(input.contents(), "横");
 
         // Inserting involves moving the cursor right. If that wasn't done
         // correctly for the previous insertion, this one will panic.
@@ -305,10 +305,10 @@ mod tests {
         // character would make sure that it actually moved to a character
         // boundary.
         input.update(Insert { ch: '码' }, &mut cursor);
-        assert_eq!(input.buffer(), "横码");
+        assert_eq!(input.contents(), "横码");
 
         input.update(MoveCursorLeft, &mut cursor);
         input.update(Insert { ch: '切' }, &mut cursor);
-        assert_eq!(input.buffer(), "横切码");
+        assert_eq!(input.contents(), "横切码");
     }
 }

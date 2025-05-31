@@ -101,7 +101,7 @@ impl Editor {
 
         let current_node = compiler.codebase().node_at(&self.cursor.path);
         if let SyntaxNode::Add = current_node.node {
-            if !self.input.buffer().is_empty() {
+            if !self.input.contents().is_empty() {
                 let Some((parent, _)) = current_node.path.parent() else {
                     unreachable!(
                         "Current node is a node that is solely dedicated to \
@@ -110,18 +110,18 @@ impl Editor {
                     );
                 };
 
-                self.cursor.path =
-                    compiler.insert_child(parent.clone(), self.input.buffer());
+                self.cursor.path = compiler
+                    .insert_child(parent.clone(), self.input.contents());
             }
         } else if &compiler
             .codebase()
             .nodes()
             .get(self.cursor.path.hash())
             .to_token()
-            != self.input.buffer()
+            != self.input.contents()
         {
             self.cursor.path =
-                compiler.replace(&self.cursor.path, self.input.buffer());
+                compiler.replace(&self.cursor.path, self.input.contents());
         }
 
         let root = compiler.codebase().root().path;

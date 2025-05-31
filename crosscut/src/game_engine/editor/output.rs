@@ -275,7 +275,7 @@ fn render_prompt<A: TerminalOutputAdapter>(
 
             context.cursor = Some(adapter.cursor().move_right(*cursor));
 
-            writeln!(adapter, "{}", buffer.buffer())?;
+            writeln!(adapter, "{}", buffer.contents())?;
             writeln!(adapter, "Press ENTER to confirm, ESC to abort.")?;
         }
     }
