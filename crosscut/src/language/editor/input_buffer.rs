@@ -19,7 +19,7 @@ impl EditorInputBuffer {
         }
     }
 
-    pub fn contents(&self) -> &String {
+    pub fn contents(&self) -> &str {
         &self.buffer
     }
 

@@ -40,7 +40,7 @@ impl TerminalEditorInput {
             },
             EditorMode::Command { buffer, cursor } => match event {
                 TerminalInput::Enter => {
-                    match buffer.contents().as_str() {
+                    match buffer.contents() {
                         "clear" => {
                             language.on_command(EditorCommand::Clear)?;
                         }
