@@ -19,7 +19,7 @@ impl TerminalEditorInput {
     pub fn on_input(
         &mut self,
         input: TerminalInput,
-    ) -> anyhow::Result<Option<EditorInputOrCommand>> {
+    ) -> Option<EditorInputOrCommand> {
         match &mut self.mode {
             EditorMode::Edit => match input {
                 TerminalInput::Escape => {
@@ -29,9 +29,9 @@ impl TerminalEditorInput {
                     };
                 }
                 event => {
-                    return Ok(event
+                    return event
                         .into_editor_input_event()
-                        .map(|input| EditorInputOrCommand::Input { input }));
+                        .map(|input| EditorInputOrCommand::Input { input });
                 }
             },
             EditorMode::Command { buffer, cursor } => match input {
@@ -51,9 +51,9 @@ impl TerminalEditorInput {
 
                     self.mode = EditorMode::Edit;
 
-                    return Ok(command.map(|command| {
+                    return command.map(|command| {
                         EditorInputOrCommand::Command { command }
-                    }));
+                    });
                 }
                 TerminalInput::Escape => {
                     self.mode = EditorMode::Edit;
@@ -66,7 +66,7 @@ impl TerminalEditorInput {
             },
         }
 
-        Ok(None)
+        None
     }
 }
 
