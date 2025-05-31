@@ -37,9 +37,11 @@ where
     A: TerminalOutputAdapter,
 {
     pub fn new(game: Box<dyn Game>, adapter: A) -> Self {
+        let language = Language::new();
+
         let mut game_engine = Self {
             game,
-            language: Language::new(),
+            language,
             game_output: Vec::new(),
             editor_input: TerminalEditorInput::new(),
             editor_output: TerminalEditorOutput::new(adapter),
