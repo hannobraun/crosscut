@@ -52,13 +52,6 @@ where
         game_engine
     }
 
-    fn render_editor(&mut self) -> anyhow::Result<()> {
-        self.editor_output
-            .render(&self.language, &self.editor_input)?;
-
-        Ok(())
-    }
-
     pub fn on_editor_input(
         &mut self,
         input: TerminalInput,
@@ -239,6 +232,13 @@ where
         self.game_output.push(GameOutput::SubmitColor {
             color: [value, value, value, 1.],
         });
+    }
+
+    fn render_editor(&mut self) -> anyhow::Result<()> {
+        self.editor_output
+            .render(&self.language, &self.editor_input)?;
+
+        Ok(())
     }
 }
 
