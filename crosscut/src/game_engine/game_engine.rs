@@ -5,7 +5,10 @@ use crate::{
 
 use super::{
     Game, TerminalInput,
-    editor::{input::TerminalEditorInput, output::TerminalEditorOutput},
+    editor::{
+        input::{EditorInputOrCommand, TerminalEditorInput},
+        output::TerminalEditorOutput,
+    },
 };
 
 pub struct GameEngine<A> {
@@ -50,7 +53,15 @@ where
         &mut self,
         input: TerminalInput,
     ) -> anyhow::Result<()> {
-        self.editor_input.on_input(input, &mut self.language)?;
+        match self.editor_input.on_input(input, &mut self.language)? {
+            Some(EditorInputOrCommand::Input { input }) => {
+                self.language.on_input(input);
+            }
+            Some(EditorInputOrCommand::Command { command }) => {
+                self.language.on_command(command)?;
+            }
+            None => {}
+        }
         self.game
             .on_editor_input(&mut self.language, &mut self.game_output);
         self.render_editor()?;

@@ -22,8 +22,8 @@ impl TerminalEditorInput {
     pub fn on_input(
         &mut self,
         input: TerminalInput,
-        language: &mut Language,
-    ) -> anyhow::Result<()> {
+        _: &mut Language,
+    ) -> anyhow::Result<Option<EditorInputOrCommand>> {
         match &mut self.mode {
             EditorMode::Edit => match input {
                 TerminalInput::Escape => {
@@ -33,9 +33,9 @@ impl TerminalEditorInput {
                     };
                 }
                 event => {
-                    if let Some(event) = event.into_editor_input_event() {
-                        language.on_input(event);
-                    }
+                    return Ok(event
+                        .into_editor_input_event()
+                        .map(|input| EditorInputOrCommand::Input { input }));
                 }
             },
             EditorMode::Command { buffer, cursor } => match input {
@@ -55,9 +55,9 @@ impl TerminalEditorInput {
 
                     self.mode = EditorMode::Edit;
 
-                    if let Some(command) = command {
-                        language.on_command(command)?;
-                    }
+                    return Ok(command.map(|command| {
+                        EditorInputOrCommand::Command { command }
+                    }));
                 }
                 TerminalInput::Escape => {
                     self.mode = EditorMode::Edit;
@@ -70,7 +70,7 @@ impl TerminalEditorInput {
             },
         }
 
-        Ok(())
+        Ok(None)
     }
 }
 
@@ -157,4 +157,9 @@ impl TerminalInput {
             _ => None,
         }
     }
+}
+
+pub enum EditorInputOrCommand {
+    Input { input: EditorInput },
+    Command { command: EditorCommand },
 }
