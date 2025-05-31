@@ -270,7 +270,10 @@ fn render_prompt<A: TerminalOutputAdapter>(
             writeln!(adapter, "Currently editing.")?;
             writeln!(adapter, "Press ESC to enter command mode.")?;
         }
-        EditorMode::Command { input, cursor } => {
+        EditorMode::Command {
+            buffer: input,
+            cursor,
+        } => {
             write!(adapter, "Enter command > ")?;
 
             context.cursor = Some(adapter.cursor().move_right(*cursor));

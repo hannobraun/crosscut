@@ -28,7 +28,7 @@ impl TerminalEditorInput {
             EditorMode::Edit => match event {
                 TerminalInput::Escape => {
                     self.mode = EditorMode::Command {
-                        input: EditorInputBuffer::empty(),
+                        buffer: EditorInputBuffer::empty(),
                         cursor: 0,
                     };
                 }
@@ -38,7 +38,10 @@ impl TerminalEditorInput {
                     }
                 }
             },
-            EditorMode::Command { input, cursor } => match event {
+            EditorMode::Command {
+                buffer: input,
+                cursor,
+            } => match event {
                 TerminalInput::Enter => {
                     match input.buffer().as_str() {
                         "clear" => {
@@ -78,7 +81,7 @@ impl TerminalEditorInput {
 pub enum EditorMode {
     Edit,
     Command {
-        input: EditorInputBuffer,
+        buffer: EditorInputBuffer,
         cursor: usize,
     },
 }
