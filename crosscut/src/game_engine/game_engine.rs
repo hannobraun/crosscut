@@ -56,6 +56,8 @@ where
         &mut self,
         input: TerminalInput,
     ) -> anyhow::Result<()> {
+        let _ = self.game;
+
         self.editor_input.on_input(input, &mut self.language)?;
         self.run_game_for_a_few_steps();
         self.render_editor()?;
@@ -103,8 +105,6 @@ where
     }
 
     fn run_game_for_a_few_steps(&mut self) {
-        let _ = self.game;
-
         if let State::WaitUntil { instant } = self.state {
             if Instant::now() < instant {
                 return;
