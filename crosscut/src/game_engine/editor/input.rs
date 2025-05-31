@@ -38,12 +38,9 @@ impl TerminalEditorInput {
                     }
                 }
             },
-            EditorMode::Command {
-                buffer: input,
-                cursor,
-            } => match event {
+            EditorMode::Command { buffer, cursor } => match event {
                 TerminalInput::Enter => {
-                    match input.buffer().as_str() {
+                    match buffer.buffer().as_str() {
                         "clear" => {
                             language.on_command(EditorCommand::Clear)?;
                         }
@@ -67,7 +64,7 @@ impl TerminalEditorInput {
                 }
                 event => {
                     if let Some(event) = event.into_editor_input_event() {
-                        input.update(event, cursor);
+                        buffer.update(event, cursor);
                     }
                 }
             },
