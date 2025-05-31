@@ -213,8 +213,6 @@ where
                     }
                 }
                 RuntimeState::Finished { output } => {
-                    // This comment exists to force the current formatting.
-
                     if let Ok(body) = output.into_function_body() {
                         // If the program returns a function, we call that.
                         //
