@@ -147,7 +147,6 @@ where
 
             match self.language.step().clone() {
                 RuntimeState::Started | RuntimeState::Running => {
-                    // We're not interested in intermediate values here.
                     continue;
                 }
                 RuntimeState::Effect { effect, .. } => {
