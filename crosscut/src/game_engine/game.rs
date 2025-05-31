@@ -24,7 +24,7 @@ impl Game for PureCrosscutGame {
         &mut self,
         state: &mut State,
         language: &mut Language,
-        game_output: &mut Vec<GameOutput>,
+        output: &mut Vec<GameOutput>,
     ) {
         if let State::WaitUntil { instant } = *state {
             if Instant::now() < instant {
@@ -78,13 +78,9 @@ impl Game for PureCrosscutGame {
                                         let value: f64 = value.into();
                                         let value = value / 255.;
 
-                                        game_output.push(
-                                            GameOutput::SubmitColor {
-                                                color: [
-                                                    value, value, value, 1.,
-                                                ],
-                                            },
-                                        );
+                                        output.push(GameOutput::SubmitColor {
+                                            color: [value, value, value, 1.],
+                                        });
 
                                         *state = State::EndOfFrame;
                                         break;
