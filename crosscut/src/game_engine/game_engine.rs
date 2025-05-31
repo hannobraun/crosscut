@@ -1,9 +1,6 @@
-use std::time::{Duration, Instant};
-
 use crate::{
     io::terminal::output::{RawTerminalAdapter, TerminalOutputAdapter},
     language::{
-        code::Type,
         language::Language,
         runtime::{Effect, RuntimeState, Value},
     },
@@ -48,7 +45,11 @@ where
             editor_output: TerminalEditorOutput::new(adapter),
             state: State::Running,
         };
-        game_engine.run_game_for_a_few_steps();
+        game_engine.game.run_game_for_a_few_steps(
+            &mut game_engine.state,
+            &mut game_engine.language,
+            &mut game_engine.game_output,
+        );
 
         game_engine
     }
@@ -60,7 +61,11 @@ where
         let _ = self.game;
 
         self.editor_input.on_input(input, &mut self.language)?;
-        self.run_game_for_a_few_steps();
+        self.game.run_game_for_a_few_steps(
+            &mut self.state,
+            &mut self.language,
+            &mut self.game_output,
+        );
         self.render_editor()?;
 
         Ok(())
@@ -95,7 +100,11 @@ where
             self.state = State::Running;
         }
 
-        self.run_game_for_a_few_steps();
+        self.game.run_game_for_a_few_steps(
+            &mut self.state,
+            &mut self.language,
+            &mut self.game_output,
+        );
         self.render_editor()?;
 
         Ok(())
@@ -103,130 +112,6 @@ where
 
     pub fn game_output(&mut self) -> impl Iterator<Item = GameOutput> + '_ {
         self.game_output.drain(..)
-    }
-
-    fn run_game_for_a_few_steps(&mut self) {
-        if let State::WaitUntil { instant } = self.state {
-            if Instant::now() < instant {
-                return;
-            }
-
-            match self.language.evaluator().state() {
-                RuntimeState::Effect {
-                    effect: Effect::ApplyProvidedFunction { name, input: _ },
-                    ..
-                } => {
-                    assert_eq!(
-                        name, "sleep_ms",
-                        "Expecting to provide output for `sleep_ms` function, \
-                        because that is the only one that enters this state.",
-                    );
-
-                    self.language
-                        .provide_host_function_output(Value::nothing());
-                }
-                state => {
-                    assert!(
-                        matches!(state, RuntimeState::Started),
-                        "`WaitUntil` state was entered, but expected effect is \
-                        not active. This should only happen, if the runtime \
-                        has been reset.",
-                    );
-                }
-            }
-
-            self.state = State::Running;
-        }
-
-        let mut num_steps = 0;
-
-        loop {
-            num_steps += 1;
-            if num_steps > 1024 {
-                break;
-            }
-
-            match self.language.step().clone() {
-                RuntimeState::Started | RuntimeState::Running => {
-                    continue;
-                }
-                RuntimeState::Effect { effect, .. } => {
-                    match effect {
-                        Effect::ApplyProvidedFunction { name, input } => {
-                            match name.as_str() {
-                                "color" => match input {
-                                    Value::Integer { value } => {
-                                        let value: f64 = value.into();
-                                        let value = value / 255.;
-
-                                        self.game_output.push(
-                                            GameOutput::SubmitColor {
-                                                color: [
-                                                    value, value, value, 1.,
-                                                ],
-                                            },
-                                        );
-
-                                        self.state = State::EndOfFrame;
-                                        break;
-                                    }
-                                    value => {
-                                        self.language.trigger_effect(
-                                            Effect::UnexpectedInput {
-                                                expected: Type::Integer,
-                                                actual: value,
-                                            },
-                                        );
-                                    }
-                                },
-                                "sleep_ms" => match input {
-                                    Value::Integer { value } if value >= 0 => {
-                                        let value = value as u64;
-
-                                        self.state = State::WaitUntil {
-                                            instant: Instant::now()
-                                                + Duration::from_millis(value),
-                                        };
-                                        break;
-                                    }
-                                    value => {
-                                        self.language.trigger_effect(
-                                            Effect::UnexpectedInput {
-                                                expected: Type::Integer,
-                                                actual: value,
-                                            },
-                                        );
-                                    }
-                                },
-                                _ => {
-                                    self.language.trigger_effect(
-                                        Effect::ProvidedFunctionNotFound,
-                                    );
-                                }
-                            };
-                            continue;
-                        }
-                        _ => {
-                            // We can't handle any other effect.
-                            break;
-                        }
-                    }
-                }
-                RuntimeState::Finished { output } => {
-                    if let Ok(body) = output.into_function_body() {
-                        // If the program returns a function, we call that.
-                        //
-                        // Eventually, we would want something more stringent
-                        // here, like expect a `main` function, or a module in a
-                        // specific format. For now, this will do though.
-                        self.language.apply_function(body);
-                        continue;
-                    }
-                }
-            }
-
-            break;
-        }
     }
 
     fn render_editor(&mut self) -> anyhow::Result<()> {

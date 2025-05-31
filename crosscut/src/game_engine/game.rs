@@ -1,10 +1,153 @@
-use std::time::Instant;
+use std::time::{Duration, Instant};
 
-pub trait Game {}
+use crate::language::{
+    code::Type,
+    language::Language,
+    runtime::{Effect, RuntimeState, Value},
+};
+
+use super::GameOutput;
+
+pub trait Game {
+    fn run_game_for_a_few_steps(
+        &mut self,
+        state: &mut State,
+        language: &mut Language,
+        output: &mut Vec<GameOutput>,
+    );
+}
 
 pub struct PureCrosscutGame;
 
-impl Game for PureCrosscutGame {}
+impl Game for PureCrosscutGame {
+    fn run_game_for_a_few_steps(
+        &mut self,
+        state: &mut State,
+        language: &mut Language,
+        game_output: &mut Vec<GameOutput>,
+    ) {
+        if let State::WaitUntil { instant } = *state {
+            if Instant::now() < instant {
+                return;
+            }
+
+            match language.evaluator().state() {
+                RuntimeState::Effect {
+                    effect: Effect::ApplyProvidedFunction { name, input: _ },
+                    ..
+                } => {
+                    assert_eq!(
+                        name, "sleep_ms",
+                        "Expecting to provide output for `sleep_ms` function, \
+                        because that is the only one that enters this state.",
+                    );
+
+                    language.provide_host_function_output(Value::nothing());
+                }
+                state => {
+                    assert!(
+                        matches!(state, RuntimeState::Started),
+                        "`WaitUntil` state was entered, but expected effect is \
+                        not active. This should only happen, if the runtime \
+                        has been reset.",
+                    );
+                }
+            }
+
+            *state = State::Running;
+        }
+
+        let mut num_steps = 0;
+
+        loop {
+            num_steps += 1;
+            if num_steps > 1024 {
+                break;
+            }
+
+            match language.step().clone() {
+                RuntimeState::Started | RuntimeState::Running => {
+                    continue;
+                }
+                RuntimeState::Effect { effect, .. } => {
+                    match effect {
+                        Effect::ApplyProvidedFunction { name, input } => {
+                            match name.as_str() {
+                                "color" => match input {
+                                    Value::Integer { value } => {
+                                        let value: f64 = value.into();
+                                        let value = value / 255.;
+
+                                        game_output.push(
+                                            GameOutput::SubmitColor {
+                                                color: [
+                                                    value, value, value, 1.,
+                                                ],
+                                            },
+                                        );
+
+                                        *state = State::EndOfFrame;
+                                        break;
+                                    }
+                                    value => {
+                                        language.trigger_effect(
+                                            Effect::UnexpectedInput {
+                                                expected: Type::Integer,
+                                                actual: value,
+                                            },
+                                        );
+                                    }
+                                },
+                                "sleep_ms" => match input {
+                                    Value::Integer { value } if value >= 0 => {
+                                        let value = value as u64;
+
+                                        *state = State::WaitUntil {
+                                            instant: Instant::now()
+                                                + Duration::from_millis(value),
+                                        };
+                                        break;
+                                    }
+                                    value => {
+                                        language.trigger_effect(
+                                            Effect::UnexpectedInput {
+                                                expected: Type::Integer,
+                                                actual: value,
+                                            },
+                                        );
+                                    }
+                                },
+                                _ => {
+                                    language.trigger_effect(
+                                        Effect::ProvidedFunctionNotFound,
+                                    );
+                                }
+                            };
+                            continue;
+                        }
+                        _ => {
+                            // We can't handle any other effect.
+                            break;
+                        }
+                    }
+                }
+                RuntimeState::Finished { output } => {
+                    if let Ok(body) = output.into_function_body() {
+                        // If the program returns a function, we call that.
+                        //
+                        // Eventually, we would want something more stringent
+                        // here, like expect a `main` function, or a module in a
+                        // specific format. For now, this will do though.
+                        language.apply_function(body);
+                        continue;
+                    }
+                }
+            }
+
+            break;
+        }
+    }
+}
 
 #[derive(Debug)]
 pub enum State {
