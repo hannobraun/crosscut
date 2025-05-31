@@ -1,5 +1,5 @@
 use crate::language::{
-    editor::{EditorCommand, EditorInputBuffer, EditorInput},
+    editor::{EditorCommand, EditorInput, EditorInputBuffer},
     language::Language,
 };
 
@@ -140,16 +140,12 @@ impl TerminalInput {
             }
             Self::Character { ch } => Some(EditorInput::Insert { ch }),
 
-            Self::Backspace { ctrl_pressed } => {
-                Some(EditorInput::RemoveLeft {
-                    whole_node: ctrl_pressed,
-                })
-            }
-            Self::Delete { ctrl_pressed } => {
-                Some(EditorInput::RemoveRight {
-                    whole_node: ctrl_pressed,
-                })
-            }
+            Self::Backspace { ctrl_pressed } => Some(EditorInput::RemoveLeft {
+                whole_node: ctrl_pressed,
+            }),
+            Self::Delete { ctrl_pressed } => Some(EditorInput::RemoveRight {
+                whole_node: ctrl_pressed,
+            }),
 
             Self::Left => Some(EditorInput::MoveCursorLeft),
             Self::Right => Some(EditorInput::MoveCursorRight),
