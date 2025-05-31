@@ -38,11 +38,7 @@ where
         let mut game_output = Vec::new();
         let mut state = State::Running;
 
-        game.run_game_for_a_few_steps(
-            &mut state,
-            &mut language,
-            &mut game_output,
-        );
+        game.on_start(&mut state, &mut language, &mut game_output);
 
         Self {
             game,

@@ -9,6 +9,13 @@ use crate::language::{
 use super::GameOutput;
 
 pub trait Game {
+    fn on_start(
+        &mut self,
+        state: &mut State,
+        language: &mut Language,
+        output: &mut Vec<GameOutput>,
+    );
+
     fn on_editor_input(
         &mut self,
         state: &mut State,
@@ -34,6 +41,15 @@ pub trait Game {
 pub struct PureCrosscutGame;
 
 impl Game for PureCrosscutGame {
+    fn on_start(
+        &mut self,
+        state: &mut State,
+        language: &mut Language,
+        output: &mut Vec<GameOutput>,
+    ) {
+        self.run_game_for_a_few_steps(state, language, output);
+    }
+
     fn on_editor_input(
         &mut self,
         state: &mut State,
