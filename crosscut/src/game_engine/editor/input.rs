@@ -40,24 +40,24 @@ impl TerminalEditorInput {
             },
             EditorMode::Command { buffer, cursor } => match input {
                 TerminalInput::Enter => {
-                    match buffer.contents() {
-                        "clear" => {
-                            language.on_command(EditorCommand::Clear)?;
-                        }
-                        "dump" => {
-                            language.on_command(EditorCommand::Dump)?;
-                        }
-                        "reset" => {
-                            language.on_command(EditorCommand::Reset)?;
-                        }
+                    let command = match buffer.contents() {
+                        "clear" => Some(EditorCommand::Clear),
+                        "dump" => Some(EditorCommand::Dump),
+                        "reset" => Some(EditorCommand::Reset),
                         _ => {
                             // This should result in an error message being
                             // displayed where the user can see it. For now, we
                             // just ignore it though.
+
+                            None
                         }
-                    }
+                    };
 
                     self.mode = EditorMode::Edit;
+
+                    if let Some(command) = command {
+                        language.on_command(command)?;
+                    }
                 }
                 TerminalInput::Escape => {
                     self.mode = EditorMode::Edit;
