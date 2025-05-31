@@ -59,8 +59,8 @@ impl TerminalEditorInput {
                     self.mode = EditorMode::Edit;
                 }
                 input => {
-                    if let Some(event) = input.into_editor_input_event() {
-                        buffer.update(event, cursor);
+                    if let Some(input) = input.into_editor_input_event() {
+                        buffer.update(input, cursor);
                     }
                 }
             },
