@@ -216,9 +216,13 @@ impl Game for PureCrosscutGame {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Default)]
 pub enum State {
+    #[default]
     Running,
+
     EndOfFrame,
-    WaitUntil { instant: Instant },
+    WaitUntil {
+        instant: Instant,
+    },
 }
