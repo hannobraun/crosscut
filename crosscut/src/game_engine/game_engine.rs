@@ -12,6 +12,7 @@ use crate::{
 use super::{
     Game, TerminalInput,
     editor::{input::TerminalEditorInput, output::TerminalEditorOutput},
+    game::State,
 };
 
 pub struct GameEngine<A> {
@@ -298,11 +299,4 @@ impl GameEngine<DebugOutputAdapter> {
 #[derive(Debug)]
 pub enum GameOutput {
     SubmitColor { color: [f64; 4] },
-}
-
-#[derive(Debug)]
-pub enum State {
-    Running,
-    EndOfFrame,
-    WaitUntil { instant: Instant },
 }
