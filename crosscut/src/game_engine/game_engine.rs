@@ -58,8 +58,6 @@ where
         &mut self,
         input: TerminalInput,
     ) -> anyhow::Result<()> {
-        let _ = self.game;
-
         self.editor_input.on_input(input, &mut self.language)?;
         self.game.run_game_for_a_few_steps(
             &mut self.state,
