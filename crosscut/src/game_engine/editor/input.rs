@@ -30,7 +30,7 @@ impl TerminalEditorInput {
                 }
                 input => {
                     return input
-                        .into_editor_input_event()
+                        .into_editor_input()
                         .map(|input| EditorInputOrCommand::Input { input });
                 }
             },
@@ -59,7 +59,7 @@ impl TerminalEditorInput {
                     self.mode = EditorMode::Edit;
                 }
                 input => {
-                    if let Some(input) = input.into_editor_input_event() {
+                    if let Some(input) = input.into_editor_input() {
                         buffer.update(input, cursor);
                     }
                 }
@@ -129,7 +129,7 @@ pub enum TerminalInput {
 }
 
 impl TerminalInput {
-    fn into_editor_input_event(self) -> Option<EditorInput> {
+    fn into_editor_input(self) -> Option<EditorInput> {
         match self {
             Self::Character { ch } if ch.is_whitespace() => {
                 Some(EditorInput::Submit)
