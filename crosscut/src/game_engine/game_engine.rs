@@ -301,7 +301,7 @@ pub enum GameOutput {
 }
 
 #[derive(Debug)]
-pub enum State {
+enum State {
     Running,
     EndOfFrame,
     WaitUntil { instant: Instant },
