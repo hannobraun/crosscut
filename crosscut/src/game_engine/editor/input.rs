@@ -58,8 +58,8 @@ impl TerminalEditorInput {
                 TerminalInput::Escape => {
                     self.mode = EditorMode::Edit;
                 }
-                event => {
-                    if let Some(event) = event.into_editor_input_event() {
+                input => {
+                    if let Some(event) = input.into_editor_input_event() {
                         buffer.update(event, cursor);
                     }
                 }
