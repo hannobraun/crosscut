@@ -117,9 +117,8 @@ where
                 } => {
                     assert_eq!(
                         name, "sleep_ms",
-                        "Expecting to provide output for `sleep_ms` \
-                        function, because that is the only one that enters \
-                        this state.",
+                        "Expecting to provide output for `sleep_ms` function, \
+                        because that is the only one that enters this state.",
                     );
 
                     self.language
@@ -128,9 +127,9 @@ where
                 state => {
                     assert!(
                         matches!(state, RuntimeState::Started),
-                        "`WaitUntil` state was entered, but expected \
-                        effect is not active. This should only happen, if \
-                        the runtime has been reset.",
+                        "`WaitUntil` state was entered, but expected effect is \
+                        not active. This should only happen, if the runtime \
+                        has been reset.",
                     );
                 }
             }
