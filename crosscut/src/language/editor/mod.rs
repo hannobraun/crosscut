@@ -1,12 +1,12 @@
 mod editor;
+mod input;
 mod input_buffer;
-mod input_event;
 mod layout;
 
 pub use self::{
     editor::{Editor, EditorCommand},
+    input::EditorInput,
     input_buffer::EditorInputBuffer,
-    input_event::EditorInput,
     layout::{EditorLayout, EditorLine},
 };
 
