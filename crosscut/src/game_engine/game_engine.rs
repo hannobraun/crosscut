@@ -89,7 +89,7 @@ use crate::io::terminal::output::DebugOutputAdapter;
 #[cfg(test)]
 impl GameEngine<DebugOutputAdapter> {
     pub fn without_editor_ui() -> Self {
-        let game = Box::new(super::PureCrosscutGame);
+        let game = Box::new(super::PureCrosscutGame::default());
         let adapter = DebugOutputAdapter;
         Self::new(game, adapter)
     }

@@ -31,7 +31,8 @@ pub trait Game {
     );
 }
 
-pub struct PureCrosscutGame;
+#[derive(Default)]
+pub struct PureCrosscutGame {}
 
 impl PureCrosscutGame {
     fn run_game_for_a_few_steps(
