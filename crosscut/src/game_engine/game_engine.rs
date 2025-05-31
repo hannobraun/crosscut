@@ -6,7 +6,6 @@ use crate::{
 use super::{
     Game, TerminalInput,
     editor::{input::TerminalEditorInput, output::TerminalEditorOutput},
-    game::State,
 };
 
 pub struct GameEngine<A> {
@@ -15,7 +14,6 @@ pub struct GameEngine<A> {
     game_output: Vec<GameOutput>,
     editor_input: TerminalEditorInput,
     editor_output: TerminalEditorOutput<A>,
-    state: State,
 }
 
 impl GameEngine<RawTerminalAdapter> {
@@ -36,9 +34,8 @@ where
     pub fn new(mut game: Box<dyn Game>, adapter: A) -> Self {
         let mut language = Language::new();
         let mut game_output = Vec::new();
-        let mut state = State::Running;
 
-        game.on_start(&mut state, &mut language, &mut game_output);
+        game.on_start(&mut language, &mut game_output);
 
         Self {
             game,
@@ -46,7 +43,6 @@ where
             game_output,
             editor_input: TerminalEditorInput::new(),
             editor_output: TerminalEditorOutput::new(adapter),
-            state,
         }
     }
 
@@ -55,11 +51,8 @@ where
         input: TerminalInput,
     ) -> anyhow::Result<()> {
         self.editor_input.on_input(input, &mut self.language)?;
-        self.game.on_editor_input(
-            &mut self.state,
-            &mut self.language,
-            &mut self.game_output,
-        );
+        self.game
+            .on_editor_input(&mut self.language, &mut self.game_output);
         self.render_editor()?;
 
         Ok(())

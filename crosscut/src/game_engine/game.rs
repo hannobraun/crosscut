@@ -11,37 +11,35 @@ use super::GameOutput;
 pub trait Game {
     fn on_start(
         &mut self,
-        state: &mut State,
         language: &mut Language,
         output: &mut Vec<GameOutput>,
     );
 
     fn on_editor_input(
         &mut self,
-        state: &mut State,
         language: &mut Language,
         output: &mut Vec<GameOutput>,
     );
 
     fn on_frame(
         &mut self,
-        state: &mut State,
         language: &mut Language,
         output: &mut Vec<GameOutput>,
     );
 }
 
 #[derive(Default)]
-pub struct PureCrosscutGame {}
+pub struct PureCrosscutGame {
+    state: State,
+}
 
 impl PureCrosscutGame {
     fn run_game_for_a_few_steps(
         &mut self,
-        state: &mut State,
         language: &mut Language,
         output: &mut Vec<GameOutput>,
     ) {
-        if let State::WaitUntil { instant } = *state {
+        if let State::WaitUntil { instant } = self.state {
             if Instant::now() < instant {
                 return;
             }
@@ -69,7 +67,7 @@ impl PureCrosscutGame {
                 }
             }
 
-            *state = State::Running;
+            self.state = State::Running;
         }
 
         let mut num_steps = 0;
@@ -97,7 +95,7 @@ impl PureCrosscutGame {
                                             color: [value, value, value, 1.],
                                         });
 
-                                        *state = State::EndOfFrame;
+                                        self.state = State::EndOfFrame;
                                         break;
                                     }
                                     value => {
@@ -113,7 +111,7 @@ impl PureCrosscutGame {
                                     Value::Integer { value } if value >= 0 => {
                                         let value = value as u64;
 
-                                        *state = State::WaitUntil {
+                                        self.state = State::WaitUntil {
                                             instant: Instant::now()
                                                 + Duration::from_millis(value),
                                         };
@@ -163,29 +161,26 @@ impl PureCrosscutGame {
 impl Game for PureCrosscutGame {
     fn on_start(
         &mut self,
-        state: &mut State,
         language: &mut Language,
         output: &mut Vec<GameOutput>,
     ) {
-        self.run_game_for_a_few_steps(state, language, output);
+        self.run_game_for_a_few_steps(language, output);
     }
 
     fn on_editor_input(
         &mut self,
-        state: &mut State,
         language: &mut Language,
         output: &mut Vec<GameOutput>,
     ) {
-        self.run_game_for_a_few_steps(state, language, output);
+        self.run_game_for_a_few_steps(language, output);
     }
 
     fn on_frame(
         &mut self,
-        state: &mut State,
         language: &mut Language,
         output: &mut Vec<GameOutput>,
     ) {
-        if let State::EndOfFrame = state {
+        if let State::EndOfFrame = self.state {
             match language.evaluator().state() {
                 RuntimeState::Effect {
                     effect: Effect::ApplyProvidedFunction { name, input: _ },
@@ -209,10 +204,10 @@ impl Game for PureCrosscutGame {
                 }
             }
 
-            *state = State::Running;
+            self.state = State::Running;
         }
 
-        self.run_game_for_a_few_steps(state, language, output);
+        self.run_game_for_a_few_steps(language, output);
     }
 }
 
