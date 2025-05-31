@@ -1,9 +1,6 @@
 use crate::{
     io::terminal::output::{RawTerminalAdapter, TerminalOutputAdapter},
-    language::{
-        language::Language,
-        runtime::{Effect, RuntimeState, Value},
-    },
+    language::language::Language,
 };
 
 use super::{
@@ -73,39 +70,6 @@ where
     }
 
     pub fn on_frame(&mut self) -> anyhow::Result<()> {
-        if let State::EndOfFrame = self.state {
-            match self.language.evaluator().state() {
-                RuntimeState::Effect {
-                    effect: Effect::ApplyProvidedFunction { name, input: _ },
-                    ..
-                } => {
-                    assert_eq!(
-                        name, "color",
-                        "Expecting to provide output for `color` function, \
-                        because that is the only one that enters this state.",
-                    );
-
-                    self.language
-                        .provide_host_function_output(Value::nothing());
-                }
-                state => {
-                    assert!(
-                        matches!(state, RuntimeState::Started),
-                        "`EndOfFrame` state was entered, but expected effect \
-                        is not active. This should only happen, if the runtime \
-                        has been reset.",
-                    );
-                }
-            }
-
-            self.state = State::Running;
-        }
-
-        self.game.run_game_for_a_few_steps(
-            &mut self.state,
-            &mut self.language,
-            &mut self.game_output,
-        );
         self.render_editor()?;
 
         Ok(())
