@@ -51,14 +51,14 @@ impl Editor {
 
     pub fn on_input(
         &mut self,
-        event: EditorInput,
+        input: EditorInput,
         codebase: &mut Codebase,
         evaluator: &mut Evaluator,
     ) {
         let layout = EditorLayout::new(codebase.root(), codebase);
         let mut compiler = Compiler::new(codebase);
 
-        if let Some(action) = self.input.update(event, &mut self.cursor.index) {
+        if let Some(action) = self.input.update(input, &mut self.cursor.index) {
             // This code results in non-intuitive cursor movement, if using the
             // up and down keys. This is tracked here:
             // https://github.com/hannobraun/crosscut/issues/71
