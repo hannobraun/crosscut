@@ -55,9 +55,11 @@ where
     ) -> anyhow::Result<()> {
         match self.editor_input.on_input(input) {
             Some(EditorInputOrCommand::Input { input }) => {
-                self.language.on_input(input);
-                self.game
-                    .on_editor_input(&mut self.language, &mut self.game_output);
+                self.game.on_editor_input(
+                    input,
+                    &mut self.language,
+                    &mut self.game_output,
+                );
             }
             Some(EditorInputOrCommand::Command { command }) => {
                 self.game.on_editor_command(
