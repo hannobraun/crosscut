@@ -21,11 +21,11 @@ impl TerminalEditorInput {
 
     pub fn on_input(
         &mut self,
-        event: TerminalInput,
+        input: TerminalInput,
         language: &mut Language,
     ) -> anyhow::Result<()> {
         match &mut self.mode {
-            EditorMode::Edit => match event {
+            EditorMode::Edit => match input {
                 TerminalInput::Escape => {
                     self.mode = EditorMode::Command {
                         buffer: EditorInputBuffer::empty(),
@@ -38,7 +38,7 @@ impl TerminalEditorInput {
                     }
                 }
             },
-            EditorMode::Command { buffer, cursor } => match event {
+            EditorMode::Command { buffer, cursor } => match input {
                 TerminalInput::Enter => {
                     match buffer.contents() {
                         "clear" => {
