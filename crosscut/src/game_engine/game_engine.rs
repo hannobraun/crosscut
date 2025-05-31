@@ -46,7 +46,7 @@ where
         }
     }
 
-    pub fn on_editor_input(
+    pub fn on_terminal_input(
         &mut self,
         input: TerminalInput,
     ) -> anyhow::Result<()> {
@@ -99,12 +99,12 @@ impl GameEngine<DebugOutputAdapter> {
 
     pub fn cursor_down(&mut self) -> &mut Self {
         assert!(self.editor_input.mode().is_edit_mode());
-        self.on_editor_input(TerminalInput::Down).unwrap();
+        self.on_terminal_input(TerminalInput::Down).unwrap();
         self
     }
 
     pub fn enter_command_mode(&mut self) -> &mut Self {
-        self.on_editor_input(TerminalInput::Escape).unwrap();
+        self.on_terminal_input(TerminalInput::Escape).unwrap();
         self
     }
 
@@ -119,17 +119,17 @@ impl GameEngine<DebugOutputAdapter> {
     }
 
     pub fn execute_command(&mut self) -> &mut Self {
-        self.on_editor_input(TerminalInput::Enter).unwrap();
+        self.on_terminal_input(TerminalInput::Enter).unwrap();
         self
     }
 
     pub fn abort_command(&mut self) -> &mut Self {
-        self.on_editor_input(TerminalInput::Escape).unwrap();
+        self.on_terminal_input(TerminalInput::Escape).unwrap();
         self
     }
 
     pub fn on_char(&mut self, ch: char) -> &mut Self {
-        self.on_editor_input(TerminalInput::Character { ch })
+        self.on_terminal_input(TerminalInput::Character { ch })
             .unwrap();
         self
     }

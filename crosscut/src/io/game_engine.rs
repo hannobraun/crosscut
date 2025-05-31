@@ -136,7 +136,7 @@ fn on_frame(
     game_engine.on_frame()?;
 
     while let Some(input) = terminal_input.try_recv()? {
-        game_engine.on_editor_input(input)?;
+        game_engine.on_terminal_input(input)?;
     }
 
     for GameOutput::SubmitColor {
