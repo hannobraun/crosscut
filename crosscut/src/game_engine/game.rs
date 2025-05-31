@@ -212,7 +212,7 @@ impl Game for PureCrosscutGame {
 }
 
 #[derive(Debug, Default)]
-pub enum State {
+enum State {
     #[default]
     Running,
 
