@@ -133,8 +133,6 @@ fn on_frame(
     terminal_input: &Receiver<TerminalInput>,
     color: &mut wgpu::Color,
 ) -> Result<(), OnFrameError> {
-    // If a new frame is being rendered on the other thread, then the game
-    // engine can get ready to provide the next one.
     game_engine.on_frame()?;
 
     while let Some(input) = terminal_input.try_recv()? {
