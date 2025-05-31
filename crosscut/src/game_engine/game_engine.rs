@@ -105,41 +105,37 @@ where
     fn run_game_for_a_few_steps(&mut self) {
         let _ = self.game;
 
-        match self.state {
-            State::Running => {}
-            State::EndOfFrame => {}
-            State::WaitUntil { instant } => {
-                if Instant::now() < instant {
-                    return;
-                }
-
-                match self.language.evaluator().state() {
-                    RuntimeState::Effect {
-                        effect: Effect::ApplyProvidedFunction { name, input: _ },
-                        ..
-                    } => {
-                        assert_eq!(
-                            name, "sleep_ms",
-                            "Expecting to provide output for `sleep_ms` \
-                            function, because that is the only one that enters \
-                            this state.",
-                        );
-
-                        self.language
-                            .provide_host_function_output(Value::nothing());
-                    }
-                    state => {
-                        assert!(
-                            matches!(state, RuntimeState::Started),
-                            "`WaitUntil` state was entered, but expected \
-                            effect is not active. This should only happen, if \
-                            the runtime has been reset.",
-                        );
-                    }
-                }
-
-                self.state = State::Running;
+        if let State::WaitUntil { instant } = self.state {
+            if Instant::now() < instant {
+                return;
             }
+
+            match self.language.evaluator().state() {
+                RuntimeState::Effect {
+                    effect: Effect::ApplyProvidedFunction { name, input: _ },
+                    ..
+                } => {
+                    assert_eq!(
+                        name, "sleep_ms",
+                        "Expecting to provide output for `sleep_ms` \
+                        function, because that is the only one that enters \
+                        this state.",
+                    );
+
+                    self.language
+                        .provide_host_function_output(Value::nothing());
+                }
+                state => {
+                    assert!(
+                        matches!(state, RuntimeState::Started),
+                        "`WaitUntil` state was entered, but expected \
+                        effect is not active. This should only happen, if \
+                        the runtime has been reset.",
+                    );
+                }
+            }
+
+            self.state = State::Running;
         }
 
         let mut num_steps = 0;
