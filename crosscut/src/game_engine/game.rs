@@ -29,72 +29,11 @@ pub trait Game {
         language: &mut Language,
         output: &mut Vec<GameOutput>,
     );
-
-    fn run_game_for_a_few_steps(
-        &mut self,
-        state: &mut State,
-        language: &mut Language,
-        output: &mut Vec<GameOutput>,
-    );
 }
 
 pub struct PureCrosscutGame;
 
-impl Game for PureCrosscutGame {
-    fn on_start(
-        &mut self,
-        state: &mut State,
-        language: &mut Language,
-        output: &mut Vec<GameOutput>,
-    ) {
-        self.run_game_for_a_few_steps(state, language, output);
-    }
-
-    fn on_editor_input(
-        &mut self,
-        state: &mut State,
-        language: &mut Language,
-        output: &mut Vec<GameOutput>,
-    ) {
-        self.run_game_for_a_few_steps(state, language, output);
-    }
-
-    fn on_frame(
-        &mut self,
-        state: &mut State,
-        language: &mut Language,
-        output: &mut Vec<GameOutput>,
-    ) {
-        if let State::EndOfFrame = state {
-            match language.evaluator().state() {
-                RuntimeState::Effect {
-                    effect: Effect::ApplyProvidedFunction { name, input: _ },
-                    ..
-                } => {
-                    assert_eq!(
-                        name, "color",
-                        "Expecting to provide output for `color` function, \
-                        because that is the only one that enters this state.",
-                    );
-
-                    language.provide_host_function_output(Value::nothing());
-                }
-                state => {
-                    assert!(
-                        matches!(state, RuntimeState::Started),
-                        "`EndOfFrame` state was entered, but expected effect \
-                        is not active. This should only happen, if the runtime \
-                        has been reset.",
-                    );
-                }
-            }
-
-            *state = State::Running;
-        }
-
-        self.run_game_for_a_few_steps(state, language, output);
-    }
-
+impl PureCrosscutGame {
     fn run_game_for_a_few_steps(
         &mut self,
         state: &mut State,
@@ -217,6 +156,62 @@ impl Game for PureCrosscutGame {
 
             break;
         }
+    }
+}
+
+impl Game for PureCrosscutGame {
+    fn on_start(
+        &mut self,
+        state: &mut State,
+        language: &mut Language,
+        output: &mut Vec<GameOutput>,
+    ) {
+        self.run_game_for_a_few_steps(state, language, output);
+    }
+
+    fn on_editor_input(
+        &mut self,
+        state: &mut State,
+        language: &mut Language,
+        output: &mut Vec<GameOutput>,
+    ) {
+        self.run_game_for_a_few_steps(state, language, output);
+    }
+
+    fn on_frame(
+        &mut self,
+        state: &mut State,
+        language: &mut Language,
+        output: &mut Vec<GameOutput>,
+    ) {
+        if let State::EndOfFrame = state {
+            match language.evaluator().state() {
+                RuntimeState::Effect {
+                    effect: Effect::ApplyProvidedFunction { name, input: _ },
+                    ..
+                } => {
+                    assert_eq!(
+                        name, "color",
+                        "Expecting to provide output for `color` function, \
+                        because that is the only one that enters this state.",
+                    );
+
+                    language.provide_host_function_output(Value::nothing());
+                }
+                state => {
+                    assert!(
+                        matches!(state, RuntimeState::Started),
+                        "`EndOfFrame` state was entered, but expected effect \
+                        is not active. This should only happen, if the runtime \
+                        has been reset.",
+                    );
+                }
+            }
+
+            *state = State::Running;
+        }
+
+        self.run_game_for_a_few_steps(state, language, output);
     }
 }
 
