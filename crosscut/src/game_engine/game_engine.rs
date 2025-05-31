@@ -62,7 +62,7 @@ where
         input: TerminalInput,
     ) -> anyhow::Result<()> {
         self.editor_input.on_input(input, &mut self.language)?;
-        self.game.run_game_for_a_few_steps(
+        self.game.on_editor_input(
             &mut self.state,
             &mut self.language,
             &mut self.game_output,
