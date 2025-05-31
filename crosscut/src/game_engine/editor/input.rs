@@ -1,7 +1,4 @@
-use crate::language::{
-    editor::{EditorCommand, EditorInput, EditorInputBuffer},
-    language::Language,
-};
+use crate::language::editor::{EditorCommand, EditorInput, EditorInputBuffer};
 
 #[derive(Debug)]
 pub struct TerminalEditorInput {
@@ -22,7 +19,6 @@ impl TerminalEditorInput {
     pub fn on_input(
         &mut self,
         input: TerminalInput,
-        _: &mut Language,
     ) -> anyhow::Result<Option<EditorInputOrCommand>> {
         match &mut self.mode {
             EditorMode::Edit => match input {

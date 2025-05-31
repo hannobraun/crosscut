@@ -53,7 +53,7 @@ where
         &mut self,
         input: TerminalInput,
     ) -> anyhow::Result<()> {
-        match self.editor_input.on_input(input, &mut self.language)? {
+        match self.editor_input.on_input(input)? {
             Some(EditorInputOrCommand::Input { input }) => {
                 self.language.on_input(input);
             }
