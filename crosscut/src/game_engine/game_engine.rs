@@ -38,6 +38,7 @@ where
 {
     pub fn new(game: Box<dyn Game>, adapter: A) -> Self {
         let language = Language::new();
+        let state = State::Running;
 
         let mut game_engine = Self {
             game,
@@ -45,7 +46,7 @@ where
             game_output: Vec::new(),
             editor_input: TerminalEditorInput::new(),
             editor_output: TerminalEditorOutput::new(adapter),
-            state: State::Running,
+            state,
         };
         game_engine.game.run_game_for_a_few_steps(
             &mut game_engine.state,
