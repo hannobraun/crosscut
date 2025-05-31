@@ -77,6 +77,8 @@ where
     }
 
     pub fn on_frame(&mut self) -> anyhow::Result<()> {
+        self.game
+            .on_frame(&mut self.language, &mut self.game_output);
         self.render_editor()?;
 
         Ok(())
