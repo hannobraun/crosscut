@@ -28,8 +28,8 @@ impl TerminalEditorInput {
                         cursor: 0,
                     };
                 }
-                event => {
-                    return event
+                input => {
+                    return input
                         .into_editor_input_event()
                         .map(|input| EditorInputOrCommand::Input { input });
                 }
