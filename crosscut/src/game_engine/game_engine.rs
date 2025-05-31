@@ -160,7 +160,17 @@ where
                             match name.as_str() {
                                 "color" => match input {
                                     Value::Integer { value } => {
-                                        self.submit_color(value);
+                                        let value: f64 = value.into();
+                                        let value = value / 255.;
+
+                                        self.game_output.push(
+                                            GameOutput::SubmitColor {
+                                                color: [
+                                                    value, value, value, 1.,
+                                                ],
+                                            },
+                                        );
+
                                         self.state = State::EndOfFrame;
                                         break;
                                     }
@@ -223,15 +233,6 @@ where
 
             break;
         }
-    }
-
-    fn submit_color(&mut self, value: i32) {
-        let value: f64 = value.into();
-        let value = value / 255.;
-
-        self.game_output.push(GameOutput::SubmitColor {
-            color: [value, value, value, 1.],
-        });
     }
 
     fn render_editor(&mut self) -> anyhow::Result<()> {
