@@ -25,10 +25,10 @@ impl EditorInputBuffer {
 
     pub fn update(
         &mut self,
-        event: EditorInput,
+        input: EditorInput,
         cursor: &mut usize,
     ) -> Option<NodeAction> {
-        match event {
+        match input {
             EditorInput::Insert { ch } => {
                 assert!(
                     !ch.is_whitespace(),
