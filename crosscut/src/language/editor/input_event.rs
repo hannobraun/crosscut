@@ -1,5 +1,5 @@
 #[derive(Debug)]
-pub enum EditorInputEvent {
+pub enum EditorInput {
     Insert { ch: char },
     MoveCursorLeft,
     MoveCursorRight,

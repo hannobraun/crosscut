@@ -1,6 +1,6 @@
 use super::{
     code::{Codebase, NodePath},
-    editor::{Editor, EditorCommand, EditorInputEvent},
+    editor::{Editor, EditorCommand, EditorInput},
     runtime::{
         Effect, Evaluator, RuntimeState, Value, apply_intrinsic_function,
     },
@@ -38,7 +38,7 @@ impl Language {
         &self.evaluator
     }
 
-    pub fn on_input(&mut self, event: EditorInputEvent) {
+    pub fn on_input(&mut self, event: EditorInput) {
         self.editor
             .on_input(event, &mut self.codebase, &mut self.evaluator);
     }
@@ -106,22 +106,22 @@ impl Language {
     }
 
     pub fn down(&mut self) -> &mut Self {
-        self.on_input(EditorInputEvent::MoveCursorDown);
+        self.on_input(EditorInput::MoveCursorDown);
         self
     }
 
     pub fn up(&mut self) -> &mut Self {
-        self.on_input(EditorInputEvent::MoveCursorUp);
+        self.on_input(EditorInput::MoveCursorUp);
         self
     }
 
     pub fn remove_right(&mut self) -> &mut Self {
-        self.on_input(EditorInputEvent::RemoveRight { whole_node: false });
+        self.on_input(EditorInput::RemoveRight { whole_node: false });
         self
     }
 
     pub fn remove_left(&mut self) -> &mut Self {
-        self.on_input(EditorInputEvent::RemoveLeft { whole_node: false });
+        self.on_input(EditorInput::RemoveLeft { whole_node: false });
         self
     }
 

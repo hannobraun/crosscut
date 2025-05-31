@@ -1,6 +1,6 @@
 use crate::language::{
     code::{Codebase, SyntaxNode},
-    editor::{Editor, EditorInputEvent::*},
+    editor::{Editor, EditorInput::*},
     runtime::Evaluator,
     tests::infra::{ExpectChildren, identifier},
 };

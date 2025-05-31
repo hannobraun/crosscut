@@ -7,7 +7,7 @@ use crate::language::{
 };
 
 use super::{
-    EditorInputBuffer, EditorInputEvent, EditorLayout, input_buffer::NodeAction,
+    EditorInput, EditorInputBuffer, EditorLayout, input_buffer::NodeAction,
 };
 
 #[derive(Debug)]
@@ -51,7 +51,7 @@ impl Editor {
 
     pub fn on_input(
         &mut self,
-        event: EditorInputEvent,
+        event: EditorInput,
         codebase: &mut Codebase,
         evaluator: &mut Evaluator,
     ) {
@@ -187,9 +187,9 @@ impl Editor {
     ) {
         for ch in code.chars() {
             let event = if ch.is_whitespace() {
-                EditorInputEvent::Submit
+                EditorInput::Submit
             } else {
-                EditorInputEvent::Insert { ch }
+                EditorInput::Insert { ch }
             };
 
             self.on_input(event, codebase, evaluator);

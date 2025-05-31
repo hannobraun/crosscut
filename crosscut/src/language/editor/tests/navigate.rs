@@ -1,7 +1,7 @@
 use crate::language::{
     code::{Codebase, SyntaxNode},
     compiler::Compiler,
-    editor::{Editor, EditorInputEvent::*, editor::Cursor},
+    editor::{Editor, EditorInput::*, editor::Cursor},
     runtime::Evaluator,
     tests::infra::{ExpectChildren, identifier},
 };

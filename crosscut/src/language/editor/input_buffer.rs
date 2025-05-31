@@ -1,6 +1,6 @@
 use std::cmp::min;
 
-use super::EditorInputEvent;
+use super::EditorInput;
 
 #[derive(Debug, Eq, PartialEq)]
 pub struct EditorInputBuffer {
@@ -25,11 +25,11 @@ impl EditorInputBuffer {
 
     pub fn update(
         &mut self,
-        event: EditorInputEvent,
+        event: EditorInput,
         cursor: &mut usize,
     ) -> Option<NodeAction> {
         match event {
-            EditorInputEvent::Insert { ch } => {
+            EditorInput::Insert { ch } => {
                 assert!(
                     !ch.is_whitespace(),
                     "Expecting whitespace characters to be translated into \
@@ -38,30 +38,30 @@ impl EditorInputBuffer {
 
                 self.insert(ch, cursor);
             }
-            EditorInputEvent::MoveCursorLeft => {
+            EditorInput::MoveCursorLeft => {
                 return self.move_cursor_left(cursor);
             }
-            EditorInputEvent::MoveCursorRight => {
+            EditorInput::MoveCursorRight => {
                 return self.move_cursor_right(cursor);
             }
-            EditorInputEvent::MoveCursorUp => {
+            EditorInput::MoveCursorUp => {
                 return Some(NodeAction::NavigateToPrevious);
             }
-            EditorInputEvent::MoveCursorDown => {
+            EditorInput::MoveCursorDown => {
                 return Some(NodeAction::NavigateToNext);
             }
-            EditorInputEvent::RemoveLeft { whole_node } => {
+            EditorInput::RemoveLeft { whole_node } => {
                 if whole_node {
                     self.remove_left_whole_node(cursor);
                 } else {
                     self.remove_left(cursor);
                 }
             }
-            EditorInputEvent::RemoveRight { whole_node } => {
+            EditorInput::RemoveRight { whole_node } => {
                 let _ = whole_node;
                 self.remove_right(cursor);
             }
-            EditorInputEvent::Submit => {
+            EditorInput::Submit => {
                 return Some(NodeAction::Submit);
             }
         }
@@ -148,7 +148,7 @@ pub enum NodeAction {
 
 #[cfg(test)]
 mod tests {
-    use super::{EditorInputBuffer, EditorInputEvent::*};
+    use super::{EditorInput::*, EditorInputBuffer};
 
     #[test]
     fn insert() {

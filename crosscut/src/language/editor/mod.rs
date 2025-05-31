@@ -6,7 +6,7 @@ mod layout;
 pub use self::{
     editor::{Editor, EditorCommand},
     input_buffer::EditorInputBuffer,
-    input_event::EditorInputEvent,
+    input_event::EditorInput,
     layout::{EditorLayout, EditorLine},
 };
 

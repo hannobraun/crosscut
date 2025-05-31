@@ -1,5 +1,5 @@
 use crate::language::{
-    editor::{EditorCommand, EditorInputBuffer, EditorInputEvent},
+    editor::{EditorCommand, EditorInputBuffer, EditorInput},
     language::Language,
 };
 
@@ -133,30 +133,30 @@ pub enum TerminalInput {
 }
 
 impl TerminalInput {
-    fn into_editor_input_event(self) -> Option<EditorInputEvent> {
+    fn into_editor_input_event(self) -> Option<EditorInput> {
         match self {
             Self::Character { ch } if ch.is_whitespace() => {
-                Some(EditorInputEvent::Submit)
+                Some(EditorInput::Submit)
             }
-            Self::Character { ch } => Some(EditorInputEvent::Insert { ch }),
+            Self::Character { ch } => Some(EditorInput::Insert { ch }),
 
             Self::Backspace { ctrl_pressed } => {
-                Some(EditorInputEvent::RemoveLeft {
+                Some(EditorInput::RemoveLeft {
                     whole_node: ctrl_pressed,
                 })
             }
             Self::Delete { ctrl_pressed } => {
-                Some(EditorInputEvent::RemoveRight {
+                Some(EditorInput::RemoveRight {
                     whole_node: ctrl_pressed,
                 })
             }
 
-            Self::Left => Some(EditorInputEvent::MoveCursorLeft),
-            Self::Right => Some(EditorInputEvent::MoveCursorRight),
-            Self::Up => Some(EditorInputEvent::MoveCursorUp),
-            Self::Down => Some(EditorInputEvent::MoveCursorDown),
+            Self::Left => Some(EditorInput::MoveCursorLeft),
+            Self::Right => Some(EditorInput::MoveCursorRight),
+            Self::Up => Some(EditorInput::MoveCursorUp),
+            Self::Down => Some(EditorInput::MoveCursorDown),
 
-            Self::Enter => Some(EditorInputEvent::MoveCursorDown),
+            Self::Enter => Some(EditorInput::MoveCursorDown),
 
             _ => None,
         }

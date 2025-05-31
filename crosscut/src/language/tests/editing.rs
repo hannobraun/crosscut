@@ -1,5 +1,5 @@
 use crate::language::{
-    editor::EditorInputEvent,
+    editor::EditorInput,
     language::Language,
     runtime::{Effect, RuntimeState, Value},
 };
@@ -38,13 +38,13 @@ fn update_after_removing_character() {
         Value::Integer { value: 127 },
     );
 
-    language.on_input(EditorInputEvent::RemoveLeft { whole_node: false });
+    language.on_input(EditorInput::RemoveLeft { whole_node: false });
     assert_eq!(
         language.step_until_finished().unwrap(),
         Value::Integer { value: 12 },
     );
 
-    language.on_input(EditorInputEvent::RemoveLeft { whole_node: false });
+    language.on_input(EditorInput::RemoveLeft { whole_node: false });
     assert_eq!(
         language.step_until_finished().unwrap(),
         Value::Integer { value: 1 },
@@ -64,7 +64,7 @@ fn update_after_removing_all_characters() {
         Value::Integer { value: 1 },
     );
 
-    language.on_input(EditorInputEvent::RemoveLeft { whole_node: false });
+    language.on_input(EditorInput::RemoveLeft { whole_node: false });
     assert_eq!(language.step_until_finished().unwrap(), Value::nothing());
 }
 
