@@ -36,26 +36,25 @@ impl<A> GameEngine<A>
 where
     A: TerminalOutputAdapter,
 {
-    pub fn new(game: Box<dyn Game>, adapter: A) -> Self {
-        let language = Language::new();
-        let game_output = Vec::new();
-        let state = State::Running;
+    pub fn new(mut game: Box<dyn Game>, adapter: A) -> Self {
+        let mut language = Language::new();
+        let mut game_output = Vec::new();
+        let mut state = State::Running;
 
-        let mut game_engine = Self {
+        game.run_game_for_a_few_steps(
+            &mut state,
+            &mut language,
+            &mut game_output,
+        );
+
+        Self {
             game,
             language,
             game_output,
             editor_input: TerminalEditorInput::new(),
             editor_output: TerminalEditorOutput::new(adapter),
             state,
-        };
-        game_engine.game.run_game_for_a_few_steps(
-            &mut game_engine.state,
-            &mut game_engine.language,
-            &mut game_engine.game_output,
-        );
-
-        game_engine
+        }
     }
 
     pub fn on_editor_input(
