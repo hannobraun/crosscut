@@ -38,9 +38,9 @@ impl Language {
         &self.evaluator
     }
 
-    pub fn on_input(&mut self, event: EditorInput) {
+    pub fn on_input(&mut self, input: EditorInput) {
         self.editor
-            .on_input(event, &mut self.codebase, &mut self.evaluator);
+            .on_input(input, &mut self.codebase, &mut self.evaluator);
     }
 
     pub fn on_command(&mut self, command: EditorCommand) -> anyhow::Result<()> {
