@@ -43,7 +43,10 @@ impl Language {
             .on_input(input, &mut self.codebase, &mut self.evaluator);
     }
 
-    pub fn on_command(&mut self, command: EditorCommand) -> anyhow::Result<()> {
+    pub fn on_editor_command(
+        &mut self,
+        command: EditorCommand,
+    ) -> anyhow::Result<()> {
         self.editor.on_command(
             command,
             &mut self.codebase,

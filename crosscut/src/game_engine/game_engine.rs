@@ -58,7 +58,7 @@ where
                 self.language.on_editor_input(input);
             }
             Some(EditorInputOrCommand::Command { command }) => {
-                self.language.on_command(command)?;
+                self.language.on_editor_command(command)?;
             }
             None => {}
         }
