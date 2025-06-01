@@ -2,7 +2,6 @@ use std::time::{Duration, Instant};
 
 use crate::language::{
     code::Type,
-    editor::EditorCommand,
     language::Language,
     runtime::{Effect, RuntimeState, Value},
 };
@@ -24,7 +23,6 @@ pub trait Game {
 
     fn on_editor_command(
         &mut self,
-        command: EditorCommand,
         language: &mut Language,
         output: &mut Vec<GameOutput>,
     ) -> anyhow::Result<()>;
@@ -185,11 +183,9 @@ impl Game for PureCrosscutGame {
 
     fn on_editor_command(
         &mut self,
-        command: EditorCommand,
         language: &mut Language,
         output: &mut Vec<GameOutput>,
     ) -> anyhow::Result<()> {
-        language.on_command(command)?;
         self.run_game_for_a_few_steps(language, output);
 
         Ok(())

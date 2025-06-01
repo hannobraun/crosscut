@@ -60,8 +60,8 @@ where
                     .on_editor_input(&mut self.language, &mut self.game_output);
             }
             Some(EditorInputOrCommand::Command { command }) => {
+                self.language.on_command(command)?;
                 self.game.on_editor_command(
-                    command,
                     &mut self.language,
                     &mut self.game_output,
                 )?;
