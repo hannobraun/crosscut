@@ -53,10 +53,10 @@ impl Language {
         Ok(())
     }
 
-    pub fn apply_function(&mut self, root: NodePath) {
+    pub fn apply_function(&mut self, body: NodePath) {
         self.evaluator.apply_function(
             "".to_string(),
-            root,
+            body,
             Value::nothing(),
             self.codebase.nodes(),
         );
