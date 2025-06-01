@@ -25,7 +25,7 @@ pub trait Game {
         &mut self,
         language: &mut Language,
         output: &mut Vec<GameOutput>,
-    ) -> anyhow::Result<()>;
+    );
 
     fn on_frame(
         &mut self,
@@ -185,10 +185,8 @@ impl Game for PureCrosscutGame {
         &mut self,
         language: &mut Language,
         output: &mut Vec<GameOutput>,
-    ) -> anyhow::Result<()> {
+    ) {
         self.run_game_for_a_few_steps(language, output);
-
-        Ok(())
     }
 
     fn on_frame(

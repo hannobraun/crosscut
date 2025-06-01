@@ -64,7 +64,7 @@ where
                 self.game.on_editor_command(
                     &mut self.language,
                     &mut self.game_output,
-                )?;
+                );
             }
             None => {}
         }
