@@ -188,7 +188,7 @@ fn tail_call_arguments_have_access_to_function_argument() {
 
             saw_argument += 1;
 
-            language.provide_host_function_output(Value::nothing());
+            language.exit_from_provided_function(Value::nothing());
         }
     }
 

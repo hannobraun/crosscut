@@ -136,7 +136,7 @@ fn keep_state_on_update() {
 
                 assert_eq!(value, &expected_value);
 
-                language.provide_host_function_output(Value::nothing());
+                language.exit_from_provided_function(Value::nothing());
 
                 return;
             }

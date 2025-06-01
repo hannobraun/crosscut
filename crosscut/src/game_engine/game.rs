@@ -55,7 +55,7 @@ impl PureCrosscutGame {
                         because that is the only one that enters this state.",
                     );
 
-                    language.provide_host_function_output(Value::nothing());
+                    language.exit_from_provided_function(Value::nothing());
                 }
                 state => {
                     assert!(
@@ -192,7 +192,7 @@ impl Game for PureCrosscutGame {
                         because that is the only one that enters this state.",
                     );
 
-                    language.provide_host_function_output(Value::nothing());
+                    language.exit_from_provided_function(Value::nothing());
                 }
                 state => {
                     assert!(

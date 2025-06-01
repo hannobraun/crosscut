@@ -88,7 +88,7 @@ impl Language {
         self.evaluator.state()
     }
 
-    pub fn provide_host_function_output(&mut self, output: Value) {
+    pub fn exit_from_provided_function(&mut self, output: Value) {
         self.evaluator.exit_from_provided_function(output);
     }
 
@@ -146,7 +146,7 @@ impl Language {
                     Effect::ApplyProvidedFunction { name, input } => {
                         match handler(name, input) {
                             Ok(output) => {
-                                self.provide_host_function_output(output);
+                                self.exit_from_provided_function(output);
                             }
                             Err(effect) => {
                                 self.trigger_effect(effect);
