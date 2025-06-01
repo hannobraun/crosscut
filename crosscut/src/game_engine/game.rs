@@ -15,13 +15,7 @@ pub trait Game {
         output: &mut Vec<GameOutput>,
     );
 
-    fn on_editor_input(
-        &mut self,
-        language: &mut Language,
-        output: &mut Vec<GameOutput>,
-    );
-
-    fn on_editor_command(
+    fn on_editor_update(
         &mut self,
         language: &mut Language,
         output: &mut Vec<GameOutput>,
@@ -173,15 +167,7 @@ impl Game for PureCrosscutGame {
         self.run_game_for_a_few_steps(language, output);
     }
 
-    fn on_editor_input(
-        &mut self,
-        language: &mut Language,
-        output: &mut Vec<GameOutput>,
-    ) {
-        self.run_game_for_a_few_steps(language, output);
-    }
-
-    fn on_editor_command(
+    fn on_editor_update(
         &mut self,
         language: &mut Language,
         output: &mut Vec<GameOutput>,
