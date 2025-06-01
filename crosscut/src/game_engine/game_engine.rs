@@ -55,7 +55,7 @@ where
     ) -> anyhow::Result<()> {
         match self.editor_input.on_input(input) {
             Some(EditorInputOrCommand::Input { input }) => {
-                self.language.on_input(input);
+                self.language.on_editor_input(input);
             }
             Some(EditorInputOrCommand::Command { command }) => {
                 self.language.on_command(command)?;

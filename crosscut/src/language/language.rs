@@ -38,7 +38,7 @@ impl Language {
         &self.evaluator
     }
 
-    pub fn on_input(&mut self, input: EditorInput) {
+    pub fn on_editor_input(&mut self, input: EditorInput) {
         self.editor
             .on_input(input, &mut self.codebase, &mut self.evaluator);
     }
@@ -106,22 +106,22 @@ impl Language {
     }
 
     pub fn down(&mut self) -> &mut Self {
-        self.on_input(EditorInput::MoveCursorDown);
+        self.on_editor_input(EditorInput::MoveCursorDown);
         self
     }
 
     pub fn up(&mut self) -> &mut Self {
-        self.on_input(EditorInput::MoveCursorUp);
+        self.on_editor_input(EditorInput::MoveCursorUp);
         self
     }
 
     pub fn remove_right(&mut self) -> &mut Self {
-        self.on_input(EditorInput::RemoveRight { whole_node: false });
+        self.on_editor_input(EditorInput::RemoveRight { whole_node: false });
         self
     }
 
     pub fn remove_left(&mut self) -> &mut Self {
-        self.on_input(EditorInput::RemoveLeft { whole_node: false });
+        self.on_editor_input(EditorInput::RemoveLeft { whole_node: false });
         self
     }
 
