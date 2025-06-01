@@ -70,11 +70,12 @@ impl PureCrosscutGame {
             self.state = State::Running;
         }
 
+        let max_steps = 1024;
         let mut num_steps = 0;
 
         loop {
             num_steps += 1;
-            if num_steps > 1024 {
+            if num_steps > max_steps {
                 break;
             }
 
