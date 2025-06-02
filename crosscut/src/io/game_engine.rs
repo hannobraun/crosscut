@@ -54,12 +54,14 @@ impl Handler {
 
 impl ApplicationHandler for Handler {
     fn resumed(&mut self, event_loop: &ActiveEventLoop) {
-        match Resources::new(event_loop) {
-            Ok(resources) => {
-                self.resources = Some(resources);
-            }
-            Err(err) => {
-                self.on_error(err, event_loop);
+        if self.resources.is_none() {
+            match Resources::new(event_loop) {
+                Ok(resources) => {
+                    self.resources = Some(resources);
+                }
+                Err(err) => {
+                    self.on_error(err, event_loop);
+                }
             }
         }
     }
