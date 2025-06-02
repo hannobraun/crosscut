@@ -65,7 +65,8 @@ impl ApplicationHandler for Handler {
         _: WindowId,
         event: WindowEvent,
     ) {
-        let Resources::Initialized { renderer, .. } = &self.resources else {
+        let Resources::Initialized { renderer, .. } = &mut self.resources
+        else {
             return;
         };
         let game_engine = &mut self.game_engine;
