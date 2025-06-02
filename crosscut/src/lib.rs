@@ -25,8 +25,7 @@ pub fn start_and_wait(game: Box<dyn Game + Send>) -> anyhow::Result<()> {
     // And let's join all threads first before printing any errors. Just to make
     // sure that they have ended, and the terminal is not still in raw mode or
     // something, when we start printing here.
-    let result = threads.handles.join();
-    result?;
+    threads.handles.join()?;
 
     Ok(())
 }
