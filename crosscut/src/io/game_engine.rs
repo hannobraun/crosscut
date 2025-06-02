@@ -72,8 +72,7 @@ impl ApplicationHandler for Handler {
         _: WindowId,
         event: WindowEvent,
     ) {
-        let Some(Resources::Initialized { renderer, .. }) =
-            self.resources.as_ref()
+        let Some(Resources::Initialized { renderer, .. }) = &self.resources
         else {
             return;
         };
