@@ -178,14 +178,14 @@ impl Resources {
     }
 }
 
-struct Renderer {
+pub struct Renderer {
     surface: wgpu::Surface<'static>,
     device: wgpu::Device,
     queue: wgpu::Queue,
 }
 
 impl Renderer {
-    async fn new(window: &Arc<Window>) -> anyhow::Result<Self> {
+    pub async fn new(window: &Arc<Window>) -> anyhow::Result<Self> {
         let instance =
             wgpu::Instance::new(&wgpu::InstanceDescriptor::default());
         let surface = instance.create_surface(window.clone())?;
@@ -223,7 +223,7 @@ impl Renderer {
         })
     }
 
-    fn render(&self, bg_color: wgpu::Color) -> anyhow::Result<()> {
+    pub fn render(&self, bg_color: wgpu::Color) -> anyhow::Result<()> {
         let surface_texture = self.surface.get_current_texture()?;
         let view = surface_texture
             .texture
