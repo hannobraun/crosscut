@@ -21,12 +21,9 @@ pub fn start_and_wait(
     game: Box<dyn Game + Send>,
     terminal_input: Receiver<TerminalInput>,
 ) -> anyhow::Result<()> {
-    let game_engine = GameEngine::with_editor_ui(game)?;
-
     let mut handler = Handler {
-        game_engine,
         terminal_input,
-        resources: Resources::Uninitialized,
+        resources: Resources::Uninitialized { game: Some(game) },
         result: Ok(()),
         color: wgpu::Color::BLACK,
     };
@@ -38,7 +35,6 @@ pub fn start_and_wait(
 }
 
 struct Handler {
-    game_engine: GameEngine<RawTerminalAdapter>,
     terminal_input: Receiver<TerminalInput>,
     resources: Resources,
     result: anyhow::Result<()>,
@@ -65,11 +61,14 @@ impl ApplicationHandler for Handler {
         _: WindowId,
         event: WindowEvent,
     ) {
-        let Resources::Initialized { renderer, .. } = &mut self.resources
+        let Resources::Initialized {
+            game_engine,
+            renderer,
+            ..
+        } = &mut self.resources
         else {
             return;
         };
-        let game_engine = &mut self.game_engine;
 
         match event {
             WindowEvent::CloseRequested => {
@@ -152,10 +151,14 @@ enum OnFrameError {
     GameEngine(#[from] anyhow::Error),
 }
 
+#[allow(clippy::large_enum_variant)]
 enum Resources {
-    Uninitialized,
+    Uninitialized {
+        game: Option<Box<dyn Game>>,
+    },
     Initialized {
         window: Arc<Window>,
+        game_engine: GameEngine<RawTerminalAdapter>,
         renderer: Renderer,
     },
 }
@@ -165,7 +168,15 @@ impl Resources {
         &mut self,
         event_loop: &ActiveEventLoop,
     ) -> anyhow::Result<()> {
-        if let Resources::Uninitialized = self {
+        if let Resources::Uninitialized { game } = self {
+            let Some(game) = game.take() else {
+                unreachable!(
+                    "`game` should always be `Some`, unless the folllowing \
+                    code panics, before we replace `self` below. That would be \
+                    a bug."
+                );
+            };
+
             let window = {
                 let window = event_loop.create_window(
                     Window::default_attributes().with_title("Crosscut"),
@@ -173,9 +184,15 @@ impl Resources {
                 Arc::new(window)
             };
 
+            let game_engine = GameEngine::with_editor_ui(game)?;
+
             let renderer = Renderer::new(&window).block_on()?;
 
-            *self = Self::Initialized { window, renderer };
+            *self = Self::Initialized {
+                window,
+                game_engine,
+                renderer,
+            };
         }
 
         Ok(())
