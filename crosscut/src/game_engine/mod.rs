@@ -1,11 +1,13 @@
 mod editor;
 mod game;
 mod game_engine;
+mod renderer;
 
 pub use self::{
     editor::input::TerminalInput,
     game::{Game, PureCrosscutGame},
     game_engine::{GameEngine, GameOutput},
+    renderer::Renderer,
 };
 
 #[cfg(test)]
