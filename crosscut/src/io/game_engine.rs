@@ -54,11 +54,8 @@ impl Handler {
 
 impl ApplicationHandler for Handler {
     fn resumed(&mut self, event_loop: &ActiveEventLoop) {
-        match self.resources.init_if_necessary(event_loop) {
-            Ok(()) => {}
-            Err(err) => {
-                self.on_error(err, event_loop);
-            }
+        if let Err(err) = self.resources.init_if_necessary(event_loop) {
+            self.on_error(err, event_loop);
         }
     }
 
