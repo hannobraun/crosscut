@@ -122,8 +122,7 @@ impl ApplicationHandler for Handler {
     }
 
     fn about_to_wait(&mut self, _: &ActiveEventLoop) {
-        let Some(Resources::Initialized { window, .. }) =
-            self.resources.as_ref()
+        let Some(Resources::Initialized { window, .. }) = &self.resources
         else {
             return;
         };
