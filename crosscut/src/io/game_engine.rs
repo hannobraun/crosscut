@@ -68,6 +68,7 @@ impl ApplicationHandler for Handler {
         let Resources::Initialized { renderer, .. } = &self.resources else {
             return;
         };
+        let game_engine = &mut self.game_engine;
 
         match event {
             WindowEvent::CloseRequested => {
@@ -84,11 +85,9 @@ impl ApplicationHandler for Handler {
                 event_loop.exit();
             }
             WindowEvent::RedrawRequested => {
-                if let Err(err) = on_frame(
-                    &mut self.game_engine,
-                    &self.terminal_input,
-                    &mut self.color,
-                ) {
+                if let Err(err) =
+                    on_frame(game_engine, &self.terminal_input, &mut self.color)
+                {
                     match err {
                         OnFrameError::ChannelDisconnected(
                             terminal::ChannelDisconnected,
