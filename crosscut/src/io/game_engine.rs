@@ -121,11 +121,11 @@ impl ApplicationHandler for Handler {
     }
 
     fn about_to_wait(&mut self, _: &ActiveEventLoop) {
-        let Some(resources) = self.resources.as_ref() else {
+        let Some(Resources { window, .. }) = self.resources.as_ref() else {
             return;
         };
 
-        resources.window.request_redraw();
+        window.request_redraw();
     }
 }
 
