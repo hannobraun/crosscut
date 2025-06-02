@@ -72,7 +72,9 @@ impl ApplicationHandler for Handler {
         _: WindowId,
         event: WindowEvent,
     ) {
-        let Some(Resources { renderer, .. }) = self.resources.as_ref() else {
+        let Some(Resources::Initialized { renderer, .. }) =
+            self.resources.as_ref()
+        else {
             return;
         };
 
@@ -121,7 +123,9 @@ impl ApplicationHandler for Handler {
     }
 
     fn about_to_wait(&mut self, _: &ActiveEventLoop) {
-        let Some(Resources { window, .. }) = self.resources.as_ref() else {
+        let Some(Resources::Initialized { window, .. }) =
+            self.resources.as_ref()
+        else {
             return;
         };
 
@@ -159,9 +163,11 @@ enum OnFrameError {
     GameEngine(#[from] anyhow::Error),
 }
 
-struct Resources {
-    window: Arc<Window>,
-    renderer: Renderer,
+enum Resources {
+    Initialized {
+        window: Arc<Window>,
+        renderer: Renderer,
+    },
 }
 
 impl Resources {
@@ -175,6 +181,6 @@ impl Resources {
 
         let renderer = Renderer::new(&window).block_on()?;
 
-        Ok(Self { window, renderer })
+        Ok(Self::Initialized { window, renderer })
     }
 }
