@@ -70,13 +70,13 @@ pub fn start() -> anyhow::Result<TerminalThread> {
     })?;
 
     Ok(TerminalThread {
-        handles: editor_input,
+        handle: editor_input,
         terminal_input: terminal_input_rx,
     })
 }
 
 pub struct TerminalThread {
-    pub handles: ThreadHandle,
+    pub handle: ThreadHandle,
     pub terminal_input: Receiver<TerminalInput>,
 }
 
