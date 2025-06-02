@@ -68,13 +68,13 @@ pub fn start() -> anyhow::Result<TerminalThread> {
 
     Ok(TerminalThread {
         handle,
-        terminal_input: terminal_input_rx,
+        input: terminal_input_rx,
     })
 }
 
 pub struct TerminalThread {
     pub handle: ThreadHandle,
-    pub terminal_input: Receiver<TerminalInput>,
+    pub input: Receiver<TerminalInput>,
 }
 
 #[derive(Debug)]
