@@ -52,9 +52,6 @@ pub fn start() -> anyhow::Result<TerminalThread> {
         panics.insert(thread_id, full_message);
     }));
 
-    // Need to specify some of the channel types explicitly, to work around this
-    // bug in rust-analyzer:
-    // https://github.com/rust-lang/rust-analyzer/issues/15984
     let (terminal_input_tx, terminal_input_rx) = channel();
 
     let handle = spawn("terminal input", move || {
