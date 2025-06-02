@@ -52,13 +52,13 @@ pub fn start() -> anyhow::Result<TerminalThread> {
         panics.insert(thread_id, full_message);
     }));
 
-    let (terminal_input_tx, terminal_input_rx) = channel();
+    let (input_tx, terminal_input_rx) = channel();
 
     let handle = spawn("terminal input", move || {
         loop {
             match read_terminal_input() {
                 Ok(ControlFlow::Continue(input)) => {
-                    terminal_input_tx.send(input)?;
+                    input_tx.send(input)?;
                 }
                 Ok(ControlFlow::Break(())) => break Ok(()),
                 Err(err) => break Err(Error::Other { err }),
