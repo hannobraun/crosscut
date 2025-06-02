@@ -18,7 +18,7 @@ use crate::{
 static PANICS: LazyLock<Mutex<HashMap<ThreadId, String>>> =
     LazyLock::new(|| Mutex::new(HashMap::new()));
 
-pub fn start() -> anyhow::Result<Threads> {
+pub fn start() -> anyhow::Result<TerminalThread> {
     // Since one of the threads puts the terminal into raw mode while it's
     // running, the default panic handler won't work well. Let's register a hook
     // that extracts all information we need, so we can later print it here,
@@ -69,13 +69,13 @@ pub fn start() -> anyhow::Result<Threads> {
         }
     })?;
 
-    Ok(Threads {
+    Ok(TerminalThread {
         handles: [editor_input],
         terminal_input: terminal_input_rx,
     })
 }
 
-pub struct Threads {
+pub struct TerminalThread {
     pub handles: [ThreadHandle; 1],
     pub terminal_input: Receiver<TerminalInput>,
 }
