@@ -72,7 +72,7 @@ impl ApplicationHandler for Handler {
         _: WindowId,
         event: WindowEvent,
     ) {
-        let Some(resources) = self.resources.as_ref() else {
+        let Some(Resources { renderer, .. }) = self.resources.as_ref() else {
             return;
         };
 
@@ -112,7 +112,7 @@ impl ApplicationHandler for Handler {
                     return;
                 }
 
-                if let Err(err) = resources.renderer.render(self.color) {
+                if let Err(err) = renderer.render(self.color) {
                     self.on_error(err, event_loop);
                 }
             }
