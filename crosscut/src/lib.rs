@@ -18,13 +18,9 @@ pub fn start_and_wait(game: Box<dyn Game + Send>) -> anyhow::Result<()> {
     // game I/O, or any of the other threads shut down.
     io::game_engine::start_and_wait(game, threads.terminal_input)?;
 
-    // At this point, the shutdown should be in progress. None of these calls
-    // should block for long, if at all. The purpose of still joining all
-    // threads is just to get any error they might have produced.
-    //
-    // And let's join all threads first before printing any errors. Just to make
-    // sure that they have ended, and the terminal is not still in raw mode or
-    // something, when we start printing here.
+    // At this point, the shutdown should be in progress. This call shouldn't
+    // block for long, if at all. The purpose of still joining the thread is
+    // just to get any error that it might have produced.
     threads.handle.join()?;
 
     Ok(())
