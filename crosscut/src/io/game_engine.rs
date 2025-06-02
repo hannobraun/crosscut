@@ -54,7 +54,7 @@ impl Handler {
 
 impl ApplicationHandler for Handler {
     fn resumed(&mut self, event_loop: &ActiveEventLoop) {
-        match self.resources.init(event_loop) {
+        match self.resources.init_if_necessary(event_loop) {
             Ok(()) => {}
             Err(err) => {
                 self.on_error(err, event_loop);
@@ -164,7 +164,10 @@ enum Resources {
 }
 
 impl Resources {
-    fn init(&mut self, event_loop: &ActiveEventLoop) -> anyhow::Result<()> {
+    fn init_if_necessary(
+        &mut self,
+        event_loop: &ActiveEventLoop,
+    ) -> anyhow::Result<()> {
         if let Resources::Uninitialized = self {
             let window = {
                 let window = event_loop.create_window(
