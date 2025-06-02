@@ -13,7 +13,7 @@ use winit::{
 use crate::{
     Game,
     game_engine::{GameEngine, GameOutput, TerminalInput},
-    threads::{self, Receiver},
+    terminal::{self, Receiver},
 };
 
 use super::terminal::output::RawTerminalAdapter;
@@ -97,7 +97,7 @@ impl ApplicationHandler for Handler {
                 ) {
                     match err {
                         OnFrameError::ChannelDisconnected(
-                            threads::ChannelDisconnected,
+                            terminal::ChannelDisconnected,
                         ) => {
                             // The other end has hung up. We should shut down
                             // too.
@@ -152,7 +152,7 @@ fn on_frame(
 #[derive(Debug, thiserror::Error)]
 enum OnFrameError {
     #[error(transparent)]
-    ChannelDisconnected(#[from] threads::ChannelDisconnected),
+    ChannelDisconnected(#[from] terminal::ChannelDisconnected),
 
     #[error(transparent)]
     GameEngine(#[from] anyhow::Error),

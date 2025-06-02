@@ -6,13 +6,13 @@
 mod game_engine;
 mod io;
 mod language;
-mod threads;
+mod terminal;
 mod util;
 
 pub use game_engine::{Game, PureCrosscutGame};
 
 pub fn start_and_wait(game: Box<dyn Game + Send>) -> anyhow::Result<()> {
-    let terminal = threads::start()?;
+    let terminal = terminal::start()?;
 
     // This call is going to block until the user requests a shutdown via the
     // game I/O, or any of the other threads shut down.
