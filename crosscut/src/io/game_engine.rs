@@ -26,7 +26,7 @@ pub fn start_and_wait(
     let mut handler = Handler {
         game_engine,
         terminal_input,
-        resources: None,
+        resources: Resources::Uninitialized,
         result: Ok(()),
         color: wgpu::Color::BLACK,
     };
@@ -40,7 +40,7 @@ pub fn start_and_wait(
 struct Handler {
     game_engine: GameEngine<RawTerminalAdapter>,
     terminal_input: Receiver<TerminalInput>,
-    resources: Option<Resources>,
+    resources: Resources,
     result: anyhow::Result<()>,
     color: wgpu::Color,
 }
@@ -54,10 +54,10 @@ impl Handler {
 
 impl ApplicationHandler for Handler {
     fn resumed(&mut self, event_loop: &ActiveEventLoop) {
-        if self.resources.is_none() {
+        if let Resources::Uninitialized = self.resources {
             match Resources::new(event_loop) {
                 Ok(resources) => {
-                    self.resources = Some(resources);
+                    self.resources = resources;
                 }
                 Err(err) => {
                     self.on_error(err, event_loop);
@@ -72,8 +72,7 @@ impl ApplicationHandler for Handler {
         _: WindowId,
         event: WindowEvent,
     ) {
-        let Some(Resources::Initialized { renderer, .. }) = &self.resources
-        else {
+        let Resources::Initialized { renderer, .. } = &self.resources else {
             return;
         };
 
@@ -122,8 +121,7 @@ impl ApplicationHandler for Handler {
     }
 
     fn about_to_wait(&mut self, _: &ActiveEventLoop) {
-        let Some(Resources::Initialized { window, .. }) = &self.resources
-        else {
+        let Resources::Initialized { window, .. } = &self.resources else {
             return;
         };
 
@@ -162,6 +160,7 @@ enum OnFrameError {
 }
 
 enum Resources {
+    Uninitialized,
     Initialized {
         window: Arc<Window>,
         renderer: Renderer,
