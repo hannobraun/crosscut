@@ -171,7 +171,7 @@ impl Resources {
         if let Resources::Uninitialized { game } = self {
             let Some(game) = game.take() else {
                 unreachable!(
-                    "`game` should always be `Some`, unless the folllowing \
+                    "`game` should always be `Some`, unless the following \
                     code panics, before we replace `self` below. That would be \
                     a bug."
                 );
