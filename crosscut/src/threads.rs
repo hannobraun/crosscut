@@ -52,7 +52,7 @@ pub fn start() -> anyhow::Result<TerminalThread> {
         panics.insert(thread_id, full_message);
     }));
 
-    let (input_tx, terminal_input_rx) = channel();
+    let (input_tx, input_rx) = channel();
 
     let handle = spawn("terminal input", move || {
         loop {
@@ -68,7 +68,7 @@ pub fn start() -> anyhow::Result<TerminalThread> {
 
     Ok(TerminalThread {
         handle,
-        input: terminal_input_rx,
+        input: input_rx,
     })
 }
 
