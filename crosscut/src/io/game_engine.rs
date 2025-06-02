@@ -55,10 +55,8 @@ impl Handler {
 impl ApplicationHandler for Handler {
     fn resumed(&mut self, event_loop: &ActiveEventLoop) {
         if let Resources::Uninitialized = self.resources {
-            match Resources::new(event_loop) {
-                Ok(resources) => {
-                    self.resources = resources;
-                }
+            match self.resources.init(event_loop) {
+                Ok(()) => {}
                 Err(err) => {
                     self.on_error(err, event_loop);
                 }
@@ -168,7 +166,7 @@ enum Resources {
 }
 
 impl Resources {
-    fn new(event_loop: &ActiveEventLoop) -> anyhow::Result<Self> {
+    fn init(&mut self, event_loop: &ActiveEventLoop) -> anyhow::Result<()> {
         let window = {
             let window = event_loop.create_window(
                 Window::default_attributes().with_title("Crosscut"),
@@ -178,6 +176,8 @@ impl Resources {
 
         let renderer = Renderer::new(&window).block_on()?;
 
-        Ok(Self::Initialized { window, renderer })
+        *self = Self::Initialized { window, renderer };
+
+        Ok(())
     }
 }
