@@ -57,7 +57,7 @@ pub fn start() -> anyhow::Result<TerminalThread> {
     // https://github.com/rust-lang/rust-analyzer/issues/15984
     let (terminal_input_tx, terminal_input_rx) = channel();
 
-    let editor_input = spawn("terminal input", move || {
+    let handle = spawn("terminal input", move || {
         loop {
             match read_terminal_input() {
                 Ok(ControlFlow::Continue(input)) => {
@@ -70,7 +70,7 @@ pub fn start() -> anyhow::Result<TerminalThread> {
     })?;
 
     Ok(TerminalThread {
-        handle: editor_input,
+        handle,
         terminal_input: terminal_input_rx,
     })
 }
