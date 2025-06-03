@@ -42,7 +42,6 @@ impl PureCrosscutGame {
     fn run_game_for_a_few_steps(
         &mut self,
         language: &mut Language,
-        _: &mut Vec<GameOutput>,
     ) -> anyhow::Result<()> {
         if let State::WaitUntil { instant } = self.state {
             if Instant::now() < instant {
@@ -167,19 +166,19 @@ impl Game for PureCrosscutGame {
     fn on_start(
         &mut self,
         language: &mut Language,
-        output: &mut Vec<GameOutput>,
+        _: &mut Vec<GameOutput>,
     ) -> anyhow::Result<()> {
         self.color = Some(wgpu::Color::BLACK);
-        self.run_game_for_a_few_steps(language, output)?;
+        self.run_game_for_a_few_steps(language)?;
         Ok(())
     }
 
     fn on_editor_update(
         &mut self,
         language: &mut Language,
-        output: &mut Vec<GameOutput>,
+        _: &mut Vec<GameOutput>,
     ) -> anyhow::Result<()> {
-        self.run_game_for_a_few_steps(language, output)?;
+        self.run_game_for_a_few_steps(language)?;
         Ok(())
     }
 
@@ -216,7 +215,7 @@ impl Game for PureCrosscutGame {
             self.state = State::Running;
         }
 
-        self.run_game_for_a_few_steps(language, output)?;
+        self.run_game_for_a_few_steps(language)?;
 
         for GameOutput::SubmitColor {
             color: [r, g, b, a],
