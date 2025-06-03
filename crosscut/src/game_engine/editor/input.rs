@@ -197,4 +197,27 @@ mod tests {
             Some(EditorInputOrCommand::Command { command: expected }),
         );
     }
+
+    #[test]
+    fn abort_command() {
+        // The code that recognizes the different commands is completely
+        // declarative. Testing more than one here wouldn't really do anything
+        // productive, except repeat that declarative code in this test here.
+        let input = "reset";
+
+        let mut editor_input = TerminalEditorInput::new();
+
+        // enter command mode
+        assert_eq!(editor_input.on_input(TerminalInput::Escape), None);
+
+        for ch in input.chars() {
+            assert_eq!(
+                editor_input.on_input(TerminalInput::Character { ch }),
+                None,
+            );
+        }
+
+        // abort command
+        assert_eq!(editor_input.on_input(TerminalInput::Escape), None);
+    }
 }

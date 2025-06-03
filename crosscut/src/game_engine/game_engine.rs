@@ -137,11 +137,6 @@ impl GameEngine<DebugOutputAdapter> {
         self
     }
 
-    pub fn abort_command(&mut self) -> &mut Self {
-        self.on_terminal_input(TerminalInput::Escape).unwrap();
-        self
-    }
-
     pub fn on_char(&mut self, ch: char) -> &mut Self {
         self.on_terminal_input(TerminalInput::Character { ch })
             .unwrap();
