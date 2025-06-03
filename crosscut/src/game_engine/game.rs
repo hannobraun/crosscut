@@ -3,6 +3,7 @@ use std::{
     time::{Duration, Instant},
 };
 
+use pollster::FutureExt;
 use winit::window::Window;
 
 use crate::{
@@ -26,16 +27,13 @@ pub trait Game {
         language: &mut Language,
     ) -> anyhow::Result<()>;
 
-    fn on_frame(
-        &mut self,
-        language: &mut Language,
-        renderer: &mut Renderer,
-    ) -> anyhow::Result<()>;
+    fn on_frame(&mut self, language: &mut Language) -> anyhow::Result<()>;
 }
 
 #[derive(Default)]
 pub struct PureCrosscutGame {
     state: State,
+    renderer: Option<Renderer>,
     color: Option<wgpu::Color>,
 }
 
@@ -167,8 +165,9 @@ impl Game for PureCrosscutGame {
     fn on_start(
         &mut self,
         language: &mut Language,
-        _: &Arc<Window>,
+        window: &Arc<Window>,
     ) -> anyhow::Result<()> {
+        self.renderer = Some(Renderer::new(window).block_on()?);
         self.color = Some(wgpu::Color::BLACK);
         self.run_game_for_a_few_steps(language)?;
         Ok(())
@@ -182,11 +181,7 @@ impl Game for PureCrosscutGame {
         Ok(())
     }
 
-    fn on_frame(
-        &mut self,
-        language: &mut Language,
-        renderer: &mut Renderer,
-    ) -> anyhow::Result<()> {
+    fn on_frame(&mut self, language: &mut Language) -> anyhow::Result<()> {
         if let State::EndOfFrame = self.state {
             match language.evaluator().state() {
                 RuntimeState::Effect {
@@ -216,7 +211,7 @@ impl Game for PureCrosscutGame {
 
         self.run_game_for_a_few_steps(language)?;
 
-        if let Some(color) = self.color {
+        if let (Some(renderer), Some(color)) = (&self.renderer, self.color) {
             renderer.render(color)?;
         }
 

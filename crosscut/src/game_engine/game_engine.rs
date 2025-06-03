@@ -1,10 +1,8 @@
 use std::sync::Arc;
 
-use pollster::FutureExt;
 use winit::window::Window;
 
 use crate::{
-    game_engine::Renderer,
     io::terminal::output::{RawTerminalAdapter, TerminalOutputAdapter},
     language::language::Language,
 };
@@ -20,7 +18,6 @@ use super::{
 pub struct GameEngine<A> {
     game: Box<dyn Game>,
     language: Language,
-    renderer: Renderer,
     editor_input: TerminalEditorInput,
     editor_output: TerminalEditorOutput<A>,
 }
@@ -49,14 +46,12 @@ where
         adapter: A,
     ) -> anyhow::Result<Self> {
         let mut language = Language::new();
-        let renderer = Renderer::new(window).block_on()?;
 
         game.on_start(&mut language, window)?;
 
         Ok(Self {
             game,
             language,
-            renderer,
             editor_input: TerminalEditorInput::new(),
             editor_output: TerminalEditorOutput::new(adapter),
         })
@@ -83,7 +78,7 @@ where
     }
 
     pub fn on_frame(&mut self) -> anyhow::Result<()> {
-        self.game.on_frame(&mut self.language, &mut self.renderer)?;
+        self.game.on_frame(&mut self.language)?;
         self.render_editor()?;
 
         Ok(())
