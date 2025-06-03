@@ -9,8 +9,6 @@ use crate::{
     },
 };
 
-use super::GameOutput;
-
 pub trait Game {
     fn on_start(&mut self, language: &mut Language) -> anyhow::Result<()>;
 
@@ -23,7 +21,6 @@ pub trait Game {
         &mut self,
         language: &mut Language,
         renderer: &mut Renderer,
-        output: &mut Vec<GameOutput>,
     ) -> anyhow::Result<()>;
 }
 
@@ -176,7 +173,6 @@ impl Game for PureCrosscutGame {
         &mut self,
         language: &mut Language,
         renderer: &mut Renderer,
-        _: &mut Vec<GameOutput>,
     ) -> anyhow::Result<()> {
         if let State::EndOfFrame = self.state {
             match language.evaluator().state() {

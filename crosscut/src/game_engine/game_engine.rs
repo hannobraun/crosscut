@@ -21,7 +21,6 @@ pub struct GameEngine<A> {
     game: Box<dyn Game>,
     language: Language,
     renderer: Renderer,
-    game_output: Vec<GameOutput>,
     editor_input: TerminalEditorInput,
     editor_output: TerminalEditorOutput<A>,
 }
@@ -51,7 +50,6 @@ where
     ) -> anyhow::Result<Self> {
         let mut language = Language::new();
         let renderer = Renderer::new(window).block_on()?;
-        let game_output = Vec::new();
 
         game.on_start(&mut language)?;
 
@@ -59,7 +57,6 @@ where
             game,
             language,
             renderer,
-            game_output,
             editor_input: TerminalEditorInput::new(),
             editor_output: TerminalEditorOutput::new(adapter),
         })
@@ -86,11 +83,7 @@ where
     }
 
     pub fn on_frame(&mut self) -> anyhow::Result<()> {
-        self.game.on_frame(
-            &mut self.language,
-            &mut self.renderer,
-            &mut self.game_output,
-        )?;
+        self.game.on_frame(&mut self.language, &mut self.renderer)?;
         self.render_editor()?;
 
         Ok(())
@@ -102,9 +95,4 @@ where
 
         Ok(())
     }
-}
-
-#[derive(Debug)]
-pub enum GameOutput {
-    SubmitColor { color: [f64; 4] },
 }

@@ -6,7 +6,7 @@ mod renderer;
 pub use self::{
     editor::input::TerminalInput,
     game::{Game, PureCrosscutGame},
-    game_engine::{GameEngine, GameOutput},
+    game_engine::GameEngine,
     renderer::Renderer,
 };
 
