@@ -197,13 +197,6 @@ impl fmt::Write for RawTerminalAdapter {
 
 impl Drop for RawTerminalAdapter {
     fn drop(&mut self) {
-        // If we don't clear the screen, the terminal is going to draw the
-        // prompt over our remaining output, depending on where the cursor
-        // happened to be.
-        if let Err(err) = self.clear().and_then(|()| self.flush()) {
-            eprintln!("Failed to clear screen on shutdown: {err}");
-        }
-
         if let Err(err) = crossterm::execute!(stdout(), LeaveAlternateScreen) {
             eprintln!("Failed to leave alternate screen on shutdown: {err}");
         }
