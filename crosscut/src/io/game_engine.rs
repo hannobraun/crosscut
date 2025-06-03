@@ -24,7 +24,6 @@ pub fn start_and_wait(
         terminal_input,
         resources: Resources::Uninitialized { game: Some(game) },
         result: Ok(()),
-        color: wgpu::Color::BLACK,
     };
 
     let event_loop = EventLoop::new()?;
@@ -37,7 +36,6 @@ struct Handler {
     terminal_input: Receiver<TerminalInput>,
     resources: Resources,
     result: anyhow::Result<()>,
-    color: wgpu::Color,
 }
 
 impl Handler {
@@ -80,9 +78,7 @@ impl ApplicationHandler for Handler {
                 event_loop.exit();
             }
             WindowEvent::RedrawRequested => {
-                if let Err(err) =
-                    on_frame(game_engine, &self.terminal_input, &mut self.color)
-                {
+                if let Err(err) = on_frame(game_engine, &self.terminal_input) {
                     match err {
                         OnFrameError::ChannelDisconnected(
                             terminal::ChannelDisconnected,
@@ -113,7 +109,6 @@ impl ApplicationHandler for Handler {
 fn on_frame(
     game_engine: &mut GameEngine<RawTerminalAdapter>,
     terminal_input: &Receiver<TerminalInput>,
-    _: &mut wgpu::Color,
 ) -> Result<(), OnFrameError> {
     game_engine.on_frame()?;
 
