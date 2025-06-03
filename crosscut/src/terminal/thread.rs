@@ -1,20 +1,18 @@
 use std::{
     backtrace::Backtrace,
-    collections::HashMap,
     io,
     ops::ControlFlow,
     panic,
-    sync::{LazyLock, Mutex},
-    thread::{self, JoinHandle, ThreadId},
+    thread::{self, JoinHandle},
 };
 
 use anyhow::anyhow;
 use crossbeam_channel::{SendError, TryRecvError};
 
-use crate::{game_engine::TerminalInput, terminal::input::read_terminal_input};
-
-static PANICS: LazyLock<Mutex<HashMap<ThreadId, String>>> =
-    LazyLock::new(|| Mutex::new(HashMap::new()));
+use crate::{
+    game_engine::TerminalInput,
+    terminal::{RawTerminalAdapter, input::read_terminal_input},
+};
 
 pub fn start() -> anyhow::Result<TerminalThread> {
     // Since one of the threads puts the terminal into raw mode while it's
@@ -22,32 +20,27 @@ pub fn start() -> anyhow::Result<TerminalThread> {
     // that extracts all information we need, so we can later print it here,
     // after all other threads have ended.
     panic::set_hook(Box::new(|info| {
+        RawTerminalAdapter::on_shutdown();
+
         let message = panic_message::panic_info_message(info);
         let location = info.location();
         let backtrace = Backtrace::force_capture();
 
         let thread = thread::current();
-        let thread_id = thread.id();
         let thread_name = thread.name().unwrap_or("<unnamed>");
-
-        let Ok(mut panics) = PANICS.lock() else {
-            // Lock is poisoned. Nothing we can do about that, I think.
-            return;
-        };
 
         let location = if let Some(location) = location {
             format!(" at {location}")
         } else {
             String::new()
         };
-        let full_message = format!(
+
+        eprintln!(
             "Thread `{thread_name}` panicked{location}:\n\
             {message}\n\
             \n\
             {backtrace}"
         );
-
-        panics.insert(thread_id, full_message);
     }));
 
     let (input_tx, input_rx) = channel();
@@ -86,26 +79,13 @@ impl ThreadHandle {
     }
 
     pub fn join(self) -> anyhow::Result<()> {
-        let thread_id = self.inner.thread().id();
-
         match self.inner.join() {
             Ok(result) => result,
             Err(_) => {
-                let Ok(panics) = PANICS.lock() else {
-                    return Err(anyhow!(
-                        "Could not acquire panic info, because lock is \
-                        poisoned."
-                    ));
-                };
+                // The panic handler already prints to stderr. Nothing more to
+                // do here.
 
-                let Some(message) = panics.get(&thread_id) else {
-                    unreachable!(
-                        "Thread panicked, but panic hook doesn't seem to have \
-                        run."
-                    );
-                };
-
-                Err(anyhow!("{message}"))
+                Err(anyhow!("Thread panicked."))
             }
         }
     }
