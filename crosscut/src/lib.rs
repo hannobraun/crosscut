@@ -8,7 +8,7 @@ mod language;
 mod terminal;
 mod util;
 
-pub use game_engine::{Game, PureCrosscutGame};
+pub use self::game_engine::{Game, PureCrosscutGame};
 
 pub fn start_and_wait(game: Box<dyn Game + Send>) -> anyhow::Result<()> {
     let terminal = terminal::start()?;
