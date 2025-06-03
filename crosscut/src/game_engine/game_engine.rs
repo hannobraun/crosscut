@@ -90,60 +90,6 @@ where
     }
 }
 
-#[cfg(test)]
-use crate::io::terminal::output::DebugOutputAdapter;
-
-#[cfg(test)]
-impl GameEngine<DebugOutputAdapter> {
-    pub fn without_editor_ui() -> Self {
-        let game = Box::new(super::PureCrosscutGame::default());
-        let adapter = DebugOutputAdapter;
-        Self::new(game, adapter)
-    }
-
-    pub fn enter_code(&mut self, code: &str) -> &mut Self {
-        assert!(self.editor_input.mode().is_edit_mode());
-
-        for ch in code.chars() {
-            self.on_char(ch);
-        }
-
-        self
-    }
-
-    pub fn cursor_down(&mut self) -> &mut Self {
-        assert!(self.editor_input.mode().is_edit_mode());
-        self.on_terminal_input(TerminalInput::Down).unwrap();
-        self
-    }
-
-    pub fn enter_command_mode(&mut self) -> &mut Self {
-        self.on_terminal_input(TerminalInput::Escape).unwrap();
-        self
-    }
-
-    pub fn enter_command(&mut self, command: &str) -> &mut Self {
-        assert!(self.editor_input.mode().is_command_mode());
-
-        for ch in command.chars() {
-            self.on_char(ch);
-        }
-
-        self
-    }
-
-    pub fn execute_command(&mut self) -> &mut Self {
-        self.on_terminal_input(TerminalInput::Enter).unwrap();
-        self
-    }
-
-    pub fn on_char(&mut self, ch: char) -> &mut Self {
-        self.on_terminal_input(TerminalInput::Character { ch })
-            .unwrap();
-        self
-    }
-}
-
 #[derive(Debug)]
 pub enum GameOutput {
     SubmitColor { color: [f64; 4] },

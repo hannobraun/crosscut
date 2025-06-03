@@ -79,18 +79,6 @@ pub enum EditorMode {
     },
 }
 
-impl EditorMode {
-    #[cfg(test)]
-    pub fn is_command_mode(&self) -> bool {
-        matches!(self, Self::Command { .. })
-    }
-
-    #[cfg(test)]
-    pub fn is_edit_mode(&self) -> bool {
-        matches!(self, Self::Edit)
-    }
-}
-
 #[derive(Debug)]
 pub enum TerminalInput {
     Character {
