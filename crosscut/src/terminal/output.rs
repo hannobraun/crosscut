@@ -200,11 +200,11 @@ impl Drop for RawTerminalAdapter {
         // prompt over our remaining output, depending on where the cursor
         // happened to be.
         if let Err(err) = self.clear().and_then(|()| self.flush()) {
-            println!("Failed to clear screen on shutdown: {err}");
+            eprintln!("Failed to clear screen on shutdown: {err}");
         }
 
         if let Err(err) = terminal::disable_raw_mode() {
-            println!("Failed to disable terminal raw mode on shutdown: {err}");
+            eprintln!("Failed to disable terminal raw mode on shutdown: {err}");
         }
     }
 }
