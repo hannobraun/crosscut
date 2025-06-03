@@ -7,7 +7,7 @@ use crossterm::{
     QueueableCommand,
     cursor::{self, MoveToNextLine},
     style::{Attribute, Color, ResetColor, SetAttribute, SetForegroundColor},
-    terminal::{self, ClearType},
+    terminal::{self, ClearType, EnterAlternateScreen, LeaveAlternateScreen},
 };
 
 pub trait TerminalOutputAdapter: fmt::Write {
@@ -100,6 +100,7 @@ impl RawTerminalAdapter {
         // We are taking care of that here, by disabling raw mode in the `Drop`
         // implementation of this type. So raw mode is bound to its lifetime.
         terminal::enable_raw_mode()?;
+        crossterm::execute!(stdout(), EnterAlternateScreen)?;
 
         Ok(Self {
             w: stdout(),
@@ -203,6 +204,9 @@ impl Drop for RawTerminalAdapter {
             eprintln!("Failed to clear screen on shutdown: {err}");
         }
 
+        if let Err(err) = crossterm::execute!(stdout(), LeaveAlternateScreen) {
+            eprintln!("Failed to leave alternate screen on shutdown: {err}");
+        }
         if let Err(err) = terminal::disable_raw_mode() {
             eprintln!("Failed to disable terminal raw mode on shutdown: {err}");
         }
