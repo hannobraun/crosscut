@@ -7,7 +7,6 @@ mod start;
 pub use self::{
     editor::input::TerminalInput,
     game::{Game, PureCrosscutGame},
-    game_engine::GameEngine,
     renderer::Renderer,
     start::start_and_wait,
 };

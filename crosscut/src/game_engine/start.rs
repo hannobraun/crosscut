@@ -10,7 +10,7 @@ use winit::{
 
 use crate::{
     Game,
-    game_engine::{GameEngine, TerminalInput},
+    game_engine::{TerminalInput, game_engine::GameEngine},
     terminal::{self, RawTerminalAdapter, Receiver},
 };
 
