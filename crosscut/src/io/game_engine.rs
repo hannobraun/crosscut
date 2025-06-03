@@ -1,6 +1,5 @@
 use std::sync::Arc;
 
-use pollster::FutureExt;
 use winit::{
     application::ApplicationHandler,
     event::{KeyEvent, WindowEvent},
@@ -11,7 +10,7 @@ use winit::{
 
 use crate::{
     Game,
-    game_engine::{GameEngine, GameOutput, Renderer, TerminalInput},
+    game_engine::{GameEngine, TerminalInput},
     terminal::{self, Receiver},
 };
 
@@ -61,11 +60,7 @@ impl ApplicationHandler for Handler {
         _: WindowId,
         event: WindowEvent,
     ) {
-        let Resources::Initialized {
-            game_engine,
-            renderer,
-            ..
-        } = &mut self.resources
+        let Resources::Initialized { game_engine, .. } = &mut self.resources
         else {
             return;
         };
@@ -100,12 +95,6 @@ impl ApplicationHandler for Handler {
                             self.on_error(err, event_loop);
                         }
                     }
-
-                    return;
-                }
-
-                if let Err(err) = renderer.render(self.color) {
-                    self.on_error(err, event_loop);
                 }
             }
             _ => {}
@@ -124,19 +113,12 @@ impl ApplicationHandler for Handler {
 fn on_frame(
     game_engine: &mut GameEngine<RawTerminalAdapter>,
     terminal_input: &Receiver<TerminalInput>,
-    color: &mut wgpu::Color,
+    _: &mut wgpu::Color,
 ) -> Result<(), OnFrameError> {
     game_engine.on_frame()?;
 
     while let Some(input) = terminal_input.try_recv()? {
         game_engine.on_terminal_input(input)?;
-    }
-
-    for GameOutput::SubmitColor {
-        color: [r, g, b, a],
-    } in game_engine.game_output()
-    {
-        *color = wgpu::Color { r, g, b, a };
     }
 
     Ok(())
@@ -159,7 +141,6 @@ enum Resources {
     Initialized {
         window: Arc<Window>,
         game_engine: GameEngine<RawTerminalAdapter>,
-        renderer: Renderer,
     },
 }
 
@@ -184,14 +165,11 @@ impl Resources {
                 Arc::new(window)
             };
 
-            let game_engine = GameEngine::with_editor_ui(game)?;
-
-            let renderer = Renderer::new(&window).block_on()?;
+            let game_engine = GameEngine::with_editor_ui(game, &window)?;
 
             *self = Self::Initialized {
                 window,
                 game_engine,
-                renderer,
             };
         }
 
