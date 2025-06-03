@@ -176,7 +176,7 @@ impl Game for PureCrosscutGame {
         &mut self,
         language: &mut Language,
         renderer: &mut Renderer,
-        output: &mut Vec<GameOutput>,
+        _: &mut Vec<GameOutput>,
     ) -> anyhow::Result<()> {
         if let State::EndOfFrame = self.state {
             match language.evaluator().state() {
@@ -206,13 +206,6 @@ impl Game for PureCrosscutGame {
         }
 
         self.run_game_for_a_few_steps(language)?;
-
-        for GameOutput::SubmitColor {
-            color: [r, g, b, a],
-        } in output.drain(..)
-        {
-            self.color = Some(wgpu::Color { r, g, b, a });
-        }
 
         if let Some(color) = self.color {
             renderer.render(color)?;
