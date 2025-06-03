@@ -3,8 +3,8 @@ use std::sync::Arc;
 use winit::window::Window;
 
 use crate::{
-    io::terminal::output::{RawTerminalAdapter, TerminalOutputAdapter},
     language::language::Language,
+    terminal::{RawTerminalAdapter, TerminalOutputAdapter},
 };
 
 use super::{

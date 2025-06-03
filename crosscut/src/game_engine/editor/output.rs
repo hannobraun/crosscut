@@ -1,26 +1,26 @@
 use crossterm::style::{Attribute, Color};
 
 use crate::{
-    io::terminal::output::{Cursor, TerminalOutputAdapter},
     language::{
         code::{Codebase, NodePath, SyntaxNode},
         editor::{Editor, EditorLayout, EditorLine},
         language::Language,
         runtime::{Effect, Evaluator, RuntimeState},
     },
+    terminal::{Cursor, TerminalOutputAdapter},
 };
 
 use super::input::{EditorMode, TerminalEditorInput};
 
 #[cfg(test)]
 pub fn codebase_to_stdout(codebase: &Codebase) {
-    use crate::io::terminal::output::DebugOutputAdapter;
+    use crate::terminal::DebugOutputAdapter;
     codebase_to_adapter(codebase, &mut DebugOutputAdapter);
 }
 
 #[cfg(test)]
 pub fn codebase_to_string(codebase: &Codebase) -> String {
-    use crate::io::terminal::output::StringOutputAdapter;
+    use crate::terminal::StringOutputAdapter;
 
     let mut adapter = StringOutputAdapter {
         output: String::new(),

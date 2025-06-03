@@ -11,10 +11,8 @@ use winit::{
 use crate::{
     Game,
     game_engine::{GameEngine, TerminalInput},
-    terminal::{self, Receiver},
+    terminal::{self, RawTerminalAdapter, Receiver},
 };
-
-use super::terminal::output::RawTerminalAdapter;
 
 pub fn start_and_wait(
     game: Box<dyn Game + Send>,
