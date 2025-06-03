@@ -50,10 +50,10 @@ where
         adapter: A,
     ) -> anyhow::Result<Self> {
         let mut language = Language::new();
-        let mut renderer = Renderer::new(window).block_on()?;
+        let renderer = Renderer::new(window).block_on()?;
         let mut game_output = Vec::new();
 
-        game.on_start(&mut language, &mut renderer, &mut game_output)?;
+        game.on_start(&mut language, &mut game_output)?;
 
         Ok(Self {
             game,

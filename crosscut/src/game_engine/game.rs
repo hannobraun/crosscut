@@ -15,7 +15,6 @@ pub trait Game {
     fn on_start(
         &mut self,
         language: &mut Language,
-        renderer: &mut Renderer,
         output: &mut Vec<GameOutput>,
     ) -> anyhow::Result<()>;
 
@@ -166,7 +165,6 @@ impl Game for PureCrosscutGame {
     fn on_start(
         &mut self,
         language: &mut Language,
-        _: &mut Renderer,
         output: &mut Vec<GameOutput>,
     ) -> anyhow::Result<()> {
         self.color = Some(wgpu::Color::BLACK);
