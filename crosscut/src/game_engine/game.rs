@@ -37,6 +37,66 @@ pub struct PureCrosscutGame {
     color: Option<wgpu::Color>,
 }
 
+impl Game for PureCrosscutGame {
+    fn on_start(
+        &mut self,
+        language: &mut Language,
+        window: &Arc<Window>,
+    ) -> anyhow::Result<()> {
+        self.renderer = Some(Renderer::new(window).block_on()?);
+        self.color = Some(wgpu::Color::BLACK);
+
+        self.run_game_for_a_few_steps(language)?;
+
+        Ok(())
+    }
+
+    fn on_editor_update(
+        &mut self,
+        language: &mut Language,
+    ) -> anyhow::Result<()> {
+        self.run_game_for_a_few_steps(language)?;
+        Ok(())
+    }
+
+    fn on_frame(&mut self, language: &mut Language) -> anyhow::Result<()> {
+        if let State::EndOfFrame = self.state {
+            match language.evaluator().state() {
+                RuntimeState::Effect {
+                    effect: Effect::ApplyProvidedFunction { name, input: _ },
+                    ..
+                } => {
+                    assert_eq!(
+                        name, "color",
+                        "Expecting to provide output for `color` function, \
+                        because that is the only one that enters this state.",
+                    );
+
+                    language.exit_from_provided_function(Value::nothing());
+                }
+                state => {
+                    assert!(
+                        matches!(state, RuntimeState::Started),
+                        "`EndOfFrame` state was entered, but expected effect \
+                        is not active. This should only happen, if the runtime \
+                        has been reset.",
+                    );
+                }
+            }
+
+            self.state = State::Running;
+        }
+
+        self.run_game_for_a_few_steps(language)?;
+
+        if let (Some(renderer), Some(color)) = (&self.renderer, self.color) {
+            renderer.render(color)?;
+        }
+
+        Ok(())
+    }
+}
+
 impl PureCrosscutGame {
     fn run_game_for_a_few_steps(
         &mut self,
@@ -155,66 +215,6 @@ impl PureCrosscutGame {
             }
 
             break;
-        }
-
-        Ok(())
-    }
-}
-
-impl Game for PureCrosscutGame {
-    fn on_start(
-        &mut self,
-        language: &mut Language,
-        window: &Arc<Window>,
-    ) -> anyhow::Result<()> {
-        self.renderer = Some(Renderer::new(window).block_on()?);
-        self.color = Some(wgpu::Color::BLACK);
-
-        self.run_game_for_a_few_steps(language)?;
-
-        Ok(())
-    }
-
-    fn on_editor_update(
-        &mut self,
-        language: &mut Language,
-    ) -> anyhow::Result<()> {
-        self.run_game_for_a_few_steps(language)?;
-        Ok(())
-    }
-
-    fn on_frame(&mut self, language: &mut Language) -> anyhow::Result<()> {
-        if let State::EndOfFrame = self.state {
-            match language.evaluator().state() {
-                RuntimeState::Effect {
-                    effect: Effect::ApplyProvidedFunction { name, input: _ },
-                    ..
-                } => {
-                    assert_eq!(
-                        name, "color",
-                        "Expecting to provide output for `color` function, \
-                        because that is the only one that enters this state.",
-                    );
-
-                    language.exit_from_provided_function(Value::nothing());
-                }
-                state => {
-                    assert!(
-                        matches!(state, RuntimeState::Started),
-                        "`EndOfFrame` state was entered, but expected effect \
-                        is not active. This should only happen, if the runtime \
-                        has been reset.",
-                    );
-                }
-            }
-
-            self.state = State::Running;
-        }
-
-        self.run_game_for_a_few_steps(language)?;
-
-        if let (Some(renderer), Some(color)) = (&self.renderer, self.color) {
-            renderer.render(color)?;
         }
 
         Ok(())
