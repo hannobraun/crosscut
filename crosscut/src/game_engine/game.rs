@@ -45,10 +45,10 @@ impl PureCrosscutGame {
         language: &mut Language,
         _: &mut Renderer,
         output: &mut Vec<GameOutput>,
-    ) {
+    ) -> anyhow::Result<()> {
         if let State::WaitUntil { instant } = self.state {
             if Instant::now() < instant {
-                return;
+                return Ok(());
             }
 
             match language.evaluator().state() {
@@ -157,6 +157,8 @@ impl PureCrosscutGame {
 
             break;
         }
+
+        Ok(())
     }
 }
 
@@ -167,7 +169,7 @@ impl Game for PureCrosscutGame {
         renderer: &mut Renderer,
         output: &mut Vec<GameOutput>,
     ) -> anyhow::Result<()> {
-        self.run_game_for_a_few_steps(language, renderer, output);
+        self.run_game_for_a_few_steps(language, renderer, output)?;
         Ok(())
     }
 
@@ -177,7 +179,7 @@ impl Game for PureCrosscutGame {
         renderer: &mut Renderer,
         output: &mut Vec<GameOutput>,
     ) -> anyhow::Result<()> {
-        self.run_game_for_a_few_steps(language, renderer, output);
+        self.run_game_for_a_few_steps(language, renderer, output)?;
         Ok(())
     }
 
@@ -214,7 +216,7 @@ impl Game for PureCrosscutGame {
             self.state = State::Running;
         }
 
-        self.run_game_for_a_few_steps(language, renderer, output);
+        self.run_game_for_a_few_steps(language, renderer, output)?;
 
         Ok(())
     }
