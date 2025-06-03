@@ -12,11 +12,7 @@ use crate::{
 use super::GameOutput;
 
 pub trait Game {
-    fn on_start(
-        &mut self,
-        language: &mut Language,
-        output: &mut Vec<GameOutput>,
-    ) -> anyhow::Result<()>;
+    fn on_start(&mut self, language: &mut Language) -> anyhow::Result<()>;
 
     fn on_editor_update(
         &mut self,
@@ -163,11 +159,7 @@ impl PureCrosscutGame {
 }
 
 impl Game for PureCrosscutGame {
-    fn on_start(
-        &mut self,
-        language: &mut Language,
-        _: &mut Vec<GameOutput>,
-    ) -> anyhow::Result<()> {
+    fn on_start(&mut self, language: &mut Language) -> anyhow::Result<()> {
         self.color = Some(wgpu::Color::BLACK);
         self.run_game_for_a_few_steps(language)?;
         Ok(())

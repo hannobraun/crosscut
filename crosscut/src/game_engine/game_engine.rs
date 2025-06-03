@@ -51,9 +51,9 @@ where
     ) -> anyhow::Result<Self> {
         let mut language = Language::new();
         let renderer = Renderer::new(window).block_on()?;
-        let mut game_output = Vec::new();
+        let game_output = Vec::new();
 
-        game.on_start(&mut language, &mut game_output)?;
+        game.on_start(&mut language)?;
 
         Ok(Self {
             game,
