@@ -138,6 +138,15 @@ impl RawTerminalAdapter {
 
         Ok(())
     }
+
+    pub fn on_shutdown() {
+        if let Err(err) = crossterm::execute!(stdout(), LeaveAlternateScreen) {
+            eprintln!("Failed to leave alternate screen on shutdown: {err}");
+        }
+        if let Err(err) = terminal::disable_raw_mode() {
+            eprintln!("Failed to disable terminal raw mode on shutdown: {err}");
+        }
+    }
 }
 
 impl TerminalOutputAdapter for RawTerminalAdapter {
@@ -197,12 +206,7 @@ impl fmt::Write for RawTerminalAdapter {
 
 impl Drop for RawTerminalAdapter {
     fn drop(&mut self) {
-        if let Err(err) = crossterm::execute!(stdout(), LeaveAlternateScreen) {
-            eprintln!("Failed to leave alternate screen on shutdown: {err}");
-        }
-        if let Err(err) = terminal::disable_raw_mode() {
-            eprintln!("Failed to disable terminal raw mode on shutdown: {err}");
-        }
+        Self::on_shutdown();
     }
 }
 
