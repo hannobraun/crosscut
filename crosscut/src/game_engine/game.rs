@@ -42,7 +42,7 @@ impl PureCrosscutGame {
     fn run_game_for_a_few_steps(
         &mut self,
         language: &mut Language,
-        output: &mut Vec<GameOutput>,
+        _: &mut Vec<GameOutput>,
     ) -> anyhow::Result<()> {
         if let State::WaitUntil { instant } = self.state {
             if Instant::now() < instant {
@@ -91,8 +91,11 @@ impl PureCrosscutGame {
                                         let value: f64 = value.into();
                                         let value = value / 255.;
 
-                                        output.push(GameOutput::SubmitColor {
-                                            color: [value, value, value, 1.],
+                                        self.color = Some(wgpu::Color {
+                                            r: value,
+                                            g: value,
+                                            b: value,
+                                            a: 1.,
                                         });
 
                                         self.state = State::EndOfFrame;
