@@ -24,7 +24,6 @@ pub struct GameEngine<A> {
     game_output: Vec<GameOutput>,
     editor_input: TerminalEditorInput,
     editor_output: TerminalEditorOutput<A>,
-    color: wgpu::Color,
 }
 
 impl GameEngine<RawTerminalAdapter> {
@@ -63,7 +62,6 @@ where
             game_output,
             editor_input: TerminalEditorInput::new(),
             editor_output: TerminalEditorOutput::new(adapter),
-            color: wgpu::Color::BLACK,
         })
     }
 
@@ -99,24 +97,7 @@ where
         )?;
         self.render_editor()?;
 
-        let mut color = None;
-        for GameOutput::SubmitColor {
-            color: [r, g, b, a],
-        } in self.game_output()
-        {
-            color = Some(wgpu::Color { r, g, b, a });
-        }
-        if let Some(color) = color {
-            self.color = color;
-        }
-
-        self.renderer.render(self.color)?;
-
         Ok(())
-    }
-
-    pub fn game_output(&mut self) -> impl Iterator<Item = GameOutput> + '_ {
-        self.game_output.drain(..)
     }
 
     fn render_editor(&mut self) -> anyhow::Result<()> {

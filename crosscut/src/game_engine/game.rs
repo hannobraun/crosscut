@@ -37,6 +37,7 @@ pub trait Game {
 #[derive(Default)]
 pub struct PureCrosscutGame {
     state: State,
+    color: Option<wgpu::Color>,
 }
 
 impl PureCrosscutGame {
@@ -169,6 +170,7 @@ impl Game for PureCrosscutGame {
         renderer: &mut Renderer,
         output: &mut Vec<GameOutput>,
     ) -> anyhow::Result<()> {
+        self.color = Some(wgpu::Color::BLACK);
         self.run_game_for_a_few_steps(language, renderer, output)?;
         Ok(())
     }
@@ -217,6 +219,17 @@ impl Game for PureCrosscutGame {
         }
 
         self.run_game_for_a_few_steps(language, renderer, output)?;
+
+        for GameOutput::SubmitColor {
+            color: [r, g, b, a],
+        } in output.drain(..)
+        {
+            self.color = Some(wgpu::Color { r, g, b, a });
+        }
+
+        if let Some(color) = self.color {
+            renderer.render(color)?;
+        }
 
         Ok(())
     }
