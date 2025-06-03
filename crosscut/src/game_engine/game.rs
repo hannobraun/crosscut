@@ -1,4 +1,9 @@
-use std::time::{Duration, Instant};
+use std::{
+    sync::Arc,
+    time::{Duration, Instant},
+};
+
+use winit::window::Window;
 
 use crate::{
     game_engine::Renderer,
@@ -10,7 +15,11 @@ use crate::{
 };
 
 pub trait Game {
-    fn on_start(&mut self, language: &mut Language) -> anyhow::Result<()>;
+    fn on_start(
+        &mut self,
+        language: &mut Language,
+        window: &Arc<Window>,
+    ) -> anyhow::Result<()>;
 
     fn on_editor_update(
         &mut self,
@@ -155,7 +164,11 @@ impl PureCrosscutGame {
 }
 
 impl Game for PureCrosscutGame {
-    fn on_start(&mut self, language: &mut Language) -> anyhow::Result<()> {
+    fn on_start(
+        &mut self,
+        language: &mut Language,
+        _: &Arc<Window>,
+    ) -> anyhow::Result<()> {
         self.color = Some(wgpu::Color::BLACK);
         self.run_game_for_a_few_steps(language)?;
         Ok(())

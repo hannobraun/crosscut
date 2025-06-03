@@ -51,7 +51,7 @@ where
         let mut language = Language::new();
         let renderer = Renderer::new(window).block_on()?;
 
-        game.on_start(&mut language)?;
+        game.on_start(&mut language, window)?;
 
         Ok(Self {
             game,
