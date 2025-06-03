@@ -21,7 +21,6 @@ pub trait Game {
     fn on_editor_update(
         &mut self,
         language: &mut Language,
-        renderer: &mut Renderer,
         output: &mut Vec<GameOutput>,
     ) -> anyhow::Result<()>;
 
@@ -175,7 +174,6 @@ impl Game for PureCrosscutGame {
     fn on_editor_update(
         &mut self,
         language: &mut Language,
-        _: &mut Renderer,
         output: &mut Vec<GameOutput>,
     ) -> anyhow::Result<()> {
         self.run_game_for_a_few_steps(language, output)?;
