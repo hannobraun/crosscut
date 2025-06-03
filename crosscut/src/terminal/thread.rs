@@ -41,6 +41,13 @@ pub fn start() -> anyhow::Result<TerminalThread> {
             \n\
             {backtrace}"
         );
+
+        // NOTE(hannobraun): Without this, I'm seeing overlap between the stack
+        // trace and the terminal prompt. Possibly some weird interaction with
+        // the alternate screen that the terminal uses, but I don't know.
+        for _ in 0..16 {
+            eprintln!();
+        }
     }));
 
     let (input_tx, input_rx) = channel();
