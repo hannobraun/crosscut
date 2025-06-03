@@ -1,4 +1,4 @@
-#[derive(Debug)]
+#[derive(Debug, Eq, PartialEq)]
 pub enum EditorInput {
     Insert { ch: char },
     MoveCursorLeft,

@@ -155,6 +155,7 @@ impl TerminalInput {
     }
 }
 
+#[derive(Debug, Eq, PartialEq)]
 pub enum EditorInputOrCommand {
     Input { input: EditorInput },
     Command { command: EditorCommand },

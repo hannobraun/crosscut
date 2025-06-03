@@ -209,6 +209,7 @@ impl From<NodePath> for Cursor {
     }
 }
 
+#[derive(Debug, Eq, PartialEq)]
 pub enum EditorCommand {
     Clear,
     Dump,
