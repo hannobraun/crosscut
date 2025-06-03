@@ -79,8 +79,7 @@ where
             None => {}
         }
 
-        self.game
-            .on_editor_update(&mut self.language, &mut self.game_output)?;
+        self.game.on_editor_update(&mut self.language)?;
         self.render_editor()?;
 
         Ok(())

@@ -17,7 +17,6 @@ pub trait Game {
     fn on_editor_update(
         &mut self,
         language: &mut Language,
-        output: &mut Vec<GameOutput>,
     ) -> anyhow::Result<()>;
 
     fn on_frame(
@@ -168,7 +167,6 @@ impl Game for PureCrosscutGame {
     fn on_editor_update(
         &mut self,
         language: &mut Language,
-        _: &mut Vec<GameOutput>,
     ) -> anyhow::Result<()> {
         self.run_game_for_a_few_steps(language)?;
         Ok(())
