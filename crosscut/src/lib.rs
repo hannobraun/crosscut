@@ -4,7 +4,6 @@
 #![allow(clippy::module_inception)]
 
 mod game_engine;
-mod io;
 mod language;
 mod terminal;
 mod util;
@@ -16,7 +15,7 @@ pub fn start_and_wait(game: Box<dyn Game + Send>) -> anyhow::Result<()> {
 
     // This call is going to block until the user requests a shutdown via the
     // game I/O, or any of the other threads shut down.
-    io::start::start_and_wait(game, terminal.input)?;
+    game_engine::start_and_wait(game, terminal.input)?;
 
     // At this point, the shutdown should be in progress. This call shouldn't
     // block for long, if at all. The purpose of still joining the thread is
