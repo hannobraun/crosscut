@@ -8,7 +8,12 @@ mod language;
 mod terminal;
 mod util;
 
-pub use self::game_engine::{Game, PureCrosscutGame};
+pub use winit::window::Window;
+
+pub use self::{
+    game_engine::{Game, PureCrosscutGame},
+    language::language::Language,
+};
 
 pub fn start_and_wait(game: Box<dyn Game + Send>) -> anyhow::Result<()> {
     let terminal = terminal::start()?;
