@@ -23,7 +23,7 @@ impl GameEngine<RawTerminalAdapter> {
     pub fn with_editor_ui(game: Box<dyn Game>) -> anyhow::Result<Self> {
         let adapter = RawTerminalAdapter::new()?;
 
-        let mut game_engine = Self::new(game, adapter);
+        let mut game_engine = Self::new(game, adapter)?;
         game_engine.render_editor()?;
 
         Ok(game_engine)
@@ -34,19 +34,19 @@ impl<A> GameEngine<A>
 where
     A: TerminalOutputAdapter,
 {
-    pub fn new(mut game: Box<dyn Game>, adapter: A) -> Self {
+    pub fn new(mut game: Box<dyn Game>, adapter: A) -> anyhow::Result<Self> {
         let mut language = Language::new();
         let mut game_output = Vec::new();
 
         game.on_start(&mut language, &mut game_output);
 
-        Self {
+        Ok(Self {
             game,
             language,
             game_output,
             editor_input: TerminalEditorInput::new(),
             editor_output: TerminalEditorOutput::new(adapter),
-        }
+        })
     }
 
     pub fn on_terminal_input(
