@@ -11,9 +11,7 @@ use std::{
 use anyhow::anyhow;
 use crossbeam_channel::{SendError, TryRecvError};
 
-use crate::{
-    game_engine::TerminalInput, io::terminal::input::read_terminal_input,
-};
+use crate::{game_engine::TerminalInput, terminal::input::read_terminal_input};
 
 static PANICS: LazyLock<Mutex<HashMap<ThreadId, String>>> =
     LazyLock::new(|| Mutex::new(HashMap::new()));
