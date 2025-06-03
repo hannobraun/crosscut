@@ -1,9 +1,12 @@
 use std::time::{Duration, Instant};
 
-use crate::language::{
-    code::Type,
-    language::Language,
-    runtime::{Effect, RuntimeState, Value},
+use crate::{
+    game_engine::Renderer,
+    language::{
+        code::Type,
+        language::Language,
+        runtime::{Effect, RuntimeState, Value},
+    },
 };
 
 use super::GameOutput;
@@ -12,18 +15,21 @@ pub trait Game {
     fn on_start(
         &mut self,
         language: &mut Language,
+        renderer: &mut Renderer,
         output: &mut Vec<GameOutput>,
     );
 
     fn on_editor_update(
         &mut self,
         language: &mut Language,
+        renderer: &mut Renderer,
         output: &mut Vec<GameOutput>,
     );
 
     fn on_frame(
         &mut self,
         language: &mut Language,
+        renderer: &mut Renderer,
         output: &mut Vec<GameOutput>,
     );
 }
@@ -157,6 +163,7 @@ impl Game for PureCrosscutGame {
     fn on_start(
         &mut self,
         language: &mut Language,
+        _: &mut Renderer,
         output: &mut Vec<GameOutput>,
     ) {
         self.run_game_for_a_few_steps(language, output);
@@ -165,6 +172,7 @@ impl Game for PureCrosscutGame {
     fn on_editor_update(
         &mut self,
         language: &mut Language,
+        _: &mut Renderer,
         output: &mut Vec<GameOutput>,
     ) {
         self.run_game_for_a_few_steps(language, output);
@@ -173,6 +181,7 @@ impl Game for PureCrosscutGame {
     fn on_frame(
         &mut self,
         language: &mut Language,
+        _: &mut Renderer,
         output: &mut Vec<GameOutput>,
     ) {
         if let State::EndOfFrame = self.state {
