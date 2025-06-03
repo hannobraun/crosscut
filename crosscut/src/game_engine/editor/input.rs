@@ -41,6 +41,8 @@ impl TerminalEditorInput {
                         "dump" => Some(EditorCommand::Dump),
                         "reset" => Some(EditorCommand::Reset),
                         _ => {
+                            // Command was not recognized.
+                            //
                             // This should result in an error message being
                             // displayed where the user can see it. For now, we
                             // just ignore it though.
