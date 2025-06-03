@@ -54,7 +54,7 @@ where
         let mut renderer = Renderer::new(window).block_on()?;
         let mut game_output = Vec::new();
 
-        game.on_start(&mut language, &mut renderer, &mut game_output);
+        game.on_start(&mut language, &mut renderer, &mut game_output)?;
 
         Ok(Self {
             game,
@@ -85,7 +85,7 @@ where
             &mut self.language,
             &mut self.renderer,
             &mut self.game_output,
-        );
+        )?;
         self.render_editor()?;
 
         Ok(())
@@ -96,7 +96,7 @@ where
             &mut self.language,
             &mut self.renderer,
             &mut self.game_output,
-        );
+        )?;
         self.render_editor()?;
 
         let mut color = None;

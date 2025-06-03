@@ -17,21 +17,21 @@ pub trait Game {
         language: &mut Language,
         renderer: &mut Renderer,
         output: &mut Vec<GameOutput>,
-    );
+    ) -> anyhow::Result<()>;
 
     fn on_editor_update(
         &mut self,
         language: &mut Language,
         renderer: &mut Renderer,
         output: &mut Vec<GameOutput>,
-    );
+    ) -> anyhow::Result<()>;
 
     fn on_frame(
         &mut self,
         language: &mut Language,
         renderer: &mut Renderer,
         output: &mut Vec<GameOutput>,
-    );
+    ) -> anyhow::Result<()>;
 }
 
 #[derive(Default)]
@@ -166,8 +166,9 @@ impl Game for PureCrosscutGame {
         language: &mut Language,
         renderer: &mut Renderer,
         output: &mut Vec<GameOutput>,
-    ) {
+    ) -> anyhow::Result<()> {
         self.run_game_for_a_few_steps(language, renderer, output);
+        Ok(())
     }
 
     fn on_editor_update(
@@ -175,8 +176,9 @@ impl Game for PureCrosscutGame {
         language: &mut Language,
         renderer: &mut Renderer,
         output: &mut Vec<GameOutput>,
-    ) {
+    ) -> anyhow::Result<()> {
         self.run_game_for_a_few_steps(language, renderer, output);
+        Ok(())
     }
 
     fn on_frame(
@@ -184,7 +186,7 @@ impl Game for PureCrosscutGame {
         language: &mut Language,
         renderer: &mut Renderer,
         output: &mut Vec<GameOutput>,
-    ) {
+    ) -> anyhow::Result<()> {
         if let State::EndOfFrame = self.state {
             match language.evaluator().state() {
                 RuntimeState::Effect {
@@ -213,6 +215,8 @@ impl Game for PureCrosscutGame {
         }
 
         self.run_game_for_a_few_steps(language, renderer, output);
+
+        Ok(())
     }
 }
 
