@@ -160,3 +160,41 @@ pub enum EditorInputOrCommand {
     Input { input: EditorInput },
     Command { command: EditorCommand },
 }
+
+#[cfg(test)]
+mod tests {
+    use crate::{
+        game_engine::{
+            TerminalInput,
+            editor::input::{EditorInputOrCommand, TerminalEditorInput},
+        },
+        language::editor::EditorCommand,
+    };
+
+    #[test]
+    fn submit_command() {
+        // The code that recognizes the different commands is completely
+        // declarative. Testing more than one here wouldn't really do anything
+        // productive, except repeat that declarative code in this test here.
+        let input = "reset";
+        let expected = EditorCommand::Reset;
+
+        let mut editor_input = TerminalEditorInput::new();
+
+        // enter command mode
+        assert_eq!(editor_input.on_input(TerminalInput::Escape), None);
+
+        for ch in input.chars() {
+            assert_eq!(
+                editor_input.on_input(TerminalInput::Character { ch }),
+                None,
+            );
+        }
+
+        // submit command
+        assert_eq!(
+            editor_input.on_input(TerminalInput::Enter),
+            Some(EditorInputOrCommand::Command { command: expected }),
+        );
+    }
+}
