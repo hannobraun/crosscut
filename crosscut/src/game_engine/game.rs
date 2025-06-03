@@ -43,6 +43,7 @@ impl PureCrosscutGame {
     fn run_game_for_a_few_steps(
         &mut self,
         language: &mut Language,
+        _: &mut Renderer,
         output: &mut Vec<GameOutput>,
     ) {
         if let State::WaitUntil { instant } = self.state {
@@ -163,25 +164,25 @@ impl Game for PureCrosscutGame {
     fn on_start(
         &mut self,
         language: &mut Language,
-        _: &mut Renderer,
+        renderer: &mut Renderer,
         output: &mut Vec<GameOutput>,
     ) {
-        self.run_game_for_a_few_steps(language, output);
+        self.run_game_for_a_few_steps(language, renderer, output);
     }
 
     fn on_editor_update(
         &mut self,
         language: &mut Language,
-        _: &mut Renderer,
+        renderer: &mut Renderer,
         output: &mut Vec<GameOutput>,
     ) {
-        self.run_game_for_a_few_steps(language, output);
+        self.run_game_for_a_few_steps(language, renderer, output);
     }
 
     fn on_frame(
         &mut self,
         language: &mut Language,
-        _: &mut Renderer,
+        renderer: &mut Renderer,
         output: &mut Vec<GameOutput>,
     ) {
         if let State::EndOfFrame = self.state {
@@ -211,7 +212,7 @@ impl Game for PureCrosscutGame {
             self.state = State::Running;
         }
 
-        self.run_game_for_a_few_steps(language, output);
+        self.run_game_for_a_few_steps(language, renderer, output);
     }
 }
 
