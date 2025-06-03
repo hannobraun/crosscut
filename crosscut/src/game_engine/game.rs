@@ -169,7 +169,9 @@ impl Game for PureCrosscutGame {
     ) -> anyhow::Result<()> {
         self.renderer = Some(Renderer::new(window).block_on()?);
         self.color = Some(wgpu::Color::BLACK);
+
         self.run_game_for_a_few_steps(language)?;
+
         Ok(())
     }
 
