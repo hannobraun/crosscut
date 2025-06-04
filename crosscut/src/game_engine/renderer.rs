@@ -9,6 +9,7 @@ pub struct Renderer {
     queue: wgpu::Queue,
     pipeline: wgpu::RenderPipeline,
     vertex_buffer: wgpu::Buffer,
+    num_vertices: u32,
     instance_buffer: wgpu::Buffer,
 }
 
@@ -93,17 +94,6 @@ impl Renderer {
                 cache: None,
             });
 
-        Ok(Self {
-            surface,
-            device,
-            queue,
-            pipeline,
-            vertex_buffer,
-            instance_buffer,
-        })
-    }
-
-    pub fn render(&self, bg_color: wgpu::Color) -> anyhow::Result<()> {
         let vertices = [[0.5, -0.5], [0.5, 0.5], [-0.5, -0.5], [-0.5, 0.5]]
             .map(|[x, y]| {
                 let position = [x, y, 0.];
@@ -124,12 +114,20 @@ impl Renderer {
             assert!(num_vertices <= Vertex::MAX_NUM);
         }
 
-        self.queue.write_buffer(
-            &self.vertex_buffer,
-            0,
-            bytemuck::cast_slice(&vertices),
-        );
+        queue.write_buffer(&vertex_buffer, 0, bytemuck::cast_slice(&vertices));
 
+        Ok(Self {
+            surface,
+            device,
+            queue,
+            pipeline,
+            vertex_buffer,
+            num_vertices,
+            instance_buffer,
+        })
+    }
+
+    pub fn render(&self, bg_color: wgpu::Color) -> anyhow::Result<()> {
         let instance = Instance {
             position: [0., 0., 0.],
         };
@@ -177,7 +175,7 @@ impl Renderer {
             render_pass.set_pipeline(&self.pipeline);
             render_pass.set_vertex_buffer(0, self.vertex_buffer.slice(..));
             render_pass.set_vertex_buffer(1, self.instance_buffer.slice(..));
-            render_pass.draw(0..num_vertices, 0..num_instances);
+            render_pass.draw(0..self.num_vertices, 0..num_instances);
         }
 
         self.queue.submit(Some(encoder.finish()));
