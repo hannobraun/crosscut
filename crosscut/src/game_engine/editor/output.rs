@@ -18,7 +18,7 @@ use crate::language::code::LocatedNode;
 #[cfg(test)]
 pub fn codebase_to_stdout(codebase: &Codebase) {
     use crate::terminal::DebugOutputAdapter;
-    codebase_to_adapter(codebase.root(), codebase, &mut DebugOutputAdapter);
+    node_to_adapter(codebase.root(), codebase, &mut DebugOutputAdapter);
 }
 
 #[cfg(test)]
@@ -28,13 +28,13 @@ pub fn codebase_to_string(codebase: &Codebase) -> String {
     let mut adapter = StringOutputAdapter {
         output: String::new(),
     };
-    codebase_to_adapter(codebase.root(), codebase, &mut adapter);
+    node_to_adapter(codebase.root(), codebase, &mut adapter);
 
     adapter.output
 }
 
 #[cfg(test)]
-fn codebase_to_adapter(
+fn node_to_adapter(
     node: LocatedNode,
     codebase: &Codebase,
     adapter: &mut impl TerminalOutputAdapter,
