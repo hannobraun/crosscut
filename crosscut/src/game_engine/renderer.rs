@@ -176,7 +176,7 @@ impl Vertex {
     const MAX_NUM: u64 = 4;
 
     fn size() -> u64 {
-        let Ok(size) = size_of::<Vertex>().try_into() else {
+        let Ok(size) = size_of::<Self>().try_into() else {
             unreachable!("Size of `Vertex` can surely fit into a `u64`");
         };
 
