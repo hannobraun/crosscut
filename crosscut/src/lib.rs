@@ -12,7 +12,7 @@ pub use async_trait::async_trait;
 pub use winit::window::Window;
 
 pub use self::{
-    game_engine::{Game, PureCrosscutGame},
+    game_engine::{Game, PureCrosscutGame, Renderer},
     language::language::Language,
 };
 
