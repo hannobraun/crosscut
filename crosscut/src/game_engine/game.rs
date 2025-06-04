@@ -38,13 +38,11 @@ pub struct PureCrosscutGame {
 impl Game for PureCrosscutGame {
     fn on_start(
         &mut self,
-        language: &mut Language,
+        _: &mut Language,
         window: &Arc<Window>,
     ) -> anyhow::Result<()> {
         self.renderer = Some(Renderer::new(window).block_on()?);
         self.color = Some(wgpu::Color::BLACK);
-
-        self.run_game_for_a_few_steps(language)?;
 
         Ok(())
     }

@@ -48,6 +48,7 @@ where
         let mut language = Language::new();
 
         game.on_start(&mut language, window)?;
+        game.on_code_update(&mut language)?;
 
         Ok(Self {
             game,
