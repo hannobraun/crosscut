@@ -196,4 +196,4 @@ impl Vertex {
     }
 }
 
-const MAX_VERTICES: u64 = 3;
+const MAX_VERTICES: u64 = 4;
