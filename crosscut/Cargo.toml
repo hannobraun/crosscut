@@ -4,6 +4,7 @@ edition = "2024"
 
 [dependencies]
 anyhow = "*"
+async-trait = "*"
 base64 = "*"
 crossbeam-channel = "*"
 crossterm = "*"
