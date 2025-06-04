@@ -105,10 +105,11 @@ impl Renderer {
     }
 
     pub fn render(&self, bg_color: wgpu::Color) -> anyhow::Result<()> {
-        let vertices = [[0.0, 0.5], [-0.5, -0.5], [0.5, -0.5]].map(|[x, y]| {
-            let position = [x, y, 0.];
-            Vertex { position }
-        });
+        let vertices = [[0.5, -0.5], [0.5, 0.5], [-0.5, -0.5], [-0.5, 0.5]]
+            .map(|[x, y]| {
+                let position = [x, y, 0.];
+                Vertex { position }
+            });
         let num_vertices: u32 = {
             let Ok(len) = vertices.len().try_into() else {
                 unreachable!(
