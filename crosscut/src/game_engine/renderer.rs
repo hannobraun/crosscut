@@ -117,6 +117,11 @@ impl Renderer {
             len
         };
 
+        {
+            let num_vertices: u64 = num_vertices.into();
+            assert!(num_vertices <= MAX_VERTICES);
+        }
+
         self.queue.write_buffer(
             &self.vertex_buffer,
             0,
