@@ -45,7 +45,7 @@ impl Renderer {
 
         let vertex_buffer = device.create_buffer(&wgpu::BufferDescriptor {
             label: None,
-            size: Vertex::size() * 3,
+            size: Vertex::size() * MAX_VERTICES,
             usage: wgpu::BufferUsages::COPY_DST | wgpu::BufferUsages::VERTEX,
             mapped_at_creation: false,
         });
@@ -190,3 +190,5 @@ impl Vertex {
         }
     }
 }
+
+const MAX_VERTICES: u64 = 3;
