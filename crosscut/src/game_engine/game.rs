@@ -3,6 +3,7 @@ use std::{
     time::{Duration, Instant},
 };
 
+use async_trait::async_trait;
 use pollster::FutureExt;
 use winit::window::Window;
 
@@ -15,6 +16,7 @@ use crate::{
     },
 };
 
+#[async_trait]
 pub trait Game {
     fn on_start(
         &mut self,
@@ -35,6 +37,7 @@ pub struct PureCrosscutGame {
     color: Option<wgpu::Color>,
 }
 
+#[async_trait]
 impl Game for PureCrosscutGame {
     fn on_start(
         &mut self,
