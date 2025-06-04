@@ -1,6 +1,8 @@
 use std::sync::Arc;
 
-use crosscut::{Color, Game, Language, Renderer, Window, async_trait};
+use crosscut::{
+    Color, Game, Language, Renderer, async_trait, winit::window::Window,
+};
 
 #[derive(Default)]
 pub struct Snake {
