@@ -9,6 +9,7 @@ pub struct Renderer {
     queue: wgpu::Queue,
     pipeline: wgpu::RenderPipeline,
     vertex_buffer: wgpu::Buffer,
+    instance_buffer: wgpu::Buffer,
 }
 
 impl Renderer {
@@ -44,6 +45,8 @@ impl Renderer {
         surface.configure(&device, &config);
 
         let vertex_buffer = device.create_buffer(&Vertex::buffer_descriptor());
+        let instance_buffer =
+            device.create_buffer(&Instance::buffer_descriptor());
 
         let shader =
             device.create_shader_module(wgpu::ShaderModuleDescriptor {
@@ -62,7 +65,7 @@ impl Renderer {
                     entry_point: Some("vert_main"),
                     compilation_options:
                         wgpu::PipelineCompilationOptions::default(),
-                    buffers: &[Vertex::layout()],
+                    buffers: &[Vertex::layout(), Instance::layout()],
                 },
                 primitive: wgpu::PrimitiveState {
                     topology: wgpu::PrimitiveTopology::TriangleStrip,
@@ -96,6 +99,7 @@ impl Renderer {
             queue,
             pipeline,
             vertex_buffer,
+            instance_buffer,
         })
     }
 
@@ -124,6 +128,22 @@ impl Renderer {
             &self.vertex_buffer,
             0,
             bytemuck::cast_slice(&vertices),
+        );
+
+        let instance = Instance {
+            position: [0., 0., 0.],
+        };
+        let num_instances = 1;
+
+        {
+            let num_instances: u64 = num_instances.into();
+            assert!(num_instances <= Instance::MAX_NUM);
+        }
+
+        self.queue.write_buffer(
+            &self.instance_buffer,
+            0,
+            bytemuck::cast_slice(&[instance]),
         );
 
         let surface_texture = self.surface.get_current_texture()?;
@@ -156,7 +176,8 @@ impl Renderer {
 
             render_pass.set_pipeline(&self.pipeline);
             render_pass.set_vertex_buffer(0, self.vertex_buffer.slice(..));
-            render_pass.draw(0..num_vertices, 0..1);
+            render_pass.set_vertex_buffer(1, self.instance_buffer.slice(..));
+            render_pass.draw(0..num_vertices, 0..num_instances);
         }
 
         self.queue.submit(Some(encoder.finish()));
@@ -198,6 +219,43 @@ impl Vertex {
             step_mode: wgpu::VertexStepMode::Vertex,
             attributes: &wgpu::vertex_attr_array![
                 0 => Float32x3
+            ],
+        }
+    }
+}
+
+#[derive(Clone, Copy, bytemuck::Pod, bytemuck::Zeroable)]
+#[repr(C)]
+struct Instance {
+    position: [f32; 3],
+}
+
+impl Instance {
+    const MAX_NUM: u64 = 1;
+
+    fn size() -> u64 {
+        let Ok(size) = size_of::<Self>().try_into() else {
+            unreachable!("Size of `Instance` can surely fit into a `u64`");
+        };
+
+        size
+    }
+
+    fn buffer_descriptor() -> wgpu::BufferDescriptor<'static> {
+        wgpu::BufferDescriptor {
+            label: None,
+            size: Self::size() * Self::MAX_NUM,
+            usage: wgpu::BufferUsages::COPY_DST | wgpu::BufferUsages::VERTEX,
+            mapped_at_creation: false,
+        }
+    }
+
+    fn layout() -> wgpu::VertexBufferLayout<'static> {
+        wgpu::VertexBufferLayout {
+            array_stride: Self::size(),
+            step_mode: wgpu::VertexStepMode::Instance,
+            attributes: &wgpu::vertex_attr_array![
+                1 => Float32x3
             ],
         }
     }
