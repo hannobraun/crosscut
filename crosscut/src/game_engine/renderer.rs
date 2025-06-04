@@ -45,7 +45,7 @@ impl Renderer {
 
         let vertex_buffer = device.create_buffer(&wgpu::BufferDescriptor {
             label: None,
-            size: Vertex::size() * MAX_VERTICES,
+            size: Vertex::size() * Vertex::MAX_VERTICES,
             usage: wgpu::BufferUsages::COPY_DST | wgpu::BufferUsages::VERTEX,
             mapped_at_creation: false,
         });
@@ -122,7 +122,7 @@ impl Renderer {
 
         {
             let num_vertices: u64 = num_vertices.into();
-            assert!(num_vertices <= MAX_VERTICES);
+            assert!(num_vertices <= Vertex::MAX_VERTICES);
         }
 
         self.queue.write_buffer(
@@ -178,6 +178,8 @@ struct Vertex {
 }
 
 impl Vertex {
+    const MAX_VERTICES: u64 = 4;
+
     fn size() -> u64 {
         let Ok(size) = size_of::<Vertex>().try_into() else {
             unreachable!("Size of `Vertex` can surely fit into a `u64`");
@@ -196,5 +198,3 @@ impl Vertex {
         }
     }
 }
-
-const MAX_VERTICES: u64 = 4;
