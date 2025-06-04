@@ -1,7 +1,7 @@
 use std::sync::Arc;
 
 use crosscut::{
-    Color, Game, Language, Renderer, async_trait, winit::window::Window,
+    Game, Language, Renderer, async_trait, wgpu::Color, winit::window::Window,
 };
 
 #[derive(Default)]
