@@ -106,7 +106,7 @@ impl Renderer {
 
     pub fn render(&self, bg_color: wgpu::Color) -> anyhow::Result<()> {
         let vertices = [[0.0, 0.5], [-0.5, -0.5], [0.5, -0.5]].map(|[x, y]| {
-            let position = [x, y];
+            let position = [x, y, 0.];
             Vertex { position }
         });
         let num_vertices: u32 = {
@@ -173,7 +173,7 @@ impl Renderer {
 #[derive(Clone, Copy, bytemuck::Pod, bytemuck::Zeroable)]
 #[repr(C)]
 struct Vertex {
-    position: [f32; 2],
+    position: [f32; 3],
 }
 
 impl Vertex {
@@ -190,7 +190,7 @@ impl Vertex {
             array_stride: Self::size(),
             step_mode: wgpu::VertexStepMode::Vertex,
             attributes: &wgpu::vertex_attr_array![
-                0 => Float32x2
+                0 => Float32x3
             ],
         }
     }

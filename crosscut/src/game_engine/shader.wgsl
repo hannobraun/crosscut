@@ -1,5 +1,5 @@
 struct VertexInput {
-    @location(0) position: vec2<f32>,
+    @location(0) position: vec3<f32>,
 }
 
 struct VertexOutput {
@@ -9,7 +9,7 @@ struct VertexOutput {
 @vertex
 fn vert_main(in: VertexInput) -> VertexOutput {
     var output: VertexOutput;
-    output.position = vec4<f32>(in.position, 0.0, 1.0);
+    output.position = vec4<f32>(in.position, 1.0);
 
     return output;
 }
