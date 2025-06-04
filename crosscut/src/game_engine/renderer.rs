@@ -107,7 +107,15 @@ impl Renderer {
     pub fn render(&self, bg_color: wgpu::Color) -> anyhow::Result<()> {
         let vertices = [[0.0, 0.5], [-0.5, -0.5], [0.5, -0.5]]
             .map(|position| Vertex { position });
-        let num_vertices = 3;
+        let num_vertices: u32 = {
+            let Ok(len) = vertices.len().try_into() else {
+                unreachable!(
+                    "Number of vertices defined here fits into an `u32`."
+                );
+            };
+
+            len
+        };
 
         self.queue.write_buffer(
             &self.vertex_buffer,
