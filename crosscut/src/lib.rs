@@ -8,6 +8,7 @@ mod language;
 mod terminal;
 mod util;
 
+pub use async_trait::async_trait;
 pub use winit::window::Window;
 
 pub use self::{
