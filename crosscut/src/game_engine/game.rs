@@ -18,7 +18,7 @@ use crate::{
 
 #[async_trait]
 pub trait Game {
-    fn on_start(
+    async fn on_start(
         &mut self,
         language: &mut Language,
         window: &Arc<Window>,
@@ -39,7 +39,7 @@ pub struct PureCrosscutGame {
 
 #[async_trait]
 impl Game for PureCrosscutGame {
-    fn on_start(
+    async fn on_start(
         &mut self,
         _: &mut Language,
         window: &Arc<Window>,

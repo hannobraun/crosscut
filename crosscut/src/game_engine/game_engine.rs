@@ -1,5 +1,6 @@
 use std::sync::Arc;
 
+use pollster::FutureExt;
 use winit::window::Window;
 
 use crate::{
@@ -47,7 +48,7 @@ where
     ) -> anyhow::Result<Self> {
         let mut language = Language::new();
 
-        game.on_start(&mut language, window)?;
+        game.on_start(&mut language, window).block_on()?;
         game.on_code_update(&mut language)?;
 
         Ok(Self {
