@@ -13,7 +13,7 @@ pub use self::{
 
 #[cfg(test)]
 #[allow(unused)] // used only intermittently, to debug tests
-pub use self::editor::output::codebase_to_stdout;
+pub use self::editor::output::node_to_stdout;
 
 #[cfg(test)]
 #[allow(unused)] // user was removed; but likely to become used again soon

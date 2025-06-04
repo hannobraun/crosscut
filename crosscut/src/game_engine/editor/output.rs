@@ -16,7 +16,7 @@ use super::input::{EditorMode, TerminalEditorInput};
 use crate::language::code::LocatedNode;
 
 #[cfg(test)]
-pub fn codebase_to_stdout(node: LocatedNode, codebase: &Codebase) {
+pub fn node_to_stdout(node: LocatedNode, codebase: &Codebase) {
     use crate::terminal::DebugOutputAdapter;
     node_to_adapter(node, codebase, &mut DebugOutputAdapter);
 }
