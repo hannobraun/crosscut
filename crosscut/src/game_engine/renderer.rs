@@ -8,6 +8,7 @@ pub struct Renderer {
     device: wgpu::Device,
     queue: wgpu::Queue,
     pipeline: wgpu::RenderPipeline,
+    vertex_buffer: wgpu::Buffer,
 }
 
 impl Renderer {
@@ -42,6 +43,13 @@ impl Renderer {
             })?;
         surface.configure(&device, &config);
 
+        let vertex_buffer = device.create_buffer(&wgpu::BufferDescriptor {
+            label: None,
+            size: Vertex::size() * 3,
+            usage: wgpu::BufferUsages::COPY_DST | wgpu::BufferUsages::VERTEX,
+            mapped_at_creation: false,
+        });
+
         let shader =
             device.create_shader_module(wgpu::ShaderModuleDescriptor {
                 label: None,
@@ -59,7 +67,7 @@ impl Renderer {
                     entry_point: Some("vert_main"),
                     compilation_options:
                         wgpu::PipelineCompilationOptions::default(),
-                    buffers: &[],
+                    buffers: &[Vertex::layout()],
                 },
                 primitive: wgpu::PrimitiveState {
                     topology: wgpu::PrimitiveTopology::TriangleList,
@@ -92,11 +100,20 @@ impl Renderer {
             device,
             queue,
             pipeline,
+            vertex_buffer,
         })
     }
 
     pub fn render(&self, bg_color: wgpu::Color) -> anyhow::Result<()> {
+        let vertices = [[0.0, 0.5], [-0.5, -0.5], [0.5, -0.5]]
+            .map(|position| Vertex { position });
         let num_vertices = 3;
+
+        self.queue.write_buffer(
+            &self.vertex_buffer,
+            0,
+            bytemuck::cast_slice(&vertices),
+        );
 
         let surface_texture = self.surface.get_current_texture()?;
         let view = surface_texture
@@ -127,6 +144,7 @@ impl Renderer {
                 });
 
             render_pass.set_pipeline(&self.pipeline);
+            render_pass.set_vertex_buffer(0, self.vertex_buffer.slice(..));
             render_pass.draw(0..num_vertices, 0..1);
         }
 
@@ -134,5 +152,33 @@ impl Renderer {
         surface_texture.present();
 
         Ok(())
+    }
+}
+
+#[derive(Clone, Copy, bytemuck::Pod, bytemuck::Zeroable)]
+#[repr(C)]
+struct Vertex {
+    position: [f32; 2],
+}
+
+impl Vertex {
+    fn size() -> u64 {
+        let Ok(size) = size_of::<Vertex>().try_into() else {
+            unreachable!("Size of `Vertex` can surely fit into a `u64`");
+        };
+
+        size
+    }
+
+    fn layout() -> wgpu::VertexBufferLayout<'static> {
+        wgpu::VertexBufferLayout {
+            array_stride: Self::size(),
+            step_mode: wgpu::VertexStepMode::Vertex,
+            attributes: &[wgpu::VertexAttribute {
+                format: wgpu::VertexFormat::Float32x2,
+                offset: 0,
+                shader_location: 0,
+            }],
+        }
     }
 }
