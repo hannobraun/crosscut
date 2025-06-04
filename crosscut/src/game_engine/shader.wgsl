@@ -10,7 +10,9 @@ fn vert_main(in: VertexInput) -> @builtin(position) vec4<f32> {
         vec2<f32>(0.5, -0.5),
     );
 
-    return vec4<f32>(positions[in.index], 0.0, 1.0);
+    let output = vec4<f32>(positions[in.index], 0.0, 1.0);
+
+    return output;
 }
 
 @fragment
