@@ -126,8 +126,6 @@ impl Renderer {
 
             render_pass.set_pipeline(&self.pipeline);
             render_pass.draw(0..3, 0..1);
-
-            let _ = render_pass;
         }
 
         self.queue.submit(Some(encoder.finish()));
