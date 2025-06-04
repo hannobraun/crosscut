@@ -35,7 +35,8 @@ fn codebase_to_adapter(
     codebase: &Codebase,
     adapter: &mut impl TerminalOutputAdapter,
 ) {
-    let layout = EditorLayout::new(codebase.root(), codebase);
+    let node = codebase.root();
+    let layout = EditorLayout::new(node, codebase);
 
     let mut context = RenderContext {
         codebase,
