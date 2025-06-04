@@ -1,13 +1,16 @@
+struct VertexInput {
+    @builtin(vertex_index) index: u32,
+}
+
 @vertex
-fn vert_main(@builtin(vertex_index) index: u32) -> @builtin(position) vec4<f32>
-{
+fn vert_main(in: VertexInput) -> @builtin(position) vec4<f32> {
     var positions = array<vec2<f32>, 3>(
         vec2<f32>(0.0, 0.5),
         vec2<f32>(-0.5, -0.5),
         vec2<f32>(0.5, -0.5),
     );
 
-    return vec4<f32>(positions[index], 0.0, 1.0);
+    return vec4<f32>(positions[in.index], 0.0, 1.0);
 }
 
 @fragment
