@@ -22,10 +22,8 @@ pub trait Game {
         window: &Arc<Window>,
     ) -> anyhow::Result<()>;
 
-    fn on_editor_update(
-        &mut self,
-        language: &mut Language,
-    ) -> anyhow::Result<()>;
+    fn on_code_update(&mut self, language: &mut Language)
+    -> anyhow::Result<()>;
 
     fn on_frame(&mut self, language: &mut Language) -> anyhow::Result<()>;
 }
@@ -51,7 +49,7 @@ impl Game for PureCrosscutGame {
         Ok(())
     }
 
-    fn on_editor_update(
+    fn on_code_update(
         &mut self,
         language: &mut Language,
     ) -> anyhow::Result<()> {
