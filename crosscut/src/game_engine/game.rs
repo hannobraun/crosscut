@@ -4,7 +4,6 @@ use std::{
 };
 
 use async_trait::async_trait;
-use pollster::FutureExt;
 use winit::window::Window;
 
 use crate::{
@@ -44,7 +43,7 @@ impl Game for PureCrosscutGame {
         _: &mut Language,
         window: &Arc<Window>,
     ) -> anyhow::Result<()> {
-        self.renderer = Some(Renderer::new(window).block_on()?);
+        self.renderer = Some(Renderer::new(window).await?);
         self.color = Some(wgpu::Color::BLACK);
 
         Ok(())
