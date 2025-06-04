@@ -96,6 +96,8 @@ impl Renderer {
     }
 
     pub fn render(&self, bg_color: wgpu::Color) -> anyhow::Result<()> {
+        let num_vertices = 3;
+
         let surface_texture = self.surface.get_current_texture()?;
         let view = surface_texture
             .texture
@@ -125,7 +127,7 @@ impl Renderer {
                 });
 
             render_pass.set_pipeline(&self.pipeline);
-            render_pass.draw(0..3, 0..1);
+            render_pass.draw(0..num_vertices, 0..1);
         }
 
         self.queue.submit(Some(encoder.finish()));
