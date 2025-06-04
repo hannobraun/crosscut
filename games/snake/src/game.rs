@@ -1,7 +1,7 @@
 use std::sync::Arc;
 
 use crosscut::{
-    Game, Language, Renderer, async_trait, wgpu::Color, winit::window::Window,
+    Game, Language, Renderer, async_trait, wgpu, winit::window::Window,
 };
 
 #[derive(Default)]
@@ -29,7 +29,7 @@ impl Game for Snake {
             return Ok(());
         };
 
-        renderer.render(Color {
+        renderer.render(wgpu::Color {
             r: 1.,
             g: 1.,
             b: 1.,
