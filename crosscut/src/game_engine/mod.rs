@@ -17,4 +17,4 @@ pub use self::editor::output::codebase_to_stdout;
 
 #[cfg(test)]
 #[allow(unused)] // user was removed; but likely to become used again soon
-pub use self::editor::output::codebase_to_string;
+pub use self::editor::output::node_to_string;

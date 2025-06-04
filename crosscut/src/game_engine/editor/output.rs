@@ -22,7 +22,7 @@ pub fn codebase_to_stdout(codebase: &Codebase) {
 }
 
 #[cfg(test)]
-pub fn codebase_to_string(node: LocatedNode, codebase: &Codebase) -> String {
+pub fn node_to_string(node: LocatedNode, codebase: &Codebase) -> String {
     use crate::terminal::StringOutputAdapter;
 
     let mut adapter = StringOutputAdapter {
