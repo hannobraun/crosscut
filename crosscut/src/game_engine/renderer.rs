@@ -43,12 +43,7 @@ impl Renderer {
             })?;
         surface.configure(&device, &config);
 
-        let vertex_buffer = device.create_buffer(&wgpu::BufferDescriptor {
-            label: None,
-            size: Vertex::size() * Vertex::MAX_NUM,
-            usage: wgpu::BufferUsages::COPY_DST | wgpu::BufferUsages::VERTEX,
-            mapped_at_creation: false,
-        });
+        let vertex_buffer = device.create_buffer(&Vertex::buffer_descriptor());
 
         let shader =
             device.create_shader_module(wgpu::ShaderModuleDescriptor {
@@ -186,6 +181,15 @@ impl Vertex {
         };
 
         size
+    }
+
+    fn buffer_descriptor() -> wgpu::BufferDescriptor<'static> {
+        wgpu::BufferDescriptor {
+            label: None,
+            size: Vertex::size() * Vertex::MAX_NUM,
+            usage: wgpu::BufferUsages::COPY_DST | wgpu::BufferUsages::VERTEX,
+            mapped_at_creation: false,
+        }
     }
 
     fn layout() -> wgpu::VertexBufferLayout<'static> {
