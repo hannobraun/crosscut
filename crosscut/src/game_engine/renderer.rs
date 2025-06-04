@@ -187,11 +187,9 @@ impl Vertex {
         wgpu::VertexBufferLayout {
             array_stride: Self::size(),
             step_mode: wgpu::VertexStepMode::Vertex,
-            attributes: &[wgpu::VertexAttribute {
-                format: wgpu::VertexFormat::Float32x2,
-                offset: 0,
-                shader_location: 0,
-            }],
+            attributes: &wgpu::vertex_attr_array![
+                0 => Float32x2
+            ],
         }
     }
 }
