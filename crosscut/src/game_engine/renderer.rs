@@ -186,7 +186,7 @@ impl Vertex {
     fn buffer_descriptor() -> wgpu::BufferDescriptor<'static> {
         wgpu::BufferDescriptor {
             label: None,
-            size: Vertex::size() * Vertex::MAX_NUM,
+            size: Self::size() * Self::MAX_NUM,
             usage: wgpu::BufferUsages::COPY_DST | wgpu::BufferUsages::VERTEX,
             mapped_at_creation: false,
         }
