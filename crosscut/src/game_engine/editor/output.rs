@@ -13,9 +13,12 @@ use crate::{
 use super::input::{EditorMode, TerminalEditorInput};
 
 #[cfg(test)]
+use crate::language::code::LocatedNode;
+
+#[cfg(test)]
 pub fn codebase_to_stdout(codebase: &Codebase) {
     use crate::terminal::DebugOutputAdapter;
-    codebase_to_adapter(codebase, &mut DebugOutputAdapter);
+    codebase_to_adapter(codebase.root(), codebase, &mut DebugOutputAdapter);
 }
 
 #[cfg(test)]
@@ -25,17 +28,17 @@ pub fn codebase_to_string(codebase: &Codebase) -> String {
     let mut adapter = StringOutputAdapter {
         output: String::new(),
     };
-    codebase_to_adapter(codebase, &mut adapter);
+    codebase_to_adapter(codebase.root(), codebase, &mut adapter);
 
     adapter.output
 }
 
 #[cfg(test)]
 fn codebase_to_adapter(
+    node: LocatedNode,
     codebase: &Codebase,
     adapter: &mut impl TerminalOutputAdapter,
 ) {
-    let node = codebase.root();
     let layout = EditorLayout::new(node, codebase);
 
     let mut context = RenderContext {
