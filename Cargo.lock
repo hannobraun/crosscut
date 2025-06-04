@@ -412,6 +412,7 @@ dependencies = [
  "async-trait",
  "base64",
  "blake3",
+ "bytemuck",
  "crossbeam-channel",
  "crossterm",
  "itertools",

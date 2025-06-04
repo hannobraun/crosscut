@@ -19,6 +19,10 @@ winit = "*"
 version = "*"
 features = ["traits-preview"]
 
+[dependencies.bytemuck]
+version = "*"
+features = ["derive"]
+
 [dependencies.udigest]
 version = "*"
 features = ["derive"]
