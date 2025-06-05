@@ -46,6 +46,18 @@ impl Renderer {
             })?;
         surface.configure(&device, &config);
 
+        let uniform_buffer = device.create_buffer(&wgpu::BufferDescriptor {
+            label: None,
+            size: Uniforms::size(),
+            usage: wgpu::BufferUsages::COPY_DST | wgpu::BufferUsages::UNIFORM,
+            mapped_at_creation: false,
+        });
+        queue.write_buffer(
+            &uniform_buffer,
+            0,
+            bytemuck::cast_slice(&[Uniforms::default()]),
+        );
+
         let bind_group_layout =
             device.create_bind_group_layout(&wgpu::BindGroupLayoutDescriptor {
                 label: None,
@@ -215,6 +227,20 @@ impl Renderer {
         surface_texture.present();
 
         Ok(())
+    }
+}
+
+#[derive(Clone, Copy, Default, bytemuck::Pod, bytemuck::Zeroable)]
+#[repr(C)]
+struct Uniforms {}
+
+impl Uniforms {
+    fn size() -> u64 {
+        let Ok(size) = size_of::<Self>().try_into() else {
+            unreachable!("Size of `Self` definitely fits into a `u64`.");
+        };
+
+        size
     }
 }
 
