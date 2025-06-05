@@ -19,6 +19,7 @@ impl Game for Snake {
     ) -> anyhow::Result<()> {
         self.camera = Some(Camera::default());
         self.renderer = Some(Renderer::new(window).await?);
+
         Ok(())
     }
 
