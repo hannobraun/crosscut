@@ -6,6 +6,7 @@ use crosscut::{
 
 #[derive(Default)]
 pub struct Snake {
+    camera: Option<Camera>,
     renderer: Option<Renderer>,
 }
 
@@ -16,6 +17,7 @@ impl Game for Snake {
         _: &mut Language,
         window: &Arc<Window>,
     ) -> anyhow::Result<()> {
+        self.camera = Some(Camera::default());
         self.renderer = Some(Renderer::new(window).await?);
         Ok(())
     }
@@ -25,7 +27,8 @@ impl Game for Snake {
     }
 
     fn on_frame(&mut self, _: &mut Language) -> anyhow::Result<()> {
-        let Some(renderer) = &self.renderer else {
+        let (Some(camera), Some(renderer)) = (&self.camera, &self.renderer)
+        else {
             return Ok(());
         };
 
@@ -37,7 +40,7 @@ impl Game for Snake {
                 a: 1.,
             },
             [[0., 0., 0.]],
-            &Camera::default(),
+            camera,
         )?;
 
         Ok(())
