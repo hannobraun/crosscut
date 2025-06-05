@@ -128,9 +128,7 @@ impl Renderer {
     }
 
     pub fn render(&self, bg_color: wgpu::Color) -> anyhow::Result<()> {
-        let instances = [Instance {
-            position: [0., 0., 0.],
-        }];
+        let instances = [[0., 0., 0.]].map(|position| Instance { position });
         let num_instances: u32 = {
             let Ok(len) = instances.len().try_into() else {
                 panic!(
