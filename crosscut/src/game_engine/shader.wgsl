@@ -18,10 +18,10 @@ struct VertexOutput {
 fn vert_main(in: VertexInput) -> VertexOutput {
     let position = in.instance_position + in.vertex_position;
 
-    var output: VertexOutput;
-    output.position = uniforms.transform * vec4<f32>(position, 1.0);
+    var out: VertexOutput;
+    out.position = uniforms.transform * vec4<f32>(position, 1.0);
 
-    return output;
+    return out;
 }
 
 @fragment
