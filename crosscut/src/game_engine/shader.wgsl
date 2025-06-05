@@ -9,8 +9,10 @@ struct VertexOutput {
 
 @vertex
 fn vert_main(in: VertexInput) -> VertexOutput {
+    let position = in.instance_position + in.vertex_position;
+
     var output: VertexOutput;
-    output.position = vec4<f32>(in.instance_position + in.vertex_position, 1.0);
+    output.position = vec4<f32>(position, 1.0);
 
     return output;
 }
