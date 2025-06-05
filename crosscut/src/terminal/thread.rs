@@ -35,12 +35,14 @@ pub fn start() -> anyhow::Result<TerminalThread> {
             String::new()
         };
 
-        eprintln!(
+        let message = format!(
             "Thread `{thread_name}` panicked{location}:\n\
             {message}\n\
             \n\
             {backtrace}"
         );
+
+        eprintln!("{message}");
 
         // NOTE(hannobraun): Without this, I'm seeing overlap between the stack
         // trace and the terminal prompt. Possibly some weird interaction with
