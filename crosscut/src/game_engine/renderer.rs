@@ -127,8 +127,12 @@ impl Renderer {
         })
     }
 
-    pub fn render(&self, bg_color: wgpu::Color) -> anyhow::Result<()> {
-        let instances = [[0., 0., 0.]].map(|position| Instance { position });
+    pub fn render<const N: usize>(
+        &self,
+        bg_color: wgpu::Color,
+        positions: [[f32; 3]; N],
+    ) -> anyhow::Result<()> {
+        let instances = positions.map(|position| Instance { position });
         let num_instances: u32 = {
             let Ok(len) = instances.len().try_into() else {
                 panic!(

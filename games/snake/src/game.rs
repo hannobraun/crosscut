@@ -29,12 +29,15 @@ impl Game for Snake {
             return Ok(());
         };
 
-        renderer.render(wgpu::Color {
-            r: 1.,
-            g: 1.,
-            b: 1.,
-            a: 1.,
-        })?;
+        renderer.render(
+            wgpu::Color {
+                r: 1.,
+                g: 1.,
+                b: 1.,
+                a: 1.,
+            },
+            [[0., 0., 0.]],
+        )?;
 
         Ok(())
     }
