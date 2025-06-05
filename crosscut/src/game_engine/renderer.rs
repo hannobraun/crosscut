@@ -3,6 +3,8 @@ use std::sync::Arc;
 use anyhow::anyhow;
 use winit::window::Window;
 
+use super::Camera;
+
 pub struct Renderer {
     surface: wgpu::Surface<'static>,
     device: wgpu::Device,
@@ -260,12 +262,7 @@ impl Uniforms {
 
 impl Default for Uniforms {
     fn default() -> Self {
-        let transform = [
-            [1., 0., 0., 0.],
-            [0., 1., 0., 0.],
-            [0., 0., 1., 0.],
-            [0., 0., 0., 1.],
-        ];
+        let transform = Camera::default().to_transform();
 
         Self { transform }
     }

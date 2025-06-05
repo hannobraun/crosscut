@@ -1,3 +1,4 @@
+mod camera;
 mod editor;
 mod game;
 mod game_engine;
@@ -5,6 +6,7 @@ mod renderer;
 mod start;
 
 pub use self::{
+    camera::Camera,
     editor::input::TerminalInput,
     game::{Game, PureCrosscutGame},
     renderer::Renderer,
