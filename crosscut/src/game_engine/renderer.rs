@@ -263,7 +263,6 @@ impl Uniforms {
 impl Default for Uniforms {
     fn default() -> Self {
         let transform = Camera::default().to_transform();
-
         Self { transform }
     }
 }
