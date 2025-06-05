@@ -45,10 +45,6 @@ impl Renderer {
             })?;
         surface.configure(&device, &config);
 
-        let vertex_buffer = device.create_buffer(&Vertex::buffer_descriptor());
-        let instance_buffer =
-            device.create_buffer(&Instance::buffer_descriptor());
-
         let pipeline_layout =
             device.create_pipeline_layout(&wgpu::PipelineLayoutDescriptor {
                 label: None,
@@ -100,6 +96,10 @@ impl Renderer {
                 multiview: None,
                 cache: None,
             });
+
+        let vertex_buffer = device.create_buffer(&Vertex::buffer_descriptor());
+        let instance_buffer =
+            device.create_buffer(&Instance::buffer_descriptor());
 
         let vertices = [[0.5, -0.5], [0.5, 0.5], [-0.5, -0.5], [-0.5, 0.5]]
             .map(|[x, y]| {
