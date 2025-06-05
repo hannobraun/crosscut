@@ -49,6 +49,13 @@ impl Renderer {
         let instance_buffer =
             device.create_buffer(&Instance::buffer_descriptor());
 
+        let pipeline_layout =
+            device.create_pipeline_layout(&wgpu::PipelineLayoutDescriptor {
+                label: None,
+                bind_group_layouts: &[],
+                push_constant_ranges: &[],
+            });
+
         let shader =
             device.create_shader_module(wgpu::ShaderModuleDescriptor {
                 label: None,
@@ -60,7 +67,7 @@ impl Renderer {
         let pipeline =
             device.create_render_pipeline(&wgpu::RenderPipelineDescriptor {
                 label: None,
-                layout: None,
+                layout: Some(&pipeline_layout),
                 vertex: wgpu::VertexState {
                     module: &shader,
                     entry_point: Some("vert_main"),
