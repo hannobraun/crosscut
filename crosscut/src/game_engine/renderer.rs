@@ -230,9 +230,11 @@ impl Renderer {
     }
 }
 
-#[derive(Clone, Copy, Default, bytemuck::Pod, bytemuck::Zeroable)]
+#[derive(Clone, Copy, bytemuck::Pod, bytemuck::Zeroable)]
 #[repr(C)]
-struct Uniforms {}
+struct Uniforms {
+    transform: [[f32; 4]; 4],
+}
 
 impl Uniforms {
     fn size() -> u64 {
@@ -241,6 +243,19 @@ impl Uniforms {
         };
 
         size
+    }
+}
+
+impl Default for Uniforms {
+    fn default() -> Self {
+        Self {
+            transform: [
+                [1., 0., 0., 0.],
+                [0., 1., 0., 0.],
+                [0., 0., 1., 0.],
+                [0., 0., 0., 1.],
+            ],
+        }
     }
 }
 
