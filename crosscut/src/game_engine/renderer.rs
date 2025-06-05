@@ -8,6 +8,7 @@ pub struct Renderer {
     device: wgpu::Device,
     queue: wgpu::Queue,
     pipeline: wgpu::RenderPipeline,
+    bind_group: wgpu::BindGroup,
     vertex_buffer: wgpu::Buffer,
     num_vertices: u32,
     instance_buffer: wgpu::Buffer,
@@ -45,10 +46,22 @@ impl Renderer {
             })?;
         surface.configure(&device, &config);
 
+        let bind_group_layout =
+            device.create_bind_group_layout(&wgpu::BindGroupLayoutDescriptor {
+                label: None,
+                entries: &[],
+            });
+
+        let bind_group = device.create_bind_group(&wgpu::BindGroupDescriptor {
+            label: None,
+            layout: &bind_group_layout,
+            entries: &[],
+        });
+
         let pipeline_layout =
             device.create_pipeline_layout(&wgpu::PipelineLayoutDescriptor {
                 label: None,
-                bind_group_layouts: &[],
+                bind_group_layouts: &[&bind_group_layout],
                 push_constant_ranges: &[],
             });
 
@@ -128,6 +141,7 @@ impl Renderer {
             device,
             queue,
             pipeline,
+            bind_group,
             vertex_buffer,
             num_vertices,
             instance_buffer,
@@ -191,6 +205,7 @@ impl Renderer {
                 });
 
             render_pass.set_pipeline(&self.pipeline);
+            render_pass.set_bind_group(0, &self.bind_group, &[]);
             render_pass.set_vertex_buffer(0, self.vertex_buffer.slice(..));
             render_pass.set_vertex_buffer(1, self.instance_buffer.slice(..));
             render_pass.draw(0..self.num_vertices, 0..num_instances);
