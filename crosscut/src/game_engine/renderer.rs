@@ -128,7 +128,7 @@ impl Renderer {
     }
 
     pub fn render(&self, bg_color: wgpu::Color) -> anyhow::Result<()> {
-        let instance = [Instance {
+        let instances = [Instance {
             position: [0., 0., 0.],
         }];
         let num_instances = 1;
@@ -141,7 +141,7 @@ impl Renderer {
         self.queue.write_buffer(
             &self.instance_buffer,
             0,
-            bytemuck::cast_slice(&instance),
+            bytemuck::cast_slice(&instances),
         );
 
         let surface_texture = self.surface.get_current_texture()?;
