@@ -178,6 +178,7 @@ impl Renderer {
         &self,
         bg_color: wgpu::Color,
         positions: [[f32; 3]; N],
+        _: &Camera,
     ) -> anyhow::Result<()> {
         let instances = positions.map(|position| Instance { position });
         let num_instances: u32 = {

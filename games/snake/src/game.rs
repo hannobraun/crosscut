@@ -1,7 +1,7 @@
 use std::sync::Arc;
 
 use crosscut::{
-    Game, Language, Renderer, async_trait, wgpu, winit::window::Window,
+    Camera, Game, Language, Renderer, async_trait, wgpu, winit::window::Window,
 };
 
 #[derive(Default)]
@@ -37,6 +37,7 @@ impl Game for Snake {
                 a: 1.,
             },
             [[0., 0., 0.]],
+            &Camera::default(),
         )?;
 
         Ok(())
