@@ -260,14 +260,14 @@ impl Uniforms {
 
 impl Default for Uniforms {
     fn default() -> Self {
-        Self {
-            transform: [
-                [1., 0., 0., 0.],
-                [0., 1., 0., 0.],
-                [0., 0., 1., 0.],
-                [0., 0., 0., 1.],
-            ],
-        }
+        let transform = [
+            [1., 0., 0., 0.],
+            [0., 1., 0., 0.],
+            [0., 0., 1., 0.],
+            [0., 0., 0., 1.],
+        ];
+
+        Self { transform }
     }
 }
 
