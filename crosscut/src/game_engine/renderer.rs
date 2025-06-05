@@ -131,7 +131,16 @@ impl Renderer {
         let instances = [Instance {
             position: [0., 0., 0.],
         }];
-        let num_instances = 1;
+        let num_instances: u32 = {
+            let Ok(len) = instances.len().try_into() else {
+                panic!(
+                    "A number of instances that doesn't fit into a `u32` is \
+                    not supprted."
+                );
+            };
+
+            len
+        };
 
         {
             let num_instances: u64 = num_instances.into();
