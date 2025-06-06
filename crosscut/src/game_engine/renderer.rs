@@ -31,7 +31,8 @@ impl Renderer {
             })
             .await?;
 
-        let required_limits = wgpu::Limits::downlevel_webgl2_defaults();
+        let required_limits = wgpu::Limits::downlevel_webgl2_defaults()
+            .using_resolution(adapter.limits());
 
         let (device, queue) = adapter
             .request_device(&wgpu::DeviceDescriptor {
