@@ -42,12 +42,12 @@ impl Renderer {
             .await?;
 
         let size = window.inner_size();
-        let config = surface
+        let surface_config = surface
             .get_default_config(&adapter, size.width, size.height)
             .ok_or_else(|| {
                 anyhow!("Could not acquire default surface configuration.")
             })?;
-        surface.configure(&device, &config);
+        surface.configure(&device, &surface_config);
 
         let uniform_buffer = device.create_buffer(&wgpu::BufferDescriptor {
             label: None,
@@ -127,7 +127,7 @@ impl Renderer {
                     compilation_options:
                         wgpu::PipelineCompilationOptions::default(),
                     targets: &[Some(wgpu::ColorTargetState {
-                        format: config.format,
+                        format: surface_config.format,
                         blend: None,
                         write_mask: wgpu::ColorWrites::ALL,
                     })],
