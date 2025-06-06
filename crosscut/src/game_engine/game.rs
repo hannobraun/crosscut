@@ -45,7 +45,7 @@ impl GameStart for PureCrosscutGameStart {
     ) -> anyhow::Result<Box<dyn Game>> {
         Ok(Box::new(PureCrosscutGame {
             state: State::Running,
-            renderer: Some(Renderer::new(window).await?),
+            renderer: Renderer::new(window).await?,
             color: Some(wgpu::Color::BLACK),
         }))
     }
@@ -53,7 +53,7 @@ impl GameStart for PureCrosscutGameStart {
 
 pub struct PureCrosscutGame {
     state: State,
-    renderer: Option<Renderer>,
+    renderer: Renderer,
     color: Option<wgpu::Color>,
 }
 
@@ -96,7 +96,7 @@ impl Game for PureCrosscutGame {
 
         self.run_game_for_a_few_steps(language)?;
 
-        if let (Some(renderer), Some(color)) = (&self.renderer, self.color) {
+        if let (renderer, Some(color)) = (&self.renderer, self.color) {
             renderer.render(color, [], &Camera::default())?;
         }
 
