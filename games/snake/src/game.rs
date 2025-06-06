@@ -31,6 +31,7 @@ impl GameStart for SnakeStart {
         Ok(Box::new(Snake {
             last_update: Instant::now(),
             positions: VecDeque::from([Vec2::splat((WORLD_SIZE / 2.).floor())]),
+            nominal_length: 3,
             velocity: Vec2::new(1., 0.),
             camera,
             renderer: Renderer::new(window).await?,
@@ -41,6 +42,7 @@ impl GameStart for SnakeStart {
 pub struct Snake {
     last_update: Instant,
     positions: VecDeque<Vec2>,
+    nominal_length: usize,
     velocity: Vec2,
     camera: Camera,
     renderer: Renderer,
@@ -78,7 +80,9 @@ impl Game for Snake {
                 unreachable!("The body is never empty.");
             };
 
-            self.positions.pop_back();
+            if self.positions.len() >= self.nominal_length {
+                self.positions.pop_back();
+            }
 
             self.positions.push_front(head + self.velocity);
         }
