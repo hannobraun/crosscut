@@ -22,7 +22,7 @@ impl GameStart for SnakeStart {
         let projection = projection(window_size);
 
         Ok(Box::new(Snake {
-            camera: Camera::from_orthographic_projection(projection),
+            camera: projection,
             renderer: Renderer::new(window).await?,
         }))
     }
@@ -58,7 +58,7 @@ impl Game for Snake {
     }
 }
 
-fn projection(window_size: [u32; 2]) -> OrthographicProjection {
+fn projection(window_size: [u32; 2]) -> Camera {
     let world_size = 32.;
     let world_min = -0.5;
     let world_max = world_size + world_min;
@@ -76,7 +76,7 @@ fn projection(window_size: [u32; 2]) -> OrthographicProjection {
     let far = -1.0;
     let near = 1.0;
 
-    if window_width >= window_height {
+    let projection = if window_width >= window_height {
         let width = world_size * window_width / window_height;
         let extra = (width - world_size) / 2.;
 
@@ -100,5 +100,7 @@ fn projection(window_size: [u32; 2]) -> OrthographicProjection {
             far,
             near,
         }
-    }
+    };
+
+    Camera::from_orthographic_projection(projection)
 }
