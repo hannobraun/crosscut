@@ -68,7 +68,7 @@ impl Game for Snake {
     }
 
     fn on_frame(&mut self, _: &mut Language) -> anyhow::Result<()> {
-        let move_time = Duration::from_secs_f32(0.25);
+        let move_time = Duration::from_secs_f32(0.1);
 
         while self.last_update.elapsed() >= move_time {
             self.last_update += move_time;
