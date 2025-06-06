@@ -80,9 +80,7 @@ impl Game for Snake {
     }
 
     fn on_frame(&mut self, _: &mut Language) -> anyhow::Result<()> {
-        let renderer = &self.renderer;
-
-        renderer.render(
+        self.renderer.render(
             wgpu::Color {
                 r: 1.,
                 g: 1.,
