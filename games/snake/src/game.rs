@@ -69,7 +69,6 @@ impl GameStart for SnakeStart {
     }
 }
 
-#[derive(Default)]
 pub struct Snake {
     camera: Option<Camera>,
     renderer: Option<Renderer>,
