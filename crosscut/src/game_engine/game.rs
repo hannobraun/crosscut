@@ -4,7 +4,7 @@ use std::{
 };
 
 use async_trait::async_trait;
-use winit::{keyboard::Key, window::Window};
+use winit::{keyboard::KeyCode, window::Window};
 
 use crate::{
     game_engine::Renderer,
@@ -32,7 +32,7 @@ pub trait Game {
 
     fn on_window_resized(&mut self, new_size: [u32; 2]);
 
-    fn on_key(&mut self, key: Key);
+    fn on_key(&mut self, key: KeyCode);
 
     fn on_frame(&mut self, language: &mut Language) -> anyhow::Result<()>;
 }
@@ -74,7 +74,7 @@ impl Game for PureCrosscutGame {
         self.renderer.handle_resize(new_size);
     }
 
-    fn on_key(&mut self, key: Key) {
+    fn on_key(&mut self, key: KeyCode) {
         let _ = key;
     }
 

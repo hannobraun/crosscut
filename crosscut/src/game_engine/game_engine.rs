@@ -1,7 +1,7 @@
 use std::sync::Arc;
 
 use pollster::FutureExt;
-use winit::{keyboard::Key, window::Window};
+use winit::{keyboard::KeyCode, window::Window};
 
 use crate::{
     language::language::Language,
@@ -83,7 +83,7 @@ where
         self.game.on_window_resized(new_size);
     }
 
-    pub fn on_key(&mut self, key: Key) {
+    pub fn on_key(&mut self, key: KeyCode) {
         self.game.on_key(key);
     }
 

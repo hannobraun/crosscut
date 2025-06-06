@@ -8,7 +8,7 @@ use crosscut::{
     async_trait,
     glam::Vec2,
     wgpu,
-    winit::{keyboard::Key, window::Window},
+    winit::{keyboard::KeyCode, window::Window},
 };
 
 #[derive(Default)]
@@ -55,7 +55,7 @@ impl Game for Snake {
         self.renderer.handle_resize(new_size);
     }
 
-    fn on_key(&mut self, key: Key) {
+    fn on_key(&mut self, key: KeyCode) {
         let _ = key;
     }
 

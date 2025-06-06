@@ -4,7 +4,7 @@ use winit::{
     application::ApplicationHandler,
     event::{ElementState, KeyEvent, WindowEvent},
     event_loop::{ActiveEventLoop, EventLoop},
-    keyboard::{Key, NamedKey},
+    keyboard::{Key, NamedKey, PhysicalKey},
     window::{Window, WindowId},
 };
 
@@ -85,13 +85,13 @@ impl ApplicationHandler for Handler {
             WindowEvent::KeyboardInput {
                 event:
                     KeyEvent {
-                        logical_key,
+                        physical_key: PhysicalKey::Code(key),
                         state: ElementState::Pressed,
                         ..
                     },
                 ..
             } => {
-                game_engine.on_key(logical_key);
+                game_engine.on_key(key);
             }
             WindowEvent::RedrawRequested => {
                 if let Err(err) = on_frame(game_engine, &self.terminal_input) {
