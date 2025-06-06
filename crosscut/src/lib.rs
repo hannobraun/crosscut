@@ -9,6 +9,7 @@ mod terminal;
 mod util;
 
 pub use async_trait::async_trait;
+pub use glam;
 pub use wgpu;
 pub use winit;
 
