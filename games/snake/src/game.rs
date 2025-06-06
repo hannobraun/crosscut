@@ -15,52 +15,7 @@ impl GameStart for SnakeStart {
         _: &mut Language,
         window: &Arc<Window>,
     ) -> anyhow::Result<Box<dyn Game>> {
-        let world_size = 32.;
-        let world_min = -0.5;
-        let world_max = world_size + world_min;
-
-        let [window_width, window_height] = {
-            let window_size = window.inner_size();
-
-            [window_size.width, window_size.height].map(|size_u32| {
-                let size_f32 = size_u32 as f32;
-                assert_eq!(
-                    size_f32 as u32, size_u32,
-                    "Loss of precision while converting window size.",
-                );
-
-                size_f32
-            })
-        };
-
-        let far = -1.0;
-        let near = 1.0;
-
-        let projection = if window_width >= window_height {
-            let width = world_size * window_width / window_height;
-            let extra = (width - world_size) / 2.;
-
-            OrthographicProjection {
-                left: world_min - extra,
-                right: world_max + extra,
-                bottom: world_min,
-                top: world_max,
-                far,
-                near,
-            }
-        } else {
-            let height = world_size * window_height / window_width;
-            let extra = (height - world_size) / 2.;
-
-            OrthographicProjection {
-                left: world_min,
-                right: world_max,
-                bottom: world_min - extra,
-                top: world_max + extra,
-                far,
-                near,
-            }
-        };
+        let projection = projection(window);
 
         Ok(Box::new(Snake {
             camera: Camera::from_orthographic_projection(projection),
@@ -96,5 +51,54 @@ impl Game for Snake {
         )?;
 
         Ok(())
+    }
+}
+
+fn projection(window: &Arc<Window>) -> OrthographicProjection {
+    let world_size = 32.;
+    let world_min = -0.5;
+    let world_max = world_size + world_min;
+
+    let [window_width, window_height] = {
+        let window_size = window.inner_size();
+
+        [window_size.width, window_size.height].map(|size_u32| {
+            let size_f32 = size_u32 as f32;
+            assert_eq!(
+                size_f32 as u32, size_u32,
+                "Loss of precision while converting window size.",
+            );
+
+            size_f32
+        })
+    };
+
+    let far = -1.0;
+    let near = 1.0;
+
+    if window_width >= window_height {
+        let width = world_size * window_width / window_height;
+        let extra = (width - world_size) / 2.;
+
+        OrthographicProjection {
+            left: world_min - extra,
+            right: world_max + extra,
+            bottom: world_min,
+            top: world_max,
+            far,
+            near,
+        }
+    } else {
+        let height = world_size * window_height / window_width;
+        let extra = (height - world_size) / 2.;
+
+        OrthographicProjection {
+            left: world_min,
+            right: world_max,
+            bottom: world_min - extra,
+            top: world_max + extra,
+            far,
+            near,
+        }
     }
 }
