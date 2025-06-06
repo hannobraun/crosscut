@@ -13,7 +13,9 @@ pub use wgpu;
 pub use winit;
 
 pub use self::{
-    game_engine::{Camera, Game, PureCrosscutGame, Renderer},
+    game_engine::{
+        Camera, Game, OrthographicProjection, PureCrosscutGame, Renderer,
+    },
     language::language::Language,
 };
 

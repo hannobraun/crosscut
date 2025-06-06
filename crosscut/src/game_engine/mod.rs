@@ -6,7 +6,7 @@ mod renderer;
 mod start;
 
 pub use self::{
-    camera::Camera,
+    camera::{Camera, OrthographicProjection},
     editor::input::TerminalInput,
     game::{Game, PureCrosscutGame},
     renderer::Renderer,
