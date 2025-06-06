@@ -51,7 +51,6 @@ impl GameStart for PureCrosscutGameStart {
     }
 }
 
-#[derive(Default)]
 pub struct PureCrosscutGame {
     state: State,
     renderer: Option<Renderer>,
