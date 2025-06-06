@@ -7,6 +7,7 @@ use super::Camera;
 
 pub struct Renderer {
     surface: wgpu::Surface<'static>,
+    surface_config: wgpu::SurfaceConfiguration,
     device: wgpu::Device,
     queue: wgpu::Queue,
     pipeline: wgpu::RenderPipeline,
@@ -168,6 +169,7 @@ impl Renderer {
 
         Ok(Self {
             surface,
+            surface_config,
             device,
             queue,
             pipeline,
@@ -177,6 +179,15 @@ impl Renderer {
             num_vertices,
             instance_buffer,
         })
+    }
+
+    pub fn handle_resize(&mut self, new_size: [u32; 2]) {
+        let [width, height] = new_size;
+
+        self.surface_config.width = width;
+        self.surface_config.height = height;
+
+        self.surface.configure(&self.device, &self.surface_config);
     }
 
     pub fn render<const N: usize>(
