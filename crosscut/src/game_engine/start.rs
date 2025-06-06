@@ -145,8 +145,8 @@ impl Resources {
         &mut self,
         event_loop: &ActiveEventLoop,
     ) -> anyhow::Result<()> {
-        if let Resources::Uninitialized { game_start: game } = self {
-            let Some(game_start) = game.take() else {
+        if let Resources::Uninitialized { game_start } = self {
+            let Some(game_start) = game_start.take() else {
                 unreachable!(
                     "`game` should always be `Some`, unless the following code \
                     panics, before we replace `self` below. That would be a \
