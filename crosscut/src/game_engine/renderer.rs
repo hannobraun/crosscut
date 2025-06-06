@@ -180,12 +180,14 @@ impl Renderer {
         &self,
         bg_color: wgpu::Color,
         positions: [[f32; 3]; N],
-        _: &Camera,
+        camera: &Camera,
     ) -> anyhow::Result<()> {
         self.queue.write_buffer(
             &self.uniform_buffer,
             0,
-            bytemuck::cast_slice(&[Uniforms::default()]),
+            bytemuck::cast_slice(&[Uniforms {
+                transform: camera.to_transform(),
+            }]),
         );
 
         let instances = positions.map(|position| Instance { position });
