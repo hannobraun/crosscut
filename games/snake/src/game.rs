@@ -19,10 +19,10 @@ impl GameStart for SnakeStart {
             let inner_size = window.inner_size();
             [inner_size.width, inner_size.height]
         };
-        let projection = projection(window_size);
+        let camera = projection(window_size);
 
         Ok(Box::new(Snake {
-            camera: projection,
+            camera,
             renderer: Renderer::new(window).await?,
         }))
     }
