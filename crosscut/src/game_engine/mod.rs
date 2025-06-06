@@ -8,7 +8,7 @@ mod start;
 pub use self::{
     camera::{Camera, OrthographicProjection},
     editor::input::TerminalInput,
-    game::{Game, PureCrosscutGame},
+    game::{Game, GameStart, PureCrosscutGame, PureCrosscutGameStart},
     renderer::Renderer,
     start::start_and_wait,
 };

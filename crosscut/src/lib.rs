@@ -14,12 +14,13 @@ pub use winit;
 
 pub use self::{
     game_engine::{
-        Camera, Game, OrthographicProjection, PureCrosscutGame, Renderer,
+        Camera, Game, GameStart, OrthographicProjection, PureCrosscutGame,
+        PureCrosscutGameStart, Renderer,
     },
     language::language::Language,
 };
 
-pub fn start_and_wait(game: Box<dyn Game + Send>) -> anyhow::Result<()> {
+pub fn start_and_wait(game: Box<dyn GameStart + Send>) -> anyhow::Result<()> {
     let terminal = terminal::start()?;
 
     // This call is going to block until the user requests a shutdown via the

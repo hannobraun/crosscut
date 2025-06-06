@@ -18,17 +18,38 @@ use crate::{
 use super::Camera;
 
 #[async_trait]
-pub trait Game {
+pub trait GameStart {
     async fn on_start(
         &mut self,
         language: &mut Language,
         window: &Arc<Window>,
-    ) -> anyhow::Result<()>;
+    ) -> anyhow::Result<Box<dyn Game>>;
+}
 
+#[async_trait]
+pub trait Game {
     fn on_code_update(&mut self, language: &mut Language)
     -> anyhow::Result<()>;
 
     fn on_frame(&mut self, language: &mut Language) -> anyhow::Result<()>;
+}
+
+#[derive(Default)]
+pub struct PureCrosscutGameStart {}
+
+#[async_trait]
+impl GameStart for PureCrosscutGameStart {
+    async fn on_start(
+        &mut self,
+        _: &mut Language,
+        window: &Arc<Window>,
+    ) -> anyhow::Result<Box<dyn Game>> {
+        Ok(Box::new(PureCrosscutGame {
+            state: State::Running,
+            renderer: Some(Renderer::new(window).await?),
+            color: Some(wgpu::Color::BLACK),
+        }))
+    }
 }
 
 #[derive(Default)]
@@ -40,17 +61,6 @@ pub struct PureCrosscutGame {
 
 #[async_trait]
 impl Game for PureCrosscutGame {
-    async fn on_start(
-        &mut self,
-        _: &mut Language,
-        window: &Arc<Window>,
-    ) -> anyhow::Result<()> {
-        self.renderer = Some(Renderer::new(window).await?);
-        self.color = Some(wgpu::Color::BLACK);
-
-        Ok(())
-    }
-
     fn on_code_update(
         &mut self,
         language: &mut Language,

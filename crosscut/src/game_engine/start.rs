@@ -9,13 +9,14 @@ use winit::{
 };
 
 use crate::{
-    Game,
     game_engine::{TerminalInput, game_engine::GameEngine},
     terminal::{self, RawTerminalAdapter, Receiver},
 };
 
+use super::GameStart;
+
 pub fn start_and_wait(
-    game: Box<dyn Game + Send>,
+    game: Box<dyn GameStart + Send>,
     terminal_input: Receiver<TerminalInput>,
 ) -> anyhow::Result<()> {
     let mut handler = Handler {
@@ -129,7 +130,7 @@ enum OnFrameError {
 #[allow(clippy::large_enum_variant)]
 enum Resources {
     Uninitialized {
-        game: Option<Box<dyn Game>>,
+        game: Option<Box<dyn GameStart>>,
     },
     Initialized {
         window: Arc<Window>,

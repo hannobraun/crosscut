@@ -1,23 +1,20 @@
 use std::sync::Arc;
 
 use crosscut::{
-    Camera, Game, Language, OrthographicProjection, Renderer, async_trait,
-    wgpu, winit::window::Window,
+    Camera, Game, GameStart, Language, OrthographicProjection, Renderer,
+    async_trait, wgpu, winit::window::Window,
 };
 
 #[derive(Default)]
-pub struct Snake {
-    camera: Option<Camera>,
-    renderer: Option<Renderer>,
-}
+pub struct SnakeStart {}
 
 #[async_trait]
-impl Game for Snake {
+impl GameStart for SnakeStart {
     async fn on_start(
         &mut self,
         _: &mut Language,
         window: &Arc<Window>,
-    ) -> anyhow::Result<()> {
+    ) -> anyhow::Result<Box<dyn Game>> {
         let world_size = 32.;
         let world_min = -0.5;
         let world_max = world_size + world_min;
@@ -65,12 +62,21 @@ impl Game for Snake {
             }
         };
 
-        self.camera = Some(Camera::from_orthographic_projection(projection));
-        self.renderer = Some(Renderer::new(window).await?);
-
-        Ok(())
+        Ok(Box::new(Snake {
+            camera: Some(Camera::from_orthographic_projection(projection)),
+            renderer: Some(Renderer::new(window).await?),
+        }))
     }
+}
 
+#[derive(Default)]
+pub struct Snake {
+    camera: Option<Camera>,
+    renderer: Option<Renderer>,
+}
+
+#[async_trait]
+impl Game for Snake {
     fn on_code_update(&mut self, _: &mut Language) -> anyhow::Result<()> {
         Ok(())
     }
