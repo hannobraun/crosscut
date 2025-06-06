@@ -1,4 +1,8 @@
-use std::{array, sync::Arc};
+use std::{
+    array,
+    sync::Arc,
+    time::{Duration, Instant},
+};
 
 use crosscut::{
     Camera, Game, GameStart, Language, OrthographicProjection, Renderer,
@@ -22,6 +26,7 @@ impl GameStart for SnakeStart {
         let camera = make_camera(window_size);
 
         Ok(Box::new(Snake {
+            last_update: Instant::now(),
             position: array::from_fn(|_| (WORLD_SIZE / 2.).floor()),
             camera,
             renderer: Renderer::new(window).await?,
@@ -30,6 +35,7 @@ impl GameStart for SnakeStart {
 }
 
 pub struct Snake {
+    last_update: Instant,
     position: [f32; 2],
     camera: Camera,
     renderer: Renderer,
@@ -46,6 +52,14 @@ impl Game for Snake {
     }
 
     fn on_frame(&mut self, _: &mut Language) -> anyhow::Result<()> {
+        let move_time = Duration::from_secs_f32(0.25);
+
+        while self.last_update.elapsed() >= move_time {
+            self.last_update += move_time;
+
+            self.position[0] += 1.;
+        }
+
         let position = {
             let [x, y] = self.position;
             [x, y, 0.]
