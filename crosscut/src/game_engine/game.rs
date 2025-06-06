@@ -26,7 +26,6 @@ pub trait GameStart {
     ) -> anyhow::Result<Box<dyn Game>>;
 }
 
-#[async_trait]
 pub trait Game {
     fn on_code_update(&mut self, language: &mut Language)
     -> anyhow::Result<()>;
@@ -59,7 +58,6 @@ pub struct PureCrosscutGame {
     color: Option<wgpu::Color>,
 }
 
-#[async_trait]
 impl Game for PureCrosscutGame {
     fn on_code_update(
         &mut self,

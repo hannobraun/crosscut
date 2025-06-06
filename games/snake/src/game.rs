@@ -75,7 +75,6 @@ pub struct Snake {
     renderer: Option<Renderer>,
 }
 
-#[async_trait]
 impl Game for Snake {
     fn on_code_update(&mut self, _: &mut Language) -> anyhow::Result<()> {
         Ok(())
