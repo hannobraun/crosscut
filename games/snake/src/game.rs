@@ -63,17 +63,15 @@ fn projection(window_size: [u32; 2]) -> OrthographicProjection {
     let world_min = -0.5;
     let world_max = world_size + world_min;
 
-    let [window_width, window_height] = {
-        window_size.map(|size_u32| {
-            let size_f32 = size_u32 as f32;
-            assert_eq!(
-                size_f32 as u32, size_u32,
-                "Loss of precision while converting window size.",
-            );
+    let [window_width, window_height] = window_size.map(|size_u32| {
+        let size_f32 = size_u32 as f32;
+        assert_eq!(
+            size_f32 as u32, size_u32,
+            "Loss of precision while converting window size.",
+        );
 
-            size_f32
-        })
-    };
+        size_f32
+    });
 
     let far = -1.0;
     let near = 1.0;
