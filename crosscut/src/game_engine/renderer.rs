@@ -342,7 +342,7 @@ struct Instance {
 }
 
 impl Instance {
-    const MAX_NUM: u64 = 1;
+    const MAX_NUM: u64 = 4;
 
     fn size() -> u64 {
         let Ok(size) = size_of::<Self>().try_into() else {
