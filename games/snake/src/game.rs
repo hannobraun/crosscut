@@ -79,6 +79,10 @@ impl Game for Snake {
         Ok(())
     }
 
+    fn on_window_resized(&mut self, new_size: [u32; 2]) {
+        self.renderer.handle_resize(new_size);
+    }
+
     fn on_frame(&mut self, _: &mut Language) -> anyhow::Result<()> {
         self.renderer.render(
             wgpu::Color {

@@ -65,6 +65,10 @@ impl ApplicationHandler for Handler {
         };
 
         match event {
+            WindowEvent::Resized(new_size) => {
+                let new_size = [new_size.width, new_size.height];
+                game_engine.on_window_resized(new_size);
+            }
             WindowEvent::CloseRequested => {
                 event_loop.exit();
             }

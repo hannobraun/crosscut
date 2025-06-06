@@ -79,6 +79,10 @@ where
         Ok(())
     }
 
+    pub fn on_window_resized(&mut self, new_size: [u32; 2]) {
+        self.game.on_window_resized(new_size);
+    }
+
     pub fn on_frame(&mut self) -> anyhow::Result<()> {
         self.game.on_frame(&mut self.language)?;
         self.render_editor()?;

@@ -30,6 +30,8 @@ pub trait Game {
     fn on_code_update(&mut self, language: &mut Language)
     -> anyhow::Result<()>;
 
+    fn on_window_resized(&mut self, new_size: [u32; 2]);
+
     fn on_frame(&mut self, language: &mut Language) -> anyhow::Result<()>;
 }
 
@@ -64,6 +66,10 @@ impl Game for PureCrosscutGame {
     ) -> anyhow::Result<()> {
         self.run_game_for_a_few_steps(language)?;
         Ok(())
+    }
+
+    fn on_window_resized(&mut self, new_size: [u32; 2]) {
+        self.renderer.handle_resize(new_size);
     }
 
     fn on_frame(&mut self, language: &mut Language) -> anyhow::Result<()> {
