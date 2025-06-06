@@ -21,7 +21,9 @@ pub fn start_and_wait(
 ) -> anyhow::Result<()> {
     let mut handler = Handler {
         terminal_input,
-        resources: Resources::Uninitialized { game: Some(game) },
+        resources: Resources::Uninitialized {
+            game_start: Some(game),
+        },
         result: Ok(()),
     };
 
@@ -130,7 +132,7 @@ enum OnFrameError {
 #[allow(clippy::large_enum_variant)]
 enum Resources {
     Uninitialized {
-        game: Option<Box<dyn GameStart>>,
+        game_start: Option<Box<dyn GameStart>>,
     },
     Initialized {
         window: Arc<Window>,
@@ -143,7 +145,7 @@ impl Resources {
         &mut self,
         event_loop: &ActiveEventLoop,
     ) -> anyhow::Result<()> {
-        if let Resources::Uninitialized { game } = self {
+        if let Resources::Uninitialized { game_start: game } = self {
             let Some(game_start) = game.take() else {
                 unreachable!(
                     "`game` should always be `Some`, unless the following code \
