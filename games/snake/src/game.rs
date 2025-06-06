@@ -22,6 +22,7 @@ impl GameStart for SnakeStart {
         let camera = make_camera(window_size);
 
         Ok(Box::new(Snake {
+            position: [0., 0.],
             camera,
             renderer: Renderer::new(window).await?,
         }))
@@ -29,6 +30,7 @@ impl GameStart for SnakeStart {
 }
 
 pub struct Snake {
+    position: [f32; 2],
     camera: Camera,
     renderer: Renderer,
 }
@@ -44,9 +46,8 @@ impl Game for Snake {
     }
 
     fn on_frame(&mut self, _: &mut Language) -> anyhow::Result<()> {
-        let position = [0., 0.];
         let position = {
-            let [x, y] = position;
+            let [x, y] = self.position;
             [x, y, 0.]
         };
 
