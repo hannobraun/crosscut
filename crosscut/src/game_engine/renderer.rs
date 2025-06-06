@@ -191,10 +191,10 @@ impl Renderer {
         self.surface.configure(&self.device, &self.surface_config);
     }
 
-    pub fn render<const N: usize>(
+    pub fn render(
         &self,
         bg_color: wgpu::Color,
-        positions: [Vec3; N],
+        positions: impl IntoIterator<Item = Vec3>,
         camera: &Camera,
     ) -> anyhow::Result<()> {
         self.queue.write_buffer(
@@ -207,7 +207,9 @@ impl Renderer {
 
         let instances = positions
             .into_iter()
-            .map(|position| Instance { position: position.to_array() })
+            .map(|position| Instance {
+                position: position.to_array(),
+            })
             .collect::<Vec<_>>();
         let num_instances: u32 = {
             let Ok(len) = instances.len().try_into() else {
