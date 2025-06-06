@@ -1,12 +1,13 @@
 use std::{
-    array,
     sync::Arc,
     time::{Duration, Instant},
 };
 
 use crosscut::{
     Camera, Game, GameStart, Language, OrthographicProjection, Renderer,
-    async_trait, wgpu,
+    async_trait,
+    glam::Vec2,
+    wgpu,
     winit::{keyboard::Key, window::Window},
 };
 
@@ -28,7 +29,7 @@ impl GameStart for SnakeStart {
 
         Ok(Box::new(Snake {
             last_update: Instant::now(),
-            position: array::from_fn(|_| (WORLD_SIZE / 2.).floor()),
+            position: Vec2::splat((WORLD_SIZE / 2.).floor()),
             camera,
             renderer: Renderer::new(window).await?,
         }))
@@ -37,7 +38,7 @@ impl GameStart for SnakeStart {
 
 pub struct Snake {
     last_update: Instant,
-    position: [f32; 2],
+    position: Vec2,
     camera: Camera,
     renderer: Renderer,
 }
@@ -66,7 +67,7 @@ impl Game for Snake {
         }
 
         let position = {
-            let [x, y] = self.position;
+            let [x, y] = [self.position.x, self.position.y];
             [x, y, 0.]
         };
 
