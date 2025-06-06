@@ -66,10 +66,7 @@ impl Game for Snake {
             self.position[0] += 1.;
         }
 
-        let position = {
-            let [x, y] = [self.position.x, self.position.y];
-            [x, y, 0.]
-        };
+        let position = [self.position.x, self.position.y, 0.];
 
         self.renderer.render(
             wgpu::Color {
