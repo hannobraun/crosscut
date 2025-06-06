@@ -67,9 +67,8 @@ impl Game for Snake {
 }
 
 fn make_camera(window_size: [u32; 2]) -> Camera {
-    let world_size = 32.;
     let world_min = -0.5;
-    let world_max = world_size + world_min;
+    let world_max = WORLD_SIZE + world_min;
 
     let [window_width, window_height] = window_size.map(|size_u32| {
         let size_f32 = size_u32 as f32;
@@ -85,8 +84,8 @@ fn make_camera(window_size: [u32; 2]) -> Camera {
     let near = 1.0;
 
     let projection = if window_width >= window_height {
-        let width = world_size * window_width / window_height;
-        let extra = (width - world_size) / 2.;
+        let width = WORLD_SIZE * window_width / window_height;
+        let extra = (width - WORLD_SIZE) / 2.;
 
         OrthographicProjection {
             left: world_min - extra,
@@ -97,8 +96,8 @@ fn make_camera(window_size: [u32; 2]) -> Camera {
             near,
         }
     } else {
-        let height = world_size * window_height / window_width;
-        let extra = (height - world_size) / 2.;
+        let height = WORLD_SIZE * window_height / window_width;
+        let extra = (height - WORLD_SIZE) / 2.;
 
         OrthographicProjection {
             left: world_min,
@@ -112,3 +111,5 @@ fn make_camera(window_size: [u32; 2]) -> Camera {
 
     Camera::from_orthographic_projection(projection)
 }
+
+const WORLD_SIZE: f32 = 32.;
