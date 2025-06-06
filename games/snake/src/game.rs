@@ -6,7 +6,7 @@ use std::{
 use crosscut::{
     Camera, Game, GameStart, Language, OrthographicProjection, Renderer,
     async_trait,
-    glam::Vec2,
+    glam::{Vec2, Vec3},
     wgpu,
     winit::{keyboard::KeyCode, window::Window},
 };
@@ -75,7 +75,7 @@ impl Game for Snake {
             self.position += self.velocity;
         }
 
-        let positions = [[self.position.x, self.position.y, 0.]];
+        let positions = [Vec3::new(self.position.x, self.position.y, 0.)];
 
         self.renderer.render(
             wgpu::Color {

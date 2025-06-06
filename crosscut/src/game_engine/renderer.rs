@@ -1,6 +1,7 @@
 use std::sync::Arc;
 
 use anyhow::anyhow;
+use glam::Vec3;
 use winit::window::Window;
 
 use super::Camera;
@@ -193,7 +194,7 @@ impl Renderer {
     pub fn render<const N: usize>(
         &self,
         bg_color: wgpu::Color,
-        positions: [[f32; 3]; N],
+        positions: [Vec3; N],
         camera: &Camera,
     ) -> anyhow::Result<()> {
         self.queue.write_buffer(
@@ -206,7 +207,7 @@ impl Renderer {
 
         let instances = positions
             .into_iter()
-            .map(|position| Instance { position })
+            .map(|position| Instance { position: position.to_array() })
             .collect::<Vec<_>>();
         let num_instances: u32 = {
             let Ok(len) = instances.len().try_into() else {
