@@ -63,7 +63,8 @@ impl Game for Snake {
         while self.last_update.elapsed() >= move_time {
             self.last_update += move_time;
 
-            self.position[0] += 1.;
+            let velocity = Vec2::new(1., 0.);
+            self.position += velocity;
         }
 
         let position = [self.position.x, self.position.y, 0.];
