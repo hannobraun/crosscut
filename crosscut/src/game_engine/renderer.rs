@@ -11,6 +11,7 @@ pub struct Renderer {
     queue: wgpu::Queue,
     pipeline: wgpu::RenderPipeline,
     bind_group: wgpu::BindGroup,
+    uniform_buffer: wgpu::Buffer,
     vertex_buffer: wgpu::Buffer,
     num_vertices: u32,
     instance_buffer: wgpu::Buffer,
@@ -168,6 +169,7 @@ impl Renderer {
             queue,
             pipeline,
             bind_group,
+            uniform_buffer,
             vertex_buffer,
             num_vertices,
             instance_buffer,
@@ -180,6 +182,12 @@ impl Renderer {
         positions: [[f32; 3]; N],
         _: &Camera,
     ) -> anyhow::Result<()> {
+        self.queue.write_buffer(
+            &self.uniform_buffer,
+            0,
+            bytemuck::cast_slice(&[Uniforms::default()]),
+        );
+
         let instances = positions.map(|position| Instance { position });
         let num_instances: u32 = {
             let Ok(len) = instances.len().try_into() else {
