@@ -19,7 +19,7 @@ impl GameStart for SnakeStart {
             let inner_size = window.inner_size();
             [inner_size.width, inner_size.height]
         };
-        let camera = projection(window_size);
+        let camera = make_camera(window_size);
 
         Ok(Box::new(Snake {
             camera,
@@ -58,7 +58,7 @@ impl Game for Snake {
     }
 }
 
-fn projection(window_size: [u32; 2]) -> Camera {
+fn make_camera(window_size: [u32; 2]) -> Camera {
     let world_size = 32.;
     let world_min = -0.5;
     let world_max = world_size + world_min;
