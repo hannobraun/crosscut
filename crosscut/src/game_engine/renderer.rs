@@ -204,7 +204,10 @@ impl Renderer {
             }]),
         );
 
-        let instances = positions.map(|position| Instance { position });
+        let instances = positions
+            .into_iter()
+            .map(|position| Instance { position })
+            .collect::<Vec<_>>();
         let num_instances: u32 = {
             let Ok(len) = instances.len().try_into() else {
                 panic!(
