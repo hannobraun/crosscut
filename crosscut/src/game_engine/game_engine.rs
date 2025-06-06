@@ -42,13 +42,13 @@ where
     A: TerminalOutputAdapter,
 {
     pub fn new(
-        mut game: Box<dyn GameStart>,
+        mut game_start: Box<dyn GameStart>,
         window: &Arc<Window>,
         adapter: A,
     ) -> anyhow::Result<Self> {
         let mut language = Language::new();
 
-        let mut game = game.on_start(&mut language, window).block_on()?;
+        let mut game = game_start.on_start(&mut language, window).block_on()?;
         game.on_code_update(&mut language)?;
 
         Ok(Self {
