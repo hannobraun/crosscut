@@ -2,7 +2,7 @@ use std::sync::Arc;
 
 use winit::{
     application::ApplicationHandler,
-    event::{KeyEvent, WindowEvent},
+    event::{ElementState, KeyEvent, WindowEvent},
     event_loop::{ActiveEventLoop, EventLoop},
     keyboard::{Key, NamedKey},
     window::{Window, WindowId},
@@ -81,6 +81,17 @@ impl ApplicationHandler for Handler {
                 ..
             } => {
                 event_loop.exit();
+            }
+            WindowEvent::KeyboardInput {
+                event:
+                    KeyEvent {
+                        logical_key,
+                        state: ElementState::Pressed,
+                        ..
+                    },
+                ..
+            } => {
+                game_engine.on_key(logical_key);
             }
             WindowEvent::RedrawRequested => {
                 if let Err(err) = on_frame(game_engine, &self.terminal_input) {

@@ -6,7 +6,8 @@ use std::{
 
 use crosscut::{
     Camera, Game, GameStart, Language, OrthographicProjection, Renderer,
-    async_trait, wgpu, winit::window::Window,
+    async_trait, wgpu,
+    winit::{keyboard::Key, window::Window},
 };
 
 #[derive(Default)]
@@ -49,6 +50,10 @@ impl Game for Snake {
     fn on_window_resized(&mut self, new_size: [u32; 2]) {
         self.camera = make_camera(new_size);
         self.renderer.handle_resize(new_size);
+    }
+
+    fn on_key(&mut self, key: Key) {
+        let _ = key;
     }
 
     fn on_frame(&mut self, _: &mut Language) -> anyhow::Result<()> {
