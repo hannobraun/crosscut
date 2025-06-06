@@ -80,7 +80,7 @@ impl Game for Snake {
     }
 
     fn on_frame(&mut self, _: &mut Language) -> anyhow::Result<()> {
-        let (camera, Some(renderer)) = (&self.camera, &self.renderer) else {
+        let Some(renderer) = &self.renderer else {
             return Ok(());
         };
 
@@ -92,7 +92,7 @@ impl Game for Snake {
                 a: 1.,
             },
             [[0., 0., 0.]],
-            camera,
+            &self.camera,
         )?;
 
         Ok(())
