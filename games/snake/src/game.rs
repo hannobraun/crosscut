@@ -44,7 +44,11 @@ impl Game for Snake {
     }
 
     fn on_frame(&mut self, _: &mut Language) -> anyhow::Result<()> {
-        let position = [0., 0., 0.];
+        let position = [0., 0.];
+        let position = {
+            let [x, y] = position;
+            [x, y, 0.]
+        };
 
         self.renderer.render(
             wgpu::Color {
