@@ -30,6 +30,7 @@ impl GameStart for SnakeStart {
         Ok(Box::new(Snake {
             last_update: Instant::now(),
             position: Vec2::splat((WORLD_SIZE / 2.).floor()),
+            velocity: Vec2::new(1., 0.),
             camera,
             renderer: Renderer::new(window).await?,
         }))
@@ -39,6 +40,7 @@ impl GameStart for SnakeStart {
 pub struct Snake {
     last_update: Instant,
     position: Vec2,
+    velocity: Vec2,
     camera: Camera,
     renderer: Renderer,
 }
@@ -63,7 +65,7 @@ impl Game for Snake {
         while self.last_update.elapsed() >= move_time {
             self.last_update += move_time;
 
-            let velocity = Vec2::new(1., 0.);
+            let velocity = self.velocity;
             self.position += velocity;
         }
 
