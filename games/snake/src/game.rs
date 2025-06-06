@@ -75,7 +75,7 @@ impl Game for Snake {
             self.position += self.velocity;
         }
 
-        let position = [self.position.x, self.position.y, 0.];
+        let positions = [[self.position.x, self.position.y, 0.]];
 
         self.renderer.render(
             wgpu::Color {
@@ -84,7 +84,7 @@ impl Game for Snake {
                 b: 1.,
                 a: 1.,
             },
-            [position],
+            positions,
             &self.camera,
         )?;
 
