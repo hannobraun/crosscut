@@ -96,8 +96,7 @@ impl Game for PureCrosscutGame {
 
         self.run_game_for_a_few_steps(language)?;
 
-        let color = self.color;
-        self.renderer.render(color, [], &Camera::default())?;
+        self.renderer.render(self.color, [], &Camera::default())?;
 
         Ok(())
     }
