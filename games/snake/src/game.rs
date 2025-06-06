@@ -63,14 +63,14 @@ impl GameStart for SnakeStart {
         };
 
         Ok(Box::new(Snake {
-            camera: Some(Camera::from_orthographic_projection(projection)),
+            camera: Camera::from_orthographic_projection(projection),
             renderer: Some(Renderer::new(window).await?),
         }))
     }
 }
 
 pub struct Snake {
-    camera: Option<Camera>,
+    camera: Camera,
     renderer: Option<Renderer>,
 }
 
@@ -80,8 +80,7 @@ impl Game for Snake {
     }
 
     fn on_frame(&mut self, _: &mut Language) -> anyhow::Result<()> {
-        let (Some(camera), Some(renderer)) = (&self.camera, &self.renderer)
-        else {
+        let (camera, Some(renderer)) = (&self.camera, &self.renderer) else {
             return Ok(());
         };
 
