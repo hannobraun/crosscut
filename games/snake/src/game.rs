@@ -30,7 +30,7 @@ impl GameStart for SnakeStart {
 
         Ok(Box::new(Snake {
             last_update: Instant::now(),
-            position: VecDeque::from([Vec2::splat((WORLD_SIZE / 2.).floor())]),
+            positions: VecDeque::from([Vec2::splat((WORLD_SIZE / 2.).floor())]),
             velocity: Vec2::new(1., 0.),
             camera,
             renderer: Renderer::new(window).await?,
@@ -40,7 +40,7 @@ impl GameStart for SnakeStart {
 
 pub struct Snake {
     last_update: Instant,
-    position: VecDeque<Vec2>,
+    positions: VecDeque<Vec2>,
     velocity: Vec2,
     camera: Camera,
     renderer: Renderer,
@@ -74,13 +74,13 @@ impl Game for Snake {
         while self.last_update.elapsed() >= move_time {
             self.last_update += move_time;
 
-            for position in &mut self.position {
+            for position in &mut self.positions {
                 *position += self.velocity;
             }
         }
 
         let positions = self
-            .position
+            .positions
             .iter()
             .map(|position| Vec3::new(position.x, position.y, 0.));
 
