@@ -1,4 +1,4 @@
-use std::sync::Arc;
+use std::{array, sync::Arc};
 
 use crosscut::{
     Camera, Game, GameStart, Language, OrthographicProjection, Renderer,
@@ -22,7 +22,7 @@ impl GameStart for SnakeStart {
         let camera = make_camera(window_size);
 
         Ok(Box::new(Snake {
-            position: [0., 0.],
+            position: array::from_fn(|_| (WORLD_SIZE / 2.).floor()),
             camera,
             renderer: Renderer::new(window).await?,
         }))
