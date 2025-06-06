@@ -74,9 +74,13 @@ impl Game for Snake {
         while self.last_update.elapsed() >= move_time {
             self.last_update += move_time;
 
-            for position in &mut self.positions {
-                *position += self.velocity;
-            }
+            let Some(head) = self.positions.front().copied() else {
+                unreachable!("The body is never empty.");
+            };
+
+            self.positions.pop_back();
+
+            self.positions.push_front(head + self.velocity);
         }
 
         let positions = self
