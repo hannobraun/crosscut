@@ -39,6 +39,7 @@ impl Game for Snake {
     }
 
     fn on_window_resized(&mut self, new_size: [u32; 2]) {
+        self.camera = make_camera(new_size);
         self.renderer.handle_resize(new_size);
     }
 
