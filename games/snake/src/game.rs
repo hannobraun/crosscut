@@ -64,14 +64,14 @@ impl GameStart for SnakeStart {
 
         Ok(Box::new(Snake {
             camera: Camera::from_orthographic_projection(projection),
-            renderer: Some(Renderer::new(window).await?),
+            renderer: Renderer::new(window).await?,
         }))
     }
 }
 
 pub struct Snake {
     camera: Camera,
-    renderer: Option<Renderer>,
+    renderer: Renderer,
 }
 
 impl Game for Snake {
@@ -80,9 +80,7 @@ impl Game for Snake {
     }
 
     fn on_frame(&mut self, _: &mut Language) -> anyhow::Result<()> {
-        let Some(renderer) = &self.renderer else {
-            return Ok(());
-        };
+        let renderer = &self.renderer;
 
         renderer.render(
             wgpu::Color {
