@@ -1,7 +1,6 @@
 use std::sync::Arc;
 
 use anyhow::anyhow;
-use glam::Vec3;
 use winit::window::Window;
 
 use super::Camera;
@@ -194,7 +193,7 @@ impl Renderer {
     pub fn render(
         &self,
         bg_color: wgpu::Color,
-        positions: impl IntoIterator<Item = Vec3>,
+        positions: impl IntoIterator<Item = [f32; 3]>,
         camera: &Camera,
     ) -> anyhow::Result<()> {
         self.queue.write_buffer(
@@ -208,7 +207,7 @@ impl Renderer {
         let instances = positions
             .into_iter()
             .map(|position| Instance {
-                position: position.to_array(),
+                position,
                 color: [0., 1., 0., 1.],
             })
             .collect::<Vec<_>>();
