@@ -139,7 +139,8 @@ impl World {
         if self.food.is_none() {
             let [x, y] =
                 array::from_fn(|_| (random::<f32>() * (WORLD_SIZE)).floor());
-            self.food = Some(Vec2::new(x, y));
+            let position = Vec2::new(x, y);
+            self.food = Some(position);
         }
     }
 
