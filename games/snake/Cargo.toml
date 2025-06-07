@@ -4,6 +4,7 @@ edition = "2024"
 
 [dependencies]
 anyhow = "*"
+rand = "*"
 
 [dependencies.crosscut]
 path = "../../crosscut"
