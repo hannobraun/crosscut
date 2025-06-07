@@ -5,8 +5,8 @@ use std::{
 };
 
 use crosscut::{
-    Camera, Game, GameStart, Language, OrthographicProjection, Renderer,
-    async_trait,
+    Camera, Game, GameStart, Instance, Language, OrthographicProjection,
+    Renderer, async_trait,
     glam::Vec2,
     wgpu,
     winit::{keyboard::KeyCode, window::Window},
@@ -87,10 +87,10 @@ impl Game for Snake {
             self.positions.push_front(head + self.velocity);
         }
 
-        let positions = self
-            .positions
-            .iter()
-            .map(|position| [position.x, position.y, 0.]);
+        let positions = self.positions.iter().map(|position| Instance {
+            position: [position.x, position.y, 0.],
+            color: [0., 1., 0., 1.],
+        });
 
         self.renderer.render(
             wgpu::Color {

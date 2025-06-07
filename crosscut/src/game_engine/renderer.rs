@@ -193,7 +193,7 @@ impl Renderer {
     pub fn render(
         &self,
         bg_color: wgpu::Color,
-        positions: impl IntoIterator<Item = [f32; 3]>,
+        positions: impl IntoIterator<Item = Instance>,
         camera: &Camera,
     ) -> anyhow::Result<()> {
         self.queue.write_buffer(
@@ -204,13 +204,7 @@ impl Renderer {
             }]),
         );
 
-        let instances = positions
-            .into_iter()
-            .map(|position| Instance {
-                position,
-                color: [0., 1., 0., 1.],
-            })
-            .collect::<Vec<_>>();
+        let instances = positions.into_iter().collect::<Vec<_>>();
         let num_instances: u32 = {
             let Ok(len) = instances.len().try_into() else {
                 panic!(
