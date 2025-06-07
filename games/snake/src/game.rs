@@ -123,6 +123,7 @@ impl World {
 
     fn update(&mut self) {
         self.move_snake();
+        self.collide_snake_with_walls();
     }
 
     fn move_snake(&mut self) {
@@ -135,6 +136,22 @@ impl World {
         }
 
         self.positions.push_front(head + self.velocity);
+    }
+
+    fn collide_snake_with_walls(&mut self) {
+        let Some(head) = self.positions.front() else {
+            unreachable!("There is always a snake head.");
+        };
+
+        let mut collision = false;
+
+        for position in &self.walls {
+            collision |= head == position;
+        }
+
+        if collision {
+            *self = Self::new();
+        }
     }
 }
 
