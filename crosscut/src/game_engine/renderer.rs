@@ -337,9 +337,9 @@ impl Vertex {
 
 #[derive(Clone, Copy, bytemuck::Pod, bytemuck::Zeroable)]
 #[repr(C)]
-struct Instance {
-    position: [f32; 3],
-    color: [f32; 4],
+pub struct Instance {
+    pub position: [f32; 3],
+    pub color: [f32; 4],
 }
 
 impl Instance {
