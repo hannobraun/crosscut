@@ -160,15 +160,19 @@ impl World {
             unreachable!("There is always a snake head.");
         };
 
+        if self.collides_with_walls(head) {
+            *self = Self::new();
+        }
+    }
+
+    fn collides_with_walls(&self, position: &Vec2) -> bool {
         let mut collision = false;
 
         for p in &self.walls {
-            collision |= head == p;
+            collision |= position == p;
         }
 
-        if collision {
-            *self = Self::new();
-        }
+        collision
     }
 }
 
