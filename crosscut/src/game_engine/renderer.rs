@@ -343,6 +343,9 @@ struct Instance {
 
 impl Instance {
     const MAX_NUM: u64 = 4;
+    const ATTRIBUTES: &[wgpu::VertexAttribute] = &wgpu::vertex_attr_array![
+        1 => Float32x3,
+    ];
 
     fn size() -> u64 {
         let Ok(size) = size_of::<Self>().try_into() else {
@@ -365,9 +368,7 @@ impl Instance {
         wgpu::VertexBufferLayout {
             array_stride: Self::size(),
             step_mode: wgpu::VertexStepMode::Instance,
-            attributes: &wgpu::vertex_attr_array![
-                1 => Float32x3,
-            ],
+            attributes: Self::ATTRIBUTES,
         }
     }
 }
