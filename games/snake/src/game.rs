@@ -170,6 +170,7 @@ impl World {
         if let Some(food) = &self.food {
             if self.collides_with(food, &self.snake) {
                 self.food = None;
+                self.nominal_length += 3;
             }
         }
     }
