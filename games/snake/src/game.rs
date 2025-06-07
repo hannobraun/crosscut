@@ -27,6 +27,7 @@ impl GameStart for SnakeStart {
             [inner_size.width, inner_size.height]
         };
         let camera = make_camera(window_size);
+        let renderer = Renderer::new(window).await?;
 
         Ok(Box::new(Snake {
             last_update: Instant::now(),
@@ -35,7 +36,7 @@ impl GameStart for SnakeStart {
             nominal_length: 3,
             velocity: Vec2::new(1., 0.),
             camera,
-            renderer: Renderer::new(window).await?,
+            renderer,
         }))
     }
 }
