@@ -31,14 +31,7 @@ impl GameStart for SnakeStart {
 
         Ok(Box::new(Snake {
             last_update: Instant::now(),
-            world: World {
-                walls: make_walls(),
-                positions: VecDeque::from([Vec2::splat(
-                    (WORLD_SIZE / 2.).floor(),
-                )]),
-                nominal_length: 3,
-                velocity: Vec2::new(1., 0.),
-            },
+            world: World::new(),
             camera,
             renderer,
         }))
@@ -119,6 +112,15 @@ struct World {
 }
 
 impl World {
+    pub fn new() -> Self {
+        Self {
+            walls: make_walls(),
+            positions: VecDeque::from([Vec2::splat((WORLD_SIZE / 2.).floor())]),
+            nominal_length: 3,
+            velocity: Vec2::new(1., 0.),
+        }
+    }
+
     fn update(&mut self) {
         self.move_snake();
     }
