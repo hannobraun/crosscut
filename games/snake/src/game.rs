@@ -162,8 +162,8 @@ impl World {
 
         let mut collision = false;
 
-        for position in &self.walls {
-            collision |= head == position;
+        for p in &self.walls {
+            collision |= head == p;
         }
 
         if collision {
