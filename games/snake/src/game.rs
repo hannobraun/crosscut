@@ -78,7 +78,7 @@ impl Game for Snake {
 
         let positions = self
             .world
-            .positions
+            .snake
             .iter()
             .map(|position| Instance {
                 position: [position.x, position.y, 0.],
@@ -106,7 +106,7 @@ impl Game for Snake {
 
 struct World {
     walls: Vec<Vec2>,
-    positions: VecDeque<Vec2>,
+    snake: VecDeque<Vec2>,
     nominal_length: usize,
     velocity: Vec2,
 }
@@ -115,7 +115,7 @@ impl World {
     pub fn new() -> Self {
         Self {
             walls: make_walls(),
-            positions: VecDeque::from([Vec2::splat((WORLD_SIZE / 2.).floor())]),
+            snake: VecDeque::from([Vec2::splat((WORLD_SIZE / 2.).floor())]),
             nominal_length: 3,
             velocity: Vec2::new(1., 0.),
         }
@@ -127,19 +127,19 @@ impl World {
     }
 
     fn move_snake(&mut self) {
-        let Some(head) = self.positions.front().copied() else {
+        let Some(head) = self.snake.front().copied() else {
             unreachable!("The body is never empty.");
         };
 
-        if self.positions.len() >= self.nominal_length {
-            self.positions.pop_back();
+        if self.snake.len() >= self.nominal_length {
+            self.snake.pop_back();
         }
 
-        self.positions.push_front(head + self.velocity);
+        self.snake.push_front(head + self.velocity);
     }
 
     fn collide_snake_with_walls(&mut self) {
-        let Some(head) = self.positions.front() else {
+        let Some(head) = self.snake.front() else {
             unreachable!("There is always a snake head.");
         };
 
