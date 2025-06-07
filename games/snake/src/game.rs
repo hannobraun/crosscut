@@ -31,10 +31,14 @@ impl GameStart for SnakeStart {
 
         Ok(Box::new(Snake {
             last_update: Instant::now(),
-            walls: make_walls(),
-            positions: VecDeque::from([Vec2::splat((WORLD_SIZE / 2.).floor())]),
-            nominal_length: 3,
-            velocity: Vec2::new(1., 0.),
+            world: World {
+                walls: make_walls(),
+                positions: VecDeque::from([Vec2::splat(
+                    (WORLD_SIZE / 2.).floor(),
+                )]),
+                nominal_length: 3,
+                velocity: Vec2::new(1., 0.),
+            },
             camera,
             renderer,
         }))
@@ -43,10 +47,7 @@ impl GameStart for SnakeStart {
 
 pub struct Snake {
     last_update: Instant,
-    walls: Vec<Vec2>,
-    positions: VecDeque<Vec2>,
-    nominal_length: usize,
-    velocity: Vec2,
+    world: World,
     camera: Camera,
     renderer: Renderer,
 }
@@ -62,7 +63,7 @@ impl Game for Snake {
     }
 
     fn on_key(&mut self, key: KeyCode) {
-        self.velocity = match key {
+        self.world.velocity = match key {
             KeyCode::ArrowUp | KeyCode::KeyW => Vec2::new(0., 1.),
             KeyCode::ArrowLeft | KeyCode::KeyA => Vec2::new(-1., 0.),
             KeyCode::ArrowDown | KeyCode::KeyS => Vec2::new(0., -1.),
@@ -83,13 +84,14 @@ impl Game for Snake {
         }
 
         let positions = self
+            .world
             .positions
             .iter()
             .map(|position| Instance {
                 position: [position.x, position.y, 0.],
                 color: [0., 1., 0., 1.],
             })
-            .chain(self.walls.iter().map(|position| Instance {
+            .chain(self.world.walls.iter().map(|position| Instance {
                 position: [position.x, position.y, 0.],
                 color: [0., 0., 0., 1.],
             }));
@@ -111,16 +113,23 @@ impl Game for Snake {
 
 impl Snake {
     fn move_snake(&mut self) {
-        let Some(head) = self.positions.front().copied() else {
+        let Some(head) = self.world.positions.front().copied() else {
             unreachable!("The body is never empty.");
         };
 
-        if self.positions.len() >= self.nominal_length {
-            self.positions.pop_back();
+        if self.world.positions.len() >= self.world.nominal_length {
+            self.world.positions.pop_back();
         }
 
-        self.positions.push_front(head + self.velocity);
+        self.world.positions.push_front(head + self.world.velocity);
     }
+}
+
+struct World {
+    walls: Vec<Vec2>,
+    positions: VecDeque<Vec2>,
+    nominal_length: usize,
+    velocity: Vec2,
 }
 
 fn make_camera(window_size: [u32; 2]) -> Camera {
