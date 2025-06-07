@@ -15,8 +15,8 @@ pub use winit;
 
 pub use self::{
     game_engine::{
-        Camera, Game, GameStart, OrthographicProjection, PureCrosscutGame,
-        PureCrosscutGameStart, Renderer,
+        Camera, Game, GameStart, Instance, OrthographicProjection,
+        PureCrosscutGame, PureCrosscutGameStart, Renderer,
     },
     language::language::Language,
 };

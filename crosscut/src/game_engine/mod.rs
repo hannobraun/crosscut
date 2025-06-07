@@ -9,7 +9,7 @@ pub use self::{
     camera::{Camera, OrthographicProjection},
     editor::input::TerminalInput,
     game::{Game, GameStart, PureCrosscutGame, PureCrosscutGameStart},
-    renderer::Renderer,
+    renderer::{Instance, Renderer},
     start::start_and_wait,
 };
 
