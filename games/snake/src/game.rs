@@ -143,7 +143,7 @@ impl World {
                 });
                 let position = Vec2::new(x, y);
 
-                if self.collides_with_walls(&position, &self.walls) {
+                if self.collides_with(&position, &self.walls) {
                     continue;
                 }
 
@@ -170,12 +170,12 @@ impl World {
             unreachable!("There is always a snake head.");
         };
 
-        if self.collides_with_walls(head, &self.walls) {
+        if self.collides_with(head, &self.walls) {
             *self = Self::new();
         }
     }
 
-    fn collides_with_walls(&self, position: &Vec2, with: &[Vec2]) -> bool {
+    fn collides_with(&self, position: &Vec2, with: &[Vec2]) -> bool {
         let mut collision = false;
 
         for p in with {
