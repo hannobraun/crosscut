@@ -5,12 +5,12 @@ use crate::language::code::{
 use super::Value;
 
 #[derive(Clone, Debug)]
-pub struct RuntimeNode {
+pub struct EvalStep {
     pub path: Option<NodePath>,
     pub kind: RuntimeNodeKind,
 }
 
-impl RuntimeNode {
+impl EvalStep {
     pub fn new(path: NodePath, nodes: &Nodes) -> Self {
         let kind = RuntimeNodeKind::new(path.clone(), nodes);
 

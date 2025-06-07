@@ -2,12 +2,12 @@ use crate::language::code::{Codebase, NodePath, Nodes, Type};
 
 use super::{
     Effect, RuntimeState, Value,
-    node::{RuntimeChild, RuntimeNode, RuntimeNodeKind},
+    node::{EvalStep, RuntimeChild, RuntimeNodeKind},
 };
 
 #[derive(Debug, Default)]
 pub struct Evaluator {
-    eval_stack: Vec<RuntimeNode>,
+    eval_stack: Vec<EvalStep>,
     call_stack: Vec<StackFrame>,
     state: RuntimeState,
 }
@@ -38,7 +38,7 @@ impl Evaluator {
         argument: Value,
         nodes: &Nodes,
     ) {
-        self.eval_stack.push(RuntimeNode::new(body.clone(), nodes));
+        self.eval_stack.push(EvalStep::new(body.clone(), nodes));
         self.call_stack.push(StackFrame {
             parameter,
             argument,
@@ -124,8 +124,7 @@ impl Evaluator {
                 let path = path.clone();
 
                 self.eval_stack.push(node);
-                self.eval_stack
-                    .push(RuntimeNode::new(path, codebase.nodes()));
+                self.eval_stack.push(EvalStep::new(path, codebase.nodes()));
             }
             RuntimeNodeKind::Apply {
                 expression:
@@ -139,7 +138,7 @@ impl Evaluator {
                 if is_tail_call {
                     self.call_stack.pop();
                 } else {
-                    self.eval_stack.push(RuntimeNode {
+                    self.eval_stack.push(EvalStep {
                         path: None,
                         kind: RuntimeNodeKind::PopStackFrame {
                             output: Value::nothing(),
@@ -207,8 +206,7 @@ impl Evaluator {
                 };
 
                 self.eval_stack.push(node);
-                self.eval_stack
-                    .push(RuntimeNode::new(child, codebase.nodes()));
+                self.eval_stack.push(EvalStep::new(child, codebase.nodes()));
             }
             RuntimeNodeKind::Body { mut evaluated, .. } => {
                 let value = evaluated.pop().unwrap_or_else(Value::nothing);
@@ -230,8 +228,7 @@ impl Evaluator {
                 };
 
                 self.eval_stack.push(node);
-                self.eval_stack
-                    .push(RuntimeNode::new(child, codebase.nodes()));
+                self.eval_stack.push(EvalStep::new(child, codebase.nodes()));
             }
             RuntimeNodeKind::Tuple { evaluated, .. } => {
                 self.finish_evaluating_node(Value::Tuple { values: evaluated });
