@@ -215,7 +215,7 @@ impl Renderer {
             let Ok(len) = instances.len().try_into() else {
                 panic!(
                     "A number of instances that doesn't fit into a `u32` is \
-                    not supprted."
+                    not supported."
                 );
             };
 
