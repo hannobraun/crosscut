@@ -80,7 +80,7 @@ impl Game for Snake {
         while self.last_update.elapsed() >= move_time {
             self.last_update += move_time;
 
-            self.move_snake();
+            self.world.move_snake();
         }
 
         let positions = self
@@ -111,25 +111,25 @@ impl Game for Snake {
     }
 }
 
-impl Snake {
-    fn move_snake(&mut self) {
-        let Some(head) = self.world.positions.front().copied() else {
-            unreachable!("The body is never empty.");
-        };
-
-        if self.world.positions.len() >= self.world.nominal_length {
-            self.world.positions.pop_back();
-        }
-
-        self.world.positions.push_front(head + self.world.velocity);
-    }
-}
-
 struct World {
     walls: Vec<Vec2>,
     positions: VecDeque<Vec2>,
     nominal_length: usize,
     velocity: Vec2,
+}
+
+impl World {
+    fn move_snake(&mut self) {
+        let Some(head) = self.positions.front().copied() else {
+            unreachable!("The body is never empty.");
+        };
+
+        if self.positions.len() >= self.nominal_length {
+            self.positions.pop_back();
+        }
+
+        self.positions.push_front(head + self.velocity);
+    }
 }
 
 fn make_camera(window_size: [u32; 2]) -> Camera {
