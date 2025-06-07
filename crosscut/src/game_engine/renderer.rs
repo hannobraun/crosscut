@@ -209,6 +209,7 @@ impl Renderer {
             .into_iter()
             .map(|position| Instance {
                 position: position.to_array(),
+                color: [0., 1., 0., 1.],
             })
             .collect::<Vec<_>>();
         let num_instances: u32 = {
@@ -339,12 +340,14 @@ impl Vertex {
 #[repr(C)]
 struct Instance {
     position: [f32; 3],
+    color: [f32; 4],
 }
 
 impl Instance {
     const MAX_NUM: u64 = 4;
     const ATTRIBUTES: &[wgpu::VertexAttribute] = &wgpu::vertex_attr_array![
         1 => Float32x3,
+        2 => Float32x4,
     ];
 
     fn size() -> u64 {
