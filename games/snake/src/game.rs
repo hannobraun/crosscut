@@ -175,7 +175,11 @@ impl World {
         }
     }
 
-    fn collides_with(&self, position: &Vec2, with: &[Vec2]) -> bool {
+    fn collides_with<'a>(
+        &self,
+        position: &Vec2,
+        with: impl IntoIterator<Item = &'a Vec2>,
+    ) -> bool {
         let mut collision = false;
 
         for p in with {
