@@ -1,4 +1,5 @@
 use std::{
+    array,
     collections::VecDeque,
     sync::Arc,
     time::{Duration, Instant},
@@ -11,6 +12,7 @@ use crosscut::{
     wgpu,
     winit::{keyboard::KeyCode, window::Window},
 };
+use rand::random;
 
 #[derive(Default)]
 pub struct SnakeStart {}
@@ -87,6 +89,10 @@ impl Game for Snake {
             .chain(self.world.walls.iter().map(|position| Instance {
                 position: [position.x, position.y, 0.],
                 color: [0., 0., 0., 1.],
+            }))
+            .chain(self.world.food.map(|position| Instance {
+                position: [position.x, position.y, 0.],
+                color: [1., 0., 0., 1.],
             }));
 
         self.renderer.render(
@@ -109,6 +115,7 @@ struct World {
     snake: VecDeque<Vec2>,
     nominal_length: usize,
     velocity: Vec2,
+    food: Option<Vec2>,
 }
 
 impl World {
@@ -118,12 +125,22 @@ impl World {
             snake: VecDeque::from([Vec2::splat((WORLD_SIZE / 2.).floor())]),
             nominal_length: 3,
             velocity: Vec2::new(1., 0.),
+            food: None,
         }
     }
 
     fn update(&mut self) {
+        self.spawn_food();
         self.move_snake();
         self.collide_snake_with_walls();
+    }
+
+    fn spawn_food(&mut self) {
+        if self.food.is_none() {
+            let [x, y] =
+                array::from_fn(|_| (random::<f32>() * (WORLD_SIZE)).floor());
+            self.food = Some(Vec2::new(x, y));
+        }
     }
 
     fn move_snake(&mut self) {
