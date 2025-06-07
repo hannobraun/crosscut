@@ -13,6 +13,7 @@ struct VertexInput {
 
 struct VertexOutput {
     @builtin(position) position: vec4<f32>,
+    @location(2) color: vec4<f32>,
 }
 
 @vertex
@@ -21,11 +22,12 @@ fn vert_main(in: VertexInput) -> VertexOutput {
 
     var out: VertexOutput;
     out.position = uniforms.transform * vec4<f32>(position, 1.0);
+    out.color = in.instance_color;
 
     return out;
 }
 
 @fragment
 fn frag_main(in: VertexOutput) -> @location(0) vec4<f32> {
-    return vec4<f32>(0.0, 1.0, 0.0, 1.0);
+    return in.color;
 }
