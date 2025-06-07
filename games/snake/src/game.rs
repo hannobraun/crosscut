@@ -78,15 +78,7 @@ impl Game for Snake {
         while self.last_update.elapsed() >= move_time {
             self.last_update += move_time;
 
-            let Some(head) = self.positions.front().copied() else {
-                unreachable!("The body is never empty.");
-            };
-
-            if self.positions.len() >= self.nominal_length {
-                self.positions.pop_back();
-            }
-
-            self.positions.push_front(head + self.velocity);
+            self.move_snake();
         }
 
         let positions = self
@@ -113,6 +105,20 @@ impl Game for Snake {
         )?;
 
         Ok(())
+    }
+}
+
+impl Snake {
+    fn move_snake(&mut self) {
+        let Some(head) = self.positions.front().copied() else {
+            unreachable!("The body is never empty.");
+        };
+
+        if self.positions.len() >= self.nominal_length {
+            self.positions.pop_back();
+        }
+
+        self.positions.push_front(head + self.velocity);
     }
 }
 
