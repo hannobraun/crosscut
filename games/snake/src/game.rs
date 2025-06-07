@@ -80,7 +80,7 @@ impl Game for Snake {
         while self.last_update.elapsed() >= move_time {
             self.last_update += move_time;
 
-            self.world.move_snake();
+            self.world.update();
         }
 
         let positions = self
@@ -119,6 +119,10 @@ struct World {
 }
 
 impl World {
+    fn update(&mut self) {
+        self.move_snake();
+    }
+
     fn move_snake(&mut self) {
         let Some(head) = self.positions.front().copied() else {
             unreachable!("The body is never empty.");
