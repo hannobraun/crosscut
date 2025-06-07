@@ -137,10 +137,19 @@ impl World {
 
     fn spawn_food(&mut self) {
         if self.food.is_none() {
-            let [x, y] =
-                array::from_fn(|_| (random::<f32>() * (WORLD_SIZE)).floor());
-            let position = Vec2::new(x, y);
-            self.food = Some(position);
+            loop {
+                let [x, y] = array::from_fn(|_| {
+                    (random::<f32>() * (WORLD_SIZE)).floor()
+                });
+                let position = Vec2::new(x, y);
+
+                if self.collides_with_walls(&position) {
+                    continue;
+                }
+
+                self.food = Some(position);
+                break;
+            }
         }
     }
 
