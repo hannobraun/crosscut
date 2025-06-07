@@ -30,6 +30,7 @@ impl GameStart for SnakeStart {
 
         Ok(Box::new(Snake {
             last_update: Instant::now(),
+            walls: make_walls(),
             positions: VecDeque::from([Vec2::splat((WORLD_SIZE / 2.).floor())]),
             nominal_length: 3,
             velocity: Vec2::new(1., 0.),
@@ -41,6 +42,7 @@ impl GameStart for SnakeStart {
 
 pub struct Snake {
     last_update: Instant,
+    walls: Vec<Vec2>,
     positions: VecDeque<Vec2>,
     nominal_length: usize,
     velocity: Vec2,
@@ -87,10 +89,17 @@ impl Game for Snake {
             self.positions.push_front(head + self.velocity);
         }
 
-        let positions = self.positions.iter().map(|position| Instance {
-            position: [position.x, position.y, 0.],
-            color: [0., 1., 0., 1.],
-        });
+        let positions = self
+            .positions
+            .iter()
+            .map(|position| Instance {
+                position: [position.x, position.y, 0.],
+                color: [0., 1., 0., 1.],
+            })
+            .chain(self.walls.iter().map(|position| Instance {
+                position: [position.x, position.y, 0.],
+                color: [0., 0., 0., 1.],
+            }));
 
         self.renderer.render(
             wgpu::Color {
@@ -151,6 +160,30 @@ fn make_camera(window_size: [u32; 2]) -> Camera {
     };
 
     Camera::from_orthographic_projection(projection)
+}
+
+fn make_walls() -> Vec<Vec2> {
+    let mut walls = Vec::new();
+
+    for x in [0., WORLD_SIZE - 1.] {
+        let mut y = 0.;
+
+        while y < WORLD_SIZE {
+            walls.push(Vec2::new(x, y));
+            y += 1.
+        }
+    }
+
+    for y in [0., WORLD_SIZE - 1.] {
+        let mut x = 1.;
+
+        while x < WORLD_SIZE - 1. {
+            walls.push(Vec2::new(x, y));
+            x += 1.;
+        }
+    }
+
+    walls
 }
 
 const WORLD_SIZE: f32 = 32.;
