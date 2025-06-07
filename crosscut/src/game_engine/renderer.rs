@@ -329,7 +329,7 @@ impl Vertex {
             array_stride: Self::size(),
             step_mode: wgpu::VertexStepMode::Vertex,
             attributes: &wgpu::vertex_attr_array![
-                0 => Float32x3
+                0 => Float32x3,
             ],
         }
     }
@@ -366,7 +366,7 @@ impl Instance {
             array_stride: Self::size(),
             step_mode: wgpu::VertexStepMode::Instance,
             attributes: &wgpu::vertex_attr_array![
-                1 => Float32x3
+                1 => Float32x3,
             ],
         }
     }
