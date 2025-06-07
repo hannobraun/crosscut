@@ -2,7 +2,7 @@ use crate::language::code::{Codebase, NodePath, Nodes, Type};
 
 use super::{
     Effect, RuntimeState, Value,
-    node::{EvalStep, RuntimeChild, RuntimeNodeKind},
+    eval_step::{EvalStep, RuntimeChild, RuntimeNodeKind},
 };
 
 #[derive(Debug, Default)]
