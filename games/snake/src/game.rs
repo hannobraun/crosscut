@@ -312,13 +312,13 @@ fn make_walls() -> Vec<Vec2> {
 }
 
 fn collision_between<'a>(
-    position: &Vec2,
+    a: &Vec2,
     with: impl IntoIterator<Item = &'a Vec2>,
 ) -> bool {
     let mut collision = false;
 
     for p in with {
-        collision |= position == p;
+        collision |= a == p;
     }
 
     collision
