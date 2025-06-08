@@ -103,6 +103,10 @@ impl Game for Snake {
             .chain(self.world.food.map(|position| Instance {
                 position: [position.x, position.y, 0.],
                 color: [1., 0., 0., 1.],
+            }))
+            .chain(self.world.new_walls.iter().map(|position| Instance {
+                position: [position.x, position.y, 0.],
+                color: [0.125, 1., 0.125, 1.],
             }));
 
         self.renderer.render(
@@ -127,6 +131,8 @@ struct World {
     nominal_length: usize,
     velocity: Vec2,
     food: Option<Vec2>,
+    new_walls: Vec<Vec2>,
+    new_walls_left: usize,
 }
 
 impl World {
@@ -138,6 +144,8 @@ impl World {
             nominal_length: 3,
             velocity: Vec2::new(1., 0.),
             food: None,
+            new_walls: Vec::new(),
+            new_walls_left: 0,
         }
     }
 
@@ -184,6 +192,11 @@ impl World {
         }
 
         self.snake.push_front(head + self.velocity);
+
+        if self.new_walls_left > 0 {
+            self.new_walls.push(head);
+            self.new_walls_left -= 1;
+        }
     }
 
     fn eat_food(&mut self) {
@@ -191,6 +204,7 @@ impl World {
             if collides_with(food, &self.snake) {
                 self.food = None;
                 self.nominal_length += 3;
+                self.new_walls_left += 3;
             }
         }
     }
