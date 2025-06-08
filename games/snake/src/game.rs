@@ -156,6 +156,7 @@ impl World {
         self.eat_food();
         self.collide_snake_with_walls();
         self.collide_snake_with_itself();
+        self.finish_new_walls();
     }
 
     fn process_input(&mut self) {
@@ -224,6 +225,17 @@ impl World {
             let body = self.snake.iter().skip(1);
             if collides_with(head, body) {
                 *self = Self::new();
+            }
+        }
+    }
+
+    fn finish_new_walls(&mut self) {
+        if let Some(new_wall) = self.new_walls.pop_front() {
+            let body = self.snake.iter().skip(1);
+            if collides_with(&new_wall, body) {
+                self.new_walls.push_front(new_wall);
+            } else {
+                self.walls.push(new_wall);
             }
         }
     }
