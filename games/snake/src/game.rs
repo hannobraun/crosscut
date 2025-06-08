@@ -58,7 +58,7 @@ impl Game for Snake {
     }
 
     fn on_key(&mut self, key: KeyCode) {
-        self.world.velocity = match key {
+        let new_velocity = match key {
             KeyCode::ArrowUp | KeyCode::KeyW => Vec2::new(0., 1.),
             KeyCode::ArrowLeft | KeyCode::KeyA => Vec2::new(-1., 0.),
             KeyCode::ArrowDown | KeyCode::KeyS => Vec2::new(0., -1.),
@@ -67,6 +67,10 @@ impl Game for Snake {
                 return;
             }
         };
+
+        if new_velocity * -1. != self.world.velocity {
+            self.world.velocity = new_velocity;
+        }
     }
 
     fn on_frame(&mut self, _: &mut Language) -> anyhow::Result<()> {
