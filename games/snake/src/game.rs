@@ -131,7 +131,7 @@ struct World {
     nominal_length: usize,
     velocity: Vec2,
     food: Option<Vec2>,
-    new_walls: Vec<Vec2>,
+    new_walls: VecDeque<Vec2>,
     new_walls_left: usize,
 }
 
@@ -144,7 +144,7 @@ impl World {
             nominal_length: 3,
             velocity: Vec2::new(1., 0.),
             food: None,
-            new_walls: Vec::new(),
+            new_walls: VecDeque::new(),
             new_walls_left: 0,
         }
     }
@@ -194,7 +194,7 @@ impl World {
         self.snake.push_front(head + self.velocity);
 
         if self.new_walls_left > 0 {
-            self.new_walls.push(head);
+            self.new_walls.push_back(head);
             self.new_walls_left -= 1;
         }
     }
