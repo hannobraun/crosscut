@@ -88,7 +88,7 @@ impl Game for Snake {
             })
             .chain(self.world.walls.iter().map(|position| Instance {
                 position: [position.x, position.y, 0.],
-                color: [0., 0., 0., 1.],
+                color: [1., 1., 1., 1.],
             }))
             .chain(self.world.food.map(|position| Instance {
                 position: [position.x, position.y, 0.],
@@ -97,9 +97,9 @@ impl Game for Snake {
 
         self.renderer.render(
             wgpu::Color {
-                r: 1.,
-                g: 1.,
-                b: 1.,
+                r: 0.,
+                g: 0.,
+                b: 0.,
                 a: 1.,
             },
             positions,
