@@ -205,6 +205,7 @@ impl World {
             if collision_between(food, &self.snake) {
                 self.food = None;
                 self.nominal_length += 3;
+
                 self.new_walls_left += 3;
             }
         }
