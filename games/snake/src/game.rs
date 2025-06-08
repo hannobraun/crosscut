@@ -144,7 +144,7 @@ impl World {
                 });
                 let position = Vec2::new(x, y);
 
-                if Self::collides_with(&position, &self.walls) {
+                if collides_with(&position, &self.walls) {
                     continue;
                 }
 
@@ -168,7 +168,7 @@ impl World {
 
     fn eat_food(&mut self) {
         if let Some(food) = &self.food {
-            if Self::collides_with(food, &self.snake) {
+            if collides_with(food, &self.snake) {
                 self.food = None;
                 self.nominal_length += 3;
             }
@@ -180,22 +180,9 @@ impl World {
             unreachable!("There is always a snake head.");
         };
 
-        if Self::collides_with(head, &self.walls) {
+        if collides_with(head, &self.walls) {
             *self = Self::new();
         }
-    }
-
-    fn collides_with<'a>(
-        position: &Vec2,
-        with: impl IntoIterator<Item = &'a Vec2>,
-    ) -> bool {
-        let mut collision = false;
-
-        for p in with {
-            collision |= position == p;
-        }
-
-        collision
     }
 }
 
@@ -267,6 +254,19 @@ fn make_walls() -> Vec<Vec2> {
     }
 
     walls
+}
+
+fn collides_with<'a>(
+    position: &Vec2,
+    with: impl IntoIterator<Item = &'a Vec2>,
+) -> bool {
+    let mut collision = false;
+
+    for p in with {
+        collision |= position == p;
+    }
+
+    collision
 }
 
 const WORLD_SIZE: f32 = 32.;
