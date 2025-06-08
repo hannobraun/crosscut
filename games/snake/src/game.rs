@@ -68,8 +68,14 @@ impl Game for Snake {
             }
         };
 
-        if new_velocity * -1. != self.world.velocity {
-            self.world.velocity = new_velocity;
+        let is_valid = match self.world.input.back().copied() {
+            Some(latest_input) if new_velocity * -1. != latest_input => true,
+            Some(_) => false,
+            None => true,
+        };
+
+        if is_valid {
+            self.world.input.push_back(new_velocity);
         }
     }
 
@@ -115,6 +121,7 @@ impl Game for Snake {
 }
 
 struct World {
+    input: VecDeque<Vec2>,
     walls: Vec<Vec2>,
     snake: VecDeque<Vec2>,
     nominal_length: usize,
@@ -125,6 +132,7 @@ struct World {
 impl World {
     pub fn new() -> Self {
         Self {
+            input: VecDeque::new(),
             walls: make_walls(),
             snake: VecDeque::from([Vec2::splat((WORLD_SIZE / 2.).floor())]),
             nominal_length: 3,
@@ -134,11 +142,18 @@ impl World {
     }
 
     fn update(&mut self) {
+        self.process_input();
         self.spawn_food();
         self.move_snake();
         self.eat_food();
         self.collide_snake_with_walls();
         self.collide_snake_with_itself();
+    }
+
+    fn process_input(&mut self) {
+        if let Some(velocity) = self.input.pop_front() {
+            self.velocity = velocity;
+        }
     }
 
     fn spawn_food(&mut self) {
