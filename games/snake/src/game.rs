@@ -134,6 +134,7 @@ impl World {
         self.move_snake();
         self.eat_food();
         self.collide_snake_with_walls();
+        self.collide_snake_with_itself();
     }
 
     fn spawn_food(&mut self) {
@@ -182,6 +183,15 @@ impl World {
 
         if collides_with(head, &self.walls) {
             *self = Self::new();
+        }
+    }
+
+    fn collide_snake_with_itself(&mut self) {
+        if let Some(head) = self.snake.front() {
+            let body = self.snake.iter().skip(1);
+            if collides_with(head, body) {
+                *self = Self::new();
+            }
         }
     }
 }
