@@ -201,8 +201,8 @@ impl World {
     }
 
     fn eat_food(&mut self) {
-        if let Some(food) = &self.food {
-            if collision_between(food, &self.snake) {
+        if let Some(food) = self.food {
+            if collision_between(&food, &self.snake) {
                 self.food = None;
                 self.nominal_length += 3;
 
