@@ -173,7 +173,7 @@ impl World {
                 });
                 let position = Vec2::new(x, y);
 
-                if collides_with(&position, &self.walls) {
+                if collision_between(&position, &self.walls) {
                     continue;
                 }
 
@@ -202,7 +202,7 @@ impl World {
 
     fn eat_food(&mut self) {
         if let Some(food) = &self.food {
-            if collides_with(food, &self.snake) {
+            if collision_between(food, &self.snake) {
                 self.food = None;
                 self.nominal_length += 3;
                 self.new_walls_left += 3;
@@ -215,7 +215,7 @@ impl World {
             unreachable!("There is always a snake head.");
         };
 
-        if collides_with(head, &self.walls) {
+        if collision_between(head, &self.walls) {
             *self = Self::new();
         }
     }
@@ -223,7 +223,7 @@ impl World {
     fn collide_snake_with_itself(&mut self) {
         if let Some(head) = self.snake.front() {
             let body = self.snake.iter().skip(1);
-            if collides_with(head, body) {
+            if collision_between(head, body) {
                 *self = Self::new();
             }
         }
@@ -232,7 +232,7 @@ impl World {
     fn finish_new_walls(&mut self) {
         if let Some(new_wall) = self.new_walls.pop_front() {
             let body = self.snake.iter().skip(1);
-            if collides_with(&new_wall, body) {
+            if collision_between(&new_wall, body) {
                 self.new_walls.push_front(new_wall);
             } else {
                 self.walls.push(new_wall);
@@ -311,7 +311,7 @@ fn make_walls() -> Vec<Vec2> {
     walls
 }
 
-fn collides_with<'a>(
+fn collision_between<'a>(
     position: &Vec2,
     with: impl IntoIterator<Item = &'a Vec2>,
 ) -> bool {
