@@ -114,13 +114,13 @@ impl Quads {
         queue.write_buffer(&vertex_buffer, 0, bytemuck::cast_slice(&vertices));
 
         {
-            let Ok(len) = vertices.len().try_into() else {
+            let Ok(num_vertices) = vertices.len().try_into() else {
                 unreachable!(
                     "Number of vertices defined here fits into an `u32`."
                 );
             };
 
-            let num_vertices: u32 = len;
+            let num_vertices: u32 = num_vertices;
             assert!(num_vertices == Self::NUM_VERTICES);
         }
 
