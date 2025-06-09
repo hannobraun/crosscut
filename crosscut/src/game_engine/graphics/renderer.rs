@@ -3,7 +3,7 @@ use std::sync::Arc;
 use anyhow::anyhow;
 use winit::window::Window;
 
-use crate::{Camera, Instance};
+use crate::{Camera, Instance, game_engine::graphics::quads::Vertex};
 
 pub struct Renderer {
     surface: wgpu::Surface<'static>,
@@ -289,42 +289,5 @@ impl Default for Uniforms {
     fn default() -> Self {
         let transform = Camera::default().to_transform();
         Self { transform }
-    }
-}
-
-#[derive(Clone, Copy, bytemuck::Pod, bytemuck::Zeroable)]
-#[repr(C)]
-pub struct Vertex {
-    pub position: [f32; 3],
-}
-
-impl Vertex {
-    pub const MAX_NUM: u64 = 4;
-
-    fn size() -> u64 {
-        let Ok(size) = size_of::<Self>().try_into() else {
-            unreachable!("Size of `Vertex` can surely fit into a `u64`");
-        };
-
-        size
-    }
-
-    pub fn buffer_descriptor() -> wgpu::BufferDescriptor<'static> {
-        wgpu::BufferDescriptor {
-            label: None,
-            size: Self::size() * Self::MAX_NUM,
-            usage: wgpu::BufferUsages::COPY_DST | wgpu::BufferUsages::VERTEX,
-            mapped_at_creation: false,
-        }
-    }
-
-    pub fn layout() -> wgpu::VertexBufferLayout<'static> {
-        wgpu::VertexBufferLayout {
-            array_stride: Self::size(),
-            step_mode: wgpu::VertexStepMode::Vertex,
-            attributes: &wgpu::vertex_attr_array![
-                0 => Float32x3,
-            ],
-        }
     }
 }
