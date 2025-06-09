@@ -123,10 +123,7 @@ impl Quads {
 
             len
         };
-
-        {
-            assert!(num_vertices == Self::NUM_VERTICES);
-        }
+        assert!(num_vertices == Self::NUM_VERTICES);
 
         let instance_buffer =
             device.create_buffer(&Instance::buffer_descriptor());
