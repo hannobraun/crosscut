@@ -9,7 +9,7 @@ impl Background {
         &self,
         view: &wgpu::TextureView,
         encoder: &mut wgpu::CommandEncoder,
-        bg_color: wgpu::Color,
+        color: wgpu::Color,
     ) {
         encoder.begin_render_pass(&wgpu::RenderPassDescriptor {
             label: None,
@@ -17,7 +17,7 @@ impl Background {
                 view,
                 resolve_target: None,
                 ops: wgpu::Operations {
-                    load: wgpu::LoadOp::Clear(bg_color),
+                    load: wgpu::LoadOp::Clear(color),
                     store: wgpu::StoreOp::Store,
                 },
             })],
