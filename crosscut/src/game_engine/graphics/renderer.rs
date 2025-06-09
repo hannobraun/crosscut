@@ -277,7 +277,7 @@ impl Renderer {
 #[derive(Clone, Copy, bytemuck::Pod, bytemuck::Zeroable)]
 #[repr(C)]
 pub struct Uniforms {
-    transform: [[f32; 4]; 4],
+    pub transform: [[f32; 4]; 4],
 }
 
 impl Uniforms {
