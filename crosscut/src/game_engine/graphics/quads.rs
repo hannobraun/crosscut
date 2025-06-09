@@ -222,9 +222,11 @@ impl Vertex {
     }
 
     fn buffer_descriptor() -> wgpu::BufferDescriptor<'static> {
+        let num_vertices = Quads::NUM_VERTICES;
+
         wgpu::BufferDescriptor {
             label: None,
-            size: Self::size() * Quads::NUM_VERTICES,
+            size: Self::size() * num_vertices,
             usage: wgpu::BufferUsages::COPY_DST | wgpu::BufferUsages::VERTEX,
             mapped_at_creation: false,
         }
