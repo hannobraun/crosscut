@@ -126,7 +126,7 @@ impl Quads {
 
         {
             let num_vertices: u64 = num_vertices.into();
-            assert!(num_vertices <= Self::NUM_VERTICES);
+            assert!(num_vertices == Self::NUM_VERTICES);
         }
 
         let instance_buffer =
