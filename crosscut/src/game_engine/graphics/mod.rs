@@ -3,7 +3,7 @@ use std::sync::Arc;
 use anyhow::anyhow;
 use winit::window::Window;
 
-use super::Camera;
+use crate::Camera;
 
 pub struct Renderer {
     surface: wgpu::Surface<'static>,
