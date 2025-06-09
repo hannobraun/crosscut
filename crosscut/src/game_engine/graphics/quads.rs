@@ -237,8 +237,8 @@ pub struct Instance {
 impl Instance {
     const MAX_NUM: u64 = 1024;
     const ATTRIBUTES: &[wgpu::VertexAttribute] = &wgpu::vertex_attr_array![
-        1 => Float32x3,
-        2 => Float32x4,
+        0 => Float32x3,
+        1 => Float32x4,
     ];
 
     fn size() -> u64 {
@@ -298,7 +298,7 @@ impl Vertex {
             array_stride: Self::size(),
             step_mode: wgpu::VertexStepMode::Vertex,
             attributes: &wgpu::vertex_attr_array![
-                0 => Float32x3,
+                2 => Float32x3,
             ],
         }
     }

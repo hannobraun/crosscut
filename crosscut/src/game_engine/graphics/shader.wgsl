@@ -6,14 +6,14 @@ struct Uniforms {
 }
 
 struct VertexInput {
-    @location(0) vertex_position: vec3<f32>,
-    @location(1) instance_position: vec3<f32>,
-    @location(2) instance_color: vec4<f32>,
+    @location(2) vertex_position: vec3<f32>,
+    @location(0) instance_position: vec3<f32>,
+    @location(1) instance_color: vec4<f32>,
 }
 
 struct VertexOutput {
     @builtin(position) position: vec4<f32>,
-    @location(2) color: vec4<f32>,
+    @location(1) color: vec4<f32>,
 }
 
 @vertex
