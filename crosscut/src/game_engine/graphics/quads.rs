@@ -10,7 +10,7 @@ pub struct Quads {
 }
 
 impl Quads {
-    pub const NUM_VERTICES: u64 = 4;
+    pub const NUM_VERTICES: u32 = 4;
 
     pub fn new(
         device: &wgpu::Device,
@@ -125,7 +125,6 @@ impl Quads {
         };
 
         {
-            let num_vertices: u64 = num_vertices.into();
             assert!(num_vertices == Self::NUM_VERTICES);
         }
 
@@ -222,7 +221,7 @@ impl Vertex {
     }
 
     fn buffer_descriptor() -> wgpu::BufferDescriptor<'static> {
-        let num_vertices = Quads::NUM_VERTICES;
+        let num_vertices: u64 = Quads::NUM_VERTICES.into();
 
         wgpu::BufferDescriptor {
             label: None,
