@@ -142,7 +142,7 @@ impl Renderer {
                 .set_vertex_buffer(0, self.quads.vertex_buffer.slice(..));
             render_pass
                 .set_vertex_buffer(1, self.quads.instance_buffer.slice(..));
-            render_pass.draw(0..self.quads.num_vertices, 0..num_instances);
+            render_pass.draw(0..Quads::NUM_VERTICES, 0..num_instances);
         }
 
         self.queue.submit(Some(encoder.finish()));

@@ -5,7 +5,6 @@ pub struct Quads {
     pub bind_group: wgpu::BindGroup,
     pub uniform_buffer: wgpu::Buffer,
     pub vertex_buffer: wgpu::Buffer,
-    pub num_vertices: u32,
     pub instance_buffer: wgpu::Buffer,
 }
 
@@ -133,7 +132,6 @@ impl Quads {
             bind_group,
             uniform_buffer,
             vertex_buffer,
-            num_vertices,
             instance_buffer,
         }
     }
