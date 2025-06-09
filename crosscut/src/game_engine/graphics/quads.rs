@@ -10,7 +10,7 @@ pub struct Quads {
 }
 
 impl Quads {
-    const NUM_VERTICES: u64 = 4;
+    pub const NUM_VERTICES: u64 = 4;
 
     pub fn new(
         device: &wgpu::Device,
