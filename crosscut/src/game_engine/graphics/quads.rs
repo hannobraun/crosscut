@@ -141,7 +141,7 @@ impl Quads {
         queue: &wgpu::Queue,
         view: &wgpu::TextureView,
         encoder: &mut wgpu::CommandEncoder,
-        bg_color: wgpu::Color,
+        _: wgpu::Color,
         positions: impl IntoIterator<Item = Instance>,
         camera: &Camera,
     ) {
@@ -185,7 +185,7 @@ impl Quads {
                             view,
                             resolve_target: None,
                             ops: wgpu::Operations {
-                                load: wgpu::LoadOp::Clear(bg_color),
+                                load: wgpu::LoadOp::Load,
                                 store: wgpu::StoreOp::Store,
                             },
                         },

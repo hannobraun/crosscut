@@ -5,11 +5,14 @@ use winit::window::Window;
 
 use crate::{Camera, Instance, game_engine::graphics::quads::Quads};
 
+use super::background::Background;
+
 pub struct Renderer {
     surface: wgpu::Surface<'static>,
     surface_config: wgpu::SurfaceConfiguration,
     device: wgpu::Device,
     queue: wgpu::Queue,
+    background: Background,
     quads: Quads,
 }
 
@@ -48,6 +51,7 @@ impl Renderer {
             })?;
         surface.configure(&device, &surface_config);
 
+        let background = Background::new();
         let quads = Quads::new(&device, &queue, &surface_config);
 
         Ok(Self {
@@ -55,6 +59,7 @@ impl Renderer {
             surface_config,
             device,
             queue,
+            background,
             quads,
         })
     }
@@ -83,6 +88,7 @@ impl Renderer {
             &wgpu::CommandEncoderDescriptor { label: None },
         );
 
+        self.background.draw(&view, &mut encoder, bg_color);
         self.quads.draw(
             &self.queue,
             &view,

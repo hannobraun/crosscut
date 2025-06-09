@@ -1,3 +1,4 @@
+mod background;
 mod quads;
 mod renderer;
 
