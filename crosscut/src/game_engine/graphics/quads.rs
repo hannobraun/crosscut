@@ -10,7 +10,7 @@ pub struct Quads {
 }
 
 impl Quads {
-    const MAX_NUM: u64 = 4;
+    const NUM_VERTICES: u64 = 4;
 
     pub fn new(
         device: &wgpu::Device,
@@ -126,7 +126,7 @@ impl Quads {
 
         {
             let num_vertices: u64 = num_vertices.into();
-            assert!(num_vertices <= Self::MAX_NUM);
+            assert!(num_vertices <= Self::NUM_VERTICES);
         }
 
         let instance_buffer =
@@ -224,7 +224,7 @@ impl Vertex {
     fn buffer_descriptor() -> wgpu::BufferDescriptor<'static> {
         wgpu::BufferDescriptor {
             label: None,
-            size: Self::size() * Quads::MAX_NUM,
+            size: Self::size() * Quads::NUM_VERTICES,
             usage: wgpu::BufferUsages::COPY_DST | wgpu::BufferUsages::VERTEX,
             mapped_at_creation: false,
         }
