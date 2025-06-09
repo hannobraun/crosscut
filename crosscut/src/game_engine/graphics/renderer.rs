@@ -309,7 +309,7 @@ impl Vertex {
         size
     }
 
-    fn buffer_descriptor() -> wgpu::BufferDescriptor<'static> {
+    pub fn buffer_descriptor() -> wgpu::BufferDescriptor<'static> {
         wgpu::BufferDescriptor {
             label: None,
             size: Self::size() * Self::MAX_NUM,
@@ -318,7 +318,7 @@ impl Vertex {
         }
     }
 
-    fn layout() -> wgpu::VertexBufferLayout<'static> {
+    pub fn layout() -> wgpu::VertexBufferLayout<'static> {
         wgpu::VertexBufferLayout {
             array_stride: Self::size(),
             step_mode: wgpu::VertexStepMode::Vertex,
