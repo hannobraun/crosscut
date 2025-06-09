@@ -140,8 +140,6 @@ impl Renderer {
             });
 
         let vertex_buffer = device.create_buffer(&Vertex::buffer_descriptor());
-        let instance_buffer =
-            device.create_buffer(&Instance::buffer_descriptor());
 
         let vertices = [[0.5, -0.5], [0.5, 0.5], [-0.5, -0.5], [-0.5, 0.5]]
             .map(|[x, y]| {
@@ -164,6 +162,9 @@ impl Renderer {
         }
 
         queue.write_buffer(&vertex_buffer, 0, bytemuck::cast_slice(&vertices));
+
+        let instance_buffer =
+            device.create_buffer(&Instance::buffer_descriptor());
 
         let quads = Quads {
             pipeline,
