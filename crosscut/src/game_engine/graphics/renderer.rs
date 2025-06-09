@@ -299,7 +299,7 @@ pub struct Vertex {
 }
 
 impl Vertex {
-    const MAX_NUM: u64 = 4;
+    pub const MAX_NUM: u64 = 4;
 
     fn size() -> u64 {
         let Ok(size) = size_of::<Self>().try_into() else {
