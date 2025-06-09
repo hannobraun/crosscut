@@ -337,7 +337,7 @@ pub struct Instance {
 }
 
 impl Instance {
-    const MAX_NUM: u64 = 1024;
+    pub const MAX_NUM: u64 = 1024;
     const ATTRIBUTES: &[wgpu::VertexAttribute] = &wgpu::vertex_attr_array![
         1 => Float32x3,
         2 => Float32x4,
