@@ -2,14 +2,14 @@ mod camera;
 mod editor;
 mod game;
 mod game_engine;
-mod renderer;
+mod graphics;
 mod start;
 
 pub use self::{
     camera::{Camera, OrthographicProjection},
     editor::input::TerminalInput,
     game::{Game, GameStart, PureCrosscutGame, PureCrosscutGameStart},
-    renderer::{Instance, Renderer},
+    graphics::{Instance, Renderer},
     start::start_and_wait,
 };
 
