@@ -141,7 +141,6 @@ impl Quads {
         queue: &wgpu::Queue,
         view: &wgpu::TextureView,
         encoder: &mut wgpu::CommandEncoder,
-        _: wgpu::Color,
         positions: impl IntoIterator<Item = Instance>,
         camera: &Camera,
     ) {

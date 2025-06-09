@@ -89,14 +89,8 @@ impl Renderer {
         );
 
         self.background.draw(&view, &mut encoder, bg_color);
-        self.quads.draw(
-            &self.queue,
-            &view,
-            &mut encoder,
-            bg_color,
-            positions,
-            camera,
-        );
+        self.quads
+            .draw(&self.queue, &view, &mut encoder, positions, camera);
 
         self.queue.submit(Some(encoder.finish()));
         surface_texture.present();
