@@ -165,19 +165,21 @@ impl Renderer {
 
         queue.write_buffer(&vertex_buffer, 0, bytemuck::cast_slice(&vertices));
 
+        let quads = Quads {
+            pipeline,
+            bind_group,
+            uniform_buffer,
+            vertex_buffer,
+            num_vertices,
+            instance_buffer,
+        };
+
         Ok(Self {
             surface,
             surface_config,
             device,
             queue,
-            quads: Quads {
-                pipeline,
-                bind_group,
-                uniform_buffer,
-                vertex_buffer,
-                num_vertices,
-                instance_buffer,
-            },
+            quads,
         })
     }
 
