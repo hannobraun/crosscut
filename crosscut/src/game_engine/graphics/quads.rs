@@ -110,9 +110,6 @@ impl Quads {
                 Vertex { position }
             });
 
-        let vertex_buffer = device.create_buffer(&Vertex::buffer_descriptor());
-        queue.write_buffer(&vertex_buffer, 0, bytemuck::cast_slice(&vertices));
-
         {
             let Ok(num_vertices) = vertices.len().try_into() else {
                 unreachable!(
@@ -123,6 +120,9 @@ impl Quads {
             let num_vertices: u32 = num_vertices;
             assert!(num_vertices == Self::NUM_VERTICES);
         }
+
+        let vertex_buffer = device.create_buffer(&Vertex::buffer_descriptor());
+        queue.write_buffer(&vertex_buffer, 0, bytemuck::cast_slice(&vertices));
 
         let instance_buffer =
             device.create_buffer(&Instance::buffer_descriptor());
