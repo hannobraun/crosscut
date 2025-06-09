@@ -1,11 +1,11 @@
 use crate::Camera;
 
 pub struct Quads {
-    pub pipeline: wgpu::RenderPipeline,
-    pub bind_group: wgpu::BindGroup,
-    pub uniform_buffer: wgpu::Buffer,
-    pub vertex_buffer: wgpu::Buffer,
-    pub instance_buffer: wgpu::Buffer,
+    pipeline: wgpu::RenderPipeline,
+    bind_group: wgpu::BindGroup,
+    uniform_buffer: wgpu::Buffer,
+    vertex_buffer: wgpu::Buffer,
+    instance_buffer: wgpu::Buffer,
 }
 
 impl Quads {
