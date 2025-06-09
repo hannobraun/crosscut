@@ -235,7 +235,7 @@ pub struct Instance {
 }
 
 impl Instance {
-    pub const MAX_NUM: u64 = 1024;
+    const MAX_NUM: u64 = 1024;
     const ATTRIBUTES: &[wgpu::VertexAttribute] = &wgpu::vertex_attr_array![
         1 => Float32x3,
         2 => Float32x4,
@@ -249,7 +249,7 @@ impl Instance {
         size
     }
 
-    pub fn buffer_descriptor() -> wgpu::BufferDescriptor<'static> {
+    fn buffer_descriptor() -> wgpu::BufferDescriptor<'static> {
         wgpu::BufferDescriptor {
             label: None,
             size: Self::size() * Self::MAX_NUM,
@@ -258,7 +258,7 @@ impl Instance {
         }
     }
 
-    pub fn layout() -> wgpu::VertexBufferLayout<'static> {
+    fn layout() -> wgpu::VertexBufferLayout<'static> {
         wgpu::VertexBufferLayout {
             array_stride: Self::size(),
             step_mode: wgpu::VertexStepMode::Instance,
