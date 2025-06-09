@@ -1,3 +1,4 @@
+mod quads;
 mod renderer;
 
-pub use self::renderer::{Instance, Renderer};
+pub use self::{quads::Instance, renderer::Renderer};
