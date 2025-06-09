@@ -1,3 +1,12 @@
+pub struct Quads {
+    pub pipeline: wgpu::RenderPipeline,
+    pub bind_group: wgpu::BindGroup,
+    pub uniform_buffer: wgpu::Buffer,
+    pub vertex_buffer: wgpu::Buffer,
+    pub num_vertices: u32,
+    pub instance_buffer: wgpu::Buffer,
+}
+
 #[derive(Clone, Copy, bytemuck::Pod, bytemuck::Zeroable)]
 #[repr(C)]
 pub struct Instance {

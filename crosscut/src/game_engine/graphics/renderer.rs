@@ -3,19 +3,17 @@ use std::sync::Arc;
 use anyhow::anyhow;
 use winit::window::Window;
 
-use crate::{Camera, Instance, game_engine::graphics::quads::Vertex};
+use crate::{
+    Camera, Instance,
+    game_engine::graphics::quads::{Quads, Vertex},
+};
 
 pub struct Renderer {
     surface: wgpu::Surface<'static>,
     surface_config: wgpu::SurfaceConfiguration,
     device: wgpu::Device,
     queue: wgpu::Queue,
-    pipeline: wgpu::RenderPipeline,
-    bind_group: wgpu::BindGroup,
-    uniform_buffer: wgpu::Buffer,
-    vertex_buffer: wgpu::Buffer,
-    num_vertices: u32,
-    instance_buffer: wgpu::Buffer,
+    quads: Quads,
 }
 
 impl Renderer {
@@ -172,12 +170,14 @@ impl Renderer {
             surface_config,
             device,
             queue,
-            pipeline,
-            bind_group,
-            uniform_buffer,
-            vertex_buffer,
-            num_vertices,
-            instance_buffer,
+            quads: Quads {
+                pipeline,
+                bind_group,
+                uniform_buffer,
+                vertex_buffer,
+                num_vertices,
+                instance_buffer,
+            },
         })
     }
 
@@ -197,7 +197,7 @@ impl Renderer {
         camera: &Camera,
     ) -> anyhow::Result<()> {
         self.queue.write_buffer(
-            &self.uniform_buffer,
+            &self.quads.uniform_buffer,
             0,
             bytemuck::cast_slice(&[Uniforms {
                 transform: camera.to_transform(),
@@ -222,7 +222,7 @@ impl Renderer {
         }
 
         self.queue.write_buffer(
-            &self.instance_buffer,
+            &self.quads.instance_buffer,
             0,
             bytemuck::cast_slice(&instances),
         );
@@ -255,11 +255,13 @@ impl Renderer {
                     occlusion_query_set: None,
                 });
 
-            render_pass.set_pipeline(&self.pipeline);
-            render_pass.set_bind_group(0, &self.bind_group, &[]);
-            render_pass.set_vertex_buffer(0, self.vertex_buffer.slice(..));
-            render_pass.set_vertex_buffer(1, self.instance_buffer.slice(..));
-            render_pass.draw(0..self.num_vertices, 0..num_instances);
+            render_pass.set_pipeline(&self.quads.pipeline);
+            render_pass.set_bind_group(0, &self.quads.bind_group, &[]);
+            render_pass
+                .set_vertex_buffer(0, self.quads.vertex_buffer.slice(..));
+            render_pass
+                .set_vertex_buffer(1, self.quads.instance_buffer.slice(..));
+            render_pass.draw(0..self.quads.num_vertices, 0..num_instances);
         }
 
         self.queue.submit(Some(encoder.finish()));
