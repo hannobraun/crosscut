@@ -1,3 +1,5 @@
+use crate::Camera;
+
 pub struct Quads {
     pub pipeline: wgpu::RenderPipeline,
     pub bind_group: wgpu::BindGroup,
@@ -5,6 +7,29 @@ pub struct Quads {
     pub vertex_buffer: wgpu::Buffer,
     pub num_vertices: u32,
     pub instance_buffer: wgpu::Buffer,
+}
+
+#[derive(Clone, Copy, bytemuck::Pod, bytemuck::Zeroable)]
+#[repr(C)]
+pub struct Uniforms {
+    pub transform: [[f32; 4]; 4],
+}
+
+impl Uniforms {
+    pub fn size() -> u64 {
+        let Ok(size) = size_of::<Self>().try_into() else {
+            unreachable!("Size of `Self` definitely fits into a `u64`.");
+        };
+
+        size
+    }
+}
+
+impl Default for Uniforms {
+    fn default() -> Self {
+        let transform = Camera::default().to_transform();
+        Self { transform }
+    }
 }
 
 #[derive(Clone, Copy, bytemuck::Pod, bytemuck::Zeroable)]

@@ -5,7 +5,7 @@ use winit::window::Window;
 
 use crate::{
     Camera, Instance,
-    game_engine::graphics::quads::{Quads, Vertex},
+    game_engine::graphics::quads::{Quads, Uniforms, Vertex},
 };
 
 pub struct Renderer {
@@ -271,28 +271,5 @@ impl Renderer {
         surface_texture.present();
 
         Ok(())
-    }
-}
-
-#[derive(Clone, Copy, bytemuck::Pod, bytemuck::Zeroable)]
-#[repr(C)]
-pub struct Uniforms {
-    pub transform: [[f32; 4]; 4],
-}
-
-impl Uniforms {
-    pub fn size() -> u64 {
-        let Ok(size) = size_of::<Self>().try_into() else {
-            unreachable!("Size of `Self` definitely fits into a `u64`.");
-        };
-
-        size
-    }
-}
-
-impl Default for Uniforms {
-    fn default() -> Self {
-        let transform = Camera::default().to_transform();
-        Self { transform }
     }
 }
