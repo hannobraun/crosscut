@@ -281,7 +281,7 @@ pub struct Uniforms {
 }
 
 impl Uniforms {
-    fn size() -> u64 {
+    pub fn size() -> u64 {
         let Ok(size) = size_of::<Self>().try_into() else {
             unreachable!("Size of `Self` definitely fits into a `u64`.");
         };
