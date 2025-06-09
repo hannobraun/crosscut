@@ -135,6 +135,73 @@ impl Quads {
             instance_buffer,
         }
     }
+
+    pub fn draw(
+        &self,
+        queue: &wgpu::Queue,
+        view: &wgpu::TextureView,
+        encoder: &mut wgpu::CommandEncoder,
+        bg_color: wgpu::Color,
+        positions: impl IntoIterator<Item = Instance>,
+        camera: &Camera,
+    ) {
+        queue.write_buffer(
+            &self.uniform_buffer,
+            0,
+            bytemuck::cast_slice(&[Uniforms {
+                transform: camera.to_transform(),
+            }]),
+        );
+
+        let instances = positions.into_iter().collect::<Vec<_>>();
+        let num_instances: u32 = {
+            let Ok(len) = instances.len().try_into() else {
+                panic!(
+                    "A number of instances that doesn't fit into a `u32` is \
+                    not supported."
+                );
+            };
+
+            len
+        };
+
+        {
+            let num_instances: u64 = num_instances.into();
+            assert!(num_instances <= Instance::MAX_NUM);
+        }
+
+        queue.write_buffer(
+            &self.instance_buffer,
+            0,
+            bytemuck::cast_slice(&instances),
+        );
+
+        {
+            let mut render_pass =
+                encoder.begin_render_pass(&wgpu::RenderPassDescriptor {
+                    label: None,
+                    color_attachments: &[Some(
+                        wgpu::RenderPassColorAttachment {
+                            view,
+                            resolve_target: None,
+                            ops: wgpu::Operations {
+                                load: wgpu::LoadOp::Clear(bg_color),
+                                store: wgpu::StoreOp::Store,
+                            },
+                        },
+                    )],
+                    depth_stencil_attachment: None,
+                    timestamp_writes: None,
+                    occlusion_query_set: None,
+                });
+
+            render_pass.set_pipeline(&self.pipeline);
+            render_pass.set_bind_group(0, &self.bind_group, &[]);
+            render_pass.set_vertex_buffer(0, self.vertex_buffer.slice(..));
+            render_pass.set_vertex_buffer(1, self.instance_buffer.slice(..));
+            render_pass.draw(0..Quads::NUM_VERTICES, 0..num_instances);
+        }
+    }
 }
 
 #[derive(Clone, Copy, bytemuck::Pod, bytemuck::Zeroable)]

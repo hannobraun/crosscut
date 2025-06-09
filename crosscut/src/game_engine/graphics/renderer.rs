@@ -3,10 +3,7 @@ use std::sync::Arc;
 use anyhow::anyhow;
 use winit::window::Window;
 
-use crate::{
-    Camera, Instance,
-    game_engine::graphics::quads::{Quads, Uniforms},
-};
+use crate::{Camera, Instance, game_engine::graphics::quads::Quads};
 
 pub struct Renderer {
     surface: wgpu::Surface<'static>,
@@ -86,64 +83,14 @@ impl Renderer {
             &wgpu::CommandEncoderDescriptor { label: None },
         );
 
-        self.queue.write_buffer(
-            &self.quads.uniform_buffer,
-            0,
-            bytemuck::cast_slice(&[Uniforms {
-                transform: camera.to_transform(),
-            }]),
+        self.quads.draw(
+            &self.queue,
+            &view,
+            &mut encoder,
+            bg_color,
+            positions,
+            camera,
         );
-
-        let instances = positions.into_iter().collect::<Vec<_>>();
-        let num_instances: u32 = {
-            let Ok(len) = instances.len().try_into() else {
-                panic!(
-                    "A number of instances that doesn't fit into a `u32` is \
-                    not supported."
-                );
-            };
-
-            len
-        };
-
-        {
-            let num_instances: u64 = num_instances.into();
-            assert!(num_instances <= Instance::MAX_NUM);
-        }
-
-        self.queue.write_buffer(
-            &self.quads.instance_buffer,
-            0,
-            bytemuck::cast_slice(&instances),
-        );
-
-        {
-            let mut render_pass =
-                encoder.begin_render_pass(&wgpu::RenderPassDescriptor {
-                    label: None,
-                    color_attachments: &[Some(
-                        wgpu::RenderPassColorAttachment {
-                            view: &view,
-                            resolve_target: None,
-                            ops: wgpu::Operations {
-                                load: wgpu::LoadOp::Clear(bg_color),
-                                store: wgpu::StoreOp::Store,
-                            },
-                        },
-                    )],
-                    depth_stencil_attachment: None,
-                    timestamp_writes: None,
-                    occlusion_query_set: None,
-                });
-
-            render_pass.set_pipeline(&self.quads.pipeline);
-            render_pass.set_bind_group(0, &self.quads.bind_group, &[]);
-            render_pass
-                .set_vertex_buffer(0, self.quads.vertex_buffer.slice(..));
-            render_pass
-                .set_vertex_buffer(1, self.quads.instance_buffer.slice(..));
-            render_pass.draw(0..Quads::NUM_VERTICES, 0..num_instances);
-        }
 
         self.queue.submit(Some(encoder.finish()));
         surface_texture.present();
