@@ -206,12 +206,12 @@ impl Quads {
 
 #[derive(Clone, Copy, bytemuck::Pod, bytemuck::Zeroable)]
 #[repr(C)]
-pub struct Uniforms {
-    pub transform: [[f32; 4]; 4],
+struct Uniforms {
+    transform: [[f32; 4]; 4],
 }
 
 impl Uniforms {
-    pub fn size() -> u64 {
+    fn size() -> u64 {
         let Ok(size) = size_of::<Self>().try_into() else {
             unreachable!("Size of `Self` definitely fits into a `u64`.");
         };
