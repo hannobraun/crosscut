@@ -294,7 +294,7 @@ impl Default for Uniforms {
 
 #[derive(Clone, Copy, bytemuck::Pod, bytemuck::Zeroable)]
 #[repr(C)]
-struct Vertex {
+pub struct Vertex {
     position: [f32; 3],
 }
 
