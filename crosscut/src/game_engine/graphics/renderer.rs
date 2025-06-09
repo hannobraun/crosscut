@@ -77,6 +77,15 @@ impl Renderer {
         positions: impl IntoIterator<Item = Instance>,
         camera: &Camera,
     ) -> anyhow::Result<()> {
+        let surface_texture = self.surface.get_current_texture()?;
+        let view = surface_texture
+            .texture
+            .create_view(&wgpu::TextureViewDescriptor::default());
+
+        let mut encoder = self.device.create_command_encoder(
+            &wgpu::CommandEncoderDescriptor { label: None },
+        );
+
         self.queue.write_buffer(
             &self.quads.uniform_buffer,
             0,
@@ -106,15 +115,6 @@ impl Renderer {
             &self.quads.instance_buffer,
             0,
             bytemuck::cast_slice(&instances),
-        );
-
-        let surface_texture = self.surface.get_current_texture()?;
-        let view = surface_texture
-            .texture
-            .create_view(&wgpu::TextureViewDescriptor::default());
-
-        let mut encoder = self.device.create_command_encoder(
-            &wgpu::CommandEncoderDescriptor { label: None },
         );
 
         {
