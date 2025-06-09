@@ -10,6 +10,8 @@ pub struct Quads {
 }
 
 impl Quads {
+    const MAX_NUM: u64 = 4;
+
     pub fn new(
         device: &wgpu::Device,
         queue: &wgpu::Queue,
@@ -124,7 +126,7 @@ impl Quads {
 
         {
             let num_vertices: u64 = num_vertices.into();
-            assert!(num_vertices <= Vertex::MAX_NUM);
+            assert!(num_vertices <= Self::MAX_NUM);
         }
 
         let instance_buffer =
@@ -211,8 +213,6 @@ struct Vertex {
 }
 
 impl Vertex {
-    const MAX_NUM: u64 = 4;
-
     fn size() -> u64 {
         let Ok(size) = size_of::<Self>().try_into() else {
             unreachable!("Size of `Vertex` can surely fit into a `u64`");
@@ -224,7 +224,7 @@ impl Vertex {
     fn buffer_descriptor() -> wgpu::BufferDescriptor<'static> {
         wgpu::BufferDescriptor {
             label: None,
-            size: Self::size() * Self::MAX_NUM,
+            size: Self::size() * Quads::MAX_NUM,
             usage: wgpu::BufferUsages::COPY_DST | wgpu::BufferUsages::VERTEX,
             mapped_at_creation: false,
         }
