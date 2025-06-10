@@ -17,7 +17,7 @@ pub enum EvalStep {
 }
 
 impl EvalStep {
-    pub fn new(path: NodePath, nodes: &Nodes) -> Self {
+    pub fn derived(path: NodePath, nodes: &Nodes) -> Self {
         let step = DerivedEvalStep::new(path.clone(), nodes);
         Self::Derived { path, step }
     }

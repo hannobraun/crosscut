@@ -41,7 +41,7 @@ impl Evaluator {
         argument: Value,
         nodes: &Nodes,
     ) {
-        self.eval_stack.push(EvalStep::new(body.clone(), nodes));
+        self.eval_stack.push(EvalStep::derived(body.clone(), nodes));
         self.call_stack.push(StackFrame {
             parameter,
             argument,
@@ -131,7 +131,8 @@ impl Evaluator {
                 let path = path.clone();
 
                 self.eval_stack.push(step);
-                self.eval_stack.push(EvalStep::new(path, codebase.nodes()));
+                self.eval_stack
+                    .push(EvalStep::derived(path, codebase.nodes()));
             }
             EvalStep::Derived {
                 step:
@@ -226,7 +227,8 @@ impl Evaluator {
                 };
 
                 self.eval_stack.push(step);
-                self.eval_stack.push(EvalStep::new(child, codebase.nodes()));
+                self.eval_stack
+                    .push(EvalStep::derived(child, codebase.nodes()));
             }
             EvalStep::Derived {
                 step: DerivedEvalStep::Body { mut evaluated, .. },
@@ -255,7 +257,8 @@ impl Evaluator {
                 };
 
                 self.eval_stack.push(step);
-                self.eval_stack.push(EvalStep::new(child, codebase.nodes()));
+                self.eval_stack
+                    .push(EvalStep::derived(child, codebase.nodes()));
             }
             EvalStep::Derived {
                 step: DerivedEvalStep::Tuple { evaluated, .. },
