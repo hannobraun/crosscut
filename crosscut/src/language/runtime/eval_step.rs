@@ -8,7 +8,7 @@ use super::Value;
 pub enum EvalStep {
     /// # An evaluation step that was derived from a syntax node
     Derived {
-        path: Option<NodePath>,
+        path: NodePath,
         step: DerivedEvalStep,
     },
 
@@ -20,10 +20,7 @@ impl EvalStep {
     pub fn new(path: NodePath, nodes: &Nodes) -> Self {
         let step = DerivedEvalStep::new(path.clone(), nodes);
 
-        Self::Derived {
-            path: Some(path),
-            step,
-        }
+        Self::Derived { path, step }
     }
 }
 

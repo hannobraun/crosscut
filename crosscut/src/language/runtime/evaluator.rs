@@ -178,13 +178,6 @@ impl Evaluator {
                     },
                 ref path,
             } => {
-                let Some(path) = path else {
-                    unreachable!(
-                        "`Apply` is created from a syntax node, so a path is \
-                        always available."
-                    );
-                };
-
                 self.state = RuntimeState::Effect {
                     effect: Effect::ApplyProvidedFunction {
                         name: name.clone(),
@@ -206,13 +199,6 @@ impl Evaluator {
                     },
                 ref path,
             } => {
-                let Some(path) = path else {
-                    unreachable!(
-                        "`Apply` is created from a syntax node, so a path is \
-                        always available."
-                    );
-                };
-
                 self.unexpected_input(
                     Type::Function,
                     value.clone(),
