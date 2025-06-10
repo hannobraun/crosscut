@@ -154,7 +154,6 @@ impl Evaluator {
                 );
             }
             RuntimeNodeKind::Apply {
-                ref path,
                 expression:
                     RuntimeChild::Evaluated {
                         value: Value::ProvidedFunction { ref name },
@@ -165,6 +164,13 @@ impl Evaluator {
                     },
                 ..
             } => {
+                let Some(path) = &node.path else {
+                    unreachable!(
+                        "`Apply` is created from a syntax node, so a path is \
+                        always available."
+                    );
+                };
+
                 self.state = RuntimeState::Effect {
                     effect: Effect::ApplyProvidedFunction {
                         name: name.clone(),
@@ -179,10 +185,16 @@ impl Evaluator {
                 self.eval_stack.push(node);
             }
             RuntimeNodeKind::Apply {
-                ref path,
                 expression: RuntimeChild::Evaluated { ref value },
                 ..
             } => {
+                let Some(path) = &node.path else {
+                    unreachable!(
+                        "`Apply` is created from a syntax node, so a path is \
+                        always available."
+                    );
+                };
+
                 self.unexpected_input(
                     Type::Function,
                     value.clone(),
