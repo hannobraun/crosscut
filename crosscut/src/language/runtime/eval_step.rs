@@ -12,11 +12,11 @@ pub struct EvalStep {
 
 impl EvalStep {
     pub fn new(path: NodePath, nodes: &Nodes) -> Self {
-        let kind = DerivedEvalStep::new(path.clone(), nodes);
+        let step = DerivedEvalStep::new(path.clone(), nodes);
 
         Self {
             path: Some(path),
-            step: kind,
+            step,
         }
     }
 }
