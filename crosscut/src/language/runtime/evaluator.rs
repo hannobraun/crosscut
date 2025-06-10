@@ -111,7 +111,7 @@ impl Evaluator {
 
         self.state = RuntimeState::Running;
 
-        match step.kind {
+        match step.step {
             DerivedEvalStep::Apply {
                 expression: RuntimeChild::Unevaluated { ref path },
                 ..
@@ -140,7 +140,7 @@ impl Evaluator {
                 } else {
                     self.eval_stack.push(EvalStep {
                         path: None,
-                        kind: DerivedEvalStep::PopStackFrame {
+                        step: DerivedEvalStep::PopStackFrame {
                             output: Value::nothing(),
                         },
                     });
@@ -309,7 +309,7 @@ impl Evaluator {
         // the stack.
 
         let new_state = if let Some(parent) = self.eval_stack.last_mut() {
-            parent.kind.child_was_evaluated(output);
+            parent.step.child_was_evaluated(output);
             RuntimeState::Running
         } else {
             RuntimeState::Finished { output }

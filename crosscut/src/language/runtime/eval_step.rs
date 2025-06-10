@@ -7,7 +7,7 @@ use super::Value;
 #[derive(Clone, Debug)]
 pub struct EvalStep {
     pub path: Option<NodePath>,
-    pub kind: DerivedEvalStep,
+    pub step: DerivedEvalStep,
 }
 
 impl EvalStep {
@@ -16,7 +16,7 @@ impl EvalStep {
 
         Self {
             path: Some(path),
-            kind,
+            step: kind,
         }
     }
 }
