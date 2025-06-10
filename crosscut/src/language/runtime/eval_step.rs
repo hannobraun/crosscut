@@ -78,9 +78,8 @@ impl DerivedEvalStep {
             Expression::Apply { apply } => {
                 let [expression, argument] =
                     [apply.expression(), apply.argument()].map(|child| {
-                        RuntimeChild::Unevaluated {
-                            path: child.into_path(path.clone(), nodes),
-                        }
+                        let path = child.into_path(path.clone(), nodes);
+                        RuntimeChild::Unevaluated { path }
                     });
 
                 let is_tail_call =
