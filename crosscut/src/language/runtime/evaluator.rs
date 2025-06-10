@@ -2,7 +2,7 @@ use crate::language::code::{Codebase, NodePath, Nodes, Type};
 
 use super::{
     Effect, RuntimeState, Value,
-    eval_step::{EvalStep, DerivedEvalStep, RuntimeChild},
+    eval_step::{DerivedEvalStep, EvalStep, RuntimeChild},
 };
 
 #[derive(Debug, Default)]
@@ -15,7 +15,9 @@ pub struct Evaluator {
 impl Evaluator {
     pub fn update(&mut self, codebase: &Codebase) {
         for step in &mut self.eval_stack {
-            let _ = step.path;
+            match step {
+                EvalStep::Derived { .. } => {}
+            }
         }
 
         self.reset(codebase);
@@ -111,14 +113,18 @@ impl Evaluator {
 
         self.state = RuntimeState::Running;
 
-        match step.step {
-            DerivedEvalStep::Apply {
-                expression: RuntimeChild::Unevaluated { ref path },
-                ..
-            }
-            | DerivedEvalStep::Apply {
-                expression: RuntimeChild::Evaluated { .. },
-                argument: RuntimeChild::Unevaluated { ref path },
+        match step {
+            EvalStep::Derived {
+                step:
+                    DerivedEvalStep::Apply {
+                        expression: RuntimeChild::Unevaluated { ref path },
+                        ..
+                    }
+                    | DerivedEvalStep::Apply {
+                        expression: RuntimeChild::Evaluated { .. },
+                        argument: RuntimeChild::Unevaluated { ref path },
+                        ..
+                    },
                 ..
             } => {
                 let path = path.clone();
@@ -126,19 +132,23 @@ impl Evaluator {
                 self.eval_stack.push(step);
                 self.eval_stack.push(EvalStep::new(path, codebase.nodes()));
             }
-            DerivedEvalStep::Apply {
-                expression:
-                    RuntimeChild::Evaluated {
-                        value: Value::Function { parameter, body },
+            EvalStep::Derived {
+                step:
+                    DerivedEvalStep::Apply {
+                        expression:
+                            RuntimeChild::Evaluated {
+                                value: Value::Function { parameter, body },
+                            },
+                        argument: RuntimeChild::Evaluated { value: argument },
+                        is_tail_call,
+                        ..
                     },
-                argument: RuntimeChild::Evaluated { value: argument },
-                is_tail_call,
                 ..
             } => {
                 if is_tail_call {
                     self.call_stack.pop();
                 } else {
-                    self.eval_stack.push(EvalStep {
+                    self.eval_stack.push(EvalStep::Derived {
                         path: None,
                         step: DerivedEvalStep::PopStackFrame {
                             output: Value::nothing(),
@@ -153,18 +163,22 @@ impl Evaluator {
                     codebase.nodes(),
                 );
             }
-            DerivedEvalStep::Apply {
-                expression:
-                    RuntimeChild::Evaluated {
-                        value: Value::ProvidedFunction { ref name },
+            EvalStep::Derived {
+                step:
+                    DerivedEvalStep::Apply {
+                        expression:
+                            RuntimeChild::Evaluated {
+                                value: Value::ProvidedFunction { ref name },
+                            },
+                        argument:
+                            RuntimeChild::Evaluated {
+                                value: ref argument,
+                            },
+                        ..
                     },
-                argument:
-                    RuntimeChild::Evaluated {
-                        value: ref argument,
-                    },
-                ..
+                ref path,
             } => {
-                let Some(path) = &step.path else {
+                let Some(path) = path else {
                     unreachable!(
                         "`Apply` is created from a syntax node, so a path is \
                         always available."
@@ -184,11 +198,15 @@ impl Evaluator {
                 // then we still need the node.
                 self.eval_stack.push(step);
             }
-            DerivedEvalStep::Apply {
-                expression: RuntimeChild::Evaluated { ref value },
-                ..
+            EvalStep::Derived {
+                step:
+                    DerivedEvalStep::Apply {
+                        expression: RuntimeChild::Evaluated { ref value },
+                        ..
+                    },
+                ref path,
             } => {
-                let Some(path) = &step.path else {
+                let Some(path) = path else {
                     unreachable!(
                         "`Apply` is created from a syntax node, so a path is \
                         always available."
@@ -203,8 +221,12 @@ impl Evaluator {
                 self.eval_stack.push(step);
             }
 
-            DerivedEvalStep::Body {
-                ref mut to_evaluate,
+            EvalStep::Derived {
+                step:
+                    DerivedEvalStep::Body {
+                        ref mut to_evaluate,
+                        ..
+                    },
                 ..
             } if !to_evaluate.is_empty() => {
                 let Some(child) = to_evaluate.pop() else {
@@ -220,13 +242,20 @@ impl Evaluator {
                 self.eval_stack.push(step);
                 self.eval_stack.push(EvalStep::new(child, codebase.nodes()));
             }
-            DerivedEvalStep::Body { mut evaluated, .. } => {
+            EvalStep::Derived {
+                step: DerivedEvalStep::Body { mut evaluated, .. },
+                ..
+            } => {
                 let value = evaluated.pop().unwrap_or_else(Value::nothing);
                 self.finish_evaluating_node(value);
             }
 
-            DerivedEvalStep::Tuple {
-                ref mut to_evaluate,
+            EvalStep::Derived {
+                step:
+                    DerivedEvalStep::Tuple {
+                        ref mut to_evaluate,
+                        ..
+                    },
                 ..
             } if !to_evaluate.is_empty() => {
                 let Some(child) = to_evaluate.pop() else {
@@ -242,20 +271,32 @@ impl Evaluator {
                 self.eval_stack.push(step);
                 self.eval_stack.push(EvalStep::new(child, codebase.nodes()));
             }
-            DerivedEvalStep::Tuple { evaluated, .. } => {
+            EvalStep::Derived {
+                step: DerivedEvalStep::Tuple { evaluated, .. },
+                ..
+            } => {
                 self.finish_evaluating_node(Value::Tuple { values: evaluated });
             }
 
-            DerivedEvalStep::Empty => {
+            EvalStep::Derived {
+                step: DerivedEvalStep::Empty,
+                ..
+            } => {
                 self.finish_evaluating_node(Value::nothing());
             }
-            DerivedEvalStep::Function { parameter, body } => {
+            EvalStep::Derived {
+                step: DerivedEvalStep::Function { parameter, body },
+                ..
+            } => {
                 self.finish_evaluating_node(Value::Function {
                     parameter,
                     body,
                 });
             }
-            DerivedEvalStep::Identifier { name } => {
+            EvalStep::Derived {
+                step: DerivedEvalStep::Identifier { name },
+                ..
+            } => {
                 let mut value = Value::ProvidedFunction { name: name.clone() };
 
                 for stack_frame in self.call_stack.iter().rev() {
@@ -267,14 +308,23 @@ impl Evaluator {
 
                 self.finish_evaluating_node(value);
             }
-            DerivedEvalStep::Number { value } => {
+            EvalStep::Derived {
+                step: DerivedEvalStep::Number { value },
+                ..
+            } => {
                 self.finish_evaluating_node(Value::Integer { value });
             }
-            DerivedEvalStep::PopStackFrame { output } => {
+            EvalStep::Derived {
+                step: DerivedEvalStep::PopStackFrame { output },
+                ..
+            } => {
                 self.finish_evaluating_node(output);
                 self.call_stack.pop();
             }
-            DerivedEvalStep::Recursion => {
+            EvalStep::Derived {
+                step: DerivedEvalStep::Recursion,
+                ..
+            } => {
                 let stack_frame =
                     self.call_stack.last().cloned().unwrap_or_else(|| {
                         StackFrame {
@@ -309,7 +359,12 @@ impl Evaluator {
         // the stack.
 
         let new_state = if let Some(parent) = self.eval_stack.last_mut() {
-            parent.step.child_was_evaluated(output);
+            match parent {
+                EvalStep::Derived { step, .. } => {
+                    step.child_was_evaluated(output);
+                }
+            }
+
             RuntimeState::Running
         } else {
             RuntimeState::Finished { output }

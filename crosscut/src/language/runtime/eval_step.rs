@@ -5,16 +5,18 @@ use crate::language::code::{
 use super::Value;
 
 #[derive(Clone, Debug)]
-pub struct EvalStep {
-    pub path: Option<NodePath>,
-    pub step: DerivedEvalStep,
+pub enum EvalStep {
+    Derived {
+        path: Option<NodePath>,
+        step: DerivedEvalStep,
+    },
 }
 
 impl EvalStep {
     pub fn new(path: NodePath, nodes: &Nodes) -> Self {
         let step = DerivedEvalStep::new(path.clone(), nodes);
 
-        Self {
+        Self::Derived {
             path: Some(path),
             step,
         }
