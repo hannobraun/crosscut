@@ -144,11 +144,10 @@ impl Evaluator {
                         added to the queue earlier."
                     );
                 };
-                let path = child.path;
 
                 self.eval_stack.push(step);
                 self.eval_stack.push(EvalStep::derived(
-                    path,
+                    child.path,
                     &mut self.eval_queue,
                     codebase.nodes(),
                 ));
