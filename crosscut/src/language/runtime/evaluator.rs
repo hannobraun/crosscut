@@ -316,7 +316,6 @@ impl Evaluator {
             }
             EvalStep::Synthetic {
                 step: SyntheticEvalStep::PopStackFrame { output },
-                ..
             } => {
                 self.finish_evaluating_node(output);
                 self.call_stack.pop();
