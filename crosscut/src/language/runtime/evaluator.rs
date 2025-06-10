@@ -97,7 +97,7 @@ impl Evaluator {
             return;
         }
 
-        let Some(mut node) = self.eval_stack.pop() else {
+        let Some(mut step) = self.eval_stack.pop() else {
             // Evaluation stack is empty, which means there's nothing we can do.
 
             if !self.state.is_finished() {
@@ -111,7 +111,7 @@ impl Evaluator {
 
         self.state = RuntimeState::Running;
 
-        match node.kind {
+        match step.kind {
             RuntimeNodeKind::Apply {
                 expression: RuntimeChild::Unevaluated { ref path },
                 ..
@@ -123,7 +123,7 @@ impl Evaluator {
             } => {
                 let path = path.clone();
 
-                self.eval_stack.push(node);
+                self.eval_stack.push(step);
                 self.eval_stack.push(EvalStep::new(path, codebase.nodes()));
             }
             RuntimeNodeKind::Apply {
@@ -164,7 +164,7 @@ impl Evaluator {
                     },
                 ..
             } => {
-                let Some(path) = &node.path else {
+                let Some(path) = &step.path else {
                     unreachable!(
                         "`Apply` is created from a syntax node, so a path is \
                         always available."
@@ -182,13 +182,13 @@ impl Evaluator {
                 // A provided function is not fully handled, until the handler
                 // has provided its output. It might also trigger an effect, and
                 // then we still need the node.
-                self.eval_stack.push(node);
+                self.eval_stack.push(step);
             }
             RuntimeNodeKind::Apply {
                 expression: RuntimeChild::Evaluated { ref value },
                 ..
             } => {
-                let Some(path) = &node.path else {
+                let Some(path) = &step.path else {
                     unreachable!(
                         "`Apply` is created from a syntax node, so a path is \
                         always available."
@@ -200,7 +200,7 @@ impl Evaluator {
                     value.clone(),
                     path.clone(),
                 );
-                self.eval_stack.push(node);
+                self.eval_stack.push(step);
             }
 
             RuntimeNodeKind::Body {
@@ -217,7 +217,7 @@ impl Evaluator {
                     );
                 };
 
-                self.eval_stack.push(node);
+                self.eval_stack.push(step);
                 self.eval_stack.push(EvalStep::new(child, codebase.nodes()));
             }
             RuntimeNodeKind::Body { mut evaluated, .. } => {
@@ -239,7 +239,7 @@ impl Evaluator {
                     );
                 };
 
-                self.eval_stack.push(node);
+                self.eval_stack.push(step);
                 self.eval_stack.push(EvalStep::new(child, codebase.nodes()));
             }
             RuntimeNodeKind::Tuple { evaluated, .. } => {
