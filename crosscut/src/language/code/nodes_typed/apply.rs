@@ -43,6 +43,10 @@ impl Apply<NodeByHash> {
     pub fn argument(&self) -> TypedChild {
         TypedChild::new(self.argument, 1)
     }
+
+    pub fn children(&self) -> impl DoubleEndedIterator<Item = TypedChild> {
+        [self.expression(), self.argument()].into_iter()
+    }
 }
 
 impl Default for Apply<Owned> {
