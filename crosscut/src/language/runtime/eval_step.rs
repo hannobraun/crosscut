@@ -21,7 +21,7 @@ pub enum EvalStep {
 impl EvalStep {
     pub fn derived(
         path: NodePath,
-        eval_queue: &mut VecDeque<ChildToEvaluate>,
+        eval_queue: &mut VecDeque<QueuedEvalStep>,
         nodes: &Nodes,
     ) -> Self {
         let step = DerivedEvalStep::new(path.clone(), eval_queue, nodes);
@@ -61,7 +61,7 @@ pub enum DerivedEvalStep {
 impl DerivedEvalStep {
     pub fn new(
         path: NodePath,
-        eval_queue: &mut VecDeque<ChildToEvaluate>,
+        eval_queue: &mut VecDeque<QueuedEvalStep>,
         nodes: &Nodes,
     ) -> Self {
         let TypedNode::Expression { expression } =
@@ -77,7 +77,7 @@ impl DerivedEvalStep {
         match expression {
             Expression::Apply { apply } => {
                 for child in apply.children().rev() {
-                    eval_queue.push_front(ChildToEvaluate {
+                    eval_queue.push_front(QueuedEvalStep {
                         path: child.into_path(path.clone(), nodes),
                         parent: path.clone(),
                     });
@@ -175,7 +175,7 @@ impl DerivedEvalStep {
 }
 
 #[derive(Debug)]
-pub struct ChildToEvaluate {
+pub struct QueuedEvalStep {
     pub path: NodePath,
     pub parent: NodePath,
 }

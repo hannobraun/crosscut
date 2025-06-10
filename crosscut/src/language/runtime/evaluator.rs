@@ -5,7 +5,7 @@ use crate::language::code::{Codebase, NodePath, Nodes, Type};
 use super::{
     Effect, RuntimeState, Value,
     eval_step::{
-        ChildToEvaluate, DerivedEvalStep, EvalStep, RuntimeChild,
+        DerivedEvalStep, EvalStep, QueuedEvalStep, RuntimeChild,
         SyntheticEvalStep,
     },
 };
@@ -13,7 +13,7 @@ use super::{
 #[derive(Debug, Default)]
 pub struct Evaluator {
     eval_stack: Vec<EvalStep>,
-    eval_queue: VecDeque<ChildToEvaluate>,
+    eval_queue: VecDeque<QueuedEvalStep>,
     call_stack: Vec<StackFrame>,
     state: RuntimeState,
 }
