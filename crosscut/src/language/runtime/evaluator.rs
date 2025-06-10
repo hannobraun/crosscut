@@ -2,7 +2,7 @@ use crate::language::code::{Codebase, NodePath, Nodes, Type};
 
 use super::{
     Effect, RuntimeState, Value,
-    eval_step::{EvalStep, RuntimeChild, RuntimeNodeKind},
+    eval_step::{EvalStep, EvalStepKind, RuntimeChild},
 };
 
 #[derive(Debug, Default)]
@@ -112,11 +112,11 @@ impl Evaluator {
         self.state = RuntimeState::Running;
 
         match step.kind {
-            RuntimeNodeKind::Apply {
+            EvalStepKind::Apply {
                 expression: RuntimeChild::Unevaluated { ref path },
                 ..
             }
-            | RuntimeNodeKind::Apply {
+            | EvalStepKind::Apply {
                 expression: RuntimeChild::Evaluated { .. },
                 argument: RuntimeChild::Unevaluated { ref path },
                 ..
@@ -126,7 +126,7 @@ impl Evaluator {
                 self.eval_stack.push(step);
                 self.eval_stack.push(EvalStep::new(path, codebase.nodes()));
             }
-            RuntimeNodeKind::Apply {
+            EvalStepKind::Apply {
                 expression:
                     RuntimeChild::Evaluated {
                         value: Value::Function { parameter, body },
@@ -140,7 +140,7 @@ impl Evaluator {
                 } else {
                     self.eval_stack.push(EvalStep {
                         path: None,
-                        kind: RuntimeNodeKind::PopStackFrame {
+                        kind: EvalStepKind::PopStackFrame {
                             output: Value::nothing(),
                         },
                     });
@@ -153,7 +153,7 @@ impl Evaluator {
                     codebase.nodes(),
                 );
             }
-            RuntimeNodeKind::Apply {
+            EvalStepKind::Apply {
                 expression:
                     RuntimeChild::Evaluated {
                         value: Value::ProvidedFunction { ref name },
@@ -184,7 +184,7 @@ impl Evaluator {
                 // then we still need the node.
                 self.eval_stack.push(step);
             }
-            RuntimeNodeKind::Apply {
+            EvalStepKind::Apply {
                 expression: RuntimeChild::Evaluated { ref value },
                 ..
             } => {
@@ -203,7 +203,7 @@ impl Evaluator {
                 self.eval_stack.push(step);
             }
 
-            RuntimeNodeKind::Body {
+            EvalStepKind::Body {
                 ref mut to_evaluate,
                 ..
             } if !to_evaluate.is_empty() => {
@@ -220,12 +220,12 @@ impl Evaluator {
                 self.eval_stack.push(step);
                 self.eval_stack.push(EvalStep::new(child, codebase.nodes()));
             }
-            RuntimeNodeKind::Body { mut evaluated, .. } => {
+            EvalStepKind::Body { mut evaluated, .. } => {
                 let value = evaluated.pop().unwrap_or_else(Value::nothing);
                 self.finish_evaluating_node(value);
             }
 
-            RuntimeNodeKind::Tuple {
+            EvalStepKind::Tuple {
                 ref mut to_evaluate,
                 ..
             } if !to_evaluate.is_empty() => {
@@ -242,20 +242,20 @@ impl Evaluator {
                 self.eval_stack.push(step);
                 self.eval_stack.push(EvalStep::new(child, codebase.nodes()));
             }
-            RuntimeNodeKind::Tuple { evaluated, .. } => {
+            EvalStepKind::Tuple { evaluated, .. } => {
                 self.finish_evaluating_node(Value::Tuple { values: evaluated });
             }
 
-            RuntimeNodeKind::Empty => {
+            EvalStepKind::Empty => {
                 self.finish_evaluating_node(Value::nothing());
             }
-            RuntimeNodeKind::Function { parameter, body } => {
+            EvalStepKind::Function { parameter, body } => {
                 self.finish_evaluating_node(Value::Function {
                     parameter,
                     body,
                 });
             }
-            RuntimeNodeKind::Identifier { name } => {
+            EvalStepKind::Identifier { name } => {
                 let mut value = Value::ProvidedFunction { name: name.clone() };
 
                 for stack_frame in self.call_stack.iter().rev() {
@@ -267,14 +267,14 @@ impl Evaluator {
 
                 self.finish_evaluating_node(value);
             }
-            RuntimeNodeKind::Number { value } => {
+            EvalStepKind::Number { value } => {
                 self.finish_evaluating_node(Value::Integer { value });
             }
-            RuntimeNodeKind::PopStackFrame { output } => {
+            EvalStepKind::PopStackFrame { output } => {
                 self.finish_evaluating_node(output);
                 self.call_stack.pop();
             }
-            RuntimeNodeKind::Recursion => {
+            EvalStepKind::Recursion => {
                 let stack_frame =
                     self.call_stack.last().cloned().unwrap_or_else(|| {
                         StackFrame {

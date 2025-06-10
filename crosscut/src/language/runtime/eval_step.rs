@@ -7,12 +7,12 @@ use super::Value;
 #[derive(Clone, Debug)]
 pub struct EvalStep {
     pub path: Option<NodePath>,
-    pub kind: RuntimeNodeKind,
+    pub kind: EvalStepKind,
 }
 
 impl EvalStep {
     pub fn new(path: NodePath, nodes: &Nodes) -> Self {
-        let kind = RuntimeNodeKind::new(path.clone(), nodes);
+        let kind = EvalStepKind::new(path.clone(), nodes);
 
         Self {
             path: Some(path),
@@ -22,7 +22,7 @@ impl EvalStep {
 }
 
 #[derive(Clone, Debug)]
-pub enum RuntimeNodeKind {
+pub enum EvalStepKind {
     Apply {
         expression: RuntimeChild,
         argument: RuntimeChild,
@@ -53,7 +53,7 @@ pub enum RuntimeNodeKind {
     },
 }
 
-impl RuntimeNodeKind {
+impl EvalStepKind {
     pub fn new(path: NodePath, nodes: &Nodes) -> Self {
         let TypedNode::Expression { expression } =
             TypedNode::from_hash(path.hash(), nodes)
