@@ -12,8 +12,25 @@ use super::{
 
 #[derive(Debug, Default)]
 pub struct Evaluator {
+    /// # Stack of evaluation steps that are currently in progress
+    ///
+    /// An evaluation step is in progress, if it has just been added and has not
+    /// started evaluating yet, or if it has children that are currently being
+    /// evaluated. In the latter case, those children would also be on the
+    /// stack, higher than their parent.
     eval_stack: Vec<EvalStep>,
+
+    /// # Evaluation steps that will be evaluated in the future
+    ///
+    /// These are the children of evaluation steps that are currently on the
+    /// evaluation stack. The children of a step are all added to the queue when
+    /// the step itself is added to the stack.
+    ///
+    /// New steps are added to the front of the queue, meaning that the first
+    /// child of a step and all its descendants are evaluated before the second
+    /// child of the step is taken off the queue.
     eval_queue: VecDeque<QueuedEvalStep>,
+
     call_stack: Vec<StackFrame>,
     state: RuntimeState,
 }
