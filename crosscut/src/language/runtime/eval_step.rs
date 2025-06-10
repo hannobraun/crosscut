@@ -76,8 +76,6 @@ impl DerivedEvalStep {
 
         match expression {
             Expression::Apply { apply } => {
-                // The reverted order of arguments is deliberate. It's required
-                // to make the queue work correctly.
                 for child in apply.children().rev() {
                     eval_queue.push_front(ChildToEvaluate {
                         path: child.into_path(path.clone(), nodes),
