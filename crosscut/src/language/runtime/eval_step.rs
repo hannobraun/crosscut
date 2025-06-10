@@ -1,3 +1,5 @@
+use std::collections::VecDeque;
+
 use crate::language::code::{
     Body, Expression, NodePath, Nodes, SyntaxNode, TypedNode,
 };
@@ -17,8 +19,12 @@ pub enum EvalStep {
 }
 
 impl EvalStep {
-    pub fn derived(path: NodePath, nodes: &Nodes) -> Self {
-        let step = DerivedEvalStep::new(path.clone(), nodes);
+    pub fn derived(
+        path: NodePath,
+        eval_queue: &mut VecDeque<ChildToEvaluate>,
+        nodes: &Nodes,
+    ) -> Self {
+        let step = DerivedEvalStep::new(path.clone(), eval_queue, nodes);
         Self::Derived { path, step }
     }
 }
@@ -53,7 +59,11 @@ pub enum DerivedEvalStep {
 }
 
 impl DerivedEvalStep {
-    pub fn new(path: NodePath, nodes: &Nodes) -> Self {
+    pub fn new(
+        path: NodePath,
+        _: &mut VecDeque<ChildToEvaluate>,
+        nodes: &Nodes,
+    ) -> Self {
         let TypedNode::Expression { expression } =
             TypedNode::from_hash(path.hash(), nodes)
         else {
@@ -163,6 +173,9 @@ impl DerivedEvalStep {
         }
     }
 }
+
+#[derive(Debug)]
+pub struct ChildToEvaluate {}
 
 #[derive(Clone, Debug)]
 pub enum RuntimeChild {

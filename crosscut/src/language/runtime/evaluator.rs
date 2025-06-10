@@ -1,13 +1,19 @@
+use std::collections::VecDeque;
+
 use crate::language::code::{Codebase, NodePath, Nodes, Type};
 
 use super::{
     Effect, RuntimeState, Value,
-    eval_step::{DerivedEvalStep, EvalStep, RuntimeChild, SyntheticEvalStep},
+    eval_step::{
+        ChildToEvaluate, DerivedEvalStep, EvalStep, RuntimeChild,
+        SyntheticEvalStep,
+    },
 };
 
 #[derive(Debug, Default)]
 pub struct Evaluator {
     eval_stack: Vec<EvalStep>,
+    eval_queue: VecDeque<ChildToEvaluate>,
     call_stack: Vec<StackFrame>,
     state: RuntimeState,
 }
@@ -41,7 +47,11 @@ impl Evaluator {
         argument: Value,
         nodes: &Nodes,
     ) {
-        self.eval_stack.push(EvalStep::derived(body.clone(), nodes));
+        self.eval_stack.push(EvalStep::derived(
+            body.clone(),
+            &mut self.eval_queue,
+            nodes,
+        ));
         self.call_stack.push(StackFrame {
             parameter,
             argument,
@@ -131,8 +141,11 @@ impl Evaluator {
                 let path = path.clone();
 
                 self.eval_stack.push(step);
-                self.eval_stack
-                    .push(EvalStep::derived(path, codebase.nodes()));
+                self.eval_stack.push(EvalStep::derived(
+                    path,
+                    &mut self.eval_queue,
+                    codebase.nodes(),
+                ));
             }
             EvalStep::Derived {
                 step:
@@ -227,8 +240,11 @@ impl Evaluator {
                 };
 
                 self.eval_stack.push(step);
-                self.eval_stack
-                    .push(EvalStep::derived(child, codebase.nodes()));
+                self.eval_stack.push(EvalStep::derived(
+                    child,
+                    &mut self.eval_queue,
+                    codebase.nodes(),
+                ));
             }
             EvalStep::Derived {
                 step: DerivedEvalStep::Body { mut evaluated, .. },
@@ -257,8 +273,11 @@ impl Evaluator {
                 };
 
                 self.eval_stack.push(step);
-                self.eval_stack
-                    .push(EvalStep::derived(child, codebase.nodes()));
+                self.eval_stack.push(EvalStep::derived(
+                    child,
+                    &mut self.eval_queue,
+                    codebase.nodes(),
+                ));
             }
             EvalStep::Derived {
                 step: DerivedEvalStep::Tuple { evaluated, .. },
