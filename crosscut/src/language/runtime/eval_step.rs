@@ -61,7 +61,7 @@ pub enum DerivedEvalStep {
 impl DerivedEvalStep {
     pub fn new(
         path: NodePath,
-        _: &mut VecDeque<ChildToEvaluate>,
+        eval_queue: &mut VecDeque<ChildToEvaluate>,
         nodes: &Nodes,
     ) -> Self {
         let TypedNode::Expression { expression } =
@@ -76,11 +76,17 @@ impl DerivedEvalStep {
 
         match expression {
             Expression::Apply { apply } => {
-                let [expression, argument] =
-                    [apply.expression(), apply.argument()].map(|child| {
-                        let path = child.into_path(path.clone(), nodes);
-                        RuntimeChild::Unevaluated { path }
+                // The reverted order of arguments is deliberate. It's required
+                // to make the queue work correctly.
+                for child in [apply.argument(), apply.expression()] {
+                    eval_queue.push_front(ChildToEvaluate {
+                        path: child.into_path(path.clone(), nodes),
                     });
+                }
+
+                let [expression, argument] =
+                    [apply.expression(), apply.argument()]
+                        .map(|_| RuntimeChild::Unevaluated);
 
                 let is_tail_call =
                     if let Some((parent_path, child_index)) = path.parent() {
@@ -142,12 +148,12 @@ impl DerivedEvalStep {
     pub fn child_was_evaluated(&mut self, value: Value) {
         match self {
             Self::Apply {
-                expression: child @ RuntimeChild::Unevaluated { .. },
+                expression: child @ RuntimeChild::Unevaluated,
                 ..
             }
             | Self::Apply {
                 expression: RuntimeChild::Evaluated { .. },
-                argument: child @ RuntimeChild::Unevaluated { .. },
+                argument: child @ RuntimeChild::Unevaluated,
                 ..
             } => {
                 *child = RuntimeChild::Evaluated { value };
@@ -174,11 +180,13 @@ impl DerivedEvalStep {
 }
 
 #[derive(Debug)]
-pub struct ChildToEvaluate {}
+pub struct ChildToEvaluate {
+    pub path: NodePath,
+}
 
 #[derive(Clone, Debug)]
 pub enum RuntimeChild {
-    Unevaluated { path: NodePath },
+    Unevaluated,
     Evaluated { value: Value },
 }
 

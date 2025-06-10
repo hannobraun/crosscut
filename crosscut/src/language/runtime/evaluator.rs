@@ -128,17 +128,23 @@ impl Evaluator {
             EvalStep::Derived {
                 step:
                     DerivedEvalStep::Apply {
-                        expression: RuntimeChild::Unevaluated { ref path },
+                        expression: RuntimeChild::Unevaluated,
                         ..
                     }
                     | DerivedEvalStep::Apply {
                         expression: RuntimeChild::Evaluated { .. },
-                        argument: RuntimeChild::Unevaluated { ref path },
+                        argument: RuntimeChild::Unevaluated,
                         ..
                     },
                 ..
             } => {
-                let path = path.clone();
+                let Some(child) = self.eval_queue.pop_front() else {
+                    unreachable!(
+                        "Node has unevaluated children. Those must have been \
+                        added to the queue earlier."
+                    );
+                };
+                let path = child.path;
 
                 self.eval_stack.push(step);
                 self.eval_stack.push(EvalStep::derived(
