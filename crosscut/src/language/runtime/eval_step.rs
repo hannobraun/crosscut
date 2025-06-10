@@ -79,6 +79,7 @@ impl DerivedEvalStep {
                 for child in apply.children().rev() {
                     eval_queue.push_front(ChildToEvaluate {
                         path: child.into_path(path.clone(), nodes),
+                        parent: path.clone(),
                     });
                 }
 
@@ -176,6 +177,7 @@ impl DerivedEvalStep {
 #[derive(Debug)]
 pub struct ChildToEvaluate {
     pub path: NodePath,
+    pub parent: NodePath,
 }
 
 #[derive(Clone, Debug)]

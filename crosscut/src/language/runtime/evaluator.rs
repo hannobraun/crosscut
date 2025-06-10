@@ -136,7 +136,7 @@ impl Evaluator {
                         argument: RuntimeChild::Unevaluated,
                         ..
                     },
-                ..
+                ref path,
             } => {
                 let Some(child) = self.eval_queue.pop_front() else {
                     unreachable!(
@@ -144,6 +144,7 @@ impl Evaluator {
                         added to the queue earlier."
                     );
                 };
+                assert_eq!(&child.parent, path);
 
                 self.eval_stack.push(step);
                 self.eval_stack.push(EvalStep::derived(
