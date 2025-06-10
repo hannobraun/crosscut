@@ -10,6 +10,9 @@ pub enum EvalStep {
         path: Option<NodePath>,
         step: DerivedEvalStep,
     },
+    Synthetic {
+        step: SyntheticEvalStep,
+    },
 }
 
 impl EvalStep {
@@ -44,9 +47,6 @@ pub enum DerivedEvalStep {
     },
     Number {
         value: i32,
-    },
-    PopStackFrame {
-        output: Value,
     },
     Recursion,
     Tuple {
@@ -151,10 +151,6 @@ impl DerivedEvalStep {
                 evaluated.push(value);
             }
 
-            Self::PopStackFrame { output } => {
-                *output = value;
-            }
-
             Self::Apply {
                 expression: RuntimeChild::Evaluated { .. },
                 argument: RuntimeChild::Evaluated { .. },
@@ -175,4 +171,19 @@ impl DerivedEvalStep {
 pub enum RuntimeChild {
     Unevaluated { path: NodePath },
     Evaluated { value: Value },
+}
+
+#[derive(Clone, Debug)]
+pub enum SyntheticEvalStep {
+    PopStackFrame { output: Value },
+}
+
+impl SyntheticEvalStep {
+    pub fn child_was_evaluated(&mut self, value: Value) {
+        match self {
+            Self::PopStackFrame { output } => {
+                *output = value;
+            }
+        }
+    }
 }

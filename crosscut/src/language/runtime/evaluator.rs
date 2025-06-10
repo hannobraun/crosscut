@@ -2,7 +2,7 @@ use crate::language::code::{Codebase, NodePath, Nodes, Type};
 
 use super::{
     Effect, RuntimeState, Value,
-    eval_step::{DerivedEvalStep, EvalStep, RuntimeChild},
+    eval_step::{DerivedEvalStep, EvalStep, RuntimeChild, SyntheticEvalStep},
 };
 
 #[derive(Debug, Default)]
@@ -17,6 +17,7 @@ impl Evaluator {
         for step in &mut self.eval_stack {
             match step {
                 EvalStep::Derived { .. } => {}
+                EvalStep::Synthetic { .. } => {}
             }
         }
 
@@ -148,9 +149,8 @@ impl Evaluator {
                 if is_tail_call {
                     self.call_stack.pop();
                 } else {
-                    self.eval_stack.push(EvalStep::Derived {
-                        path: None,
-                        step: DerivedEvalStep::PopStackFrame {
+                    self.eval_stack.push(EvalStep::Synthetic {
+                        step: SyntheticEvalStep::PopStackFrame {
                             output: Value::nothing(),
                         },
                     });
@@ -314,8 +314,8 @@ impl Evaluator {
             } => {
                 self.finish_evaluating_node(Value::Integer { value });
             }
-            EvalStep::Derived {
-                step: DerivedEvalStep::PopStackFrame { output },
+            EvalStep::Synthetic {
+                step: SyntheticEvalStep::PopStackFrame { output },
                 ..
             } => {
                 self.finish_evaluating_node(output);
@@ -361,6 +361,9 @@ impl Evaluator {
         let new_state = if let Some(parent) = self.eval_stack.last_mut() {
             match parent {
                 EvalStep::Derived { step, .. } => {
+                    step.child_was_evaluated(output);
+                }
+                EvalStep::Synthetic { step } => {
                     step.child_was_evaluated(output);
                 }
             }
