@@ -6,13 +6,14 @@ use super::Value;
 
 #[derive(Clone, Debug)]
 pub enum EvalStep {
+    /// # An evaluation step that was derived from a syntax node
     Derived {
         path: Option<NodePath>,
         step: DerivedEvalStep,
     },
-    Synthetic {
-        step: SyntheticEvalStep,
-    },
+
+    /// # An evaluation step that has no equivalent in the syntax tree
+    Synthetic { step: SyntheticEvalStep },
 }
 
 impl EvalStep {
