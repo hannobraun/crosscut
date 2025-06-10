@@ -1,4 +1,4 @@
-use std::collections::VecDeque;
+use std::{array, collections::VecDeque};
 
 use crate::language::code::{
     Body, Expression, NodePath, Nodes, SyntaxNode, TypedNode,
@@ -85,8 +85,7 @@ impl DerivedEvalStep {
                 }
 
                 let [expression, argument] =
-                    [apply.expression(), apply.argument()]
-                        .map(|_| RuntimeChild::Unevaluated);
+                    array::from_fn(|_| RuntimeChild::Unevaluated);
 
                 let is_tail_call =
                     if let Some((parent_path, child_index)) = path.parent() {
