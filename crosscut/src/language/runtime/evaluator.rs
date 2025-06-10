@@ -314,12 +314,6 @@ impl Evaluator {
             } => {
                 self.finish_evaluating_node(Value::Integer { value });
             }
-            EvalStep::Synthetic {
-                step: SyntheticEvalStep::PopStackFrame { output },
-            } => {
-                self.finish_evaluating_node(output);
-                self.call_stack.pop();
-            }
             EvalStep::Derived {
                 step: DerivedEvalStep::Recursion,
                 ..
@@ -337,6 +331,12 @@ impl Evaluator {
                     parameter: stack_frame.parameter,
                     body: stack_frame.root,
                 });
+            }
+            EvalStep::Synthetic {
+                step: SyntheticEvalStep::PopStackFrame { output },
+            } => {
+                self.finish_evaluating_node(output);
+                self.call_stack.pop();
             }
         }
     }
