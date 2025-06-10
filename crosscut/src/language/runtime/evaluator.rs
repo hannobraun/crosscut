@@ -14,8 +14,8 @@ pub struct Evaluator {
 
 impl Evaluator {
     pub fn update(&mut self, codebase: &Codebase) {
-        for node in &mut self.eval_stack {
-            let _ = node.path;
+        for step in &mut self.eval_stack {
+            let _ = step.path;
         }
 
         self.reset(codebase);
