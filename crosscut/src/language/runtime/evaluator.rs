@@ -250,7 +250,7 @@ impl Evaluator {
                         ref mut to_evaluate,
                         ..
                     },
-                ..
+                ref path,
             } if *to_evaluate > 0 => {
                 let Some(child) = self.eval_queue.pop_front() else {
                     // This could be prevented with an `if let` guard, but those
@@ -261,6 +261,8 @@ impl Evaluator {
                         evaluate."
                     );
                 };
+                assert_eq!(&child.parent, path);
+
                 *to_evaluate -= 1;
 
                 self.eval_stack.push(step);
