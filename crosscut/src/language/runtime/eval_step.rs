@@ -37,7 +37,7 @@ pub enum DerivedEvalStep {
         is_tail_call: bool,
     },
     Body {
-        to_evaluate: Vec<NodePath>,
+        to_evaluate: usize,
         evaluated: Vec<Value>,
     },
     Empty,
@@ -103,8 +103,15 @@ impl DerivedEvalStep {
                 }
             }
             Expression::Body { body } => {
-                let to_evaluate =
-                    body.children().to_paths(&path, nodes).rev().collect();
+                let mut to_evaluate = 0;
+                for child_path in body.children().to_paths(&path, nodes).rev() {
+                    eval_queue.push_front(QueuedEvalStep {
+                        path: child_path,
+                        parent: path.clone(),
+                    });
+                    to_evaluate += 1;
+                }
+
                 let evaluated = Vec::new();
 
                 Self::Body {
