@@ -283,21 +283,21 @@ impl Evaluator {
                         ref mut to_evaluate,
                         ..
                     },
-                ..
-            } if !to_evaluate.is_empty() => {
-                let Some(child) = to_evaluate.pop() else {
-                    // This could be prevented with an `if let` guard, but those
-                    // are not stable yet, as of 2025-05-16:
-                    // https://rust-lang.github.io/rfcs/2294-if-let-guard.html
+                ref path,
+            } if *to_evaluate > 0 => {
+                let Some(child) = self.eval_queue.pop_front() else {
                     unreachable!(
                         "The match guard above checks that there are values to \
                         evaluate."
                     );
                 };
+                assert_eq!(&child.parent, path);
+
+                *to_evaluate -= 1;
 
                 self.eval_stack.push(step);
                 self.eval_stack.push(EvalStep::derived(
-                    child,
+                    child.path,
                     &mut self.eval_queue,
                     codebase.nodes(),
                 ));

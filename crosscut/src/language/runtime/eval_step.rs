@@ -53,7 +53,7 @@ pub enum DerivedEvalStep {
     },
     Recursion,
     Tuple {
-        to_evaluate: Vec<NodePath>,
+        to_evaluate: usize,
         evaluated: Vec<Value>,
     },
 }
@@ -133,10 +133,19 @@ impl DerivedEvalStep {
             Expression::Recursion => Self::Recursion,
             Expression::Tuple { tuple } => {
                 let values = Body::from_hash(&tuple.values, nodes);
-                let parent = tuple.values().into_path(path, nodes);
+                let parent = tuple.values().into_path(path.clone(), nodes);
 
-                let to_evaluate =
-                    values.children().to_paths(&parent, nodes).rev().collect();
+                let mut to_evaluate = 0;
+                for child_path in
+                    values.children().to_paths(&parent, nodes).rev()
+                {
+                    eval_queue.push_front(QueuedEvalStep {
+                        path: child_path,
+                        parent: path.clone(),
+                    });
+                    to_evaluate += 1;
+                }
+
                 let evaluated = Vec::new();
 
                 Self::Tuple {
