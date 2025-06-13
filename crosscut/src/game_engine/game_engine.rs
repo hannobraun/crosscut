@@ -25,12 +25,12 @@ pub struct GameEngine<A> {
 
 impl GameEngine<RawTerminalAdapter> {
     pub fn with_editor_ui(
-        game_start: Box<dyn Init>,
+        init: Box<dyn Init>,
         window: &Arc<Window>,
     ) -> anyhow::Result<Self> {
         let adapter = RawTerminalAdapter::new()?;
 
-        let mut game_engine = Self::new(game_start, window, adapter)?;
+        let mut game_engine = Self::new(init, window, adapter)?;
         game_engine.render_editor()?;
 
         Ok(game_engine)
