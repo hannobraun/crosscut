@@ -246,7 +246,6 @@ impl Evaluator {
                     }
                 }
             }
-
             EvalStep::Derived {
                 step: DerivedEvalStep::Body,
                 ..
