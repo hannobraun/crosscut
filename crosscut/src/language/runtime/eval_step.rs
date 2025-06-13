@@ -175,11 +175,13 @@ impl DerivedEvalStep {
             }
 
             Self::Body {
-                evaluated_children: evaluated,
-                ..
+                evaluated_children, ..
             }
-            | Self::Tuple { evaluated, .. } => {
-                evaluated.push(value);
+            | Self::Tuple {
+                evaluated: evaluated_children,
+                ..
+            } => {
+                evaluated_children.push(value);
             }
 
             Self::Apply {
