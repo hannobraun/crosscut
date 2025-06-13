@@ -175,7 +175,8 @@ impl Resources {
 
             let window = {
                 let window = event_loop.create_window(
-                    Window::default_attributes().with_title("Crosscut"),
+                    Window::default_attributes()
+                        .with_title("Game made with Crosscut"),
                 )?;
                 Arc::new(window)
             };
