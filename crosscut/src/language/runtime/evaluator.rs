@@ -30,6 +30,8 @@ pub struct Evaluator {
     /// child of the step is taken off the queue.
     eval_queue: VecDeque<QueuedEvalStep>,
 
+    evaluated_children: Vec<Value>,
+
     call_stack: Vec<StackFrame>,
     state: RuntimeState,
 }
@@ -140,7 +142,7 @@ impl Evaluator {
 
         self.state = RuntimeState::Running;
 
-        if let EvalStep::Derived {
+        let mut evaluated_children = if let EvalStep::Derived {
             path,
             num_children,
             children_to_evaluate,
@@ -171,16 +173,29 @@ impl Evaluator {
                 // that on the next step. No need to look more closely at the
                 // current step right now.
                 return;
+            } else {
+                let Some(index) =
+                    self.evaluated_children.len().checked_sub(*num_children)
+                else {
+                    unreachable!(
+                        "All children have been evaluated, so there must be at \
+                        least `num_children` evaluated children available."
+                    );
+                };
+
+                let children =
+                    self.evaluated_children.drain(index..).collect::<Vec<_>>();
+                assert_eq!(children.len(), *num_children);
+
+                children
             }
-        }
+        } else {
+            Vec::new()
+        };
 
         match eval_step {
             EvalStep::Derived {
-                step:
-                    DerivedEvalStep::Apply {
-                        ref evaluated_children,
-                        is_tail_call,
-                    },
+                step: DerivedEvalStep::Apply { is_tail_call },
                 ref path,
                 ..
             } => {
@@ -239,11 +254,7 @@ impl Evaluator {
             }
 
             EvalStep::Derived {
-                step:
-                    DerivedEvalStep::Body {
-                        mut evaluated_children,
-                        ..
-                    },
+                step: DerivedEvalStep::Body,
                 ..
             } => {
                 let value =
@@ -305,10 +316,7 @@ impl Evaluator {
                 });
             }
             EvalStep::Derived {
-                step:
-                    DerivedEvalStep::Tuple {
-                        evaluated_children, ..
-                    },
+                step: DerivedEvalStep::Tuple,
                 ..
             } => {
                 let values = evaluated_children;
@@ -341,8 +349,8 @@ impl Evaluator {
 
         let new_state = if let Some(parent) = self.eval_stack.last_mut() {
             match parent {
-                EvalStep::Derived { step, .. } => {
-                    step.child_was_evaluated(output);
+                EvalStep::Derived { .. } => {
+                    self.evaluated_children.push(output);
                 }
                 EvalStep::Synthetic { step } => {
                     step.child_was_evaluated(output);

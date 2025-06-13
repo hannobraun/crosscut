@@ -50,28 +50,14 @@ impl EvalStep {
 
 #[derive(Clone, Debug)]
 pub enum DerivedEvalStep {
-    Apply {
-        evaluated_children: Vec<Value>,
-        is_tail_call: bool,
-    },
-    Body {
-        evaluated_children: Vec<Value>,
-    },
+    Apply { is_tail_call: bool },
+    Body,
     Empty,
-    Function {
-        parameter: String,
-        body: NodePath,
-    },
-    Identifier {
-        name: String,
-    },
-    Number {
-        value: i32,
-    },
+    Function { parameter: String, body: NodePath },
+    Identifier { name: String },
+    Number { value: i32 },
     Recursion,
-    Tuple {
-        evaluated_children: Vec<Value>,
-    },
+    Tuple,
 }
 
 impl DerivedEvalStep {
@@ -112,10 +98,7 @@ impl DerivedEvalStep {
                         false
                     };
 
-                Self::Apply {
-                    evaluated_children: Vec::new(),
-                    is_tail_call,
-                }
+                Self::Apply { is_tail_call }
             }
             Expression::Body { body } => {
                 for child_path in body.children().to_paths(&path, nodes).rev() {
@@ -125,9 +108,7 @@ impl DerivedEvalStep {
                     });
                 }
 
-                Self::Body {
-                    evaluated_children: Vec::new(),
-                }
+                Self::Body {}
             }
             Expression::Empty => Self::Empty,
             Expression::Function { function } => {
@@ -154,33 +135,7 @@ impl DerivedEvalStep {
                     });
                 }
 
-                Self::Tuple {
-                    evaluated_children: Vec::new(),
-                }
-            }
-        }
-    }
-
-    pub fn child_was_evaluated(&mut self, value: Value) {
-        match self {
-            Self::Apply {
-                evaluated_children, ..
-            }
-            | Self::Body {
-                evaluated_children, ..
-            }
-            | Self::Tuple {
-                evaluated_children, ..
-            } => {
-                evaluated_children.push(value);
-            }
-
-            Self::Empty
-            | Self::Function { .. }
-            | Self::Identifier { .. }
-            | Self::Number { .. }
-            | Self::Recursion => {
-                unreachable!("Node has no unevaluated children: {self:#?}")
+                Self::Tuple {}
             }
         }
     }
