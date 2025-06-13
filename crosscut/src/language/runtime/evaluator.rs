@@ -279,30 +279,6 @@ impl Evaluator {
             }
 
             EvalStep::Derived {
-                step:
-                    DerivedEvalStep::Body {
-                        ref mut to_evaluate,
-                        ..
-                    },
-                ref path,
-                ..
-            } if *to_evaluate > 0 => {
-                let Some(child) = self.eval_queue.pop_front() else {
-                    unreachable!(
-                        "The match guard above checks that there are values to \
-                        evaluate."
-                    );
-                };
-                assert_eq!(&child.parent, path);
-
-                self.eval_stack.push(eval_step);
-                self.eval_stack.push(EvalStep::derived(
-                    child.path,
-                    &mut self.eval_queue,
-                    codebase.nodes(),
-                ));
-            }
-            EvalStep::Derived {
                 step: DerivedEvalStep::Body { mut evaluated, .. },
                 ..
             } => {
@@ -310,30 +286,6 @@ impl Evaluator {
                 self.finish_evaluating_node(value);
             }
 
-            EvalStep::Derived {
-                step:
-                    DerivedEvalStep::Tuple {
-                        ref mut to_evaluate,
-                        ..
-                    },
-                ref path,
-                ..
-            } if *to_evaluate > 0 => {
-                let Some(child) = self.eval_queue.pop_front() else {
-                    unreachable!(
-                        "The match guard above checks that there are values to \
-                        evaluate."
-                    );
-                };
-                assert_eq!(&child.parent, path);
-
-                self.eval_stack.push(eval_step);
-                self.eval_stack.push(EvalStep::derived(
-                    child.path,
-                    &mut self.eval_queue,
-                    codebase.nodes(),
-                ));
-            }
             EvalStep::Derived {
                 step: DerivedEvalStep::Tuple { evaluated, .. },
                 ..

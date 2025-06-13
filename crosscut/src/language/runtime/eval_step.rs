@@ -53,7 +53,6 @@ pub enum DerivedEvalStep {
         is_tail_call: bool,
     },
     Body {
-        to_evaluate: usize,
         evaluated: Vec<Value>,
     },
     Empty,
@@ -69,7 +68,6 @@ pub enum DerivedEvalStep {
     },
     Recursion,
     Tuple {
-        to_evaluate: usize,
         evaluated: Vec<Value>,
     },
 }
@@ -119,21 +117,16 @@ impl DerivedEvalStep {
                 }
             }
             Expression::Body { body } => {
-                let mut to_evaluate = 0;
                 for child_path in body.children().to_paths(&path, nodes).rev() {
                     eval_queue.push_front(QueuedEvalStep {
                         path: child_path,
                         parent: path.clone(),
                     });
-                    to_evaluate += 1;
                 }
 
                 let evaluated = Vec::new();
 
-                Self::Body {
-                    to_evaluate,
-                    evaluated,
-                }
+                Self::Body { evaluated }
             }
             Expression::Empty => Self::Empty,
             Expression::Function { function } => {
@@ -151,7 +144,6 @@ impl DerivedEvalStep {
                 let values = Body::from_hash(&tuple.values, nodes);
                 let parent = tuple.values().into_path(path.clone(), nodes);
 
-                let mut to_evaluate = 0;
                 for child_path in
                     values.children().to_paths(&parent, nodes).rev()
                 {
@@ -159,15 +151,11 @@ impl DerivedEvalStep {
                         path: child_path,
                         parent: path.clone(),
                     });
-                    to_evaluate += 1;
                 }
 
                 let evaluated = Vec::new();
 
-                Self::Tuple {
-                    to_evaluate,
-                    evaluated,
-                }
+                Self::Tuple { evaluated }
             }
         }
     }
@@ -186,17 +174,7 @@ impl DerivedEvalStep {
                 *child = RuntimeChild::Evaluated { value };
             }
 
-            Self::Body {
-                to_evaluate,
-                evaluated,
-                ..
-            }
-            | Self::Tuple {
-                to_evaluate,
-                evaluated,
-                ..
-            } => {
-                *to_evaluate -= 1;
+            Self::Body { evaluated, .. } | Self::Tuple { evaluated, .. } => {
                 evaluated.push(value);
             }
 
