@@ -38,10 +38,10 @@ pub trait Game {
 }
 
 #[derive(Default)]
-pub struct PureCrosscutGameStart {}
+pub struct PureCrosscutGameInit {}
 
 #[async_trait]
-impl Init for PureCrosscutGameStart {
+impl Init for PureCrosscutGameInit {
     async fn on_start(
         &mut self,
         _: &mut Language,
