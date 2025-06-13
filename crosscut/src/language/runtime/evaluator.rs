@@ -336,7 +336,7 @@ impl Evaluator {
     }
 
     fn finish_step(&mut self, output: Value) {
-        // When this is called, the current node has already been removed from
+        // When this is called, the current step has already been removed from
         // the stack.
 
         let new_state = if self.eval_stack.last().is_some() {
