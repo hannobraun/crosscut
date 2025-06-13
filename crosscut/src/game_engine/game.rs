@@ -19,6 +19,8 @@ use super::Camera;
 
 #[async_trait]
 pub trait Init {
+    fn name(&self) -> Option<&str>;
+
     async fn init(
         &mut self,
         language: &mut Language,
@@ -42,6 +44,10 @@ pub struct PureCrosscutGameInit {}
 
 #[async_trait]
 impl Init for PureCrosscutGameInit {
+    fn name(&self) -> Option<&str> {
+        None
+    }
+
     async fn init(
         &mut self,
         _: &mut Language,

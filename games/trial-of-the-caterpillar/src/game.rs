@@ -19,6 +19,10 @@ pub struct TrialOfTheCaterpillarInit {}
 
 #[async_trait]
 impl Init for TrialOfTheCaterpillarInit {
+    fn name(&self) -> Option<&str> {
+        Some("Trial of the Caterpillar")
+    }
+
     async fn init(
         &mut self,
         _: &mut Language,
