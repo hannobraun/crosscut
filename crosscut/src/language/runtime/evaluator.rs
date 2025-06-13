@@ -213,9 +213,7 @@ impl Evaluator {
                             self.call_stack.pop();
                         } else {
                             self.eval_stack.push(EvalStep::Synthetic {
-                                step: SyntheticEvalStep::PopStackFrame {
-                                    output: Value::nothing(),
-                                },
+                                step: SyntheticEvalStep::PopStackFrame,
                             });
                         }
 
@@ -321,9 +319,8 @@ impl Evaluator {
                 self.finish_evaluating_node(Value::Tuple { values });
             }
             EvalStep::Synthetic {
-                step: SyntheticEvalStep::PopStackFrame { output },
+                step: SyntheticEvalStep::PopStackFrame,
             } => {
-                self.finish_evaluating_node(output);
                 self.call_stack.pop();
             }
         }
@@ -350,11 +347,9 @@ impl Evaluator {
                 EvalStep::Derived { .. } => {
                     self.evaluated_children.push(output);
                 }
-                EvalStep::Synthetic { step } => match step {
-                    SyntheticEvalStep::PopStackFrame { output: o } => {
-                        *o = output;
-                    }
-                },
+                EvalStep::Synthetic { .. } => {
+                    self.evaluated_children.push(output);
+                }
             }
 
             RuntimeState::Running

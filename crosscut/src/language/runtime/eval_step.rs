@@ -4,8 +4,6 @@ use crate::language::code::{
     Body, Expression, NodePath, Nodes, SyntaxNode, TypedNode,
 };
 
-use super::Value;
-
 #[derive(Clone, Debug)]
 pub enum EvalStep {
     /// # An evaluation step that was derived from a syntax node
@@ -149,5 +147,5 @@ pub struct QueuedEvalStep {
 
 #[derive(Clone, Debug)]
 pub enum SyntheticEvalStep {
-    PopStackFrame { output: Value },
+    PopStackFrame,
 }
