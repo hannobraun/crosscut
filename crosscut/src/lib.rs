@@ -21,12 +21,12 @@ pub use self::{
     language::language::Language,
 };
 
-pub fn start_and_wait(game_start: Box<dyn Init + Send>) -> anyhow::Result<()> {
+pub fn start_and_wait(init: Box<dyn Init + Send>) -> anyhow::Result<()> {
     let terminal = terminal::start()?;
 
     // This call is going to block until the user requests a shutdown via the
     // game I/O, or any of the other threads shut down.
-    game_engine::start_and_wait(game_start, terminal.input)?;
+    game_engine::start_and_wait(init, terminal.input)?;
 
     // At this point, the shutdown should be in progress. This call shouldn't
     // block for long, if at all. The purpose of still joining the thread is
