@@ -25,11 +25,22 @@ impl EvalStep {
         eval_queue: &mut VecDeque<QueuedEvalStep>,
         nodes: &Nodes,
     ) -> Self {
+        let queue_len_before = eval_queue.len();
         let step = DerivedEvalStep::new(path.clone(), eval_queue, nodes);
+        let queue_len_after = eval_queue.len();
+
+        let Some(num_children) = queue_len_after.checked_sub(queue_len_before)
+        else {
+            unreachable!(
+                "Creating a derived eval step does not remove from the queue. \
+                Subtracting the old length from the new must be valid."
+            );
+        };
+
         Self::Derived {
             path,
             step,
-            children_to_evaluate: 0,
+            children_to_evaluate: num_children,
         }
     }
 }
