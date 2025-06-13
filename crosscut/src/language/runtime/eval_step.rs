@@ -79,7 +79,6 @@ impl DerivedEvalStep {
                 for child in apply.children().rev() {
                     eval_queue.push_front(QueuedEvalStep {
                         path: child.into_path(path.clone(), nodes),
-                        parent: path.clone(),
                     });
                 }
 
@@ -100,10 +99,7 @@ impl DerivedEvalStep {
             }
             Expression::Body { body } => {
                 for child_path in body.children().to_paths(&path, nodes).rev() {
-                    eval_queue.push_front(QueuedEvalStep {
-                        path: child_path,
-                        parent: path.clone(),
-                    });
+                    eval_queue.push_front(QueuedEvalStep { path: child_path });
                 }
 
                 Self::Body
@@ -127,10 +123,7 @@ impl DerivedEvalStep {
                 for child_path in
                     values.children().to_paths(&parent, nodes).rev()
                 {
-                    eval_queue.push_front(QueuedEvalStep {
-                        path: child_path,
-                        parent: path.clone(),
-                    });
+                    eval_queue.push_front(QueuedEvalStep { path: child_path });
                 }
 
                 Self::Tuple
@@ -142,7 +135,6 @@ impl DerivedEvalStep {
 #[derive(Debug)]
 pub struct QueuedEvalStep {
     pub path: NodePath,
-    pub parent: NodePath,
 }
 
 #[derive(Clone, Debug)]

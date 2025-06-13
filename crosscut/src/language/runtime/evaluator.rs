@@ -143,7 +143,6 @@ impl Evaluator {
         self.state = RuntimeState::Running;
 
         let mut evaluated_children = if let EvalStep::Derived {
-            path,
             num_children,
             children_to_evaluate,
             ..
@@ -156,7 +155,6 @@ impl Evaluator {
                         evaluate."
                     );
                 };
-                assert_eq!(&child.parent, path);
 
                 *children_to_evaluate -= 1;
 
