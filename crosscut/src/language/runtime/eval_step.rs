@@ -124,10 +124,8 @@ impl DerivedEvalStep {
                     });
                 }
 
-                let evaluated = Vec::new();
-
                 Self::Body {
-                    evaluated_children: evaluated,
+                    evaluated_children: Vec::new(),
                 }
             }
             Expression::Empty => Self::Empty,
