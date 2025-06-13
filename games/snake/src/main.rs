@@ -1,6 +1,6 @@
 mod game;
 
 fn main() -> anyhow::Result<()> {
-    let game_start = Box::new(game::TrialOfTheCaterpillarInit::default());
-    crosscut::start_and_wait(game_start)
+    let init = Box::new(game::TrialOfTheCaterpillarInit::default());
+    crosscut::start_and_wait(init)
 }
