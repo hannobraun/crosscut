@@ -336,12 +336,13 @@ impl Evaluator {
             EvalStep::Derived {
                 step:
                     DerivedEvalStep::Tuple {
-                        evaluated_children: evaluated,
-                        ..
+                        evaluated_children, ..
                     },
                 ..
             } => {
-                self.finish_evaluating_node(Value::Tuple { values: evaluated });
+                self.finish_evaluating_node(Value::Tuple {
+                    values: evaluated_children,
+                });
             }
             EvalStep::Synthetic {
                 step: SyntheticEvalStep::PopStackFrame { output },
