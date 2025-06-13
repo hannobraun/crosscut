@@ -311,9 +311,8 @@ impl Evaluator {
                     },
                 ..
             } => {
-                self.finish_evaluating_node(Value::Tuple {
-                    values: evaluated_children,
-                });
+                let values = evaluated_children;
+                self.finish_evaluating_node(Value::Tuple { values });
             }
             EvalStep::Synthetic {
                 step: SyntheticEvalStep::PopStackFrame { output },
