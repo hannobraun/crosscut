@@ -127,7 +127,7 @@ impl Evaluator {
             return;
         }
 
-        let Some(mut step) = self.eval_stack.pop() else {
+        let Some(mut eval_step) = self.eval_stack.pop() else {
             // Evaluation stack is empty, which means there's nothing we can do.
 
             if !self.state.is_finished() {
@@ -141,7 +141,7 @@ impl Evaluator {
 
         self.state = RuntimeState::Running;
 
-        match step {
+        match eval_step {
             EvalStep::Derived {
                 step:
                     DerivedEvalStep::Apply {
@@ -163,7 +163,7 @@ impl Evaluator {
                 };
                 assert_eq!(&child.parent, path);
 
-                self.eval_stack.push(step);
+                self.eval_stack.push(eval_step);
                 self.eval_stack.push(EvalStep::derived(
                     child.path,
                     &mut self.eval_queue,
@@ -226,7 +226,7 @@ impl Evaluator {
                 // A provided function is not fully handled, until the handler
                 // has provided its output. It might also trigger an effect, and
                 // then we still need the node.
-                self.eval_stack.push(step);
+                self.eval_stack.push(eval_step);
             }
             EvalStep::Derived {
                 step:
@@ -241,7 +241,7 @@ impl Evaluator {
                     value.clone(),
                     path.clone(),
                 );
-                self.eval_stack.push(step);
+                self.eval_stack.push(eval_step);
             }
 
             EvalStep::Derived {
@@ -262,7 +262,7 @@ impl Evaluator {
 
                 *to_evaluate -= 1;
 
-                self.eval_stack.push(step);
+                self.eval_stack.push(eval_step);
                 self.eval_stack.push(EvalStep::derived(
                     child.path,
                     &mut self.eval_queue,
@@ -295,7 +295,7 @@ impl Evaluator {
 
                 *to_evaluate -= 1;
 
-                self.eval_stack.push(step);
+                self.eval_stack.push(eval_step);
                 self.eval_stack.push(EvalStep::derived(
                     child.path,
                     &mut self.eval_queue,
