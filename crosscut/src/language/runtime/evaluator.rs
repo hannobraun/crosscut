@@ -342,16 +342,8 @@ impl Evaluator {
         // When this is called, the current node has already been removed from
         // the stack.
 
-        let new_state = if let Some(parent) = self.eval_stack.last_mut() {
-            match parent {
-                EvalStep::Derived { .. } => {
-                    self.evaluated_children.push(output);
-                }
-                EvalStep::Synthetic { .. } => {
-                    self.evaluated_children.push(output);
-                }
-            }
-
+        let new_state = if self.eval_stack.last_mut().is_some() {
+            self.evaluated_children.push(output);
             RuntimeState::Running
         } else {
             RuntimeState::Finished { output }
