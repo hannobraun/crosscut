@@ -141,6 +141,37 @@ impl Evaluator {
 
         self.state = RuntimeState::Running;
 
+        if let EvalStep::Derived {
+            path,
+            children_to_evaluate,
+            ..
+        } = &mut eval_step
+        {
+            if *children_to_evaluate > 0 {
+                let Some(child) = self.eval_queue.pop_front() else {
+                    unreachable!(
+                        "The match guard above checks that there are values to \
+                        evaluate."
+                    );
+                };
+                assert_eq!(&child.parent, path);
+
+                *children_to_evaluate -= 1;
+
+                self.eval_stack.push(eval_step);
+                self.eval_stack.push(EvalStep::derived(
+                    child.path,
+                    &mut self.eval_queue,
+                    codebase.nodes(),
+                ));
+
+                // We have to evaluate the child first, and we'll start with
+                // that on the next step. No need to look more closely at the
+                // current step right now.
+                return;
+            }
+        }
+
         match eval_step {
             EvalStep::Derived {
                 step:
@@ -154,6 +185,7 @@ impl Evaluator {
                         ..
                     },
                 ref path,
+                ..
             } => {
                 let Some(child) = self.eval_queue.pop_front() else {
                     unreachable!(
@@ -214,6 +246,7 @@ impl Evaluator {
                         ..
                     },
                 ref path,
+                ..
             } => {
                 self.state = RuntimeState::Effect {
                     effect: Effect::ApplyProvidedFunction {
@@ -235,6 +268,7 @@ impl Evaluator {
                         ..
                     },
                 ref path,
+                ..
             } => {
                 self.unexpected_input(
                     Type::Function,
@@ -251,6 +285,7 @@ impl Evaluator {
                         ..
                     },
                 ref path,
+                ..
             } if *to_evaluate > 0 => {
                 let Some(child) = self.eval_queue.pop_front() else {
                     unreachable!(
@@ -284,6 +319,7 @@ impl Evaluator {
                         ..
                     },
                 ref path,
+                ..
             } if *to_evaluate > 0 => {
                 let Some(child) = self.eval_queue.pop_front() else {
                     unreachable!(

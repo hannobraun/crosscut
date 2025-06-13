@@ -12,6 +12,7 @@ pub enum EvalStep {
     Derived {
         path: NodePath,
         step: DerivedEvalStep,
+        children_to_evaluate: usize,
     },
 
     /// # An evaluation step that has no equivalent in the syntax tree
@@ -25,7 +26,11 @@ impl EvalStep {
         nodes: &Nodes,
     ) -> Self {
         let step = DerivedEvalStep::new(path.clone(), eval_queue, nodes);
-        Self::Derived { path, step }
+        Self::Derived {
+            path,
+            step,
+            children_to_evaluate: 0,
+        }
     }
 }
 
