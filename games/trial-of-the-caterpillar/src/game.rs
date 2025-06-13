@@ -110,7 +110,7 @@ impl Game for TrialOfTheCaterpillar {
             }))
             .chain(self.world.new_walls.iter().map(|position| Instance {
                 position: [position.x, position.y, 0.],
-                color: [0.125, 1., 0.125, 1.],
+                color: [0.5, 1., 0.5, 1.],
             }));
 
         self.renderer.render(
