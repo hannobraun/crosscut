@@ -108,7 +108,7 @@ impl DerivedEvalStep {
                     });
                 }
 
-                Self::Body {}
+                Self::Body
             }
             Expression::Empty => Self::Empty,
             Expression::Function { function } => {
@@ -135,7 +135,7 @@ impl DerivedEvalStep {
                     });
                 }
 
-                Self::Tuple {}
+                Self::Tuple
             }
         }
     }
