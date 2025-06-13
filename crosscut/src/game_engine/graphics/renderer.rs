@@ -74,7 +74,7 @@ impl Renderer {
     }
 
     pub fn render(
-        &self,
+        &mut self,
         bg_color: wgpu::Color,
         positions: impl IntoIterator<Item = Instance>,
         camera: &Camera,
