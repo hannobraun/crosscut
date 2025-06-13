@@ -274,7 +274,6 @@ impl Evaluator {
                 let value = evaluated.pop().unwrap_or_else(Value::nothing);
                 self.finish_evaluating_node(value);
             }
-
             EvalStep::Derived {
                 step: DerivedEvalStep::Empty,
                 ..
