@@ -16,13 +16,13 @@ use crate::{
 use super::Init;
 
 pub fn start_and_wait(
-    game_start: Box<dyn Init + Send>,
+    init: Box<dyn Init + Send>,
     terminal_input: Receiver<TerminalInput>,
 ) -> anyhow::Result<()> {
     let mut handler = Handler {
         terminal_input,
         resources: Resources::Uninitialized {
-            game_start: Some(game_start),
+            game_start: Some(init),
         },
         result: Ok(()),
     };
