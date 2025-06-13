@@ -149,8 +149,6 @@ impl Evaluator {
             ..
         } = &mut eval_step
         {
-            let _ = num_children;
-
             if *children_to_evaluate > 0 {
                 let Some(child) = self.eval_queue.pop_front() else {
                     unreachable!(
