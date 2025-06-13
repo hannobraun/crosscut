@@ -19,7 +19,7 @@ pub struct SnakeStart {}
 
 #[async_trait]
 impl Init for SnakeStart {
-    async fn on_start(
+    async fn init(
         &mut self,
         _: &mut Language,
         window: &Arc<Window>,

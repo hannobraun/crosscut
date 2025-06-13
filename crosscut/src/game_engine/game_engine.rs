@@ -48,7 +48,7 @@ where
     ) -> anyhow::Result<Self> {
         let mut language = Language::new();
 
-        let mut game = game_start.on_start(&mut language, window).block_on()?;
+        let mut game = game_start.init(&mut language, window).block_on()?;
         game.on_code_update(&mut language)?;
 
         Ok(Self {
