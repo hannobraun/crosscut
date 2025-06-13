@@ -15,10 +15,10 @@ use crosscut::{
 use rand::random;
 
 #[derive(Default)]
-pub struct SnakeStart {}
+pub struct TrialOfTheCaterpillarInit {}
 
 #[async_trait]
-impl Init for SnakeStart {
+impl Init for TrialOfTheCaterpillarInit {
     async fn init(
         &mut self,
         _: &mut Language,
