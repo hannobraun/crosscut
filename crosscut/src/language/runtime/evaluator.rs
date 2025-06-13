@@ -1,13 +1,12 @@
 use std::collections::VecDeque;
 
+use itertools::Itertools;
+
 use crate::language::code::{Codebase, NodePath, Nodes, Type};
 
 use super::{
     Effect, RuntimeState, Value,
-    eval_step::{
-        DerivedEvalStep, EvalStep, QueuedEvalStep, RuntimeChild,
-        SyntheticEvalStep,
-    },
+    eval_step::{DerivedEvalStep, EvalStep, QueuedEvalStep, SyntheticEvalStep},
 };
 
 #[derive(Debug, Default)]
@@ -176,37 +175,22 @@ impl Evaluator {
             EvalStep::Derived {
                 step:
                     DerivedEvalStep::Apply {
-                        expression: RuntimeChild::Unevaluated,
-                        ..
-                    }
-                    | DerivedEvalStep::Apply {
-                        expression: RuntimeChild::Evaluated { .. },
-                        argument: RuntimeChild::Unevaluated,
-                        ..
-                    },
-                ..
-            } => {
-                unreachable!(
-                    "Unevaluated children are handled above, before we make it \
-                    here."
-                );
-            }
-            EvalStep::Derived {
-                step:
-                    DerivedEvalStep::Apply {
-                        expression:
-                            RuntimeChild::Evaluated {
-                                value: ref function,
-                            },
-                        argument:
-                            RuntimeChild::Evaluated {
-                                value: ref argument,
-                            },
+                        ref evaluated_children,
                         is_tail_call,
                     },
                 ref path,
                 ..
             } => {
+                let Some([function, argument]) =
+                    evaluated_children.iter().collect_array()
+                else {
+                    unreachable!(
+                        "Apply nodes have exactly two children. And unless \
+                        both have been evaluated, the child handling code \
+                        above wouldn't have let us arrive here."
+                    );
+                };
+
                 match function {
                     Value::Function { parameter, body } => {
                         if is_tail_call {

@@ -48,8 +48,7 @@ impl EvalStep {
 #[derive(Clone, Debug)]
 pub enum DerivedEvalStep {
     Apply {
-        expression: RuntimeChild,
-        argument: RuntimeChild,
+        evaluated_children: Vec<Value>,
         is_tail_call: bool,
     },
     Body {
@@ -111,8 +110,7 @@ impl DerivedEvalStep {
                     };
 
                 Self::Apply {
-                    expression: RuntimeChild::Unevaluated,
-                    argument: RuntimeChild::Unevaluated,
+                    evaluated_children: Vec::new(),
                     is_tail_call,
                 }
             }
@@ -163,15 +161,9 @@ impl DerivedEvalStep {
     pub fn child_was_evaluated(&mut self, value: Value) {
         match self {
             Self::Apply {
-                expression: child @ RuntimeChild::Unevaluated,
-                ..
-            }
-            | Self::Apply {
-                expression: RuntimeChild::Evaluated { .. },
-                argument: child @ RuntimeChild::Unevaluated,
-                ..
+                evaluated_children, ..
             } => {
-                *child = RuntimeChild::Evaluated { value };
+                evaluated_children.push(value);
             }
 
             Self::Body {
@@ -183,12 +175,7 @@ impl DerivedEvalStep {
                 evaluated_children.push(value);
             }
 
-            Self::Apply {
-                expression: RuntimeChild::Evaluated { .. },
-                argument: RuntimeChild::Evaluated { .. },
-                ..
-            }
-            | Self::Empty
+            Self::Empty
             | Self::Function { .. }
             | Self::Identifier { .. }
             | Self::Number { .. }
@@ -203,12 +190,6 @@ impl DerivedEvalStep {
 pub struct QueuedEvalStep {
     pub path: NodePath,
     pub parent: NodePath,
-}
-
-#[derive(Clone, Debug)]
-pub enum RuntimeChild {
-    Unevaluated,
-    Evaluated { value: Value },
 }
 
 #[derive(Clone, Debug)]
