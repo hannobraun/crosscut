@@ -184,23 +184,12 @@ impl Evaluator {
                         argument: RuntimeChild::Unevaluated,
                         ..
                     },
-                ref path,
                 ..
             } => {
-                let Some(child) = self.eval_queue.pop_front() else {
-                    unreachable!(
-                        "Node has unevaluated children. Those must have been \
-                        added to the queue earlier."
-                    );
-                };
-                assert_eq!(&child.parent, path);
-
-                self.eval_stack.push(eval_step);
-                self.eval_stack.push(EvalStep::derived(
-                    child.path,
-                    &mut self.eval_queue,
-                    codebase.nodes(),
-                ));
+                unreachable!(
+                    "Unevaluated children are handled above, before we make it \
+                    here."
+                );
             }
             EvalStep::Derived {
                 step:
