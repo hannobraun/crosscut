@@ -48,6 +48,10 @@ where
     ) -> anyhow::Result<Self> {
         let mut language = Language::new();
 
+        if let Some(name) = init.name() {
+            window.set_title(name);
+        }
+
         let mut game = init.init(&mut language, window).block_on()?;
         game.on_code_update(&mut language)?;
 
