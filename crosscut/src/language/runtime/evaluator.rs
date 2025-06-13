@@ -350,9 +350,11 @@ impl Evaluator {
                 EvalStep::Derived { .. } => {
                     self.evaluated_children.push(output);
                 }
-                EvalStep::Synthetic { step } => {
-                    step.child_was_evaluated(output);
-                }
+                EvalStep::Synthetic { step } => match step {
+                    SyntheticEvalStep::PopStackFrame { output: o } => {
+                        *o = output;
+                    }
+                },
             }
 
             RuntimeState::Running

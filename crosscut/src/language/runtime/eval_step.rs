@@ -151,13 +151,3 @@ pub struct QueuedEvalStep {
 pub enum SyntheticEvalStep {
     PopStackFrame { output: Value },
 }
-
-impl SyntheticEvalStep {
-    pub fn child_was_evaluated(&mut self, value: Value) {
-        match self {
-            Self::PopStackFrame { output } => {
-                *output = value;
-            }
-        }
-    }
-}
