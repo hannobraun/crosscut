@@ -145,6 +145,12 @@ enum OnFrameError {
 #[allow(clippy::large_enum_variant)]
 enum Resources {
     Uninitialized {
+        /// # Implementatioan of [`Init`] that initializes the game
+        ///
+        /// This field is always going to be `Some`, except right before this
+        /// variant is replaced by `Self::Initialized`. The only reason we have
+        /// an `Option` here, is to deal with the fact that we only ever have a
+        /// mutable reference to this field, and can't easily move out of it.
         init: Option<Box<dyn Init>>,
     },
     Initialized {
