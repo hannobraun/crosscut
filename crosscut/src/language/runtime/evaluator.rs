@@ -196,75 +196,59 @@ impl Evaluator {
                     DerivedEvalStep::Apply {
                         expression:
                             RuntimeChild::Evaluated {
-                                value: Value::Function { parameter, body },
-                            },
-                        argument: RuntimeChild::Evaluated { value: argument },
-                        is_tail_call,
-                        ..
-                    },
-                ..
-            } => {
-                if is_tail_call {
-                    self.call_stack.pop();
-                } else {
-                    self.eval_stack.push(EvalStep::Synthetic {
-                        step: SyntheticEvalStep::PopStackFrame {
-                            output: Value::nothing(),
-                        },
-                    });
-                }
-
-                self.apply_function(
-                    parameter,
-                    body,
-                    argument,
-                    codebase.nodes(),
-                );
-            }
-            EvalStep::Derived {
-                step:
-                    DerivedEvalStep::Apply {
-                        expression:
-                            RuntimeChild::Evaluated {
-                                value: Value::ProvidedFunction { ref name },
+                                value: ref function,
                             },
                         argument:
                             RuntimeChild::Evaluated {
                                 value: ref argument,
                             },
-                        ..
+                        is_tail_call,
                     },
                 ref path,
                 ..
             } => {
-                self.state = RuntimeState::Effect {
-                    effect: Effect::ApplyProvidedFunction {
-                        name: name.clone(),
-                        input: argument.clone(),
-                    },
-                    path: path.clone(),
-                };
+                match function {
+                    Value::Function { parameter, body } => {
+                        if is_tail_call {
+                            self.call_stack.pop();
+                        } else {
+                            self.eval_stack.push(EvalStep::Synthetic {
+                                step: SyntheticEvalStep::PopStackFrame {
+                                    output: Value::nothing(),
+                                },
+                            });
+                        }
 
-                // A provided function is not fully handled, until the handler
-                // has provided its output. It might also trigger an effect, and
-                // then we still need the node.
-                self.eval_stack.push(eval_step);
-            }
-            EvalStep::Derived {
-                step:
-                    DerivedEvalStep::Apply {
-                        expression: RuntimeChild::Evaluated { ref value },
-                        ..
-                    },
-                ref path,
-                ..
-            } => {
-                self.unexpected_input(
-                    Type::Function,
-                    value.clone(),
-                    path.clone(),
-                );
-                self.eval_stack.push(eval_step);
+                        self.apply_function(
+                            parameter.clone(),
+                            body.clone(),
+                            argument.clone(),
+                            codebase.nodes(),
+                        );
+                    }
+                    Value::ProvidedFunction { name } => {
+                        self.state = RuntimeState::Effect {
+                            effect: Effect::ApplyProvidedFunction {
+                                name: name.clone(),
+                                input: argument.clone(),
+                            },
+                            path: path.clone(),
+                        };
+
+                        // A provided function is not fully handled, until the
+                        // handler has provided its output. It might also
+                        // trigger an effect, and then we still need the node.
+                        self.eval_stack.push(eval_step);
+                    }
+                    value => {
+                        self.unexpected_input(
+                            Type::Function,
+                            value.clone(),
+                            path.clone(),
+                        );
+                        self.eval_stack.push(eval_step);
+                    }
+                }
             }
 
             EvalStep::Derived {
