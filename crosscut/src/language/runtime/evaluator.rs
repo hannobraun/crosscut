@@ -270,12 +270,13 @@ impl Evaluator {
             EvalStep::Derived {
                 step:
                     DerivedEvalStep::Body {
-                        evaluated_children: mut evaluated,
+                        mut evaluated_children,
                         ..
                     },
                 ..
             } => {
-                let value = evaluated.pop().unwrap_or_else(Value::nothing);
+                let value =
+                    evaluated_children.pop().unwrap_or_else(Value::nothing);
                 self.finish_evaluating_node(value);
             }
             EvalStep::Derived {
