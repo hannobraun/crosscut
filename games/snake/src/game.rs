@@ -31,7 +31,7 @@ impl Init for SnakeStart {
         let camera = make_camera(window_size);
         let renderer = Renderer::new(window).await?;
 
-        Ok(Box::new(Snake {
+        Ok(Box::new(TrialOfTheCaterpillar {
             last_update: Instant::now(),
             world: World::new(),
             camera,
@@ -40,14 +40,14 @@ impl Init for SnakeStart {
     }
 }
 
-pub struct Snake {
+pub struct TrialOfTheCaterpillar {
     last_update: Instant,
     world: World,
     camera: Camera,
     renderer: Renderer,
 }
 
-impl Game for Snake {
+impl Game for TrialOfTheCaterpillar {
     fn on_code_update(&mut self, _: &mut Language) -> anyhow::Result<()> {
         Ok(())
     }
