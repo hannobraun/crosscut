@@ -276,13 +276,6 @@ impl Evaluator {
             }
 
             EvalStep::Derived {
-                step: DerivedEvalStep::Tuple { evaluated, .. },
-                ..
-            } => {
-                self.finish_evaluating_node(Value::Tuple { values: evaluated });
-            }
-
-            EvalStep::Derived {
                 step: DerivedEvalStep::Empty,
                 ..
             } => {
@@ -335,6 +328,12 @@ impl Evaluator {
                     parameter: stack_frame.parameter,
                     body: stack_frame.root,
                 });
+            }
+            EvalStep::Derived {
+                step: DerivedEvalStep::Tuple { evaluated, .. },
+                ..
+            } => {
+                self.finish_evaluating_node(Value::Tuple { values: evaluated });
             }
             EvalStep::Synthetic {
                 step: SyntheticEvalStep::PopStackFrame { output },
