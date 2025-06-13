@@ -101,7 +101,7 @@ impl Evaluator {
             );
         };
 
-        self.finish_evaluating_node(output);
+        self.finish_evaluating_step(output);
     }
 
     pub fn trigger_effect(&mut self, effect: Effect) {
@@ -255,19 +255,19 @@ impl Evaluator {
             } => {
                 let value =
                     evaluated_children.pop().unwrap_or_else(Value::nothing);
-                self.finish_evaluating_node(value);
+                self.finish_evaluating_step(value);
             }
             EvalStep::Derived {
                 step: DerivedEvalStep::Empty,
                 ..
             } => {
-                self.finish_evaluating_node(Value::nothing());
+                self.finish_evaluating_step(Value::nothing());
             }
             EvalStep::Derived {
                 step: DerivedEvalStep::Function { parameter, body },
                 ..
             } => {
-                self.finish_evaluating_node(Value::Function {
+                self.finish_evaluating_step(Value::Function {
                     parameter,
                     body,
                 });
@@ -285,13 +285,13 @@ impl Evaluator {
                     }
                 }
 
-                self.finish_evaluating_node(value);
+                self.finish_evaluating_step(value);
             }
             EvalStep::Derived {
                 step: DerivedEvalStep::Number { value },
                 ..
             } => {
-                self.finish_evaluating_node(Value::Integer { value });
+                self.finish_evaluating_step(Value::Integer { value });
             }
             EvalStep::Derived {
                 step: DerivedEvalStep::Recursion,
@@ -306,7 +306,7 @@ impl Evaluator {
                         }
                     });
 
-                self.finish_evaluating_node(Value::Function {
+                self.finish_evaluating_step(Value::Function {
                     parameter: stack_frame.parameter,
                     body: stack_frame.root,
                 });
@@ -316,7 +316,7 @@ impl Evaluator {
                 ..
             } => {
                 let values = evaluated_children;
-                self.finish_evaluating_node(Value::Tuple { values });
+                self.finish_evaluating_step(Value::Tuple { values });
             }
             EvalStep::Synthetic {
                 step: SyntheticEvalStep::PopStackFrame,
@@ -338,7 +338,7 @@ impl Evaluator {
         };
     }
 
-    fn finish_evaluating_node(&mut self, output: Value) {
+    fn finish_evaluating_step(&mut self, output: Value) {
         // When this is called, the current node has already been removed from
         // the stack.
 
