@@ -295,8 +295,6 @@ impl Evaluator {
                 };
                 assert_eq!(&child.parent, path);
 
-                *to_evaluate -= 1;
-
                 self.eval_stack.push(eval_step);
                 self.eval_stack.push(EvalStep::derived(
                     child.path,
@@ -328,8 +326,6 @@ impl Evaluator {
                     );
                 };
                 assert_eq!(&child.parent, path);
-
-                *to_evaluate -= 1;
 
                 self.eval_stack.push(eval_step);
                 self.eval_stack.push(EvalStep::derived(

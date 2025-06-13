@@ -175,7 +175,17 @@ impl DerivedEvalStep {
                 *child = RuntimeChild::Evaluated { value };
             }
 
-            Self::Body { evaluated, .. } | Self::Tuple { evaluated, .. } => {
+            Self::Body {
+                to_evaluate,
+                evaluated,
+                ..
+            }
+            | Self::Tuple {
+                to_evaluate,
+                evaluated,
+                ..
+            } => {
+                *to_evaluate -= 1;
                 evaluated.push(value);
             }
 
