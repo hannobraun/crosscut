@@ -339,14 +339,12 @@ impl Evaluator {
         // When this is called, the current step has already been removed from
         // the stack.
 
-        let new_state = if self.eval_stack.last().is_some() {
+        self.state = if self.eval_stack.last().is_some() {
             self.evaluated_children.push(output);
             RuntimeState::Running
         } else {
             RuntimeState::Finished { output }
         };
-
-        self.state = new_state;
     }
 
     pub fn state(&self) -> &RuntimeState {
