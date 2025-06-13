@@ -334,7 +334,11 @@ impl Evaluator {
                 });
             }
             EvalStep::Derived {
-                step: DerivedEvalStep::Tuple { evaluated, .. },
+                step:
+                    DerivedEvalStep::Tuple {
+                        evaluated_children: evaluated,
+                        ..
+                    },
                 ..
             } => {
                 self.finish_evaluating_node(Value::Tuple { values: evaluated });

@@ -68,7 +68,7 @@ pub enum DerivedEvalStep {
     },
     Recursion,
     Tuple {
-        evaluated: Vec<Value>,
+        evaluated_children: Vec<Value>,
     },
 }
 
@@ -155,7 +155,9 @@ impl DerivedEvalStep {
 
                 let evaluated = Vec::new();
 
-                Self::Tuple { evaluated }
+                Self::Tuple {
+                    evaluated_children: evaluated,
+                }
             }
         }
     }
@@ -178,8 +180,7 @@ impl DerivedEvalStep {
                 evaluated_children, ..
             }
             | Self::Tuple {
-                evaluated: evaluated_children,
-                ..
+                evaluated_children, ..
             } => {
                 evaluated_children.push(value);
             }
