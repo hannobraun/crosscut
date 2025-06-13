@@ -12,6 +12,8 @@ pub enum EvalStep {
     Derived {
         path: NodePath,
         step: DerivedEvalStep,
+
+        num_children: usize,
         children_to_evaluate: usize,
     },
 
@@ -40,6 +42,7 @@ impl EvalStep {
         Self::Derived {
             path,
             step,
+            num_children,
             children_to_evaluate: num_children,
         }
     }
