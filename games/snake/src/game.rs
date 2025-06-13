@@ -6,8 +6,8 @@ use std::{
 };
 
 use crosscut::{
-    Camera, Game, GameStart, Instance, Language, OrthographicProjection,
-    Renderer, async_trait,
+    Camera, Game, Init, Instance, Language, OrthographicProjection, Renderer,
+    async_trait,
     glam::Vec2,
     wgpu,
     winit::{keyboard::KeyCode, window::Window},
@@ -18,7 +18,7 @@ use rand::random;
 pub struct SnakeStart {}
 
 #[async_trait]
-impl GameStart for SnakeStart {
+impl Init for SnakeStart {
     async fn on_start(
         &mut self,
         _: &mut Language,

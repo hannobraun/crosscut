@@ -9,7 +9,7 @@ use crate::{
 };
 
 use super::{
-    Game, GameStart, TerminalInput,
+    Game, Init, TerminalInput,
     editor::{
         input::{EditorInputOrCommand, TerminalEditorInput},
         output::TerminalEditorOutput,
@@ -25,7 +25,7 @@ pub struct GameEngine<A> {
 
 impl GameEngine<RawTerminalAdapter> {
     pub fn with_editor_ui(
-        game_start: Box<dyn GameStart>,
+        game_start: Box<dyn Init>,
         window: &Arc<Window>,
     ) -> anyhow::Result<Self> {
         let adapter = RawTerminalAdapter::new()?;
@@ -42,7 +42,7 @@ where
     A: TerminalOutputAdapter,
 {
     pub fn new(
-        mut game_start: Box<dyn GameStart>,
+        mut game_start: Box<dyn Init>,
         window: &Arc<Window>,
         adapter: A,
     ) -> anyhow::Result<Self> {

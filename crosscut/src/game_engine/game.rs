@@ -18,7 +18,7 @@ use crate::{
 use super::Camera;
 
 #[async_trait]
-pub trait GameStart {
+pub trait Init {
     async fn on_start(
         &mut self,
         language: &mut Language,
@@ -41,7 +41,7 @@ pub trait Game {
 pub struct PureCrosscutGameStart {}
 
 #[async_trait]
-impl GameStart for PureCrosscutGameStart {
+impl Init for PureCrosscutGameStart {
     async fn on_start(
         &mut self,
         _: &mut Language,
