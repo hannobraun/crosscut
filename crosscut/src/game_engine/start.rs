@@ -159,7 +159,7 @@ impl Resources {
         event_loop: &ActiveEventLoop,
     ) -> anyhow::Result<()> {
         if let Resources::Uninitialized { init } = self {
-            let Some(game_start) = init.take() else {
+            let Some(init) = init.take() else {
                 unreachable!(
                     "`game` should always be `Some`, unless the following code \
                     panics, before we replace `self` below. That would be a \
@@ -174,7 +174,7 @@ impl Resources {
                 Arc::new(window)
             };
 
-            let game_engine = GameEngine::with_editor_ui(game_start, &window)?;
+            let game_engine = GameEngine::with_editor_ui(init, &window)?;
 
             *self = Self::Initialized {
                 window,
