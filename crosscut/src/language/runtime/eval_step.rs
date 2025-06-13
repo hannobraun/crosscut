@@ -153,10 +153,8 @@ impl DerivedEvalStep {
                     });
                 }
 
-                let evaluated = Vec::new();
-
                 Self::Tuple {
-                    evaluated_children: evaluated,
+                    evaluated_children: Vec::new(),
                 }
             }
         }
