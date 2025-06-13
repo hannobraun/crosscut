@@ -268,7 +268,11 @@ impl Evaluator {
             }
 
             EvalStep::Derived {
-                step: DerivedEvalStep::Body { mut evaluated, .. },
+                step:
+                    DerivedEvalStep::Body {
+                        evaluated_children: mut evaluated,
+                        ..
+                    },
                 ..
             } => {
                 let value = evaluated.pop().unwrap_or_else(Value::nothing);

@@ -53,7 +53,7 @@ pub enum DerivedEvalStep {
         is_tail_call: bool,
     },
     Body {
-        evaluated: Vec<Value>,
+        evaluated_children: Vec<Value>,
     },
     Empty,
     Function {
@@ -126,7 +126,9 @@ impl DerivedEvalStep {
 
                 let evaluated = Vec::new();
 
-                Self::Body { evaluated }
+                Self::Body {
+                    evaluated_children: evaluated,
+                }
             }
             Expression::Empty => Self::Empty,
             Expression::Function { function } => {
@@ -174,7 +176,11 @@ impl DerivedEvalStep {
                 *child = RuntimeChild::Evaluated { value };
             }
 
-            Self::Body { evaluated, .. } | Self::Tuple { evaluated, .. } => {
+            Self::Body {
+                evaluated_children: evaluated,
+                ..
+            }
+            | Self::Tuple { evaluated, .. } => {
                 evaluated.push(value);
             }
 
