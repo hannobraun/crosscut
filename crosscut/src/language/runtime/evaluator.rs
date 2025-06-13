@@ -6,7 +6,7 @@ use crate::language::code::{Codebase, NodePath, Nodes, Type};
 
 use super::{
     Effect, RuntimeState, Value,
-    eval_step::{DerivedEvalStep, EvalStep, QueuedEvalStep, SyntheticEvalStep},
+    eval_step::{DerivedEvalStep, EvalStep, SyntheticEvalStep},
 };
 
 #[derive(Debug, Default)]
@@ -28,7 +28,7 @@ pub struct Evaluator {
     /// New steps are added to the front of the queue, meaning that the first
     /// child of a step and all its descendants are evaluated before the second
     /// child of the step is taken off the queue.
-    eval_queue: VecDeque<QueuedEvalStep>,
+    eval_queue: VecDeque<NodePath>,
 
     evaluated_children: Vec<Value>,
 
@@ -160,7 +160,7 @@ impl Evaluator {
 
                 self.eval_stack.push(eval_step);
                 self.eval_stack.push(EvalStep::derived(
-                    child.path,
+                    child,
                     &mut self.eval_queue,
                     codebase.nodes(),
                 ));

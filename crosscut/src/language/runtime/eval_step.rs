@@ -22,7 +22,7 @@ pub enum EvalStep {
 impl EvalStep {
     pub fn derived(
         path: NodePath,
-        eval_queue: &mut VecDeque<QueuedEvalStep>,
+        eval_queue: &mut VecDeque<NodePath>,
         nodes: &Nodes,
     ) -> Self {
         let queue_len_before = eval_queue.len();
@@ -61,7 +61,7 @@ pub enum DerivedEvalStep {
 impl DerivedEvalStep {
     pub fn new(
         path: NodePath,
-        eval_queue: &mut VecDeque<QueuedEvalStep>,
+        eval_queue: &mut VecDeque<NodePath>,
         nodes: &Nodes,
     ) -> Self {
         let TypedNode::Expression { expression } =
@@ -77,9 +77,7 @@ impl DerivedEvalStep {
         match expression {
             Expression::Apply { apply } => {
                 for child in apply.children().rev() {
-                    eval_queue.push_front(QueuedEvalStep {
-                        path: child.into_path(path.clone(), nodes),
-                    });
+                    eval_queue.push_front(child.into_path(path.clone(), nodes));
                 }
 
                 let is_tail_call =
@@ -99,7 +97,7 @@ impl DerivedEvalStep {
             }
             Expression::Body { body } => {
                 for child_path in body.children().to_paths(&path, nodes).rev() {
-                    eval_queue.push_front(QueuedEvalStep { path: child_path });
+                    eval_queue.push_front(child_path);
                 }
 
                 Self::Body
@@ -123,18 +121,13 @@ impl DerivedEvalStep {
                 for child_path in
                     values.children().to_paths(&parent, nodes).rev()
                 {
-                    eval_queue.push_front(QueuedEvalStep { path: child_path });
+                    eval_queue.push_front(child_path);
                 }
 
                 Self::Tuple
             }
         }
     }
-}
-
-#[derive(Debug)]
-pub struct QueuedEvalStep {
-    pub path: NodePath,
 }
 
 #[derive(Clone, Debug)]
