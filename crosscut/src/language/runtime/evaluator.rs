@@ -38,13 +38,6 @@ pub struct Evaluator {
 
 impl Evaluator {
     pub fn update(&mut self, codebase: &Codebase) {
-        for step in &mut self.eval_stack {
-            match step {
-                EvalStep::Derived { .. } => {}
-                EvalStep::Synthetic { .. } => {}
-            }
-        }
-
         self.reset(codebase);
     }
 
