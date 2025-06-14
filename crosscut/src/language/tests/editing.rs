@@ -142,6 +142,6 @@ fn keep_state_on_update_to_code_after_current_step() {
             }
         }
 
-        panic!();
+        panic!("Expected call to provided function was not received.");
     }
 }
