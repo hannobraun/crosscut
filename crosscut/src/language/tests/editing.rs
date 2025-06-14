@@ -69,7 +69,6 @@ fn update_after_removing_all_characters() {
 }
 
 #[test]
-#[should_panic] // currently being implemented
 fn keep_state_on_update() {
     // An update of the code keeps all the runtime state.
 

@@ -38,7 +38,17 @@ pub struct Evaluator {
 
 impl Evaluator {
     pub fn update(&mut self, codebase: &Codebase) {
-        self.reset(codebase);
+        if self.state().is_started() || self.state.is_finished() {
+            self.reset(codebase);
+            return;
+        }
+        
+        // The following update code is not complete. But neither is the test
+        // coverage, so far.
+
+        for path in &mut self.eval_queue {
+            *path = codebase.latest_version_of(path).clone();
+        }
     }
 
     pub fn reset(&mut self, codebase: &Codebase) {

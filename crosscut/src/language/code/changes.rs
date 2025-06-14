@@ -28,7 +28,6 @@ impl Changes {
         }
     }
 
-    #[cfg(test)]
     pub fn latest_version_of<'r>(&'r self, path: &'r NodePath) -> &'r NodePath {
         let Some(i) = self.change_sets.iter().enumerate().rev().find_map(
             |(i, change_set)| {

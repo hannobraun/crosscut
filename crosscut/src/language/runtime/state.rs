@@ -20,6 +20,10 @@ pub enum RuntimeState {
 }
 
 impl RuntimeState {
+    pub fn is_started(&self) -> bool {
+        matches!(self, Self::Started)
+    }
+
     #[cfg(test)]
     pub fn is_running(&self) -> bool {
         matches!(self, Self::Running { .. })

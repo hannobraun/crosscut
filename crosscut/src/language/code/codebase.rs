@@ -44,6 +44,10 @@ impl Codebase {
         }
     }
 
+    pub fn latest_version_of<'r>(&'r self, path: &'r NodePath) -> &'r NodePath {
+        self.changes.latest_version_of(path)
+    }
+
     pub fn make_change<R>(
         &mut self,
         f: impl FnOnce(&mut NewChangeSet) -> R,
