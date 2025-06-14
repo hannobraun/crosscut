@@ -69,7 +69,7 @@ fn update_after_removing_all_characters() {
 }
 
 #[test]
-fn keep_state_on_update() {
+fn keep_state_on_update_to_code_after_current_step() {
     // An update of the code keeps all the runtime state.
 
     let mut language = Language::new();
