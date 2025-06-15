@@ -1,11 +1,12 @@
 use std::sync::Arc;
 
 use anyhow::anyhow;
+use glam::Vec2;
 use winit::window::Window;
 
 use crate::{Camera, Instance, game_engine::graphics::quads::Quads};
 
-use super::background::Background;
+use super::{background::Background, text::Text};
 
 pub struct Renderer {
     surface: wgpu::Surface<'static>,
@@ -14,6 +15,7 @@ pub struct Renderer {
     queue: wgpu::Queue,
     background: Background,
     quads: Quads,
+    text: Text,
 }
 
 impl Renderer {
@@ -53,6 +55,7 @@ impl Renderer {
 
         let background = Background::new();
         let quads = Quads::new(&device, &queue, &surface_config);
+        let text = Text::new(&device, &queue, surface_config.format);
 
         Ok(Self {
             surface,
@@ -61,6 +64,7 @@ impl Renderer {
             queue,
             background,
             quads,
+            text,
         })
     }
 
@@ -77,6 +81,7 @@ impl Renderer {
         &mut self,
         bg_color: wgpu::Color,
         positions: impl IntoIterator<Item = Instance>,
+        texts: impl IntoIterator<Item = (String, Vec2)>,
         camera: &Camera,
     ) -> anyhow::Result<()> {
         let surface_texture = self.surface.get_current_texture()?;
@@ -91,6 +96,14 @@ impl Renderer {
         self.background.draw(&view, &mut encoder, bg_color);
         self.quads
             .draw(&self.queue, &view, &mut encoder, positions, camera);
+        self.text.draw(
+            &self.device,
+            &self.queue,
+            &view,
+            &mut encoder,
+            &self.surface_config,
+            texts,
+        )?;
 
         self.queue.submit(Some(encoder.finish()));
         surface_texture.present();
