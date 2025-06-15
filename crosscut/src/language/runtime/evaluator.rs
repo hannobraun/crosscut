@@ -42,7 +42,7 @@ impl Evaluator {
             self.reset(codebase);
             return;
         }
-        
+
         // The following update code is not complete. But neither is the test
         // coverage, so far.
 
