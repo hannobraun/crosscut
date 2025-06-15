@@ -121,6 +121,7 @@ impl Game for TrialOfTheCaterpillar {
                 a: 1.,
             },
             positions,
+            [],
             &self.camera,
         )?;
 
