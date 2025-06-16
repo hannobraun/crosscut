@@ -73,43 +73,31 @@ fn keep_state_on_update_to_code_after_current_step() {
     // An update of code that comes after the current step, keeps all the
     // runtime state.
 
-    let mut language = Language::new();
-    language
-        .code("apply")
-        .down()
-        .code("fn")
-        .down()
-        .code("i")
-        .down()
-        .code("apply")
-        .down()
-        .code("notify_test")
-        .down()
-        .code("i")
-        .down()
-        .code("apply")
-        .down()
-        .code("self")
-        .down()
-        .code("apply")
-        .down()
-        .code("+")
-        .down()
-        .code("tuple")
-        .down()
-        .code("i")
-        .down()
-        .code("1")
-        .down()
-        .down() // navigate past tuple
-        .down() // navigate past function body
-        .code("0");
+    let mut language = Language::import(
+        "
+        apply
+            fn
+                i
+                apply
+                    notify_test
+                    i
+                apply
+                    self
+                    apply
+                        +
+                        tuple
+                            i
+                            1
+            0
+        ",
+    );
 
     wait_for(&mut language, 0);
     wait_for(&mut language, 1);
     wait_for(&mut language, 2);
 
     language
+        .up()
         .up()
         .up()
         .up()
