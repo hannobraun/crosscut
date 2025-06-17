@@ -1,7 +1,7 @@
 use std::{fmt, fs::File};
 
 use crate::language::{
-    code::{Codebase, NodePath, SyntaxNode},
+    code::{Codebase, LocatedNode, NodePath, SyntaxNode},
     compiler::Compiler,
     runtime::Evaluator,
 };
@@ -47,6 +47,35 @@ impl Editor {
 
     pub fn cursor(&self) -> &Cursor {
         &self.cursor
+    }
+
+    pub fn find(&mut self, code: &str, codebase: &Codebase) {
+        let path = find_from_node(codebase.root(), code, codebase);
+
+        if let Some(path) = path {
+            self.cursor.path = path;
+            self.cursor.index = 0;
+        }
+
+        fn find_from_node(
+            located_node: LocatedNode,
+            code: &str,
+            codebase: &Codebase,
+        ) -> Option<NodePath> {
+            if let SyntaxNode::Body { .. } = located_node.node {
+                // Bodies can't be converted into a token.
+            } else if located_node.node.to_token() == code {
+                return Some(located_node.path);
+            }
+
+            for child in located_node.children(codebase.nodes()) {
+                if let Some(path) = find_from_node(child, code, codebase) {
+                    return Some(path);
+                }
+            }
+
+            None
+        }
     }
 
     pub fn on_input(

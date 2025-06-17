@@ -166,6 +166,11 @@ impl Language {
         self
     }
 
+    pub fn find(&mut self, code: &str) -> &mut Self {
+        self.editor.find(code, &self.codebase);
+        self
+    }
+
     pub fn remove_right(&mut self) -> &mut Self {
         self.on_editor_input(EditorInput::RemoveRight { whole_node: false });
         self

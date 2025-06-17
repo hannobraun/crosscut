@@ -96,16 +96,7 @@ fn update_on_edit_after_active_expression() {
     wait_for(&mut language, 1);
     wait_for(&mut language, 2);
 
-    language
-        .up()
-        .up()
-        .up()
-        .up()
-        .up()
-        .up()
-        .up()
-        .remove_left()
-        .code("-");
+    language.find("+").remove_right().code("-");
 
     wait_for(&mut language, 1);
 
