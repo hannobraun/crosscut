@@ -70,8 +70,8 @@ fn update_after_removing_all_characters() {
 
 #[test]
 fn update_on_edit_after_active_expression() {
-    // An update of code that comes after the current step, keeps all the
-    // runtime state.
+    // Editing code code after the currently active expression, applies the new
+    // code to the running program.
 
     let mut language = Language::import(
         "
