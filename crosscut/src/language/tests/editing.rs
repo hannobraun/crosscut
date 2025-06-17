@@ -69,7 +69,7 @@ fn update_after_removing_all_characters() {
 }
 
 #[test]
-fn keep_state_on_update_to_code_after_current_step() {
+fn update_on_edit_after_active_expression() {
     // An update of code that comes after the current step, keeps all the
     // runtime state.
 
