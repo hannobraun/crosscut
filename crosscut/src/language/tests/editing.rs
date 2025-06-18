@@ -1,7 +1,10 @@
-use crate::language::{
-    editor::EditorInput,
-    language::Language,
-    runtime::{Effect, RuntimeState, Value},
+use crate::{
+    game_engine::node_to_stdout,
+    language::{
+        editor::EditorInput,
+        language::Language,
+        runtime::{Effect, RuntimeState, Value},
+    },
 };
 
 #[test]
@@ -91,6 +94,8 @@ fn update_on_edit_after_active_expression() {
             0
         ",
     );
+
+    node_to_stdout(language.codebase().root(), language.codebase());
 
     wait_for(&mut language, 0);
     wait_for(&mut language, 1);
