@@ -120,21 +120,23 @@ impl Language {
                 let cursor = &language.editor().cursor().path;
                 let node = language.codebase().node_at(cursor).node;
 
-                if let Some(prev_indent) = prev_indent {
-                    if indent > prev_indent {
-                        indent_stack.push(prev_indent);
-                    } else if indent < prev_indent {
-                        if let Some(parent_indent) = indent_stack.pop() {
-                            if indent >= parent_indent {
-                                break;
-                            }
+                let Some(prev_indent) = prev_indent else {
+                    break;
+                };
 
-                            if let SyntaxNode::Add = node {
-                                language.down();
-                            }
-
-                            continue;
+                if indent > prev_indent {
+                    indent_stack.push(prev_indent);
+                } else if indent < prev_indent {
+                    if let Some(parent_indent) = indent_stack.pop() {
+                        if indent >= parent_indent {
+                            break;
                         }
+
+                        if let SyntaxNode::Add = node {
+                            language.down();
+                        }
+
+                        continue;
                     }
                 }
 
