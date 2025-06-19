@@ -118,7 +118,7 @@ impl Language {
 
             loop {
                 let cursor = &language.editor().cursor().path;
-                let node = language.codebase().node_at(cursor).node;
+                let current_node = language.codebase().node_at(cursor).node;
 
                 let Some(prev_indent) = prev_indent else {
                     break;
@@ -132,7 +132,7 @@ impl Language {
                             break;
                         }
 
-                        if let SyntaxNode::Add = node {
+                        if let SyntaxNode::Add = current_node {
                             language.down();
                         }
 
