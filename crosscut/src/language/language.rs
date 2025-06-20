@@ -127,20 +127,23 @@ impl Language {
                 if indent > prev_indent {
                     indent_stack.push(prev_indent);
                 } else if indent < prev_indent {
-                    if let Some(parent_indent) = indent_stack.last().copied() {
-                        if indent >= parent_indent {
-                            indent_stack.pop();
-                            break;
-                        }
+                    let Some(parent_indent) = indent_stack.last().copied()
+                    else {
+                        break;
+                    };
 
-                        if let SyntaxNode::Add = current.node {
-                            language.down();
-                        }
-
+                    if indent >= parent_indent {
                         indent_stack.pop();
-
-                        continue;
+                        break;
                     }
+
+                    if let SyntaxNode::Add = current.node {
+                        language.down();
+                    }
+
+                    indent_stack.pop();
+
+                    continue;
                 }
 
                 break;
