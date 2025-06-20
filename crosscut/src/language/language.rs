@@ -124,32 +124,29 @@ impl Language {
                     break;
                 };
 
+                if indent == prev_indent {
+                    break;
+                }
+
                 if indent > prev_indent {
                     indent_stack.push(prev_indent);
                     break;
                 }
 
-                if indent < prev_indent {
-                    let Some(parent_indent) = indent_stack.last().copied()
-                    else {
-                        break;
-                    };
+                let Some(parent_indent) = indent_stack.last().copied() else {
+                    break;
+                };
 
-                    if indent >= parent_indent {
-                        indent_stack.pop();
-                        break;
-                    }
-
-                    if let SyntaxNode::Add = current.node {
-                        language.down();
-                    }
-
+                if indent >= parent_indent {
                     indent_stack.pop();
-
-                    continue;
+                    break;
                 }
 
-                break;
+                if let SyntaxNode::Add = current.node {
+                    language.down();
+                }
+
+                indent_stack.pop();
             }
 
             language.code(line.trim());
