@@ -126,7 +126,10 @@ impl Language {
 
                 if indent > prev_indent {
                     indent_stack.push(prev_indent);
-                } else if indent < prev_indent {
+                    break;
+                }
+
+                if indent < prev_indent {
                     let Some(parent_indent) = indent_stack.last().copied()
                     else {
                         break;
