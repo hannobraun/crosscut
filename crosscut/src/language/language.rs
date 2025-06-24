@@ -120,15 +120,15 @@ impl Language {
                 let cursor = &language.editor().cursor().path;
                 let current = language.codebase().node_at(cursor);
 
-                let Some(prev_indent) = prev_indent else {
-                    break;
-                };
+                if let Some(prev_indent) = prev_indent {
+                    if indent >= prev_indent {
+                        if indent > prev_indent {
+                            indent_stack.push(prev_indent);
+                        }
 
-                if indent >= prev_indent {
-                    if indent > prev_indent {
-                        indent_stack.push(prev_indent);
+                        break;
                     }
-
+                } else {
                     break;
                 }
 
