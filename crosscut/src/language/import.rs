@@ -59,6 +59,8 @@ fn handle_navigating_past_add_nodes(
                 `Add`.",
             );
 
+            // And if we're not at an `Add` node, then there's nothing to do for
+            // this function.
             break;
         };
 
