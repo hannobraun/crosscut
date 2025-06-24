@@ -14,14 +14,12 @@ pub fn import(code: &str) -> Language {
             continue;
         };
 
-        if let Some(prev_indent) = prev_indent {
-            handle_navigating_past_add_nodes(
-                &mut indent_stack,
-                prev_indent,
-                indent,
-                &mut language,
-            );
-        }
+        handle_navigating_past_add_nodes(
+            &mut indent_stack,
+            prev_indent,
+            indent,
+            &mut language,
+        );
 
         language.code(line.trim());
         language.down();
@@ -34,10 +32,14 @@ pub fn import(code: &str) -> Language {
 
 fn handle_navigating_past_add_nodes(
     indent_stack: &mut Vec<usize>,
-    prev_indent: usize,
+    prev_indent: Option<usize>,
     indent: usize,
     language: &mut Language,
 ) {
+    let Some(prev_indent) = prev_indent else {
+        return;
+    };
+
     if indent >= prev_indent {
         if indent > prev_indent {
             indent_stack.push(prev_indent);
