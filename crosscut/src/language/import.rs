@@ -57,7 +57,6 @@ fn handle_navigating_past_add_nodes(
         };
 
         if indent >= parent_indent {
-            parent_indents.pop();
             break;
         }
 
