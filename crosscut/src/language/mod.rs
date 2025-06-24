@@ -5,4 +5,7 @@ pub mod language;
 pub mod runtime;
 
 #[cfg(test)]
+mod import;
+
+#[cfg(test)]
 pub mod tests;
