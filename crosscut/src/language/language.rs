@@ -128,8 +128,6 @@ impl Language {
 
                         break;
                     }
-                } else {
-                    break;
                 }
 
                 let Some(parent_indent) = indent_stack.last().copied() else {
