@@ -31,7 +31,7 @@ pub fn import(code: &str) -> Language {
 }
 
 fn handle_navigating_past_add_nodes(
-    indent_stack: &mut Vec<usize>,
+    parent_indents: &mut Vec<usize>,
     prev_indent: Option<usize>,
     indent: usize,
     language: &mut Language,
@@ -42,7 +42,7 @@ fn handle_navigating_past_add_nodes(
 
     if indent >= prev_indent {
         if indent > prev_indent {
-            indent_stack.push(prev_indent);
+            parent_indents.push(prev_indent);
         }
 
         return;
@@ -52,12 +52,12 @@ fn handle_navigating_past_add_nodes(
         let cursor = &language.editor().cursor().path;
         let current = language.codebase().node_at(cursor);
 
-        let Some(parent_indent) = indent_stack.last().copied() else {
+        let Some(parent_indent) = parent_indents.last().copied() else {
             break;
         };
 
         if indent >= parent_indent {
-            indent_stack.pop();
+            parent_indents.pop();
             break;
         }
 
@@ -65,6 +65,6 @@ fn handle_navigating_past_add_nodes(
             language.down();
         }
 
-        indent_stack.pop();
+        parent_indents.pop();
     }
 }
