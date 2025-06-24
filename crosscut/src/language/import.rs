@@ -14,35 +14,12 @@ pub fn import(code: &str) -> Language {
             continue;
         };
 
-        loop {
-            let cursor = &language.editor().cursor().path;
-            let current = language.codebase().node_at(cursor);
-
-            if let Some(prev_indent) = prev_indent {
-                if indent >= prev_indent {
-                    if indent > prev_indent {
-                        indent_stack.push(prev_indent);
-                    }
-
-                    break;
-                }
-            }
-
-            let Some(parent_indent) = indent_stack.last().copied() else {
-                break;
-            };
-
-            if indent >= parent_indent {
-                indent_stack.pop();
-                break;
-            }
-
-            if let SyntaxNode::Add = current.node {
-                language.down();
-            }
-
-            indent_stack.pop();
-        }
+        update_indent_stack(
+            &mut indent_stack,
+            prev_indent,
+            indent,
+            &mut language,
+        );
 
         language.code(line.trim());
         language.down();
@@ -51,4 +28,41 @@ pub fn import(code: &str) -> Language {
     }
 
     language
+}
+
+fn update_indent_stack(
+    indent_stack: &mut Vec<usize>,
+    prev_indent: Option<usize>,
+    indent: usize,
+    language: &mut Language,
+) {
+    loop {
+        let cursor = &language.editor().cursor().path;
+        let current = language.codebase().node_at(cursor);
+
+        if let Some(prev_indent) = prev_indent {
+            if indent >= prev_indent {
+                if indent > prev_indent {
+                    indent_stack.push(prev_indent);
+                }
+
+                break;
+            }
+        }
+
+        let Some(parent_indent) = indent_stack.last().copied() else {
+            break;
+        };
+
+        if indent >= parent_indent {
+            indent_stack.pop();
+            break;
+        }
+
+        if let SyntaxNode::Add = current.node {
+            language.down();
+        }
+
+        indent_stack.pop();
+    }
 }
