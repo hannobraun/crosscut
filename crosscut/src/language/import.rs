@@ -51,13 +51,13 @@ fn handle_navigating_past_add_nodes(
 
     loop {
         let cursor = &language.editor().cursor().path;
-        let current = language.codebase().nodes().get(cursor.hash());
+        let node = language.codebase().nodes().get(cursor.hash());
 
         parent_indents.pop();
 
         let Some(parent_indent) = parent_indents.last().copied() else {
             assert!(
-                !matches!(current, SyntaxNode::Add),
+                !matches!(node, SyntaxNode::Add),
                 "There are no parent nodes, so the current node can't be an \
                 `Add`.",
             );
@@ -76,7 +76,7 @@ fn handle_navigating_past_add_nodes(
             break;
         }
 
-        if let SyntaxNode::Add = current {
+        if let SyntaxNode::Add = node {
             language.down();
         }
     }
