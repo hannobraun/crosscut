@@ -53,7 +53,7 @@ fn handle_navigating_past_add_nodes(
         let current = language.codebase().node_at(cursor);
 
         let Some(parent_indent) = parent_indents.last().copied() else {
-            // There are no parents, so the current node can't be an `Add`.
+            // There are no parent nodes, so the current node can't be an `Add`.
             // Nothing to do here.
             break;
         };
