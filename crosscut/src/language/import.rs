@@ -66,7 +66,7 @@ fn handle_navigating_past_add_nodes(
 
         assert!(indent <= parent_indent, "Loop should be done already.");
 
-        if indent >= parent_indent {
+        if indent == parent_indent {
             // This could not have been true in the first iteration of the loop,
             // as per the check above. Which means the code belove has done its
             // job and we're done.
