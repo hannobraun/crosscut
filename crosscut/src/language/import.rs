@@ -15,7 +15,7 @@ pub fn import(code: &str) -> Language {
         };
 
         if let Some(prev_indent) = prev_indent {
-            update_indent_stack(
+            handle_navigating_past_add_nodes(
                 &mut indent_stack,
                 prev_indent,
                 indent,
@@ -32,7 +32,7 @@ pub fn import(code: &str) -> Language {
     language
 }
 
-fn update_indent_stack(
+fn handle_navigating_past_add_nodes(
     indent_stack: &mut Vec<usize>,
     prev_indent: usize,
     indent: usize,
