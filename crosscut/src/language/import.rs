@@ -50,6 +50,8 @@ fn handle_navigating_past_add_nodes(
 
     loop {
         let Some(parent_indent) = parent_indents.last().copied() else {
+            // There are no parents, so the current node can't be an `Add`.
+            // Nothing to do here.
             break;
         };
 
