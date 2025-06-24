@@ -49,9 +49,6 @@ fn handle_navigating_past_add_nodes(
     }
 
     loop {
-        let cursor = &language.editor().cursor().path;
-        let current = language.codebase().node_at(cursor);
-
         let Some(parent_indent) = parent_indents.last().copied() else {
             break;
         };
@@ -59,6 +56,9 @@ fn handle_navigating_past_add_nodes(
         if indent >= parent_indent {
             break;
         }
+
+        let cursor = &language.editor().cursor().path;
+        let current = language.codebase().node_at(cursor);
 
         if let SyntaxNode::Add = current.node {
             language.down();
