@@ -15,9 +15,9 @@ pub fn import(code: &str) -> Language {
         };
 
         handle_navigating_past_add_nodes(
-            &mut parent_indents,
             prev_indent,
             indent,
+            &mut parent_indents,
             &mut language,
         );
 
@@ -31,9 +31,9 @@ pub fn import(code: &str) -> Language {
 }
 
 fn handle_navigating_past_add_nodes(
-    parent_indents: &mut Vec<usize>,
     prev_indent: Option<usize>,
     indent: usize,
+    parent_indents: &mut Vec<usize>,
     language: &mut Language,
 ) {
     let Some(prev_indent) = prev_indent else {
