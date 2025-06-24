@@ -1,8 +1,8 @@
 use crate::Language;
 
-pub fn import(code: &str) -> Language {
-    use crate::language::code::SyntaxNode;
+use super::code::SyntaxNode;
 
+pub fn import(code: &str) -> Language {
     let mut language = Language::new();
 
     let mut prev_indent = None;
