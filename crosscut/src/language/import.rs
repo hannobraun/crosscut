@@ -47,7 +47,7 @@ fn update_indent_stack(
                 indent_stack.push(prev_indent);
             }
 
-            break;
+            return;
         }
 
         let Some(parent_indent) = indent_stack.last().copied() else {
