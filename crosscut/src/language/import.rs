@@ -6,7 +6,7 @@ pub fn import(code: &str) -> Language {
     let mut language = Language::new();
 
     let mut prev_indent = None;
-    let mut indent_stack = Vec::new();
+    let mut parent_indents = Vec::new();
 
     for line in code.lines() {
         let Some(indent) = line.find(|ch: char| !ch.is_whitespace()) else {
@@ -15,7 +15,7 @@ pub fn import(code: &str) -> Language {
         };
 
         handle_navigating_past_add_nodes(
-            &mut indent_stack,
+            &mut parent_indents,
             prev_indent,
             indent,
             &mut language,
