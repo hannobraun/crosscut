@@ -124,12 +124,11 @@ impl Language {
                     break;
                 };
 
-                if indent == prev_indent {
-                    break;
-                }
+                if indent >= prev_indent {
+                    if indent > prev_indent {
+                        indent_stack.push(prev_indent);
+                    }
 
-                if indent > prev_indent {
-                    indent_stack.push(prev_indent);
                     break;
                 }
 
