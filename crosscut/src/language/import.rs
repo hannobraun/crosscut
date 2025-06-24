@@ -38,17 +38,17 @@ fn update_indent_stack(
     indent: usize,
     language: &mut Language,
 ) {
+    if indent >= prev_indent {
+        if indent > prev_indent {
+            indent_stack.push(prev_indent);
+        }
+
+        return;
+    }
+
     loop {
         let cursor = &language.editor().cursor().path;
         let current = language.codebase().node_at(cursor);
-
-        if indent >= prev_indent {
-            if indent > prev_indent {
-                indent_stack.push(prev_indent);
-            }
-
-            return;
-        }
 
         let Some(parent_indent) = indent_stack.last().copied() else {
             break;
