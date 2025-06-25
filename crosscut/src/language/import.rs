@@ -54,11 +54,7 @@ fn navigate_past_add_nodes(
     parent_indents: &mut Vec<usize>,
     language: &mut Language,
 ) {
-    loop {
-        let Some(parent_indent) = parent_indents.last().copied() else {
-            break;
-        };
-
+    while let Some(parent_indent) = parent_indents.last().copied() {
         assert!(indent <= parent_indent, "Loop should be done already.");
 
         if indent == parent_indent {
