@@ -14,7 +14,7 @@ pub fn import(code: &str) -> Language {
             continue;
         };
 
-        handle_navigating_past_add_nodes(
+        handle_add_nodes(
             prev_indent,
             indent,
             &mut parent_indents,
@@ -30,7 +30,7 @@ pub fn import(code: &str) -> Language {
     language
 }
 
-fn handle_navigating_past_add_nodes(
+fn handle_add_nodes(
     prev_indent: Option<usize>,
     indent: usize,
     parent_indents: &mut Vec<usize>,
