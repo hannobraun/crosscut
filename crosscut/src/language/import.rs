@@ -48,6 +48,14 @@ fn handle_add_nodes(
         return;
     }
 
+    navigate_past_add_nodes(indent, parent_indents, language);
+}
+
+fn navigate_past_add_nodes(
+    indent: usize,
+    parent_indents: &mut Vec<usize>,
+    language: &mut Language,
+) {
     loop {
         let cursor = &language.editor().cursor().path;
         let node = language.codebase().nodes().get(cursor.hash());
