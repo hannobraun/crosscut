@@ -36,17 +36,15 @@ fn handle_add_nodes(
     parent_indents: &mut Vec<usize>,
     language: &mut Language,
 ) {
-    let Some(prev_indent) = prev_indent else {
-        return;
-    };
+    if let Some(prev_indent) = prev_indent {
+        if indent >= prev_indent {
+            if indent > prev_indent {
+                parent_indents.push(prev_indent);
+            }
 
-    if indent >= prev_indent {
-        if indent > prev_indent {
-            parent_indents.push(prev_indent);
+            return;
         }
-
-        return;
-    }
+    };
 
     navigate_past_add_nodes(indent, parent_indents, language);
 }
@@ -61,14 +59,6 @@ fn navigate_past_add_nodes(
         let node = language.codebase().nodes().get(cursor.hash());
 
         let Some(parent_indent) = parent_indents.last().copied() else {
-            assert!(
-                !matches!(node, SyntaxNode::Add),
-                "There are no parent nodes, so the current node can't be an \
-                `Add`.",
-            );
-
-            // And if we're not at an `Add` node, then there's nothing to do for
-            // this function.
             break;
         };
 
