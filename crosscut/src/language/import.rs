@@ -55,9 +55,6 @@ fn navigate_past_add_nodes(
     language: &mut Language,
 ) {
     loop {
-        let cursor = &language.editor().cursor().path;
-        let node = language.codebase().nodes().get(cursor.hash());
-
         let Some(parent_indent) = parent_indents.last().copied() else {
             break;
         };
@@ -70,6 +67,9 @@ fn navigate_past_add_nodes(
             // job and we're done.
             break;
         }
+
+        let cursor = &language.editor().cursor().path;
+        let node = language.codebase().nodes().get(cursor.hash());
 
         if let SyntaxNode::Add = node {
             language.down();
