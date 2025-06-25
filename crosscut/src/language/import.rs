@@ -37,13 +37,12 @@ fn handle_navigating_past_add_nodes(
     language: &mut Language,
 ) {
     let Some(prev_indent) = prev_indent else {
-        parent_indents.push(indent);
         return;
     };
 
     if indent >= prev_indent {
         if indent > prev_indent {
-            parent_indents.push(indent);
+            parent_indents.push(prev_indent);
         }
 
         return;
@@ -52,8 +51,6 @@ fn handle_navigating_past_add_nodes(
     loop {
         let cursor = &language.editor().cursor().path;
         let node = language.codebase().nodes().get(cursor.hash());
-
-        parent_indents.pop();
 
         let Some(parent_indent) = parent_indents.last().copied() else {
             assert!(
@@ -79,5 +76,7 @@ fn handle_navigating_past_add_nodes(
         if let SyntaxNode::Add = node {
             language.down();
         }
+
+        parent_indents.pop();
     }
 }
