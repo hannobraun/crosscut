@@ -57,7 +57,6 @@ export const singleDailyNotePage = (
                     {dailyNoteNavigation(date, dates)}
                 </nav>
             </div>
-            {subscribe()}
         </>,
     );
 };
@@ -105,24 +104,6 @@ const dailyNotesExplainer = () => {
             programming language I'm creating. If you have any questions,
             comments, or feedback, please {email_link("get in touch")}!
         </p>,
-    );
-};
-
-const subscribe = () => {
-    return box(
-        <p>
-            <span class="font-bold">Hey, you!</span>{" "}
-            Want to subscribe to my daily notes? Just{" "}
-            {email_link("let me know", {
-                subject:
-                    "I%27d%20like%20to%20subscribe%20to%20your%20daily%20notes%21",
-                body:
-                    "Hey%20Hanno%2C%20please%20send%20me%20email%20every%20single%20day.",
-            })}{" "}
-            (maybe include a nice message, if you're up for it), and I'll send
-            you an email every time I post a new one.
-        </p>,
-        { highlight: true },
     );
 };
 
