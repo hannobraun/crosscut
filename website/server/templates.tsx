@@ -63,11 +63,9 @@ export const singleDailyNotePage = (
 };
 
 const dailyNoteItem = (date: string) => {
-    const link = dailyNoteLink(date, date);
-
     return (
         <li class="my-4 font-bold text-lg">
-            {link}
+            {dailyNoteLink(date, date)}
         </li>
     );
 };
