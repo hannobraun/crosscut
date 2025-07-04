@@ -26,8 +26,8 @@ this repository) showed promise, but it was also clear that much more work would
 be required to get anywhere.
 
 I eventually decided to end the project, not really because of anything about
-the project itself, but because I came to the conclusion that working on these
-huge projects was the wrong approach for me personally.
+the project itself, but because I came to the conclusion that to keep working on
+these huge projects was the wrong approach for me personally.
 
 ## Usage
 
