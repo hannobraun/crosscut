@@ -1,0 +1,18 @@
+<!doctype html><html lang="en"><head><title>Daily Note - 2024-06-22 - Crosscut</title><meta charSet="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><link href="/style.css" rel="stylesheet"></head><body class="max-w-xl mx-auto p-2"><header><a href="/"><h1>Crosscut</h1></a></header><main><h2>Daily Note - 2024-06-22</h2><div class="m-4 p-4 rounded font-sm bg-slate-200"><p class="prose">Hey, I'm Hanno! These are my daily notes on <a href="https://github.com/hannobraun/crosscut" class="text-blue-700 underline font-bold">Crosscut</a>, the programming language I'm creating. If you have any questions, comments, or feedback, please <a href="mailto:Hanno%20Braun%20%3Chello%40hannobraun.com%3E?subject=&body=" class="text-blue-700 underline font-bold">get in touch</a>!</p></div><div class="m-4 p-4 rounded font-sm bg-slate-200"><p>This note was published <a href="/daily/2024-12-25" class="text-blue-700 underline font-bold"> before Crosscut was called Crosscut</a>! If it refers to "Caterpillar", that is the old name, just so you know.</p></div><div class="my-8"><nav><a href="/daily" class="text-blue-700 underline font-bold">< back to list</a></nav><main class="prose"><p>Caterpillar has postfix operators and a stack-based evaluation model,
+<a href="/daily/2024-06-21" rel="noopener noreferrer">but it isn't a stack-based language</a>. It doesn't use a
+single data stack to pass arguments and return values between functions.
+Instead, it works much more like a conventional language, with named arguments
+and local scopes.</p>
+<p>In Caterpillar, every function defines a number of named arguments. The
+following pseudocode (Caterpillar still
+<a href="https://github.com/hannobraun/crosscut/blob/56805b4eeeeaf47f2d3dde508a18cbcf7ebe32ec/capi/src/games/snake.rs" rel="noopener noreferrer">does not have a syntax</a>) shows what that could look like:</p>
+<pre><code>fn add ( a b ) { a b + }</code></pre><p>The arguments are bound to the specified names, <code>a</code> and <code>b</code>, which can then be
+used as operands. The result of the <code>+</code> could be used as an operand for another
+operation, but in this case, since the function ends there, the unused operand
+is returned to the caller.</p>
+<p>In a stack-based language, you could write the same function in a more compact
+way:</p>
+<pre><code>fn add { + }</code></pre><p>Here, the same global stack is available to all functions, enabling this more
+compact representation. This has desirable properties, but
+<a href="/daily/2024-06-20" rel="noopener noreferrer">since I found it too error-prone</a>, it's out for now.</p>
+</main><nav class="grid grid-cols-2"><span class="col-1 justify-self-start"><a href="/daily/2024-06-21" class="text-blue-700 underline font-bold"><< previous note</a></span><span class="col-2 justify-self-end"><a href="/daily/2024-06-23" class="text-blue-700 underline font-bold">next note >></a></span></nav></div></main><hr class="w-1/2 mx-auto my-16"><footer class="max-w-fit mx-auto text-sm"><p class="max-w-fit mx-auto italic">A website by</p><address><div>Hanno Braun<br>Untere Pfarrgasse 19<br>64720 Michelstadt<br>Germany<br></div><div class="my-4">📧 <a href="mailto:hello@hannobraun.com">hello@hannobraun.com</a></div></address></footer></body></html>

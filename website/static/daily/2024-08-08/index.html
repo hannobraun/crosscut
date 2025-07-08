@@ -1,0 +1,16 @@
+<!doctype html><html lang="en"><head><title>Daily Note - 2024-08-08 - Crosscut</title><meta charSet="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><link href="/style.css" rel="stylesheet"></head><body class="max-w-xl mx-auto p-2"><header><a href="/"><h1>Crosscut</h1></a></header><main><h2>Daily Note - 2024-08-08</h2><div class="m-4 p-4 rounded font-sm bg-slate-200"><p class="prose">Hey, I'm Hanno! These are my daily notes on <a href="https://github.com/hannobraun/crosscut" class="text-blue-700 underline font-bold">Crosscut</a>, the programming language I'm creating. If you have any questions, comments, or feedback, please <a href="mailto:Hanno%20Braun%20%3Chello%40hannobraun.com%3E?subject=&body=" class="text-blue-700 underline font-bold">get in touch</a>!</p></div><div class="m-4 p-4 rounded font-sm bg-slate-200"><p>This note was published <a href="/daily/2024-12-25" class="text-blue-700 underline font-bold"> before Crosscut was called Crosscut</a>! If it refers to "Caterpillar", that is the old name, just so you know.</p></div><div class="my-8"><nav><a href="/daily" class="text-blue-700 underline font-bold">< back to list</a></nav><main class="prose"><p>A few weeks ago, <a href="/daily/2024-07-24" rel="noopener noreferrer">I implemented <code>if</code></a>, to replace the
+previous conditional primitives. In the time since, I've discovered shortcomings
+of <code>if</code>, and have reconsidered my approach to conditionals. I'd like to explain
+what those shortcomings are, and what other solution I've come up with. But
+before I can get to that, I need to start with some basics.</p>
+<p>So, purely functional languages. If you can't mutate local variables, then
+there's really no sensible way to have the typical looping constructs from
+imperative languages. You need recursion. But if you implement recursion
+naively, then an endless loop will endlessly grow your stack memory use. That
+won't do.</p>
+<p>The solution to that is tail call elimination, and it's quite straight-forward:
+If a call is the last expression in its scope, then you don't need to create a
+new stack frame. You don't need to return to the current scope anyway, so you
+can reuse the already existing stack frame instead. Tomorrow, I want to expand
+on that, and explain what that has to do with conditionals.</p>
+</main><nav class="grid grid-cols-2"><span class="col-1 justify-self-start"><a href="/daily/2024-08-07" class="text-blue-700 underline font-bold"><< previous note</a></span><span class="col-2 justify-self-end"><a href="/daily/2024-08-09" class="text-blue-700 underline font-bold">next note >></a></span></nav></div></main><hr class="w-1/2 mx-auto my-16"><footer class="max-w-fit mx-auto text-sm"><p class="max-w-fit mx-auto italic">A website by</p><address><div>Hanno Braun<br>Untere Pfarrgasse 19<br>64720 Michelstadt<br>Germany<br></div><div class="my-4">📧 <a href="mailto:hello@hannobraun.com">hello@hannobraun.com</a></div></address></footer></body></html>

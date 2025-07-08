@@ -1,0 +1,16 @@
+<!doctype html><html lang="en"><head><title>Daily Note - 2024-10-16 - Crosscut</title><meta charSet="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><link href="/style.css" rel="stylesheet"></head><body class="max-w-xl mx-auto p-2"><header><a href="/"><h1>Crosscut</h1></a></header><main><h2>Daily Note - 2024-10-16</h2><div class="m-4 p-4 rounded font-sm bg-slate-200"><p class="prose">Hey, I'm Hanno! These are my daily notes on <a href="https://github.com/hannobraun/crosscut" class="text-blue-700 underline font-bold">Crosscut</a>, the programming language I'm creating. If you have any questions, comments, or feedback, please <a href="mailto:Hanno%20Braun%20%3Chello%40hannobraun.com%3E?subject=&body=" class="text-blue-700 underline font-bold">get in touch</a>!</p></div><div class="m-4 p-4 rounded font-sm bg-slate-200"><p>This note was published <a href="/daily/2024-12-25" class="text-blue-700 underline font-bold"> before Crosscut was called Crosscut</a>! If it refers to "Caterpillar", that is the old name, just so you know.</p></div><div class="my-8"><nav><a href="/daily" class="text-blue-700 underline font-bold">< back to list</a></nav><main class="prose"><p>The idea of having memory management strategies
+<a href="/daily/2024-10-15" rel="noopener noreferrer">that are not directly built into the language</a> is not new.
+<a href="https://man7.org/linux/man-pages/man3/malloc.3.html" rel="noopener noreferrer"><code>malloc</code></a> is just a function after all. <a href="https://www.rust-lang.org/" rel="noopener noreferrer">Rust</a> has the <code>Box</code> type, and
+<code>Rc</code>/<code>Arc</code>. <a href="https://ziglang.org/" rel="noopener noreferrer">Zig</a> adds another twist and requires an explicit allocator to
+reserve memory on the heap.</p>
+<p>As I've been working on this series of daily notes, I've realized what I want
+for Caterpillar is basically <a href="https://en.wikipedia.org/wiki/Region-based_memory_management" rel="noopener noreferrer">region-based memory-management</a>. A region would be
+represented as a value in the language. Different types of regions could provide
+different memory management strategies. And they'd use the linear type system to
+make that sound, and as error-proof as they need to.</p>
+<p>This also fits with the host concept. The core language would only know about
+the stack. Access to the heap is provided by the host. I assume there would be
+standardized interfaces, that region types written in Caterpillar could build
+on. But also host-specific region types. A host running on a desktop or server
+OS could provide different regions than one running on a microcontroller.</p>
+</main><nav class="grid grid-cols-2"><span class="col-1 justify-self-start"><a href="/daily/2024-10-15" class="text-blue-700 underline font-bold"><< previous note</a></span><span class="col-2 justify-self-end"><a href="/daily/2024-10-17" class="text-blue-700 underline font-bold">next note >></a></span></nav></div></main><hr class="w-1/2 mx-auto my-16"><footer class="max-w-fit mx-auto text-sm"><p class="max-w-fit mx-auto italic">A website by</p><address><div>Hanno Braun<br>Untere Pfarrgasse 19<br>64720 Michelstadt<br>Germany<br></div><div class="my-4">📧 <a href="mailto:hello@hannobraun.com">hello@hannobraun.com</a></div></address></footer></body></html>

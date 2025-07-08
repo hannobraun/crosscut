@@ -1,0 +1,16 @@
+<!doctype html><html lang="en"><head><title>Daily Note - 2024-11-13 - Crosscut</title><meta charSet="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><link href="/style.css" rel="stylesheet"></head><body class="max-w-xl mx-auto p-2"><header><a href="/"><h1>Crosscut</h1></a></header><main><h2>Daily Note - 2024-11-13</h2><div class="m-4 p-4 rounded font-sm bg-slate-200"><p class="prose">Hey, I'm Hanno! These are my daily notes on <a href="https://github.com/hannobraun/crosscut" class="text-blue-700 underline font-bold">Crosscut</a>, the programming language I'm creating. If you have any questions, comments, or feedback, please <a href="mailto:Hanno%20Braun%20%3Chello%40hannobraun.com%3E?subject=&body=" class="text-blue-700 underline font-bold">get in touch</a>!</p></div><div class="m-4 p-4 rounded font-sm bg-slate-200"><p>This note was published <a href="/daily/2024-12-25" class="text-blue-700 underline font-bold"> before Crosscut was called Crosscut</a>! If it refers to "Caterpillar", that is the old name, just so you know.</p></div><div class="my-8"><nav><a href="/daily" class="text-blue-700 underline font-bold">< back to list</a></nav><main class="prose"><p>So <a href="/daily/2024-11-12" rel="noopener noreferrer">I've been wondering</a> if and how the approach taken by
+<a href="https://en.wikipedia.org/wiki/Io_uring" rel="noopener noreferrer">io_uring</a> can apply to Caterpillar's host interface. I think the short answer
+is that right now, it wouldn't matter and would only add complication. But once
+Caterpillar is used in more challenging scenarios, maybe it could start to make
+sense.</p>
+<p>The way io_uring works, is that instead of making a synchronous system call
+whose arguments are copied to the stack, or registers or whatever, you have two
+ring buffers shared between kernel and userspace: One for submitting system
+calls asynchronously, which is only writable by the userspace process. Another
+for receiving the results of those calls, which is only writable by the kernel.</p>
+<p>The same concept could apply to Caterpillar, with one buffer for submitting
+calls to host functions, another for receiving the return values of those calls.
+The Caterpillar side could use some kind of async/await technique, or functional
+reactive programming, or whatever else will turn out to make sense, to deal with
+the asynchrony.</p>
+</main><nav class="grid grid-cols-2"><span class="col-1 justify-self-start"><a href="/daily/2024-11-12" class="text-blue-700 underline font-bold"><< previous note</a></span><span class="col-2 justify-self-end"><a href="/daily/2024-11-14" class="text-blue-700 underline font-bold">next note >></a></span></nav></div></main><hr class="w-1/2 mx-auto my-16"><footer class="max-w-fit mx-auto text-sm"><p class="max-w-fit mx-auto italic">A website by</p><address><div>Hanno Braun<br>Untere Pfarrgasse 19<br>64720 Michelstadt<br>Germany<br></div><div class="my-4">📧 <a href="mailto:hello@hannobraun.com">hello@hannobraun.com</a></div></address></footer></body></html>

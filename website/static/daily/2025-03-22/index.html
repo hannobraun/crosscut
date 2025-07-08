@@ -1,0 +1,15 @@
+<!doctype html><html lang="en"><head><title>Daily Note - 2025-03-22 - Crosscut</title><meta charSet="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><link href="/style.css" rel="stylesheet"></head><body class="max-w-xl mx-auto p-2"><header><a href="/"><h1>Crosscut</h1></a></header><main><h2>Daily Note - 2025-03-22</h2><div class="m-4 p-4 rounded font-sm bg-slate-200"><p class="prose">Hey, I'm Hanno! These are my daily notes on <a href="https://github.com/hannobraun/crosscut" class="text-blue-700 underline font-bold">Crosscut</a>, the programming language I'm creating. If you have any questions, comments, or feedback, please <a href="mailto:Hanno%20Braun%20%3Chello%40hannobraun.com%3E?subject=&body=" class="text-blue-700 underline font-bold">get in touch</a>!</p></div><div class="my-8"><nav><a href="/daily" class="text-blue-700 underline font-bold">< back to list</a></nav><main class="prose"><p>Let's take a closer look at the
+<a href="/daily/2025-03-21" rel="noopener noreferrer">automatic application of functions to variant types</a>. If we
+have a fallible function <code>f: A -&gt; variant { B, Error }</code>, and we follow it up
+with another function <code>g: B -&gt; C</code>. The compiler could automatically wrap <code>g</code> in
+another function it creates, <code>g': variant { B, Error } -&gt; variant { C, Error }</code>.</p>
+<p>If the variant happens to be <code>B</code>, this new function <code>g'</code> would just apply <code>g</code>
+and wrap its result in another variant. If the variant is <code>Error</code>, <code>g'</code> would
+return that unchanged. This is basically <a href="https://fsharpforfunandprofit.com/rop/" rel="noopener noreferrer">railway-oriented programming</a>, but
+built into the language.</p>
+<p>This whole concept is not new. I believe what I did above, turning <code>g</code> into <code>g'</code>
+would be called <a href="https://fsharpforfunandprofit.com/posts/elevated-world/" rel="noopener noreferrer">"lifting"</a>. But all the examples I could find in the wild
+either do this explicitly, or as part of a special notation. Maybe I'm missing
+something. But at least right now, I can't think of a reason why automatic
+lifting wouldn't work.</p>
+</main><nav class="grid grid-cols-2"><span class="col-1 justify-self-start"><a href="/daily/2025-03-21" class="text-blue-700 underline font-bold"><< previous note</a></span><span class="col-2 justify-self-end"><a href="/daily/2025-03-23" class="text-blue-700 underline font-bold">next note >></a></span></nav></div></main><hr class="w-1/2 mx-auto my-16"><footer class="max-w-fit mx-auto text-sm"><p class="max-w-fit mx-auto italic">A website by</p><address><div>Hanno Braun<br>Untere Pfarrgasse 19<br>64720 Michelstadt<br>Germany<br></div><div class="my-4">📧 <a href="mailto:hello@hannobraun.com">hello@hannobraun.com</a></div></address></footer></body></html>

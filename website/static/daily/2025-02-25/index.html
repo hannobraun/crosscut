@@ -1,0 +1,23 @@
+<!doctype html><html lang="en"><head><title>Daily Note - 2025-02-25 - Crosscut</title><meta charSet="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><link href="/style.css" rel="stylesheet"></head><body class="max-w-xl mx-auto p-2"><header><a href="/"><h1>Crosscut</h1></a></header><main><h2>Daily Note - 2025-02-25</h2><div class="m-4 p-4 rounded font-sm bg-slate-200"><p class="prose">Hey, I'm Hanno! These are my daily notes on <a href="https://github.com/hannobraun/crosscut" class="text-blue-700 underline font-bold">Crosscut</a>, the programming language I'm creating. If you have any questions, comments, or feedback, please <a href="mailto:Hanno%20Braun%20%3Chello%40hannobraun.com%3E?subject=&body=" class="text-blue-700 underline font-bold">get in touch</a>!</p></div><div class="my-8"><nav><a href="/daily" class="text-blue-700 underline font-bold">< back to list</a></nav><main class="prose"><p>I'd like to introduce the concepts of structural and nominal typing. I'm going
+to talk about some aspects of the type system next, and this is going to be
+required background. Let's start with structural typing. Consider this function
+in Rust:</p>
+<pre><code>fn measure_width() -&gt; (Value, Unit) { ... }</code></pre><p>It's a function that returns two values. Except, a function in Rust can only
+return one value, really, so I've bundled those up into one tuple. Please note
+that this tuple is an anonymous data type. I just wrote down its structure here,
+the data it contains, without giving it a name.</p>
+<p>I can define another function that's similar:</p>
+<pre><code>fn measure_height() -&gt; (Value, Unit) { ... }</code></pre><p>The return type looks the same.</p>
+<p>And not only do they <em>look</em> the same; in a very real way, they <em>are</em> the same:</p>
+<pre><code>let width = measure_width();
+let height = measure_height();
+
+let max_dimension = if width &gt; height {
+    width
+} else {
+    height
+};</code></pre><p>This works. The type of <code>max_dimension</code> is <code>(Value, Unit)</code>, which is also the
+type of either of those return values. Even though we've defined that type in
+two locations (and could define it in more), it's the same type. Because it's
+the <em>structure</em> of the type that counts. This is <em>structural typing</em>.</p>
+</main><nav class="grid grid-cols-2"><span class="col-1 justify-self-start"><a href="/daily/2025-02-24" class="text-blue-700 underline font-bold"><< previous note</a></span><span class="col-2 justify-self-end"><a href="/daily/2025-02-26" class="text-blue-700 underline font-bold">next note >></a></span></nav></div></main><hr class="w-1/2 mx-auto my-16"><footer class="max-w-fit mx-auto text-sm"><p class="max-w-fit mx-auto italic">A website by</p><address><div>Hanno Braun<br>Untere Pfarrgasse 19<br>64720 Michelstadt<br>Germany<br></div><div class="my-4">📧 <a href="mailto:hello@hannobraun.com">hello@hannobraun.com</a></div></address></footer></body></html>

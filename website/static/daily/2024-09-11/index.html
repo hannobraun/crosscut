@@ -1,0 +1,16 @@
+<!doctype html><html lang="en"><head><title>Daily Note - 2024-09-11 - Crosscut</title><meta charSet="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><link href="/style.css" rel="stylesheet"></head><body class="max-w-xl mx-auto p-2"><header><a href="/"><h1>Crosscut</h1></a></header><main><h2>Daily Note - 2024-09-11</h2><div class="m-4 p-4 rounded font-sm bg-slate-200"><p class="prose">Hey, I'm Hanno! These are my daily notes on <a href="https://github.com/hannobraun/crosscut" class="text-blue-700 underline font-bold">Crosscut</a>, the programming language I'm creating. If you have any questions, comments, or feedback, please <a href="mailto:Hanno%20Braun%20%3Chello%40hannobraun.com%3E?subject=&body=" class="text-blue-700 underline font-bold">get in touch</a>!</p></div><div class="m-4 p-4 rounded font-sm bg-slate-200"><p>This note was published <a href="/daily/2024-12-25" class="text-blue-700 underline font-bold"> before Crosscut was called Crosscut</a>! If it refers to "Caterpillar", that is the old name, just so you know.</p></div><div class="my-8"><nav><a href="/daily" class="text-blue-700 underline font-bold">< back to list</a></nav><main class="prose"><p>Another performance-related aspect that could
+<a href="/daily/2024-09-10" rel="noopener noreferrer">benefit from inference and the code database</a>: data layout.
+If you define a struct, a compiler might re-order its fields for better
+performance. I don't have room to go into the reasons for that here, but if
+you're interested, <a href="https://vimeo.com/649009599" rel="noopener noreferrer">this talk by Andrew Kelley</a> is
+great.</p>
+<p>This reordering, while beneficial, is also problematic. It means that you can't
+rely on a struct's layout, which is relevant for storage, communication, even
+function calls. But again, what if layout optimization happens in
+pre-compilation, and the already optimized struct gets stored in the database
+(where it is <a href="/daily/2024-08-01" rel="noopener noreferrer">addressed by a hash</a>)?</p>
+<p>The developer would see right in the code what the compiler did. And in any
+situations where we exchange the struct with another entity that might have a
+different version of it, whatever tooling is involved can recognize the
+incompatibility, maybe even fix it, as long as type information is available.</p>
+</main><nav class="grid grid-cols-2"><span class="col-1 justify-self-start"><a href="/daily/2024-09-10" class="text-blue-700 underline font-bold"><< previous note</a></span><span class="col-2 justify-self-end"><a href="/daily/2024-09-12" class="text-blue-700 underline font-bold">next note >></a></span></nav></div></main><hr class="w-1/2 mx-auto my-16"><footer class="max-w-fit mx-auto text-sm"><p class="max-w-fit mx-auto italic">A website by</p><address><div>Hanno Braun<br>Untere Pfarrgasse 19<br>64720 Michelstadt<br>Germany<br></div><div class="my-4">📧 <a href="mailto:hello@hannobraun.com">hello@hannobraun.com</a></div></address></footer></body></html>

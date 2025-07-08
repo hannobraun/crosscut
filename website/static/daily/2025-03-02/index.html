@@ -1,0 +1,24 @@
+<!doctype html><html lang="en"><head><title>Daily Note - 2025-03-02 - Crosscut</title><meta charSet="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><link href="/style.css" rel="stylesheet"></head><body class="max-w-xl mx-auto p-2"><header><a href="/"><h1>Crosscut</h1></a></header><main><h2>Daily Note - 2025-03-02</h2><div class="m-4 p-4 rounded font-sm bg-slate-200"><p class="prose">Hey, I'm Hanno! These are my daily notes on <a href="https://github.com/hannobraun/crosscut" class="text-blue-700 underline font-bold">Crosscut</a>, the programming language I'm creating. If you have any questions, comments, or feedback, please <a href="mailto:Hanno%20Braun%20%3Chello%40hannobraun.com%3E?subject=&body=" class="text-blue-700 underline font-bold">get in touch</a>!</p></div><div class="my-8"><nav><a href="/daily" class="text-blue-700 underline font-bold">< back to list</a></nav><main class="prose"><p>If modules can be functions that are
+<a href="/daily/2025-03-01" rel="noopener noreferrer">executed at compile time</a>, that would be pretty neat. It
+would re-use a concept that already needs to be in the language anyway. And it
+would introduce compile-time code execution, which is a powerful tool that can
+be useful in many scenarios.</p>
+<p>As I said yesterday, I haven't worked out all the details yet. But here's how
+that could look like, maybe:</p>
+<pre><code>module {
+    # Insert some code here; calculate some constant values, for example.
+
+    # At the end of the module, we return what we want to export.
+    {
+        TheThing: # insert some data type here
+        read_from_the_thing: # insert a function here
+        write_to_the_thing: # another function goes here
+    }
+}</code></pre><p>Probably more than anything, this is inspired by old-school JavaScript, before
+modules where supported in the language. Back then, we could build our own
+module systems, based on functions that returned objects of things they wanted
+to export. (Well, we still can. It just makes less sense these days.)</p>
+<p>Maybe this is the wrong inspiration for a language that is supposed to be
+statically typed and compiled, at some point. But right now, I can't see why it
+wouldn't work. We'll see!</p>
+</main><nav class="grid grid-cols-2"><span class="col-1 justify-self-start"><a href="/daily/2025-03-01" class="text-blue-700 underline font-bold"><< previous note</a></span><span class="col-2 justify-self-end"><a href="/daily/2025-03-03" class="text-blue-700 underline font-bold">next note >></a></span></nav></div></main><hr class="w-1/2 mx-auto my-16"><footer class="max-w-fit mx-auto text-sm"><p class="max-w-fit mx-auto italic">A website by</p><address><div>Hanno Braun<br>Untere Pfarrgasse 19<br>64720 Michelstadt<br>Germany<br></div><div class="my-4">📧 <a href="mailto:hello@hannobraun.com">hello@hannobraun.com</a></div></address></footer></body></html>

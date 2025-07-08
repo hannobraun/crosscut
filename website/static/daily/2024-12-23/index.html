@@ -1,0 +1,34 @@
+<!doctype html><html lang="en"><head><title>Daily Note - 2024-12-23 - Crosscut</title><meta charSet="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><link href="/style.css" rel="stylesheet"></head><body class="max-w-xl mx-auto p-2"><header><a href="/"><h1>Crosscut</h1></a></header><main><h2>Daily Note - 2024-12-23</h2><div class="m-4 p-4 rounded font-sm bg-slate-200"><p class="prose">Hey, I'm Hanno! These are my daily notes on <a href="https://github.com/hannobraun/crosscut" class="text-blue-700 underline font-bold">Crosscut</a>, the programming language I'm creating. If you have any questions, comments, or feedback, please <a href="mailto:Hanno%20Braun%20%3Chello%40hannobraun.com%3E?subject=&body=" class="text-blue-700 underline font-bold">get in touch</a>!</p></div><div class="m-4 p-4 rounded font-sm bg-slate-200"><p>This note was published <a href="/daily/2024-12-25" class="text-blue-700 underline font-bold"> before Crosscut was called Crosscut</a>! If it refers to "Caterpillar", that is the old name, just so you know.</p></div><div class="my-8"><nav><a href="/daily" class="text-blue-700 underline font-bold">< back to list</a></nav><main class="prose"><p>Dealing with a single linear value in the presence of an <code>Error</code> effect is, it
+seems, <a href="/daily/2024-12-22" rel="noopener noreferrer">a solvable issue</a>. But what if you have multiple
+linear values, only one of which is involved in possibly triggering a given
+instance of the <code>Error</code> effect?</p>
+<p>Let's look at another example:</p>
+<pre><code>file_a "a" write
+file_b "b" write</code></pre><p>Two files, and we're writing to each of them. But this can't work as written. If
+writing to <code>file_a</code> triggers <code>Error</code>, then the <code>write</code> function (which triggers
+the effect) can make sure that <code>file_a</code> is put into the error, and whoever ends
+up handling the effect can dispose of the file accordingly. But that instance of
+<code>write</code> doesn't know about <code>file_b</code>, so what happens to that?</p>
+<p>The compiler must reject this code, but it could be made to work like this:</p>
+<pre><code>try
+    file_a "a" write
+handle Error(file_a)
+    Error(file_a, file_b) trigger
+end
+
+try
+    file_b "b" write
+handle Error(file_b)
+    Error(file_a, file_b) trigger
+end</code></pre><p>(This is just some example effect handling syntax I invented right now. If
+anything like this makes its way into the language, it would most likely go
+through more revisions.)</p>
+<p>Here, we handle the <code>Error</code> effect for each call to <code>write</code>, and pass it on, but
+with the second file value added. This solves the immediate problem, but is way
+too verbose.</p>
+<p>Maybe we could invent some clever API that does this for us. Or maybe there
+could be some kind of implicit rule, that every effect gets automatically
+transformed by every scope it goes through, with all the linear values being
+added to it. Then the initial example would just work. But that sounds quite
+complicated, and too magical to easily understand.</p>
+</main><nav class="grid grid-cols-2"><span class="col-1 justify-self-start"><a href="/daily/2024-12-22" class="text-blue-700 underline font-bold"><< previous note</a></span><span class="col-2 justify-self-end"><a href="/daily/2024-12-24" class="text-blue-700 underline font-bold">next note >></a></span></nav></div></main><hr class="w-1/2 mx-auto my-16"><footer class="max-w-fit mx-auto text-sm"><p class="max-w-fit mx-auto italic">A website by</p><address><div>Hanno Braun<br>Untere Pfarrgasse 19<br>64720 Michelstadt<br>Germany<br></div><div class="my-4">📧 <a href="mailto:hello@hannobraun.com">hello@hannobraun.com</a></div></address></footer></body></html>

@@ -1,0 +1,14 @@
+<!doctype html><html lang="en"><head><title>Daily Note - 2025-02-10 - Crosscut</title><meta charSet="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><link href="/style.css" rel="stylesheet"></head><body class="max-w-xl mx-auto p-2"><header><a href="/"><h1>Crosscut</h1></a></header><main><h2>Daily Note - 2025-02-10</h2><div class="m-4 p-4 rounded font-sm bg-slate-200"><p class="prose">Hey, I'm Hanno! These are my daily notes on <a href="https://github.com/hannobraun/crosscut" class="text-blue-700 underline font-bold">Crosscut</a>, the programming language I'm creating. If you have any questions, comments, or feedback, please <a href="mailto:Hanno%20Braun%20%3Chello%40hannobraun.com%3E?subject=&body=" class="text-blue-700 underline font-bold">get in touch</a>!</p></div><div class="my-8"><nav><a href="/daily" class="text-blue-700 underline font-bold">< back to list</a></nav><main class="prose"><p>Yesterday, I <a href="/daily/2025-02-09" rel="noopener noreferrer">introduced currying</a> (or to be precise,
+<em>automatic</em> currying). I don't think this would work with postfix syntax. At
+least I don't see how. We need something different for Crosscut.</p>
+<p>And that <em>something</em> are composite types. If you want to pass multiple values to
+a function, you just bundle those up. If a function's parameters don't really
+need explicit names, that composite value could be a tuple (e.g. <code>(1, 2) +</code>). If
+you think naming them is beneficial, you can make that a record (e.g.
+<code>{ a: 1, b: 2 } +</code>).</p>
+<p>I like the elegance of this approach. Parameter lists of functions are not a
+special syntax. It's just a tuple or record pattern. You don't need a special
+feature for "keyword arguments", or something like that. Support for them just
+arises from this concept naturally, as long as you support records. Plus, the
+whole approach works for output values too (unlike currying).</p>
+</main><nav class="grid grid-cols-2"><span class="col-1 justify-self-start"><a href="/daily/2025-02-09" class="text-blue-700 underline font-bold"><< previous note</a></span><span class="col-2 justify-self-end"><a href="/daily/2025-02-11" class="text-blue-700 underline font-bold">next note >></a></span></nav></div></main><hr class="w-1/2 mx-auto my-16"><footer class="max-w-fit mx-auto text-sm"><p class="max-w-fit mx-auto italic">A website by</p><address><div>Hanno Braun<br>Untere Pfarrgasse 19<br>64720 Michelstadt<br>Germany<br></div><div class="my-4">📧 <a href="mailto:hello@hannobraun.com">hello@hannobraun.com</a></div></address></footer></body></html>

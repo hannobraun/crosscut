@@ -1,0 +1,25 @@
+<!doctype html><html lang="en"><head><title>Daily Note - 2024-08-22 - Crosscut</title><meta charSet="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><link href="/style.css" rel="stylesheet"></head><body class="max-w-xl mx-auto p-2"><header><a href="/"><h1>Crosscut</h1></a></header><main><h2>Daily Note - 2024-08-22</h2><div class="m-4 p-4 rounded font-sm bg-slate-200"><p class="prose">Hey, I'm Hanno! These are my daily notes on <a href="https://github.com/hannobraun/crosscut" class="text-blue-700 underline font-bold">Crosscut</a>, the programming language I'm creating. If you have any questions, comments, or feedback, please <a href="mailto:Hanno%20Braun%20%3Chello%40hannobraun.com%3E?subject=&body=" class="text-blue-700 underline font-bold">get in touch</a>!</p></div><div class="m-4 p-4 rounded font-sm bg-slate-200"><p>This note was published <a href="/daily/2024-12-25" class="text-blue-700 underline font-bold"> before Crosscut was called Crosscut</a>! If it refers to "Caterpillar", that is the old name, just so you know.</p></div><div class="my-8"><nav><a href="/daily" class="text-blue-700 underline font-bold">< back to list</a></nav><main class="prose"><p>I've recently started reusing <a href="/daily/2024-08-17" rel="noopener noreferrer">pattern-matching functions</a>
+for yet another thing: Defining bindings. Let's revisit how those used to work:</p>
+<pre><code>a b + =&gt; sum .
+# code that uses `sum` goes here</code></pre><p>This code no longer works, as I removed the binding syntax recently. What it
+used to do, is sum up two values and bind the result to the name <code>sum</code>. This
+modified the current scope, which I don't like. Creating a new scope would be
+easier on the compiler, and possibly easier on the developer too. Just one less
+thing (what exists where in a given scope) to keep track of.</p>
+<p>Here's what that could potentially look like:</p>
+<pre><code>a b + =&gt; sum {
+    # code that uses `sum` goes here
+}</code></pre><p>But for now,
+<a href="https://github.com/hannobraun/crosscut?tab=readme-ov-file#minimalism-over-readability-for-now" rel="noopener noreferrer">language simplicity trumps convenience</a>,
+and we can already do the same thing using an anonymous pattern-matching
+function:</p>
+<pre><code>a b +
+{ |sum|
+    # code that uses `sum` goes here
+}
+    eval</code></pre><p>At some point I expect to add back syntax sugar of some kind, to make this more
+convenient. But under the hood, it can keep re-using pattern-matching functions.
+This reduces the number of features that the compiler needs to deal with. Only
+the first compiler passes need to know about syntax sugar. The rest then only
+need to handle functions.</p>
+</main><nav class="grid grid-cols-2"><span class="col-1 justify-self-start"><a href="/daily/2024-08-21" class="text-blue-700 underline font-bold"><< previous note</a></span><span class="col-2 justify-self-end"><a href="/daily/2024-08-23" class="text-blue-700 underline font-bold">next note >></a></span></nav></div></main><hr class="w-1/2 mx-auto my-16"><footer class="max-w-fit mx-auto text-sm"><p class="max-w-fit mx-auto italic">A website by</p><address><div>Hanno Braun<br>Untere Pfarrgasse 19<br>64720 Michelstadt<br>Germany<br></div><div class="my-4">📧 <a href="mailto:hello@hannobraun.com">hello@hannobraun.com</a></div></address></footer></body></html>

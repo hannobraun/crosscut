@@ -1,0 +1,19 @@
+<!doctype html><html lang="en"><head><title>Daily Note - 2025-05-30 - Crosscut</title><meta charSet="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><link href="/style.css" rel="stylesheet"></head><body class="max-w-xl mx-auto p-2"><header><a href="/"><h1>Crosscut</h1></a></header><main><h2>Daily Note - 2025-05-30</h2><div class="m-4 p-4 rounded font-sm bg-slate-200"><p class="prose">Hey, I'm Hanno! These are my daily notes on <a href="https://github.com/hannobraun/crosscut" class="text-blue-700 underline font-bold">Crosscut</a>, the programming language I'm creating. If you have any questions, comments, or feedback, please <a href="mailto:Hanno%20Braun%20%3Chello%40hannobraun.com%3E?subject=&body=" class="text-blue-700 underline font-bold">get in touch</a>!</p></div><div class="my-8"><nav><a href="/daily" class="text-blue-700 underline font-bold">< back to list</a></nav><main class="prose"><p>Before I move on to the next topic, it's time for another development update!</p>
+<p>I've updated the root context and function bodies to be a
+<a href="/daily/2025-04-27" rel="noopener noreferrer">series of expressions</a> instead of just a single expression.
+One small step in the direction of algebraic effects. I also managed to write
+the first recursive function that actually does something! Here's a video:</p>
+<video controls>
+    <source src="2025-05-30/recursive-function.webm"></source>
+</video>
+
+<p>This function sets the background color of the window, sleeps for 20
+milliseconds, then calls itself recursively with a slightly lighter background
+color. As you can see, typing even such simple code is pretty tedious right now.
+But one thing at a time. (No idea why the editor starts to flicker at some
+point. I'll look into it.)</p>
+<p>The next priority is to implement live updates, or hot reloading, or whatever
+the nomenclature will end up being. With recursive functions being practical
+now, this actually becomes possible to test. Whereas before, the current "reset
+after change" behavior wasn't actually distinguishable from true live updates.</p>
+</main><nav class="grid grid-cols-2"><span class="col-1 justify-self-start"><a href="/daily/2025-05-29" class="text-blue-700 underline font-bold"><< previous note</a></span><span class="col-2 justify-self-end"><a href="/daily/2025-05-31" class="text-blue-700 underline font-bold">next note >></a></span></nav></div></main><hr class="w-1/2 mx-auto my-16"><footer class="max-w-fit mx-auto text-sm"><p class="max-w-fit mx-auto italic">A website by</p><address><div>Hanno Braun<br>Untere Pfarrgasse 19<br>64720 Michelstadt<br>Germany<br></div><div class="my-4">📧 <a href="mailto:hello@hannobraun.com">hello@hannobraun.com</a></div></address></footer></body></html>

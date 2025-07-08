@@ -1,0 +1,23 @@
+<!doctype html><html lang="en"><head><title>Daily Note - 2025-04-10 - Crosscut</title><meta charSet="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><link href="/style.css" rel="stylesheet"></head><body class="max-w-xl mx-auto p-2"><header><a href="/"><h1>Crosscut</h1></a></header><main><h2>Daily Note - 2025-04-10</h2><div class="m-4 p-4 rounded font-sm bg-slate-200"><p class="prose">Hey, I'm Hanno! These are my daily notes on <a href="https://github.com/hannobraun/crosscut" class="text-blue-700 underline font-bold">Crosscut</a>, the programming language I'm creating. If you have any questions, comments, or feedback, please <a href="mailto:Hanno%20Braun%20%3Chello%40hannobraun.com%3E?subject=&body=" class="text-blue-700 underline font-bold">get in touch</a>!</p></div><div class="my-8"><nav><a href="/daily" class="text-blue-700 underline font-bold">< back to list</a></nav><main class="prose"><p>I've laid out some <a href="/daily/2025-04-09" rel="noopener noreferrer">design goals</a> for the overall language,
+and for error handling specifically. From here, I'd like to demonstrate how my
+design for <a href="/daily/2025-03-07" rel="noopener noreferrer">variant types</a> and
+<a href="/daily/2025-03-22" rel="noopener noreferrer">automatic lifting</a> can meet those, and why I think that
+alternative solutions don't do this well enough.</p>
+<p>Let's start by looking at error handling in <a href="https://www.rust-lang.org/" rel="noopener noreferrer">Rust</a>. There, error handling is
+done by returning a <code>Result</code> enum, which can carry a regular value or an error.
+If you can't handle an error locally, you usually abort your function and return
+an error yourself (often using the <code>?</code> operator).</p>
+<p>If multiple specific errors can occur in a function, you can convert them into a
+broader error enum whose variants tell you more about which specific error
+occurred. Or you can convert any error into a general error value that hides the
+specific error information, but provides a good error message, using something
+like <a href="https://crates.io/crates/anyhow" rel="noopener noreferrer">Anyhow</a>.</p>
+<p>On top of that, there are panics. You can always convert an error into a panic,
+for example using the <code>unwrap</code> method. This makes sense, if you don't want to
+deal with error handling right now (when you're prototyping, for example), or to
+signal that it's not possible for an error to actually happen in the context of
+your code.</p>
+<p>Those are the broad strokes. Obviously, this is not a complete reference of
+error handling in Rust. I just wanted to call out some of its elements so I can
+refer to them tomorrow, when I'll go into the problems I see with this approach.</p>
+</main><nav class="grid grid-cols-2"><span class="col-1 justify-self-start"><a href="/daily/2025-04-09" class="text-blue-700 underline font-bold"><< previous note</a></span><span class="col-2 justify-self-end"><a href="/daily/2025-04-11" class="text-blue-700 underline font-bold">next note >></a></span></nav></div></main><hr class="w-1/2 mx-auto my-16"><footer class="max-w-fit mx-auto text-sm"><p class="max-w-fit mx-auto italic">A website by</p><address><div>Hanno Braun<br>Untere Pfarrgasse 19<br>64720 Michelstadt<br>Germany<br></div><div class="my-4">📧 <a href="mailto:hello@hannobraun.com">hello@hannobraun.com</a></div></address></footer></body></html>

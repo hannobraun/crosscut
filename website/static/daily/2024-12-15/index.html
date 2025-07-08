@@ -1,0 +1,21 @@
+<!doctype html><html lang="en"><head><title>Daily Note - 2024-12-15 - Crosscut</title><meta charSet="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><link href="/style.css" rel="stylesheet"></head><body class="max-w-xl mx-auto p-2"><header><a href="/"><h1>Crosscut</h1></a></header><main><h2>Daily Note - 2024-12-15</h2><div class="m-4 p-4 rounded font-sm bg-slate-200"><p class="prose">Hey, I'm Hanno! These are my daily notes on <a href="https://github.com/hannobraun/crosscut" class="text-blue-700 underline font-bold">Crosscut</a>, the programming language I'm creating. If you have any questions, comments, or feedback, please <a href="mailto:Hanno%20Braun%20%3Chello%40hannobraun.com%3E?subject=&body=" class="text-blue-700 underline font-bold">get in touch</a>!</p></div><div class="m-4 p-4 rounded font-sm bg-slate-200"><p>This note was published <a href="/daily/2024-12-25" class="text-blue-700 underline font-bold"> before Crosscut was called Crosscut</a>! If it refers to "Caterpillar", that is the old name, just so you know.</p></div><div class="my-8"><nav><a href="/daily" class="text-blue-700 underline font-bold">< back to list</a></nav><main class="prose"><p>Over the last few days, we've looked at several of the ad-hoc effects in Rust.
+First <a href="/daily/2024-12-13" rel="noopener noreferrer"><code>Result</code> and panics</a>, then
+<a href="/daily/2024-12-14" rel="noopener noreferrer">asynchrony</a>. Armed with that knowledge, we can now imagine a
+unified system that includes the most powerful aspects of all of them, and can
+support any kind of effect.</p>
+<p>Here's what such a unified system could include:</p>
+<ul>
+<li>It would use a side channel to transport effects, instead of return values.
+The caller doesn't have to know about the effect, and a handler can sit
+anywhere in the call chain.</li>
+<li>Handlers themselves can trigger the effect (or any other), allowing for nested
+handlers that can make a decision at their respective level.</li>
+<li>Any code that triggers an effect can be resumed afterwards, if the handler
+decides it's appropriate.</li>
+</ul>
+<p>A language that has such a system, could use it to provide all kinds of effects.
+The ones I already mentioned, but also I/O could be covered by effects.
+Randomness could be, making it easy to control where that's important (think
+multiplayer games). In Rust, <code>unsafe</code> could be one! Imagine using that to easily
+sandbox any dependency you don't trust.</p>
+</main><nav class="grid grid-cols-2"><span class="col-1 justify-self-start"><a href="/daily/2024-12-14" class="text-blue-700 underline font-bold"><< previous note</a></span><span class="col-2 justify-self-end"><a href="/daily/2024-12-16" class="text-blue-700 underline font-bold">next note >></a></span></nav></div></main><hr class="w-1/2 mx-auto my-16"><footer class="max-w-fit mx-auto text-sm"><p class="max-w-fit mx-auto italic">A website by</p><address><div>Hanno Braun<br>Untere Pfarrgasse 19<br>64720 Michelstadt<br>Germany<br></div><div class="my-4">📧 <a href="mailto:hello@hannobraun.com">hello@hannobraun.com</a></div></address></footer></body></html>

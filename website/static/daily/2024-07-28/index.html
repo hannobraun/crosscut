@@ -1,0 +1,16 @@
+<!doctype html><html lang="en"><head><title>Daily Note - 2024-07-28 - Crosscut</title><meta charSet="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><link href="/style.css" rel="stylesheet"></head><body class="max-w-xl mx-auto p-2"><header><a href="/"><h1>Crosscut</h1></a></header><main><h2>Daily Note - 2024-07-28</h2><div class="m-4 p-4 rounded font-sm bg-slate-200"><p class="prose">Hey, I'm Hanno! These are my daily notes on <a href="https://github.com/hannobraun/crosscut" class="text-blue-700 underline font-bold">Crosscut</a>, the programming language I'm creating. If you have any questions, comments, or feedback, please <a href="mailto:Hanno%20Braun%20%3Chello%40hannobraun.com%3E?subject=&body=" class="text-blue-700 underline font-bold">get in touch</a>!</p></div><div class="m-4 p-4 rounded font-sm bg-slate-200"><p>This note was published <a href="/daily/2024-12-25" class="text-blue-700 underline font-bold"> before Crosscut was called Crosscut</a>! If it refers to "Caterpillar", that is the old name, just so you know.</p></div><div class="my-8"><nav><a href="/daily" class="text-blue-700 underline font-bold">< back to list</a></nav><main class="prose"><p>I mentioned briefly, that at some point,
+<a href="/daily/2024-06-12" rel="noopener noreferrer">I expect Caterpillar code to be stored in a database instead of plain text files</a>.
+This ties into the topic of
+<a href="/daily/2024-07-22" rel="noopener noreferrer">inferring information about the code</a> and having the tooling
+display that to the developer.</p>
+<p>Under a traditional compilation model, implicit types and effects and such would
+not be present in the plain text source code. They would be inferred during the
+compilation process, and be displayed in an IDE, based on intermediate results
+of the compilation.</p>
+<p>This has problems. Performance for one. Every time you re-compile, you have to
+re-do the inference, and this could potentially be expensive. Another problem,
+maybe the bigger one, is that changes to inferred information are not obvious.
+Modifying one piece of code could lead to an undesired change of a type
+elsewhere. Tomorrow, I'd like to talk about how a code database can solve both
+problems.</p>
+</main><nav class="grid grid-cols-2"><span class="col-1 justify-self-start"><a href="/daily/2024-07-27" class="text-blue-700 underline font-bold"><< previous note</a></span><span class="col-2 justify-self-end"><a href="/daily/2024-07-29" class="text-blue-700 underline font-bold">next note >></a></span></nav></div></main><hr class="w-1/2 mx-auto my-16"><footer class="max-w-fit mx-auto text-sm"><p class="max-w-fit mx-auto italic">A website by</p><address><div>Hanno Braun<br>Untere Pfarrgasse 19<br>64720 Michelstadt<br>Germany<br></div><div class="my-4">📧 <a href="mailto:hello@hannobraun.com">hello@hannobraun.com</a></div></address></footer></body></html>

@@ -1,0 +1,16 @@
+<!doctype html><html lang="en"><head><title>Daily Note - 2025-03-08 - Crosscut</title><meta charSet="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><link href="/style.css" rel="stylesheet"></head><body class="max-w-xl mx-auto p-2"><header><a href="/"><h1>Crosscut</h1></a></header><main><h2>Daily Note - 2025-03-08</h2><div class="m-4 p-4 rounded font-sm bg-slate-200"><p class="prose">Hey, I'm Hanno! These are my daily notes on <a href="https://github.com/hannobraun/crosscut" class="text-blue-700 underline font-bold">Crosscut</a>, the programming language I'm creating. If you have any questions, comments, or feedback, please <a href="mailto:Hanno%20Braun%20%3Chello%40hannobraun.com%3E?subject=&body=" class="text-blue-700 underline font-bold">get in touch</a>!</p></div><div class="my-8"><nav><a href="/daily" class="text-blue-700 underline font-bold">< back to list</a></nav><main class="prose"><p>I've presented both <a href="/daily/2025-03-05" rel="noopener noreferrer">record</a> and <a href="/daily/2025-03-07" rel="noopener noreferrer">variant</a>
+types. I want to expand on those and how they interact, to hopefully make things
+a bit more clear.</p>
+<p>Both records and variants are types, and they contain types. So naturally, you
+should be able to combine them freely. Here's a record that contains a variant
+and another record:</p>
+<pre><code>record {
+    id: variant { Integer, Text },
+    address: record { street: Text, house_number: Integer },
+}</code></pre><p>Here's a variant that could be either a record or another variant:</p>
+<pre><code>variant {
+    record { street: Text, house_number: Integer },
+    variant { Integer, Text },
+}</code></pre><p>And by the way, I've chosen the syntax here for clarity in these examples. It
+might or might not be similar to what eventually ends up in the language.</p>
+</main><nav class="grid grid-cols-2"><span class="col-1 justify-self-start"><a href="/daily/2025-03-07" class="text-blue-700 underline font-bold"><< previous note</a></span><span class="col-2 justify-self-end"><a href="/daily/2025-03-09" class="text-blue-700 underline font-bold">next note >></a></span></nav></div></main><hr class="w-1/2 mx-auto my-16"><footer class="max-w-fit mx-auto text-sm"><p class="max-w-fit mx-auto italic">A website by</p><address><div>Hanno Braun<br>Untere Pfarrgasse 19<br>64720 Michelstadt<br>Germany<br></div><div class="my-4">📧 <a href="mailto:hello@hannobraun.com">hello@hannobraun.com</a></div></address></footer></body></html>

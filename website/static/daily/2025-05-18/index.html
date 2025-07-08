@@ -1,0 +1,30 @@
+<!doctype html><html lang="en"><head><title>Daily Note - 2025-05-18 - Crosscut</title><meta charSet="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><link href="/style.css" rel="stylesheet"></head><body class="max-w-xl mx-auto p-2"><header><a href="/"><h1>Crosscut</h1></a></header><main><h2>Daily Note - 2025-05-18</h2><div class="m-4 p-4 rounded font-sm bg-slate-200"><p class="prose">Hey, I'm Hanno! These are my daily notes on <a href="https://github.com/hannobraun/crosscut" class="text-blue-700 underline font-bold">Crosscut</a>, the programming language I'm creating. If you have any questions, comments, or feedback, please <a href="mailto:Hanno%20Braun%20%3Chello%40hannobraun.com%3E?subject=&body=" class="text-blue-700 underline font-bold">get in touch</a>!</p></div><div class="my-8"><nav><a href="/daily" class="text-blue-700 underline font-bold">< back to list</a></nav><main class="prose"><p>I have two more notes on postfix syntax in the pipeline. But first, I'd like to
+stop for some updates:</p>
+<ul>
+<li>I implemented bindings! For now, only in the form of function parameters. But
+using an anonymous function that you evaluate immediately, it should be
+possible to simulate <code>let</code> bindings. I plan to add those as syntax sugar
+later.</li>
+<li>This means that recursion (which has been in the language for a while) should
+now actually be usable. Before, it was possible to write recursive functions,
+but I struggled to actually do something with that.</li>
+<li>To simplify things in advance, I moved function resolution to runtime, making
+the language much more dynamic. Not the direction I want to go in, but I think
+it's what I need right now: A much simpler compiler and less complexity
+overall, making it easier to make progress where it matters most.</li>
+</ul>
+<p>I had some trouble accommodating the expanded syntax tree required for this. For
+a while, I went down the wrong path there, making things way too complicated. In
+the end, I realized that a much simpler, less type-safe, uniform syntax node
+representation would work better; so that's what I went with.</p>
+<p>What I <em>should</em> be doing now is verify that recursion is <em>actually</em> usable, and
+use that to write a test which demonstrates the lack of live code updates (or
+hot reloading; whatever nomenclature we end up going with). That's the next
+priority, as I want to build everything else around a
+<a href="/daily/2025-01-20" rel="noopener noreferrer">tight, interactive core</a>.</p>
+<p>What I did instead, was sucker myself into doing some code cleanups. This is
+important too. After all, getting to terms with the shape of that thing I'm
+writing; the code database, the incremental-only compiler that it implies, the
+editor that drives that; is a constant struggle. And maybe it also serves as a
+bit of a break for me.</p>
+</main><nav class="grid grid-cols-2"><span class="col-1 justify-self-start"><a href="/daily/2025-05-17" class="text-blue-700 underline font-bold"><< previous note</a></span><span class="col-2 justify-self-end"><a href="/daily/2025-05-19" class="text-blue-700 underline font-bold">next note >></a></span></nav></div></main><hr class="w-1/2 mx-auto my-16"><footer class="max-w-fit mx-auto text-sm"><p class="max-w-fit mx-auto italic">A website by</p><address><div>Hanno Braun<br>Untere Pfarrgasse 19<br>64720 Michelstadt<br>Germany<br></div><div class="my-4">📧 <a href="mailto:hello@hannobraun.com">hello@hannobraun.com</a></div></address></footer></body></html>

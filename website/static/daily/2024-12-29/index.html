@@ -1,0 +1,50 @@
+<!doctype html><html lang="en"><head><title>Daily Note - 2024-12-29 - Crosscut</title><meta charSet="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><link href="/style.css" rel="stylesheet"></head><body class="max-w-xl mx-auto p-2"><header><a href="/"><h1>Crosscut</h1></a></header><main><h2>Daily Note - 2024-12-29</h2><div class="m-4 p-4 rounded font-sm bg-slate-200"><p class="prose">Hey, I'm Hanno! These are my daily notes on <a href="https://github.com/hannobraun/crosscut" class="text-blue-700 underline font-bold">Crosscut</a>, the programming language I'm creating. If you have any questions, comments, or feedback, please <a href="mailto:Hanno%20Braun%20%3Chello%40hannobraun.com%3E?subject=&body=" class="text-blue-700 underline font-bold">get in touch</a>!</p></div><div class="my-8"><nav><a href="/daily" class="text-blue-700 underline font-bold">< back to list</a></nav><main class="prose"><p>The new <a href="/daily/2024-12-28" rel="noopener noreferrer">comments on branches</a> required changes to the
+syntax. I want them to be associated with the branch in the syntax tree, so they
+can be used to generate documentation, for example. Or, as I've already done, to
+add metadata to branches for use in tests. Why did this require changes to the
+syntax? Consider this example:</p>
+<pre><code>my_function: fn
+    \ 0 -&gt;
+        0
+        # This comment is part of the body of the first branch.
+
+    \ 1 -&gt;
+        1
+end</code></pre><p>Versus this:</p>
+<pre><code>my_function: fn
+    \ 0 -&gt;
+        0
+
+    # This comment applies to the second branch.
+    \ 1 -&gt;
+        1
+end</code></pre><p>The parser ignores whitespace, and it doesn't look ahead beyond the next token
+it's going to process (the grammar is
+<a href="https://en.wikipedia.org/wiki/LL_parser" rel="noopener noreferrer">LL(1)</a>). So it can't distinguish
+between those two cases. To fix that, I required that branches end with <code>end</code>,
+like functions:</p>
+<pre><code>my_function: fn
+    \ 0 -&gt;
+        0
+        # Now this comment can be clearly distinguished...
+    end
+
+    # ...from this other comment.
+    \ 1 -&gt;
+        1
+    end
+end</code></pre><p>I thought that having the <code>end</code> there made it look inconsistent, that branches
+are started using an <code>\</code> token. So I replaced that with the new <code>br</code> keyword:</p>
+<pre><code>my_function: fn
+    br 0 -&gt;
+        0
+    end
+
+    br 1 -&gt;
+        1
+    end
+end</code></pre><p>The new syntax still looks weird to me, but that's fine. I've come to realize
+more and more, that everything I do syntax-wise before the
+<a href="/daily/2024-07-29" rel="noopener noreferrer">code database</a> exists, is temporary at best. But that's a
+topic for another day.</p>
+</main><nav class="grid grid-cols-2"><span class="col-1 justify-self-start"><a href="/daily/2024-12-28" class="text-blue-700 underline font-bold"><< previous note</a></span><span class="col-2 justify-self-end"><a href="/daily/2024-12-30" class="text-blue-700 underline font-bold">next note >></a></span></nav></div></main><hr class="w-1/2 mx-auto my-16"><footer class="max-w-fit mx-auto text-sm"><p class="max-w-fit mx-auto italic">A website by</p><address><div>Hanno Braun<br>Untere Pfarrgasse 19<br>64720 Michelstadt<br>Germany<br></div><div class="my-4">📧 <a href="mailto:hello@hannobraun.com">hello@hannobraun.com</a></div></address></footer></body></html>

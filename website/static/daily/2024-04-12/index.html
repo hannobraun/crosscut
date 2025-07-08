@@ -1,0 +1,20 @@
+<!doctype html><html lang="en"><head><title>Daily Note - 2024-04-12 - Crosscut</title><meta charSet="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><link href="/style.css" rel="stylesheet"></head><body class="max-w-xl mx-auto p-2"><header><a href="/"><h1>Crosscut</h1></a></header><main><h2>Daily Note - 2024-04-12</h2><div class="m-4 p-4 rounded font-sm bg-slate-200"><p class="prose">Hey, I'm Hanno! These are my daily notes on <a href="https://github.com/hannobraun/crosscut" class="text-blue-700 underline font-bold">Crosscut</a>, the programming language I'm creating. If you have any questions, comments, or feedback, please <a href="mailto:Hanno%20Braun%20%3Chello%40hannobraun.com%3E?subject=&body=" class="text-blue-700 underline font-bold">get in touch</a>!</p></div><div class="m-4 p-4 rounded font-sm bg-slate-200"><p>This note was published <a href="/daily/2024-12-25" class="text-blue-700 underline font-bold"> before Crosscut was called Crosscut</a>! If it refers to "Caterpillar", that is the old name, just so you know.</p></div><div class="my-8"><nav><a href="/daily" class="text-blue-700 underline font-bold">< back to list</a></nav><main class="prose"><p>I think it is a mistake to give a language inherent capabilities, that then
+might or might not be available on the platform where you actually want to run
+it. Look at Rust's standard library, for example. It's not available at all on
+microcontrollers. It is available in WebAssembly, but then some things just
+don't work (like <code>print!</code>) or you might get an error when using others (like
+threads). And yet, it is the baseline that most Rust code is written against.</p>
+<p>I really like what <a href="https://www.roc-lang.org/" rel="noopener noreferrer">Roc</a> does instead: Code inherently can't do anything, except
+pure computation. If it wants to do I/O, anything that relies on platform
+capabilities, it specifies the I/O primitives it needs as arguments. These I/O
+primitives are provided by something called a platform, which is basically a
+framework that runs your application, and you have to pass those primitives on
+to the libraries you want to use.</p>
+<p>As a result, libraries end up much more portable (in principle; I don't know,
+about the specific implementation in Roc). A library can't just use the
+filesystem. It can at most expect to use something that looks like a filesystem.
+As long as what you give it has the correct interface, you can make that do
+whatever you need. Store "files" in your microcontroller's flash memory, for
+example, or in RAM.</p>
+<p>This is a concept I'm stealing for Caterpillar.</p>
+</main><nav class="grid grid-cols-2"><span class="col-1 justify-self-start"><a href="/daily/2024-04-11" class="text-blue-700 underline font-bold"><< previous note</a></span><span class="col-2 justify-self-end"><a href="/daily/2024-04-13" class="text-blue-700 underline font-bold">next note >></a></span></nav></div></main><hr class="w-1/2 mx-auto my-16"><footer class="max-w-fit mx-auto text-sm"><p class="max-w-fit mx-auto italic">A website by</p><address><div>Hanno Braun<br>Untere Pfarrgasse 19<br>64720 Michelstadt<br>Germany<br></div><div class="my-4">📧 <a href="mailto:hello@hannobraun.com">hello@hannobraun.com</a></div></address></footer></body></html>

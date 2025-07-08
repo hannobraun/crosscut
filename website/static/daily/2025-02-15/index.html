@@ -1,0 +1,19 @@
+<!doctype html><html lang="en"><head><title>Daily Note - 2025-02-15 - Crosscut</title><meta charSet="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><link href="/style.css" rel="stylesheet"></head><body class="max-w-xl mx-auto p-2"><header><a href="/"><h1>Crosscut</h1></a></header><main><h2>Daily Note - 2025-02-15</h2><div class="m-4 p-4 rounded font-sm bg-slate-200"><p class="prose">Hey, I'm Hanno! These are my daily notes on <a href="https://github.com/hannobraun/crosscut" class="text-blue-700 underline font-bold">Crosscut</a>, the programming language I'm creating. If you have any questions, comments, or feedback, please <a href="mailto:Hanno%20Braun%20%3Chello%40hannobraun.com%3E?subject=&body=" class="text-blue-700 underline font-bold">get in touch</a>!</p></div><div class="my-8"><nav><a href="/daily" class="text-blue-700 underline font-bold">< back to list</a></nav><main class="prose"><p>I think it has become clear, that I like postfix syntax. But I also think that
+prefix syntax has <a href="/daily/2025-02-14" rel="noopener noreferrer">one critical advantage</a> that is too big to
+ignore: It gives you the context of what's happening first, which helps you
+understand the following details. (It might have more critical advantages.
+That's just the one that is very clear to me right now.)</p>
+<p>The problem, I believe, is that whether it's better to provide context first, or
+to <a href="/daily/2025-02-12" rel="noopener noreferrer">present code in order of execution</a>, depends on the
+specific situation. So either style is going to be worse <em>sometimes</em>. But just
+as we can invent language features to
+<a href="/daily/2025-02-13" rel="noopener noreferrer">offset the disadvantage</a> of prefix syntax, we can do the
+same for postfix syntax. Consider this:</p>
+<pre><code>(detail_a, detail_b)
+    important_behavior_that_puts_the_details_into_context</code></pre><p>We could invent some kind of optional prefix syntax to improve this example,
+like this:</p>
+<pre><code>important_behavior_that_puts_the_details_into_context:
+    (detail_a, detail_b)</code></pre><p>Here, the <code>:</code> (which might be too subtle, but it's just an example), marks the
+application of the function with the long name as using prefix syntax. We could
+choose to write it like that, whenever we think that provides an advantage.</p>
+</main><nav class="grid grid-cols-2"><span class="col-1 justify-self-start"><a href="/daily/2025-02-14" class="text-blue-700 underline font-bold"><< previous note</a></span><span class="col-2 justify-self-end"><a href="/daily/2025-02-16" class="text-blue-700 underline font-bold">next note >></a></span></nav></div></main><hr class="w-1/2 mx-auto my-16"><footer class="max-w-fit mx-auto text-sm"><p class="max-w-fit mx-auto italic">A website by</p><address><div>Hanno Braun<br>Untere Pfarrgasse 19<br>64720 Michelstadt<br>Germany<br></div><div class="my-4">📧 <a href="mailto:hello@hannobraun.com">hello@hannobraun.com</a></div></address></footer></body></html>

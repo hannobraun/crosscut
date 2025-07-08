@@ -1,0 +1,47 @@
+<!doctype html><html lang="en"><head><title>Daily Note - 2024-12-12 - Crosscut</title><meta charSet="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><link href="/style.css" rel="stylesheet"></head><body class="max-w-xl mx-auto p-2"><header><a href="/"><h1>Crosscut</h1></a></header><main><h2>Daily Note - 2024-12-12</h2><div class="m-4 p-4 rounded font-sm bg-slate-200"><p class="prose">Hey, I'm Hanno! These are my daily notes on <a href="https://github.com/hannobraun/crosscut" class="text-blue-700 underline font-bold">Crosscut</a>, the programming language I'm creating. If you have any questions, comments, or feedback, please <a href="mailto:Hanno%20Braun%20%3Chello%40hannobraun.com%3E?subject=&body=" class="text-blue-700 underline font-bold">get in touch</a>!</p></div><div class="m-4 p-4 rounded font-sm bg-slate-200"><p>This note was published <a href="/daily/2024-12-25" class="text-blue-700 underline font-bold"> before Crosscut was called Crosscut</a>! If it refers to "Caterpillar", that is the old name, just so you know.</p></div><div class="my-8"><nav><a href="/daily" class="text-blue-700 underline font-bold">< back to list</a></nav><main class="prose"><p>Let's talk about <a href="https://www.rust-lang.org/" rel="noopener noreferrer">Rust</a> today, because it has
+<a href="/daily/2024-12-11" rel="noopener noreferrer">ad-hoc effects</a>, no principled effect system, and has real
+problems because of that. Here's a rather simple example that involves a
+higher-order function:</p>
+<pre><code>let name = names().find(|name| name.is_available());</code></pre><p>Okay, so <code>names</code> is a function that returns some kind of <a href="https://doc.rust-lang.org/std/iter/trait.Iterator.html" rel="noopener noreferrer"><code>Iterator</code></a>. We use
+<code>find</code> and an anonymous function that we pass to it, to find the first name that
+is available. All good!</p>
+<p>But what if <code>is_available</code> can fail? Maybe it connects to a database? Well,
+<code>find</code> expects its argument to return a <code>bool</code>, so the best we can do is panic
+(another effect!) in there, which is not always desirable. Fortunately, there is
+<code>try_find</code>:</p>
+<pre><code>let name = names().try_find(|name| name.is_available())?;</code></pre><p>Now <code>is_available</code> can return a <code>Result</code>, which <code>try_find</code> passes on, for us to
+handle. Again, all good! Except, maybe, that <code>try_find</code> is not available in
+stable versions. And note how we needed a completely different method to deal
+with this slightly different scenario.</p>
+<p>But whatever, let's take a look at what would happen instead, if <code>is_available</code>
+is <code>async</code>. It could call a database, remember? Now using <a href="https://doc.rust-lang.org/std/iter/trait.Iterator.html" rel="noopener noreferrer"><code>Iterator</code></a> is no
+longer an option, because that is inherently synchronous. We need an
+asynchronous iterator, which exists in the form of <a href="https://docs.rs/futures/latest/futures/stream/trait.Stream.html" rel="noopener noreferrer"><code>Stream</code></a>.</p>
+<pre><code>let name = stream::iter(names())
+    .filter(|name| name.is_available())
+    .next()
+    .await;</code></pre><p>Okay, so we convert our iterator into a stream. Then we find out that,
+annoyingly, <a href="https://docs.rs/futures/latest/futures/stream/trait.Stream.html" rel="noopener noreferrer"><code>Stream</code></a> (or <a href="https://docs.rs/futures/latest/futures/stream/trait.StreamExt.html" rel="noopener noreferrer"><code>StreamExt</code></a>, to be precise) does not have a <code>find</code>
+method. But we can emulate that with <code>filter</code> and <code>next</code>. (Please note that I
+left code that handles pinning out of this example and the next one. It would be
+slightly more complicated and not relevant to the topic at hand.)</p>
+<p>So we needed a completely new API to deal with <code>async</code>, but other than that, all
+good? Not quite! If <code>is_available</code> talks to a database, then it's unrealistic
+that it wouldn't be <code>async</code> <em>and</em> fallible. How can we deal with that?</p>
+<pre><code>let name = stream::iter(names())
+    .filter_map(|name| async move {
+        name.is_available()
+            .await
+            .map(|is_available| is_available.then_some(name))
+            .transpose()
+    })
+    .next()
+    .await
+    .transpose()?;</code></pre><p>As you might have guessed, yes, we needed even more methods and do a whole song
+and dance. Now, I'm not claiming that this is the best way to do it (it's just
+the best I could come up with). But my point is this: The <code>filter</code> method from
+my initial example is not able to abstract over its argument being fallible, or
+async, or both. In Rust, it's impossible to write a function that does.</p>
+<p>Starting tomorrow, let's speculate about how this could be much better, in a
+language with effects as a first-class citizen!</p>
+</main><nav class="grid grid-cols-2"><span class="col-1 justify-self-start"><a href="/daily/2024-12-11" class="text-blue-700 underline font-bold"><< previous note</a></span><span class="col-2 justify-self-end"><a href="/daily/2024-12-13" class="text-blue-700 underline font-bold">next note >></a></span></nav></div></main><hr class="w-1/2 mx-auto my-16"><footer class="max-w-fit mx-auto text-sm"><p class="max-w-fit mx-auto italic">A website by</p><address><div>Hanno Braun<br>Untere Pfarrgasse 19<br>64720 Michelstadt<br>Germany<br></div><div class="my-4">📧 <a href="mailto:hello@hannobraun.com">hello@hannobraun.com</a></div></address></footer></body></html>

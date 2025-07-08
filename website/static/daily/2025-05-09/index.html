@@ -1,0 +1,17 @@
+<!doctype html><html lang="en"><head><title>Daily Note - 2025-05-09 - Crosscut</title><meta charSet="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><link href="/style.css" rel="stylesheet"></head><body class="max-w-xl mx-auto p-2"><header><a href="/"><h1>Crosscut</h1></a></header><main><h2>Daily Note - 2025-05-09</h2><div class="m-4 p-4 rounded font-sm bg-slate-200"><p class="prose">Hey, I'm Hanno! These are my daily notes on <a href="https://github.com/hannobraun/crosscut" class="text-blue-700 underline font-bold">Crosscut</a>, the programming language I'm creating. If you have any questions, comments, or feedback, please <a href="mailto:Hanno%20Braun%20%3Chello%40hannobraun.com%3E?subject=&body=" class="text-blue-700 underline font-bold">get in touch</a>!</p></div><div class="my-8"><nav><a href="/daily" class="text-blue-700 underline font-bold">< back to list</a></nav><main class="prose"><p>When <a href="/daily/2025-05-08" rel="noopener noreferrer">formatting a syntax tree</a> using postfix syntax, my
+first instinct was to start with the children in the upper-left, then indent
+their parent. So a function call looked like this:</p>
+<pre><code>argument
+    function</code></pre><p>I was going to expand that into a more complicated (and realistic) example and
+demonstrate how confusing this could get, but then realized that I could only
+reproduce the worst problems I encountered by using
+<a href="/daily/2025-05-02" rel="noopener noreferrer">free-form structural editing</a>. So the switch to
+<a href="/daily/2025-05-04" rel="noopener noreferrer">restricted structural editing</a> by itself solves a lot of
+issues.</p>
+<p>So that's one less reason to switch away from postfix syntax, I guess. But I
+don't think this significantly weakens the
+<a href="/daily/2025-05-07" rel="noopener noreferrer">overall argument</a>, as postfix syntax generally doesn't
+interact well with restricted structural editing. And even if the worst problems
+are fixed, that still leaves us with the general weirdness of this unfamiliar
+representation.</p>
+</main><nav class="grid grid-cols-2"><span class="col-1 justify-self-start"><a href="/daily/2025-05-08" class="text-blue-700 underline font-bold"><< previous note</a></span><span class="col-2 justify-self-end"><a href="/daily/2025-05-10" class="text-blue-700 underline font-bold">next note >></a></span></nav></div></main><hr class="w-1/2 mx-auto my-16"><footer class="max-w-fit mx-auto text-sm"><p class="max-w-fit mx-auto italic">A website by</p><address><div>Hanno Braun<br>Untere Pfarrgasse 19<br>64720 Michelstadt<br>Germany<br></div><div class="my-4">📧 <a href="mailto:hello@hannobraun.com">hello@hannobraun.com</a></div></address></footer></body></html>

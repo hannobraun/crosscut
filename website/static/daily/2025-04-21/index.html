@@ -1,0 +1,14 @@
+<!doctype html><html lang="en"><head><title>Daily Note - 2025-04-21 - Crosscut</title><meta charSet="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><link href="/style.css" rel="stylesheet"></head><body class="max-w-xl mx-auto p-2"><header><a href="/"><h1>Crosscut</h1></a></header><main><h2>Daily Note - 2025-04-21</h2><div class="m-4 p-4 rounded font-sm bg-slate-200"><p class="prose">Hey, I'm Hanno! These are my daily notes on <a href="https://github.com/hannobraun/crosscut" class="text-blue-700 underline font-bold">Crosscut</a>, the programming language I'm creating. If you have any questions, comments, or feedback, please <a href="mailto:Hanno%20Braun%20%3Chello%40hannobraun.com%3E?subject=&body=" class="text-blue-700 underline font-bold">get in touch</a>!</p></div><div class="my-8"><nav><a href="/daily" class="text-blue-700 underline font-bold">< back to list</a></nav><main class="prose"><p>I have laid out <a href="/daily/2025-04-20" rel="noopener noreferrer">two competing approaches</a> to error handling:
+One in the style of Rust, based on variant types and early returns in case of an
+error; the other based on checked exceptions. Both approaches are
+well-established in mainstream languages (Rust and Java, respectively).</p>
+<p>If we look at error handling in isolation, both seem fine. But let's not forget,
+the premise for this line of thought is that we
+<a href="/daily/2025-04-19" rel="noopener noreferrer">no longer have linear types</a>, which means we need a
+different solution for tracking side effects.</p>
+<p>And as I see it, there are two competing approaches here too: Monads and
+<a href="/daily/2024-12-10" rel="noopener noreferrer">algebraic effects</a>. This choice mirrors the one for error
+handling, because a Rust-like <code>Result</code> type is a monad, while checked exceptions
+are a subset of algebraic effects. It makes sense to consider both decisions
+together.</p>
+</main><nav class="grid grid-cols-2"><span class="col-1 justify-self-start"><a href="/daily/2025-04-20" class="text-blue-700 underline font-bold"><< previous note</a></span><span class="col-2 justify-self-end"><a href="/daily/2025-04-22" class="text-blue-700 underline font-bold">next note >></a></span></nav></div></main><hr class="w-1/2 mx-auto my-16"><footer class="max-w-fit mx-auto text-sm"><p class="max-w-fit mx-auto italic">A website by</p><address><div>Hanno Braun<br>Untere Pfarrgasse 19<br>64720 Michelstadt<br>Germany<br></div><div class="my-4">📧 <a href="mailto:hello@hannobraun.com">hello@hannobraun.com</a></div></address></footer></body></html>

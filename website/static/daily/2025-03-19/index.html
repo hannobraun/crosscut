@@ -1,0 +1,14 @@
+<!doctype html><html lang="en"><head><title>Daily Note - 2025-03-19 - Crosscut</title><meta charSet="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><link href="/style.css" rel="stylesheet"></head><body class="max-w-xl mx-auto p-2"><header><a href="/"><h1>Crosscut</h1></a></header><main><h2>Daily Note - 2025-03-19</h2><div class="m-4 p-4 rounded font-sm bg-slate-200"><p class="prose">Hey, I'm Hanno! These are my daily notes on <a href="https://github.com/hannobraun/crosscut" class="text-blue-700 underline font-bold">Crosscut</a>, the programming language I'm creating. If you have any questions, comments, or feedback, please <a href="mailto:Hanno%20Braun%20%3Chello%40hannobraun.com%3E?subject=&body=" class="text-blue-700 underline font-bold">get in touch</a>!</p></div><div class="my-8"><nav><a href="/daily" class="text-blue-700 underline font-bold">< back to list</a></nav><main class="prose"><p>Rust is rather strict about pattern matching: You always have to match every
+possible case. So if you match on an enum, you have to cover all of its
+variants. And all match arms have to return the same type. I don't think that's
+the only way to do it.</p>
+<p>Let's say you have a <code>variant { A, B, C }</code> but your match expression only covers
+<code>A</code> and <code>B</code>, and always returns <code>X</code>. If we wanted, the compiler could accept
+this partial match, and the result would be a <code>variant { X, C }</code>. If the match
+arms returned either <code>X</code> or <code>Y</code> instead, this could result in a
+<code>variant { X, Y, C }</code>.</p>
+<p>In such a system, variant types would be more closely tied into the language
+than enums are in Rust. In Rust, it's always an error, if the "then" and "else"
+branches of an <code>if</code> expression return different types. But we could decide that
+in Crosscut, this case results in a variant.</p>
+</main><nav class="grid grid-cols-2"><span class="col-1 justify-self-start"><a href="/daily/2025-03-18" class="text-blue-700 underline font-bold"><< previous note</a></span><span class="col-2 justify-self-end"><a href="/daily/2025-03-20" class="text-blue-700 underline font-bold">next note >></a></span></nav></div></main><hr class="w-1/2 mx-auto my-16"><footer class="max-w-fit mx-auto text-sm"><p class="max-w-fit mx-auto italic">A website by</p><address><div>Hanno Braun<br>Untere Pfarrgasse 19<br>64720 Michelstadt<br>Germany<br></div><div class="my-4">📧 <a href="mailto:hello@hannobraun.com">hello@hannobraun.com</a></div></address></footer></body></html>

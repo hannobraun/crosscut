@@ -1,0 +1,14 @@
+<!doctype html><html lang="en"><head><title>Daily Note - 2024-06-23 - Crosscut</title><meta charSet="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><link href="/style.css" rel="stylesheet"></head><body class="max-w-xl mx-auto p-2"><header><a href="/"><h1>Crosscut</h1></a></header><main><h2>Daily Note - 2024-06-23</h2><div class="m-4 p-4 rounded font-sm bg-slate-200"><p class="prose">Hey, I'm Hanno! These are my daily notes on <a href="https://github.com/hannobraun/crosscut" class="text-blue-700 underline font-bold">Crosscut</a>, the programming language I'm creating. If you have any questions, comments, or feedback, please <a href="mailto:Hanno%20Braun%20%3Chello%40hannobraun.com%3E?subject=&body=" class="text-blue-700 underline font-bold">get in touch</a>!</p></div><div class="m-4 p-4 rounded font-sm bg-slate-200"><p>This note was published <a href="/daily/2024-12-25" class="text-blue-700 underline font-bold"> before Crosscut was called Crosscut</a>! If it refers to "Caterpillar", that is the old name, just so you know.</p></div><div class="my-8"><nav><a href="/daily" class="text-blue-700 underline font-bold">< back to list</a></nav><main class="prose"><p>Caterpillar has a stack-based evaluation model. But despite that,
+<a href="/daily/2024-06-22" rel="noopener noreferrer">functions have to specify named arguments</a>. In addition, you
+can bind values to names within a function.</p>
+<p>Here's some pseudocode (because again,
+<a href="https://github.com/hannobraun/crosscut/blob/3048ce2d6f362b7cb4c8ab6a5fc6fc47747fb130/crates/capi/src/games/snake.rs" rel="noopener noreferrer">Caterpillar still has no syntax</a>):</p>
+<pre><code>fn square_then_times_five ( x )
+{
+    x x * =&gt; squared .
+    squared 5 * =&gt; times_five .
+    times_five
+}</code></pre><p>Here, each intermediate result is bound to a name. In most languages, this would
+be called a "variable", but in Caterpillar they are called "bindings". (Because
+they are supposed to be immutable, i.e. not actually <em>variable</em>.)</p>
+</main><nav class="grid grid-cols-2"><span class="col-1 justify-self-start"><a href="/daily/2024-06-22" class="text-blue-700 underline font-bold"><< previous note</a></span><span class="col-2 justify-self-end"><a href="/daily/2024-06-24" class="text-blue-700 underline font-bold">next note >></a></span></nav></div></main><hr class="w-1/2 mx-auto my-16"><footer class="max-w-fit mx-auto text-sm"><p class="max-w-fit mx-auto italic">A website by</p><address><div>Hanno Braun<br>Untere Pfarrgasse 19<br>64720 Michelstadt<br>Germany<br></div><div class="my-4">📧 <a href="mailto:hello@hannobraun.com">hello@hannobraun.com</a></div></address></footer></body></html>

@@ -1,0 +1,22 @@
+<!doctype html><html lang="en"><head><title>Daily Note - 2025-02-14 - Crosscut</title><meta charSet="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><link href="/style.css" rel="stylesheet"></head><body class="max-w-xl mx-auto p-2"><header><a href="/"><h1>Crosscut</h1></a></header><main><h2>Daily Note - 2025-02-14</h2><div class="m-4 p-4 rounded font-sm bg-slate-200"><p class="prose">Hey, I'm Hanno! These are my daily notes on <a href="https://github.com/hannobraun/crosscut" class="text-blue-700 underline font-bold">Crosscut</a>, the programming language I'm creating. If you have any questions, comments, or feedback, please <a href="mailto:Hanno%20Braun%20%3Chello%40hannobraun.com%3E?subject=&body=" class="text-blue-700 underline font-bold">get in touch</a>!</p></div><div class="my-8"><nav><a href="/daily" class="text-blue-700 underline font-bold">< back to list</a></nav><main class="prose"><p>Postfix syntax has advantages over prefix syntax, but
+<a href="/daily/2025-02-13" rel="noopener noreferrer">you can offset those</a>. And there is at least one genuine
+advantage that prefix syntax has over postfix (besides familiarity; which, to
+me, doesn't count). Because this is shit:</p>
+<pre><code>condition
+then_case
+else_case
+    if</code></pre><p>This is a fictional postfix syntax for an <code>if</code> expression. And I don't like it,
+because I have to read three distinct pieces of code (condition, "then" case,
+"else" case) before I'm told the context (<code>if</code>) that could help me understand
+this.</p>
+<p>We can make that a bit better by being more explicit:</p>
+<pre><code>{
+    condition: ...
+    then: ...
+    else: ...
+}
+    if</code></pre><p>At least this way, you see a record type that starts with a <code>condition</code> field,
+and can pretty much assume what this is going to be. But it's not the same as
+knowing the context of what's happening from the start. Like you would, if this
+was using prefix syntax, and <code>if</code> was the first thing you saw.</p>
+</main><nav class="grid grid-cols-2"><span class="col-1 justify-self-start"><a href="/daily/2025-02-13" class="text-blue-700 underline font-bold"><< previous note</a></span><span class="col-2 justify-self-end"><a href="/daily/2025-02-15" class="text-blue-700 underline font-bold">next note >></a></span></nav></div></main><hr class="w-1/2 mx-auto my-16"><footer class="max-w-fit mx-auto text-sm"><p class="max-w-fit mx-auto italic">A website by</p><address><div>Hanno Braun<br>Untere Pfarrgasse 19<br>64720 Michelstadt<br>Germany<br></div><div class="my-4">📧 <a href="mailto:hello@hannobraun.com">hello@hannobraun.com</a></div></address></footer></body></html>

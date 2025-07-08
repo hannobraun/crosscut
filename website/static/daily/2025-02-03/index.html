@@ -1,0 +1,16 @@
+<!doctype html><html lang="en"><head><title>Daily Note - 2025-02-03 - Crosscut</title><meta charSet="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><link href="/style.css" rel="stylesheet"></head><body class="max-w-xl mx-auto p-2"><header><a href="/"><h1>Crosscut</h1></a></header><main><h2>Daily Note - 2025-02-03</h2><div class="m-4 p-4 rounded font-sm bg-slate-200"><p class="prose">Hey, I'm Hanno! These are my daily notes on <a href="https://github.com/hannobraun/crosscut" class="text-blue-700 underline font-bold">Crosscut</a>, the programming language I'm creating. If you have any questions, comments, or feedback, please <a href="mailto:Hanno%20Braun%20%3Chello%40hannobraun.com%3E?subject=&body=" class="text-blue-700 underline font-bold">get in touch</a>!</p></div><div class="my-8"><nav><a href="/daily" class="text-blue-700 underline font-bold">< back to list</a></nav><main class="prose"><p>Since centering the previous prototype around the browser was
+<a href="/daily/2025-02-02" rel="noopener noreferrer">so unnecessary</a>, I am taking the opposite approach for the
+new one: radically simplify the whole architecture by running everything in a
+single process, including both the game and the
+<a href="/daily/2025-01-15" rel="noopener noreferrer">interactive editor</a>.</p>
+<p>That comes with some disadvantages. Ease of access, for one. I'm not going to
+provide a ready-made downloadable version, since that would be its own can of
+worms and a huge distraction. So for the time being, the target platform is
+basically an already installed Rust development environment. You can use
+Crosscut by cloning the repository and executing <code>cargo run</code>.</p>
+<p>Which limits me on the marketing side. Eventually, I want to have a live demo on
+the website. So the development environment has to support the browser
+eventually. But that's a problem for later. For now, this approach gives me some
+breathing room to figure out all the things that need figuring, before something
+like a live demo can even become relevant.</p>
+</main><nav class="grid grid-cols-2"><span class="col-1 justify-self-start"><a href="/daily/2025-02-02" class="text-blue-700 underline font-bold"><< previous note</a></span><span class="col-2 justify-self-end"><a href="/daily/2025-02-04" class="text-blue-700 underline font-bold">next note >></a></span></nav></div></main><hr class="w-1/2 mx-auto my-16"><footer class="max-w-fit mx-auto text-sm"><p class="max-w-fit mx-auto italic">A website by</p><address><div>Hanno Braun<br>Untere Pfarrgasse 19<br>64720 Michelstadt<br>Germany<br></div><div class="my-4">📧 <a href="mailto:hello@hannobraun.com">hello@hannobraun.com</a></div></address></footer></body></html>

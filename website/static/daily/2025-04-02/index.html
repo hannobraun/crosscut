@@ -1,0 +1,19 @@
+<!doctype html><html lang="en"><head><title>Daily Note - 2025-04-02 - Crosscut</title><meta charSet="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><link href="/style.css" rel="stylesheet"></head><body class="max-w-xl mx-auto p-2"><header><a href="/"><h1>Crosscut</h1></a></header><main><h2>Daily Note - 2025-04-02</h2><div class="m-4 p-4 rounded font-sm bg-slate-200"><p class="prose">Hey, I'm Hanno! These are my daily notes on <a href="https://github.com/hannobraun/crosscut" class="text-blue-700 underline font-bold">Crosscut</a>, the programming language I'm creating. If you have any questions, comments, or feedback, please <a href="mailto:Hanno%20Braun%20%3Chello%40hannobraun.com%3E?subject=&body=" class="text-blue-700 underline font-bold">get in touch</a>!</p></div><div class="my-8"><nav><a href="/daily" class="text-blue-700 underline font-bold">< back to list</a></nav><main class="prose"><p>Progress <a href="/daily/2025-04-01" rel="noopener noreferrer">has been slow</a>, but I still made <em>some</em>. To remind
+you, the goal for the current milestone is to build a minimalist game engine.
+But so far, all you can do is set the background color in the game window (and
+that only in grayscale). Here's a screencast of me playing around with the
+editor:</p>
+<video controls>
+    <source src="2025-04-02/crosscut-demo.webm"></source>
+</video>
+
+<p>First, I'm just typing numbers. If the program evaluates to a number, the game
+engine interprets that as a grayscale value and uses it as the background color.
+Then, I'm writing functions. If the program evaluates to a function value, the
+game engine executes that, passing it a "display" value. The <code>black</code> and <code>white</code>
+functions operate on the display, setting the color accordingly.</p>
+<p>All that is pretty limited. The language can do <em>a bit</em> more, but not much. The
+background color updates directly, in response to what you type, but that is a
+bit fake. So far, the whole program restarts on every change. It's not a live
+update of the running program, which is what I'm eventually going for.</p>
+</main><nav class="grid grid-cols-2"><span class="col-1 justify-self-start"><a href="/daily/2025-04-01" class="text-blue-700 underline font-bold"><< previous note</a></span><span class="col-2 justify-self-end"><a href="/daily/2025-04-03" class="text-blue-700 underline font-bold">next note >></a></span></nav></div></main><hr class="w-1/2 mx-auto my-16"><footer class="max-w-fit mx-auto text-sm"><p class="max-w-fit mx-auto italic">A website by</p><address><div>Hanno Braun<br>Untere Pfarrgasse 19<br>64720 Michelstadt<br>Germany<br></div><div class="my-4">📧 <a href="mailto:hello@hannobraun.com">hello@hannobraun.com</a></div></address></footer></body></html>

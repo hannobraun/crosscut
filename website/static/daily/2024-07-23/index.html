@@ -1,0 +1,16 @@
+<!doctype html><html lang="en"><head><title>Daily Note - 2024-07-23 - Crosscut</title><meta charSet="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><link href="/style.css" rel="stylesheet"></head><body class="max-w-xl mx-auto p-2"><header><a href="/"><h1>Crosscut</h1></a></header><main><h2>Daily Note - 2024-07-23</h2><div class="m-4 p-4 rounded font-sm bg-slate-200"><p class="prose">Hey, I'm Hanno! These are my daily notes on <a href="https://github.com/hannobraun/crosscut" class="text-blue-700 underline font-bold">Crosscut</a>, the programming language I'm creating. If you have any questions, comments, or feedback, please <a href="mailto:Hanno%20Braun%20%3Chello%40hannobraun.com%3E?subject=&body=" class="text-blue-700 underline font-bold">get in touch</a>!</p></div><div class="m-4 p-4 rounded font-sm bg-slate-200"><p>This note was published <a href="/daily/2024-12-25" class="text-blue-700 underline font-bold"> before Crosscut was called Crosscut</a>! If it refers to "Caterpillar", that is the old name, just so you know.</p></div><div class="my-8"><nav><a href="/daily" class="text-blue-700 underline font-bold">< back to list</a></nav><main class="prose"><p>Besides types and effects, there's more about Caterpillar code that the tooling
+could infer. Let's look at Rust for a moment: It has a distinction between
+supposedly cheap (and hence implicit) copies, and potentially expensive (and
+hence explicit) clones. (This
+<a href="https://smallcultfollowing.com/babysteps/blog/2024/06/21/claim-auto-and-otherwise/" rel="noopener noreferrer">doesn't work perfectly and might get changed</a>,
+but we can ignore that here.)</p>
+<p>This distinction makes sense, and we might or might not end up having something
+like that in Caterpillar. If we end up not having it, we could get the same
+effect (or maybe even do better) by inferring and displaying information about
+performance characteristics of your code.</p>
+<p>Imagine looking at a function, and having each expression color-coded, based on
+their relative cost. This could be based on heuristics, or actual measurements.
+Either way, it's another example of the principle I've been talking about:
+Designing the language with tooling in mind allows us to make certain things
+explicit, without requiring the developer to actually write them out.</p>
+</main><nav class="grid grid-cols-2"><span class="col-1 justify-self-start"><a href="/daily/2024-07-22" class="text-blue-700 underline font-bold"><< previous note</a></span><span class="col-2 justify-self-end"><a href="/daily/2024-07-24" class="text-blue-700 underline font-bold">next note >></a></span></nav></div></main><hr class="w-1/2 mx-auto my-16"><footer class="max-w-fit mx-auto text-sm"><p class="max-w-fit mx-auto italic">A website by</p><address><div>Hanno Braun<br>Untere Pfarrgasse 19<br>64720 Michelstadt<br>Germany<br></div><div class="my-4">📧 <a href="mailto:hello@hannobraun.com">hello@hannobraun.com</a></div></address></footer></body></html>

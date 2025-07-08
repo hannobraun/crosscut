@@ -1,0 +1,16 @@
+<!doctype html><html lang="en"><head><title>Daily Note - 2024-12-02 - Crosscut</title><meta charSet="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><link href="/style.css" rel="stylesheet"></head><body class="max-w-xl mx-auto p-2"><header><a href="/"><h1>Crosscut</h1></a></header><main><h2>Daily Note - 2024-12-02</h2><div class="m-4 p-4 rounded font-sm bg-slate-200"><p class="prose">Hey, I'm Hanno! These are my daily notes on <a href="https://github.com/hannobraun/crosscut" class="text-blue-700 underline font-bold">Crosscut</a>, the programming language I'm creating. If you have any questions, comments, or feedback, please <a href="mailto:Hanno%20Braun%20%3Chello%40hannobraun.com%3E?subject=&body=" class="text-blue-700 underline font-bold">get in touch</a>!</p></div><div class="m-4 p-4 rounded font-sm bg-slate-200"><p>This note was published <a href="/daily/2024-12-25" class="text-blue-700 underline font-bold"> before Crosscut was called Crosscut</a>! If it refers to "Caterpillar", that is the old name, just so you know.</p></div><div class="my-8"><nav><a href="/daily" class="text-blue-700 underline font-bold">< back to list</a></nav><main class="prose"><p>There's quite a bit of <a href="/daily/2024-12-01" rel="noopener noreferrer">overhead</a> to making rewinding work. I
+think that's unavoidable, since immediacy is the central theme of Caterpillar,
+and <em>"I ran into an error; have to set a breakpoint earlier, then restart and do
+the same things that led to the error, for a second time"</em> is not very
+immediate.</p>
+<p>But we shouldn't need to pay for the full overhead in every single situation. As
+I've noticed before, the overhead <a href="/daily/2024-11-21" rel="noopener noreferrer">can be reduced</a>
+significantly, by undoing groups of expressions as a unit, instead of supporting
+that for every single expression, one by one. But I think it's fine to have the
+full overhead during development, for the code you're currently editing.</p>
+<p>Other code maybe doesn't need to be undo-able in as fine-grained a manner,
+although how to decide that specifically is still an open question. Maybe for
+third-party code, it's good enough (by default) to only undo a whole function
+call into that third-party code as a unit. And it should be possible to turn the
+feature off completely, in cases where you need all the available performance.</p>
+</main><nav class="grid grid-cols-2"><span class="col-1 justify-self-start"><a href="/daily/2024-12-01" class="text-blue-700 underline font-bold"><< previous note</a></span><span class="col-2 justify-self-end"><a href="/daily/2024-12-03" class="text-blue-700 underline font-bold">next note >></a></span></nav></div></main><hr class="w-1/2 mx-auto my-16"><footer class="max-w-fit mx-auto text-sm"><p class="max-w-fit mx-auto italic">A website by</p><address><div>Hanno Braun<br>Untere Pfarrgasse 19<br>64720 Michelstadt<br>Germany<br></div><div class="my-4">📧 <a href="mailto:hello@hannobraun.com">hello@hannobraun.com</a></div></address></footer></body></html>

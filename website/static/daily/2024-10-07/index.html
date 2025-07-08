@@ -1,0 +1,15 @@
+<!doctype html><html lang="en"><head><title>Daily Note - 2024-10-07 - Crosscut</title><meta charSet="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><link href="/style.css" rel="stylesheet"></head><body class="max-w-xl mx-auto p-2"><header><a href="/"><h1>Crosscut</h1></a></header><main><h2>Daily Note - 2024-10-07</h2><div class="m-4 p-4 rounded font-sm bg-slate-200"><p class="prose">Hey, I'm Hanno! These are my daily notes on <a href="https://github.com/hannobraun/crosscut" class="text-blue-700 underline font-bold">Crosscut</a>, the programming language I'm creating. If you have any questions, comments, or feedback, please <a href="mailto:Hanno%20Braun%20%3Chello%40hannobraun.com%3E?subject=&body=" class="text-blue-700 underline font-bold">get in touch</a>!</p></div><div class="m-4 p-4 rounded font-sm bg-slate-200"><p>This note was published <a href="/daily/2024-12-25" class="text-blue-700 underline font-bold"> before Crosscut was called Crosscut</a>! If it refers to "Caterpillar", that is the old name, just so you know.</p></div><div class="my-8"><nav><a href="/daily" class="text-blue-700 underline font-bold">< back to list</a></nav><main class="prose"><p>The <a href="/daily/2024-10-06" rel="noopener noreferrer">hypothetical syntax that I presented yesterday</a> does not
+have any delimiters, like commas (<code>,</code>), to demarcate between different elements
+in a list, tuple, or map. This has precedence in the current syntax. Branch
+parameters are not delimited either.</p>
+<p>I like the clean look this results in, but there are subtleties to consider.
+Thanks to postfix operators and stack-based evaluation, it's possible to even
+have more complex elements without ambiguity. Consider a list like
+<code>[ a b 1 + ]</code>. This is semantically unambiguous when evaluating it left to right
+(add <code>a</code>; add <code>b</code>; add <code>1</code>; then take <code>b</code> and <code>1</code>, add their sum).</p>
+<p>But that doesn't mean it's a good idea. For one, it might be unambiguous, but
+that doesn't mean it's clear. Without delimiters, this must be formatted using
+whitespace to become readable. The other issue is <em>syntactical</em> ambiguity. The
+compiler can't make sense of this just by parsing it. It needs to run
+type-checking, at least.</p>
+</main><nav class="grid grid-cols-2"><span class="col-1 justify-self-start"><a href="/daily/2024-10-06" class="text-blue-700 underline font-bold"><< previous note</a></span><span class="col-2 justify-self-end"><a href="/daily/2024-10-08" class="text-blue-700 underline font-bold">next note >></a></span></nav></div></main><hr class="w-1/2 mx-auto my-16"><footer class="max-w-fit mx-auto text-sm"><p class="max-w-fit mx-auto italic">A website by</p><address><div>Hanno Braun<br>Untere Pfarrgasse 19<br>64720 Michelstadt<br>Germany<br></div><div class="my-4">📧 <a href="mailto:hello@hannobraun.com">hello@hannobraun.com</a></div></address></footer></body></html>
