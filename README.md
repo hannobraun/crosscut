@@ -44,6 +44,12 @@ list:
 - [Tomorrow Corporation Tech Demo](https://www.youtube.com/watch?v=72y2EC5fkcE)
 - [Stop Writing Dead Programs](https://jackrusher.com/strange-loop-2022/)
 
+## Further Reading
+
+For over a year, I published daily notes about my work on this project. Those
+are available here:
+[https://archive.hannobraun.com/crosscut/](https://archive.hannobraun.com/crosscut/)
+
 ## License
 
 This project is open source, licensed under the terms of the
